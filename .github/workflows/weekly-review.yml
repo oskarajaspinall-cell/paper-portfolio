@@ -1,0 +1,88 @@
+# Weekly paper-portfolio review. PAPER ONLY: no broker, no real orders.
+# Order (scripts/weekly_run.py): scan + mechanical exits -> review of flagged holdings -> core
+# re-initiations -> up to 2 new initiations -> trades via portfolio.py -> decision log -> report.
+name: Weekly review
+
+on:
+  schedule:
+    - cron: "0 8 * * 6"            # every Saturday 08:00 UTC
+  workflow_dispatch:               # "Run workflow" button in the Actions tab
+    inputs:
+      dry_run:
+        description: "Dry run: do everything but change and commit nothing"
+        type: boolean
+        default: false
+      simulate_failure:
+        description: "TEST ONLY: force a failure at this step (e.g. 'decision log'); leave empty normally"
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: paper-portfolio           # shared with the screen workflow: two runs can never overlap
+  cancel-in-progress: false
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for PAUSED file
+        id: pause
+        run: bin/ci-paused >> "$GITHUB_OUTPUT"
+
+      - name: Set run date
+        id: date
+        if: steps.pause.outputs.paused != 'true'
+        run: echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        if: steps.pause.outputs.paused != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        if: steps.pause.outputs.paused != 'true'
+        run: pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        if: steps.pause.outputs.paused != 'true'
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code CLI
+        if: steps.pause.outputs.paused != 'true'
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Weekly run
+        if: steps.pause.outputs.paused != 'true'
+        env:
+          # Add ONE of these as a repository secret (see README): an Anthropic API key, or a token
+          # from a Claude subscription made with `claude setup-token`.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          PAPER_SIMULATE_FAILURE: ${{ inputs.simulate_failure }}
+        run: |
+          [ -n "$ANTHROPIC_API_KEY" ] || unset ANTHROPIC_API_KEY
+          [ -n "$CLAUDE_CODE_OAUTH_TOKEN" ] || unset CLAUDE_CODE_OAUTH_TOKEN
+          if [ -z "${ANTHROPIC_API_KEY:-}${CLAUDE_CODE_OAUTH_TOKEN:-}" ]; then
+            echo "::error::No ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN secret is set. Add one (README: 'Try it yourself'), or add a PAUSED file."
+            exit 1
+          fi
+          bin/py scripts/weekly_run.py --asof "${{ steps.date.outputs.date }}" ${{ inputs.dry_run && '--dry-run' || '' }}
+
+      - name: Show report
+        if: steps.pause.outputs.paused != 'true'
+        run: cat "reports/weekly/${{ steps.date.outputs.date }}.md"
+
+      - name: Commit results to main
+        if: steps.pause.outputs.paused != 'true' && !inputs.dry_run
+        run: bin/ci-finish success weekly "${{ steps.date.outputs.date }}"
+
+      - name: On failure, commit only the error log and mark the run failed
+        if: failure() && steps.pause.outputs.paused != 'true' && !inputs.dry_run
+        run: bin/ci-finish failure weekly "${{ steps.date.outputs.date }}"

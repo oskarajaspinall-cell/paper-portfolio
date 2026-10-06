@@ -1,0 +1,5 @@
+#!/bin/sh
+# Project Python: the local .venv if present (Python 3.12), otherwise the runner's python3 (CI).
+DIR="$(cd "$(dirname "$0")/.." && pwd)"
+if [ -x "$DIR/.venv/bin/python" ]; then exec "$DIR/.venv/bin/python" "$@"; fi
+exec python3 "$@"

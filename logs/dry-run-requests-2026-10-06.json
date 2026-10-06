@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "AAPL",
+    "action": "BUY",
+    "position_type": "CORE",
+    "conviction": 2,
+    "thesis": "Apple's ecosystem-driven Services mix keeps lifting already exceptional returns on capital, but a P/E above its own 5-year maximum limits 12-month upside, so it merits only a starter core position.",
+    "reason": "Quality is exceptional and still rising, with ROIC 101.6% and gross margin 48.7% trending up. However, P/E, EV/EBITDA and EV/Sales all sit above their 5-year maxima, and regulation threatens Services economics. P/FCF within its range justifies owning it, but only at a minimum 3% size. The portfolio is all cash, so no replacement is needed.",
+    "research_note": "research/AAPL/2026-10-06.md",
+    "triggers": [
+      {"text": "Gross margin falls below 46%, implying Services mix or pricing power is breaking down.", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 46}},
+      {"text": "ROIC falls below 75%, its 5-year trough, implying capital no longer compounds at the current rate.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 75}},
+      {"text": "Price closes below the 200-day MA level of 289.75, implying a de-rating without an earnings offset.", "check": {"source": "price", "field": "close", "op": "<", "value": 289.75}}
+    ],
+    "core_initiation": false
+  }
+]

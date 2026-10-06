@@ -1,0 +1,42 @@
+#!/bin/sh
+# Commit the outcome of a scheduled run directly to the current branch.
+#   bin/ci-finish success <kind> <date>   commit run outputs:   "Weekly run <date>" / "Screen <date>"
+#   bin/ci-finish failure <kind> <date>   discard EVERYTHING the run changed, commit only the error log,
+#                                          then exit 1 so the run is marked failed.
+# <kind> is "weekly" or "screen".
+set -eu
+status="$1"; kind="$2"; date="$3"
+git config user.name "github-actions[bot]"
+git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+if [ "$kind" = "weekly" ]; then label="Weekly run $date"; paths="portfolio research reports runs universe logs"
+else label="Screen $date"; paths="reports/screen universe logs"; fi
+
+existing=""
+for p in $paths; do [ -e "$p" ] && existing="$existing $p"; done
+
+if [ "$status" = "success" ]; then
+  # shellcheck disable=SC2086
+  [ -n "$existing" ] && git add -A -- $existing
+  if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+  git commit -q -m "$label"
+  git pull -q --rebase && git push -q
+  echo "committed: $label"
+  exit 0
+fi
+
+# ---- failure: keep only the error log
+err="runs/$date/error.log"
+tmp="$(mktemp)"
+if [ -f "$err" ]; then cp "$err" "$tmp"
+else printf '%s FAILED before the run wrote its own log (setup, screen or commit step).\nNo trades from this run were applied.\nSee the GitHub Actions log for this run.\n' "$label" > "$tmp"; fi
+git reset -q --hard HEAD          # undo every tracked change from the run (state, ledger, notes, reports)
+# shellcheck disable=SC2086
+[ -n "$existing" ] && git clean -q -fd -- $existing   # remove untracked files the run created
+mkdir -p "runs/$date"
+mv "$tmp" "$err"
+git add -- "$err"
+git commit -q -m "$label FAILED (error log only)"
+git pull -q --rebase && git push -q
+echo "committed error log only: $err" >&2
+exit 1

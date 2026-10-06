@@ -1,0 +1,56 @@
+# Weekly universe refresh + screen (no model calls). Picks feed Saturday's review.
+# ~3,800 statistics pages at 1 request / 3 s, so it takes about 3 hours.
+name: Weekly screen
+
+on:
+  schedule:
+    - cron: "0 21 * * 5"           # every Friday 21:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: paper-portfolio
+  cancel-in-progress: false
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for PAUSED file
+        id: pause
+        run: bin/ci-paused >> "$GITHUB_OUTPUT"
+
+      - name: Set run date
+        id: date
+        if: steps.pause.outputs.paused != 'true'
+        run: echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        if: steps.pause.outputs.paused != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        if: steps.pause.outputs.paused != 'true'
+        run: pip install -r requirements.txt
+
+      - name: Refresh universe (S&P 500, FTSE 100, All-World proxy)
+        if: steps.pause.outputs.paused != 'true'
+        run: bin/py scripts/universe.py build
+
+      - name: Screen
+        if: steps.pause.outputs.paused != 'true'
+        run: bin/py scripts/screen.py --asof "${{ steps.date.outputs.date }}"
+
+      - name: Commit screen to main
+        if: steps.pause.outputs.paused != 'true'
+        run: bin/ci-finish success screen "${{ steps.date.outputs.date }}"
+
+      - name: On failure, commit only the error log and mark the run failed
+        if: failure() && steps.pause.outputs.paused != 'true'
+        run: bin/ci-finish failure screen "${{ steps.date.outputs.date }}"

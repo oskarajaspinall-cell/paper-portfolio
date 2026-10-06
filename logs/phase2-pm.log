@@ -1,0 +1,38 @@
+**This was a DRY RUN — nothing was written to `portfolio/`.** Requests were saved to `logs/dry-run-requests-2026-10-06.json` only.
+
+## Decisions
+
+| Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| AAPL | BUY | CORE | 2 |
+| LON:SHEL | AVOID (no trade) | TACTICAL | 1 |
+
+## Submission output (dry run)
+
+```json
+{
+ "cash_before_usd": 100000.0,
+ "cash_after_usd": 97000.99,
+ "applied": [
+  {
+   "side": "BUY",
+   "ticker": "AAPL",
+   "type": "CORE",
+   "shares": 9,
+   "fill_price": 332.89,
+   "currency": "USD",
+   "fill_close_date": "2026-10-05",
+   "gross_usd": 2996.01,
+   "costs_usd": 3.0,
+   "cash_change_usd": -2999.01
+  }
+ ],
+ "rejected": [],
+ "warnings": [
+  "holdings 1 below target minimum 8",
+  "cash 97.0% above target maximum 20%"
+ ]
+}
+```
+
+No rejections. Warnings are informational (target minimum holdings and target maximum cash are reported, not enforced).

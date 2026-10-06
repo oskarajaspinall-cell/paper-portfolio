@@ -1,0 +1,8 @@
+#!/bin/sh
+# Prints paused=true|false for $GITHUB_OUTPUT. A file named PAUSED in the repo root pauses all runs.
+if [ -f PAUSED ]; then
+  echo "PAUSED file found: exiting without changes." >&2
+  echo "paused=true"
+else
+  echo "paused=false"
+fi

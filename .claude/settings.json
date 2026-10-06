@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "deny": ["WebSearch", "Bash(curl:*)", "Bash(wget:*)", "Read(./.env)", "Read(./.env.*)"]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          { "type": "command", "command": "\"$CLAUDE_PROJECT_DIR/bin/py\" \"$CLAUDE_PROJECT_DIR/scripts/allowlist_hook.py\"" }
+        ]
+      }
+    ]
+  }
+}
