@@ -95,13 +95,15 @@ def score(metrics: dict[str, dict], cfg: dict, asof: str) -> list[dict]:
 
 
 def recently_researched(days: int, asof: str) -> set[str]:
+    """Folder slugs of names with a REAL decision in the decision log within `days` (dry runs record
+    no decisions, so their research never blocks a name)."""
+    import csv
+    log = ROOT / "portfolio" / "decisions.csv"
+    if not log.exists():
+        return set()
     cutoff = (dt.date.fromisoformat(asof) - dt.timedelta(days=days)).isoformat()
-    out = set()
-    for d in (ROOT / "research").glob("*/"):
-        for f in d.glob("20??-??-??.md"):
-            if f.stem >= cutoff:
-                out.add(d.name)
-    return out
+    with log.open() as fh:
+        return {Ticker(r["ticker"]).slug for r in csv.DictReader(fh) if r.get("date", "") >= cutoff}
 
 
 def pick(rows: list[dict], cfg: dict) -> list[dict]:

@@ -133,8 +133,13 @@ bin/py -m pytest
 bin/py scripts/universe.py build
 ```
 ```bash
-bin/py scripts/weekly_run.py --dry-run
+bin/py scripts/screen.py --limit 200
 ```
+```bash
+bin/py scripts/weekly_run.py --local --dry-run
+```
+`--local` runs on your computer even though the repository contains `PAUSED` (which then only pauses
+GitHub). Drop `--dry-run` for a real run; the agents use your own Claude Code login.
 The saved copies of stockanalysis.com pages used by some parser tests are not included in this repository,
 so those tests are skipped (about 20 of 160); everything else runs.
 

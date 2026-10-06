@@ -17,7 +17,7 @@ Test switch: env PAPER_SIMULATE_FAILURE=<step name prefix, e.g. "decision log"> 
 If ANY step fails: portfolio/ is restored to its state at the start of the run (no trades applied),
 runs/<date>/error.log is written, and the exit code is 1.
 
-    python scripts/weekly_run.py [--asof YYYY-MM-DD] [--dry-run] [--max-new N]
+    python scripts/weekly_run.py [--asof YYYY-MM-DD] [--dry-run] [--max-new N] [--local]
 """
 from __future__ import annotations
 
@@ -83,7 +83,7 @@ def screen_picks(asof: str, max_age_days: int = 7) -> list[dict]:
     return json.loads(files[-1].read_text())["picks"] if files else []
 
 
-def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent) -> int:
+def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local: bool = False) -> int:
     cfg = load_config()
     rundir = ROOT / "runs" / asof
     rundir.mkdir(parents=True, exist_ok=True)
@@ -104,7 +104,7 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent) -> in
         if os.environ.get("PAPER_SIMULATE_FAILURE") and name.startswith(os.environ["PAPER_SIMULATE_FAILURE"]):
             raise StepFailed(f"simulated failure at step '{name}' (PAPER_SIMULATE_FAILURE test switch)")
     try:
-        if (ROOT / "PAUSED").exists():
+        if (ROOT / "PAUSED").exists() and not local:
             raise StepFailed("PAUSED file present (the workflow should have exited before this)")
         step("mark")
         sh(PY + ["scripts/portfolio.py", "mark", "--asof", asof], log)
@@ -206,11 +206,13 @@ def main(argv=None) -> int:
     ap.add_argument("--asof", default=dt.date.today().isoformat())
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--max-new", type=int)
+    ap.add_argument("--local", action="store_true",
+                    help="run on this computer even if PAUSED exists (PAUSED then only pauses GitHub)")
     a = ap.parse_args(argv)
-    if (ROOT / "PAUSED").exists():
-        print("PAUSED: exiting without changes")
+    if (ROOT / "PAUSED").exists() and not a.local:
+        print("PAUSED: exiting without changes (on your own computer, add --local to run anyway)")
         return 0
-    return run(a.asof, a.dry_run, a.max_new)
+    return run(a.asof, a.dry_run, a.max_new, local=a.local)
 
 
 if __name__ == "__main__":

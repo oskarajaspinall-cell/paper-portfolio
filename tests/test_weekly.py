@@ -277,3 +277,23 @@ def test_paused_exits_without_changes(fake_repo, monkeypatch):
     monkeypatch.setattr(wr, "sh", lambda *a: pytest.fail("no step may run while paused"))
     assert wr.main(["--asof", "2026-10-10"]) == 0
     assert not (fake_repo / "runs").exists()
+
+
+def test_local_flag_runs_despite_paused(fake_repo, monkeypatch):
+    (fake_repo / "PAUSED").write_text("")
+    calls = []
+    monkeypatch.setattr(wr, "sh", make_sh(fake_repo, SCAN_QUIET, calls))
+    monkeypatch.setattr(wr, "claude_agent", lambda *a: None)
+    assert wr.main(["--asof", "2026-10-10", "--local", "--max-new", "0"]) == 0
+    assert any("weekly_scan.py" in c for c in calls)  # it ran
+
+
+def test_recently_researched_counts_only_logged_decisions(tmp_path, monkeypatch):
+    import screen
+    monkeypatch.setattr(screen, "ROOT", tmp_path)
+    (tmp_path / "research" / "AAPL").mkdir(parents=True)
+    (tmp_path / "research" / "AAPL" / "2026-10-01.md").write_text("dry-run note")
+    assert screen.recently_researched(90, "2026-10-07") == set()  # a note alone doesn't block
+    (tmp_path / "portfolio").mkdir()
+    (tmp_path / "portfolio" / "decisions.csv").write_text("date,ticker\n2026-10-01,LON:SHEL\n2026-01-01,MSFT\n")
+    assert screen.recently_researched(90, "2026-10-07") == {"LON-SHEL"}
