@@ -1,8 +1,6 @@
 # Paper Portfolio
 
-An automated **paper** (pretend-money) stock portfolio run by Claude agents. Every week it screens
-thousands of stocks, researches a few, makes firm buy / avoid / sell decisions, trades a simulated
-$100,000 portfolio and keeps a track record of every decision against the S&P 500 (SPY).
+Paper Portfolio is a hands-off, simulated stock portfolio that runs itself on GitHub every week. A Python screen scores thousands of stocks on quality, valuation and momentum. Claude agents then research the best ideas, argue the bear case before the bull case, and must reach a firm decision with a conviction level. Simple scripts handle everything else: prices, position sizing, trading costs, stop-losses and returns, so no maths is left to the AI. Every decision is logged and scored against the S&P 500 at 1, 3, 6 and 12 months, building an honest track record. It's paper trading only, with no broker connection. Fork it, add your own Claude key, and choose your own stocks.
 
 > **Paper trading only. Not investment advice.** There is no broker connection, no real orders and no
 > broker credentials anywhere in this project. Prices and financials are read from
