@@ -82,9 +82,9 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     for f in scan.get("flagged", []):
         out.append(f"- **{f['ticker']}** flagged: " + " | ".join(f["reasons"]))
     for d in decisions:
-        if d.get("kind") == "reinitiation":
-            out.append(f"- **{d['ticker']}** core re-initiation → {d['decision']} (conviction {d['conviction']}): "
-                       f"{d.get('rationale', '')} [{d['evaluation']}]")
+        what = "core re-initiation" if d.get("kind") == "reinitiation" else "new initiation"
+        out.append(f"- **{d['ticker']}** {what} → {d['decision']} (conviction {d['conviction']}): "
+                   f"{d.get('rationale', '')} [{d['evaluation']}]")
     reviews = run / "reviews.md"
     if reviews.exists():
         body = "\n".join(l for l in reviews.read_text().strip().splitlines() if not l.startswith("# "))

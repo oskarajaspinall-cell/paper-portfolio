@@ -297,3 +297,15 @@ def test_recently_researched_counts_only_logged_decisions(tmp_path, monkeypatch)
     (tmp_path / "portfolio").mkdir()
     (tmp_path / "portfolio" / "decisions.csv").write_text("date,ticker\n2026-10-01,LON:SHEL\n2026-01-01,MSFT\n")
     assert screen.recently_researched(90, "2026-10-07") == {"LON-SHEL"}
+
+
+def test_report_lists_new_initiation_reasons(tmp_path):
+    import weekly_report
+    run = tmp_path / "run"
+    run.mkdir()
+    (run / "run.json").write_text(json.dumps({"decisions": [{"kind": "new", "ticker": "AMD", "decision": "AVOID",
+        "conviction": 1, "rationale": "gap risk through the stop", "evaluation": "research/AMD/x.md"}]}))
+    (tmp_path / "port").mkdir()
+    md = weekly_report.build(run, "2026-10-07", tmp_path / "port")
+    sec4 = md.split("## 4. Review notes")[1].split("## 5.")[0]
+    assert "**AMD** new initiation → AVOID (conviction 1): gap risk through the stop" in sec4

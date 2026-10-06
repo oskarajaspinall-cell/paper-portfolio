@@ -1,0 +1,79 @@
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py mark --asof 2026-10-07
+{"total": 100000.0, "cash": 100000.0, "core": 0, "tactical": 0, "sectors": {}, "n": 0}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_scan.py --asof 2026-10-07 --out /Users/oskaraspinall/paper-portfolio/runs/2026-10-07
+{"flagged_for_review": [], "reinitiate": [], "mechanical_exits": [], "trims": [], "unflagged": 0, "scan": "/Users/oskaraspinall/paper-portfolio/runs/2026-10-07/scan.json"}
+$ claude -p Ticker KRX:000660, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+Note path: `research/KRX-000660/2026-10-07.md`
+Fact sheet: `research/KRX-000660/factsheet-2026-10-07.md`
+`OK research/KRX-000660/2026-10-07.md type=CORE 1=64 2=150 3=149 4=98 5=98 6=77 total=636`
+
+Blocked URLs: `https://www.reuters.com/markets/companies/000660.KS/` and `https://www.reuters.com/technology/sk-hynix` (fetch unable to access reuters.com; no substitute data used). No data conflicts — all figures sourced solely from the fact sheet; qualitative claims from stockanalysis.com overview text and SEC EDGAR filings only (no company IR domain was found for this ticker).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/KRX-000660/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/KRX-000660/2026-10-07.md type=CORE 1=64 2=150 3=149 4=98 5=98 6=77 total=636
+$ claude -p Evaluate KRX:000660 for 2026-10-07: fact sheet research/KRX-000660/factsheet-2026-10-07.md, note research/KRX-000660/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/KRX-000660/2026-10-07-evaluation.md
+OK research/KRX-000660/2026-10-07-evaluation.md Bear case=130 Bull case=123 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/KRX-000660/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/KRX-000660/2026-10-07-evaluation.md Bear case=130 Bull case=123 decision=BUY
+$ claude -p Ticker AMD, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+Note: research/AMD/2026-10-07.md
+Fact sheet: research/AMD/factsheet-2026-10-07.md
+OK research/AMD/2026-10-07.md type=TACTICAL 1=109 2=83 3=60 4=70 5=35 total=357
+
+Blocked URL: https://ir.amd.com/news-events/press-release-details/2026/AMD-to-Report-Fiscal-Third-Quarter-2026-Financial-Results (404, not retried). No data conflicts found.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/AMD/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/AMD/2026-10-07.md type=TACTICAL 1=109 2=83 3=60 4=70 5=35 total=357
+$ claude -p Evaluate AMD for 2026-10-07: fact sheet research/AMD/factsheet-2026-10-07.md, note research/AMD/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/AMD/2026-10-07-evaluation.md
+OK research/AMD/2026-10-07-evaluation.md Bear case=140 Bull case=104 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/AMD/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/AMD/2026-10-07-evaluation.md Bear case=140 Bull case=104 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py submit /Users/oskaraspinall/paper-portfolio/runs/2026-10-07/requests-mechanical.json --asof 2026-10-07 --save /Users/oskaraspinall/paper-portfolio/runs/2026-10-07/submit-mechanical.json --dry-run
+{
+ "cash_before_usd": 100000.0,
+ "cash_after_usd": 100000.0,
+ "applied": [],
+ "rejected": [],
+ "warnings": [
+  "holdings 0 below target minimum 8",
+  "cash 100.0% above target maximum 20%"
+ ],
+ "dry_run": true
+}
+$ claude -p Evaluation files: research/KRX-000660/2026-10-07-evaluation.md research/AMD/2026-10-07-evaluation.md. Date 2026-10-07. Write the requests to runs/2026-10-07/requests-decisions.json and submit with --save runs/2026-10-07/submit.json. This is a DRY RUN. --agent portfolio-manager --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+**This was a DRY RUN — nothing was written to the live portfolio.**
+
+| Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| KRX:000660 | BUY | CORE | 2 |
+| AMD | AVOID (no trade) | TACTICAL | 1 |
+
+```json
+{
+ "cash_before_usd": 100000.0,
+ "cash_after_usd": 97341.78,
+ "applied": [
+  {
+   "side": "BUY",
+   "ticker": "KRX:000660",
+   "type": "CORE",
+   "shares": 2,
+   "fill_price": 1773000,
+   "currency": "KRW",
+   "fill_close_date": "2026-10-06",
+   "gross_usd": 2651.59,
+   "costs_usd": 6.63,
+   "cash_change_usd": -2658.22,
+   "reason": "Quality, net cash and a peer discount justify owning it. But earnings sit on peak-cycle margins, EV/Sales and P/B are above their 5-year highs, and beta is 2.39. Normalised earnings could be far lower. A 3% starter caps the cyclical downside. The portfolio is all cash, so no limits bind."
+  }
+ ],
+ "rejected": [],
+ "warnings": [
+  "holdings 1 below target minimum 8",
+  "cash 97.3% above target maximum 20%"
+ ],
+ "dry_run": true
+}
+```
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_report.py --asof 2026-10-07 --run /Users/oskaraspinall/paper-portfolio/runs/2026-10-07
+/Users/oskaraspinall/paper-portfolio/reports/weekly/2026-10-07.md
