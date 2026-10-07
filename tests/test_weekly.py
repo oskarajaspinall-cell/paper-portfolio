@@ -90,7 +90,9 @@ class ScanMarket(FakeMarket):
         self.hist = hist
 
     def history(self, t):
-        return {"url": f"https://stockanalysis.com/fake/{t}/history/", "currency": "USD", "rows": self.hist[t]}
+        news = [{"title": f"{t} wins big contract", "source": "Reuters", "ago": "2 days ago", "url": f"https://x/{t}/1"},
+                {"title": f"{t} price target raised at UBS", "source": "TheFly", "ago": "1 day ago", "url": f"https://x/{t}/2"}]
+        return {"url": f"https://stockanalysis.com/fake/{t}/history/", "currency": "USD", "rows": self.hist[t], "news": news}
 
 
 class ScanFetcher:
@@ -137,6 +139,9 @@ def test_scan_end_to_end(cfg):
     assert req["TAC"] == {"ticker": "TAC", "action": "SELL", "position_type": "TACTICAL", "fill_date": "2026-09-10",
                           "reason": req["TAC"]["reason"]}
     assert req["BIG"]["action"] == "TRIM" and req["BIG"]["target_weight_pct"] == 15  # 20.4k of ~95k > 15%
+    mover = next(f for f in res["flagged"] if f["ticker"] == "MOVER")
+    assert [h["title"] for h in mover["figures"]["recent_headlines"]] == ["MOVER wins big contract"]  # rating dropped
+    assert all("recent_headlines" not in u for u in res["unflagged"])
 
 
 # ------------------------------------------------------------------ decision log

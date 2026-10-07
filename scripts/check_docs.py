@@ -57,17 +57,21 @@ def mixed_tags(md: str) -> list[str]:
     return [m for m in re.findall(r"\[[^\]]*\b(?:certain|likely|guessing)\b[^\]]*\]", md, re.I) if m not in TAGS]
 
 
-def bad_urls(md: str) -> list[str]:
+def bad_urls(md: str, extra: set[str] | None = None) -> list[str]:
+    """URLs not on the allowlist. `extra` = exact URLs listed in the stock's fact sheet (its news headlines),
+    which may be cited even though their sites are not fetched."""
     doms = allowed_hosts()
     out = []
     for u in re.findall(r"https?://[^\s)\]>|]+", md):
+        if extra and u.rstrip(".,;") in extra:
+            continue
         h = (urlparse(u).hostname or "").lower()
         if not any(h == d or h.endswith("." + d) for d in doms):
             out.append(u)
     return out
 
 
-def check_note(md: str) -> tuple[list[str], dict]:
+def check_note(md: str, sheet_urls: set[str] | None = None) -> tuple[list[str], dict]:
     errs, counts = [], {}
     title = md.splitlines()[0] if md.strip() else ""
     if "Core initiation" in title:
@@ -112,7 +116,7 @@ def check_note(md: str) -> tuple[list[str], dict]:
     errs += [f"banned phrase '{p}'" for p in BANNED_PHRASES if p in low]
     if not re.search(r"^## +Sources\s*$", md, re.M) or not re.search(r"https://stockanalysis\.com/", md):
         errs.append("needs a '## Sources' section citing the fact sheet's stockanalysis.com URLs")
-    errs += [f"URL not on allowlist: {u}" for u in bad_urls(md)]
+    errs += [f"URL not on allowlist: {u}" for u in bad_urls(md, sheet_urls)]
     return errs, counts
 
 
@@ -193,7 +197,10 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     md = Path(a.path).read_text()
     if a.kind == "note":
-        errs, counts = check_note(md)
+        path = Path(a.path)
+        sheets = sorted(path.parent.glob("factsheet-*.md"))
+        sheet_urls = set(re.findall(r"https?://[^\s)\]>|]+", sheets[-1].read_text())) if sheets else set()
+        errs, counts = check_note(md, {u.rstrip(".,;") for u in sheet_urls})
     else:
         errs, counts = check_eval(md, json.loads(Path(a.state).read_text()), load_config())
     if errs:

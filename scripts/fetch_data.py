@@ -241,6 +241,40 @@ def parse_info(nodes, url) -> dict:
     }
 
 
+_INVISIBLE = dict.fromkeys(map(ord, "\u200b\u200c\u200d\u2060\ufeff\u00ad"), None)
+
+
+def _clean(text, limit: int) -> str:
+    """Third-party text: drop invisible/control characters, collapse whitespace, trim."""
+    t = "".join(ch for ch in str(text or "").translate(_INVISIBLE) if ch.isprintable() or ch == " ")
+    t = " ".join(t.split())
+    return t if len(t) <= limit else t[: limit - 1] + "…"
+
+
+def parse_news_overview(page: dict) -> list[dict]:
+    """News feed on an overview page: [{title, summary, source, time, url}]. Optional: [] if absent."""
+    feed = page.get("news")
+    items = feed.get("data") if isinstance(feed, dict) else None
+    out = []
+    for n in items or []:
+        if isinstance(n, dict) and n.get("title") and n.get("url"):
+            out.append({"title": _clean(n["title"], 200), "summary": _clean(n.get("text"), 240),
+                        "source": n.get("source") or "", "time": n.get("time") or "", "ago": n.get("ago") or "",
+                        "url": n["url"]})
+    return out
+
+
+def parse_news_short(page: dict) -> list[dict]:
+    """Headline list on history/other pages: [{title, source, ago, url}]. Optional: [] if absent."""
+    items = page.get("news")
+    out = []
+    for n in items if isinstance(items, list) else []:
+        if isinstance(n, dict) and n.get("t") and n.get("u"):
+            out.append({"title": _clean(n["t"], 200), "summary": "", "source": n.get("n") or "", "time": "",
+                        "ago": n.get("d") or "", "url": n["u"]})
+    return out
+
+
 def parse_overview(nodes, url) -> dict:
     page = _strip_banned(nodes[-1])
     out = {"info": parse_info(nodes, url)}
@@ -251,6 +285,7 @@ def parse_overview(nodes, url) -> dict:
     out["earnings_date"] = page.get("earningsDate")
     out["earnings_date_label"] = page.get("earningsDateLabel")
     out["ch1y_pct"] = parse_number(page.get("ch1y"))  # ETFs show this on the overview
+    out["news"] = parse_news_overview(page)
     if out["info"]["type"] != "etf" and not out["sector"]:
         raise DataError(url, "infoTable.Sector", "sector missing")
     return out
@@ -304,7 +339,7 @@ def parse_history(nodes, url) -> dict:
     if not rows:
         raise DataError(url, "history", "no rows")
     rows.sort(key=lambda r: r["date"])
-    return {"info": parse_info(nodes, url), "rows": rows}
+    return {"info": parse_info(nodes, url), "rows": rows, "news": parse_news_short(page)}
 
 
 def parse_filings(nodes, url) -> dict:

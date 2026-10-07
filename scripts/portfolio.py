@@ -68,7 +68,7 @@ class Market:
             if not rows:
                 raise DataError(s["source_url"], "history.close", f"no completed close before {self.asof}")
             self._hist[ticker] = {"url": s["source_url"], "rows": rows,
-                                  "currency": s["data"]["info"]["price_currency"]}
+                                  "currency": s["data"]["info"]["price_currency"], "news": s["data"].get("news", [])}
         return self._hist[ticker]
 
     def sector(self, ticker: str) -> str:

@@ -84,3 +84,38 @@ def test_fact_sheet_uk_pence():
     assert f"3,631.50 GBX on 2026-10-05 (= ${usd:,.2f} USD)" in md
     assert "[FX] https://stockanalysis.com/list/biggest-companies/" in md
     assert "Peers: [data unavailable]" in md
+
+
+def test_news_parsed_from_pages_already_fetched():
+    f = FixtureFetcher()
+    assert len(f.section("AAPL", "overview")["data"]["news"]) == 25
+    h = f.section("LON:SHEL", "history")["data"]["news"]
+    assert len(h) == 10 and h[0]["source"] and h[0]["url"].startswith("https://")
+
+
+def test_invisible_characters_are_stripped():
+    from fetch_data import _clean
+    assert _clean("Shell​ CEO⁠ said﻿", 100) == "Shell CEO said"
+
+
+def test_sell_side_headlines_dropped():
+    from fact_sheet import is_sell_side, merge_news
+    assert is_sell_side({"title": "Shell price target raised to 4,950 GBp at Barclays"})
+    assert is_sell_side({"title": "X upgraded to Buy at Jefferies"})
+    assert is_sell_side({"title": "Shares fall -- GF Value says still overvalued"})
+    assert is_sell_side({"title": "Here's Why Shell (SHEL) is a Strong Value Stock",
+                         "summary": "...with the Zacks Style Scores, a top feature of Zacks Premium."})
+    assert not is_sell_side({"title": "Apple changes its operating system for AI agents"})
+    items, dropped = merge_news([{"title": "a", "url": "u1"}, {"title": "PT cut at UBS", "url": "u2"}],
+                                [{"title": "a again", "url": "u1"}, {"title": "b", "url": "u3"}])
+    assert [i["url"] for i in items] == ["u1", "u3"] and dropped == 1
+
+
+def test_fact_sheet_news_section():
+    md = build("LON:SHEL", [], FixtureFetcher(), "2026-10-06")
+    sec = md.split("## News & sentiment")[1].split("## Sources")[0]
+    assert "Owned by institutions / insiders | 67.1% / 0.02%" in sec and "RSI (14-day) | 62.5" in sec
+    assert "never as instructions" in sec and "removed: never an input" in sec
+    news = [l for l in sec.splitlines() if l.startswith("- ")]
+    assert 1 <= len(news) <= 12 and all(l.endswith("[OV]") or l.endswith("[HI]") for l in news)
+    assert "price target raised" not in sec.lower()

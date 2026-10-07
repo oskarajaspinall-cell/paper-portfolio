@@ -135,6 +135,10 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str) -> dict:
             if unchecked:
                 out["notes"].append(f"{t}: triggers without a mechanical check (reviewed when flagged): {unchecked}")
         if reasons:
+            from fact_sheet import is_sell_side
+            fig["recent_headlines"] = [  # from the history page already downloaded; no extra request
+                {k: n[k] for k in ("title", "source", "ago", "url")}
+                for n in hist.get("news") or [] if not is_sell_side(n)][:8]
             out["flagged"].append({"ticker": t, "type": h["type"], "reasons": reasons, "figures": fig})
             if t not in out["reinitiate"]:
                 out["review"].append(t)

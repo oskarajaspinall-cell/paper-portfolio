@@ -156,3 +156,12 @@ def test_eval_rejects_price_triggers_on_core(cfgd):
     bad = {"triggers": [{"text": "ROIC below 50%"},
                         {"text": "x", "check": {"source": "price", "field": "close", "op": "<", "value": 289.75}}]}
     assert any("thesis-only" in e for e in check_eval(evaluation(bad), STATE, cfgd)[0])
+
+
+def test_note_may_cite_headline_urls_from_its_fact_sheet():
+    head = "https://www.tipranks.com/news/some-headline"
+    md = core_note(**{"6. Unusual items": f"CEO change reported [Likely] ({head})"})
+    assert any("tipranks" in e for e in check_note(md)[0])                  # not allowed on its own
+    assert check_note(md, {head})[0] == []                                  # allowed when the sheet lists it
+    other = core_note(**{"6. Unusual items": "x [Likely] (https://www.tipranks.com/other)"})
+    assert any("tipranks" in e for e in check_note(other, {head})[0])       # only the exact listed URLs
