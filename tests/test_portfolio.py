@@ -546,3 +546,33 @@ def test_replacement_pair_fills_both_sides_at_their_opens(cfg, tmp_path):
     mkt = OpenMarket(cfg, opens={"AAPL": [("2026-10-12", 205.0)], "MSFT": [("2026-10-12", 390.0)]}, asof="2026-10-13")
     out = fill_pending(sp, mkt, cfg, WATCH, port_dir=tmp_path)
     assert [(a["side"], a["ticker"], a["fill_price"]) for a in out["applied"]] == [("SELL", "MSFT", 390.0), ("BUY", "AAPL", 205.0)]
+
+
+# ------------------------------------------------------------------ daily re-pricing
+def test_daily_valuation_rows(tmp_path):
+    from portfolio import VAL_COLS, record_valuation
+    path = tmp_path / "valuations.csv"
+    base = {k: "" for k in VAL_COLS}
+    assert record_valuation(path, {**base, "date": "2026-10-09", "phase": "post", "total_usd": 100}) == "appended"
+    # the weekly run already valued that close: no duplicate daily row
+    assert record_valuation(path, {**base, "date": "2026-10-09", "phase": "daily", "total_usd": 100}) == "skipped"
+    assert record_valuation(path, {**base, "date": "2026-10-12", "phase": "daily", "total_usd": 101}) == "appended"
+    # same-day re-run replaces the daily row
+    assert record_valuation(path, {**base, "date": "2026-10-12", "phase": "daily", "total_usd": 102}) == "replaced"
+    rows = read_csv(path)
+    assert [(r["date"], r["phase"], r["total_usd"]) for r in rows] == [
+        ("2026-10-09", "post", "100"), ("2026-10-12", "daily", "102")]
+
+
+def test_week_return_spans_seven_days_with_daily_rows():
+    vals = [val("2026-10-02", "post", 100000, spy=100),
+            val("2026-10-05", "daily", 100500, spy=101),
+            val("2026-10-08", "daily", 101000, spy=102),
+            val("2026-10-09", "pre", 102000, spy=103),
+            val("2026-10-12", "daily", 103000, spy=104),
+            val("2026-10-13", "daily", 104000, spy=105)]
+    rt = returns_table(vals, "2026-10-14")
+    # latest valuation at least 7 days before 2026-10-13 is 2026-10-05 (not yesterday)
+    assert rt["week"]["from"] == "2026-10-05"
+    assert rt["week"]["total"] == pytest.approx(104000 / 100500 - 1)
+    assert rt["week"]["spy"] == pytest.approx(105 / 101 - 1)

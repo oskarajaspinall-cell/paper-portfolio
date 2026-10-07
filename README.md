@@ -19,12 +19,12 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 |---|---|---|
 | **Weekly screen** | Rebuilds the stock list (default: S&P 500 + FTSE 100 + the ~3,800 largest stocks worldwide) and scores every stock on quality, valuation and momentum, with a 5-year history check on the top 500. Picks 10 core + 10 tactical ideas (tactical ideas must have results due soon and not be overextended). ~4 hours with the default list. | No |
 | **Weekly review** | Fills last week's orders; checks every holding; sells tactical positions that hit their stop, target or time limit; reviews holdings that moved >8% or reported results (using recent headlines); fully re-researches any core holding whose thesis broke; researches the screen's 20 picks (3 at a time; a failed one is skipped and listed); places orders for the next open; updates the decision log, report and dashboard. | Only for flagged holdings and new research |
-| **Order fills** (weekdays) | Fills pending orders at the opening price of the next trading day. | No |
+| **Daily update** (weekdays) | Fills pending orders at the opening price of the next trading day, re-prices every holding at its latest close, and refreshes the dashboard. | No |
 
 | Schedule | On your Mac (`bin/install-mac-schedule`) | On GitHub Actions (UTC) |
 |---|---|---|
 | Screen + review | Friday 22:00, one script (`bin/weekly-local`) | Screen Friday 21:00, review Saturday 08:00 |
-| Order fills | Weekdays 22:30 (`bin/fill-pending`) | Weekdays 21:30 |
+| Order fills + daily prices | Weekdays 22:30 (`bin/fill-pending`) | Weekdays 21:30 |
 
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Trades fill at the next market open**: decisions become pending orders filled at the
@@ -34,7 +34,7 @@ bull/base/bear scenarios into return distributions for 3, 6 and 12 months (`rese
 the AI only extracts cited parameters, never results. Each research note includes the stock's recent **news headlines** (analyst price targets and ratings are
 filtered out by rule) and sentiment figures such as short interest.
 
-Results are committed to the `main` branch ("Weekly run 2026-10-10", "Filled orders 2026-10-12"). If anything goes wrong, **no trades
+Results are committed to the `main` branch ("Weekly run 2026-10-10", "Daily update 2026-10-12"). If anything goes wrong, **no trades
 from that run are kept**: only an error log is committed and the run shows a red ✗.
 
 See `reports/weekly/` for real reports, and `reports/sample/` for an older example from a simulated portfolio.

@@ -205,6 +205,23 @@ def valuation_row(state: dict, mkt: Market, phase: str) -> dict:
             "baseline_usd": "" if bv is None else round(bv, 2), "spy_close": spy["close"]}
 
 
+def record_valuation(path: Path, row: dict) -> str:
+    """Append a valuation row. A "daily" row for a close date that is already valued is not duplicated:
+    it replaces an earlier daily row of that date (same-day re-run) and is skipped when the weekly run
+    already recorded that date."""
+    vals = read_csv(path)
+    if row["phase"] == "daily" and vals and vals[-1]["date"] == row["date"]:
+        if vals[-1]["phase"] != "daily":
+            return "skipped"
+        tmp = path.with_suffix(".rewrite.tmp")
+        tmp.unlink(missing_ok=True)
+        append_csv(tmp, VAL_COLS, vals[:-1] + [row])  # same writer as every other row
+        os.replace(tmp, path)
+        return "replaced"
+    append_csv(path, VAL_COLS, [row])
+    return "appended"
+
+
 # --------------------------------------------------------------------------- returns
 def interval_return(mv0, mv1, fin, fout) -> float | None:
     """Modified Dietz for one interval: buys (fin, incl. costs) weighted at the start,
@@ -244,7 +261,9 @@ def returns_table(vals: list[dict], asof: str) -> dict:
         return {}
     run_dates = sorted({v["date"] for v in vals})
     last_date = run_dates[-1]
-    prev_date = run_dates[-2] if len(run_dates) > 1 else run_dates[0]
+    week_ago = (dt.date.fromisoformat(last_date) - dt.timedelta(days=7)).isoformat()
+    older = [d for d in run_dates if d <= week_ago]  # daily valuations exist: "week" spans >= 7 days
+    prev_date = older[-1] if older else run_dates[0]
     month_start = last_date[:8] + "01"
     before_month = [d for d in run_dates if d < month_start]
     mtd_from = before_month[-1] if before_month else run_dates[0]
@@ -777,6 +796,7 @@ def main(argv=None) -> int:
     ap.add_argument("requests", nargs="?")
     ap.add_argument("--asof", default=dt.date.today().isoformat())
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--phase", default="pre", choices=["pre", "daily"], help="mark: valuation row label (daily = weekday re-pricing)")
     args = ap.parse_args(argv)
     cfg = load_config()
     from fetch_data import Fetcher
@@ -810,7 +830,7 @@ def main(argv=None) -> int:
                 append_csv(PORT / "valuations.csv", VAL_COLS, [valuation_row(state, mkt, "inception")])
             mark(state, mkt)
             atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
-            append_csv(PORT / "valuations.csv", VAL_COLS, [valuation_row(state, mkt, "pre")])
+            record_valuation(PORT / "valuations.csv", valuation_row(state, mkt, args.phase))
             print(json.dumps({k: round(v, 2) if isinstance(v, float) else v for k, v in totals(state).items()}))
         elif args.cmd == "returns":
             print(format_returns(returns_table(read_csv(PORT / "valuations.csv"), args.asof)))

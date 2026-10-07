@@ -179,7 +179,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/allowlist_hook.py` — WebFetch guard (wired in `.claude/settings.json`); blocked URLs go to `logs/skipped-urls.log`. WebSearch, curl and wget are denied.
 - `scripts/common.py` — config reader, ticker/URL mapping, allowlist, thesis-only trigger rule.
 - `bin/py` — project Python launcher (`.venv` locally, `python3` in CI).
-- Mac schedule: `bin/install-mac-schedule` (launchd) → `bin/weekly-local` (Fri 22:00) and `bin/fill-pending` (weekdays 22:30).
+- Mac schedule: `bin/install-mac-schedule` (launchd) → `bin/weekly-local` (Fri 22:00) and `bin/fill-pending` (weekdays 22:30: fill orders + re-price holdings daily; no AI).
 - GitHub Actions: `.github/workflows/screen.yml` (Fri 21:00 UTC), `weekly-review.yml` (Sat 08:00 UTC), `fills.yml` (weekdays 21:30 UTC); one concurrency group; `bin/ci-paused` and `bin/ci-finish` handle PAUSED and commit-or-error-log.
 - `universe/` — `watchlist.txt` (always eligible, optional `ir=` domain), `ftse100.txt` (owner-maintained; `screen=no`), `custom.txt` (your own tickers), `ir_domains.txt` (auto-recorded company domains), `universe.csv` (built locally; not in the public repo).
 - `portfolio/` — `state.json` (cash, holdings, pending orders), `ledger.csv`, `rejections.csv`, `valuations.csv`, `decisions.csv`.

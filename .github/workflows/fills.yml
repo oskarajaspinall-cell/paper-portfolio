@@ -1,4 +1,4 @@
-# Fill pending orders at the next market open (owner rule). No AI, no model calls.
+# Fill pending orders at the next market open (owner rule) and re-price holdings daily. No AI.
 # Runs after every market has opened (and closed) on weekdays.
 name: Fill orders
 
@@ -41,10 +41,11 @@ jobs:
         if: steps.pause.outputs.paused != 'true'
         run: pip install -r requirements.txt
 
-      - name: Fill pending orders at the open
+      - name: Fill pending orders at the open, re-price holdings
         if: steps.pause.outputs.paused != 'true'
         run: |
           bin/py scripts/portfolio.py fill-pending --asof "${{ steps.date.outputs.asof }}"
+          bin/py scripts/portfolio.py mark --phase daily --asof "${{ steps.date.outputs.asof }}"
           bin/py scripts/dashboard.py
 
       - name: Commit to main

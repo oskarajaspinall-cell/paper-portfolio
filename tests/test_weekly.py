@@ -528,3 +528,12 @@ def test_macro_failure_never_blocks_research(fake_repo, monkeypatch):
     assert ev.name == "2026-10-10-evaluation.md"
     evaluator_prompt = next(p for n, p in seen if n == "evaluator")
     assert "macro overlay" not in evaluator_prompt                      # evaluated without it, not blocked
+
+
+def test_dashboard_week_tile_spans_seven_days():
+    import dashboard
+    ser = [{"date": d, "portfolio": p, "spy": 100.0} for d, p in
+           (("2026-10-02", 100.0), ("2026-10-05", 101.0), ("2026-10-09", 102.0), ("2026-10-13", 104.0))]
+    w = dashboard.week_change(ser)
+    assert w["from"] == "2026-10-05" and w["portfolio"] == pytest.approx(104 / 101 - 1)
+    assert dashboard.week_change(ser[:1]) is None

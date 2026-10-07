@@ -1,6 +1,7 @@
 #!/bin/bash
 # Weekdays 22:30 (launchd: ~/Library/LaunchAgents/com.paperportfolio.fills.plist): fill pending orders
-# at their next open, refresh the dashboard, commit and upload if anything changed.
+# at their next open, re-price every holding at its latest close (daily valuation), refresh the dashboard,
+# commit and upload if anything changed. No AI.
 set -u
 cd "$(dirname "$0")/.." || exit 1
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -14,8 +15,10 @@ trap 'rmdir "$LOCK"' EXIT
 ASOF=$(date -v+1d +%F)                     # include today's session (all markets have opened by 22:30)
 python_out=$(bin/py scripts/portfolio.py fill-pending --asof "$ASOF") || { echo "!! fill-pending failed"; echo "$python_out"; exit 1; }
 echo "$python_out"
-if git diff --quiet -- portfolio; then echo "no orders filled"; exit 0; fi
+# Daily re-pricing (no AI): every holding at its latest close, a valuation point, a fresh dashboard.
+bin/py scripts/portfolio.py mark --phase daily --asof "$ASOF" || { echo "!! daily re-pricing failed"; exit 1; }
+if git diff --quiet -- portfolio; then echo "nothing changed"; exit 0; fi
 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
 git add -A -- portfolio docs "$LOG"
-git commit -q -m "Filled orders $(date +%F)" && git pull -q --rebase && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
+git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
 echo "== end $(date)"

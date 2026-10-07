@@ -65,6 +65,19 @@ def series(vals: list[dict], start_cash: float) -> list[dict]:
     return out
 
 
+def week_change(ser: list[dict]) -> dict | None:
+    """Latest point vs the latest one at least 7 days earlier (daily points exist), else the first."""
+    if len(ser) < 2 or not ser[-1]["portfolio"]:
+        return None
+    last = ser[-1]
+    cut = (dt.date.fromisoformat(last["date"]) - dt.timedelta(days=7)).isoformat()
+    prev = ([p for p in ser[:-1] if p["date"] <= cut] or ser[:1])[-1]
+    if not prev["portfolio"]:
+        return None
+    return {"from": prev["date"], "portfolio": last["portfolio"] / prev["portfolio"] - 1,
+            "spy": (last["spy"] / prev["spy"] - 1) if last["spy"] and prev["spy"] else None}
+
+
 def build_data() -> dict:
     cfg = load_config()
     port = ROOT / "portfolio"
@@ -103,10 +116,7 @@ def build_data() -> dict:
         done = [d for d in decisions if d.get(f"hit_{h}m") not in ("", None)]
         hits[f"{h}m"] = {"n": len(done), "hits": sum(int(d[f"hit_{h}m"]) for d in done)}
     last = ser[-1] if ser else None
-    week = None
-    if len(ser) >= 2 and ser[-2]["portfolio"] and last["portfolio"]:
-        week = {"portfolio": last["portfolio"] / ser[-2]["portfolio"] - 1,
-                "spy": (last["spy"] / ser[-2]["spy"] - 1) if last["spy"] and ser[-2]["spy"] else None}
+    week = week_change(ser)
     return {
         "generated": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
         "repo": repo_url(),
