@@ -41,7 +41,7 @@ from common import ROOT, Ticker, load_config  # noqa: E402
 PY = [str(ROOT / "bin" / "py")]
 TOOLS = {"researcher": "Read,Write,WebFetch,Bash(bin/py:*)", "evaluator": "Read,Write,Bash(bin/py:*)",
          "portfolio-manager": "Read,Write,Bash(bin/py:*)", "weekly-reviewer": "Read,Write,WebFetch",
-         "mc-parameters": "Read,Write,Bash(bin/py:*)"}
+         "mc-parameters": "Read,Write,Bash(bin/py:*)", "macro-overlay": "Read,Write,WebFetch,Bash(bin/py:*)"}
 
 
 class StepFailed(Exception):
@@ -80,13 +80,33 @@ def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, l
     if not note.exists():
         raise StepFailed(f"researcher wrote no note at {note}")
     check_doc("note", note, log)
+    macro = run_macro(ticker, slug, asof, agent, log)
     agent("evaluator", f"Evaluate {ticker} for {asof}: fact sheet research/{slug}/factsheet-{asof}.md, "
-                       f"note research/{slug}/{asof}.md, state portfolio/state.json. {why}", log)
+                       f"note research/{slug}/{asof}.md, state portfolio/state.json"
+                       + (f", macro overlay research/{slug}/{asof}-macro.md" if macro else "") + f". {why}", log)
     if not ev.exists():
         raise StepFailed(f"evaluator wrote no evaluation at {ev}")
     check_doc("eval", ev, log)
     run_montecarlo(ticker, slug, asof, agent, log, run)
     return ev
+
+
+def run_macro(ticker: str, slug: str, asof: str, agent, log) -> bool:
+    """Macro overlay (skill: macro-overlay). Non-blocking: on failure the stock is researched without it."""
+    out = ROOT / "research" / slug / f"{asof}-macro.md"
+    try:
+        if not (ROOT / "reports" / "macro" / f"{asof}.json").exists():
+            sh(PY + ["scripts/macro_data.py", "--asof", asof], log)  # official FRED snapshot, once per run
+        agent("macro-overlay", f"Ticker {ticker}, date {asof}. Research: research/{slug}/factsheet-{asof}.md, "
+                               f"research/{slug}/{asof}.md. Macro snapshot: reports/macro/{asof}.md. "
+                               f"Write research/{slug}/{asof}-macro.md.", log)
+        if not out.exists():
+            raise StepFailed("macro-overlay wrote no file")
+        check_doc("macro", out, log)
+        return True
+    except StepFailed as e:
+        log(f"!! MACRO OVERLAY UNAVAILABLE for {ticker}: {e}")
+        return False
 
 
 def run_montecarlo(ticker: str, slug: str, asof: str, agent, log, run: Path) -> None:
@@ -96,7 +116,9 @@ def run_montecarlo(ticker: str, slug: str, asof: str, agent, log, run: Path) -> 
     try:
         sh(PY + ["scripts/mc_inputs.py", ticker, "--asof", asof], log)  # regression, vol, analogues (no LLM)
         agent("mc-parameters", f"Ticker {ticker}, date {asof}. Research: research/{slug}/factsheet-{asof}.md, "
-                               f"research/{slug}/{asof}.md, research/{slug}/{asof}-evaluation.md, inputs research/{slug}/{asof}-mc-inputs.json. "
+                               f"research/{slug}/{asof}.md, research/{slug}/{asof}-evaluation.md, inputs research/{slug}/{asof}-mc-inputs.json"
+                               + (f", macro overlay research/{slug}/{asof}-macro.md" if (ROOT / "research" / slug / f"{asof}-macro.md").exists() else "")
+                               + ". "
                                f"Write research/{slug}/{asof}-mc-params.json and run the simulation.", log)
         if not params.exists():
             raise StepFailed("mc-parameters wrote no parameters file")
@@ -173,7 +195,7 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             step(f"reinitiate {t}")
             h = state["holdings"][t]
             why = (f"This is a full re-initiation of an existing {h['type']} holding "
-                   f"(scan: {'core trigger hit' if t in scan['reinitiate'] else 'escalated by weekly review'}). "
+                   f"(scan: {'core or macro trigger fired' if t in scan['reinitiate'] else 'escalated by weekly review'}). "
                    f"Decide ADD, HOLD, TRIM or SELL.")
             evals.append(("reinitiation", research_and_evaluate(t, h["type"], asof, why, agent, log, rundir)))
 

@@ -92,11 +92,53 @@ def events_in_window(events: list[dict], after: str, asof: str) -> list[dict]:
 
 
 # --------------------------------------------------------------------------- scan
-def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str) -> dict:
+def latest_macro(ticker: str) -> dict | None:
+    """The newest macro-overlay block for a holding, or None."""
+    import re
+    from common import ROOT as _R, Ticker as _T
+    files = sorted((_R / "research" / _T(ticker).slug).glob("*-macro.md"))
+    if not files:
+        return None
+    m = re.search(r"```json\s*(\{.*?\})\s*```\s*$", files[-1].read_text().strip(), re.S)
+    try:
+        return {**json.loads(m.group(1)), "file": str(files[-1].relative_to(_R))} if m else None
+    except json.JSONDecodeError:
+        return None
+
+
+def macro_check(ticker: str, last_run: str | None, asof: str, fred) -> dict:
+    """Skill macro-overlay, weekly review: test each mechanical refresh trigger on FRED data since the last
+    review (no model call). Returns {weight, fired: [...], text_triggers: [...], line}."""
+    from macro_data import fired
+    ov = latest_macro(ticker)
+    if not ov or ov.get("macro_weight") not in ("secondary", "primary"):
+        return {"weight": (ov or {}).get("macro_weight"), "fired": [], "text_triggers": [], "line": None}
+    hits, text = [], []
+    for t in ov.get("refresh_triggers") or []:
+        c = t.get("check")
+        if not c or c.get("source") != "fred":
+            text.append(t.get("text", ""))
+            continue
+        try:
+            rows = fred.series(c["series"])["rows"]
+        except DataError as e:
+            text.append(f"{t.get('text', '')} [could not check: {e.field}]")
+            continue
+        f = fired(rows, c["op"], c["value"], last_run, asof)
+        if f:
+            hits.append(f"{t.get('text', '')} ({c['series']} = {f['value']} on {f['date']})")
+    line = None if hits else f"{ticker}: macro: no change ({ov['macro_weight']}, {ov['file']})"
+    return {"weight": ov["macro_weight"], "fired": hits, "text_triggers": text, "line": line}
+
+
+def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> dict:
     last_run = state.get("last_scan")
+    if fred is None and "macro" in cfg:
+        from macro_data import FredFetcher
+        fred = FredFetcher(cfg)
     thr = cfg["agents"]["weekly_flag_move_pct"]
     out = {"asof": asof, "last_run": last_run, "flagged": [], "reinitiate": [], "review": [],
-           "unflagged": [], "exits": [], "trims": [], "mechanical_requests": [], "notes": []}
+           "unflagged": [], "exits": [], "trims": [], "mechanical_requests": [], "notes": [], "macro": []}
     for t, h in sorted(state["holdings"].items()):
         hist = mkt.history(t)
         ref = reference_close(hist["rows"], last_run, h.get("entry_close_date"))
@@ -134,6 +176,16 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str) -> dict:
                 out["reinitiate"].append(t)
             if unchecked:
                 out["notes"].append(f"{t}: triggers without a mechanical check (reviewed when flagged): {unchecked}")
+        if fred is not None:
+            mcx = macro_check(t, last_run, asof, fred)
+            if mcx["fired"]:
+                reasons.append("macro trigger fired: " + "; ".join(mcx["fired"]))
+                if t not in out["reinitiate"]:
+                    out["reinitiate"].append(t)  # skill: re-run the macro steps + a position decision
+            elif mcx["line"]:
+                out["macro"].append(mcx["line"])
+            if mcx["text_triggers"]:
+                out["notes"].append(f"{t}: macro triggers to check by hand: {mcx['text_triggers']}")
         if reasons:
             from fact_sheet import is_sell_side
             fig["recent_headlines"] = [  # from the history page already downloaded; no extra request

@@ -9,7 +9,8 @@ You are the portfolio's investment committee for a PAPER portfolio (no real mone
 ## Inputs (read ONLY these)
 1. The fact sheet `research/<SLUG>/factsheet-<date>.md`
 2. The research note `research/<SLUG>/<date>.md`
-3. For BUY/ADD questions: `portfolio/state.json` (cash, holdings, types, sectors, weights via market_value_usd) and the config block in `CLAUDE.md` (limits and conviction sizes).
+3. If given, the macro overlay `research/<SLUG>/<date>-macro.md`. For `secondary`/`primary` weight, let its `macro_tilt` move the scenario probabilities or the valuation range (small/moderate/large), and say so in the affected scenario's `basis`, citing the overlay. For `none`/`context`, macro does not change the decision.
+4. For BUY/ADD questions: `portfolio/state.json` (cash, holdings, types, sectors, weights via market_value_usd) and the config block in `CLAUDE.md` (limits and conviction sizes).
 Do not read anything else and do not fetch anything. Use Bash ONLY to run the checker in step 3.
 
 ## Output: `research/<SLUG>/<date>-evaluation.md`, sections in exactly this order

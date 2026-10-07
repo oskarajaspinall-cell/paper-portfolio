@@ -218,9 +218,57 @@ def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
     return errs, counts
 
 
+MACRO_WEIGHTS = ("none", "context", "secondary", "primary")
+
+
+def check_macro(md: str, cfg: dict) -> tuple[list[str], dict]:
+    errs = []
+    heads = [h for h, _ in sections(md)]
+    if heads != ["Assessment", "Overlay"]:
+        errs.append(f"sections must be exactly ['Assessment', 'Overlay'] (got {heads})")
+    d, err = decision_block(md)
+    if err:
+        return errs + [err.replace("Decision", "Overlay")], {}
+    w = d.get("macro_weight")
+    counts = {"macro_weight": w, "words": words(dict(sections(md)).get("Assessment", ""))}
+    if w not in MACRO_WEIGHTS:
+        return errs + [f"macro_weight must be one of {MACRO_WEIGHTS}"], counts
+    if not str(d.get("macro_basis", "")).strip():
+        errs.append("macro_basis is required")
+    if w in ("secondary", "primary"):
+        for k in ("dominant_chain", "market_pricing", "macro_bull", "macro_bear"):
+            if not str(d.get(k, "")).strip():
+                errs.append(f"{k} is required for macro_weight {w}")
+        t = d.get("macro_tilt") or {}
+        if t.get("direction") not in ("toward bull", "toward bear", "neutral") or t.get("size") not in ("small", "moderate", "large") \
+                or not str(t.get("reason", "")).strip():
+            errs.append("macro_tilt needs direction (toward bull|toward bear|neutral), size (small|moderate|large) and reason")
+        trig = d.get("refresh_triggers") or []
+        if not 2 <= len(trig) <= 4 or not all(isinstance(x, dict) and x.get("text") for x in trig):
+            errs.append("2-4 refresh_triggers are required, each {\"text\": ...}")
+        for x in trig:
+            c = (x or {}).get("check")
+            if c and not (c.get("source") == "fred" and c.get("series") and c.get("op") in ("<", ">")
+                          and isinstance(c.get("value"), (int, float))):
+                errs.append(f"trigger check must be {{source: fred, series, op: < or >, value}}: {x.get('text', '')[:50]}")
+        if not d.get("sources"):
+            errs.append("sources (URL + date for every figure) are required")
+        if counts["words"] > 250:
+            errs.append(f"Assessment has {counts['words']} words (limit 250)")
+    elif counts["words"] > 80:
+        errs.append(f"a {w} assessment should be ~2 sentences (got {counts['words']} words)")
+    official = {d_.lower() for d_ in cfg.get("macro", {}).get("official_sources", [])}
+    for u in re.findall(r"https?://[^\s)\]>|\"]+", md):
+        h = (urlparse(u).hostname or "").lower()
+        if not any(h == x or h.endswith("." + x) for x in official | allowed_hosts()):
+            errs.append(f"URL not on the allowlist or official macro sources: {u}")
+    errs += [f"banned phrase '{p_}'" for p_ in ("price target", "target price", "analyst target") if p_ in md.lower()]
+    return errs, counts
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("kind", choices=["note", "eval"])
+    ap.add_argument("kind", choices=["note", "eval", "macro"])
     ap.add_argument("path")
     ap.add_argument("--state", default=str(ROOT / "portfolio" / "state.json"))
     a = ap.parse_args(argv)
@@ -230,6 +278,8 @@ def main(argv=None) -> int:
         sheets = sorted(path.parent.glob("factsheet-*.md"))
         sheet_urls = set(re.findall(r"https?://[^\s)\]>|]+", sheets[-1].read_text())) if sheets else set()
         errs, counts = check_note(md, {u.rstrip(".,;") for u in sheet_urls})
+    elif a.kind == "macro":
+        errs, counts = check_macro(md, load_config())
     else:
         errs, counts = check_eval(md, json.loads(Path(a.state).read_text()), load_config())
     if errs:

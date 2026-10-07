@@ -261,9 +261,9 @@ def test_run_reinitiates_fired_core_trigger(fake_repo, monkeypatch):
             (fake_repo / "runs" / "2026-10-10" / "submit.json").write_text("{}")
 
     assert wr.run("2026-10-10", False, 0, agent=agent) == 0
-    assert seen == ["researcher", "evaluator", "mc-parameters", "portfolio-manager"]
-    assert "full re-initiation of an existing CORE holding (scan: core trigger hit)" in prompts[0]
-    assert "Decide ADD, HOLD, TRIM or SELL" in prompts[1]
+    assert seen == ["researcher", "macro-overlay", "evaluator", "mc-parameters", "portfolio-manager"]
+    assert "full re-initiation of an existing CORE holding (scan: core or macro trigger fired)" in prompts[0]
+    assert "Decide ADD, HOLD, TRIM or SELL" in prompts[2]
 
 
 def test_failed_run_applies_no_trades_and_logs_error(fake_repo, monkeypatch):
@@ -445,3 +445,86 @@ def test_montecarlo_failure_is_reported_but_never_blocks(fake_repo, monkeypatch)
     monkeypatch.setattr(weekly_report, "ROOT", fake_repo)
     md = weekly_report.build(fake_repo / "runs" / "2026-10-10", "2026-10-10", fake_repo / "portfolio")
     assert "**N0** Monte Carlo FAILED (nothing written; decision unaffected)" in md
+
+
+# ------------------------------------------------------------------ macro overlay
+MACRO_OK = """# Macro overlay: X (X) — 2026-10-07
+## Assessment
+Real yields rose 0.7pp in 3 months [Certain] (https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10, 2026-10-05).
+## Overlay
+```json
+%s
+```
+"""
+
+
+def macro_md(**over):
+    d = {"macro_weight": "secondary", "macro_basis": "long-duration growth multiple is sensitive to real yields",
+         "dominant_chain": "real yields -> discount rate -> multiple", "market_pricing": "breakevens 2.36%",
+         "macro_bull": "real yields fall -> multiple +", "macro_bear": "real yields rise -> multiple -",
+         "macro_tilt": {"direction": "toward bear", "size": "small", "reason": "real yields rising"},
+         "refresh_triggers": [{"text": "10y real yield above 3.2%", "check": {"source": "fred", "series": "DFII10", "op": ">", "value": 3.2}},
+                              {"text": "PBoC cuts the RRR"}],
+         "sources": ["https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10 (2026-10-05)"]}
+    d.update(over)
+    return MACRO_OK % json.dumps(d)
+
+
+def test_check_macro_valid_and_invalid(real_cfg):
+    from check_docs import check_macro
+    assert check_macro(macro_md(), real_cfg)[0] == []
+    assert check_macro(macro_md(macro_weight="context", dominant_chain=None, refresh_triggers=None), real_cfg)[0] == []
+    assert any("macro_weight" in e for e in check_macro(macro_md(macro_weight="huge"), real_cfg)[0])
+    assert any("refresh_triggers" in e for e in check_macro(macro_md(refresh_triggers=[{"text": "x"}]), real_cfg)[0])
+    assert any("macro_tilt" in e for e in check_macro(macro_md(macro_tilt={"direction": "up"}), real_cfg)[0])
+    bad = macro_md(refresh_triggers=[{"text": "a", "check": {"source": "bloomberg", "series": "X", "op": ">", "value": 1}}, {"text": "b"}])
+    assert any("trigger check" in e for e in check_macro(bad, real_cfg)[0])
+    bad_src = macro_md().replace("## Overlay", "See https://www.zerohedge.com/x [Guessing].\n## Overlay")
+    assert any("not on the allowlist" in e for e in check_macro(bad_src, real_cfg)[0])
+
+
+def test_fred_trigger_fires_only_in_window():
+    from macro_data import fired, parse_csv
+    rows = parse_csv("observation_date,DFII10\n2026-09-28,3.0\n2026-09-29,.\n2026-10-01,3.3\n2026-10-05,3.1\n", "u")
+    assert [r["date"] for r in rows] == ["2026-09-28", "2026-10-01", "2026-10-05"]   # '.' = missing, skipped
+    assert fired(rows, ">", 3.2, "2026-09-30", "2026-10-07") == {"date": "2026-10-01", "value": 3.3}
+    assert fired(rows, ">", 3.2, "2026-10-02", "2026-10-07") is None
+    assert fired(rows, "<", 3.05, None, "2026-10-07")["date"] == "2026-09-28"
+
+
+def test_scan_macro_trigger_reinitiates_and_no_change_line(cfg, tmp_path, monkeypatch):
+    import weekly_scan as ws
+    monkeypatch.setattr("common.ROOT", tmp_path)
+    for t in ("HOT", "CALM"):
+        (tmp_path / "research" / t).mkdir(parents=True)
+        (tmp_path / "research" / t / "2026-09-01-macro.md").write_text(macro_md())
+
+    class Fred:
+        def __init__(self, v): self.v = v
+        def series(self, sid): return {"rows": [{"date": "2026-09-15", "value": self.v}]}
+
+    hot = ws.macro_check("HOT", "2026-09-05", "2026-09-20", Fred(3.4))
+    assert hot["fired"] and "DFII10 = 3.4" in hot["fired"][0] and hot["text_triggers"] == ["PBoC cuts the RRR"]
+    calm = ws.macro_check("CALM", "2026-09-05", "2026-09-20", Fred(2.9))
+    assert calm["fired"] == [] and "macro: no change" in calm["line"]
+    assert ws.macro_check("NONE", None, "2026-09-20", Fred(9))["line"] is None   # no overlay: nothing to check
+
+
+def test_macro_failure_never_blocks_research(fake_repo, monkeypatch):
+    seen = []
+    def agent(name, prompt, log):
+        seen.append((name, prompt))
+        d = fake_repo / "research" / "N0"
+        d.mkdir(exist_ok=True)
+        if name == "researcher":
+            (d / "2026-10-10.md").write_text("note")
+        elif name == "macro-overlay":
+            raise wr.StepFailed("FRED unreachable")
+        elif name == "evaluator":
+            (d / "2026-10-10-evaluation.md").write_text(EVAL.replace("AAA", "N0") % ("AVOID", 1))
+    (fake_repo / "runs" / "2026-10-10").mkdir(parents=True, exist_ok=True)
+    monkeypatch.setattr(wr, "sh", lambda args, log, timeout=None: "")
+    ev = wr.research_and_evaluate("N0", "CORE", "2026-10-10", "x", agent, lambda m: None, fake_repo / "runs" / "2026-10-10")
+    assert ev.name == "2026-10-10-evaluation.md"
+    evaluator_prompt = next(p for n, p in seen if n == "evaluator")
+    assert "macro overlay" not in evaluator_prompt                      # evaluated without it, not blocked

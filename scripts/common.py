@@ -120,7 +120,9 @@ def record_ir_domain(ticker: str, domain: str | None) -> None:
 
 def allowed_domains(cfg: dict | None = None) -> set[str]:
     """Qualitative allowlist: config allowlist + watchlist ir= domains + recorded company domains."""
-    doms = {d.lower() for d in (cfg or load_config())["data"]["allowlist"]}
+    c = cfg or load_config()
+    doms = {d.lower() for d in c["data"]["allowlist"]}
+    doms |= {d.lower() for d in c.get("macro", {}).get("official_sources", [])}  # macro exception (owner-approved)
     doms |= {ir.lower() for ir in read_watchlist().values() if ir}
     if IR_DOMAINS.exists():
         doms |= {l.split()[1].lower() for l in IR_DOMAINS.read_text().splitlines() if len(l.split()) == 2}

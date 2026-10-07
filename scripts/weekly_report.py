@@ -110,6 +110,8 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
             out.append(f"- **{t}** Monte Carlo FAILED (nothing written; decision unaffected): {why}")
     for sk in manifest.get("skipped", []):
         out.append(f"- **{sk['ticker']}** new initiation SKIPPED (research failed; no decision, no trade): {sk['reason']}")
+    for ml in scan.get("macro", []):
+        out.append(f"- {ml}")
     for u in scan.get("unflagged", []):
         out.append(f"- {u['line']}")
     for n in scan.get("notes", []):
