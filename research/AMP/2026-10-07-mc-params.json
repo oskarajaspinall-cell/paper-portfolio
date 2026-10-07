@@ -1,0 +1,56 @@
+{
+  "ticker": "AMP",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.20, "cite": "research/AMP/2026-10-07-evaluation.md Decision.scenarios.bull.probability"},
+      "probability_evidence": "Bull case: $5.5bn additional buyback authorised 2026-09-29 (~13% of the 43.1bn market cap) keeps the share count shrinking; RSI 35 after falling from the 572.56 swing high; advisor recruits from Merrill Lynch (Aug) and Wells Fargo (Sep) show the channel still attracts talent; Q3 results on 2026-10-29 are the near-term catalyst that could show attrition contained. Probability is cut from a 0.25 base case for the moderate bear macro tilt (research/AMP/2026-10-07-macro.md macro_tilt).",
+      "target_price_12m": {"value": 629.0, "cite": "research/AMP/2026-10-07-evaluation.md Decision.scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0664, "cite": "Half the spread between the P/E-anchored target (629.0 = 5y-max P/E 15.2x x TTM EPS 41.38, EPS implied by the 12.0x P/E on the 496.61 close, factsheet Valuation/Price [RA,HI]) and the P/B-anchored implied price at the 5y-max P/B 9.9x on BVPS implied by the 6.9x P/B on the same close (712.5), relative to 629.0 = 6.64%. P/FCF excluded as an anchor: the evaluation rationale states AMP's P/FCF 'likely distorts' owner earnings via insurance balance-sheet flows (research/AMP/2026-10-07-evaluation.md Bear case); EV/EBITDA is [data unavailable] on the factsheet. Band (6.6%) is below the blended residual vol (22.5%, mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/AMP/2026-10-07-evaluation.md Decision.scenarios.base.probability"},
+      "probability_evidence": "Base case: stable margins and continued steady buybacks return the P/E to its 5y median, the modal outcome absent either attrition resolution or escalation. Probability is cut from 0.50 for the moderate bear macro tilt tied to rising real yields (+0.71pp/3m) and widening HY spreads (+0.4pp/3m) (research/AMP/2026-10-07-macro.md macro_tilt).",
+      "target_price_12m": {"value": 529.7, "cite": "research/AMP/2026-10-07-evaluation.md Decision.scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0503, "cite": "Half the spread between the P/E-anchored target (529.7 = 5y-median P/E 12.8x x TTM EPS 41.38, factsheet Valuation/Price [RA,HI]) and the P/B-anchored implied price at the 5y-median P/B 8.1x on the same BVPS (583.0), relative to 529.7 = 5.03%. P/FCF excluded as an anchor per the evaluation's distortion caveat (research/AMP/2026-10-07-evaluation.md Bear case); EV/EBITDA is [data unavailable]. Band (5.0%) is below the blended residual vol (22.5%, mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.35, "cite": "research/AMP/2026-10-07-evaluation.md Decision.scenarios.bear.probability"},
+      "probability_evidence": "Bear case: 2026-09-24 TheFly/Citywire report that AMP is offering bonuses and fee discounts to stem advisor attrition, consistent with five years of margin erosion (gross margin -5.5pp, net margin -6.7pp, factsheet IS); macro overlay's moderate bear tilt from rising real yields and widening HY spreads marks down AUM-linked fees further. Probability is raised from 0.25 for this tilt (research/AMP/2026-10-07-macro.md macro_tilt; research/AMP/2026-10-07.md Quality section).",
+      "target_price_12m": {"value": 409.7, "cite": "research/AMP/2026-10-07-evaluation.md Decision.scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.0007, "cite": "Half the spread between the P/E-anchored target (409.7 = 5y-min P/E 9.9x x TTM EPS 41.38, factsheet Valuation/Price [RA,HI]) and the P/B-anchored implied price at the 5y-min P/B 5.7x on the same BVPS (410.2), relative to 409.7 = 0.07% -- the two anchors converge in the bear case. P/FCF excluded per the evaluation's distortion caveat (research/AMP/2026-10-07-evaluation.md Bear case); EV/EBITDA is [data unavailable]. Band is well below the blended residual vol (22.5%, mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": -0.02, "cite": "Macro overlay (research/AMP/2026-10-07-macro.md) dominant_chain 'real yields / policy path -> equity & bond market valuations' with macro_tilt 'toward bear, moderate' (real yields +0.71pp/3m, HY spreads +0.4pp/3m); tempered by mixed factor_news for SPY in mc-inputs.json (record-high momentum per Bloomberg/WSJ/CNBC 2026-10-06 vs narrow-breadth/valuation caution per Barron's 'Only Four Trillion-Dollar Stocks Are Beating the S&P 500' and MarketWatch 'facing rate chaos and narrow breadth', both 2026-10-06)."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "research/AMP/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual (0.1431)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "Macro overlay (research/AMP/2026-10-07-macro.md) FRED facts: 10y real yield DFII10 +0.71pp/3m to 2.95%, 10y nominal DGS10 +0.83pp/3m to 5.31%, macro_tilt 'toward bear, moderate'; corroborated by factor_news for IEF in mc-inputs.json: Barron's 'Global Bond Markets Sell Off on France's Fiscal Worries... highest since 2002' (2026-10-05) and WSJ 'The Bond Rout Is Deepening' (2026-10-01). Rising yields imply further pressure on IEF's price."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "research/AMP/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual (0.0646)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings surprise",
+      "reason": "AMP reports Q3 2026 results on 2026-10-29, the next scheduled catalyst inside the 12-month horizon; historical earnings weeks have produced moves well beyond a typical week in either direction (mc-inputs.json event_weeks, earnings_release entries).",
+      "cite": "research/AMP/factsheet-2026-10-07.md Price section: 'Next earnings date: Oct 29, 2026' (ST,OV)",
+      "annual_probability": {"value": 0.76, "cite": "research/AMP/2026-10-07-mc-inputs.json analogues.event_weeks earnings_release entries: 6 of the last 20 quarterly earnings weeks (2021-10-25 to 2026-07-20) moved >=5% in magnitude (2022-04-25 -5.21%, 2022-07-25 +10.14%, 2022-10-24 +16.91%, 2024-07-22 +6.97%, 2025-10-27 -5.51%, 2026-01-26 +6.16%), a 30% per-quarter base rate; annual probability of at least one such quarter = 1-(1-0.30)^4 = 0.76."},
+      "impact": {"value": -0.0551, "cite": "research/AMP/2026-10-07-mc-inputs.json analogues.event_weeks: Q3 2025 earnings week 2025-10-27, move -0.0551 (the worst earnings-tagged week in the 5y history, used as the earnings-miss tail)."},
+      "analogue": {"week": "2025-10-27", "move": -0.0551},
+      "assumption": null
+    },
+    {
+      "name": "Advisor attrition / negative investor-disclosure shock",
+      "reason": "TheFly/Citywire (2026-09-24) reports AMP is offering bonuses and fee discounts to stem advisor attrition, a direct threat to the fee-generating asset base that could surface as a sudden negative disclosure (e.g. at an investor presentation or guidance update) distinct in timing from the gradual margin erosion already priced into the bear scenario's target.",
+      "cite": "research/AMP/2026-10-07.md section 2 (Quality): 'a 2026-09-24 TheFly/Citywire item reports Ameriprise is offering bonuses and fee discounts to stem advisor attrition'; also listed in factsheet-2026-10-07.md News & sentiment (2026-09-24 TheFly item).",
+      "annual_probability": {"value": 0.6, "cite": "research/AMP/2026-10-07-mc-inputs.json analogues.event_weeks: 3 non-earnings event weeks with moves beyond -4% over the 5-year history (2021-10-18 to 2026-09-28) -- 2023-03-13 proxy filing -6.75%, 2023-05-01 investor presentation -4.11%, 2026-02-09 investor presentation -12.51% -- ~3 events / ~5 years = 0.6/yr."},
+      "impact": {"value": -0.1251, "cite": "research/AMP/2026-10-07-mc-inputs.json analogues.largest_falls / event_weeks: week 2026-02-09 ('Investor presentation' 2026-02-11), move -0.1251, the largest negative non-earnings disclosure-linked week in the 5y history."},
+      "analogue": {"week": "2026-02-09", "move": -0.1251},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,47 @@
+{
+  "ticker": "ZTS",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "research/ZTS/2026-10-07-evaluation.md Decision JSON, scenarios.bull.probability"},
+      "probability_evidence": "Dermatology in-clinic share fell 10pp YoY with no sign yet of stabilising against entrants' discounting/bundling (note sec.2, Q2 2026 call); this bull path requires a share stabilisation not yet observed in the data, which the evaluator weights as the least likely of the three outcomes (conviction capped at 4, not 5, per the evaluation's rationale).",
+      "target_price_12m": {"value": 115, "cite": "research/ZTS/2026-10-07-evaluation.md Decision JSON, scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.076, "cite": "Bull's basis re-rates EV/EBITDA 9.1x->14.3x peer median (89.7% of the gap to the 14.9x 5-year minimum; factsheet-2026-10-07.md Valuation table, RA/P:IDXX/P:ELAN/P:MRK/P:PAHC). Applying the same 89.7% gap-closure fraction to P/E (11.6x->19.76x of its 20.7x min), EV/Sales (3.9x->6.14x of its 6.4x min) and P/FCF (12.7x->23.10x of its 24.3x min) implies $121.49, $112.31 and $129.76 respectively vs the stated $115 target; half the spread ($129.76-$112.31)/2=$8.73 is 7.6% of the target, below the 37.0% blended residual volatility."}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "research/ZTS/2026-10-07-evaluation.md Decision JSON, scenarios.base.probability"},
+      "probability_evidence": "Management's own FY2026 guidance (organic revenue -3% to -1%, adjusted net income -9% to -5%, Q2 2026 call per research/ZTS/2026-10-07.md sec.2) is the modal operating outcome already stated by the company, making 'earnings land within the guided range' the single most likely path; the evaluator assigns it the majority (50%) weight versus 20%/30% for bull/bear.",
+      "target_price_12m": {"value": 83, "cite": "research/ZTS/2026-10-07-evaluation.md Decision JSON, scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.03, "cite": "Base's basis fully closes EV/Sales' 13% discount to the 4.5x peer median (3.9x->4.5x; factsheet Valuation table), which is 25.5% of the gap to EV/Sales' own 6.4x 5-year minimum. Applying the same 25.5% gap-closure fraction to P/E (->13.92x of 20.7x min), EV/EBITDA (->10.58x of 14.9x min) and P/FCF (->15.66x of 24.3x min) implies $85.57, $82.93 and $87.95 vs the stated $83 target; half the spread ($87.95-$82.93)/2=$2.51 is 3.0% of the target."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "research/ZTS/2026-10-07-evaluation.md Decision JSON, scenarios.bear.probability"},
+      "probability_evidence": "Momentum is broken (-50.6% 12-month, 26.9% below the 200-day MA, factsheet Price section) and options flow is bearish into the Nov 5, 2026 print (2,600 puts, 1.4x expected volume, concentrated in Oct/Nov-26 65-strike puts, factsheet News & sentiment); the evaluator weights a further guidance cut (30%) above the bull re-rating (20%) given the trend is still deteriorating.",
+      "target_price_12m": {"value": 58, "cite": "research/ZTS/2026-10-07-evaluation.md Decision JSON, scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.157, "cite": "Bear's basis holds P/E flat near 11.6x with EPS down ~18.7% to $5.00 (=> $58); the same proportional decline held flat on EV/EBITDA and EV/Sales also implies $58. Applying the FY2022 FCF-conversion low (62.7% vs TTM 87.8%, factsheet Quality table, CF/IS) to the same EPS decline via P/FCF held at its current 12.7x implies ~$39.80 (quality/cash-conversion could compress further in a deeper downturn than EPS alone suggests); half the spread ($58.00-$39.80)/2=$9.10 is 15.7% of the target, below the 37.0% blended residual volatility."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.05, "cite": "research/ZTS/2026-10-07-mc-inputs.json factor_news.SPY: multiple 2026-10-06 headlines (Bloomberg, WSJ, CNBC, MarketWatch) report the S&P 500 at record highs on AI-led mega-cap strength, with MarketWatch citing a Goldman Sachs insider still forecasting a record high before year-end; moderated to a modest +5% given Barron's/MarketWatch headlines flagging narrow breadth ('Only Four Trillion-Dollar Stocks Are Beating the S&P 500') and 'rate chaos'."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/ZTS/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "research/ZTS/2026-10-07-mc-inputs.json factor_news.IEF: Barron's/Bloomberg/WSJ headlines (2026-10-01/02/05) report a 'global bond rout' with 10-year Treasury yields at the 'highest level since 2002' and French yields near 5%, implying lower IEF prices; moderated to -4% given partially offsetting headlines of a 'US Treasury rebound' pulling yields off multi-decade highs after a weaker-than-expected jobs report."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/ZTS/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings / guidance-cut risk (Q3 2026, Nov 5 2026)",
+      "reason": "Bear case text: 'put flow is bearish into the 5 Nov print... another cut there could push the multiple lower still'; Decision triggers include 'Management cuts FY2026 adjusted net income guidance below the low end of the current 9%-5% decline range on the Q3 2026 call or later.' Fact sheet lists next earnings as Nov 5, 2026.",
+      "cite": "research/ZTS/2026-10-07-evaluation.md (bear case and triggers); research/ZTS/factsheet-2026-10-07.md Price section (next earnings date)",
+      "annual_probability": {"value": 0.2, "cite": "research/ZTS/2026-10-07-mc-inputs.json analogues.event_weeks: of the 20 quarterly earnings_release weeks in the 5-year history (2021 Q3 through 2026 Q2), 1 (2026-05-04, Q1 2026) produced a move of this magnitude (>=25%), a per-quarter rate of ~5%; the probability of at least one such print in a year with 4 quarterly releases is 1-(1-0.05)^4 ~= 0.185, rounded to 0.20."},
+      "impact": {"value": -0.2744, "cite": "research/ZTS/2026-10-07-mc-inputs.json analogues.largest_falls / event_weeks: week of 2026-05-04 (Q1 2026 earnings release, the print that triggered the FY2026 guidance cut described in research/ZTS/2026-10-07.md sec.2) moved -27.44%, the stock's largest weekly fall in the 5-year history."},
+      "analogue": {"week": "2026-05-04", "move": -0.2744},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.015, "cite": "research/ZTS/factsheet-2026-10-07.md Price section: price below the 50-day MA (-3.7%), 3-month momentum -5.4%, declining swing highs (80.17 on 2026-08-03 -> 78.75 on 2026-08-26 -> 78.00 on 2026-09-03); RSI 47.8 (neutral, not oversold), so a modest rather than maximal negative tilt."}
+}

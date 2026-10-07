@@ -13,8 +13,10 @@ A page that fails to load or parse is EXCLUDED and listed in the report (never g
 cached per day, so an interrupted run resumes where it stopped.
 
 Usage:
-    python scripts/screen.py [--asof YYYY-MM-DD] [--limit N]
+    python scripts/screen.py [--asof YYYY-MM-DD] [--limit N] [--index SP500|FTSE100|ALLWORLD]
 Writes reports/screen/<date>.md (ranked tables with source URLs) and reports/screen/<date>.json (picks).
+With --index (an ad-hoc screen of one index, percentiles within that index) the files are
+<date>-<index>.md/.json, so the weekly run's pick list is never replaced.
 """
 from __future__ import annotations
 
@@ -196,11 +198,13 @@ def pick(rows: list[dict], cfg: dict) -> list[dict]:
     return picks
 
 
-def run(fetcher, cfg: dict, asof: str, limit: int | None = None, state: dict | None = None) -> dict:
+def run(fetcher, cfg: dict, asof: str, limit: int | None = None, state: dict | None = None,
+        index: str | None = None) -> dict:
     held = set((state or {}).get("holdings", {}))
     recent = recently_researched(cfg["screen"]["exclude_researched_days"], asof)
     uni = [r for r in read_universe() if r["screen"] == "yes" and r["ticker"] not in held
-           and Ticker(r["ticker"]).slug not in recent]
+           and Ticker(r["ticker"]).slug not in recent
+           and (index is None or index in r["indexes"].split(";"))]
     if limit:
         uni = uni[:limit]
     metrics, failed, names = {}, [], {}
@@ -254,18 +258,20 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--asof", default=dt.date.today().isoformat())
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--index", choices=["SP500", "FTSE100", "ALLWORLD"], help="screen one index only (ad-hoc)")
     a = ap.parse_args(argv)
     cfg = load_config()
     if not (ROOT / "universe" / "universe.csv").exists():
         print("ERROR: universe/universe.csv not found. Build it first: bin/py scripts/universe.py build", file=sys.stderr)
         return 2
     state = json.loads((ROOT / "portfolio" / "state.json").read_text())
-    res = run(Fetcher(cfg), cfg, a.asof, a.limit, state)
+    res = run(Fetcher(cfg), cfg, a.asof, a.limit, state, a.index)
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / f"{a.asof}.md").write_text(report_md(res))
-    (OUT / f"{a.asof}.json").write_text(json.dumps({k: res[k] for k in ("asof", "screened", "failed", "picks")}, indent=1))
+    stem = a.asof + (f"-{a.index.lower()}" if a.index else "")
+    (OUT / f"{stem}.md").write_text(report_md(res))
+    (OUT / f"{stem}.json").write_text(json.dumps({k: res[k] for k in ("asof", "screened", "failed", "picks")}, indent=1))
     print(json.dumps({"screened": res["screened"], "failed": len(res["failed"]), "picks": res["picks"],
-                      "report": str((OUT / f"{a.asof}.md").relative_to(ROOT))}))
+                      "report": str((OUT / f"{stem}.md").relative_to(ROOT))}))
     return 0
 
 

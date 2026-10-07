@@ -1,0 +1,56 @@
+{
+  "ticker": "DECK",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.35, "cite": "evaluation.md Decision block scenarios.bull.probability"},
+      "probability_evidence": "Bull case: 90.6% TTM ROIC, 57.8% gross margin and a net-cash balance sheet trading 32-40% below peers (CROX/ONON/NKE/VFC) on P/E, EV/EBITDA and P/FCF, with FY2026 ROIC/ROCE/gross margin still near record levels -- i.e. the fundamentals have not yet shown the slowdown the price implies (research/DECK/2026-10-07-evaluation.md Bull case; factsheet-2026-10-07.md Quality and Valuation tables).",
+      "target_price_12m": {"value": 106.20, "cite": "evaluation.md Decision block scenarios.bull.target_price_12m: P/E re-rates to its 5y minimum 13.9x from 11.3x on TTM EPS lifted by the 5.72% YoY share-count reduction"},
+      "target_band": {"value": 0.0296, "cite": "Half the spread of the bull target priced on P/E (13.9x -> 106.20, factsheet-2026-10-07.md Valuation table), EV/EBITDA (9.3x -> ~107.05) and P/FCF (12.9x -> ~112.49), each 5y-minimum multiple applied to the same 5.72% buyback-driven per-share growth (factsheet Valuation and Other tables); spread $6.32 / 2 / $106.20 target = 2.96%"}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation.md Decision block scenarios.base.probability"},
+      "probability_evidence": "Base case is the modal outcome: valuation already sits below every 5y minimum and peer multiple (factsheet-2026-10-07.md Valuation table) while TTM operating margin has slipped from 23.7% to 22.7% and the stock sits near 6-month/52-week lows with weak relative strength into the Oct 22 print (factsheet Price table; evaluation.md Bear case) -- consistent with a 'cheap but no further re-rating yet' status quo rather than a re-rate or a collapse.",
+      "target_price_12m": {"value": 86.33, "cite": "evaluation.md Decision block scenarios.base.target_price_12m: P/FCF stays at 9.9x with flat FCF, FCF per share grows only by the 5.72% buyback-driven share-count reduction"},
+      "target_band": {"value": 0.0, "cite": "Base case holds the CURRENT multiple flat (P/E 11.3x, EV/EBITDA 7.5x and P/FCF 9.9x, factsheet-2026-10-07.md Valuation table) and grows only by the 5.72% buyback factor (Other table) -- because current price already equals each metric's current multiple, pricing the same growth off P/E, EV/EBITDA or P/FCF all converge on $86.33, so there is no cross-anchor disagreement in this scenario"}
+    },
+    "bear": {
+      "probability": {"value": 0.20, "cite": "evaluation.md Decision block scenarios.bear.probability"},
+      "probability_evidence": "Lowest-probability scenario: despite the 10-K's flagged 'pricing and promotional pressure', 18.5% customer concentration in receivables, a retailer naming HOKA among brands in a 'reset' and short interest up 20.4% to 7.02% of float (research/DECK/2026-10-07.md section 2 and 6; evaluation.md Bear case), FY2026 fundamentals (ROIC 104.4%, gross margin 57.7%, factsheet-2026-10-07.md Quality table) have not yet deteriorated to support a full margin reversion to FY2022 levels.",
+      "target_price_12m": {"value": 64.75, "cite": "evaluation.md Decision block scenarios.bear.target_price_12m: operating margin reverts from 22.7% TTM to the FY2022 level of 18.0%, cutting earnings at an unchanged 11.3x P/E"},
+      "target_band": {"value": 0.0, "cite": "Bear case holds the CURRENT multiple flat (P/E 11.3x, EV/EBITDA 7.5x, P/FCF 9.9x, factsheet-2026-10-07.md Valuation table) and applies the same margin-cut factor (18.0%/22.7%, Quality table) to each -- all three anchors converge on $64.75, so there is no cross-anchor disagreement in this scenario"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs led by a narrow set of megacap/AI names (WSJ, Market Watch 2026-10-06) alongside explicit narrow-breadth and overbought warnings (Barron's, Market Watch 2026-10-06) and 'rate chaos' concerns -- no clear net direction, so 0"},
+      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431 (156-week weekly regression, stockanalysis.com SPY history)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: a bond sell-off on France's fiscal worries pushing yields toward multi-decade highs (Barron's, WSJ 2026-10-01/05) against a Treasury rebound and easing yields on a weak jobs print (Bloomberg, The Guardian 2026-10-02) -- no clear net direction, so 0"},
+      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646 (156-week weekly regression, stockanalysis.com IEF history)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Earnings print (Oct 22, 2026 and subsequent quarters)",
+      "reason": "Next earnings date is Oct 22, 2026, shortly after this initiation, and DECK's weekly history shows quarterly reports routinely drive double-digit single-week moves in either direction",
+      "cite": "research/DECK/2026-10-07.md section 6 ('Next earnings is October 22, 2026, shortly after this initiation'); factsheet-2026-10-07.md Price table 'Next earnings date'",
+      "annual_probability": {"value": 0.90, "cite": "mc-inputs.json analogues.event_weeks: of the 20 completed quarterly-report weeks (2021-10-25 to 2026-07-20), 9 showed a weekly move of 12% or more in magnitude -- a per-quarter rate of ~45%, so P(at least one such move across the 4 quarters in a year) = 1-(1-0.45)^4 = 0.908"},
+      "impact": {"value": -0.21, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2025-05-19, -21.00%, tagged Q4 2025 annual_report/earnings_release"},
+      "analogue": {"week": "2025-05-19", "move": -0.21},
+      "assumption": null
+    },
+    {
+      "name": "Retail-partner concentration / promotional reset",
+      "reason": "10-K warns of 'pricing and promotional pressure across our brands' and one customer holds 18.5% of trade receivables; a major US retailer's executive chairman named HOKA among brands caught in a sector-wide 'reset'",
+      "cite": "research/DECK/2026-10-07.md section 2 (10-K quote, customer concentration); factsheet-2026-10-07.md News & sentiment (TheFly, 2026-08-25, 'Nike selloff in sympathy with Dick's...HOKA as brands in the reset')",
+      "annual_probability": {"value": 0.63, "cite": "mc-inputs.json analogues.all_weekly_moves: 5 weeks with a fall of 10% or more NOT tied to a scheduled earnings/report event over the ~5-year history (2022-02-28, 2022-06-27, 2024-09-03, 2025-07-28, 2026-03-02) -- an average of ~1/year; Poisson P(at least one in a year) = 1-e^-1 = 0.63"},
+      "impact": {"value": -0.146, "cite": "mc-inputs.json analogues.largest_falls: week 2022-02-28, -14.60%, not tagged to any scheduled report"},
+      "analogue": {"week": "2022-02-28", "move": -0.146},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

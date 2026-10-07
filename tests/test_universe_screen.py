@@ -262,3 +262,22 @@ def test_tactical_excludes_overextended(cfg):
     ok = dict(base, ch1y=40, price_vs_sma200=20, price_vs_sma50=6, rsi=60)
     rows = {r["ticker"]: r for r in score({"HOT": hot, "OK": ok, "MID": dict(ok, ch1y=5)}, c, "2026-10-07")}
     assert rows["HOT"]["tactical"] is None and rows["OK"]["tactical"] is not None
+
+
+def test_index_screen_filters_universe(cfg, monkeypatch):
+    import screen
+    uni = [{"ticker": "AAA", "name": "A", "indexes": "ALLWORLD;SP500", "screen": "yes"},
+           {"ticker": "LON:BBB", "name": "B", "indexes": "FTSE100", "screen": "yes"},
+           {"ticker": "CCC", "name": "C", "indexes": "ALLWORLD", "screen": "yes"}]
+    seen = []
+
+    class F:
+        def html(self, url):
+            seen.append(url)
+            raise screen.DataError(url, "test", "no page")
+
+    monkeypatch.setattr(screen, "read_universe", lambda: uni)
+    monkeypatch.setattr(screen, "recently_researched", lambda days, asof: set())
+    monkeypatch.setattr(screen, "deep_dive", lambda rows, f, c: [])
+    res = screen.run(F(), cfg, "2026-10-07", index="SP500")
+    assert len(seen) == 1 and "/aaa/" in seen[0] and [x["ticker"] for x in res["failed"]] == ["AAA"]

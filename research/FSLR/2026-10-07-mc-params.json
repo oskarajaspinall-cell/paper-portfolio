@@ -1,0 +1,65 @@
+{
+ "ticker": "FSLR",
+ "date": "2026-10-07",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "evaluation decision block scenarios.bull.probability (research/FSLR/2026-10-07-evaluation.md)"},
+   "probability_evidence": "Roth Capital called FSLR an 'attractive entry point' after the BIS's temporary final rule addressing poly 232 stockpiling (TheFly, 2026-09-25 and 2026-09-22, factsheet News & sentiment) — a potential short-covering/re-rating catalyst (short interest 10.35% of float, +11.6% MoM, ST) if Q3 (Oct 29) confirms margins hold; probability is cut by 0.05 below a symmetric default for the macro overlay's moderate bear tilt on rising real yields (research/FSLR/2026-10-07-macro.md).",
+   "target_price_12m": {"value": 236.00, "cite": "evaluation decision block scenarios.bull.target_price_12m (research/FSLR/2026-10-07-evaluation.md)"},
+   "target_band": {"value": 0.012, "cite": "Fact sheet valuation table (research/FSLR/factsheet-2026-10-07.md): bull basis reverts P/E to its 5y min 14.6x (179.80x14.6/11.1=236.49) vs. EV/EBITDA to its 5y min 10.1x (179.80x10.1/7.5=242.13), both at flat earnings; half the spread between the two implied prices divided by the target = ~1.2%."}
+  },
+  "base": {
+   "probability": {"value": 0.45, "cite": "evaluation decision block scenarios.base.probability (research/FSLR/2026-10-07-evaluation.md)"},
+   "probability_evidence": "The note flags that margins are at five-year highs and the fact sheet cannot split 45X credits from core operating profit (note section 2), and a securities class action plus patent litigation are unresolved (note section 6) — these argue for stasis rather than a directional break until Q3 earnings (Oct 29) confirm or refute margin durability, which is why 'hold' carries the largest single weight (45%).",
+   "target_price_12m": {"value": 180.00, "cite": "evaluation decision block scenarios.base.target_price_12m (research/FSLR/2026-10-07-evaluation.md)"},
+   "target_band": {"value": 0.0, "cite": "Fact sheet valuation table (research/FSLR/factsheet-2026-10-07.md): base basis holds both P/E (11.1x) and EV/EBITDA (7.5x) at current levels with earnings flat, so both anchors imply the unchanged current price (179.80); the anchors agree, so band = 0."}
+  },
+  "bear": {
+   "probability": {"value": 0.30, "cite": "evaluation decision block scenarios.bear.probability (research/FSLR/2026-10-07-evaluation.md)"},
+   "probability_evidence": "TTM gross/operating margins sit at or near five-year highs while leaning on 45X credits and tariff protection (note section 2); FY2022's -10.7% operating margin shows how fast this business can swing (factsheet Quality table); short interest rose 11.6% MoM to 10.35% of float (ST) and a securities class action is live (note section 6); probability is raised by 0.05 above a symmetric default for the macro overlay's moderate bear tilt on rising real yields and widening HY spreads (research/FSLR/2026-10-07-macro.md).",
+   "target_price_12m": {"value": 143.00, "cite": "evaluation decision block scenarios.bear.target_price_12m (research/FSLR/2026-10-07-evaluation.md)"},
+   "target_band": {"value": 0.0, "cite": "Fact sheet valuation table (research/FSLR/factsheet-2026-10-07.md): bear basis applies the same operating-margin reversion (33.6%->26.7%, income statement) to earnings while holding the multiple fixed at its current level for both P/E (11.1x) and EV/EBITDA (7.5x); since neither multiple moves, both anchors scale by the identical earnings ratio and imply the same price, so band = 0."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.06, "cite": "mc-inputs.json factor_news.SPY: Bloomberg/WSJ/CNBC/Invezz 2026-10-06 ('S&P 500 Hits Record High' / 'Record High as Big Tech Leads') and MarketWatch 2026-10-06 (Goldman Sachs 'forecasts a record high for the S&P 500 before year-end'), tempered by Barron's 2026-10-06 narrow-breadth concern ('Only Four Trillion-Dollar Stocks Are Beating the S&P 500') -> modest positive 12m drift."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 14.31% (annualised weekly vol, 156-week regression)."}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.03, "cite": "mc-inputs.json factor_news.IEF: Barron's 2026-10-05 ('Global Bond Markets Sell Off on France's Fiscal Worries') and Bloomberg 2026-10-01 ('US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002'; 'bond rout deepening'), partly offset by 2026-10-02 Guardian/ETF Trends coverage of yields easing on a softer jobs/PCE print; aligned with the macro overlay's moderate bear tilt expecting real yields to keep rising near-term rather than stabilise (research/FSLR/2026-10-07-macro.md) -> modest negative 12m drift for this Treasury-price factor."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 6.46% (annualised weekly vol, 156-week regression)."}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Q3 2026 earnings reset",
+   "reason": "Margins are at/near five-year highs; Q3 results (Oct 29, 2026) are the next test of whether they hold, and the bear case flags this as a specific near-term reset risk.",
+   "cite": "evaluation Bear case ('Q3 results on Oct 29 able to reset guidance', research/FSLR/2026-10-07-evaluation.md); factsheet Price section next earnings date Oct 29, 2026 (research/FSLR/factsheet-2026-10-07.md)",
+   "annual_probability": {"value": 0.35, "cite": "mc-inputs.json analogues.event_weeks: 2 of ~20 quarterly earnings prints over the last 5 years produced >15% weekly moves (Q1 2023: -15.82% week 2023-04-24; Q4 2025: -18.47% week 2026-02-23) -> ~10% per-print chance x4 prints/yr implies ~35% annual probability of at least one such extreme print."},
+   "impact": {"value": -0.1847, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: Q4 2025 earnings week 2026-02-23, move -18.47%."},
+   "analogue": {"week": "2026-02-23", "move": -0.1847},
+   "assumption": null
+  },
+  {
+   "name": "Tariff / Section 232 polysilicon policy shock",
+   "reason": "Section 232 tariff policy on polysilicon stockpiling is an ongoing regulatory variable that has moved the stock sharply on policy headlines.",
+   "cite": "note section 2 ('Section 232/tariff policy on polysilicon stockpiling is an ongoing regulatory variable', research/FSLR/2026-10-07.md); factsheet News & sentiment TheFly headlines 2026-09-22 and 2026-09-25 on the BIS temporary final rule (research/FSLR/factsheet-2026-10-07.md)",
+   "annual_probability": {"value": 0.40, "cite": "factsheet News & sentiment: three distinct tariff/Section 232 policy headlines within a five-week window (2026-09-15, 2026-09-22, 2026-09-25) indicate a recurring near-term policy catalyst rather than a rare tail event."},
+   "impact": {"value": -0.20, "cite": "mc-inputs.json analogues.all_weekly_moves: non-earnings weekly falls of comparable magnitude occurred historically (-13.01% week of 2026-01-05; -17.24% week of 2025-06-16), used as the magnitude basis per the stated assumption since no week in the event table is tagged specifically as a regulatory event."},
+   "analogue": null,
+   "assumption": "No week in the inputs file's event_weeks table is tagged as a regulatory/tariff event (only earnings/proxy/annual-report filings are tagged), so impact is a stated assumption capped within the +/-30% bound, sized to historical non-earnings weekly falls of comparable magnitude."
+  },
+  {
+   "name": "Securities class action & patent litigation overhang",
+   "reason": "A securities class action (filed June 23, 2026) alleging false statements is live, alongside patent litigation on both sides, neither with quantified liability yet.",
+   "cite": "note section 6 ('A securities class action ... and two active patent suits are live legal overhangs; neither has a quantified liability yet', research/FSLR/2026-10-07.md); factsheet News & sentiment Kaplan Fox headlines 2026-08-21/2026-08-24 and TheFly JA Solar lawsuit 2026-10-01 (research/FSLR/factsheet-2026-10-07.md)",
+   "annual_probability": {"value": 0.15, "cite": "Only one class action and two patent suits are currently pending in the research with no scheduled near-term ruling date, so a lower-frequency estimate is used than the recurring tariff-headline risk above."},
+   "impact": {"value": -0.12, "cite": "No quantified liability figure is given in the research (note section 6); impact is a stated assumption within the +/-30% bound, sized below the regulatory shock given the absence of a dollar liability estimate."},
+   "analogue": null,
+   "assumption": "No week in the inputs file's event_weeks table is tagged as a litigation event, so impact and probability are stated assumptions, capped within the +/-30% bound."
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}
