@@ -404,3 +404,14 @@ def test_dashboard_series_and_safe_embedding():
     assert s[1]["baseline"] == pytest.approx(101)
     html = dashboard.render({"x": "</script><script>alert(1)</script>"})
     assert "</script><script>alert(1)" not in html                          # data can't break out of its tag
+
+
+def test_decision_log_relabels_low_conviction_buys(real_cfg, tmp_path, monkeypatch):
+    monkeypatch.setattr(dl, "ROOT", tmp_path)
+    (tmp_path / "e.md").write_text(EVAL % ("BUY", 3))
+    m = DLMarket(real_cfg, {"AAA": {"2026-01-05": 100}, "SPY": {"2026-01-05": 500}})
+    rows = dl.record([str(tmp_path / "e.md")], m, "2026-01-10", [])
+    assert rows[0]["decision"] == "AVOID" and "below the minimum 4" in rows[0]["note"]
+    out = tmp_path / "d.csv"
+    dl.write(rows, out)
+    assert dl.read(out)[0]["note"].startswith("relabelled BUY->AVOID")

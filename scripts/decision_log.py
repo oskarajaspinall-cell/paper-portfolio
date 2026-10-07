@@ -26,7 +26,7 @@ from fetch_data import Fetcher  # noqa: E402
 LOG = ROOT / "portfolio" / "decisions.csv"
 HORIZONS = (1, 3, 6, 12)
 COLS = (["date", "ticker", "type", "decision", "conviction", "price", "currency", "price_date", "price_usd",
-         "spy_close", "evaluation"]
+         "spy_close", "evaluation", "note"]
         + [f"{k}_{h}m" for h in HORIZONS for k in ("ret", "spy", "excess", "hit")])
 POSITIVE = {"BUY", "ADD", "HOLD"}
 
@@ -77,7 +77,13 @@ def record(eval_paths: list[str], mkt, asof: str, rows: list[dict]) -> list[dict
         d = decision_from_eval(Path(p if Path(p).is_absolute() else ROOT / p).read_text())
         q = mkt.quote(d["ticker"], d["price_date"])
         s = mkt.quote(spy, d["price_date"])
-        rows.append({"date": asof, "ticker": d["ticker"], "type": d["position_type"], "decision": d["decision"],
+        m = int(mkt.cfg["core"].get("min_buy_conviction", 1))
+        note = ""
+        if d["decision"] in ("BUY", "ADD") and int(d["conviction"]) < m:  # owner rule: never bought
+            note = (f"relabelled {d['decision']}->AVOID: conviction {d['conviction']} is below the minimum {m} "
+                    "to buy (owner rule); the trade was not made")
+            d["decision"] = "AVOID"
+        rows.append({"note": note, "date": asof, "ticker": d["ticker"], "type": d["position_type"], "decision": d["decision"],
                      "conviction": d["conviction"], "price": d["price_at_decision"], "currency": q["currency"],
                      "price_date": d["price_date"], "price_usd": round(q["price_usd"], 6),
                      "spy_close": s["close"], "evaluation": rel})

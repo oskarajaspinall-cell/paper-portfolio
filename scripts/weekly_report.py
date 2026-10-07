@@ -96,7 +96,7 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     for d in decisions:
         what = "core re-initiation" if d.get("kind") == "reinitiation" else "new initiation"
         out.append(f"- **{d['ticker']}** {what} → {d['decision']} (conviction {d['conviction']}): "
-                   f"{d.get('rationale', '')} [{d['evaluation']}]")
+                   f"{d.get('rationale', '')} [{d['evaluation']}]" + (f" — Note: {d['note']}." if d.get("note") else ""))
     reviews = run / "reviews.md"
     if reviews.exists():
         body = "\n".join(l for l in reviews.read_text().strip().splitlines() if not l.startswith("# "))
