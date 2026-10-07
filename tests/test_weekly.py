@@ -372,3 +372,30 @@ def test_reinitiation_failure_still_cancels_the_week(fake_repo, monkeypatch):
         raise wr.StepFailed("researcher crashed")
     assert wr.run("2026-10-10", False, 0, agent=agent) == 1
     assert "reinitiate TRIG" in (fake_repo / "runs" / "2026-10-10" / "error.log").read_text()
+
+
+def test_run_builds_dashboard_but_its_failure_is_not_fatal(fake_repo, monkeypatch):
+    calls = []
+    base = make_sh(fake_repo, SCAN_QUIET, calls)
+
+    def sh(args, log, timeout=None):
+        if "dashboard.py" in " ".join(args):
+            calls.append("dashboard")
+            raise wr.StepFailed("disk full")
+        return base(args, log)
+    monkeypatch.setattr(wr, "sh", sh)
+    assert wr.run("2026-10-10", False, 0, agent=lambda *a: None) == 0
+    assert "dashboard" in calls and "dashboard not updated" in (fake_repo / "runs" / "2026-10-10" / "run.log").read_text()
+
+
+def test_dashboard_series_and_safe_embedding():
+    import dashboard
+    vals = [{"date": "2026-10-09", "total_usd": "100000", "spy_close": "500", "baseline_usd": ""},
+            {"date": "2026-10-09", "total_usd": "99990", "spy_close": "500", "baseline_usd": "99990"},
+            {"date": "2026-10-16", "total_usd": "102000", "spy_close": "505", "baseline_usd": "101000"}]
+    s = dashboard.series(vals, 100000)
+    assert [p["date"] for p in s] == ["2026-10-09", "2026-10-16"]          # last row per date
+    assert s[1]["portfolio"] == pytest.approx(102) and s[1]["spy"] == pytest.approx(101)
+    assert s[1]["baseline"] == pytest.approx(101)
+    html = dashboard.render({"x": "</script><script>alert(1)</script>"})
+    assert "</script><script>alert(1)" not in html                          # data can't break out of its tag

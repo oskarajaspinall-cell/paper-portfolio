@@ -134,6 +134,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions; any failure restores `portfolio/` and writes `runs/<date>/error.log`.
 - `.github/workflows/weekly-review.yml` (Sat 08:00 UTC) and `screen.yml` (Fri 21:00 UTC) — share one concurrency group; `bin/ci-paused` and `bin/ci-finish` handle PAUSED and commit-or-error-log.
 - `runs/<date>/` — each run's scan, requests, submit results, reviews, log. `reports/screen/` — screens. `reports/sample/` — simulated sample report.
+- `scripts/dashboard.py` → `docs/index.html` — self-contained charts dashboard, rebuilt after every real weekly run (GitHub Pages serves `/docs`).
 - `README.md` — plain-English setup guide.
 - `data/cache/` — per-day page cache (git-ignored).
 

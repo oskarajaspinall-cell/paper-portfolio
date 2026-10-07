@@ -11,7 +11,7 @@ script before the next step.
   6. mechanical exits/trims submitted by script (no model call); then portfolio-manager turns the
      evaluators' decisions into requests -> portfolio.py submit (skipped if there are none)
   7. decision log: record this run's decisions, update matured outcomes
-  8. stamp the scan date; 9. weekly report
+  8. stamp the scan date; 9. weekly report; 10. dashboard (docs/index.html)
 
 Test switch: env PAPER_SIMULATE_FAILURE=<step name prefix, e.g. "decision log"> forces a failure there.
 
@@ -212,6 +212,11 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
         (rundir / "run.json").write_text(json.dumps(manifest, indent=1))
         step("report")
         sh(PY + ["scripts/weekly_report.py", "--asof", asof, "--run", str(rundir)], log)
+        if not dry_run:
+            try:  # cosmetic: a dashboard problem is logged, never cancels the week
+                sh(PY + ["scripts/dashboard.py"], log)
+            except StepFailed as e:
+                log(f"dashboard not updated: {e}")
         if dry_run:  # a dry run never changes the portfolio
             shutil.rmtree(port)
             shutil.copytree(backup, port)

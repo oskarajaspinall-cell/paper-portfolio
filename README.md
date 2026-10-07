@@ -88,6 +88,15 @@ website).
 
 ---
 
+## The dashboard (charts)
+
+Every weekly run rebuilds `docs/index.html`: portfolio value, performance vs the S&P 500, holdings and
+sector weights, recent trades, decisions and hit rates.
+- **On your computer:** open `docs/index.html` in any browser.
+- **As a public web page (free):** on GitHub, **Settings** → **Pages** → under **Build and deployment**,
+  Source **Deploy from a branch**, Branch **main**, folder **/docs** → **Save**. After a minute it's live at
+  `https://<your-username>.github.io/paper-portfolio/` and updates itself after every weekly run.
+
 ## Where to look
 
 | File | What it is |
