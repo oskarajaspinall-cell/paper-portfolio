@@ -31,8 +31,8 @@ def core_buy(t, conv=4, **kw):
     return r
 
 
-def tac_buy(t, target, **kw):
-    r = {"ticker": t, "action": "BUY", "position_type": "TACTICAL", "conviction": 3, "reason": "catalyst",
+def tac_buy(t, target, conviction=3, **kw):
+    r = {"ticker": t, "action": "BUY", "position_type": "TACTICAL", "conviction": conviction, "reason": "catalyst",
          "thesis": "Q3 results 2026-10-29", "exit_plan": {"target": target}}
     r.update(kw)
     return r
@@ -469,3 +469,80 @@ def test_rule_min_buy_conviction_tactical_and_add(real_cfg):
     e = engine(real_cfg, {"AAPL": holding("AAPL", "CORE", 3, conv=2)})
     e.process([{"ticker": "AAPL", "action": "ADD", "position_type": "CORE", "conviction": 3, "reason": "x"}])
     assert only_rule(e) == "CONVICTION_TOO_LOW"
+
+
+# ------------------------------------------------------------------ next-open orders (owner rule)
+class OpenMarket(FakeMarket):
+    """Completed closes up to 2026-10-09 (Fri); `opens` gives later sessions' opening prices."""
+
+    def __init__(self, cfg, opens=None, asof="2026-10-10"):
+        super().__init__(PRICES, cfg, asof=asof, close_date="2026-10-09")
+        self.opens = opens or {}
+
+    def history(self, t):
+        h = super().history(t)
+        extra = [{"date": d, "open": o, "close": o, "high": o, "low": o} for d, o in self.opens.get(t, [])]
+        return {**h, "all_rows": [dict(h["rows"][0], open=h["rows"][0]["close"])] + extra}
+
+
+def test_place_orders_changes_nothing_but_the_queue(cfg, tmp_path):
+    from portfolio import place_orders
+    sp = tmp_path / "state.json"
+    out = place_orders([core_buy("AAPL", conv=4), core_buy("MSFT", conv=1)], sp, OpenMarket(cfg), cfg, WATCH,
+                       "2026-10-10", port_dir=tmp_path)
+    s = json.loads(sp.read_text())
+    assert s["cash_usd"] == 100000 and s["holdings"] == {}
+    assert [o["request"]["ticker"] for o in s["pending"]] == ["AAPL"] and s["pending"][0]["placed"] == "2026-10-10"
+    assert out["placed"][0]["est_shares"] == 35 and out["rejected"][0]["rule"] == "CONVICTION_NO_POSITION"
+    assert not (tmp_path / "ledger.csv").exists()
+
+
+def test_fill_waits_for_the_open_then_fills_at_it(cfg, tmp_path):
+    from portfolio import fill_pending, place_orders
+    sp = tmp_path / "state.json"
+    place_orders([core_buy("AAPL", conv=4)], sp, OpenMarket(cfg), cfg, WATCH, "2026-10-10", port_dir=tmp_path)
+    out = fill_pending(sp, OpenMarket(cfg, asof="2026-10-11"), cfg, WATCH, port_dir=tmp_path)  # Sunday: no open yet
+    assert out["still_pending"] and json.loads(sp.read_text())["holdings"] == {}
+    mkt = OpenMarket(cfg, opens={"AAPL": [("2026-10-12", 210.0)]}, asof="2026-10-13")
+    out = fill_pending(sp, mkt, cfg, WATCH, port_dir=tmp_path)
+    row = out["applied"][0]
+    assert (row["fill_price"], row["fill_close_date"]) == (210.0, "2026-10-12")      # Monday's OPEN, not a close
+    assert "filled at the open of 2026-10-12" in row["reason"]
+    s = json.loads(sp.read_text())
+    assert s["pending"] == [] and s["holdings"]["AAPL"]["entry_price"] == 210.0
+    assert s["cash_usd"] == pytest.approx(100000 - row["gross_usd"] - row["costs_usd"])
+
+
+def test_tactical_order_cancelled_if_it_opens_beyond_target(cfg, tmp_path):
+    from portfolio import fill_pending, place_orders
+    sp = tmp_path / "state.json"
+    place_orders([tac_buy("NVDA", target=110, conviction=4)], sp, OpenMarket(cfg), cfg, WATCH, "2026-10-10",
+                 port_dir=tmp_path)
+    out = fill_pending(sp, OpenMarket(cfg, opens={"NVDA": [("2026-10-12", 115.0)]}, asof="2026-10-13"), cfg, WATCH,
+                       port_dir=tmp_path)
+    assert out["applied"] == [] and out["rejected"][0]["rule"] == "TACTICAL_EXIT_PLAN"
+    assert "at the open of 2026-10-12" in out["rejected"][0]["detail"]
+    assert json.loads(sp.read_text())["pending"] == []
+
+
+def test_order_expires_without_an_open(cfg, tmp_path):
+    from portfolio import fill_pending, place_orders
+    sp = tmp_path / "state.json"
+    place_orders([core_buy("AAPL", conv=4)], sp, OpenMarket(cfg), cfg, WATCH, "2026-10-10", port_dir=tmp_path)
+    out = fill_pending(sp, OpenMarket(cfg, asof="2026-10-30"), cfg, WATCH, port_dir=tmp_path)
+    assert out["expired"] and out["rejected"][0]["rule"] == "ORDER_EXPIRED"
+    assert json.loads(sp.read_text())["pending"] == []
+
+
+def test_replacement_pair_fills_both_sides_at_their_opens(cfg, tmp_path):
+    from portfolio import fill_pending, place_orders
+    sp = tmp_path / "state.json"
+    s = empty_state(cfg)
+    s["holdings"]["MSFT"] = holding("MSFT", "CORE", 5)
+    s["cash_usd"] = 95000
+    sp.write_text(json.dumps(s))
+    place_orders([core_buy("AAPL", conv=4, replaces="MSFT", replacement_reason="better value")], sp, OpenMarket(cfg),
+                 cfg, WATCH, "2026-10-10", port_dir=tmp_path)
+    mkt = OpenMarket(cfg, opens={"AAPL": [("2026-10-12", 205.0)], "MSFT": [("2026-10-12", 390.0)]}, asof="2026-10-13")
+    out = fill_pending(sp, mkt, cfg, WATCH, port_dir=tmp_path)
+    assert [(a["side"], a["ticker"], a["fill_price"]) for a in out["applied"]] == [("SELL", "MSFT", 390.0), ("BUY", "AAPL", 205.0)]

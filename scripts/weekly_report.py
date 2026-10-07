@@ -31,8 +31,10 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     scan = _load(run / "scan.json", {})
     empty = {"applied": [], "rejected": [], "warnings": []}
     mech_sub, sub = _load(run / "submit-mechanical.json", empty), _load(run / "submit.json", empty)
-    sub = {"applied": mech_sub.get("applied", []) + sub.get("applied", []),
-           "rejected": mech_sub.get("rejected", []) + sub.get("rejected", []),
+    fills = _load(run / "fills.json", empty)
+    placed = sub.get("placed", [])
+    sub = {"applied": fills.get("applied", []) + mech_sub.get("applied", []) + sub.get("applied", []),
+           "rejected": fills.get("rejected", []) + mech_sub.get("rejected", []) + sub.get("rejected", []),
            "dry_run": mech_sub.get("dry_run") or sub.get("dry_run")}
     manifest = _load(run / "run.json", {})
     vals = read_csv(port / "valuations.csv")
@@ -49,7 +51,8 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     out = [f"# Weekly report — {asof}{dry}", "", "## 1. Summary"]
     out.append(f"- Portfolio ${total:,.0f}; week {pct(wk.get('total'))} vs SPY {pct(wk.get('spy'))}; since inception "
                f"{pct(inc.get('total'))} vs SPY {pct(inc.get('spy'))}." if total is not None else "- No valuations yet.")
-    out.append(f"- Trades: {len(applied)} executed ({mech} mechanical), {len(rejected)} rejected; "
+    out.append(f"- Trades: {len(applied)} executed ({mech} mechanical), {len(placed)} order(s) placed for the next open, "
+               f"{len(rejected)} rejected; "
                f"{len(state.get('holdings', {}))} holdings, cash "
                f"{(cash / total * 100) if cash is not None and total else 0:.1f}%.")
     out.append(f"- Scan: {len(scan.get('review', []))} reviewed, {len(scan.get('reinitiate', []))} core re-initiation(s), "
@@ -62,6 +65,14 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
         out += ["| Side | Ticker | Type | Shares | Fill (close date) | Gross $ | Costs $ | Reason |", "|---|---|---|---|---|---|---|---|"]
         out += [f"| {a['side']} | {a['ticker']} | {a['type']} | {a['shares']} | {a['fill_price']} {a['currency']} ({a['fill_close_date']}) | "
                 f"{a['gross_usd']:,.2f} | {a['costs_usd']:,.2f} | {str(a.get('reason', ''))[:120]} |" for a in applied]
+    else:
+        out.append("None.")
+    out += ["", "**Orders placed (fill at the next market open)**", ""]
+    if placed:
+        out += ["| Action | Ticker | Type | Est. shares | Latest close | Replaces |", "|---|---|---|---|---|---|"]
+        out += [f"| {p['action']} | {p['ticker']} | {p['type']} | {p.get('est_shares', '')} | "
+                f"{p.get('est_price', '')} {p.get('est_currency', '')} ({p.get('est_close_date', '')}) | {p.get('replaces') or ''} |"
+                for p in placed]
     else:
         out.append("None.")
     out += ["", "**Rejected**", ""]

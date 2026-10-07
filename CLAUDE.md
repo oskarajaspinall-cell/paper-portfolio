@@ -123,6 +123,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/fetch_data.py` — stockanalysis.com scraper → JSON with `source_url` per section.
 - `scripts/fact_sheet.py <TICKER> --peers A B C` — one-page `research/<TICKER>/factsheet-<date>.md`.
 - `scripts/portfolio.py` — validates and applies trade requests, marks to market, computes returns. All arithmetic lives here.
+- **Fills (owner rule):** trades decided by the agents are validated at once and queued as pending orders that fill at the OPEN of the next trading day (`portfolio.py submit --at-next-open`, then `fill-pending`, run each weekday at 22:30 by `bin/fill-pending` and at the start of each weekly run). Mechanical tactical exits still fill at the first close that crossed the stop/target.
 - `scripts/common.py` — config block reader, ticker/URL mapping, watchlist parser.
 - `scripts/universe.py build` — builds `universe/universe.csv` (S&P 500 + FTSE 100 + All-World proxy).
 - `scripts/screen.py` — weekly screen → `reports/screen/<date>.md` and the picks for new initiations.

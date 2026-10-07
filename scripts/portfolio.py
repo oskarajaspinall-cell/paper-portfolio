@@ -3,7 +3,8 @@
 Paper only: no broker, no broker API, no real orders.
 
 Commands:
-    python scripts/portfolio.py submit requests.json [--asof YYYY-MM-DD] [--dry-run]
+    python scripts/portfolio.py submit requests.json [--asof YYYY-MM-DD] [--dry-run] [--at-next-open]
+    python scripts/portfolio.py fill-pending [--asof YYYY-MM-DD]   (fill queued orders at the next open)
     python scripts/portfolio.py mark [--asof YYYY-MM-DD]
     python scripts/portfolio.py returns [--asof YYYY-MM-DD]
     python scripts/portfolio.py status [--asof YYYY-MM-DD]
@@ -67,7 +68,7 @@ class Market:
             rows = [r for r in s["data"]["rows"] if r["date"] < self.asof]
             if not rows:
                 raise DataError(s["source_url"], "history.close", f"no completed close before {self.asof}")
-            self._hist[ticker] = {"url": s["source_url"], "rows": rows,
+            self._hist[ticker] = {"url": s["source_url"], "rows": rows, "all_rows": s["data"]["rows"],
                                   "currency": s["data"]["info"]["price_currency"], "news": s["data"].get("news", [])}
         return self._hist[ticker]
 
@@ -85,6 +86,17 @@ class Market:
                 raise DataError("https://stockanalysis.com/list/biggest-companies/", "fx",
                                 f"[data unavailable] no USD rate for {ccy} on stockanalysis.com")
         return self._fx[ccy]
+
+    def open_quote(self, ticker: str, on_or_after: str) -> dict | None:
+        """Price at the OPEN of the first trading day on/after `on_or_after` (None if it hasn't happened yet)."""
+        h = self.history(ticker)
+        rows = [r for r in h.get("all_rows", h["rows"]) if r["date"] >= on_or_after and r.get("open")]
+        if not rows:
+            return None
+        r = rows[0]
+        q = self.price(ticker, r["open"], r["date"], h["currency"], h["url"])
+        q["basis"] = "open"
+        return q
 
     def quote(self, ticker: str, on_or_before: str | None = None) -> dict:
         h = self.history(ticker)
@@ -289,6 +301,11 @@ class Engine:
         self.ledger: list[dict] = []
         self.rejections: list[dict] = []
         self.applied: list[dict] = []
+        self.applied_rows: list[tuple[dict, list[dict]]] = []
+        self.override: dict[str, dict] = {}  # ticker -> quote (fills at the next open)
+
+    def quote(self, ticker: str, on_or_before: str | None = None) -> dict:
+        return self.override.get(ticker) or self.mkt.quote(ticker, on_or_before)
 
     # ---- helpers
     def pv(self, s=None) -> float:
@@ -371,7 +388,7 @@ class Engine:
             if r["conviction"] == 1:
                 raise Reject("CONVICTION_NO_POSITION", "conviction 1 means no position")
             self._min_conviction(r)
-            q = self.mkt.quote(t)
+            q = self.quote(t)
             pv = self.pv(s)
             if ptype == "CORE":
                 self._core_entry_fields(r)
@@ -404,7 +421,7 @@ class Engine:
                 raise Reject("NOT_HELD", f"{t} is not held")
             if held["type"] != ptype:
                 raise Reject("LABEL_FIXED", f"{t} is held as {held['type']}, request says {ptype}")
-            q = self.mkt.quote(t, r.get("fill_date"))
+            q = self.quote(t, r.get("fill_date"))
             if r.get("fill_date") and q["date"] != r["fill_date"]:
                 raise Reject("SCHEMA", f"no daily close for {t} on fill_date {r['fill_date']}")
             pv = self.pv(s)
@@ -568,7 +585,7 @@ class Engine:
                     if not r.get("replacement_reason"):
                         raise Reject("REPLACEMENT_INVALID", "replacement_reason missing (why the new idea is better)")
                     rh = work["holdings"][rep]
-                    rows.append(self._execute(work, rep, rh["type"], "SELL", rh["shares"], self.mkt.quote(rep),
+                    rows.append(self._execute(work, rep, rh["type"], "SELL", rh["shares"], self.quote(rep),
                                               f"replaced by {r['ticker']}: {r['replacement_reason']}"))
                 rows += self._apply(work, r)
                 breaches = self.limit_breaches(work, r)
@@ -585,6 +602,7 @@ class Engine:
             self.s.update(work)
             self.ledger += rows
             self.applied.append(r)
+            self.applied_rows.append((r, rows))
 
     def update_baseline(self):
         """Baseline = the first week's picks held unchanged. Trades in the first 7 days
@@ -665,9 +683,96 @@ def run_submit(requests, state_path, mkt, cfg, watch, today, dry_run=False, port
     return summary
 
 
+def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, port_dir=PORT) -> dict:
+    """Owner rule: decided trades fill at the NEXT OPEN. Validate every rule now (on a copy, at the latest
+    close) and queue the valid requests as pending orders; nothing is bought or sold yet."""
+    state = load_state(state_path, cfg)
+    mark(state, mkt)
+    work = copy.deepcopy(state)
+    eng = Engine(work, mkt, cfg, watch, today)
+    eng.process(requests)
+    n0 = len(state.get("pending", []))
+    orders = []
+    for i, (r, rows) in enumerate(eng.applied_rows):
+        main_rows = [x for x in rows if x["ticker"] == r["ticker"]] or rows or [{}]
+        last = main_rows[-1]
+        orders.append({"id": f"{today}-{n0 + i + 1}", "placed": today, "request": r,
+                       "estimate": {"side": last.get("side", r["action"]), "shares": last.get("shares", 0),
+                                    "price": last.get("fill_price"), "currency": last.get("currency"),
+                                    "close_date": last.get("fill_close_date")}})
+    summary = {"mode": "next_open",
+               "placed": [{"id": o["id"], "ticker": o["request"]["ticker"], "action": o["request"]["action"],
+                           "type": o["request"]["position_type"], **{f"est_{k}": v for k, v in o["estimate"].items()},
+                           "replaces": o["request"].get("replaces"), "reason": o["request"].get("reason", "")}
+                          for o in orders],
+               "applied": [], "rejected": eng.rejections, "warnings": target_warnings(state, cfg)}
+    if not dry_run:
+        append_csv(port_dir / "rejections.csv", REJECT_COLS, eng.rejections)
+        if orders:
+            state.setdefault("pending", []).extend(orders)
+            atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
+    return summary
+
+
+def fill_pending(state_path, mkt, cfg, watch, dry_run=False, port_dir=PORT, max_wait_days: int = 14) -> dict:
+    """Fill each pending order at the open of the first trading day on/after the day it was placed,
+    re-checking every rule at that price. Orders whose open hasn't happened yet stay pending; orders
+    older than `max_wait_days` expire. Tactical orders that open beyond their stop/target are rejected."""
+    state = load_state(state_path, cfg)
+    pending = state.get("pending", [])
+    out = {"applied": [], "rejected": [], "still_pending": [], "expired": []}
+    if not pending:
+        return out
+    mark(state, mkt)
+    ledger, rejections, remaining = [], [], []
+    rank = {"SELL": 0, "TRIM": 1, "HOLD": 1, "ADD": 2, "BUY": 3}
+    for o in sorted(pending, key=lambda o: (o["placed"], rank.get(o["request"]["action"], 9))):
+        r = o["request"]
+        tickers = [r["ticker"]] + ([r["replaces"]] if r.get("replaces") else [])
+        quotes = {t: mkt.open_quote(t, o["placed"]) for t in tickers}
+        if any(q is None for q in quotes.values()):
+            age = (dt.date.fromisoformat(mkt.asof) - dt.date.fromisoformat(o["placed"])).days
+            if age > max_wait_days:
+                rejections.append({"date": mkt.asof, "ticker": r["ticker"], "action": r["action"],
+                                   "type": r["position_type"], "rule": "ORDER_EXPIRED",
+                                   "detail": f"no opening price within {max_wait_days} days of {o['placed']}"})
+                out["expired"].append(o["id"])
+            else:
+                remaining.append(o)
+                out["still_pending"].append(o["id"])
+            continue
+        fill_day = max(q["date"] for q in quotes.values())
+        eng = Engine(state, mkt, cfg, watch, fill_day)
+        eng.override = quotes
+        eng.process([r])
+        for row in eng.ledger:
+            row["reason"] = f"{row['reason']} [order {o['id']} filled at the open of {row['fill_close_date']}]"
+        for rej in eng.rejections:
+            rej["detail"] = f"at the open of {fill_day}: {rej['detail']}"
+        eng.update_baseline()
+        ledger += eng.ledger
+        rejections += eng.rejections
+    state["pending"] = remaining
+    mark(state, mkt)
+    out["applied"] = [{k: r.get(k, "") for k in ("side", "ticker", "type", "shares", "fill_price", "currency",
+                                                 "fill_close_date", "gross_usd", "costs_usd", "cash_change_usd", "reason")}
+                      for r in ledger]
+    out["rejected"] = rejections
+    if not dry_run:
+        append_csv(port_dir / "rejections.csv", REJECT_COLS, rejections)
+        if ledger or rejections or len(remaining) != len(pending):
+            atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
+        if ledger:
+            append_csv(port_dir / "ledger.csv", LEDGER_COLS, ledger)
+            append_csv(port_dir / "valuations.csv", VAL_COLS, [valuation_row(state, mkt, "post")])
+    return out
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["submit", "mark", "returns", "status", "stamp"])
+    ap.add_argument("cmd", choices=["submit", "fill-pending", "mark", "returns", "status", "stamp"])
+    ap.add_argument("--at-next-open", action="store_true",
+                    help="submit: validate now, queue as pending orders filled at the next open (owner rule for decided trades)")
     ap.add_argument("--save", help="submit: also write the JSON summary to this path")
     ap.add_argument("requests", nargs="?")
     ap.add_argument("--asof", default=dt.date.today().isoformat())
@@ -681,8 +786,15 @@ def main(argv=None) -> int:
     try:
         if args.cmd == "submit":
             reqs = json.loads(Path(args.requests).read_text())
-            out = run_submit(reqs, state_path, mkt, cfg, investable(), args.asof, args.dry_run)
+            out = (place_orders if args.at_next_open else run_submit)(reqs, state_path, mkt, cfg, investable(),
+                                                                       args.asof, args.dry_run)
             out["dry_run"] = args.dry_run
+            if args.save:
+                Path(args.save).parent.mkdir(parents=True, exist_ok=True)
+                Path(args.save).write_text(json.dumps(out, indent=1))
+            print(json.dumps(out, indent=1))
+        elif args.cmd == "fill-pending":
+            out = fill_pending(state_path, mkt, cfg, investable(), args.dry_run)
             if args.save:
                 Path(args.save).parent.mkdir(parents=True, exist_ok=True)
                 Path(args.save).write_text(json.dumps(out, indent=1))

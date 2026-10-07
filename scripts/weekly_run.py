@@ -2,6 +2,7 @@
 (`claude -p --agent <name>`); everything else is a script. Each agent's output is checked by a
 script before the next step.
 
+  0. fill pending orders from earlier runs at their next open
   1. mark to market (pre-trade valuation)
   2. weekly_scan.py: flags, mechanical tactical exits and trims (no model calls)
   3. weekly-reviewer on flagged holdings (skipped if none)
@@ -119,6 +120,9 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
     try:
         if (ROOT / "PAUSED").exists() and not local:
             raise StepFailed("PAUSED file present (the workflow should have exited before this)")
+        step("fill pending")  # orders from earlier runs fill at their next open (owner rule)
+        sh(PY + ["scripts/portfolio.py", "fill-pending", "--asof", asof, "--save", str(rundir / "fills.json")]
+           + (["--dry-run"] if dry_run else []), log)
         step("mark")
         sh(PY + ["scripts/portfolio.py", "mark", "--asof", asof], log)
 
@@ -189,7 +193,7 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             files = " ".join(str(e.relative_to(ROOT)) for _, e in evals)
             agent("portfolio-manager",
                   f"Evaluation files: {files}. Date {asof}. Write the requests to runs/{asof}/requests-decisions.json "
-                  f"and submit with --save runs/{asof}/submit.json." + (" This is a DRY RUN." if dry_run else ""), log)
+                  f"and submit with --at-next-open --save runs/{asof}/submit.json (decided trades fill at the next open)." + (" This is a DRY RUN." if dry_run else ""), log)
             if not (rundir / "submit.json").exists():
                 raise StepFailed("portfolio-manager did not produce submit.json")
         else:

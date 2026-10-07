@@ -20,6 +20,11 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 | Friday 21:00 | **Weekly screen** | Rebuilds the stock list (default: S&P 500 + FTSE 100 + the ~3,800 largest stocks worldwide) and scores every stock on quality, valuation and momentum. Picks 10 core + 10 tactical ideas. ~4 hours with the default list (3,800 stocks, plus a 5-year history check on the top 500). | No |
 | Saturday 08:00 | **Weekly review** | Checks every holding; sells tactical positions that hit their stop, target or time limit; reviews holdings that moved >8% or reported results; fully re-researches any core holding whose thesis broke; researches the screen's 20 picks (3 at a time; a failed one is skipped and listed); trades; updates the decision log; writes the weekly report. | Only for flagged holdings and new research |
 
+**Trades fill at the next market open.** Decisions made in the weekly review become pending orders, filled at
+the opening price of the next trading day (on a Mac: a weekday 22:30 job, `bin/fill-pending`); a tactical
+order that opens beyond its stop or target is cancelled. Only **high-conviction** ideas (4 or 5 out of 5) are
+ever bought; the rest are recorded as AVOID.
+
 Results are committed to the `main` branch ("Weekly run 2026-10-10"). If anything goes wrong, **no trades
 from that run are kept**: only an error log is committed and the run shows a red ✗.
 

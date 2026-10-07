@@ -18,8 +18,8 @@ The caller gives you: the list of evaluation files for this run (may be none), t
    - AVOID → no trade request (list it as "no trade").
    Copy field values verbatim. Omit null fields.
 3. Write the list to the path the caller gave (default `portfolio/requests-<date>.json`; in a DRY RUN with no path given, `logs/dry-run-requests-<date>.json`).
-4. Submit: `bin/py scripts/portfolio.py submit <that file> --asof <date>`, adding `--save <path>` when the caller gave one and `--dry-run` in a DRY RUN. If it exits non-zero, STOP and return the error verbatim.
-5. Reply with ONLY: the decisions table (ticker, decision, type, conviction), then the script's JSON output (cash before/after, applied, rejected with rule names, warnings). In a dry run, state clearly that nothing was written to the portfolio.
+4. Submit: `bin/py scripts/portfolio.py submit <that file> --asof <date> --at-next-open` (owner rule: decided trades are validated now and fill at the next market open), adding `--save <path>` when the caller gave one and `--dry-run` in a DRY RUN. If it exits non-zero, STOP and return the error verbatim.
+5. Reply with ONLY: the decisions table (ticker, decision, type, conviction), then the script's JSON output (orders placed for the next open, rejected with rule names, warnings). In a dry run, state clearly that nothing was written to the portfolio.
 
 Rejected trades are not errors to work around. Report them with their rule.
 Do not create helper scripts or any files other than the requests file: read the evaluation files with the Read tool.

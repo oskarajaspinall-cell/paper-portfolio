@@ -121,6 +121,10 @@ def build_data() -> dict:
         "decisions": [{k: d.get(k, "") for k in ("date", "ticker", "type", "decision", "conviction", "price", "currency",
                                                  "excess_1m", "excess_3m", "evaluation")} for d in decisions[::-1][:40]],
         "hits": hits, "n_decisions": len(decisions),
+        "pending": [{"id": o["id"], "placed": o["placed"], "action": o["request"]["action"],
+                     "ticker": o["request"]["ticker"], "type": o["request"]["position_type"],
+                     "conviction": o["request"].get("conviction"), "est": o.get("estimate", {})}
+                    for o in state.get("pending", [])],
         "screen": {"asof": screen.get("asof"), "screened": screen.get("screened"), "picks": screen.get("picks", [])},
     }
 
@@ -167,6 +171,7 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 <span><span class="sw" style="background:var(--s2)"></span>Tactical</span></div><div id="bars"></div></section>
 <section class="card"><h2>Sectors</h2><div class="sub">% of the portfolio (cash excluded)</div><div id="sectors"></div></section></div>
 <section class="card"><h2>Holdings</h2><div class="tw"><table id="holdings"></table></div></section>
+<section class="card"><h2>Pending orders</h2><div class="sub">Decided trades fill at the next market open.</div><div class="tw"><table id="pending"></table></div></section>
 <section class="card"><h2>Recent trades</h2><div class="tw"><table id="trades"></table></div></section>
 <section class="card"><h2>Decisions &amp; hit rates</h2><div class="sub">A decision is a hit when it was right about direction vs SPY: BUY/ADD/HOLD beat SPY, AVOID/SELL/TRIM lagged it.</div>
 <div class="tiles" id="hits"></div><div class="tw" style="margin-top:12px"><table id="decisions"></table></div></section>
@@ -256,6 +261,9 @@ table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>r.name},{h:'Type',f:
  {h:'Entry',f:r=>r.entry_date},{h:'Entry price',n:1,f:r=>r.entry_price==null?'':r.entry_price+' '+r.currency},{h:'Last',n:1,f:r=>r.last_price==null?'':r.last_price+' '+r.currency},
  {h:'Change',n:1,f:r=>pct(r.change_pct,1),c:r=>cls(r.change_pct)},{h:'Value',n:1,f:r=>usd(r.value)},{h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},
  {h:'P/L',n:1,f:r=>r.pl==null?'':usd(r.pl),c:r=>cls(r.pl)},{h:'Plan',w:1,f:r=>r.plan}],D.holdings,'No holdings yet: the portfolio is all cash.');
+table('pending',[{h:'Placed',f:r=>r.placed},{h:'Action',f:r=>r.action},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},
+ {h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Est. shares',n:1,f:r=>r.est.shares??''},{h:'Latest close',n:1,f:r=>r.est.price==null?'':`${r.est.price} ${r.est.currency}`}],
+ D.pending,'No pending orders.');
 table('trades',[{h:'Date',f:r=>r.date},{h:'Side',f:r=>r.side},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Shares',n:1,f:r=>r.shares},
  {h:'Fill',n:1,f:r=>`${r.fill_price} ${r.currency} (${r.fill_close_date})`},{h:'Gross',n:1,f:r=>usd(+r.gross_usd,2)},{h:'Costs',n:1,f:r=>usd(+r.costs_usd,2)},
  {h:'Reason',w:1,f:r=>{const sp=el('span',{title:r.reason||''});sp.textContent=(r.reason||'').length>140?r.reason.slice(0,139)+'…':(r.reason||'');return sp;}}],D.ledger,'No trades yet.');
