@@ -6,7 +6,8 @@ script before the next step.
   2. weekly_scan.py: flags, mechanical tactical exits and trims (no model calls)
   3. weekly-reviewer on flagged holdings (skipped if none)
   4. core re-initiations (researcher + evaluator) for fired triggers and escalations
-  5. at most `max_new_initiations_per_week` new initiations from this week's screen picks
+  5. up to `max_new_initiations_per_week` new initiations from this week's screen picks, researched
+     `parallel_research` at a time; a failed NEW initiation skips that stock (listed in the report)
   6. mechanical exits/trims submitted by script (no model call); then portfolio-manager turns the
      evaluators' decisions into requests -> portfolio.py submit (skipped if there are none)
   7. decision log: record this run's decisions, update matured outcomes
@@ -14,7 +15,7 @@ script before the next step.
 
 Test switch: env PAPER_SIMULATE_FAILURE=<step name prefix, e.g. "decision log"> forces a failure there.
 
-If ANY step fails: portfolio/ is restored to its state at the start of the run (no trades applied),
+Apart from skipped new initiations, if ANY step fails: portfolio/ is restored to its state at the start of the run (no trades applied),
 runs/<date>/error.log is written, and the exit code is 1.
 
     python scripts/weekly_run.py [--asof YYYY-MM-DD] [--dry-run] [--max-new N] [--local]
@@ -28,6 +29,8 @@ import os
 import shutil
 import subprocess
 import sys
+import threading
+from concurrent.futures import ThreadPoolExecutor
 import traceback
 from pathlib import Path
 
@@ -43,9 +46,15 @@ class StepFailed(Exception):
     pass
 
 
-def sh(args: list[str], log) -> str:
+AGENT_TIMEOUT = 30 * 60  # seconds; a stuck session can't hang the night
+
+
+def sh(args: list[str], log, timeout: int | None = None) -> str:
     log(f"$ {' '.join(args)}")
-    p = subprocess.run(args, cwd=ROOT, capture_output=True, text=True)
+    try:
+        p = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+    except subprocess.TimeoutExpired as e:
+        raise StepFailed(f"{args[0]} timed out after {timeout}s") from e
     log(p.stdout.strip()[-4000:])
     if p.returncode != 0:
         raise StepFailed(f"{' '.join(args)} exited {p.returncode}: {p.stderr.strip()[-2000:]}")
@@ -54,7 +63,8 @@ def sh(args: list[str], log) -> str:
 
 def claude_agent(name: str, prompt: str, log) -> str:
     """Run one subagent as its own headless session. Replaced in tests."""
-    return sh(["claude", "-p", prompt, "--agent", name, "--allowedTools", TOOLS[name], "--output-format", "text"], log)
+    return sh(["claude", "-p", prompt, "--agent", name, "--allowedTools", TOOLS[name], "--output-format", "text"],
+              log, timeout=AGENT_TIMEOUT)
 
 
 def check_doc(kind: str, path: Path, log) -> None:
@@ -89,9 +99,12 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
     rundir.mkdir(parents=True, exist_ok=True)
     logf = (rundir / "run.log").open("a")
 
+    log_lock = threading.Lock()
+
     def log(msg):
-        logf.write(msg + "\n")
-        logf.flush()
+        with log_lock:  # parallel researchers share this log
+            logf.write(msg + "\n")
+            logf.flush()
 
     port, backup = ROOT / "portfolio", rundir / ".portfolio-backup"
     if backup.exists():
@@ -144,11 +157,28 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
         recent = recently_researched(cfg["screen"]["exclude_researched_days"], asof)
         picks = [p for p in screen_picks(asof) if p["ticker"] not in state["holdings"]
                  and Ticker(p["ticker"]).slug not in recent]
-        for p in picks[:cap]:
-            step(f"initiate {p['ticker']}")
-            evals.append(("new", research_and_evaluate(p["ticker"], p["type"], asof,
-                                                       "New initiation from this week's screen. Decide BUY or AVOID.",
-                                                       agent, log, rundir)))
+        manifest["skipped"] = []
+
+        def initiate(p):
+            """A failed NEW initiation skips that stock only (owner rule); it never cancels the week."""
+            try:
+                step(f"initiate {p['ticker']}")
+                return research_and_evaluate(p["ticker"], p["type"], asof,
+                                             "New initiation from this week's screen. Decide BUY or AVOID.",
+                                             agent, log, rundir)
+            except Exception as e:  # noqa: BLE001
+                log(f"SKIPPED initiation {p['ticker']}: {e}")
+                manifest["skipped"].append({"ticker": p["ticker"], "type": p["type"], "reason": str(e)[:300]})
+                slug = Ticker(p["ticker"]).slug
+                for f in (ROOT / "research" / slug).glob(f"{asof}*.md"):  # no half-finished docs left behind
+                    f.unlink()
+                return None
+
+        workers = max(1, int(cfg["agents"].get("parallel_research", 1)))
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            for p, ev in zip(picks[:cap], pool.map(initiate, picks[:cap])):
+                if ev is not None:
+                    evals.append(("new", ev))
 
         mech = rundir / "requests-mechanical.json"
         step("mechanical submit")

@@ -357,19 +357,26 @@ class Fetcher:
     def _get(self, url: str) -> str:
         import requests
 
+        import fcntl
+
         last_err = None
+        self.stamp.parent.mkdir(parents=True, exist_ok=True)
         for attempt in range(3):  # network hiccups only; a bad page is never retried into a guess
             if attempt:
                 time.sleep(self.interval * 5 * attempt)
-            self._wait()
-            try:
-                r = requests.get(url, headers={"User-Agent": self.ua}, timeout=30)
-                break
-            except requests.RequestException as e:
-                last_err = e
-            finally:
-                self.stamp.parent.mkdir(parents=True, exist_ok=True)
-                self.stamp.write_text(str(time.time()))
+            # One lock for every process on this machine (parallel researchers share one rate limit).
+            with open(self.stamp.with_suffix(".lock"), "w") as lk:
+                fcntl.flock(lk, fcntl.LOCK_EX)
+                try:
+                    self._wait()
+                    try:
+                        r = requests.get(url, headers={"User-Agent": self.ua}, timeout=30)
+                        break
+                    except requests.RequestException as e:
+                        last_err = e
+                finally:
+                    self.stamp.write_text(str(time.time()))
+                    fcntl.flock(lk, fcntl.LOCK_UN)
         else:
             raise DataError(url, "network", f"{type(last_err).__name__} after 3 attempts")
         if r.status_code != 200:

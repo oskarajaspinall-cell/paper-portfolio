@@ -210,3 +210,24 @@ def test_fetch_decodes_pages_as_utf8(fetcher):
         assert fetcher._get("https://stockanalysis.com/x/") == "Petróleo Brasileiro"
     finally:
         rq.get = orig
+
+
+def test_rate_limit_is_shared_between_parallel_fetchers(tmp_path, cfg, monkeypatch):
+    import copy
+    import threading
+    import time as _t
+    c = copy.deepcopy(cfg)
+    c["data"]["request_interval_seconds"] = 0.3
+    stamps = []
+
+    def fake_get(url, headers, timeout):
+        stamps.append(_t.time())
+        return FakeResp("ok")
+
+    monkeypatch.setattr(requests, "get", fake_get)
+    fetchers = [Fetcher(c, cache_dir=tmp_path, today="2026-10-07") for _ in range(3)]  # like 3 researchers
+    threads = [threading.Thread(target=f._get, args=(f"https://stockanalysis.com/p{i}/",)) for i, f in enumerate(fetchers)]
+    [t.start() for t in threads]
+    [t.join() for t in threads]
+    stamps.sort()
+    assert len(stamps) == 3 and all(b - a >= 0.29 for a, b in zip(stamps, stamps[1:]))

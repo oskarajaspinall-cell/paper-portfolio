@@ -54,7 +54,8 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
                f"{(cash / total * 100) if cash is not None and total else 0:.1f}%.")
     out.append(f"- Scan: {len(scan.get('review', []))} reviewed, {len(scan.get('reinitiate', []))} core re-initiation(s), "
                f"{len(scan.get('unflagged', []))} unchanged; new initiations: "
-               + (", ".join(f"{d['ticker']} {d['decision']}" for d in decisions if d.get("kind") == "new") or "none") + ".")
+               + (", ".join(f"{d['ticker']} {d['decision']}" for d in decisions if d.get("kind") == "new") or "none")
+               + (f"; {len(manifest.get('skipped', []))} skipped" if manifest.get("skipped") else "") + ".")
 
     out += ["", "## 2. Trades executed and rejected", "", "**Executed**", ""]
     if applied:
@@ -89,6 +90,8 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     if reviews.exists():
         body = "\n".join(l for l in reviews.read_text().strip().splitlines() if not l.startswith("# "))
         out += ["", "**Weekly reviewer notes**", "", body.strip(), ""]
+    for sk in manifest.get("skipped", []):
+        out.append(f"- **{sk['ticker']}** new initiation SKIPPED (research failed; no decision, no trade): {sk['reason']}")
     for u in scan.get("unflagged", []):
         out.append(f"- {u['line']}")
     for n in scan.get("notes", []):

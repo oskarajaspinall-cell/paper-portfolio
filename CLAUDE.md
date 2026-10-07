@@ -81,8 +81,8 @@ custom_file = "universe/custom.txt"   # your own tickers, one per line (optional
 # Weekly Python screen over universe/universe.csv (one statistics page per stock, no model calls).
 # Percentile scores within the screened set. Core score = quality + valuation; tactical = momentum
 # with an earnings date inside the window. Valuation multiples are used ONLY here for ranking.
-core_picks = 1                    # new initiations per week from the core ranking
-tactical_picks = 1                # ... and from the tactical ranking (total <= max_new_initiations_per_week)
+core_picks = 10                   # new initiations per week from the core ranking
+tactical_picks = 10               # ... and from the tactical ranking (total <= max_new_initiations_per_week)
 exclude_researched_days = 90      # skip names with a research note this recent
 tactical_earnings_window_days = 42
 min_metrics_per_pillar = 2
@@ -96,7 +96,8 @@ history = ["cheap_evebitda", "cheap_pfcf", "cheap_pe", "cheap_pb", "roic_trend",
 [agents]
 fetch_cap_core = 6
 fetch_cap_tactical = 4
-max_new_initiations_per_week = 2
+max_new_initiations_per_week = 20  # full research (researcher + evaluator) per week
+parallel_research = 3              # researched at the same time; a failed NEW initiation just skips that stock
 weekly_flag_move_pct = 8
 ```
 <!-- CONFIG:END -->

@@ -68,6 +68,10 @@ def test_score_and_pick(cfg):
                 earningsYield=8, evEbitda=6, pe=8)
     mom = dict(base, ch1y=80, price_vs_sma200=30, price_vs_sma50=10, earnings_date="2026-10-29")
     late = dict(mom, earnings_date="2027-03-01")  # outside the 42-day window
+    import copy
+    cfg = copy.deepcopy(cfg)
+    cfg["screen"].update(core_picks=1, tactical_picks=1)
+    cfg["agents"]["max_new_initiations_per_week"] = 2
     rows = score({"GOOD": good, "MOM": mom, "LATE": late, "MID": base}, cfg, "2026-10-06")
     by = {r["ticker"]: r for r in rows}
     assert by["LATE"]["tactical"] is None and by["MOM"]["tactical"] is not None
@@ -233,3 +237,12 @@ def test_top_n_name_without_history_keeps_stage1_score(cfg):
     a, b = rows
     assert a["history"] is None and a["core_deep"] == 90             # not penalised for missing data
     assert sorted(rows, key=core_rank_key, reverse=True)[0]["ticker"] == "A"
+
+
+def test_pick_ten_and_ten_within_cap(cfg):
+    rows = [{"ticker": f"C{i}", "core": 100 - i, "tactical": None} for i in range(30)] + \
+           [{"ticker": f"T{i}", "core": None, "tactical": 100 - i} for i in range(30)]
+    picks = pick(rows, cfg)
+    assert len(picks) == cfg["agents"]["max_new_initiations_per_week"] == 20
+    assert [p["ticker"] for p in picks if p["type"] == "CORE"] == [f"C{i}" for i in range(10)]
+    assert [p["ticker"] for p in picks if p["type"] == "TACTICAL"] == [f"T{i}" for i in range(10)]

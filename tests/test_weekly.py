@@ -320,3 +320,55 @@ def test_second_concurrent_review_refuses(fake_repo, monkeypatch, tmp_path):
     monkeypatch.setattr(wr, "sh", lambda *a: pytest.fail("must not run while another review holds the lock"))
     assert wr.main(["--asof", "2026-10-10", "--local"]) == 1
     lock.rmdir()
+
+
+def test_parallel_initiations_skip_failures_and_continue(fake_repo, monkeypatch):
+    import threading
+    import time as _t
+    picks = [{"ticker": f"N{i}", "type": "CORE", "score": 90 - i} for i in range(6)]
+    (fake_repo / "reports" / "screen" / "2026-10-10.json").write_text(json.dumps({"picks": picks}))
+    monkeypatch.setattr(wr, "sh", make_sh(fake_repo, dict(SCAN_QUIET, exits=[], mechanical_requests=[]), []))
+    live, peak, pm_prompt = [0], [0], []
+    lock = threading.Lock()
+
+    def agent(name, prompt, log):
+        t = prompt.split()[1].rstrip(",") if name != "portfolio-manager" else None
+        if name == "portfolio-manager":
+            pm_prompt.append(prompt)
+            (fake_repo / "runs" / "2026-10-10" / "submit.json").write_text("{}")
+            return
+        if name == "evaluator":
+            t = prompt.split()[1]
+        with lock:
+            live[0] += 1
+            peak[0] = max(peak[0], live[0])
+        _t.sleep(0.05)
+        with lock:
+            live[0] -= 1
+        if t == "N2":
+            raise wr.StepFailed("simulated researcher crash")
+        d = fake_repo / "research" / t
+        d.mkdir(exist_ok=True)
+        if name == "researcher":
+            (d / "2026-10-10.md").write_text("note")
+        else:
+            (d / "2026-10-10-evaluation.md").write_text(EVAL.replace("AAA", t) % ("AVOID", 1))
+
+    assert wr.run("2026-10-10", False, None, agent=agent) == 0           # one failure did not cancel the week
+    assert 1 < peak[0] <= 3                                               # ran in parallel, never more than 3
+    m = json.loads((fake_repo / "runs" / "2026-10-10" / "run.json").read_text())
+    assert [x["ticker"] for x in m["skipped"]] == ["N2"]
+    assert sorted(d["ticker"] for d in m["decisions"]) == ["N0", "N1", "N3", "N4", "N5"]
+    assert "N2" not in pm_prompt[0] and "N5" in pm_prompt[0]
+    assert not (fake_repo / "research" / "N2" / "2026-10-10.md").exists()  # no half-finished docs
+
+
+def test_reinitiation_failure_still_cancels_the_week(fake_repo, monkeypatch):
+    scan_ = dict(SCAN_QUIET, reinitiate=["TRIG"], exits=[], mechanical_requests=[])
+    (fake_repo / "portfolio" / "state.json").write_text(json.dumps({"holdings": {"TRIG": {"type": "CORE"}}}))
+    monkeypatch.setattr(wr, "sh", make_sh(fake_repo, scan_, []))
+
+    def agent(name, prompt, log):
+        raise wr.StepFailed("researcher crashed")
+    assert wr.run("2026-10-10", False, 0, agent=agent) == 1
+    assert "reinitiate TRIG" in (fake_repo / "runs" / "2026-10-10" / "error.log").read_text()
