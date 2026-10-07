@@ -130,6 +130,33 @@ def decision_block(md: str) -> tuple[dict | None, str | None]:
         return None, f"Decision block is not valid JSON: {e}"
 
 
+def scenario_problems(sc) -> list[str]:
+    """bull/base/bear with probabilities summing to 1, ordered positive targets and a cited basis."""
+    if not isinstance(sc, dict):
+        return ["decision block needs 'scenarios' (bull/base/bear with probability, target_price_12m, basis)"]
+    errs = []
+    for k in ("bull", "base", "bear"):
+        v = sc.get(k)
+        if not isinstance(v, dict):
+            errs.append(f"scenarios.{k} missing")
+            continue
+        p, t = v.get("probability"), v.get("target_price_12m")
+        if not isinstance(p, (int, float)) or not 0 < p < 1:
+            errs.append(f"scenarios.{k}.probability must be a number between 0 and 1")
+        if not isinstance(t, (int, float)) or t <= 0:
+            errs.append(f"scenarios.{k}.target_price_12m must be a positive number")
+        if not str(v.get("basis", "")).strip():
+            errs.append(f"scenarios.{k}.basis (the research finding it rests on) is missing")
+    if errs:
+        return errs
+    total = sum(sc[k]["probability"] for k in ("bull", "base", "bear"))
+    if abs(total - 1) > 1e-6:
+        errs.append(f"scenario probabilities sum to {total:g}, not 1")
+    if not sc["bear"]["target_price_12m"] <= sc["base"]["target_price_12m"] <= sc["bull"]["target_price_12m"]:
+        errs.append("scenario targets must be ordered bear <= base <= bull")
+    return errs
+
+
 def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
     errs, counts = [], {}
     heads = [h for h, _ in sections(md)]
@@ -183,6 +210,7 @@ def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
         for k in ("target", "stop", "time_limit"):
             if ep.get(k) in (None, ""):
                 errs.append(f"TACTICAL decision needs exit_plan.{k}")
+    errs += scenario_problems(d.get("scenarios"))
     if dec == "BUY" and len(held) >= cfg["portfolio"]["max_holdings"] and not (d.get("replaces") and d.get("replacement_reason")):
         errs.append("portfolio is at max holdings: BUY must name 'replaces' and 'replacement_reason'")
     if d.get("replaces") and d["replaces"] not in held:

@@ -139,6 +139,10 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str) -> dict:
             fig["recent_headlines"] = [  # from the history page already downloaded; no extra request
                 {k: n[k] for k in ("title", "source", "ago", "url")}
                 for n in hist.get("news") or [] if not is_sell_side(n)][:8]
+            from common import ROOT as _R, Ticker as _T
+            mcs = sorted((_R / "research" / _T(t).slug).glob("*-montecarlo.md"))
+            if mcs:
+                fig["montecarlo"] = str(mcs[-1].relative_to(_R))
             out["flagged"].append({"ticker": t, "type": h["type"], "reasons": reasons, "figures": fig})
             if t not in out["reinitiate"]:
                 out["review"].append(t)

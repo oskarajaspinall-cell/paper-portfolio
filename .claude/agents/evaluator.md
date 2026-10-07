@@ -38,6 +38,10 @@ The file must END with the json block. Then run `bin/py scripts/check_docs.py ev
 - CORE (every decision except SELL, including AVOID: the triggers that would change your mind): `triggers`: 2-4 measurable invalidation triggers, each `{"text": "...", "check": {...}}`. Core triggers are PURELY about the thesis (the business and its fundamentals). NEVER a share-price level, moving average, drawdown or other price move. Add a `check` whenever the trigger is a statistics-page figure so the weekly scan can test it with no model call:
   `{"source": "statistics", "field": "<id>", "op": "<" or ">", "value": <number>}` with ids such as grossMargin, operatingMargin, profitMargin, fcfMargin, roic, roe, debtEbitda, debtEquity, currentRatio, sharesgrowthyoy, shortFloat (percent fields are in percent units, e.g. 44 for 44%). Valuation multiples (pe, evEbitda, pfcf, fcfYield) are price-driven and are NOT allowed as core triggers.
 - TACTICAL (every decision except SELL, including AVOID: the plan you assessed): `exit_plan`: `{"target": <price>, "stop": <price>, "time_limit": "YYYY-MM-DD"}` in the share's quoted currency (GBX pence for LSE). Stop default -10% from last close; time limit at most 3 months. Optional `target_weight_pct` ≤ 5.
+- `scenarios` (every decision, new name or holding): exactly three researched outcomes over 12 months, used later by the Monte Carlo step:
+  `{"bull": {"probability": 0.25, "target_price_12m": <price>, "basis": "..."}, "base": {...}, "bear": {...}}`
+  - Probabilities sum to exactly 1. Targets are YOUR estimates in the share's quoted currency, built from fact-sheet figures (e.g. "EV/EBITDA returns to its 5y median 10.4x [RA] on TTM EBITDA [IS]"); NEVER a sell-side analyst target. bear <= base <= bull.
+  - `basis`: the specific research finding (from the fact sheet, note or your Bear/Bull case) and its fact-sheet code or URL. One sentence each.
 - Replacement rule: if the portfolio is at 15 holdings, or this BUY would breach the cash floor, the 25% tactical sleeve, or the 30% sector cap, set `replaces` (an existing holding) and `replacement_reason` (why the new idea is better). Otherwise null.
 
 ## House rules

@@ -98,6 +98,17 @@ deep_dive_top = 500               # stage 2: also read the ratios page (5y histo
 history = ["cheap_evebitda", "cheap_pfcf", "cheap_pe", "cheap_pb", "roic_trend", "roce_trend", "roic_min",
            "roe_trend", "roe_min"]   # P/B and ROE give banks/insurers a history score too
 
+[montecarlo]
+# Return distributions after research (scripts/montecarlo.py). The LLM only extracts cited parameters.
+paths = 10000
+seed = 20261007                   # fixed: same inputs -> identical numbers
+student_t_df = 4.5                # fat-tailed daily innovations
+horizons_days = { "3m" = 63, "6m" = 126, "12m" = 252 }
+max_shocks = 5
+max_technical_tilt = 0.02         # |annualised|, applied to the 3m horizon only
+drift_range = [-0.60, 0.80]       # annualised drift sanity bounds
+vol_range = [0.05, 1.50]          # baseline volatility sanity bounds
+
 [agents]
 fetch_cap_core = 6
 fetch_cap_tactical = 4
@@ -116,6 +127,7 @@ weekly_flag_move_pct = 8
 ## How an initiation runs (manual or automated)
 1. `researcher` (ticker, CORE or TACTICAL, date) → fact sheet + note, checked by `check_docs.py note`.
 2. `evaluator` → `research/<SLUG>/<date>-evaluation.md`: Bear, Bull, then one Decision ```json block, checked by `check_docs.py eval`.
+2b. `mc-parameters` → `research/<SLUG>/<date>-mc-params.json` (every value cited to the research), then `scripts/montecarlo.py` (numpy) → `<date>-montecarlo.json` + `.md`: 3m/6m/12m return distributions. Sanity checks fail loudly and write nothing; a failure never blocks the decision.
 3. `portfolio-manager` → trade requests → `portfolio.py submit --at-next-open` (validated now, filled at the next market open; `--dry-run` when asked).
 Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 
@@ -127,6 +139,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.
 - `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions (3 new initiations at a time); any failure (other than a skipped new initiation) restores `portfolio/` and writes `runs/<date>/error.log`.
+- `scripts/montecarlo.py` — scenario-weighted jump-diffusion Monte Carlo (Student-t, fixed seed, 10,000 paths) from the cited parameters file; settings in `[montecarlo]`. `.claude/agents/mc-parameters.md` is the only LLM step (parameters, never results).
 - `scripts/check_docs.py` — template, word-limit, tag, allowlist, conviction and Decision-block checks for notes and evaluations.
 - `scripts/allowlist_hook.py` — WebFetch guard (wired in `.claude/settings.json`); blocked URLs go to `logs/skipped-urls.log`. WebSearch, curl and wget are denied.
 - `scripts/common.py` — config reader, ticker/URL mapping, allowlist, thesis-only trigger rule.
@@ -136,7 +149,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `universe/` — `watchlist.txt` (always eligible, optional `ir=` domain), `ftse100.txt` (owner-maintained; `screen=no`), `custom.txt` (your own tickers), `ir_domains.txt` (auto-recorded company domains), `universe.csv` (built locally; not in the public repo).
 - `portfolio/` — `state.json` (cash, holdings, pending orders), `ledger.csv`, `rejections.csv`, `valuations.csv`, `decisions.csv`.
 - `research/<SLUG>/` — fact sheets, notes, evaluations. `reports/weekly/` — weekly reports (and `-recap.md` summaries). `reports/screen/` — screens. `reports/sample/` — older simulated sample. `runs/<date>/` — each run's working files and log. `docs/index.html` — dashboard (GitHub Pages).
-- `.claude/agents/` — the four subagents. `tests/` — pytest suite (`tests/fixtures/*.html` saved site pages stay local, not in the public repo).
+- `.claude/agents/` — the subagents (researcher, evaluator, portfolio-manager, weekly-reviewer, mc-parameters). `tests/` — pytest suite (`tests/fixtures/*.html` saved site pages stay local, not in the public repo).
 - `data/cache/` — per-day page cache (git-ignored). `README.md` — plain-English setup guide.
 
 ## How to pause

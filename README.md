@@ -29,7 +29,9 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Trades fill at the next market open**: decisions become pending orders filled at the
 opening price of the next trading day; a tactical order that opens beyond its stop or target is cancelled.
-Each research note includes the stock's recent **news headlines** (analyst price targets and ratings are
+After each evaluation, a **Monte Carlo simulation** (numpy, 10,000 paths, fixed seed) turns the researched
+bull/base/bear scenarios into return distributions for 3, 6 and 12 months (`research/<TICKER>/<date>-montecarlo.md`);
+the AI only extracts cited parameters, never results. Each research note includes the stock's recent **news headlines** (analyst price targets and ratings are
 filtered out by rule) and sentiment figures such as short interest.
 
 Results are committed to the `main` branch ("Weekly run 2026-10-10", "Filled orders 2026-10-12"). If anything goes wrong, **no trades

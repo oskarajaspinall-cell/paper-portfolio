@@ -96,11 +96,18 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     for d in decisions:
         what = "core re-initiation" if d.get("kind") == "reinitiation" else "new initiation"
         out.append(f"- **{d['ticker']}** {what} → {d['decision']} (conviction {d['conviction']}): "
-                   f"{d.get('rationale', '')} [{d['evaluation']}]" + (f" — Note: {d['note']}." if d.get("note") else ""))
+                   f"{d.get('rationale', '')} [{d['evaluation']}]" + (f" — Note: {d['note']}." if d.get("note") else "")
+                   + (f" [Monte Carlo: {d['evaluation'].replace('-evaluation.md', '-montecarlo.md')}]"
+                      if (ROOT / d["evaluation"].replace("-evaluation.md", "-montecarlo.md")).exists() else ""))
     reviews = run / "reviews.md"
     if reviews.exists():
         body = "\n".join(l for l in reviews.read_text().strip().splitlines() if not l.startswith("# "))
         out += ["", "**Weekly reviewer notes**", "", body.strip(), ""]
+    mcf = run / "montecarlo-failures.log"
+    if mcf.exists():
+        for line in mcf.read_text().splitlines():
+            t, _, why = line.partition("\t")
+            out.append(f"- **{t}** Monte Carlo FAILED (nothing written; decision unaffected): {why}")
     for sk in manifest.get("skipped", []):
         out.append(f"- **{sk['ticker']}** new initiation SKIPPED (research failed; no decision, no trade): {sk['reason']}")
     for u in scan.get("unflagged", []):

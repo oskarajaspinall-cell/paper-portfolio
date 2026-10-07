@@ -78,7 +78,10 @@ STATE = {"holdings": {"MSFT": {"type": "CORE"}, "LON:SHEL": {"type": "TACTICAL"}
 def evaluation(decision, bear="Too expensive. [Likely]", bull="Great business. [Certain]", order=None):
     secs = order or ["Bear case", "Bull case"]
     body = {"Bear case": bear, "Bull case": bull}
-    d = {"ticker": "AAPL", "decision": "BUY", "position_type": "CORE", "conviction": 3, "thesis": "x",
+    d = {"scenarios": {"bull": {"probability": 0.25, "target_price_12m": 420, "basis": "re-rating to 5y median [RA]"},
+                       "base": {"probability": 0.5, "target_price_12m": 350, "basis": "multiples hold [RA]"},
+                       "bear": {"probability": 0.25, "target_price_12m": 250, "basis": "margin reverts [IS]"}},
+         "ticker": "AAPL", "decision": "BUY", "position_type": "CORE", "conviction": 3, "thesis": "x",
          "rationale": "y", "price_at_decision": 332.89, "price_date": "2026-10-05",
          "research_note": "research/AAPL/2026-10-06.md", "triggers": [{"text": "a"}, {"text": "b"}]}
     d.update(decision)
@@ -172,3 +175,19 @@ def test_eval_buy_needs_high_conviction(real_cfg):
     assert any("conviction >= 4" in e for e in errs)
     assert check_eval(evaluation({"conviction": 4}), STATE, real_cfg)[0] == []
     assert check_eval(evaluation({"decision": "AVOID", "conviction": 3}), STATE, real_cfg)[0] == []
+
+
+@pytest.mark.parametrize("mutate,msg", [
+    (lambda sc: sc.pop("base"), "scenarios.base missing"),
+    (lambda sc: sc["bull"].update(probability=0.4), "sum to"),
+    (lambda sc: sc["bear"].update(target_price_12m=500), "ordered bear <= base <= bull"),
+    (lambda sc: sc["bull"].update(basis=""), "basis"),
+    (lambda sc: sc["bear"].update(target_price_12m=-1), "positive"),
+])
+def test_eval_scenarios_validated(cfgd, mutate, msg):
+    import json as _j
+    md = evaluation({})
+    d = _j.loads(md.split("```json")[1].split("```")[0])
+    mutate(d["scenarios"])
+    errs, _ = check_eval(evaluation(d), STATE, cfgd)
+    assert any(msg in e for e in errs), errs

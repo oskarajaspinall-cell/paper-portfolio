@@ -40,7 +40,8 @@ from common import ROOT, Ticker, load_config  # noqa: E402
 
 PY = [str(ROOT / "bin" / "py")]
 TOOLS = {"researcher": "Read,Write,WebFetch,Bash(bin/py:*)", "evaluator": "Read,Write,Bash(bin/py:*)",
-         "portfolio-manager": "Read,Write,Bash(bin/py:*)", "weekly-reviewer": "Read,Write,WebFetch"}
+         "portfolio-manager": "Read,Write,Bash(bin/py:*)", "weekly-reviewer": "Read,Write,WebFetch",
+         "mc-parameters": "Read,Write,Bash(bin/py:*)"}
 
 
 class StepFailed(Exception):
@@ -84,7 +85,25 @@ def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, l
     if not ev.exists():
         raise StepFailed(f"evaluator wrote no evaluation at {ev}")
     check_doc("eval", ev, log)
+    run_montecarlo(ticker, slug, asof, agent, log, run)
     return ev
+
+
+def run_montecarlo(ticker: str, slug: str, asof: str, agent, log, run: Path) -> None:
+    """After research: the mc-parameters agent writes cited parameters, then numpy simulates. A failure is
+    logged loudly and listed in the report, but never cancels the decision or trades (it is not a signal)."""
+    params = ROOT / "research" / slug / f"{asof}-mc-params.json"
+    try:
+        agent("mc-parameters", f"Ticker {ticker}, date {asof}. Research: research/{slug}/factsheet-{asof}.md, "
+                               f"research/{slug}/{asof}.md, research/{slug}/{asof}-evaluation.md. "
+                               f"Write research/{slug}/{asof}-mc-params.json and run the simulation.", log)
+        if not params.exists():
+            raise StepFailed("mc-parameters wrote no parameters file")
+        sh(PY + ["scripts/montecarlo.py", str(params)], log)  # idempotent re-run: confirms the written output
+    except StepFailed as e:
+        log(f"!! MONTE CARLO FAILED for {ticker}: {e}")
+        with (run / "montecarlo-failures.log").open("a") as fh:
+            fh.write(f"{ticker}\t{str(e)[:400]}\n")
 
 
 def screen_picks(asof: str, max_age_days: int = 7) -> list[dict]:

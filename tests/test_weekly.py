@@ -261,7 +261,7 @@ def test_run_reinitiates_fired_core_trigger(fake_repo, monkeypatch):
             (fake_repo / "runs" / "2026-10-10" / "submit.json").write_text("{}")
 
     assert wr.run("2026-10-10", False, 0, agent=agent) == 0
-    assert seen == ["researcher", "evaluator", "portfolio-manager"]
+    assert seen == ["researcher", "evaluator", "mc-parameters", "portfolio-manager"]
     assert "full re-initiation of an existing CORE holding (scan: core trigger hit)" in prompts[0]
     assert "Decide ADD, HOLD, TRIM or SELL" in prompts[1]
 
@@ -415,3 +415,33 @@ def test_decision_log_relabels_low_conviction_buys(real_cfg, tmp_path, monkeypat
     out = tmp_path / "d.csv"
     dl.write(rows, out)
     assert dl.read(out)[0]["note"].startswith("relabelled BUY->AVOID")
+
+
+def test_montecarlo_failure_is_reported_but_never_blocks(fake_repo, monkeypatch):
+    import weekly_report
+    picks = [{"ticker": "N0", "type": "CORE", "score": 90}]
+    (fake_repo / "reports" / "screen" / "2026-10-10.json").write_text(json.dumps({"picks": picks}))
+    monkeypatch.setattr(wr, "sh", make_sh(fake_repo, dict(SCAN_QUIET, exits=[], mechanical_requests=[]), []))
+    pm = []
+
+    def agent(name, prompt, log):
+        d = fake_repo / "research" / "N0"
+        d.mkdir(exist_ok=True)
+        if name == "researcher":
+            (d / "2026-10-10.md").write_text("note")
+        elif name == "evaluator":
+            (d / "2026-10-10-evaluation.md").write_text(EVAL.replace("AAA", "N0") % ("BUY", 4))
+        elif name == "mc-parameters":
+            raise wr.StepFailed("12m median outside the researched bear-to-bull range")
+        elif name == "portfolio-manager":
+            pm.append(prompt)
+            (fake_repo / "runs" / "2026-10-10" / "submit.json").write_text("{}")
+
+    assert wr.run("2026-10-10", False, None, agent=agent) == 0       # the week is not cancelled
+    assert pm and "N0" in pm[0]                                         # the decision still goes to the PM
+    log = (fake_repo / "runs" / "2026-10-10" / "montecarlo-failures.log").read_text()
+    assert log.startswith("N0\t") and "bear-to-bull" in log
+    (fake_repo / "runs" / "2026-10-10" / "submit-mechanical.json").unlink()  # fake-shell artefact, not real output
+    monkeypatch.setattr(weekly_report, "ROOT", fake_repo)
+    md = weekly_report.build(fake_repo / "runs" / "2026-10-10", "2026-10-10", fake_repo / "portfolio")
+    assert "**N0** Monte Carlo FAILED (nothing written; decision unaffected)" in md

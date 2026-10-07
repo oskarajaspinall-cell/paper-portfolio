@@ -1,0 +1,100 @@
+{
+ "ticker": "HKG:9999",
+ "date": "2026-10-07",
+ "params_file": "2026-10-07-mc-params.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 185.6,
+  "close_date": "2026-10-06",
+  "currency": "HKD",
+  "baseline_vol": 0.3505951334770046,
+  "lookback": "123 daily log returns, 2026-04-09 to 2026-10-06",
+  "source_url": "https://stockanalysis.com/quote/hkg/9999/history/"
+ },
+ "drifts": {
+  "bull": 0.19694117892018567,
+  "base": 0.05757738736096591,
+  "bear": -0.16226541194032618
+ },
+ "drift_method": "ln(target_price_12m / last close), annualised log drift (12-month targets)",
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 226.0,
+    "vol_multiplier": 0.9
+   },
+   "base": {
+    "probability": 0.5,
+    "target_price_12m": 196.6,
+    "vol_multiplier": 1.0
+   },
+   "bear": {
+    "probability": 0.25,
+    "target_price_12m": 157.8,
+    "vol_multiplier": 1.3
+   }
+  },
+  "shocks": [],
+  "tilt": 0.0
+ },
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.02754504631642675,
+   "median": 0.01396955876434669,
+   "p5": -0.26148894964155783,
+   "p25": -0.10384690814580877,
+   "p50": 0.01396955876434669,
+   "p75": 0.14489849212802264,
+   "p95": 0.3587485580349306,
+   "prob_loss": 0.469,
+   "scenario_share": {
+    "bull": 0.2495,
+    "base": 0.4945,
+    "bear": 0.256
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.05884025809466549,
+   "median": 0.02932179046944483,
+   "p5": -0.3510026276915353,
+   "p25": -0.13849641609837454,
+   "p50": 0.02932179046944483,
+   "p75": 0.22211570165440742,
+   "p95": 0.5633627521547269,
+   "prob_loss": 0.4538,
+   "scenario_share": {
+    "bull": 0.2495,
+    "base": 0.4945,
+    "bear": 0.256
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.12256895417284727,
+   "median": 0.05709685445329549,
+   "p5": -0.46228661259420645,
+   "p25": -0.18219874516449983,
+   "p50": 0.05709685445329549,
+   "p75": 0.3606326601302903,
+   "p95": 0.922505565688235,
+   "prob_loss": 0.4407,
+   "scenario_share": {
+    "bull": 0.2495,
+    "base": 0.4945,
+    "bear": 0.256
+   }
+  }
+ }
+}
