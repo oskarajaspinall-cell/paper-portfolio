@@ -12,9 +12,10 @@ Model, per path (10,000, fixed seed; scenario mix allocated exactly n·p):
     daily log return = drift_path/252 + Σβ·factor_day + jumps_day + noise_day (+ tilt on days 1-63, netted
     out over days 64-252 so it only shapes the 3m horizon)
   factor_day  ~ MVN(ln(1+E[move])/252, D·R·D/252): correlated, historical correlation R, cited moves/uncertainty
-  noise_day   = Student-t (df, unit variance) × noise_vol / √252, where noise_vol = sqrt(resid_vol² − band²)
-               (floored at noise_floor_share × resid_vol): the measured residual vol is the total stock-specific
-               budget, split between the researched target band and day-to-day noise (no double count)
+  noise_day   = Student-t (df, unit variance) × noise_vol / √252, where noise_vol = sqrt(resid_vol² − band²
+               − jump variance) (floored at noise_floor_share × resid_vol): the measured residual vol — whose history
+               already contains past jump weeks — is the total stock-specific budget, split between the researched
+               target band, the modelled jumps and day-to-day noise (no double count)
   jumps_day   = Bernoulli(1-(1-p_annual)^(1/252)) × ln(1+impact) for each cited jump
   drift_path  = ln(1+T_path) + κ_s, with T_path drawn from target_s ± band_s and κ_s set on the seeded draws
                so each scenario's simulated MEAN simple return equals its researched target exactly.
@@ -149,6 +150,10 @@ def read_params(raw: dict, inputs: dict, mc: dict) -> dict:
             probs.append(f"scenarios.{k}.target_price_12m must be positive")
         if not 0 <= s["target_band"] <= 0.5:
             probs.append(f"scenarios.{k}.target_band must be a fraction in [0, 0.5]")
+        rv = inputs["regression"]["residual_vol"]["blended"]
+        if s["target_band"] > rv:
+            probs.append(f"scenarios.{k}.target_band ±{s['target_band']:.0%} exceeds the measured residual volatility "
+                         f"{rv:.1%}: derive it from disagreement between valuation anchors, not the full historical range")
     total = sum(s["probability"] for s in par["scenarios"].values())
     if abs(total - 1) > 1e-6:
         probs.append(f"scenario probabilities sum to {total:.6g}, not 1")
@@ -198,8 +203,11 @@ def simulate(spec: dict, mc: dict) -> dict:
         fac = np.zeros((n, days))
     # Variance budget: measured residual vol is the TOTAL stock-specific 12m uncertainty. The researched target
     # band takes its share; daily noise gets the remainder (floored so short horizons keep realistic noise).
+    # The measured residual vol already contains past jump weeks, so modelled jumps also draw on the budget:
+    # annual jump variance = sum of intensity x squared log impact.
     rv = spec["resid_vol"]
-    noise_vol = np.sqrt(np.maximum(rv ** 2 - band ** 2, (mc.get("noise_floor_share", 0.5) * rv) ** 2))
+    jump_var = sum(-math.log(1 - min(jp, 0.999999)) * math.log1p(ji) ** 2 for jp, ji in spec["jumps"])
+    noise_vol = np.sqrt(np.maximum(rv ** 2 - band ** 2 - jump_var, (mc.get("noise_floor_share", 0.5) * rv) ** 2))
     noise = (rng.standard_t(df, size=(n, days)) * math.sqrt((df - 2) / df)) * (noise_vol / math.sqrt(days))[:, None]
     jmp = np.zeros((n, days))
     for jp, ji in spec["jumps"]:

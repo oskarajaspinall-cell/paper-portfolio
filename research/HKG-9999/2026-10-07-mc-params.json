@@ -3,58 +3,67 @@
   "date": "2026-10-07",
   "scenarios": {
     "bull": {
-      "probability": {"value": 0.30, "cite": "evaluation.md Decision JSON scenarios.bull.probability (2026-10-07)"},
-      "probability_evidence": "Morgan Stanley elevated NetEase to Top Pick ahead of Ananta's January global launch, calling it a 'landmark' title with 'potential global impact' (fact sheet News & sentiment, GuruFocus/TheFly, 2026-09-28), and operating margin is still rising (35.2% TTM vs 18.7% FY2021, fact sheet Quality table); weighted below base because the stock has not traded at its 5y median P/FCF since its -21.6% 12-month decline (evaluation.md bull basis; fact sheet Price table).",
-      "target_price_12m": {"value": 226.0, "cite": "evaluation.md Decision JSON scenarios.bull.target_price_12m (2026-10-07)"},
-      "target_band": {"value": 0.29, "cite": "Fact sheet Valuation table: P/FCF 5y min/median/max = 10.7x/12.3x/17.9x [RA]; band = (17.9-10.7)/(2*12.3), the multiple the bull target re-rates to"}
+      "probability": {"value": 0.30, "cite": "evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Evaluation's bull basis notes the stock 'has not traded at the [P/FCF] median since its -21.6% 12m fall' [fact sheet Price section: 52-week change -21.6%], so the re-rating path is weighted below base despite margins still rising.",
+      "target_price_12m": {"value": 226.0, "cite": "evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.1048, "cite": "Same re-rating tier (5y median) priced on three fact-sheet anchors: P/FCF median 12.3x -> 226.0 (evaluation bull basis); P/E median 15.4x -> 185.60*(15.4/16.0)=178.64; EV/EBITDA median 10.4x -> implied EBITDA=mcap/(EV/EBITDA-netDebt/EBITDA)=598.6bn/11.96=50.05bn [fact sheet Valuation, Quality net-debt/EBITDA -3.76x], EV_new=10.4*50.05=520.52bn, mcap_new=EV_new+188.19bn net cash=708.71bn -> price 219.74. Spread 226.0-178.64=47.36; half=23.68; /226.0=0.1048. Below blended residual vol 0.3019 (mc-inputs.json regression.residual_vol.blended)."}
     },
     "base": {
-      "probability": {"value": 0.45, "cite": "evaluation.md Decision JSON scenarios.base.probability (2026-10-07)"},
-      "probability_evidence": "EV/EBITDA (8.2x) and P/FCF (10.1x) already sit below every one of their own 5-year fiscal-year-end levels (fact sheet Valuation table) while VIEs still carried 85.2% of FY2025 revenue (note section 2, source 20-F) -- the discount is structural, favouring only partial mean reversion rather than a full re-rating or a further de-rating.",
-      "target_price_12m": {"value": 196.6, "cite": "evaluation.md Decision JSON scenarios.base.target_price_12m (2026-10-07)"},
-      "target_band": {"value": 0.34, "cite": "Fact sheet Valuation table: P/FCF 5y min/median/max = 10.7x/12.3x/17.9x [RA]; band = (17.9-10.7)/(2*10.7), the multiple the base target recovers to"}
+      "probability": {"value": 0.45, "cite": "evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "Evaluation's base basis: 'EV/EBITDA and P/FCF already sit below every fiscal-year-end level in 5y [RA], favouring partial mean reversion' rather than full re-rating or further de-rating.",
+      "target_price_12m": {"value": 196.6, "cite": "evaluation.md Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.1142, "cite": "Same re-rating tier (5y minimum) priced on three fact-sheet anchors: P/FCF min 10.7x -> 196.6 (evaluation base basis); P/E min 13.6x -> 185.60*(13.6/16.0)=157.76; EV/EBITDA min 9.3x -> EV_new=9.3*50.05bn=465.47bn, mcap_new=465.47+188.19=653.66bn -> price 202.67 (same EBITDA/net-cash derivation as bull band, from fact sheet Valuation and net-debt/EBITDA). Spread 202.67-157.76=44.91; half=22.45; /196.6=0.1142. Below blended residual vol 0.3019."}
     },
     "bear": {
-      "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bear.probability (2026-10-07)"},
-      "probability_evidence": "Net debt/EBITDA of -3.76x (net cash) and a 9.86% FCF yield (fact sheet Quality/Valuation tables) give downside protection even if a PRC monetization/loot-box rule change or a weak Ananta launch (note section 6/4, source 20-F; evaluation.md bear basis) materialises, capping this scenario's weight below bull and base.",
-      "target_price_12m": {"value": 157.8, "cite": "evaluation.md Decision JSON scenarios.bear.target_price_12m (2026-10-07)"},
-      "target_band": {"value": 0.41, "cite": "Fact sheet Valuation table: P/E 5y min/median/max = 13.6x/15.4x/24.8x [RA]; band = (24.8-13.6)/(2*13.6), the multiple the bear target compresses to"}
+      "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "Evaluation's bear basis: probability 'capped by net cash at -3.76x net debt/EBITDA [RA] and a 9.86% FCF yield [ST] that limit downside' even if a regulatory shock hits.",
+      "target_price_12m": {"value": 157.8, "cite": "evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.1423, "cite": "Same re-rating tier (5y minimum) as base, same three anchors: P/E min 13.6x -> 157.76 (evaluation bear basis); P/FCF min 10.7x -> 196.6; EV/EBITDA min 9.3x -> 202.67 (derivation as in base.target_band). Spread 202.67-157.76=44.91; half=22.45; /157.8=0.1423. Below blended residual vol 0.3019."}
     }
   },
   "factors": {
     "HKG:2800": {
-      "expected_12m_move": {"value": 0, "cite": "no factor-specific view in the research: fact sheet and note contain no forward macro view on the Hang Seng/Hong Kong market"},
-      "uncertainty_12m": {"value": 0.21297083492544905, "cite": "mc-inputs.json regression.factor_stats['HKG:2800'].vol_annual (156-week weekly regression, 2023-04-03 to 2026-09-28)"}
+      "expected_12m_move": {"value": 0, "cite": "mc-inputs.json factor_news.HKG:2800.headlines is empty (no stockanalysis.com headlines for the Hang Seng Tracker Fund proxy); fact sheet news section has no Hang-Seng-level headline either -> no directional signal, set to 0."},
+      "uncertainty_12m": {"value": 0.21297083492544905, "cite": "mc-inputs.json regression.factor_stats.HKG:2800.vol_annual"}
     },
     "KWEB": {
-      "expected_12m_move": {"value": 0, "cite": "no factor-specific view in the research: fact sheet and note contain no forward macro view on the China internet sector"},
-      "uncertainty_12m": {"value": 0.33893351155209517, "cite": "mc-inputs.json regression.factor_stats['KWEB'].vol_annual (156-week weekly regression, 2023-04-03 to 2026-09-28)"}
+      "expected_12m_move": {"value": 0, "cite": "mc-inputs.json factor_news.KWEB headlines are mixed: stimulus unveiled and factory activity expanding for the first time in three months (positive) vs weakest industrial profit growth this year and investors 'still wary' of the stimulus (negative) -> no net directional lean, set to 0."},
+      "uncertainty_12m": {"value": 0.33893351155209517, "cite": "mc-inputs.json regression.factor_stats.KWEB.vol_annual"}
     },
     "IEF": {
-      "expected_12m_move": {"value": 0, "cite": "no factor-specific view in the research: fact sheet and note contain no forward view on US Treasury yields/rates"},
-      "uncertainty_12m": {"value": 0.06593661014800657, "cite": "mc-inputs.json regression.factor_stats['IEF'].vol_annual (156-week weekly regression, 2023-04-03 to 2026-09-28)"}
+      "expected_12m_move": {"value": 0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed within the same week: 'Global Bond Markets Sell Off on France's Fiscal Worries' / yields near 24-year highs (negative for IEF) vs 'US bonds rally after weaker-than-expected jobs report' and cooler PCE pulling yields off highs (positive) -> no net directional lean, set to 0."},
+      "uncertainty_12m": {"value": 0.06593661014800657, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"}
     }
   },
   "jumps": [
     {
-      "name": "PRC gaming regulation / VIE deconsolidation shock",
-      "reason": "VIEs carried 85.2% of FY2025 revenue, so ownership rests on contracts PRC authorities could challenge, and tightening PRC minors'-playtime, loot-box and game-approval rules can cap monetization at any time",
-      "cite": "note.md section 2 (source 20-F, https://www.sec.gov/Archives/edgar/data/1110646/000110465926043468/ntes-20251231x20f.htm); evaluation.md trigger: 'A new PRC regulation materially restricts game monetization, or a VIE-related regulatory action forces deconsolidation'",
-      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.all_weekly_moves: only one week in the 5-year history (2023-12-18, -25.34%) exceeds a 20% single-week fall -- 1 occurrence over ~5.0 years (2021-10-18 to 2026-09-28) implies about 0.2/yr"},
-      "impact": {"value": -0.2534, "cite": "mc-inputs.json analogues.largest_falls, week 2023-12-18, move -0.2534"},
+      "name": "PRC gaming-regulation or VIE action",
+      "reason": "New PRC regulation materially restricting game monetization (mandatory playtime/loot-box/approval curbs) or a VIE-related regulatory action forcing deconsolidation",
+      "cite": "research/HKG-9999/2026-10-07.md Sec.2/6 (VIE 85.2% of FY2025 revenue; PRC minors'-playtime/loot-box/approval rules, source: 20-F) and evaluation.md bear case / Decision trigger: 'A new PRC regulation materially restricts game monetization... or a VIE-related regulatory action forces deconsolidation'",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.largest_falls: only 1 of the 10 largest weekly falls in the ~5y history (2023-12-18, -25.34%) exceeds -20% (the real-world China game-monetization draft-rules shock) -> ~1 regulatory-scale shock per 5 years = 0.2/yr."},
+      "impact": {"value": -0.2534, "cite": "mc-inputs.json analogues.largest_falls week 2023-12-18, move -0.2534, copied exactly"},
       "analogue": {"week": "2023-12-18", "move": -0.2534},
       "assumption": null
     },
     {
-      "name": "Quarterly earnings miss",
-      "reason": "Growth now leans on hit-driven launches, leaving a single-franchise-dependent earnings base that can move sharply on a quarterly print; evaluation triggers test operating/FCF/gross margin on each quarterly release",
-      "cite": "evaluation.md bear case: 'Growth now leans on hit-driven launches... a single-franchise-dependent earnings base with little re-rating catalyst'; mc-inputs.json analogues.event_weeks (quarterly earnings_release dates)",
-      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.event_weeks: only 1 of the 20 quarterly earnings_release weeks in the history moved <= -10% (2024-05-20, -12.71%); at 4 earnings weeks/yr that is about a 0.2/yr frequency for a move of this size"},
-      "impact": {"value": -0.1271, "cite": "mc-inputs.json analogues.event_weeks, Q1 2024 earnings_release week 2024-05-20, move -0.1271 (largest negative earnings-tagged move in the history)"},
+      "name": "Weak Ananta global launch reception",
+      "reason": "A weak January Ananta global launch would leave a single-franchise-dependent earnings base with little re-rating catalyst",
+      "cite": "research/HKG-9999/2026-10-07-evaluation.md bear case: 'Growth now leans on hit-driven launches; a weak January Ananta global launch would leave a single-franchise-dependent earnings base with little re-rating catalyst [Guessing]'",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.event_weeks: only 1 of the 20 quarterly-earnings weeks over the ~5y history moved beyond -10% (2024-05-20, Q1 2024, -12.71%) -> ~0.2/yr rate for an earnings/launch-reception shock of this magnitude."},
+      "impact": {"value": -0.1271, "cite": "mc-inputs.json analogues.event_weeks week 2024-05-20 (Q1 2024 earnings), move -0.1271, copied exactly"},
       "analogue": {"week": "2024-05-20", "move": -0.1271},
       "assumption": null
+    },
+    {
+      "name": "HFCAA audit-inspection risk resurfacing",
+      "reason": "US-listing audit-inspection (HFCAA) risk is currently dormant but could resurface",
+      "cite": "research/HKG-9999/2026-10-07.md Sec.6: 'HFCAA audit-inspection risk is currently dormant (PCAOB regained PRC inspection access in December 2022) but could resurface [Guessing] (source: 20-F)'",
+      "annual_probability": {"value": 0.1, "cite": "No historical analogue isolates an HFCAA-specific shock in the 5y window; the note tags this risk [Guessing] and dormant since Dec 2022 (no recurrence in ~4 years since resolution), so a low once-per-decade-scale rate of 0.1/yr is used."},
+      "impact": {"value": -0.15, "cite": "No matching analogue; impact set below the project's 0.30 assumed-jump cap (config montecarlo.max_jump_impact_assumed), reflecting the note's [Guessing] tag and dormant status rather than an observed move."},
+      "analogue": null,
+      "assumption": "No week in the mc-inputs.json analogue history (2021-10-18 to 2026-09-28) cleanly isolates an HFCAA-specific shock from concurrent 2022 macro moves (COVID/Ukraine-war volatility); impact is a bounded assumption, not a measured analogue."
     }
   ],
   "no_discrete_risks_reason": null,
-  "technical_tilt": {"value": -0.02, "cite": "Fact sheet Price table: price -3.6% below 50-day MA and -4.0% below 200-day MA, 3-month momentum -10.9% (2026-07-06 to 2026-10-06); bearish 3-month price trend, bounded at the max |0.02| annualised 3m tilt per [montecarlo] max_technical_tilt"}
+  "technical_tilt": {"value": -0.02, "cite": "fact sheet Price section: price -3.6% vs 50-day MA, -4.0% vs 200-day MA, 3-month momentum -10.9%, relative strength vs SPY -14.6pp over 3m -> negative near-term trend, set to the max allowed |annualised| 3m tilt of -0.02 per [montecarlo] max_technical_tilt."}
 }

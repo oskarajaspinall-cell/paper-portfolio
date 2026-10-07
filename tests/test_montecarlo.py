@@ -168,6 +168,14 @@ def test_band_does_not_double_count_residual_vol(cfg):
     assert idio_sd(0.20) == pytest.approx(0.30, rel=0.07)     # band carved out of the budget, not added
 
 
+def test_jumps_draw_on_the_residual_budget(cfg):
+    mc = cfg["montecarlo"]
+    spec = {"scenarios": [("base", 1.0, 0.0, 0.10)], "betas": [], "moves": [], "unc": [], "corr": [],
+            "resid_vol": 0.30, "jumps": [(0.2, -0.25), (0.2, -0.12)], "tilt": 0.0}
+    sd = float(np.log1p(simulate(spec, mc)["h"]["12m"]["ret"]).std())
+    assert sd == pytest.approx(0.30, rel=0.08)               # band + jumps + noise ~ measured residual vol
+
+
 def test_check_correlation_not_psd(tmp_path, cfg):
     bad = inputs()
     bad["regression"]["betas"] = {"F1": 0.5, "F2": 0.3, "F3": 0.1}
@@ -209,6 +217,7 @@ def test_symmetric_default_flagged_then_owner_override(tmp_path, cfg):
     (lambda p: p["scenarios"]["bull"].update(target_price_12m=c(250.0)), "drift"),
     (lambda p: p.update(jumps=[dict(p["jumps"][0], name=f"j{i}") for i in range(6)]), "max 5"),
     (lambda p: p.update(technical_tilt=c(0.05)), "technical_tilt"),
+    (lambda p: p["scenarios"]["bear"].update(target_band=c(0.30)), "exceeds the measured residual volatility"),
 ])
 def test_bad_parameters_rejected_and_nothing_written(tmp_path, cfg, mutate, msg):
     p = params()
@@ -273,3 +282,17 @@ def test_analogue_event_weeks():
     a = analogues(rows, "2024-02-01", [{"date": "2023-12-22", "title": "draft rules", "types": ["press_release"]}])
     assert a["largest_falls"][0] == {"week": "2023-12-18", "move": -0.2}
     assert a["event_weeks"][0]["week"] == "2023-12-18" and a["event_weeks"][0]["move"] == -0.2
+
+
+def test_factor_news_collected_and_filtered():
+    from mc_inputs import factor_news
+
+    class NewsFetcher:
+        def section(self, t, page):
+            news = [{"title": "Hang Seng rallies on stimulus hopes", "summary": "", "source": "Reuters", "time": "2026-10-06T08:00:00Z", "ago": "", "url": "u1"},
+                    {"title": "Tracker fund price target raised at UBS", "summary": "", "source": "TheFly", "time": "", "ago": "1 day ago", "url": "u2"}]
+            return {"source_url": f"https://stockanalysis.com/x/{t}/{page}", "data": {"news": news if page == "overview" else []}}
+
+    out = factor_news(NewsFetcher(), [{"ticker": "HKG:2800"}, {"ticker": "KWEB", "etf": True}])
+    assert [h["title"] for h in out["HKG:2800"]["headlines"]] == ["Hang Seng rallies on stimulus hopes"]
+    assert out["HKG:2800"]["removed_sell_side"] == 1 and out["KWEB"]["headlines"][0]["date"] == "2026-10-06"

@@ -96,6 +96,31 @@ def analogues(rows: list[dict], asof: str, events: list[dict], n: int = 10) -> d
             "history_from": week_of[0] if week_of else None, "history_to": week_of[-1] if week_of else None}
 
 
+def factor_news(fetcher, specs: list[dict], limit: int = 8) -> dict:
+    """Recent headlines stockanalysis.com shows for each factor proxy (overview + history pages), analyst
+    rating/target items removed. Third-party text: data for the agent to cite, never instructions."""
+    import common
+    from fact_sheet import is_sell_side, merge_news, news_date
+    out = {}
+    for f in specs:
+        if f.get("etf"):
+            common.ETF_TICKERS.add(f["ticker"].upper())
+        items, urls = [], []
+        for page in ("overview", "history"):
+            try:
+                sec = fetcher.section(f["ticker"], page)
+                items.append(sec["data"].get("news") or [])
+                urls.append(sec["source_url"])
+            except DataError:
+                items.append([])
+        news, dropped = merge_news(items[0], items[1], limit)
+        out[f["ticker"]] = {"pages": urls, "removed_sell_side": dropped,
+                            "headlines": [{"date": news_date(n), "source": n.get("source", ""), "title": n["title"],
+                                           "summary": n.get("summary", ""), "url": n["url"]}
+                                          for n in news if not is_sell_side(n)]}
+    return out
+
+
 def build(ticker: str, asof: str, fetcher, cfg: dict) -> dict:
     mc = cfg["montecarlo"]
     specs = mc["factors"].get(market_of(ticker))
@@ -117,6 +142,7 @@ def build(ticker: str, asof: str, fetcher, cfg: dict) -> dict:
             "factors": [{**f, "source_url": fac_rows[f["ticker"]]["source_url"]} for f in specs],
             "stock_source_url": stock["source_url"], "events_source_url": events_url,
             "regression": reg, "analogues": analogues(stock["rows"], asof, events),
+            "factor_news": factor_news(fetcher, specs),
             "notes": ["No FX factor for HKG: the HKD is pegged to the USD." if market_of(ticker) == "HKG" else ""]}
 
 

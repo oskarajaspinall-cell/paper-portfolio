@@ -10,28 +10,29 @@ Factor regression (156 weekly returns, 2023-04-03 to 2026-09-28): R² 0.32; resi
 
 | Scenario | Probability | 12m target | Target return | Band |
 |---|---|---|---|---|
-| bull | 30% | 226.0 | +21.8% | ±29% |
-| base | 45% | 196.6 | +5.9% | ±34% |
-| bear | 25% | 157.8 | -15.0% | ±41% |
+| bull | 30% | 226.0 | +21.8% | ±10% |
+| base | 45% | 196.6 | +5.9% | ±11% |
+| bear | 25% | 157.8 | -15.0% | ±14% |
 
 | Jump | Annual probability | Impact | Analogue |
 |---|---|---|---|
-| PRC gaming regulation / VIE deconsolidation shock | 20% | -25.3% | week of 2023-12-18 (-25.3%) |
-| Quarterly earnings miss | 20% | -12.7% | week of 2024-05-20 (-12.7%) |
+| PRC gaming-regulation or VIE action | 20% | -25.3% | week of 2023-12-18 (-25.3%) |
+| Weak Ananta global launch reception | 20% | -12.7% | week of 2024-05-20 (-12.7%) |
+| HFCAA audit-inspection risk resurfacing | 10% | -15.0% | none (stated assumption) |
 
 | Horizon | Mean | Median | P5 | P25 | P75 | P95 | P(loss) |
 |---|---|---|---|---|---|---|---|
-| 3m | -0.4% | -1.0% | -30.3% | -13.0% | +11.8% | +30.9% | 52% |
-| 6m | +0.7% | -1.2% | -45.0% | -19.9% | +19.0% | +52.9% | 52% |
-| 12m | +5.5% | -1.8% | -64.1% | -31.0% | +33.9% | +98.5% | 52% |
+| 3m | +0.8% | -0.4% | -27.5% | -12.1% | +12.4% | +33.1% | 51% |
+| 6m | +2.3% | -1.0% | -37.6% | -17.4% | +18.7% | +52.8% | 52% |
+| 12m | +5.5% | -1.7% | -50.6% | -25.0% | +28.1% | +85.7% | 52% |
 
 Attribution of the mean log return:
 
 | Horizon | Factor | Scenario | Jumps | Noise |
 |---|---|---|---|---|
-| 3m | +0.2% | -0.1% | -2.5% | +0.1% |
-| 6m | +0.2% | +0.5% | -5.1% | +0.2% |
-| 12m | +0.1% | +1.8% | -10.1% | +0.2% |
+| 3m | +0.2% | +1.7% | -2.9% | +0.1% |
+| 6m | +0.2% | +4.1% | -5.9% | +0.3% |
+| 12m | +0.1% | +8.9% | -11.9% | +0.3% |
 
 Sensitivity (12m):
 
@@ -40,7 +41,7 @@ Sensitivity (12m):
 | probabilities as researched | +5.5% | 52% |
 | bull +10pp / bear -10pp | +9.1% | 48% |
 | bull -10pp / bear +10pp | +1.8% | 55% |
-| residual vol -25% | +5.5% | 51% |
-| residual vol +25% | +5.5% | 53% |
+| residual vol -25% | +5.5% | 49% |
+| residual vol +25% | +5.5% | 54% |
 
 Reconciliation: 12m mean +5.45% vs probability-weighted target +5.45%. Every input is cited in the parameters file. A distribution, not a signal.
