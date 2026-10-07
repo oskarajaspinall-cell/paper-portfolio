@@ -89,6 +89,9 @@ min_metrics_per_pillar = 2
 quality = ["roic", "roce", "fcfMargin", "operatingMargin", "fScore", "-debtEbitda"]   # "-" = lower is better
 valuation = ["fcfYield", "earningsYield", "-evEbitda", "-pe"]
 momentum = ["ch1y", "price_vs_sma200", "price_vs_sma50"]
+deep_dive_top = 100               # stage 2: also read the ratios page (5y history) for the top N core candidates
+history = ["cheap_evebitda", "cheap_pfcf", "cheap_pe", "cheap_pb", "roic_trend", "roce_trend", "roic_min",
+           "roe_trend", "roe_min"]   # P/B and ROE give banks/insurers a history score too
 
 [agents]
 fetch_cap_core = 6

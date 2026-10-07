@@ -150,3 +150,86 @@ def test_custom_non_usd_name_gets_fx_from_site(cfg, tmp_path):
     rows = {r["ticker"]: r for r in build(f, custom_cfg(cfg), custom_path=custom)}
     assert rows["LON:SHEL"]["currency"] == "GBX" and rows["LON:SHEL"]["screen"] == "yes"
     assert f.read == [BIGGEST_URL]  # read just far enough to find a GBX rate
+
+
+def test_history_metrics_from_real_ratios_page():
+    from screen import history_metrics
+    url = "https://stockanalysis.com/stocks/aapl/financials/ratios/"
+    ratios = PARSERS["ratios"](page_nodes((FIX / "aapl_ratios.html").read_text(), url), url)
+    h = history_metrics(ratios)
+    assert h["roic_trend"] == pytest.approx(92.698 - 80.854, abs=0.01)   # FY2021 -> FY2025, in pp
+    assert h["roic_min"] == pytest.approx(73.639, abs=0.01)               # worst fiscal year
+    assert h["cheap_pe"] < 0                                              # P/E above its 5y max -> not cheap
+
+
+class RatioFetcher:
+    def __init__(self, data, fail=()):
+        self.data, self.fail, self.calls = data, set(fail), []
+
+    def section(self, t, page):
+        self.calls.append((t, page))
+        if t in self.fail:
+            raise DataError(f"https://stockanalysis.com/x/{t}/financials/ratios/", "financialData.datekey", "missing")
+        return {"source_url": "u", "data": self.data[t]}
+
+
+def ratios_for(pe_now, pe_hist, roic):
+    periods = ["TTM", "2025", "2024", "2023"]
+    return {"periods": periods, "rows": {"pe": [pe_now] + pe_hist, "evebitda": [10, 8, 12, 14], "pfcf": [20, 15, 25, 30],
+                                         "roic": roic, "roce": roic}}
+
+
+def test_deep_dive_reranks_only_the_top_n(cfg):
+    import copy
+    from screen import deep_dive, pick
+    c = copy.deepcopy(cfg)
+    c["screen"]["deep_dive_top"] = 2
+    rows = [{"ticker": t, "quality": q, "valuation": v, "momentum": 50, "core": (q + v) / 2, "tactical": None,
+             "earnings_date": None} for t, q, v in [("A", 90, 90), ("B", 85, 85), ("C", 80, 80), ("D", 10, 10)]]
+    data = {"A": ratios_for(30, [10, 12, 14], [0.10, 0.12, 0.20, 0.25]),   # dear vs own history, ROIC falling
+            "B": ratios_for(9, [10, 12, 14], [0.30, 0.25, 0.20, 0.15])}    # cheap vs own history, ROIC rising
+    f = RatioFetcher(data)
+    assert deep_dive(rows, f, c) == []
+    assert [t for t, _ in f.calls] == ["A", "B"]                  # only the top 2 by stage-1 core score
+    by = {r["ticker"]: r for r in rows}
+    assert by["B"]["history"] > by["A"]["history"] and by["C"]["history"] is None
+    assert pick(rows, c)[0]["ticker"] == "B"                      # history flips the order of A and B
+
+
+def test_deep_dive_failed_page_is_listed_not_guessed(cfg):
+    import copy
+    from screen import deep_dive
+    c = copy.deepcopy(cfg)
+    c["screen"]["deep_dive_top"] = 1
+    rows = [{"ticker": "A", "quality": 90, "valuation": 90, "momentum": 50, "core": 90, "tactical": None, "earnings_date": None}]
+    failed = deep_dive(rows, RatioFetcher({}, fail={"A"}), c)
+    assert failed[0]["ticker"] == "A" and rows[0]["history"] is None  # listed as failed, nothing guessed
+    assert rows[0]["core_deep"] == 90  # keeps its stage-1 score
+
+
+def test_banks_get_a_history_score_from_pb_and_roe(cfg):
+    import copy
+    from screen import deep_dive
+    c = copy.deepcopy(cfg)
+    c["screen"]["deep_dive_top"] = 2
+    bank = {"periods": ["TTM", "2025", "2024", "2023"],
+            "rows": {"pe": [8, 9, 10, 11], "pb": [0.9, 1.0, 1.2, 1.1], "roe": [0.12, 0.13, 0.11, 0.09]}}
+    other = ratios_for(9, [10, 12, 14], [0.30, 0.25, 0.20, 0.15])
+    rows = [{"ticker": t, "quality": 80, "valuation": 80, "momentum": 50, "core": 80, "tactical": None,
+             "earnings_date": None} for t in ("BANK", "CO")]
+    deep_dive(rows, RatioFetcher({"BANK": bank, "CO": other}), c)
+    assert all(r["history"] is not None for r in rows)
+
+
+def test_top_n_name_without_history_keeps_stage1_score(cfg):
+    import copy
+    from screen import core_rank_key, deep_dive
+    c = copy.deepcopy(cfg)
+    c["screen"]["deep_dive_top"] = 2
+    empty = {"periods": ["TTM", "2025"], "rows": {}}
+    rows = [{"ticker": "A", "quality": 90, "valuation": 90, "momentum": 50, "core": 90, "tactical": None, "earnings_date": None},
+            {"ticker": "B", "quality": 60, "valuation": 60, "momentum": 50, "core": 60, "tactical": None, "earnings_date": None}]
+    deep_dive(rows, RatioFetcher({"A": empty, "B": ratios_for(9, [10, 12, 14], [0.3, 0.25, 0.2, 0.15])}), c)
+    a, b = rows
+    assert a["history"] is None and a["core_deep"] == 90             # not penalised for missing data
+    assert sorted(rows, key=core_rank_key, reverse=True)[0]["ticker"] == "A"

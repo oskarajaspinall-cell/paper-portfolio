@@ -4,7 +4,9 @@ For every screenable stock in universe/universe.csv (minus holdings and names re
 last `exclude_researched_days`), read its stockanalysis.com statistics page and score three pillars
 by percentile rank within the screened set (config [screen]):
     quality, valuation, momentum (price vs 50/200-day computed from the page's own quote and averages)
-Core score = mean(quality, valuation). Tactical score = momentum, only for names whose earnings date
+Core score = mean(quality, valuation). Stage 2: the top `deep_dive_top` core candidates also get
+their ratios page (5-year history) read, adding a history pillar (valuation vs own 5y range,
+ROIC/ROCE trend, worst-year ROIC); they are ranked by mean(quality, valuation, history). Tactical score = momentum, only for names whose earnings date
 falls inside `tactical_earnings_window_days`.
 
 A page that fails to load or parse is EXCLUDED and listed in the report (never guessed). Pages are
@@ -94,6 +96,69 @@ def score(metrics: dict[str, dict], cfg: dict, asof: str) -> list[dict]:
     return rows
 
 
+def history_metrics(ratios: dict) -> dict:
+    """Second-stage figures from the ratios page (5 fiscal years + TTM), all 'higher is better':
+    cheap_* = 100 - position of today's multiple in its own 5y range (100 = at its 5y low);
+    roic_trend / roce_trend = change in percentage points from the oldest to the newest fiscal year;
+    roic_min = the worst fiscal-year ROIC (%), i.e. consistency."""
+    from fact_sheet import range_position, trend
+    per = ratios["periods"]
+
+    def series(key):
+        vals = ratios["rows"].get(key) or [None] * len(per)
+        cur = vals[per.index("TTM")] if "TTM" in per else None
+        fy = [v for p, v in zip(per, vals) if p != "TTM"][::-1]  # oldest -> newest
+        return cur, fy
+
+    out = {}
+    for key in ("pe", "evebitda", "pfcf", "pb"):
+        cur, fy = series(key)
+        rp = range_position(cur, fy)
+        out[f"cheap_{key}"] = None if rp is None else 100 - rp["pos_pct"]
+    for key in ("roic", "roce", "roe"):
+        _, fy = series(key)
+        d, _ = trend([None if v is None else v * 100 for v in fy])
+        out[f"{key}_trend"] = d
+    _, roic_fy = series("roic")
+    vals = [v * 100 for v in roic_fy if v is not None]
+    out["roic_min"] = min(vals) if len(vals) >= 3 else None
+    _, roe_fy = series("roe")  # banks/insurers have no ROIC/EBITDA/FCF: ROE and P/B carry their history
+    vals = [v * 100 for v in roe_fy if v is not None]
+    out["roe_min"] = min(vals) if len(vals) >= 3 else None
+    return out
+
+
+def deep_dive(rows: list[dict], fetcher, cfg: dict) -> list[dict]:
+    """Stage 2: read the ratios page for the top `deep_dive_top` core candidates and add a
+    5-year 'history' pillar; core_deep = mean(quality, valuation, history). Returns failed pages."""
+    sc = cfg["screen"]
+    n = sc.get("deep_dive_top", 0)
+    top = sorted((r for r in rows if r["core"] is not None), key=lambda r: -r["core"])[:n]
+    hist, failed = {}, []
+    for r in top:
+        try:
+            sec = fetcher.section(r["ticker"], "ratios")
+            hist[r["ticker"]] = history_metrics(sec["data"])
+        except DataError as e:
+            failed.append({"ticker": r["ticker"], "url": e.url, "field": e.field})
+    h = pillar_scores(hist, sc["history"], sc["min_metrics_per_pillar"]) if hist else {}
+    checked = {r["ticker"] for r in top}
+    for r in rows:
+        r["history"] = h.get(r["ticker"])
+        if r["history"] is not None:
+            r["core_deep"] = st.mean([r["quality"], r["valuation"], r["history"]])
+        elif r["ticker"] in checked:  # in the top N but no usable history: keep its stage-1 score, no penalty
+            r["core_deep"] = r["core"]
+        else:
+            r["core_deep"] = None
+    return failed
+
+
+def core_rank_key(r: dict):
+    """Deep-dived names rank first (by core_deep); the rest follow by the stage-1 core score."""
+    return (r.get("core_deep") is not None, r.get("core_deep") if r.get("core_deep") is not None else r["core"])
+
+
 def recently_researched(days: int, asof: str) -> set[str]:
     """Folder slugs of names with a REAL decision in the decision log within `days` (dry runs record
     no decisions, so their research never blocks a name)."""
@@ -110,12 +175,15 @@ def pick(rows: list[dict], cfg: dict) -> list[dict]:
     sc, cap = cfg["screen"], cfg["agents"]["max_new_initiations_per_week"]
     picks: list[dict] = []
     for kind, n in (("core", sc["core_picks"]), ("tactical", sc["tactical_picks"])):
-        ranked = sorted((r for r in rows if r[kind] is not None), key=lambda r: -r[kind])
+        cands = [r for r in rows if r[kind] is not None]
+        ranked = sorted(cands, key=core_rank_key, reverse=True) if kind == "core" else \
+            sorted(cands, key=lambda r: -r[kind])
         for r in ranked:
             if len([p for p in picks if p["type"] == kind.upper()]) >= n or len(picks) >= cap:
                 break
             if r["ticker"] not in {p["ticker"] for p in picks}:
-                picks.append({"ticker": r["ticker"], "type": kind.upper(), "score": round(r[kind], 1)})
+                sc_ = r.get("core_deep") if kind == "core" and r.get("core_deep") is not None else r[kind]
+                picks.append({"ticker": r["ticker"], "type": kind.upper(), "score": round(sc_, 1)})
     return picks
 
 
@@ -136,8 +204,10 @@ def run(fetcher, cfg: dict, asof: str, limit: int | None = None, state: dict | N
         except DataError as e:
             failed.append({"ticker": r["ticker"], "url": e.url, "field": e.field})
     rows = score(metrics, cfg, asof)
-    return {"asof": asof, "screened": len(metrics), "failed": failed, "excluded_held": sorted(held),
-            "excluded_recent": sorted(recent), "rows": rows, "names": names, "picks": pick(rows, cfg)}
+    deep_failed = deep_dive(rows, fetcher, cfg)
+    return {"asof": asof, "screened": len(metrics), "failed": failed + deep_failed, "excluded_held": sorted(held),
+            "excluded_recent": sorted(recent), "rows": rows, "names": names, "picks": pick(rows, cfg),
+            "deep_dived": sum(1 for r in rows if r.get("history") is not None)}
 
 
 def report_md(res: dict, top: int = 15) -> str:
@@ -146,19 +216,25 @@ def report_md(res: dict, top: int = 15) -> str:
 
     lines = [f"# Screen — {res['asof']}",
              f"Screened {res['screened']} stocks; {len(res['failed'])} pages failed (excluded, listed below). "
-             "Scores are percentiles (0-100) within the screened set; all inputs from each stock's "
-             "stockanalysis.com statistics page.", "",
+             "Scores are percentiles (0-100) within the screened set; inputs from each stock's "
+             "stockanalysis.com statistics page. The top core candidates "
+             f"({res.get('deep_dived', 0)} stocks) also had their ratios page read: History = valuation vs its own "
+             "5-year range plus return-on-capital trend and consistency; their core score = mean(Quality, Valuation, "
+             "History).", "",
              "## This week's picks for initiation"]
     for p in res["picks"]:
         lines.append(f"- {p['ticker']} ({res['names'].get(p['ticker'], '')}): {p['type']}, score {p['score']} — "
                      f"{page_url(p['ticker'], 'statistics/')}")
     for kind in ("core", "tactical"):
-        ranked = sorted((r for r in res["rows"] if r[kind] is not None), key=lambda r: -r[kind])[:top]
-        lines += ["", f"## Top {kind} scores", "| # | Ticker | Name | Score | Quality | Valuation | Momentum | Earnings | Source |",
-                  "|---|---|---|---|---|---|---|---|---|"]
+        cands = [r for r in res["rows"] if r[kind] is not None]
+        ranked = (sorted(cands, key=core_rank_key, reverse=True) if kind == "core"
+                  else sorted(cands, key=lambda r: -r[kind]))[:top]
+        lines += ["", f"## Top {kind} scores", "| # | Ticker | Name | Score | Quality | Valuation | History | Momentum | Earnings | Source |",
+                  "|---|---|---|---|---|---|---|---|---|---|"]
         for i, r in enumerate(ranked, 1):
-            lines.append(f"| {i} | {r['ticker']} | {res['names'].get(r['ticker'], '')} | {f(r[kind])} | {f(r['quality'])} | "
-                         f"{f(r['valuation'])} | {f(r['momentum'])} | {r['earnings_date'] or 'n/a'} | "
+            score_ = r.get("core_deep") if kind == "core" and r.get("core_deep") is not None else r[kind]
+            lines.append(f"| {i} | {r['ticker']} | {res['names'].get(r['ticker'], '')} | {f(score_)} | {f(r['quality'])} | "
+                         f"{f(r['valuation'])} | {f(r.get('history'))} | {f(r['momentum'])} | {r['earnings_date'] or 'n/a'} | "
                          f"{page_url(r['ticker'], 'statistics/')} |")
     if res["failed"]:
         lines += ["", "## Failed pages (excluded)"] + [f"- {x['ticker']}: {x['url']} ({x['field']})" for x in res["failed"]]

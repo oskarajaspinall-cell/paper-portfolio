@@ -139,7 +139,7 @@ def test_ticker_urls():
 # ---- fetcher behaviour (network mocked)
 class FakeResp:
     def __init__(self, text, code=200):
-        self.text, self.status_code = text, code
+        self.text, self.status_code, self.encoding = text, code, None
 
 
 @pytest.fixture
@@ -195,3 +195,18 @@ def test_fetch_network_failure_names_url(fetcher):
         fetcher.html("https://stockanalysis.com/flaky/")
     assert e.value.field == "network" and "flaky" in e.value.url
     assert sum("flaky" in u for u, _ in fetcher.calls) == 3
+
+
+def test_fetch_decodes_pages_as_utf8(fetcher):
+    import requests as rq
+    raw = "Petróleo Brasileiro".encode("utf-8")
+    resp = rq.models.Response()
+    resp.status_code, resp._content = 200, raw
+    resp.headers["Content-Type"] = "text/html"  # no charset, as the site sends
+    import fetch_data
+    orig = rq.get
+    rq.get = lambda *a, **k: resp
+    try:
+        assert fetcher._get("https://stockanalysis.com/x/") == "Petróleo Brasileiro"
+    finally:
+        rq.get = orig

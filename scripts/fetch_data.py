@@ -374,6 +374,7 @@ class Fetcher:
             raise DataError(url, "network", f"{type(last_err).__name__} after 3 attempts")
         if r.status_code != 200:
             raise DataError(url, "http", f"status {r.status_code}")
+        r.encoding = "utf-8"  # pages are UTF-8 but the server doesn't say so (requests would guess Latin-1)
         return r.text
 
     def allowed(self, url: str) -> bool:
