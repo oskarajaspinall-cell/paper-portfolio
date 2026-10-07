@@ -80,6 +80,14 @@ def pillar_scores(metrics: dict[str, dict], spec: list[str], min_metrics: int) -
     return out
 
 
+def overextended(d: dict, sc: dict) -> bool:
+    """Tactical candidates need momentum WITHOUT being stretched: the evaluator rejects names whose
+    upside to a sensible target is smaller than the stop (overbought, far above trend)."""
+    rsi, above = d.get("rsi"), d.get("price_vs_sma200")
+    return ((rsi is not None and rsi > sc.get("tactical_max_rsi", 100))
+            or (above is not None and above > sc.get("tactical_max_above_sma200_pct", 1e9)))
+
+
 def score(metrics: dict[str, dict], cfg: dict, asof: str) -> list[dict]:
     sc = cfg["screen"]
     q = pillar_scores(metrics, sc["quality"], sc["min_metrics_per_pillar"])
@@ -91,7 +99,8 @@ def score(metrics: dict[str, dict], cfg: dict, asof: str) -> list[dict]:
         ed = d.get("earnings_date")
         rows.append({"ticker": t, "quality": q[t], "valuation": v[t], "momentum": m[t],
                      "core": st.mean([q[t], v[t]]) if q[t] is not None and v[t] is not None else None,
-                     "tactical": m[t] if m[t] is not None and ed and asof < ed <= window_end else None,
+                     "tactical": m[t] if m[t] is not None and ed and asof < ed <= window_end
+                     and not overextended(d, sc) else None,
                      "earnings_date": ed})
     return rows
 

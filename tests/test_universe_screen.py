@@ -246,3 +246,19 @@ def test_pick_ten_and_ten_within_cap(cfg):
     assert len(picks) == cfg["agents"]["max_new_initiations_per_week"] == 20
     assert [p["ticker"] for p in picks if p["type"] == "CORE"] == [f"C{i}" for i in range(10)]
     assert [p["ticker"] for p in picks if p["type"] == "TACTICAL"] == [f"T{i}" for i in range(10)]
+
+
+def test_tactical_excludes_overextended(cfg):
+    import copy
+    from screen import overextended
+    c = copy.deepcopy(cfg)
+    sc = c["screen"]
+    assert overextended({"rsi": 75, "price_vs_sma200": 10}, sc)
+    assert overextended({"rsi": 55, "price_vs_sma200": 130}, sc)
+    assert not overextended({"rsi": 62, "price_vs_sma200": 25}, sc)
+    base = {"roic": 10, "roce": 10, "fcfMargin": 10, "operatingMargin": 10, "fScore": 5, "debtEbitda": 1,
+            "fcfYield": 5, "earningsYield": 5, "evEbitda": 10, "pe": 15, "earnings_date": "2026-10-29"}
+    hot = dict(base, ch1y=300, price_vs_sma200=130, price_vs_sma50=30, rsi=78)
+    ok = dict(base, ch1y=40, price_vs_sma200=20, price_vs_sma50=6, rsi=60)
+    rows = {r["ticker"]: r for r in score({"HOT": hot, "OK": ok, "MID": dict(ok, ch1y=5)}, c, "2026-10-07")}
+    assert rows["HOT"]["tactical"] is None and rows["OK"]["tactical"] is not None

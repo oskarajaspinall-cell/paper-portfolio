@@ -88,6 +88,8 @@ core_picks = 10                   # new initiations per week from the core ranki
 tactical_picks = 10               # ... and from the tactical ranking (total <= max_new_initiations_per_week)
 exclude_researched_days = 90      # skip names with a research note this recent
 tactical_earnings_window_days = 42
+tactical_max_rsi = 70             # skip overbought names (14-day RSI above this) for tactical picks
+tactical_max_above_sma200_pct = 40  # skip names already this far above their 200-day average
 min_metrics_per_pillar = 2
 quality = ["roic", "roce", "fcfMargin", "operatingMargin", "fScore", "-debtEbitda"]   # "-" = lower is better
 valuation = ["fcfYield", "earningsYield", "-evEbitda", "-pe"]
