@@ -201,6 +201,9 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
     return 0
 
 
+LOCK = Path("/tmp/paper-portfolio-review.lock")
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--asof", default=dt.date.today().isoformat())
@@ -212,7 +215,15 @@ def main(argv=None) -> int:
     if (ROOT / "PAUSED").exists() and not a.local:
         print("PAUSED: exiting without changes (on your own computer, add --local to run anyway)")
         return 0
-    return run(a.asof, a.dry_run, a.max_new, local=a.local)
+    try:
+        LOCK.mkdir()  # one review at a time on this machine
+    except FileExistsError:
+        print(f"Another weekly review is already running (lock {LOCK}). Exiting without changes.")
+        return 1
+    try:
+        return run(a.asof, a.dry_run, a.max_new, local=a.local)
+    finally:
+        LOCK.rmdir()
 
 
 if __name__ == "__main__":

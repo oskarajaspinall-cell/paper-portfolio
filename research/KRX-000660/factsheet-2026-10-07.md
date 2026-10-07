@@ -21,14 +21,14 @@ Current = TTM at latest close. 5y range = fiscal-year-end multiples. Peer = medi
 
 | Multiple | Current | 5y min / median / max | Position in 5y range | Peer median | vs peers | Src |
 |---|---|---|---|---|---|---|
-| P/E | 7.8x | 6.1x / 9.9x / 23.1x | 10% | 14.1x (n=3) | -45% | RA,P:MU,P:KRX:005930,P:TPE:2408 |
-| EV/EBITDA | 8.8x | 3.4x / 4.3x / 23.3x | 27% | 10.2x (n=3) | -14% | RA,P:MU,P:KRX:005930,P:TPE:2408 |
-| EV/Sales | 6.6x | 1.5x / 2.2x / 4.6x | 166% (above max) | 8.3x (n=3) | -20% | RA,P:MU,P:KRX:005930,P:TPE:2408 |
-| P/FCF | 14.1x | 8.7x / 12.3x / 17.4x | 62% | 18.5x (n=3) | -24% | RA,P:MU,P:KRX:005930,P:TPE:2408 |
-| P/B | 4.9x | 0.8x / 1.6x / 3.7x | 141% (above max) | 5.6x (n=3) | -12% | RA,P:MU,P:KRX:005930,P:TPE:2408 |
+| P/E | 7.8x | 6.1x / 9.9x / 23.1x | 10% | 14.1x (n=3) | -45% | RA,P:KRX:005930,P:MU,P:TSM |
+| EV/EBITDA | 8.8x | 3.4x / 4.3x / 23.3x | 27% | 10.2x (n=3) | -14% | RA,P:KRX:005930,P:MU,P:TSM |
+| EV/Sales | 6.6x | 1.5x / 2.2x / 4.6x | 166% (above max) | 8.3x (n=3) | -20% | RA,P:KRX:005930,P:MU,P:TSM |
+| P/FCF | 14.1x | 8.7x / 12.3x / 17.4x | 62% | 20.0x (n=3) | -30% | RA,P:KRX:005930,P:MU,P:TSM |
+| P/B | 4.9x | 0.8x / 1.6x / 3.7x | 141% (above max) | 8.5x (n=3) | -42% | RA,P:KRX:005930,P:MU,P:TSM |
 | FCF yield | 7.10% | | | | | ST |
 
-Peers: MU, KRX:005930, TPE:2408
+Peers: KRX:005930, MU, TSM
 
 ## Price
 | Item | Value | Src |
@@ -66,7 +66,7 @@ Peers: MU, KRX:005930, TPE:2408
 - [HI] https://stockanalysis.com/quote/krx/000660/history/
 - [SPY-HI] https://stockanalysis.com/etf/spy/history/
 - [SPY-OV] https://stockanalysis.com/etf/spy/
-- [P:MU] https://stockanalysis.com/stocks/mu/statistics/
 - [P:KRX:005930] https://stockanalysis.com/quote/krx/005930/statistics/
-- [P:TPE:2408] https://stockanalysis.com/quote/tpe/2408/statistics/
+- [P:MU] https://stockanalysis.com/stocks/mu/statistics/
+- [P:TSM] https://stockanalysis.com/stocks/tsm/statistics/
 - [FX] https://stockanalysis.com/list/biggest-companies/

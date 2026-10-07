@@ -272,14 +272,16 @@ def test_failed_run_applies_no_trades_and_logs_error(fake_repo, monkeypatch):
     assert not (fake_repo / "runs" / "2026-10-10" / ".portfolio-backup").exists()
 
 
-def test_paused_exits_without_changes(fake_repo, monkeypatch):
+def test_paused_exits_without_changes(fake_repo, monkeypatch, tmp_path):
+    monkeypatch.setattr(wr, "LOCK", tmp_path / "lock")
     (fake_repo / "PAUSED").write_text("")
     monkeypatch.setattr(wr, "sh", lambda *a: pytest.fail("no step may run while paused"))
     assert wr.main(["--asof", "2026-10-10"]) == 0
     assert not (fake_repo / "runs").exists()
 
 
-def test_local_flag_runs_despite_paused(fake_repo, monkeypatch):
+def test_local_flag_runs_despite_paused(fake_repo, monkeypatch, tmp_path):
+    monkeypatch.setattr(wr, "LOCK", tmp_path / "lock")
     (fake_repo / "PAUSED").write_text("")
     calls = []
     monkeypatch.setattr(wr, "sh", make_sh(fake_repo, SCAN_QUIET, calls))
@@ -309,3 +311,12 @@ def test_report_lists_new_initiation_reasons(tmp_path):
     md = weekly_report.build(run, "2026-10-07", tmp_path / "port")
     sec4 = md.split("## 4. Review notes")[1].split("## 5.")[0]
     assert "**AMD** new initiation → AVOID (conviction 1): gap risk through the stop" in sec4
+
+
+def test_second_concurrent_review_refuses(fake_repo, monkeypatch, tmp_path):
+    lock = tmp_path / "review.lock"
+    monkeypatch.setattr(wr, "LOCK", lock)
+    lock.mkdir()
+    monkeypatch.setattr(wr, "sh", lambda *a: pytest.fail("must not run while another review holds the lock"))
+    assert wr.main(["--asof", "2026-10-10", "--local"]) == 1
+    lock.rmdir()

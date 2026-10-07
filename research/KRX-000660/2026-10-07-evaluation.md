@@ -1,28 +1,24 @@
 # Evaluation: SK hynix Inc. (KRX:000660) — 2026-10-07
 ## Bear case
-This is a commodity memory maker at a cyclical peak [Likely]. TTM operating margin of 68.0% and net margin of 85.6% compare with -23.6%/-27.8% in FY2023 [Certain]; those profits come from an AI-driven shortage, not a moat [Likely]. The low 7.8x P/E is calculated on peak earnings. EV/Sales (6.6x) and P/B (4.9x) both sit above their 5-year maximums, which is the classic peak-cycle pattern [Certain]. FCF conversion has fallen to 56.6% as capex ramps, and a possible new production base points to industry capacity growth that historically ends in a glut [Likely]. The stock fell 24.3% over 3 months, so the market may already be discounting the turn [Certain]. A beta of 2.39 magnifies any AI-capex pullback [Certain]. If margins normalise toward the 15–35% pre-AI band, earnings could more than halve [Guessing].
-
+This is a memory-cycle business priced on what looks like peak earnings [Likely]. TTM gross margin of 76.3% and operating margin of 68.0% sit far above every fiscal year shown, and FY2023 swung to -1.6% gross and -27.8% net margin [Certain]. A 7.8x P/E at peak margins is the classic cyclical trap; EV/Sales (6.6x) and P/B (4.9x) are already above their own 5-year highs, so the price assumes the margins hold [Certain]. TTM net margin (85.6%) exceeds operating margin (68.0%), implying non-operating gains flatter earnings and ROE [Likely]. FCF conversion fell to 56.6% from 76.1% in FY2021 [Certain]. The stock is -24.3% over three months, off a 2,987,000 high, which may mean the market is already discounting a turn [Guessing]. Beta of 2.39 and KRW exposure add volatility in an empty portfolio [Certain].
 ## Bull case
-SK hynix holds a technology and qualification lead in HBM, with disclosed supply ties to Nvidia. That gives it a higher barrier to entry than commodity DRAM [Likely]. Quality is at a cycle high: ROIC is 61.6%, FCF margin 48.5%, Piotroski F-score 7 and Altman Z 7.28 [Certain]. The balance sheet has swung to net cash (-0.47x net debt/EBITDA from 4.48x in FY2023), so it can fund HBM capacity and absorb a downturn without leverage [Certain]. Even on these figures the stock is cheap against peers: P/E is 45% below the peer median, EV/EBITDA 14% below and P/FCF 24% below, with a 7.10% FCF yield [Certain]. Dilution is negligible (+0.14% YoY) [Certain]. The Oct 29, 2026 results give an early read on whether HBM pricing is holding [Certain].
-
+SK hynix is the leading HBM supplier into AI accelerators, a position protected by multi-year qualification and heavy capex [Likely]. ROIC is 61.6% TTM, the balance sheet is net cash (-0.47x net debt/EBITDA), Piotroski F is 7 and Altman Z is 7.28 [Certain]. Even on earnings that have fully converted to cash, P/FCF of 14.1x (7.10% FCF yield) is 30% below the peer median and P/E is 45% below it [Certain]. Share count is flat (+0.14% YoY) [Certain]. If HBM keeps memory pricing structurally higher than in past cycles, today's earnings base is closer to normal than peak and the stock re-rates toward peers [Guessing]. Earnings on Oct 29, 2026 could confirm durability [Likely].
 ## Decision
 ```json
 {
   "ticker": "KRX:000660",
-  "decision": "BUY",
+  "decision": "AVOID",
   "position_type": "CORE",
-  "core_initiation": false,
-  "conviction": 2,
-  "thesis": "SK hynix's HBM leadership and net-cash balance sheet should sustain above-cost-of-capital returns through the AI memory cycle, and the stock trades at a discount to memory peers on earnings and cash flow.",
-  "rationale": "Quality, net cash and a peer discount justify owning it. But earnings sit on peak-cycle margins, EV/Sales and P/B are above their 5-year highs, and beta is 2.39. Normalised earnings could be far lower. A 3% starter caps the cyclical downside. The portfolio is all cash, so no limits bind.",
+  "conviction": 1,
+  "thesis": "An exceptional HBM franchise, but a 12-month core holding at record sales and book multiples is a bet that peak-cycle memory margins persist, which the evidence cannot support.",
+  "rationale": "Low P/E reflects record margins (76.3% gross), not cheapness: EV/Sales and P/B exceed 5-year highs, net margin exceeds operating margin, and FCF conversion is falling. A commodity-cycle stock with 2.39 beta should be bought on normalised, not peak, earnings. Quality and net cash make it a re-entry candidate after a cycle reset.",
   "price_at_decision": 1773000.00,
   "price_date": "2026-10-06",
   "research_note": "research/KRX-000660/2026-10-07.md",
   "triggers": [
-    {"text": "TTM gross margin falls below 40%, a sign the HBM/DRAM pricing premium is eroding back toward the commodity pattern.", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 40}},
-    {"text": "ROIC falls below 15%, losing the cushion above the cost of capital that sets this cycle apart from the FY2022-23 trough.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 15}},
-    {"text": "FCF margin turns negative, repeating the FY2022-23 pattern of capex outrunning cash generation in an oversupplied market.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 0}},
-    {"text": "Net debt/EBITDA (ratios page) rises back above 1.0x, signalling a return to last cycle's leverage build-up."}
+    {"text": "Gross margin falls below the FY2021 level of 44.1% while the balance sheet stays net cash: the cycle has reset with the franchise intact, so re-evaluate for entry on trough-like earnings.", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 44.1}},
+    {"text": "ROIC falls below the FY2021 normal-cycle level of 13.4%: returns have normalised, giving a sound base for a valuation that does not depend on peak margins.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 13.4}},
+    {"text": "FCF conversion (FCF/NI) recovers above the FY2024 level of 70.0% while gross margin holds above the FY2025 level of 60.4%, showing upcycle earnings are cash-backed and durable rather than peak."}
   ],
   "replaces": null,
   "replacement_reason": null

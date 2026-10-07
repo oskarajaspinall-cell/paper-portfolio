@@ -77,3 +77,82 @@ $ claude -p Evaluation files: research/KRX-000660/2026-10-07-evaluation.md resea
 ```
 $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_report.py --asof 2026-10-07 --run /Users/oskaraspinall/paper-portfolio/runs/2026-10-07
 /Users/oskaraspinall/paper-portfolio/reports/weekly/2026-10-07.md
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py mark --asof 2026-10-07
+{"total": 100000.0, "cash": 100000.0, "core": 0, "tactical": 0, "sectors": {}, "n": 0}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_scan.py --asof 2026-10-07 --out /Users/oskaraspinall/paper-portfolio/runs/2026-10-07
+{"flagged_for_review": [], "reinitiate": [], "mechanical_exits": [], "trims": [], "unflagged": 0, "scan": "/Users/oskaraspinall/paper-portfolio/runs/2026-10-07/scan.json"}
+$ claude -p Ticker KRX:000660, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/KRX-000660/2026-10-07.md
+research/KRX-000660/factsheet-2026-10-07.md
+OK research/KRX-000660/2026-10-07.md type=CORE 1=60 2=147 3=143 4=90 5=80 6=57 total=577
+
+No data conflicts. Blocked/failed fetches: https://www.reuters.com/technology/sk-hynix-2026 and https://www.reuters.com/markets/companies/000660.KS/ (reuters.com unreachable via WebFetch — not retried). No company IR domain was listed for KRX:000660, so qualitative sourcing was limited to stockanalysis.com.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/KRX-000660/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/KRX-000660/2026-10-07.md type=CORE 1=60 2=147 3=143 4=90 5=80 6=57 total=577
+$ claude -p Evaluate KRX:000660 for 2026-10-07: fact sheet research/KRX-000660/factsheet-2026-10-07.md, note research/KRX-000660/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/KRX-000660/2026-10-07-evaluation.md
+OK research/KRX-000660/2026-10-07-evaluation.md Bear case=129 Bull case=110 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/KRX-000660/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/KRX-000660/2026-10-07-evaluation.md Bear case=129 Bull case=110 decision=AVOID
+$ claude -p Ticker AMD, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/AMD/2026-10-07.md
+research/AMD/factsheet-2026-10-07.md
+OK research/AMD/2026-10-07.md type=TACTICAL 1=71 2=82 3=67 4=117 5=36 total=373
+
+No data conflicts. One blocked/failed URL: https://www.amd.com/en/newsroom.html timed out (not fetched; not logged as blocked, just unresponsive) — not used as a source.
+
+**Recommendation: AVOID.** Valuation is extreme on every multiple vs both AMD's own 5-year range and peers (EV/EBITDA 216% of 5y range, P/E +434% vs peer median), the stock is already 25%/71% above its 50/200-day MAs near 52-week highs, and the Nov 3 catalyst is a known date against deals already disclosed through the year — asymmetric risk skews to the downside with minimal valuation cushion for any disappointment.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/AMD/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/AMD/2026-10-07.md type=TACTICAL 1=71 2=82 3=67 4=117 5=36 total=373
+$ claude -p Evaluate AMD for 2026-10-07: fact sheet research/AMD/factsheet-2026-10-07.md, note research/AMD/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/AMD/2026-10-07-evaluation.md
+OK research/AMD/2026-10-07-evaluation.md Bear case=130 Bull case=109 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/AMD/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/AMD/2026-10-07-evaluation.md Bear case=130 Bull case=109 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py submit /Users/oskaraspinall/paper-portfolio/runs/2026-10-07/requests-mechanical.json --asof 2026-10-07 --save /Users/oskaraspinall/paper-portfolio/runs/2026-10-07/submit-mechanical.json
+{
+ "cash_before_usd": 100000.0,
+ "cash_after_usd": 100000.0,
+ "applied": [],
+ "rejected": [],
+ "warnings": [
+  "holdings 0 below target minimum 8",
+  "cash 100.0% above target maximum 20%"
+ ],
+ "dry_run": false
+}
+$ claude -p Evaluation files: research/KRX-000660/2026-10-07-evaluation.md research/AMD/2026-10-07-evaluation.md. Date 2026-10-07. Write the requests to runs/2026-10-07/requests-decisions.json and submit with --save runs/2026-10-07/submit.json. --agent portfolio-manager --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+## Decisions
+
+| Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| KRX:000660 | AVOID | CORE | 1 |
+| AMD | AVOID | TACTICAL | 1 |
+
+No trade requests were generated (both evaluations concluded AVOID).
+
+## Submit output
+
+```json
+{
+ "cash_before_usd": 100000.0,
+ "cash_after_usd": 100000.0,
+ "applied": [],
+ "rejected": [],
+ "warnings": [
+  "holdings 0 below target minimum 8",
+  "cash 100.0% above target maximum 20%"
+ ],
+ "dry_run": false
+}
+```
+
+No rejections. Warnings are standing portfolio-level targets (holdings below minimum, cash above target), not rejections of any trade.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/decision_log.py record research/KRX-000660/2026-10-07-evaluation.md research/AMD/2026-10-07-evaluation.md --asof 2026-10-07
+recorded 2 decision(s); 2 total
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/decision_log.py update --asof 2026-10-07
+{"rows": 2, "notes": []}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py stamp --asof 2026-10-07
+last_scan = 2026-10-07
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_report.py --asof 2026-10-07 --run /Users/oskaraspinall/paper-portfolio/runs/2026-10-07
+/Users/oskaraspinall/paper-portfolio/reports/weekly/2026-10-07.md

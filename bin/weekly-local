@@ -1,0 +1,51 @@
+#!/bin/bash
+# Weekly run on this Mac: universe -> screen -> weekly review -> commit -> upload to GitHub.
+# Started by macOS launchd every Friday 22:00 (~/Library/LaunchAgents/com.paperportfolio.weekly.plist).
+#   bin/weekly-local          real run
+#   bin/weekly-local --test   quick check: 20-stock screen, dry-run review, no commit/upload
+set -u
+cd "$(dirname "$0")/.." || exit 1
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+TEST=0; [ "${1:-}" = "--test" ] && TEST=1
+
+FRIDAY=$(date +%F)
+ASOF=$(date -v+1d +%F)            # review date = next day, so Friday's closes count as completed
+mkdir -p logs
+LOG="logs/weekly-local-$FRIDAY.log"
+exec >>"$LOG" 2>&1
+echo "== start $(date) (test=$TEST, screen $FRIDAY, review asof $ASOF)"
+
+LOCK=/tmp/paper-portfolio-weekly.lock
+if ! mkdir "$LOCK" 2>/dev/null; then echo "another run is in progress; exiting"; exit 0; fi
+trap 'rmdir "$LOCK"' EXIT
+caffeinate -i -w $$ &             # keep the Mac awake until this script ends
+
+if [ $TEST = 1 ]; then SCREEN_ARGS="--limit 20"; REVIEW_ARGS="--dry-run --max-new 0"; else SCREEN_ARGS=""; REVIEW_ARGS=""; fi
+
+# 1-2. Universe + screen. A failure here is logged but never blocks the review (exits must still run).
+bin/py scripts/universe.py build || echo "!! universe build failed (previous list kept)"
+# shellcheck disable=SC2086
+bin/py scripts/screen.py --asof "$FRIDAY" $SCREEN_ARGS || echo "!! screen failed (no new initiations this week)"
+
+# 3. Weekly review (restores portfolio/ itself and writes runs/$ASOF/error.log on failure).
+# shellcheck disable=SC2086
+bin/py scripts/weekly_run.py --local --asof "$ASOF" $REVIEW_ARGS
+review=$?
+
+if [ $TEST = 1 ]; then echo "== test finished $(date) review_exit=$review (no commit/upload in test mode)"; exit $review; fi
+
+# 4. Commit + upload. On failure keep ONLY the error log and this log (no trades from the run).
+if [ $review = 0 ]; then
+  git add -A -- portfolio research reports runs logs
+  git commit -q -m "Weekly run $ASOF" || echo "nothing to commit"
+else
+  err="runs/$ASOF/error.log"; tmp=$(mktemp); [ -f "$err" ] && cp "$err" "$tmp"
+  git checkout -q -- portfolio research reports 2>/dev/null
+  git clean -q -fd -- research reports "runs/$ASOF"
+  mkdir -p "runs/$ASOF"; [ -s "$tmp" ] && mv "$tmp" "$err"
+  git add -- "$err" "$LOG" reports/screen 2>/dev/null
+  git commit -q -m "Weekly run $ASOF FAILED (error log only)" || true
+fi
+git pull -q --rebase && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (results are committed locally; next run retries)"
+echo "== end $(date) review_exit=$review"
+exit $review

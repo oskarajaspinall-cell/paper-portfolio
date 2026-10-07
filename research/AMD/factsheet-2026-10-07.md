@@ -22,14 +22,14 @@ Current = TTM at latest close. 5y range = fiscal-year-end multiples. Peer = medi
 
 | Multiple | Current | 5y min / median / max | Position in 5y range | Peer median | vs peers | Src |
 |---|---|---|---|---|---|---|
-| P/E | 161.2x | 55.8x / 80.7x / 278.9x | 47% | 30.2x (n=3) | +434% | RA,P:NVDA,P:INTC,P:QCOM,P:MRVL |
-| EV/EBITDA | 110.0x | 18.7x / 42.8x / 61.0x | 216% (above max) | 32.8x (n=4) | +236% | RA,P:NVDA,P:INTC,P:QCOM,P:MRVL |
-| EV/Sales | 25.5x | 4.3x / 10.0x / 10.6x | 338% (above max) | 14.9x (n=4) | +70% | RA,P:NVDA,P:INTC,P:QCOM,P:MRVL |
-| P/FCF | 126.2x | 33.5x / 54.8x / 212.4x | 52% | 95.5x (n=4) | +32% | RA,P:NVDA,P:INTC,P:QCOM,P:MRVL |
-| P/B | 15.3x | 1.9x / 4.3x / 23.5x | 62% | 10.2x (n=4) | +50% | RA,P:NVDA,P:INTC,P:QCOM,P:MRVL |
+| P/E | 161.2x | 55.8x / 80.7x / 278.9x | 47% | 30.2x (n=3) | +434% | RA,P:NVDA,P:INTC,P:QCOM,P:AVGO |
+| EV/EBITDA | 110.0x | 18.7x / 42.8x / 61.0x | 216% (above max) | 31.9x (n=4) | +245% | RA,P:NVDA,P:INTC,P:QCOM,P:AVGO |
+| EV/Sales | 25.5x | 4.3x / 10.0x / 10.6x | 338% (above max) | 14.9x (n=4) | +70% | RA,P:NVDA,P:INTC,P:QCOM,P:AVGO |
+| P/FCF | 126.2x | 33.5x / 54.8x / 212.4x | 52% | 45.6x (n=4) | +177% | RA,P:NVDA,P:INTC,P:QCOM,P:AVGO |
+| P/B | 15.3x | 1.9x / 4.3x / 23.5x | 62% | 12.1x (n=4) | +26% | RA,P:NVDA,P:INTC,P:QCOM,P:AVGO |
 | FCF yield | 0.79% | | | | | ST |
 
-Peers: NVDA, INTC, QCOM, MRVL
+Peers: NVDA, INTC, QCOM, AVGO
 
 ## Price
 | Item | Value | Src |
@@ -70,4 +70,4 @@ Peers: NVDA, INTC, QCOM, MRVL
 - [P:NVDA] https://stockanalysis.com/stocks/nvda/statistics/
 - [P:INTC] https://stockanalysis.com/stocks/intc/statistics/
 - [P:QCOM] https://stockanalysis.com/stocks/qcom/statistics/
-- [P:MRVL] https://stockanalysis.com/stocks/mrvl/statistics/
+- [P:AVGO] https://stockanalysis.com/stocks/avgo/statistics/
