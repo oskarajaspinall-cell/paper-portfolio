@@ -108,6 +108,19 @@ max_shocks = 5
 max_technical_tilt = 0.02         # |annualised|, applied to the 3m horizon only
 drift_range = [-0.60, 0.80]       # annualised drift sanity bounds
 vol_range = [0.05, 1.50]          # baseline volatility sanity bounds
+regression_weeks = 156            # 3 years of weekly log returns for the factor regression
+vol_blend_weeks = [52, 156]       # residual vol level = 50/50 blend of 1y and 3y residual vol
+reconcile_mean_pp = 1.5           # fail if 12m mean differs from the probability-weighted target by more
+backtest_quarters = 8
+max_jump_impact_assumed = 0.30    # |impact| cap when a jump has no historical analogue
+noise_floor_share = 0.5           # daily noise keeps at least this share of residual vol after the target band takes its part
+
+[montecarlo.factors]
+# Factor proxies by market (stockanalysis.com tickers; "etf" marks US-listed ETFs). Weekly regression over
+# `regression_weeks`. HKD is pegged to USD, so no FX factor for HKG.
+HKG = [{ ticker = "HKG:2800", name = "Hang Seng (Tracker Fund)" }, { ticker = "KWEB", etf = true, name = "China internet sector" }, { ticker = "IEF", etf = true, name = "US 7-10y Treasuries (rates)" }]
+US = [{ ticker = "SPY", etf = true, name = "US equity market" }, { ticker = "IEF", etf = true, name = "US 7-10y Treasuries (rates)" }]
+LON = [{ ticker = "LON:ISF", name = "FTSE 100 (iShares)" }, { ticker = "IEF", etf = true, name = "US 7-10y Treasuries (rates)" }]
 
 [agents]
 fetch_cap_core = 6
@@ -127,7 +140,7 @@ weekly_flag_move_pct = 8
 ## How an initiation runs (manual or automated)
 1. `researcher` (ticker, CORE or TACTICAL, date) → fact sheet + note, checked by `check_docs.py note`.
 2. `evaluator` → `research/<SLUG>/<date>-evaluation.md`: Bear, Bull, then one Decision ```json block, checked by `check_docs.py eval`.
-2b. `mc-parameters` → `research/<SLUG>/<date>-mc-params.json` (every value cited to the research), then `scripts/montecarlo.py` (numpy) → `<date>-montecarlo.json` + `.md`: 3m/6m/12m return distributions. Sanity checks fail loudly and write nothing; a failure never blocks the decision.
+2b. Monte Carlo (never blocks the decision): `scripts/mc_inputs.py` (3y weekly factor regression, blended residual vol, factor correlation, jump-analogue table; stockanalysis.com chart-data history) → `mc-parameters` agent writes `<date>-mc-params.json` (factor scenarios, scenario bands + probability evidence, mandatory jumps with historical analogues; every value cited) → `scripts/montecarlo.py` (numpy; scenario means calibrated to targets; reconciliation checks; attribution + sensitivity) → `<date>-montecarlo.json/.md`; `scripts/mc_backtest.py` → `<date>-mc-backtest.json/.md` (8-quarter calibration coverage). Symmetric default probabilities stop with `<date>-mc-needs-review.md` until the owner approves them.
 3. `portfolio-manager` → trade requests → `portfolio.py submit --at-next-open` (validated now, filled at the next market open; `--dry-run` when asked).
 Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 
@@ -139,7 +152,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.
 - `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions (3 new initiations at a time); any failure (other than a skipped new initiation) restores `portfolio/` and writes `runs/<date>/error.log`.
-- `scripts/montecarlo.py` — scenario-weighted jump-diffusion Monte Carlo (Student-t, fixed seed, 10,000 paths) from the cited parameters file; settings in `[montecarlo]`. `.claude/agents/mc-parameters.md` is the only LLM step (parameters, never results).
+- `scripts/mc_inputs.py`, `scripts/montecarlo.py`, `scripts/mc_backtest.py` — Monte Carlo inputs (factor regression, vol, analogues), simulation (factors + calibrated scenarios + jumps + Student-t noise, fixed seed, 10,000 paths) and calibration backtest; settings in `[montecarlo]` / `[montecarlo.factors]`. `.claude/agents/mc-parameters.md` is the only LLM step (parameters, never results). Long weekly history comes from stockanalysis.com's chart-data endpoint (`Fetcher.long_history`).
 - `scripts/check_docs.py` — template, word-limit, tag, allowlist, conviction and Decision-block checks for notes and evaluations.
 - `scripts/allowlist_hook.py` — WebFetch guard (wired in `.claude/settings.json`); blocked URLs go to `logs/skipped-urls.log`. WebSearch, curl and wget are denied.
 - `scripts/common.py` — config reader, ticker/URL mapping, allowlist, thesis-only trigger rule.

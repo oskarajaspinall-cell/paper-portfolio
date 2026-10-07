@@ -450,6 +450,29 @@ class Fetcher:
         data = PARSERS[page](page_nodes(self.html(url), url), url)
         return {"source_url": url, "data": data}
 
+    def long_history(self, ticker: str, etf: bool = False, range_: str = "5Y", period: str = "Weekly") -> dict:
+        """Long price history from stockanalysis.com's chart-data endpoint (the static pages show ~6 months).
+        Path: US stock s/<sym>, ETF e/<sym>, non-US a/<EX>-<SYM>. Rows ascending: {date, close, adj_close}."""
+        from common import Ticker
+        t = Ticker(ticker)
+        kind, sym = (("a", f"{t.exchange}-{t.symbol}") if t.exchange
+                     else (("e" if etf else "s"), t.symbol.lower()))
+        url = f"{BASE_URL}/api/symbol/{kind}/{sym}/history?range={range_}&period={period}"
+        try:
+            doc = json.loads(self.html(url))
+        except json.JSONDecodeError as e:
+            raise DataError(url, "json", "chart-data endpoint did not return JSON (format changed?)") from e
+        rows = doc.get("data") if isinstance(doc, dict) else None
+        if not isinstance(rows, list) or not rows:
+            raise DataError(url, "data", "no price rows")
+        out = []
+        for r in rows:
+            if not r.get("t") or r.get("c") is None:
+                raise DataError(url, "data.c", f"row without date/close: {r}")
+            out.append({"date": r["t"], "close": r["c"], "adj_close": r.get("a") if r.get("a") is not None else r["c"]})
+        out.sort(key=lambda r: r["date"])
+        return {"source_url": url, "rows": out}
+
     def ticker(self, ticker: str, pages=tuple(p for p in PAGES if p != "filings")) -> dict:
         return {"ticker": ticker, "fetched": self.today,
                 "sections": {p: self.section(ticker, p) for p in pages}}

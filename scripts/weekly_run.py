@@ -94,12 +94,14 @@ def run_montecarlo(ticker: str, slug: str, asof: str, agent, log, run: Path) -> 
     logged loudly and listed in the report, but never cancels the decision or trades (it is not a signal)."""
     params = ROOT / "research" / slug / f"{asof}-mc-params.json"
     try:
+        sh(PY + ["scripts/mc_inputs.py", ticker, "--asof", asof], log)  # regression, vol, analogues (no LLM)
         agent("mc-parameters", f"Ticker {ticker}, date {asof}. Research: research/{slug}/factsheet-{asof}.md, "
-                               f"research/{slug}/{asof}.md, research/{slug}/{asof}-evaluation.md. "
+                               f"research/{slug}/{asof}.md, research/{slug}/{asof}-evaluation.md, inputs research/{slug}/{asof}-mc-inputs.json. "
                                f"Write research/{slug}/{asof}-mc-params.json and run the simulation.", log)
         if not params.exists():
             raise StepFailed("mc-parameters wrote no parameters file")
         sh(PY + ["scripts/montecarlo.py", str(params)], log)  # idempotent re-run: confirms the written output
+        sh(PY + ["scripts/mc_backtest.py", ticker, "--asof", asof], log)  # calibration coverage (no LLM)
     except StepFailed as e:
         log(f"!! MONTE CARLO FAILED for {ticker}: {e}")
         with (run / "montecarlo-failures.log").open("a") as fh:

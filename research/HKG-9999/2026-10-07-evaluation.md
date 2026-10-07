@@ -1,10 +1,10 @@
 # Evaluation: NetEase, Inc. (HKG:9999) — 2026-10-07
 
 ## Bear case
-The discount is structural, not an anomaly. VIEs held 85.2% of FY2025 revenue, so ownership rests on contracts PRC authorities could challenge [Certain]. Tighter minors'-playtime, loot-box and approval rules can cap monetization at any time [Certain]. Mean reversion therefore may not happen: P/E at 16.0x is above its 5y median of 15.4x, so on earnings the stock is not cheap versus its own history [Certain]. Net margin dipped to 27.9% TTM from 30.0% in FY2025 [Certain], and ROIC of 368.3% is inflated by a tiny invested-capital base rather than showing incremental strength [Likely]. Shares outstanding rose 0.39% YoY despite buybacks, so SBC absorbs repurchases [Certain]. Momentum is poor: -21.6% over 12 months and -38.0pp versus SPY [Certain]. A hit-driven pipeline makes Ananta's January launch a binary event [Guessing].
+The discount is structural, not mispricing: VIEs carry 85.2% of FY2025 revenue and PRC playtime, loot-box and approval rules can cap monetization at any time [Certain]. A cheap multiple can stay cheap; the stock is -21.6% over 12 months and -38.0pp versus SPY, below both its 50-day and 200-day averages, so the market is not yet rewarding the margin expansion [Certain]. Shares outstanding still rose 0.39% YoY despite buybacks, so SBC absorbs capital return [Certain]. TTM net margin (27.9%) has slipped below FY2025 (30.0%) and ROE fell to 20.4% from 22.6%, hinting the profit peak may be in [Likely]. Growth now leans on hit-driven launches; a weak January Ananta global launch would leave a single-franchise-dependent earnings base with little re-rating catalyst [Guessing].
 
 ## Bull case
-Quality has risen every year: operating margin 35.2% TTM vs 18.7% in FY2021, gross margin 67.2% vs 53.6%, FCF margin 43.5% vs 26.6% [Certain]. Earnings are cash-backed: FCF conversion 156.0% TTM [Certain]. Yet EV/EBITDA (8.2x) and P/FCF (10.1x) sit below their own 5-year minimums (9.3x, 10.7x) and below peer medians, with a 9.86% FCF yield [Certain]. Net cash (-3.76x net debt/EBITDA) cushions a regulatory shock and funds dividends and buybacks [Certain]. Q2 2026 gross margin improved to 70.5% on new titles including Marvel Rivals and Sea of Remnants [Likely]. Beta of 0.77 and Altman Z of 8.53 make it a low-risk way to own high-return gaming IP [Certain]. Holding at the 7% conviction-4 size already captures this; a 10% size needs evidence the regulatory discount is narrowing, which the research does not show [Likely].
+Quality has compounded for five years: operating margin 35.2% TTM vs 18.7% FY2021, FCF margin 43.5% vs 26.6%, ROCE 23.3% vs 15.9% [Certain]. Yet EV/EBITDA (8.2x) and P/FCF (10.1x) sit below their own 5-year minimums and the P/E (16.0x) is 27% under the peer median [Certain]. A 9.86% FCF yield with net cash at -3.76x net debt/EBITDA gives downside protection and funds returns [Certain]. FCF conversion of 156.0% shows earnings are cash-backed [Certain]. Q2 2026 gross margin of 70.5% per the transcript points to further mix improvement [Likely]. Ananta's global launch in January, before the 12-month horizon ends, is a concrete catalyst for re-rating toward the 5y median multiple [Likely].
 
 ## Decision
 ```json
@@ -13,8 +13,8 @@ Quality has risen every year: operating margin 35.2% TTM vs 18.7% in FY2021, gro
   "decision": "HOLD",
   "position_type": "CORE",
   "conviction": 4,
-  "thesis": "A net-cash, high-margin game developer with five years of rising returns trades below its own 5-year EV/EBITDA and P/FCF minimums at a 9.86% FCF yield, pricing in a regulatory overhang rather than the quality it has delivered.",
-  "rationale": "Thesis intact on every fundamental: margins and FCF conversion at highs, net cash, multiples below 5y minimums. Conviction stays 4, not 5, because VIE and PRC regulatory risk are structural and P/E is not below its 5y median. The position is already at the 7% conviction-4 size, so HOLD; no ADD.",
+  "thesis": "A net-cash, high-margin game developer with five years of rising returns trades below its own 5-year EV/EBITDA and P/FCF minimums at a 9.86% FCF yield, pricing a regulatory overhang rather than delivered quality.",
+  "rationale": "Nothing in the fundamentals has changed since entry: margins, ROCE and FCF conversion remain above every trigger. Position is ~7%, matching conviction 4. Conviction is not 5 because VIE/PRC regulatory risk is binary and price momentum is negative, so no ADD; valuation below 5y minimums argues against trimming.",
   "price_at_decision": 185.60,
   "price_date": "2026-10-06",
   "research_note": "research/HKG-9999/2026-10-07.md",
@@ -25,9 +25,9 @@ Quality has risen every year: operating margin 35.2% TTM vs 18.7% in FY2021, gro
     {"text": "A new PRC regulation materially restricts game monetization, or a VIE-related regulatory action forces deconsolidation, as disclosed in an SEC 20-F/6-K filing."}
   ],
   "scenarios": {
-    "bull": {"probability": 0.25, "target_price_12m": 226.0, "basis": "FCF margin holds near 43.5% TTM [CF,IS] and P/FCF re-rates from 10.1x to its 5y median 12.3x [RA] as new titles extend the gross-margin gains."},
-    "base": {"probability": 0.5, "target_price_12m": 196.6, "basis": "Fundamentals stay at TTM levels and P/FCF recovers only to its 5y minimum 10.7x from 10.1x [RA], with the regulatory/VIE discount persisting (20-F)."},
-    "bear": {"probability": 0.25, "target_price_12m": 157.8, "basis": "A PRC monetization curb or weak launch compresses P/E from 16.0x to its 5y minimum 13.6x [RA] on flat TTM earnings, per the 20-F regulatory risk."}
+    "bull": {"probability": 0.30, "target_price_12m": 226.0, "basis": "P/FCF re-rates from 10.1x to its 5y median 12.3x [RA] on TTM FCF, supported by the January Ananta global launch [OV news] and margins still rising (op margin 35.2% TTM [IS]); weighted below base because the stock has not traded at the median since its -21.6% 12m fall [ST]."},
+    "base": {"probability": 0.45, "target_price_12m": 196.6, "basis": "P/FCF recovers only to its 5y minimum 10.7x [RA] on flat TTM FCF, as the regulatory/VIE discount (85.2% VIE revenue, 20-F) persists; most likely because EV/EBITDA and P/FCF already sit below every fiscal-year-end level in 5y [RA], favouring partial mean reversion."},
+    "bear": {"probability": 0.25, "target_price_12m": 157.8, "basis": "P/E compresses from 16.0x to its 5y minimum 13.6x [RA] on a PRC monetization/loot-box rule or weak launch named in the 20-F risk section; probability capped by net cash at -3.76x net debt/EBITDA [RA] and a 9.86% FCF yield [ST] that limit downside."}
   },
   "replaces": null,
   "replacement_reason": null
