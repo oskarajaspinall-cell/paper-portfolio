@@ -116,7 +116,7 @@ should end with a red ✗ and one commit, "Weekly run <date> FAILED (error log o
 ## Costs
 
 - **GitHub Actions:** free for public repositories. Private ones include 2,000 free minutes a month; the
-  default setup uses roughly 4 hours a week.
+  default setup uses roughly 5 hours a week (about 1,300 minutes a month).
 - **Claude:** API usage is pay as you go (set a spend limit); a subscription token uses your plan. Quiet
   holdings, mechanical exits and the screen use no AI.
 
