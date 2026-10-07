@@ -15,7 +15,7 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 
 | When (UTC) | Workflow | What it does | Uses AI? |
 |---|---|---|---|
-| Friday 21:00 | **Weekly screen** | Rebuilds the stock list (default: S&P 500 + FTSE 100 + the ~3,800 largest stocks worldwide) and scores every stock on quality, valuation and momentum. Picks 1 core + 1 tactical idea. ~3 hours with the default list. | No |
+| Friday 21:00 | **Weekly screen** | Rebuilds the stock list (default: S&P 500 + FTSE 100 + the ~3,800 largest stocks worldwide) and scores every stock on quality, valuation and momentum. Picks 1 core + 1 tactical idea. ~4 hours with the default list (3,800 stocks, plus a 5-year history check on the top 500). | No |
 | Saturday 08:00 | **Weekly review** | Checks every holding; sells tactical positions that hit their stop, target or time limit; reviews holdings that moved >8% or reported results; fully re-researches any core holding whose thesis broke; researches the screen's picks; trades; updates the decision log; writes the weekly report. | Only for flagged holdings and new research |
 
 Results are committed to the `main` branch ("Weekly run 2026-10-10"). If anything goes wrong, **no trades
@@ -49,7 +49,7 @@ Then in **your fork**: **Settings** → **Secrets and variables** → **Actions*
 2. Delete the pause file: open `PAUSED` → **…** menu → **Delete file** → **Commit changes**.
 
 ### 5. First runs
-1. **Actions** → **Weekly screen** → **Run workflow**. Wait for the green ✓ (about 3 hours with the default list;
+1. **Actions** → **Weekly screen** → **Run workflow**. Wait for the green ✓ (about 4 hours with the default list;
    a few minutes with a small custom list, see below).
 2. **Actions** → **Weekly review** → **Run workflow**, tick **Dry run** → **Run workflow**. This does everything
    but changes nothing; open the run and expand **Show report**.
