@@ -173,3 +173,20 @@ This is a rejection of the research's evaluation (the evaluator's bull/bear prob
 [17:20:13] !! MONTE CARLO FAILED for INTU: /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/INTU/2026-10-07-mc-params.json exited 2: MONTE CARLO FAILED — nothing written:
 - NEEDS REVIEW: symmetric default probabilities {'bull': 0.25, 'base': 0.5, 'bear': 0.25} (see 2026-10-07-mc-needs-review.md)
 [17:20:13] == done INTU: research/INTU/2026-10-07-evaluation.md
+[18:36:14] == retry Monte Carlo INTU
+[18:36:14] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py INTU --asof 2026-10-07
+[18:36:15] {"out": "research/INTU/2026-10-07-mc-inputs.json", "betas": {"SPY": 0.678, "IEF": 0.193}, "r2": 0.07, "residual_vol": 0.4433}
+[18:36:15] $ claude -p Ticker INTU, date 2026-10-07. Research: research/INTU/factsheet-2026-10-07.md, research/INTU/2026-10-07.md, research/INTU/2026-10-07-evaluation.md, inputs research/INTU/2026-10-07-mc-inputs.json, macro overlay research/INTU/2026-10-07-macro.md. Write research/INTU/2026-10-07-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[18:41:19] `research/INTU/2026-10-07-mc-params.json`
+
+Final output:
+```
+MONTE CARLO FAILED — nothing written:
+- NEEDS REVIEW: symmetric default probabilities {'bull': 0.25, 'base': 0.5, 'bear': 0.25} (see 2026-10-07-mc-needs-review.md)
+```
+
+This is a rejection of the research's symmetric default scenario probabilities, not a defect in my parameters file — per instructions I did not alter any numbers to force a pass. The script wrote `research/INTU/2026-10-07-mc-needs-review.md`; it awaits owner approval.
+[18:41:19] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/INTU/2026-10-07-mc-params.json
+[18:41:20] 
+[18:41:20] !! MONTE CARLO FAILED for INTU: /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/INTU/2026-10-07-mc-params.json exited 2: MONTE CARLO FAILED — nothing written:
+- NEEDS REVIEW: symmetric default probabilities {'bull': 0.25, 'base': 0.5, 'bear': 0.25} (see 2026-10-07-mc-needs-review.md)

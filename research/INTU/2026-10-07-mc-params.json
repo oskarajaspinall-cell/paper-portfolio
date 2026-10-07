@@ -1,56 +1,117 @@
 {
-  "ticker": "INTU",
-  "date": "2026-10-07",
-  "scenarios": {
-    "bull": {
-      "probability": {"value": 0.25, "cite": "evaluation.md Decision block scenarios.bull.probability"},
-      "probability_evidence": "Bull case: 'big bets' (AI-driven assisted tax, money platform, mid-market) are now ~30% of revenue and each growing over 30%, and management says it saw no meaningful tax share loss to AI-native entrants this season (research/INTU/2026-10-07.md section 1 and 2; Investor Day 2026 and Goldman transcripts). It is a minority-probability scenario because management itself guided FY2027 to a slower 'reset year' with Q1 and FY27 EPS guidance below consensus (factsheet News & sentiment, TheFly 2026-09-17 headlines), making a near-term re-rating catalyst the less likely of the three paths.",
-      "target_price_12m": {"value": 368, "cite": "evaluation.md Decision block scenarios.bull.target_price_12m"},
-      "target_band": {"value": 0.2434, "cite": "Half the spread of the bull target (P/E re-rates 17.3x->22.0x peer median = $368.54) priced instead on EV/EBITDA (11.5x->14.6x peer median = $367.93) and P/FCF (8.9x->16.8x peer median = $547.06, factsheet-2026-10-07.md Valuation table peer-median column): spread $179.12 / 2 / $368 target = 24.34%. The P/FCF anchor diverges sharply because INTU's FCF/NI conversion (190%, Quality table) is far above peers', so re-rating to peers' P/FCF level implies a much higher price than re-rating to their P/E or EV/EBITDA level -- genuine cross-anchor disagreement, capped below the 44.33% blended residual vol (mc-inputs.json regression.residual_vol.blended)."}
-    },
-    "base": {
-      "probability": {"value": 0.5, "cite": "evaluation.md Decision block scenarios.base.probability"},
-      "probability_evidence": "Base case is the modal outcome: every multiple already sits below its own 5-year minimum (P/E 17.3x vs 18.9x min, EV/EBITDA 11.5x vs 12.6x min, P/FCF 8.9x vs 10.0x min, factsheet-2026-10-07.md Valuation table) while ROIC, ROE and margins keep rising (Quality table) -- consistent with the guided FY2027 reset playing out without either a confirmed re-rating catalyst or a confirmed fundamental deterioration (research/INTU/2026-10-07.md sections 2-3).",
-      "target_price_12m": {"value": 326, "cite": "evaluation.md Decision block scenarios.base.target_price_12m"},
-      "target_band": {"value": 0.0138, "cite": "Half the spread of the base target (P/FCF reverts to its 5y minimum 10.0x from 8.9x = $325.63) priced instead on EV/EBITDA (11.5x->12.6x 5y min = $317.53) and P/E (17.3x->18.9x 5y min = $316.61, factsheet-2026-10-07.md Valuation table 5y-min column), margins held flat: spread $9.02 / 2 / $326 target = 1.38%, well under the 44.33% blended residual vol (mc-inputs.json regression.residual_vol.blended)."}
-    },
-    "bear": {
-      "probability": {"value": 0.25, "cite": "evaluation.md Decision block scenarios.bear.probability"},
-      "probability_evidence": "Management's own comment that price (not AI-native competition) is the top reason DIY tax customers left, plus Q1 FY27 EPS guidance of $2.44-2.48 (vs $2.72 consensus) and FY27 EPS guidance of $22.88-23.12 (vs $24.18 consensus) (factsheet News & sentiment, TheFly 2026-09-17 headlines; research/INTU/2026-10-07.md section 6), support a plausible but minority-probability path where the FY2026 FCF-margin step-up (40.4%) proves partly transitory and reverts toward the FY2025 level (32.5%).",
-      "target_price_12m": {"value": 233, "cite": "evaluation.md Decision block scenarios.bear.target_price_12m"},
-      "target_band": {"value": 0.0983, "cite": "Half the spread of the bear target (P/FCF held at 8.9x, FCF margin reverts 40.4%->32.5% FY2025 level = $233.14) priced instead via the analogous FY2025 margin reversion on EV/EBITDA (operating margin 28.8%->26.2% FY2025, multiple held at 11.5x = $263.65) and P/E (net margin 21.3%->20.5% FY2025, multiple held at 17.3x = $278.93, factsheet-2026-10-07.md Quality table FY2025 column): spread $45.79 / 2 / $233 target = 9.83%, under the 44.33% blended residual vol (mc-inputs.json regression.residual_vol.blended)."}
-    }
+ "ticker": "INTU",
+ "date": "2026-10-07",
+ "scenarios": {
+  "bull": {
+   "probability": {
+    "value": 0.25,
+    "cite": "evaluation.md Decision JSON scenarios.bull.probability"
+   },
+   "probability_evidence": "Conviction is capped at 4/5 (not 5) specifically because 'AI-driven pricing pressure in DIY tax and the FY2027 reset make the timing of a re-rating uncertain' (evaluation.md Decision JSON, rationale), which bounds the bull weight to a minority 25% despite 'big bets' at 30% of revenue each growing >30% (Investor Day 2026 transcript, https://stockanalysis.com/stocks/intu/transcripts/612260-investor-day-2026/).",
+   "target_price_12m": {
+    "value": 368,
+    "cite": "evaluation.md Decision JSON scenarios.bull.target_price_12m"
+   },
+   "target_band": {
+    "value": 0.243,
+    "cite": "Fact sheet Valuation table: re-pricing the bull case's peer-median re-rating across the three main multiples gives divergent targets \u2014 P/E 17.3x->22.0x: 289.81*(22.0/17.3)=368.68; EV/EBITDA 11.5x->14.6x: 289.81*(14.6/11.5)=367.86; P/FCF 8.9x->16.8x: 289.81*(16.8/8.9)=547.03 (INTU's P/FCF sits far further below the peer median than its P/E or EV/EBITDA, because FCF conversion is 190% of net income). Half the spread (547.03-367.86)/2=89.59 / target 368 = 0.243; within residual_vol blended 0.4433 (mc-inputs.json regression.residual_vol.blended)."
+   }
   },
-  "factors": {
-    "SPY": {
-      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs led by AI/megacap names and a Goldman insider still bullish (Bloomberg, WSJ, Invezz, Market Watch, 2026-10-06) against explicit narrow-breadth and overbought warnings on trillion-dollar stocks (Barron's, Market Watch, 2026-10-06) -- no clear net direction, so 0."},
-      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431 (156-week weekly regression, stockanalysis.com SPY history)."}
-    },
-    "IEF": {
-      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: a global bond rout pushing 10y yields to multi-decade highs on France's fiscal worries and oil-driven inflation fears (Barron's, WSJ, Bloomberg, 2026-10-01/05) against a Treasury rebound on a weak jobs print (Bloomberg, The Guardian, 2026-10-02) -- no clear net direction. The macro overlay (research/INTU/2026-10-07-macro.md) explicitly sets macro_tilt.direction = 'neutral' / size 'small', stating rates affect re-rating speed, not direction, so 0."},
-      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646 (156-week weekly regression, stockanalysis.com IEF history)."}
-    }
+  "base": {
+   "probability": {
+    "value": 0.5,
+    "cite": "evaluation.md Decision JSON scenarios.base.probability"
+   },
+   "probability_evidence": "Management itself guided this path at the September 17, 2026 Investor Day ('Fiscal 2027 is a reset year... targeting 9%-10% revenue growth', https://stockanalysis.com/stocks/intu/transcripts/612260-investor-day-2026/) and reaffirmed it in the FY27 guidance headline (Q1 EPS $2.44-$2.48 vs consensus $2.72, fact sheet News & sentiment), making the guided reset the modal (50%) outcome rather than a tail.",
+   "target_price_12m": {
+    "value": 326,
+    "cite": "evaluation.md Decision JSON scenarios.base.target_price_12m"
+   },
+   "target_band": {
+    "value": 0.014,
+    "cite": "Fact sheet Valuation table: re-pricing the base case's 5y-minimum re-rating across the three main multiples: P/E 17.3x->18.9x: 289.81*(18.9/17.3)=316.68; EV/EBITDA 11.5x->12.6x: 289.81*(12.6/11.5)=317.65; P/FCF 8.9x->10.0x: 289.81*(10.0/8.9)=325.60 (matches the evaluation's stated basis). Half the spread (325.60-316.68)/2=4.46 / target 326 = 0.014; within residual_vol blended 0.4433 (mc-inputs.json)."
+   }
   },
-  "jumps": [
-    {
-      "name": "Earnings print (Nov 19, 2026 and subsequent quarters)",
-      "reason": "Next earnings date is Nov 19, 2026, shortly after this initiation, and INTU's quarterly-report weeks have produced double-digit single-week moves in either direction, most recently the -18.59% week around the FY2027 'reset' guidance.",
-      "cite": "factsheet-2026-10-07.md Price table 'Next earnings date'; research/INTU/2026-10-07.md section 6 (FY2027 reset guidance); mc-inputs.json analogues.event_weeks",
-      "annual_probability": {"value": 0.478, "cite": "mc-inputs.json analogues.event_weeks: of the 20 completed quarterly-report weeks (2021-11-15 to 2026-08-24), 3 showed a weekly move of 10% or more in magnitude (2021-11-15 +10.42%, 2022-05-23 +14.87%, 2026-05-18 -18.59%) -- a per-quarter rate of 15%, so P(at least one such move across 4 quarters in a year) = 1-(1-0.15)^4 = 0.478."},
-      "impact": {"value": -0.1859, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2026-05-18, -18.59%, tagged Q3 2026 quarterly_report/earnings_release/slides."},
-      "analogue": {"week": "2026-05-18", "move": -0.1859},
-      "assumption": null
-    },
-    {
-      "name": "AI-native competitive disruption / DIY tax price war (non-earnings repricing)",
-      "reason": "Management itself says price (not AI-native competition) is the top reason DIY tax customers leave; separately, the stock has suffered a cluster of large (>=10%) weekly declines through 2026 that are not tied to any scheduled earnings or filing event, consistent with an ongoing market reassessment of AI disruption risk to the core TurboTax/QuickBooks franchise.",
-      "cite": "research/INTU/2026-10-07.md sections 2 and 6 (Goldman Sachs Communacopia transcript on no meaningful tax share loss to AI entrants this season; price as the top reason DIY customers left); mc-inputs.json analogues.all_weekly_moves and event_weeks (9 of the 10 largest weekly falls are not tagged to any filing event)",
-      "annual_probability": {"value": 0.836, "cite": "mc-inputs.json analogues.all_weekly_moves: 9 weekly falls of 10% or more NOT tied to any event_weeks entry over the 259-week history (2021-10-18 to 2026-09-28, ~4.98 years) = 1.81/yr; Poisson P(at least one in a year) = 1-e^-1.81 = 0.836."},
-      "impact": {"value": -0.1668, "cite": "mc-inputs.json analogues.largest_falls: week 2026-04-06, -16.68%, not tagged to any entry in analogues.event_weeks."},
-      "analogue": {"week": "2026-04-06", "move": -0.1668},
-      "assumption": null
-    }
-  ],
-  "no_discrete_risks_reason": null,
-  "technical_tilt": null
+  "bear": {
+   "probability": {
+    "value": 0.25,
+    "cite": "evaluation.md Decision JSON scenarios.bear.probability"
+   },
+   "probability_evidence": "Weighed down to 25% by offsetting factors: the margin-compression risk is real ('management itself says price is the top reason DIY tax customers leave', evaluation.md Bear case) but short interest is only 2.69% of float and fell 11.8% month-on-month, and Piotroski F is 7 (fact sheet Other/News & sentiment tables), arguing against a high-probability bear outcome.",
+   "target_price_12m": {
+    "value": 233,
+    "cite": "evaluation.md Decision JSON scenarios.bear.target_price_12m"
+   },
+   "target_band": {
+    "value": 0.098,
+    "cite": "Fact sheet Quality table: re-pricing the bear case's margin-reversion-to-FY2025 logic across three profitability/multiple pairs held at today's multiple: FCF margin 40.4%->32.5% at constant P/FCF: 289.81*(32.5/40.4)=233.09 (matches evaluation basis); net margin 21.3%->20.5% at constant P/E: 289.81*(20.5/21.3)=278.96; operating margin 28.8%->26.2% at constant EV/EBITDA: 289.81*(26.2/28.8)=263.64. Half the spread (278.96-233.09)/2=22.94 / target 233 = 0.098; within residual_vol blended 0.4433 (mc-inputs.json)."
+   }
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {
+    "value": 0.0,
+    "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs driven narrowly by AI/megacap tech (Bloomberg/WSJ/Invezz 2026-10-06) vs caution on narrow breadth and overbought megacaps ('Only Four Trillion-Dollar Stocks Are Beating the S&P 500', Barrons 2026-10-06) and 'rate chaos and narrow breadth' (MarketWatch 2026-10-06) \u2014 no net directional signal, so 0."
+   },
+   "uncertainty_12m": {
+    "value": 0.1431154014991791,
+    "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression, stockanalysis.com SPY history)."
+   }
+  },
+  "IEF": {
+   "expected_12m_move": {
+    "value": 0.0,
+    "cite": "mc-inputs.json factor_news.IEF headlines are mixed: a global bond rout pushing 10y yields to multi-decade highs on France fiscal worries and oil-driven inflation fears (Barrons/WSJ/Bloomberg 2026-10-01/05) vs a rebound/easing on a weaker jobs report and cooler PCE (The Guardian, ETF Trends 2026-10-02) \u2014 no net directional signal; consistent with the macro overlay's explicit 'neutral' / 'small' macro_tilt (research/INTU/2026-10-07-macro.md), so 0."
+   },
+   "uncertainty_12m": {
+    "value": 0.06460381100458489,
+    "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression, stockanalysis.com IEF history)."
+   }
+  }
+ },
+ "jumps": [
+  {
+   "name": "Quarterly earnings/guidance miss (FY2027 reset)",
+   "reason": "Management guided Q1 FY27 EPS $2.44-$2.48 and FY27 EPS $22.88-$23.12, both below consensus ($2.72 / $24.18), and called FY2027 a slower 'reset year' at the Sept 17, 2026 Investor Day \u2014 the next report (Nov 19, 2026) is the first test of that guidance.",
+   "cite": "Fact sheet News & sentiment: 'Intuit sees Q1 EPS $2.44-$2.48, consensus $2.72' and 'Intuit sees FY27 EPS $22.88-$23.12, consensus $24.18' (2026-09-17, TheFly); note.md section 2, 'guided fiscal 2027 to a slower reset year'.",
+   "annual_probability": {
+    "value": 0.19,
+    "cite": "Of 20 quarterly earnings weeks in mc-inputs.json analogues.event_weeks (Q1 2022-Q4 2026), only 1 (Q3 2026, -0.1859) reached this magnitude (>=15%): ~5% per-quarter base rate; probability of at least one such quarter within a year = 1-(0.95)^4 ~= 0.19."
+   },
+   "impact": {
+    "value": -0.1859,
+    "cite": "Matches the analogue: the Q3 2026 earnings week (2026-05-18), the single largest weekly move in the regression history (mc-inputs.json analogues.event_weeks, event='Q3 2026')."
+   },
+   "analogue": {
+    "week": "2026-05-18",
+    "move": -0.1859
+   },
+   "assumption": null
+  },
+  {
+   "name": "AI-native disruption / price-driven DIY tax churn disclosed at Investor Day",
+   "reason": "Management's own stated top reason for DIY tax customer churn is price (not AI-native competitors), but the market is pricing a durable impairment of the tax/bookkeeping franchise from AI-native entrants; a fresh disclosure of worsening competitive dynamics (most likely at the annual Investor Day) could re-price this discretely.",
+   "cite": "evaluation.md Bear case: 'AI-native tools could commoditise DIY tax and small-business bookkeeping, and management itself says price is the top reason DIY tax customers leave'; note.md section 2, 'management said the top reason DIY tax customers left was price' (https://stockanalysis.com/stocks/intu/transcripts/612260-investor-day-2026/).",
+   "annual_probability": {
+    "value": 0.15,
+    "cite": "mc-inputs.json analogues.event_weeks lists one Investor Day per year (2022-2026), but none produced a move anywhere near this magnitude (range -0.0572 to +0.0648) -- a -0.30 structural shock is a tail case versus the routine annual event, estimated at roughly 1-in-6-7 years (~0.15)."
+   },
+   "impact": {
+    "value": -0.3,
+    "cite": "No historical analogue isolates a competitive-disruption shock distinct from scheduled earnings/investor-day moves already captured by the Investor Day 2026 week (-0.0572, already reflected in the current price); capped at [montecarlo].max_jump_impact_assumed = 0.30 per the assumption rule for risks without an analogue."
+   },
+   "analogue": null,
+   "assumption": "No historical analogue for a standalone structural AI-competition impairment shock exists in the jump-analogue table; impact set at the 0.30 cap per [montecarlo].max_jump_impact_assumed rather than estimated from a specific week."
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": {
+  "value": 0.015,
+  "cite": "Fact sheet Price table: 3-month momentum +6.5% (2026-07-06->2026-10-06) outperforms SPY's +3.7% by +2.8pp, RSI(14) is 43.1 (not overbought), with recent swing lows (322.57, 309.80, 262.32) suggesting a base forming even as the stock remains 25.7%/10.2% below its 200/50-day MAs \u2014 a modest positive 3-month tilt, held well inside the \u00b10.02 cap given the still-deep longer-term downtrend."
+ },
+ "owner_review": {
+  "approved": true,
+  "note": "Owner (2026-10-07): retried once, still 25/50/25; owner approved accepting the evaluation's probabilities with their cited evidence (FY2027 reset guidance vs multiples below 5-year minimums)."
+ }
 }

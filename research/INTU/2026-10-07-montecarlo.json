@@ -1,0 +1,229 @@
+{
+ "ticker": "INTU",
+ "date": "2026-10-07",
+ "params_file": "2026-10-07-mc-params.json",
+ "inputs_file": "2026-10-07-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 289.81,
+  "close_date": "2026-10-06",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/intu/history/"
+ },
+ "target_returns": {
+  "bull": 0.26979745350401996,
+  "base": 0.12487491804975681,
+  "bear": -0.1960249818846831
+ },
+ "expected_12m": 0.08088057692971262,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.6776851814008141,
+   "IEF": 0.19261748445834073
+  },
+  "r2": 0.06969832012358013,
+  "residual_vol": {
+   "52w": 0.5261995226962878,
+   "156w": 0.36044238941493423,
+   "blended": 0.443320956055611,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 368,
+    "target_band": 0.243
+   },
+   "base": {
+    "probability": 0.5,
+    "target_price_12m": 326,
+    "target_band": 0.014
+   },
+   "bear": {
+    "probability": 0.25,
+    "target_price_12m": 233,
+    "target_band": 0.098
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.6776851814008141,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.19261748445834073,
+    "move": 0.0,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Quarterly earnings/guidance miss (FY2027 reset)",
+    "p": 0.19,
+    "impact": -0.1859,
+    "analogue": {
+     "week": "2026-05-18",
+     "move": -0.1859
+    },
+    "cited": true
+   },
+   {
+    "name": "AI-native disruption / price-driven DIY tax churn disclosed at Investor Day",
+    "p": 0.15,
+    "impact": -0.3,
+    "analogue": null,
+    "cited": true
+   }
+  ],
+  "tilt": 0.015
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": {
+  "approved": true,
+  "note": "Owner (2026-10-07): retried once, still 25/50/25; owner approved accepting the evaluation's probabilities with their cited evidence (FY2027 reset guidance vs multiples below 5-year minimums)."
+ },
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.017761137072793254,
+   "median": 0.002274418308642459,
+   "p5": -0.32649652978673627,
+   "p25": -0.13526153814687775,
+   "p50": 0.002274418308642459,
+   "p75": 0.1557421644806089,
+   "p95": 0.4114608680746713,
+   "prob_loss": 0.497,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": -3.6509303377040014e-05,
+    "jumps": -0.02742013655536674,
+    "noise": 0.001020896622467456,
+    "scenario": 0.019186820362837025
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.03249495329433615,
+   "median": -0.006548657574569202,
+   "p5": -0.4429037835501821,
+   "p25": -0.19908231725282013,
+   "p50": -0.006548657574569202,
+   "p75": 0.2201418481666858,
+   "p95": 0.6318487721476022,
+   "prob_loss": 0.5099,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.00028484821596571307,
+    "jumps": -0.05382101606066482,
+    "noise": 0.00029911992822587727,
+    "scenario": 0.033373640725674045
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.08088057692971258,
+   "median": -0.02880132926619905,
+   "p5": -0.5860029109524979,
+   "p25": -0.2998075177489157,
+   "p50": -0.02880132926619905,
+   "p75": 0.3534404632083583,
+   "p95": 1.084731185124271,
+   "prob_loss": 0.5248,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.0006387781432212453,
+    "jumps": -0.10556968106422919,
+    "noise": 0.005327933459842526,
+    "scenario": 0.06174728145134809
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.08088057692971258,
+   "prob_loss_12m": 0.5248
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.5,
+    "bear": 0.15
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.12746282046858295,
+   "prob_loss_12m": 0.4843
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.5,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.034298333390842206,
+   "prob_loss_12m": 0.5635
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.0808805769297127,
+   "prob_loss_12m": 0.4799
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.08088057692971265,
+   "prob_loss_12m": 0.5602
+  }
+ ]
+}
