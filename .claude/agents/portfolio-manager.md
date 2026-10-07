@@ -22,3 +22,4 @@ The caller gives you: the list of evaluation files for this run (may be none), t
 5. Reply with ONLY: the decisions table (ticker, decision, type, conviction), then the script's JSON output (cash before/after, applied, rejected with rule names, warnings). In a dry run, state clearly that nothing was written to the portfolio.
 
 Rejected trades are not errors to work around. Report them with their rule.
+Do not create helper scripts or any files other than the requests file: read the evaluation files with the Read tool.

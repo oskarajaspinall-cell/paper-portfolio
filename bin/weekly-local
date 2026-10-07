@@ -36,7 +36,7 @@ if [ $TEST = 1 ]; then echo "== test finished $(date) review_exit=$review (no co
 
 # 4. Commit + upload. On failure keep ONLY the error log and this log (no trades from the run).
 if [ $review = 0 ]; then
-  git add -A -- portfolio research reports runs logs docs
+  git add -A -- portfolio research reports runs logs docs universe/ir_domains.txt
   git commit -q -m "Weekly run $ASOF" || echo "nothing to commit"
 else
   err="runs/$ASOF/error.log"; tmp=$(mktemp); [ -f "$err" ] && cp "$err" "$tmp"
