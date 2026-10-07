@@ -165,3 +165,10 @@ def test_note_may_cite_headline_urls_from_its_fact_sheet():
     assert check_note(md, {head})[0] == []                                  # allowed when the sheet lists it
     other = core_note(**{"6. Unusual items": "x [Likely] (https://www.tipranks.com/other)"})
     assert any("tipranks" in e for e in check_note(other, {head})[0])       # only the exact listed URLs
+
+
+def test_eval_buy_needs_high_conviction(real_cfg):
+    errs, _ = check_eval(evaluation({"conviction": 3}), STATE, real_cfg)
+    assert any("conviction >= 4" in e for e in errs)
+    assert check_eval(evaluation({"conviction": 4}), STATE, real_cfg)[0] == []
+    assert check_eval(evaluation({"decision": "AVOID", "conviction": 3}), STATE, real_cfg)[0] == []

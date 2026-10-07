@@ -370,6 +370,7 @@ class Engine:
                 raise Reject("WATCHLIST", f"{t} is not in universe/universe.csv or universe/watchlist.txt")
             if r["conviction"] == 1:
                 raise Reject("CONVICTION_NO_POSITION", "conviction 1 means no position")
+            self._min_conviction(r)
             q = self.mkt.quote(t)
             pv = self.pv(s)
             if ptype == "CORE":
@@ -413,6 +414,8 @@ class Engine:
             else:
                 if r["conviction"] == 1 and act == "ADD":
                     raise Reject("CONVICTION_NO_POSITION", "conviction 1 means no position; use SELL")
+                if act == "ADD":
+                    self._min_conviction(r)
                 if ptype == "CORE":
                     target_pct = r.get("target_weight_pct") if act == "TRIM" and r.get("target_weight_pct") is not None \
                         else self.core_size(r["conviction"])
@@ -457,6 +460,12 @@ class Engine:
         if r.get("research_note"):
             h["research_note"] = r["research_note"]
         h["last_decision"] = {"date": self.today, "action": r["action"], "conviction": h["conviction"]}
+
+    def _min_conviction(self, r):
+        m = int(self.cfg["core"].get("min_buy_conviction", 2))
+        if r["conviction"] < m:
+            raise Reject("CONVICTION_TOO_LOW", f"conviction {r['conviction']} is below the minimum {m} to buy/add "
+                                               "(owner rule: only high-conviction positions)")
 
     def _core_entry_fields(self, r):
         trig = r.get("triggers") or []

@@ -22,6 +22,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - Include only what could change the decision or the position size. Omit background that couldn't.
 
 ## Investment approach
+- **Only high conviction is bought**: a BUY or ADD (core or tactical) needs conviction >= `min_buy_conviction` (4). Anything less is AVOID (new names) or HOLD (holdings).
 - **CORE**: good business + attractive valuation, ~12-month horizon. Judged purely against thesis (invalidation) triggers on business fundamentals. No price stops, price levels, moving averages or valuation multiples as triggers.
 - **TACTICAL**: weeks to ~3 months, specific catalyst. MUST have target, stop and time limit at entry; these execute mechanically.
 - The label is fixed at entry. A tactical position can NEVER be relabelled core; it can only become core by passing a full core initiation, which records a new entry decision.
@@ -47,6 +48,7 @@ max_sector_pct = 30               # stockanalysis.com sector classification
 # conviction -> target position size (% of portfolio). 1 = no position.
 conviction_size_pct = { "1" = 0, "2" = 3, "3" = 5, "4" = 7, "5" = 10 }
 trim_above_pct = 15
+min_buy_conviction = 4            # owner rule: only buy/add with high conviction (core AND tactical); below -> AVOID/HOLD
 
 [tactical]
 max_sleeve_pct = 25

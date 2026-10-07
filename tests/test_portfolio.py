@@ -449,3 +449,23 @@ def test_trim_rounds_to_nearest_share(cfg):
     e.process([{"ticker": "NVDA", "action": "TRIM", "position_type": "CORE", "conviction": 2, "reason": "x"}])
     w = e.s["holdings"]["NVDA"]["market_value_usd"] / totals(e.s)["total"] * 100
     assert abs(w - 3) < 0.1
+
+
+@pytest.mark.parametrize("conv,ok", [(2, False), (3, False), (4, True), (5, True)])
+def test_rule_min_buy_conviction_core(real_cfg, conv, ok):
+    assert real_cfg["core"]["min_buy_conviction"] == 4
+    e = engine(real_cfg)
+    e.process([core_buy("AAPL", conv=conv)])
+    if ok:
+        assert e.applied
+    else:
+        assert only_rule(e) == "CONVICTION_TOO_LOW"
+
+
+def test_rule_min_buy_conviction_tactical_and_add(real_cfg):
+    e = engine(real_cfg)
+    e.process([tac_buy("NVDA", target=120)])  # tac_buy uses conviction 3
+    assert only_rule(e) == "CONVICTION_TOO_LOW"
+    e = engine(real_cfg, {"AAPL": holding("AAPL", "CORE", 3, conv=2)})
+    e.process([{"ticker": "AAPL", "action": "ADD", "position_type": "CORE", "conviction": 3, "reason": "x"}])
+    assert only_rule(e) == "CONVICTION_TOO_LOW"

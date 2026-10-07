@@ -162,8 +162,9 @@ def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
     c = d.get("conviction")
     if not isinstance(c, int) or not 1 <= c <= 5:
         errs.append("conviction must be an integer 1-5")
-    elif dec in ("BUY", "ADD") and c == 1:
-        errs.append("conviction 1 means no position: decide AVOID/SELL instead")
+    elif dec in ("BUY", "ADD") and c < cfg["core"].get("min_buy_conviction", 2):
+        errs.append(f"BUY/ADD needs conviction >= {cfg['core'].get('min_buy_conviction', 2)} "
+                    "(only high-conviction positions): decide AVOID (new name) or HOLD (holding) instead")
     if t in held and ptype and held[t]["type"] != ptype and not d.get("core_initiation"):
         errs.append(f"{t} is held as {held[t]['type']}; the label is fixed")
     for k in ("price_at_decision", "price_date", "research_note", "rationale"):

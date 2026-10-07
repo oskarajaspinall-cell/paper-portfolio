@@ -29,7 +29,8 @@ The file must END with the json block. Then run `bin/py scripts/check_docs.py ev
 ## Decision block fields
 - `ticker`, `decision`: BUY or AVOID for a name not held; ADD, HOLD, TRIM or SELL for a holding. "No consensus", "needs more research" or anything else is NOT allowed. If evidence is thin, that lowers conviction; it does not defer the decision.
 - `position_type`: CORE or TACTICAL. A held position's label is fixed. A TACTICAL holding becomes CORE only via a full core initiation: then set `"core_initiation": true` with decision BUY.
-- `conviction`: integer 1-5. Core sizes: 1 = no position (so AVOID/SELL), 2 = 3%, 3 = 5%, 4 = 7%, 5 = 10% of the portfolio.
+- `conviction`: integer 1-5. Core sizes: 4 = 7%, 5 = 10% of the portfolio.
+- **Only high conviction is bought (owner rule):** BUY or ADD requires conviction 4 or 5, for CORE and TACTICAL alike. If your honest conviction is 1-3, the decision is AVOID for a new name or HOLD for a holding. Never inflate conviction to get a position; "good but not compelling" is an AVOID. Do not rush: cash is an acceptable outcome.
 - `thesis`: one sentence.
 - `rationale`: ≤60 words. Why this decision and this size.
 - `price_at_decision` and `price_date`: the fact sheet's last completed close and its date (quoted currency).

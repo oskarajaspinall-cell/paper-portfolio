@@ -65,6 +65,15 @@ class FakeMarket(Market):
 
 @pytest.fixture
 def cfg():
+    """The real CLAUDE.md config, except min_buy_conviction=1 so each rule test isolates its own rule.
+    The minimum-conviction rule itself is tested with `real_cfg`."""
+    c = load_config()
+    c["core"]["min_buy_conviction"] = 1
+    return c
+
+
+@pytest.fixture
+def real_cfg():
     return load_config()
 
 
