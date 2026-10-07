@@ -156,3 +156,353 @@ $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py stamp --asof 
 last_scan = 2026-10-07
 $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_report.py --asof 2026-10-07 --run /Users/oskaraspinall/paper-portfolio/runs/2026-10-07
 /Users/oskaraspinall/paper-portfolio/reports/weekly/2026-10-07.md
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py mark --asof 2026-10-07
+{"total": 100000.0, "cash": 100000.0, "core": 0, "tactical": 0, "sectors": {}, "n": 0}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_scan.py --asof 2026-10-07 --out /Users/oskaraspinall/paper-portfolio/runs/2026-10-07
+{"flagged_for_review": [], "reinitiate": [], "mechanical_exits": [], "trims": [], "unflagged": 0, "scan": "/Users/oskaraspinall/paper-portfolio/runs/2026-10-07/scan.json"}
+$ claude -p Ticker ADBE, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+$ claude -p Ticker HKG:2628, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+$ claude -p Ticker HKG:9999, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+Note: `research/ADBE/2026-10-07.md`
+Fact sheet: `research/ADBE/factsheet-2026-10-07.md`
+Check: `OK research/ADBE/2026-10-07.md type=CORE 1=42 2=133 3=150 4=65 5=85 6=52 total=527`
+
+No data conflicts. No blocked URLs (all 5 WebFetch calls succeeded, within the 6-call CORE cap).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/ADBE/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/ADBE/2026-10-07.md type=CORE 1=42 2=133 3=150 4=65 5=85 6=52 total=527
+$ claude -p Evaluate ADBE for 2026-10-07: fact sheet research/ADBE/factsheet-2026-10-07.md, note research/ADBE/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/ADBE/2026-10-07-evaluation.md
+OK research/ADBE/2026-10-07-evaluation.md Bear case=132 Bull case=112 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/ADBE/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/ADBE/2026-10-07-evaluation.md Bear case=132 Bull case=112 decision=BUY
+$ claude -p Ticker PDD, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+Note path: research/HKG-2628/2026-10-07.md
+Fact sheet path: research/HKG-2628/factsheet-2026-10-07.md
+Check: `OK research/HKG-2628/2026-10-07.md type=CORE 1=70 2=138 3=142 4=74 5=82 6=99 total=605`
+
+Data conflicts: none. Blocked URLs: `https://www.reuters.com/markets/companies/2628.HK/` (unable to fetch; not retried).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HKG-2628/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/HKG-2628/2026-10-07.md type=CORE 1=70 2=138 3=142 4=74 5=82 6=99 total=605
+$ claude -p Evaluate HKG:2628 for 2026-10-07: fact sheet research/HKG-2628/factsheet-2026-10-07.md, note research/HKG-2628/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+Note: research/HKG-9999/2026-10-07.md
+Fact sheet: research/HKG-9999/factsheet-2026-10-07.md
+Check: OK research/HKG-9999/2026-10-07.md type=CORE 1=52 2=136 3=126 4=79 5=80 6=59 total=532
+
+No data conflicts. No blocked URLs (all 5 WebFetch calls used were sec.gov and stockanalysis.com, within the CORE cap of 6).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HKG-9999/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/HKG-9999/2026-10-07.md type=CORE 1=52 2=136 3=126 4=79 5=80 6=59 total=532
+$ claude -p Evaluate HKG:9999 for 2026-10-07: fact sheet research/HKG-9999/factsheet-2026-10-07.md, note research/HKG-9999/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/HKG-2628/2026-10-07-evaluation.md
+OK research/HKG-2628/2026-10-07-evaluation.md Bear case=127 Bull case=111 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HKG-2628/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/HKG-2628/2026-10-07-evaluation.md Bear case=127 Bull case=111 decision=BUY
+$ claude -p Ticker BKNG, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/HKG-9999/2026-10-07-evaluation.md
+OK research/HKG-9999/2026-10-07-evaluation.md Bear case=119 Bull case=128 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HKG-9999/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/HKG-9999/2026-10-07-evaluation.md Bear case=119 Bull case=128 decision=BUY
+$ claude -p Ticker NSE:TCS, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+Note: research/PDD/2026-10-07.md
+Fact sheet: research/PDD/factsheet-2026-10-07.md
+OK research/PDD/2026-10-07.md type=CORE 1=60 2=148 3=121 4=89 5=81 6=99 total=598
+
+Blocked URL: https://www.reuters.com/business/retail-consumer/eu-slaps-3-fee-cheap-ecommerce-parcels-blow-shein-temu-aliexpress-2026-07-01/ (WebFetch unable to fetch; content/claims for this URL drawn only from the headline text as shown in the fact sheet, not from the article itself). No data conflicts found.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/PDD/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/PDD/2026-10-07.md type=CORE 1=60 2=148 3=121 4=89 5=81 6=99 total=598
+$ claude -p Evaluate PDD for 2026-10-07: fact sheet research/PDD/factsheet-2026-10-07.md, note research/PDD/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+Note: research/BKNG/2026-10-07.md
+Fact sheet: research/BKNG/factsheet-2026-10-07.md
+Check: OK research/BKNG/2026-10-07.md type=CORE 1=39 2=150 3=117 4=76 5=57 6=39 total=478
+
+No data conflicts. No blocked URLs; one speculative fetch (bookingholdings.com/news/.../second-quarter-2026-financial-results/) returned only nav content (no 404, no usable data) and was not cited.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/BKNG/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/BKNG/2026-10-07.md type=CORE 1=39 2=150 3=117 4=76 5=57 6=39 total=478
+$ claude -p Evaluate BKNG for 2026-10-07: fact sheet research/BKNG/factsheet-2026-10-07.md, note research/BKNG/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/PDD/2026-10-07-evaluation.md
+OK research/PDD/2026-10-07-evaluation.md Bear case=120 Bull case=104 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/PDD/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/PDD/2026-10-07-evaluation.md Bear case=120 Bull case=104 decision=BUY
+$ claude -p Ticker SHA:601899, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/BKNG/2026-10-07-evaluation.md
+OK research/BKNG/2026-10-07-evaluation.md Bear case=128 Bull case=120 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/BKNG/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/BKNG/2026-10-07-evaluation.md Bear case=128 Bull case=120 decision=BUY
+$ claude -p Ticker MU, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/NSE-TCS/2026-10-07.md
+research/NSE-TCS/factsheet-2026-10-07.md
+OK research/NSE-TCS/2026-10-07.md type=CORE 1=57 2=137 3=130 4=80 5=83 6=47 total=534
+
+Data conflicts: none. Blocked/failed fetches: reuters.com commentary/breakingviews Porsche article (tool returned "unable to fetch"); not retried, not used for figures.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/NSE-TCS/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/NSE-TCS/2026-10-07.md type=CORE 1=57 2=137 3=130 4=80 5=83 6=47 total=534
+$ claude -p Evaluate NSE:TCS for 2026-10-07: fact sheet research/NSE-TCS/factsheet-2026-10-07.md, note research/NSE-TCS/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/NSE-TCS/2026-10-07-evaluation.md
+OK research/NSE-TCS/2026-10-07-evaluation.md Bear case=125 Bull case=124 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/NSE-TCS/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/NSE-TCS/2026-10-07-evaluation.md Bear case=125 Bull case=124 decision=BUY
+$ claude -p Ticker TSX:ABX, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/SHA-601899/2026-10-07.md
+research/SHA-601899/factsheet-2026-10-07.md
+OK research/SHA-601899/2026-10-07.md type=CORE 1=45 2=141 3=127 4=61 5=75 6=43 total=492
+
+No data conflicts. One blocked URL (not fetched, per instructions): https://www.reuters.com/markets/companies/601899.SS/
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/SHA-601899/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/SHA-601899/2026-10-07.md type=CORE 1=45 2=141 3=127 4=61 5=75 6=43 total=492
+$ claude -p Evaluate SHA:601899 for 2026-10-07: fact sheet research/SHA-601899/factsheet-2026-10-07.md, note research/SHA-601899/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/SHA-601899/2026-10-07-evaluation.md
+OK research/SHA-601899/2026-10-07-evaluation.md Bear case=111 Bull case=97 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/SHA-601899/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/SHA-601899/2026-10-07-evaluation.md Bear case=111 Bull case=97 decision=BUY
+$ claude -p Ticker SHA:600036, note type CORE, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/MU/2026-10-07.md
+research/MU/factsheet-2026-10-07.md
+OK research/MU/2026-10-07.md type=CORE 1=47 2=132 3=122 4=75 5=84 6=92 total=552
+
+No data conflicts. Blocked/failed fetches: https://www.reuters.com/legal/litigation/micron-enters-600-million-settlement-netlist-patent-dispute-2026-10-06/ (fetch failed, not usable as a source for content — cited only as the headline URL per fact sheet) and https://investors.micron.com/news-releases (404).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/MU/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/MU/2026-10-07.md type=CORE 1=47 2=132 3=122 4=75 5=84 6=92 total=552
+$ claude -p Evaluate MU for 2026-10-07: fact sheet research/MU/factsheet-2026-10-07.md, note research/MU/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/MU/2026-10-07-evaluation.md
+OK research/MU/2026-10-07-evaluation.md Bear case=136 Bull case=107 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/MU/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/MU/2026-10-07-evaluation.md Bear case=136 Bull case=107 decision=AVOID
+$ claude -p Ticker TPE:1303, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/TSX-ABX/2026-10-07.md
+research/TSX-ABX/factsheet-2026-10-07.md
+OK research/TSX-ABX/2026-10-07.md type=CORE 1=59 2=139 3=134 4=62 5=89 6=113 total=596
+
+Data conflicts: none. Blocked URLs: two Reuters article fetches (Mali strike, Agnico IPO comment) were blocked by the fetch tool itself (not an allowlist issue) — not retried per instructions; their headlines were still cited from the fact sheet's News & sentiment section.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TSX-ABX/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/TSX-ABX/2026-10-07.md type=CORE 1=59 2=139 3=134 4=62 5=89 6=113 total=596
+$ claude -p Evaluate TSX:ABX for 2026-10-07: fact sheet research/TSX-ABX/factsheet-2026-10-07.md, note research/TSX-ABX/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/TSX-ABX/2026-10-07-evaluation.md
+OK research/TSX-ABX/2026-10-07-evaluation.md Bear case=115 Bull case=107 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TSX-ABX/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/TSX-ABX/2026-10-07-evaluation.md Bear case=115 Bull case=107 decision=BUY
+$ claude -p Ticker MRNA, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+Note: research/TPE-1303/2026-10-07.md
+Fact sheet: research/TPE-1303/factsheet-2026-10-07.md
+OK research/TPE-1303/2026-10-07.md type=TACTICAL 1=98 2=98 3=68 4=83 5=50 total=397
+
+No data conflicts; no blocked URLs (no WebFetch calls were needed — all evidence came from the fact sheet, which already covered the news headlines).
+
+**Decision: AVOID.** No dated, company-specific catalyst exists (next event is a routine Nov-11 earnings release); the stock is up 660% in 12 months with RSI 75.2, and trades at EV/EBITDA 31.2x / EV/Sales 8.6x / P/B 4.7x — all far above both its own 5-year range and peer medians — while TTM ROIC is just 2.9%, FCF margin is -3.2%, and net debt/EBITDA has risen to 2.03x TTM from 0.21x in FY2021. This is pure momentum with no fundamental support and poor risk/reward for a tactical entry.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TPE-1303/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/TPE-1303/2026-10-07.md type=TACTICAL 1=98 2=98 3=68 4=83 5=50 total=397
+$ claude -p Evaluate TPE:1303 for 2026-10-07: fact sheet research/TPE-1303/factsheet-2026-10-07.md, note research/TPE-1303/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/TPE-1303/2026-10-07-evaluation.md
+OK research/TPE-1303/2026-10-07-evaluation.md Bear case=139 Bull case=109 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TPE-1303/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/TPE-1303/2026-10-07-evaluation.md Bear case=139 Bull case=109 decision=AVOID
+$ claude -p Ticker TPE:3037, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+- Note: `research/SHA-600036/2026-10-07.md`
+- Fact sheet: `research/SHA-600036/factsheet-2026-10-07.md`
+- `OK research/SHA-600036/2026-10-07.md type=CORE 1=70 2=150 3=149 4=89 5=75 6=57 total=590`
+- No data conflicts. One blocked URL (not used): `https://www.reuters.com/markets/companies/600036.SS/` — fetch unavailable, skipped per instructions.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/SHA-600036/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/SHA-600036/2026-10-07.md type=CORE 1=70 2=150 3=149 4=89 5=75 6=57 total=590
+$ claude -p Evaluate SHA:600036 for 2026-10-07: fact sheet research/SHA-600036/factsheet-2026-10-07.md, note research/SHA-600036/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/SHA-600036/2026-10-07-evaluation.md
+OK research/SHA-600036/2026-10-07-evaluation.md Bear case=124 Bull case=128 decision=BUY
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/SHA-600036/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/SHA-600036/2026-10-07-evaluation.md Bear case=124 Bull case=128 decision=BUY
+$ claude -p Ticker KRX:009150, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+Note path: `research/MRNA/2026-10-07.md`
+Fact sheet path: `research/MRNA/factsheet-2026-10-07.md`
+Check: `OK research/MRNA/2026-10-07.md type=TACTICAL 1=105 2=66 3=70 4=112 5=43 total=396`
+No data conflicts; no blocked URLs.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/MRNA/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/MRNA/2026-10-07.md type=TACTICAL 1=105 2=66 3=70 4=112 5=43 total=396
+$ claude -p Evaluate MRNA for 2026-10-07: fact sheet research/MRNA/factsheet-2026-10-07.md, note research/MRNA/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+Note: `research/TPE-3037/2026-10-07.md`
+Fact sheet: `research/TPE-3037/factsheet-2026-10-07.md`
+Check: OK research/TPE-3037/2026-10-07.md type=TACTICAL 1=101 2=81 3=58 4=73 5=41 total=354
+
+Blocked URL: full Reuters article (headline-only used as listed in fact sheet).
+
+**Decision: AVOID.** Risk/reward on the only available levels is ~0.84:1 (8.4% to the nearest overhead reference vs. the mandatory -10% stop), the stock is overbought (RSI 73.3) and extended far above both MAs after a +740% 12-month move, every valuation multiple sits above its own 5-year high and well above peer medians (EV/EBITDA +63%, EV/Sales +149%, P/B +79%), and the only in-window catalyst (Oct-29 earnings) is accompanied by deteriorating returns (falling ROIC/ROCE/ROE), negative FCF conversion, and a recent dilutive $1.4bn depositary-share raise.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TPE-3037/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/TPE-3037/2026-10-07.md type=TACTICAL 1=101 2=81 3=58 4=73 5=41 total=354
+$ claude -p Evaluate TPE:3037 for 2026-10-07: fact sheet research/TPE-3037/factsheet-2026-10-07.md, note research/TPE-3037/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/MRNA/2026-10-07-evaluation.md
+OK research/MRNA/2026-10-07-evaluation.md Bear case=136 Bull case=104 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/MRNA/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/MRNA/2026-10-07-evaluation.md Bear case=136 Bull case=104 decision=AVOID
+$ claude -p Ticker LITE, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/TPE-3037/2026-10-07-evaluation.md
+OK research/TPE-3037/2026-10-07-evaluation.md Bear case=112 Bull case=65 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TPE-3037/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/TPE-3037/2026-10-07-evaluation.md Bear case=112 Bull case=65 decision=AVOID
+$ claude -p Ticker TPE:2383, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/KRX-009150/2026-10-07.md
+research/KRX-009150/factsheet-2026-10-07.md
+research/KRX-009150/2026-10-07-evaluation.md
+
+OK research/KRX-009150/2026-10-07.md type=TACTICAL 1=82 2=91 3=74 4=87 5=49 total=383
+OK research/KRX-009150/2026-10-07-evaluation.md Bear case=120 Bull case=69 decision=AVOID
+
+Decision: **AVOID**. No data conflicts. No blocked URLs (one WebFetch to the stockanalysis.com transcript page succeeded; peer fetches used TYO: exchange code instead of TSE:, which resolved on the second attempt).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/KRX-009150/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/KRX-009150/2026-10-07.md type=TACTICAL 1=82 2=91 3=74 4=87 5=49 total=383
+$ claude -p Evaluate KRX:009150 for 2026-10-07: fact sheet research/KRX-009150/factsheet-2026-10-07.md, note research/KRX-009150/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/KRX-009150/2026-10-07-evaluation.md
+OK research/KRX-009150/2026-10-07-evaluation.md Bear case=125 Bull case=101 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/KRX-009150/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/KRX-009150/2026-10-07-evaluation.md Bear case=125 Bull case=101 decision=AVOID
+$ claude -p Ticker TPE:3711, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/TPE-2383/2026-10-07.md
+research/TPE-2383/factsheet-2026-10-07.md
+OK research/TPE-2383/2026-10-07.md type=TACTICAL 1=106 2=75 3=69 4=83 5=42 total=375
+
+Blocked: https://www.reuters.com/markets/companies/2383.TW/ (fetch failed, not retried).
+
+**Decision: AVOID.** Valuation is already 285–295% above the stock's own 5-year multiple range after a 359% 12-month run, TTM FCF is negative, and there is no sourced, specific catalyst evidence beyond a routine Oct 28 earnings date — risk/reward on the mechanical plan (+7.9% target vs -10% stop) is asymmetric against entry.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TPE-2383/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/TPE-2383/2026-10-07.md type=TACTICAL 1=106 2=75 3=69 4=83 5=42 total=375
+$ claude -p Evaluate TPE:2383 for 2026-10-07: fact sheet research/TPE-2383/factsheet-2026-10-07.md, note research/TPE-2383/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+Note: research/LITE/2026-10-07.md
+Fact sheet: research/LITE/factsheet-2026-10-07.md
+OK research/LITE/2026-10-07.md type=TACTICAL 1=80 2=76 3=63 4=88 5=50 total=357
+
+No data conflicts. Blocked/failed URLs (within allowlist, no usable data returned, not counted as blocked by the hook): https://www.lumentum.com/en/investors (404), https://investor.lumentum.com/news-releases (404).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/LITE/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/LITE/2026-10-07.md type=TACTICAL 1=80 2=76 3=63 4=88 5=50 total=357
+$ claude -p Evaluate LITE for 2026-10-07: fact sheet research/LITE/factsheet-2026-10-07.md, note research/LITE/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/TPE-2383/2026-10-07-evaluation.md
+OK research/TPE-2383/2026-10-07-evaluation.md Bear case=117 Bull case=85 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TPE-2383/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/TPE-2383/2026-10-07-evaluation.md Bear case=117 Bull case=85 decision=AVOID
+$ claude -p Ticker TYO:6857, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+research/LITE/2026-10-07-evaluation.md
+OK research/LITE/2026-10-07-evaluation.md Bear case=131 Bull case=95 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/LITE/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/LITE/2026-10-07-evaluation.md Bear case=131 Bull case=95 decision=AVOID
+$ claude -p Ticker HKG:0992, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+Note: research/TYO-6857/2026-10-07.md
+Fact sheet: research/TYO-6857/factsheet-2026-10-07.md
+OK research/TYO-6857/2026-10-07.md type=TACTICAL 1=81 2=77 3=64 4=89 5=49 total=360
+
+No data conflicts. No blocked URLs (all fetches were to stockanalysis.com transcript pages; short interest and short-interest-change fields were [data unavailable] on the fact sheet, not from a fetch).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TYO-6857/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/TYO-6857/2026-10-07.md type=TACTICAL 1=81 2=77 3=64 4=89 5=49 total=360
+$ claude -p Evaluate TYO:6857 for 2026-10-07: fact sheet research/TYO-6857/factsheet-2026-10-07.md, note research/TYO-6857/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/TYO-6857/2026-10-07-evaluation.md
+OK research/TYO-6857/2026-10-07-evaluation.md Bear case=126 Bull case=86 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TYO-6857/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/TYO-6857/2026-10-07-evaluation.md Bear case=126 Bull case=86 decision=AVOID
+$ claude -p Ticker BE, note type TACTICAL, date 2026-10-07. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+Note path: `research/TPE-3711/2026-10-07.md`
+Fact sheet path: `research/TPE-3711/factsheet-2026-10-07.md`
+Check: `OK research/TPE-3711/2026-10-07.md type=TACTICAL 1=104 2=74 3=62 4=99 5=46 total=385`
+
+Blocked URL: https://www.reuters.com/world/asia-pacific/taiwans-ase-tech-raises-2026-capex-by-2-billion-strong-demand-2026-07-30/ (fetch blocked; cited only as the headline URL listed in the fact sheet, not fetched for content). No data conflicts.
+
+**Decision: AVOID.** The Oct 30 earnings catalyst is real but guidance (Q3 revenue +21-22% QoQ) is already public and capacity is "very close to being full," capping beat potential, while the stock trades at 56.4x P/E / 24.0x EV/EBITDA (245%/275% of its 5-year range, +83%/+123% vs peers) after a +349.6% 12-month run and an overbought RSI of 72.5, 54% above its 200-day MA — an unfavorable entry point with asymmetric downside into a known catalyst.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TPE-3711/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/TPE-3711/2026-10-07.md type=TACTICAL 1=104 2=74 3=62 4=99 5=46 total=385
+$ claude -p Evaluate TPE:3711 for 2026-10-07: fact sheet research/TPE-3711/factsheet-2026-10-07.md, note research/TPE-3711/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/TPE-3711/2026-10-07-evaluation.md
+OK research/TPE-3711/2026-10-07-evaluation.md Bear case=128 Bull case=100 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TPE-3711/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/TPE-3711/2026-10-07-evaluation.md Bear case=128 Bull case=100 decision=AVOID
+Note: research/HKG-0992/2026-10-07.md
+Fact sheet: research/HKG-0992/factsheet-2026-10-07.md
+OK research/HKG-0992/2026-10-07.md type=TACTICAL 1=101 2=100 3=73 4=76 5=46 total=396
+
+Blocked: https://www.reuters.com/site-search/?query=Lenovo (domain allowlisted but fetch unavailable). No data conflicts.
+
+**Decision: AVOID.** Price is already up 209% over 12 months and trades at 823%/242% premiums to its own 5y P/E range and peer P/B respectively, while trailing (TTM) ROE/ROIC/ROCE have all fallen sharply from FY2026 levels and net margin has compressed to 0.9% — a deteriorating-fundamentals-into-a-stretched-price setup, compounded by an Altman Z in the distress zone and an unresolved ITC legal overhang. Risk/reward into the Nov 5 print is unfavorable for a new tactical long.
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HKG-0992/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/HKG-0992/2026-10-07.md type=TACTICAL 1=101 2=100 3=73 4=76 5=46 total=396
+$ claude -p Evaluate HKG:0992 for 2026-10-07: fact sheet research/HKG-0992/factsheet-2026-10-07.md, note research/HKG-0992/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/HKG-0992/2026-10-07-evaluation.md
+OK research/HKG-0992/2026-10-07-evaluation.md Bear case=132 Bull case=92 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HKG-0992/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/HKG-0992/2026-10-07-evaluation.md Bear case=132 Bull case=92 decision=AVOID
+research/BE/2026-10-07.md
+research/BE/factsheet-2026-10-07.md
+OK research/BE/2026-10-07.md type=TACTICAL 1=113 2=78 3=66 4=92 5=44 total=393
+
+Data conflicts: none.
+Blocked/unused URLs: https://www.reuters.com/technology/ (fetch blocked, not cited); https://www.bloomenergy.com/press-releases/ (fetched, no results, not cited); SEC EDGAR 8-K/10-Q filing lists (fetched, no Project Jupiter-specific filing found, not cited).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/BE/2026-10-07.md
+OK /Users/oskaraspinall/paper-portfolio/research/BE/2026-10-07.md type=TACTICAL 1=113 2=78 3=66 4=92 5=44 total=393
+$ claude -p Evaluate BE for 2026-10-07: fact sheet research/BE/factsheet-2026-10-07.md, note research/BE/2026-10-07.md, state portfolio/state.json. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+research/BE/2026-10-07-evaluation.md
+OK research/BE/2026-10-07-evaluation.md Bear case=126 Bull case=98 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/BE/2026-10-07-evaluation.md
+OK /Users/oskaraspinall/paper-portfolio/research/BE/2026-10-07-evaluation.md Bear case=126 Bull case=98 decision=AVOID
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py submit /Users/oskaraspinall/paper-portfolio/runs/2026-10-07/requests-mechanical.json --asof 2026-10-07 --save /Users/oskaraspinall/paper-portfolio/runs/2026-10-07/submit-mechanical.json
+{
+ "cash_before_usd": 100000.0,
+ "cash_after_usd": 100000.0,
+ "applied": [],
+ "rejected": [],
+ "warnings": [
+  "holdings 0 below target minimum 8",
+  "cash 100.0% above target maximum 20%"
+ ],
+ "dry_run": false
+}
+$ claude -p Evaluation files: research/ADBE/2026-10-07-evaluation.md research/HKG-2628/2026-10-07-evaluation.md research/HKG-9999/2026-10-07-evaluation.md research/PDD/2026-10-07-evaluation.md research/BKNG/2026-10-07-evaluation.md research/NSE-TCS/2026-10-07-evaluation.md research/SHA-601899/2026-10-07-evaluation.md research/MU/2026-10-07-evaluation.md research/TSX-ABX/2026-10-07-evaluation.md research/SHA-600036/2026-10-07-evaluation.md research/TPE-1303/2026-10-07-evaluation.md research/MRNA/2026-10-07-evaluation.md research/TPE-3037/2026-10-07-evaluation.md research/KRX-009150/2026-10-07-evaluation.md research/LITE/2026-10-07-evaluation.md research/TPE-2383/2026-10-07-evaluation.md research/TPE-3711/2026-10-07-evaluation.md research/TYO-6857/2026-10-07-evaluation.md research/HKG-0992/2026-10-07-evaluation.md research/BE/2026-10-07-evaluation.md. Date 2026-10-07. Write the requests to runs/2026-10-07/requests-decisions.json and submit with --save runs/2026-10-07/submit.json. --agent portfolio-manager --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+I'll leave the stray `extract_json_tmp.py` file for now since removing it needs separate approval (it's not part of this task's output — just a scratch helper I created; happy to delete it if you approve, otherwise `git status` will show it as untracked and you can remove it anytime).
+
+## Decisions
+
+| Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| ADBE | BUY | CORE | 3 |
+| HKG:2628 | BUY | CORE | 2 |
+| HKG:9999 | BUY | CORE | 4 |
+| PDD | BUY | CORE | 3 |
+| BKNG | BUY | CORE | 3 |
+| NSE:TCS | BUY | CORE | 3 |
+| SHA:601899 | BUY | CORE | 3 |
+| MU | AVOID (no trade) | CORE | 1 |
+| TSX:ABX | BUY | CORE | 3 |
+| SHA:600036 | BUY | CORE | 2 |
+| TPE:1303 | AVOID (no trade) | TACTICAL | 1 |
+| MRNA | AVOID (no trade) | TACTICAL | 1 |
+| TPE:3037 | AVOID (no trade) | TACTICAL | 1 |
+| KRX:009150 | AVOID (no trade) | TACTICAL | 1 |
+| LITE | AVOID (no trade) | TACTICAL | 1 |
+| TPE:2383 | AVOID (no trade) | TACTICAL | 1 |
+| TPE:3711 | AVOID (no trade) | TACTICAL | 1 |
+| TYO:6857 | AVOID (no trade) | TACTICAL | 1 |
+| HKG:0992 | AVOID (no trade) | TACTICAL | 1 |
+| BE | AVOID (no trade) | TACTICAL | 2 |
+
+## Submit result (`runs/2026-10-07/submit.json`)
+
+```json
+{
+ "cash_before_usd": 100000.0,
+ "cash_after_usd": 57396.26,
+ "applied": [
+  {"ticker": "ADBE", "shares": 20, "fill_price": 238.12, "gross_usd": 4762.4, "costs_usd": 4.76},
+  {"ticker": "HKG:2628", "shares": 862, "fill_price": 27.3, "gross_usd": 2998.6, "costs_usd": 7.5},
+  {"ticker": "HKG:9999", "shares": 295, "fill_price": 185.6, "gross_usd": 6976.69, "costs_usd": 17.45},
+  {"ticker": "PDD", "shares": 63, "fill_price": 78.4, "gross_usd": 4939.2, "costs_usd": 4.94},
+  {"ticker": "BKNG", "shares": 31, "fill_price": 157.63, "gross_usd": 4886.53, "costs_usd": 4.89},
+  {"ticker": "NSE:TCS", "shares": 229, "fill_price": 2100, "gross_usd": 4990.11, "costs_usd": 12.48},
+  {"ticker": "SHA:601899", "shares": 1124, "fill_price": 29.79, "gross_usd": 4993.95, "costs_usd": 12.48},
+  {"ticker": "TSX:ABX", "shares": 122, "fill_price": 57.95, "gross_usd": 4974.97, "costs_usd": 12.43},
+  {"ticker": "SHA:600036", "shares": 487, "fill_price": 41.26, "gross_usd": 2996.86, "costs_usd": 7.5}
+ ],
+ "rejected": [],
+ "warnings": ["cash 57.4% above target maximum 20%"],
+ "dry_run": false
+}
+```
+
+All 9 BUYs applied, no rejections. One warning: cash is 57.4%, above the 20% target maximum (expected, since the portfolio started this run fully in cash with only 9 of the target 8–15 holdings now filled). This was a live run — the portfolio, ledger and `runs/2026-10-07/` files were updated for real (not a dry run).
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/decision_log.py record research/ADBE/2026-10-07-evaluation.md research/HKG-2628/2026-10-07-evaluation.md research/HKG-9999/2026-10-07-evaluation.md research/PDD/2026-10-07-evaluation.md research/BKNG/2026-10-07-evaluation.md research/NSE-TCS/2026-10-07-evaluation.md research/SHA-601899/2026-10-07-evaluation.md research/MU/2026-10-07-evaluation.md research/TSX-ABX/2026-10-07-evaluation.md research/SHA-600036/2026-10-07-evaluation.md research/TPE-1303/2026-10-07-evaluation.md research/MRNA/2026-10-07-evaluation.md research/TPE-3037/2026-10-07-evaluation.md research/KRX-009150/2026-10-07-evaluation.md research/LITE/2026-10-07-evaluation.md research/TPE-2383/2026-10-07-evaluation.md research/TPE-3711/2026-10-07-evaluation.md research/TYO-6857/2026-10-07-evaluation.md research/HKG-0992/2026-10-07-evaluation.md research/BE/2026-10-07-evaluation.md --asof 2026-10-07
+recorded 20 decision(s); 22 total
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/decision_log.py update --asof 2026-10-07
+{"rows": 22, "notes": []}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py stamp --asof 2026-10-07
+last_scan = 2026-10-07
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_report.py --asof 2026-10-07 --run /Users/oskaraspinall/paper-portfolio/runs/2026-10-07
+/Users/oskaraspinall/paper-portfolio/reports/weekly/2026-10-07.md
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/dashboard.py
+/Users/oskaraspinall/paper-portfolio/docs/index.html
