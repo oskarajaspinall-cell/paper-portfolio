@@ -1,0 +1,54 @@
+#!/bin/bash
+# Schedule the portfolio on this Mac with macOS's built-in scheduler (launchd):
+#   Friday 22:00   bin/weekly-local   screen + weekly review, commit, upload
+#   Weekdays 22:30 bin/fill-pending   fill pending orders at the next open, commit, upload
+# The Mac must be on (if asleep, launchd runs the job on wake). Usage:
+#   bin/install-mac-schedule            install / refresh both jobs
+#   bin/install-mac-schedule --remove   remove both jobs
+set -eu
+DIR="$(cd "$(dirname "$0")/.." && pwd)"
+AGENTS="$HOME/Library/LaunchAgents"
+UIDN="$(id -u)"
+
+plist() { # label script calendar-xml
+  cat <<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>$1</string>
+  <key>ProgramArguments</key><array><string>/bin/bash</string><string>$DIR/bin/$2</string></array>
+  <key>WorkingDirectory</key><string>$DIR</string>
+  <key>StartCalendarInterval</key>
+$3
+  <key>StandardOutPath</key><string>$DIR/logs/launchd.log</string>
+  <key>StandardErrorPath</key><string>$DIR/logs/launchd.log</string>
+</dict>
+</plist>
+XML
+}
+
+for label in com.paperportfolio.weekly com.paperportfolio.fills; do
+  launchctl bootout "gui/$UIDN/$label" 2>/dev/null || true
+done
+if [ "${1:-}" = "--remove" ]; then
+  rm -f "$AGENTS/com.paperportfolio.weekly.plist" "$AGENTS/com.paperportfolio.fills.plist"
+  echo "Removed both scheduled jobs."
+  exit 0
+fi
+
+mkdir -p "$AGENTS" "$DIR/logs"
+plist com.paperportfolio.weekly weekly-local \
+  "  <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>22</integer><key>Minute</key><integer>0</integer></dict>" \
+  > "$AGENTS/com.paperportfolio.weekly.plist"
+days=""
+for d in 1 2 3 4 5; do days="$days    <dict><key>Weekday</key><integer>$d</integer><key>Hour</key><integer>22</integer><key>Minute</key><integer>30</integer></dict>
+"; done
+plist com.paperportfolio.fills fill-pending "  <array>
+$days  </array>" > "$AGENTS/com.paperportfolio.fills.plist"
+
+for label in com.paperportfolio.weekly com.paperportfolio.fills; do
+  plutil -lint -s "$AGENTS/$label.plist"
+  launchctl bootstrap "gui/$UIDN" "$AGENTS/$label.plist"
+done
+echo "Scheduled: Friday 22:00 weekly run; weekdays 22:30 order fills. Logs in $DIR/logs/."

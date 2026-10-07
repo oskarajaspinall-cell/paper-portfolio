@@ -98,3 +98,9 @@ def test_workflows_wire_pause_failure_and_schedule():
     assert "CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}" in wf and "No ANTHROPIC_API_KEY or" in wf
     sc = (ROOT / ".github" / "workflows" / "screen.yml").read_text()
     assert "group: paper-portfolio" in sc and "bin/ci-finish failure screen" in sc
+
+
+def test_fills_workflow():
+    wf = (ROOT / ".github" / "workflows" / "fills.yml").read_text()
+    assert 'cron: "30 21 * * 1-5"' in wf and "group: paper-portfolio" in wf and "fill-pending" in wf
+    assert "bin/ci-finish failure fills" in wf and "steps.pause.outputs.paused != 'true'" in wf

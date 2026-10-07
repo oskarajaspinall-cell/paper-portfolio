@@ -1,7 +1,7 @@
 # Paper Portfolio — CLAUDE.md
 
 ## Purpose
-A fully automated **paper** (simulated) stock portfolio. Claude Code subagents research stocks, evaluate them to a firm decision, manage the portfolio and run a weekly review via GitHub Actions. This is a decision-discipline and track-record system. It is **NEVER a trading bot**: no broker connections, no broker APIs, no real orders, no broker credentials.
+A fully automated **paper** (simulated) stock portfolio. Claude Code subagents research stocks, evaluate them to a firm decision, manage the portfolio and run a weekly review on a schedule (on the owner's Mac via launchd, or via GitHub Actions). This is a decision-discipline and track-record system. It is **NEVER a trading bot**: no broker connections, no broker APIs, no real orders, no broker credentials.
 
 Token efficiency is a design requirement: Python scripts do all data work and arithmetic; agents only read compact outputs (fact sheets, scan summaries, state).
 
@@ -27,7 +27,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - **TACTICAL**: weeks to ~3 months, specific catalyst. MUST have target, stop and time limit at entry; these execute mechanically.
 - The label is fixed at entry. A tactical position can NEVER be relabelled core; it can only become core by passing a full core initiation, which records a new entry decision.
 - When a core invalidation trigger fires, the holding gets a full core re-initiation (researcher + evaluator), not a quick review.
-- When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve or sector limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same run.
+- When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve or sector limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
 
 ## Config (edit values here; scripts read this block)
 The portfolio is kept entirely in **US dollars**: cash, holdings, costs, returns and the SPY benchmark. Percentages are percent of total portfolio value (cash + holdings, in USD).
@@ -116,33 +116,30 @@ weekly_flag_move_pct = 8
 ## How an initiation runs (manual or automated)
 1. `researcher` (ticker, CORE or TACTICAL, date) → fact sheet + note, checked by `check_docs.py note`.
 2. `evaluator` → `research/<SLUG>/<date>-evaluation.md`: Bear, Bull, then one Decision ```json block, checked by `check_docs.py eval`.
-3. `portfolio-manager` → trade requests → `portfolio.py submit` (with `--dry-run` when asked).
+3. `portfolio-manager` → trade requests → `portfolio.py submit --at-next-open` (validated now, filled at the next market open; `--dry-run` when asked).
 Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 
 ## Folder map
-- `scripts/fetch_data.py` — stockanalysis.com scraper → JSON with `source_url` per section.
-- `scripts/fact_sheet.py <TICKER> --peers A B C` — one-page `research/<TICKER>/factsheet-<date>.md`.
-- `scripts/portfolio.py` — validates and applies trade requests, marks to market, computes returns. All arithmetic lives here.
-- **Fills (owner rule):** trades decided by the agents are validated at once and queued as pending orders that fill at the OPEN of the next trading day (`portfolio.py submit --at-next-open`, then `fill-pending`, run each weekday at 22:30 by `bin/fill-pending` and at the start of each weekly run). Mechanical tactical exits still fill at the first close that crossed the stop/target.
-- `scripts/common.py` — config block reader, ticker/URL mapping, watchlist parser.
-- `scripts/universe.py build` — builds `universe/universe.csv` (S&P 500 + FTSE 100 + All-World proxy).
-- `scripts/screen.py` — weekly screen → `reports/screen/<date>.md` and the picks for new initiations.
-- `scripts/check_docs.py` — template, word-limit, tag, allowlist and Decision-block checks for notes and evaluations.
+- `scripts/fetch_data.py` — stockanalysis.com scraper (pages → JSON with `source_url`; news feeds; robots, rate limit, cache).
+- `scripts/fact_sheet.py <TICKER> --peers A B C` — one-page `research/<SLUG>/factsheet-<date>.md` (quality, valuation, price, news & sentiment).
+- `scripts/portfolio.py` — validates trades against every rule, places next-open orders, fills them, marks to market, computes returns. All arithmetic lives here.
+- **Fills (owner rule):** trades decided by the agents are validated at once and queued as pending orders that fill at the OPEN of the next trading day (`portfolio.py submit --at-next-open`, then `fill-pending`). Mechanical tactical exits still fill at the first close that crossed the stop/target.
+- `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.
+- `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.
+- `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions (3 new initiations at a time); any failure (other than a skipped new initiation) restores `portfolio/` and writes `runs/<date>/error.log`.
+- `scripts/check_docs.py` — template, word-limit, tag, allowlist, conviction and Decision-block checks for notes and evaluations.
 - `scripts/allowlist_hook.py` — WebFetch guard (wired in `.claude/settings.json`); blocked URLs go to `logs/skipped-urls.log`. WebSearch, curl and wget are denied.
-- `bin/py` — project Python launcher.
-- `universe/watchlist.txt` — one ticker per line, optional `ir=<domain>` (names you want covered regardless of the screen).
-- `universe/ftse100.txt` — FTSE 100 constituents (owner-maintained; `screen=no` excludes investment trusts).
-- `universe/universe.csv` — the full universe with index membership, currency and screen eligibility.
-- `portfolio/state.json`, `portfolio/ledger.csv`, `portfolio/rejections.csv`, `portfolio/valuations.csv`.
-- `research/<TICKER>/` — fact sheets and research notes. `reports/weekly/` — weekly reports.
-- `.claude/agents/` — the four subagents. `tests/` — pytest suite; `tests/fixtures/` holds real saved stockanalysis.com HTML.
-- `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py` — weekly scan (flags, mechanical exits/trims), decision log + hit rates, report builder. No model calls.
-- `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions; any failure restores `portfolio/` and writes `runs/<date>/error.log`.
-- `.github/workflows/weekly-review.yml` (Sat 08:00 UTC) and `screen.yml` (Fri 21:00 UTC) — share one concurrency group; `bin/ci-paused` and `bin/ci-finish` handle PAUSED and commit-or-error-log.
-- `runs/<date>/` — each run's scan, requests, submit results, reviews, log. `reports/screen/` — screens. `reports/sample/` — simulated sample report.
-- `scripts/dashboard.py` → `docs/index.html` — self-contained charts dashboard, rebuilt after every real weekly run (GitHub Pages serves `/docs`).
-- `README.md` — plain-English setup guide.
-- `data/cache/` — per-day page cache (git-ignored).
+- `scripts/common.py` — config reader, ticker/URL mapping, allowlist, thesis-only trigger rule.
+- `bin/py` — project Python launcher (`.venv` locally, `python3` in CI).
+- Mac schedule: `bin/install-mac-schedule` (launchd) → `bin/weekly-local` (Fri 22:00) and `bin/fill-pending` (weekdays 22:30).
+- GitHub Actions: `.github/workflows/screen.yml` (Fri 21:00 UTC), `weekly-review.yml` (Sat 08:00 UTC), `fills.yml` (weekdays 21:30 UTC); one concurrency group; `bin/ci-paused` and `bin/ci-finish` handle PAUSED and commit-or-error-log.
+- `universe/` — `watchlist.txt` (always eligible, optional `ir=` domain), `ftse100.txt` (owner-maintained; `screen=no`), `custom.txt` (your own tickers), `ir_domains.txt` (auto-recorded company domains), `universe.csv` (built locally; not in the public repo).
+- `portfolio/` — `state.json` (cash, holdings, pending orders), `ledger.csv`, `rejections.csv`, `valuations.csv`, `decisions.csv`.
+- `research/<SLUG>/` — fact sheets, notes, evaluations. `reports/weekly/` — weekly reports (and `-recap.md` summaries). `reports/screen/` — screens. `reports/sample/` — older simulated sample. `runs/<date>/` — each run's working files and log. `docs/index.html` — dashboard (GitHub Pages).
+- `.claude/agents/` — the four subagents. `tests/` — pytest suite (`tests/fixtures/*.html` saved site pages stay local, not in the public repo).
+- `data/cache/` — per-day page cache (git-ignored). `README.md` — plain-English setup guide.
 
 ## How to pause
-Create an empty file named `PAUSED` in the repo root and commit it. Both workflows (weekly review and screen) exit immediately and change nothing. Delete the file and commit to resume. Step-by-step clicks are in `README.md`.
+- GitHub Actions: create an empty file named `PAUSED` in the repo root and commit it. All workflows (screen, weekly review, fills) exit immediately and change nothing. Delete it and commit to resume.
+- Mac: `PAUSED` does not stop Mac runs (they use `--local`). Remove the schedule with `bin/install-mac-schedule --remove`; reinstall with `bin/install-mac-schedule`.
+Step-by-step clicks are in `README.md`.

@@ -1,0 +1,56 @@
+# Fill pending orders at the next market open (owner rule). No AI, no model calls.
+# Runs after every market has opened (and closed) on weekdays.
+name: Fill orders
+
+on:
+  schedule:
+    - cron: "30 21 * * 1-5"        # weekdays 21:30 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: paper-portfolio           # never overlaps the weekly review or screen
+  cancel-in-progress: false
+
+jobs:
+  fills:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for PAUSED file
+        id: pause
+        run: bin/ci-paused >> "$GITHUB_OUTPUT"
+
+      - name: Set dates
+        id: date
+        if: steps.pause.outputs.paused != 'true'
+        run: |
+          echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+          echo "asof=$(date -u -d tomorrow +%F)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        if: steps.pause.outputs.paused != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        if: steps.pause.outputs.paused != 'true'
+        run: pip install -r requirements.txt
+
+      - name: Fill pending orders at the open
+        if: steps.pause.outputs.paused != 'true'
+        run: |
+          bin/py scripts/portfolio.py fill-pending --asof "${{ steps.date.outputs.asof }}"
+          bin/py scripts/dashboard.py
+
+      - name: Commit to main
+        if: steps.pause.outputs.paused != 'true'
+        run: bin/ci-finish success fills "${{ steps.date.outputs.date }}"
+
+      - name: On failure, commit only the error log and mark the run failed
+        if: failure() && steps.pause.outputs.paused != 'true'
+        run: bin/ci-finish failure fills "${{ steps.date.outputs.date }}"

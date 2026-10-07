@@ -3,14 +3,17 @@
 #   bin/ci-finish success <kind> <date>   commit run outputs:   "Weekly run <date>" / "Screen <date>"
 #   bin/ci-finish failure <kind> <date>   discard EVERYTHING the run changed, commit only the error log,
 #                                          then exit 1 so the run is marked failed.
-# <kind> is "weekly" or "screen".
+# <kind> is "weekly", "screen" or "fills".
 set -eu
 status="$1"; kind="$2"; date="$3"
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-if [ "$kind" = "weekly" ]; then label="Weekly run $date"; paths="portfolio research reports runs universe logs docs"
-else label="Screen $date"; paths="reports/screen universe logs"; fi
+case "$kind" in
+  weekly) label="Weekly run $date"; paths="portfolio research reports runs universe logs docs" ;;
+  fills)  label="Filled orders $date"; paths="portfolio docs" ;;
+  *)      label="Screen $date"; paths="reports/screen universe logs" ;;
+esac
 
 existing=""
 for p in $paths; do [ -e "$p" ] && existing="$existing $p"; done

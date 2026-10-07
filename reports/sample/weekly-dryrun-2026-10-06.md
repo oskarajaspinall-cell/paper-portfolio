@@ -1,4 +1,4 @@
-> **SAMPLE — simulated portfolio** (positions opened at real 2026-09-04 closes in a scratch copy; MSFT's trigger was deliberately set to fire). Produced by `scripts/weekly_run.py --asof 2026-10-06` with real agents. Not the live portfolio.
+> **SAMPLE — simulated portfolio** (positions opened at real 2026-09-04 closes in a scratch copy; MSFT's trigger was deliberately set to fire). Produced by `scripts/weekly_run.py --asof 2026-10-06` with real agents. Not the live portfolio. Older version of the system: trades here filled at the latest close, before the next-open, conviction>=4 and news rules were added.
 
 # Weekly report — 2026-10-06
 
