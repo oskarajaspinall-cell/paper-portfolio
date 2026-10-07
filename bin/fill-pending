@@ -20,5 +20,5 @@ bin/py scripts/portfolio.py mark --phase daily --asof "$ASOF" || { echo "!! dail
 if git diff --quiet -- portfolio; then echo "nothing changed"; exit 0; fi
 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
 git add -A -- portfolio docs "$LOG"
-git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
+git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
 echo "== end $(date)"

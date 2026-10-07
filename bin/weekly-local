@@ -46,6 +46,6 @@ else
   git add -- "$err" "$LOG" reports/screen 2>/dev/null
   git commit -q -m "Weekly run $ASOF FAILED (error log only)" || true
 fi
-git pull -q --rebase && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (results are committed locally; next run retries)"
+git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (results are committed locally; next run retries)"
 echo "== end $(date) review_exit=$review"
 exit $review
