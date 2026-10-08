@@ -18,6 +18,12 @@ sessions only) and statistics-page metrics. No model calls, no network.
   stock came from, must be at least `min_reward_risk` x the stop distance above the close; at new highs
   or within one ATR of it = clear; minor wiggles inside a pullback are not resistance) and, for pullbacks, an intact uptrend
   (the close is still above the most recent swing low; swing points are the fact sheet's).
+- Pullback trend-quality checks (owner-approved 2026-10-08, after 6/6 pullbacks were rejected as
+  stocks rolling over rather than dipping): 12-month change > `pullback_min_ch1y_pct`; 50-day average
+  >= `pullback_min_sma50_over_sma200_pct` above the 200-day; beating SPY over ~6 months by
+  >= `pullback_min_rs_6m_pp`; no series of lower highs (the last three swing highs falling); no new
+  20-session low in the last 5 sessions; the 50/200-day position measured from the last COMPLETED close
+  (the statistics page's price can be live); room to the 3-month peak >= `resistance_min_room_x`.
 """
 from __future__ import annotations
 
@@ -36,8 +42,16 @@ def swing_points(rows: list[dict], half_window: int = 5, keep: int | None = 3) -
     return {"highs": highs[-keep:] if keep else highs, "lows": lows[-keep:] if keep else lows}
 
 
-def structure_problem(setup: str, rows: list[dict], p: dict, tc: dict) -> str | None:
-    """Why this setup can't make a valid trade, or None. Records the nearest resistance on `p`."""
+def pct_change(rows: list[dict], sessions: int) -> float | None:
+    if len(rows) <= sessions or not rows[-1 - sessions].get("close"):
+        return None
+    return (rows[-1]["close"] / rows[-1 - sessions]["close"] - 1) * 100
+
+
+def structure_problem(setup: str, rows: list[dict], p: dict, tc: dict, sma: dict | None = None,
+                      spy_rows: list[dict] | None = None) -> str | None:
+    """Why this setup can't make a valid trade, or None. Records the 3-month peak on `p`. `sma` (the
+    statistics page's 50/200-day averages) and `spy_rows` (SPY daily history) feed the pullback checks."""
     sw = swing_points(rows, keep=None)
     close, risk = p["close"], p["close"] - p["stop"]
     recent = [r for r in rows[-int(tc["resistance_lookback_sessions"]):] if r.get("high") is not None]
@@ -46,11 +60,31 @@ def structure_problem(setup: str, rows: list[dict], p: dict, tc: dict) -> str | 
     above = [(peak["high"], peak["date"])] if peak and peak["high"] - close > p["atr14"] else []
     p["resistance"] = {"price": above[0][0], "date": above[0][1],
                        "room_x": round((above[0][0] - close) / risk, 2)} if above else None
-    if setup == "pullback" and sw["lows"] and close <= sw["lows"][-1][1]:
-        return f"broke its most recent swing low {sw['lows'][-1][1]:g} ({sw['lows'][-1][0]}): uptrend not intact"
-    if above and above[0][0] - close < tc["min_reward_risk"] * risk:
+    if setup == "pullback":
+        if sw["lows"] and close <= sw["lows"][-1][1]:
+            return f"broke its most recent swing low {sw['lows'][-1][1]:g} ({sw['lows'][-1][0]}): uptrend not intact"
+        h3 = sw["highs"][-3:]  # one lower high is a normal bounce inside a pullback; a series is a downtrend
+        if len(h3) == 3 and h3[0][1] > h3[1][1] > h3[2][1]:
+            return ("a series of lower highs (" + ", ".join(f"{v:g} on {d}" for d, v in h3)
+                    + "): rolling over, not pulling back")
+        lows = [r["low"] for r in rows[-20:] if r.get("low") is not None]
+        if len(lows) == 20 and min(lows[-5:]) < min(lows[:-5]):  # equal lows = a base, not a breakdown
+            return "made a new 20-session low in the last 5 sessions: fresh breakdown"
+        if sma and sma.get("sma50") and sma.get("sma200"):
+            vs50, vs200 = (close / sma["sma50"] - 1) * 100, (close / sma["sma200"] - 1) * 100
+            lo50, hi50 = tc["pullback_sma50_band_pct"]
+            if vs200 <= 0 or not lo50 <= vs50 <= hi50:
+                return (f"at the last completed close {close:g}: {vs50:+.1f}% vs the 50-day, {vs200:+.1f}% vs the "
+                        f"200-day (needs {lo50:g}% to {hi50:+g}% and above the 200-day)")
+        if spy_rows:
+            n = int(tc["rs_sessions"])
+            a, b = pct_change(rows, n), pct_change(spy_rows, n)
+            if a is not None and b is not None and a - b < tc["pullback_min_rs_6m_pp"]:
+                return f"weaker than SPY over {n} sessions ({a:+.1f}% vs {b:+.1f}%)"
+    need = tc["resistance_min_room_x"]
+    if above and above[0][0] - close < need * risk:
         return (f"3-month peak {above[0][0]:g} ({above[0][1]}) is only {p['resistance']['room_x']:.1f}x the "
-                f"stop distance away (needs {tc['min_reward_risk']:g}x)")
+                f"stop distance away (needs {need:g}x)")
     return None
 
 
@@ -95,9 +129,13 @@ def days_to_earnings(ed: str | None, asof: str) -> int | None:
 
 
 def pullback_candidate(d: dict, tc: dict, asof: str) -> bool:
-    """Stage 1 (statistics page): uptrend intact, price back near the 50-day average, not overbought,
-    and no earnings inside the window."""
+    """Stage 1 (statistics page): a real uptrend (positive 12 months, 50-day well above the 200-day),
+    price back near the 50-day average, not overbought, and no earnings inside the window."""
     above200, vs50, rsi, ed = d.get("price_vs_sma200"), d.get("price_vs_sma50"), d.get("rsi"), d.get("earnings_date")
+    ch1y, s50, s200 = d.get("ch1y"), d.get("sma50"), d.get("sma200")
+    if ch1y is None or ch1y <= tc["pullback_min_ch1y_pct"] or not s50 or not s200 \
+            or (s50 / s200 - 1) * 100 < tc["pullback_min_sma50_over_sma200_pct"]:
+        return False
     lo50, hi50 = tc["pullback_sma50_band_pct"]
     rlo, rhi = tc["pullback_rsi_band"]
     n = days_to_earnings(ed, asof)

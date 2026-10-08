@@ -71,7 +71,12 @@ drift_time_limit_weeks = 8
 pullback_sma50_band_pct = [-5, 2] # price vs its 50-day average
 pullback_rsi_band = [30, 55]      # 14-day RSI: cooled off, not broken
 pullback_min_days_to_earnings = 30
-resistance_lookback_sessions = 63 # room check: the 3-month peak must be >= min_reward_risk x the stop distance above the close
+resistance_lookback_sessions = 63 # room check: the 3-month peak (the high the stock came from)...
+resistance_min_room_x = 2.5       # ...must be >= this x the stop distance above the close (2:1 with headroom)
+pullback_min_ch1y_pct = 0         # a real uptrend: positive 12 months...
+pullback_min_sma50_over_sma200_pct = 5  # ...the 50-day at least this far above the 200-day...
+pullback_min_rs_6m_pp = 0         # ...and beating SPY over rs_sessions (percentage points)
+rs_sessions = 120                 # ~6 months
 
 [fills]
 # Next-open orders fill at the first OPEN after the decision time (never an earlier price). Local opening

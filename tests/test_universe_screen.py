@@ -66,7 +66,8 @@ def test_score_and_pick(cfg):
             "price_vs_sma50": 0, "rsi": 50, "earnings_date": None}
     good = dict(base, roic=50, roce=50, fcfMargin=30, operatingMargin=30, fScore=8, debtEbitda=0.5, fcfYield=8,
                 earningsYield=8, evEbitda=6, pe=8)
-    pull = dict(base, ch1y=60, price_vs_sma200=15, price_vs_sma50=-2, rsi=42, earnings_date="2026-12-01")
+    pull = dict(base, ch1y=60, price_vs_sma200=15, price_vs_sma50=-2, rsi=42, earnings_date="2026-12-01",
+                sma50=110, sma200=100)
     hot = dict(pull, price_vs_sma50=12, rsi=74)                     # not a pullback: stretched
     soon = dict(pull, earnings_date="2026-10-20")                    # earnings inside the window
     just = dict(base, price_vs_sma50=6, earnings_date="2027-01-20")  # just reported: drift candidate
@@ -298,7 +299,8 @@ def test_tactical_check_confirms_setups_from_history(cfg):
             {"ticker": "P", "drift_cand": None, "pullback_cand": 88, "setup": None, "tactical": None},
             {"ticker": "BAD", "drift_cand": None, "pullback_cand": 80, "setup": None, "tactical": None}]
     hist = {"D": daily([100.0] * 60 + [108.0, 107.0], [1000] * 60 + [3000, 1500]),
-            "NOJUMP": daily([100.0] * 62), "P": daily([70.0 + i for i in range(30)], spread=2.0)}  # steady uptrend
+            "NOJUMP": daily([100.0] * 62), "P": daily([70.0 + i for i in range(30)], spread=2.0),  # steady uptrend
+            "SPY": daily([500.0] * 30)}
 
     class F:
         def section(self, t, page):
@@ -343,7 +345,7 @@ def test_stage1_reads_a_past_earnings_date_as_just_reported(cfg):
     assert not setups.drift_candidate(dict(d, earnings_date="2026-08-01"), tc, "2026-10-07")   # too long ago
     assert not setups.drift_candidate(dict(d, earnings_date="2026-10-20"), tc, "2026-10-07")   # report still ahead
     assert setups.drift_candidate(dict(d, earnings_date="2026-12-15"), tc, "2026-10-07")       # next one far away
-    p = {"price_vs_sma200": 10, "price_vs_sma50": -1, "rsi": 45}
+    p = {"price_vs_sma200": 10, "price_vs_sma50": -1, "rsi": 45, "ch1y": 20, "sma50": 110, "sma200": 100}
     assert setups.pullback_candidate(dict(p, earnings_date="2026-09-30"), tc, "2026-10-07")    # just reported
     assert not setups.pullback_candidate(dict(p, earnings_date="2026-10-20"), tc, "2026-10-07")  # inside 30 days
 
@@ -374,7 +376,37 @@ def test_minor_wiggles_are_not_resistance(cfg):
     import setups
     tc = cfg["tactical"]
     # peak 150 a few weeks ago, then a choppy slide to 100 with small bounces just above the close
-    closes = [100.0 + 5 * i for i in range(11)] + [140, 130, 120, 112, 104, 101, 103, 100, 102, 100, 101, 100]
+    closes = [100.0 + 5 * i for i in range(11)] + [140, 130, 120, 112, 104, 99, 101, 103, 101, 102, 101, 102, 101, 100]
     rows = daily(closes, spread=2.0)
     p = setups.plan("pullback", rows, tc)
     assert setups.structure_problem("pullback", rows, p, tc) is None and p["resistance"]["price"] == 152
+
+
+
+def test_pullback_trend_quality_checks(cfg):
+    import setups
+    tc = cfg["tactical"]
+    d = {"price_vs_sma200": 10, "price_vs_sma50": -1, "rsi": 45, "earnings_date": "2026-12-15",
+         "ch1y": 20, "sma50": 110, "sma200": 100}
+    assert setups.pullback_candidate(d, tc, "2026-10-07")
+    assert not setups.pullback_candidate(dict(d, ch1y=-6.5), tc, "2026-10-07")             # down over 12 months
+    assert not setups.pullback_candidate(dict(d, sma50=101.2), tc, "2026-10-07")           # 50d barely above 200d
+    rise = [80.0 + 2 * i for i in range(12)]
+    # a series of lower highs: three falling bounces
+    rows = daily(rise + [114] + [110, 106, 102, 100, 98, 100] + [104, 108] + [104, 100, 98, 96, 98, 100]
+                 + [102, 104] + [102, 100, 99, 99.5, 100, 100.5], spread=2.0)            # swing highs 116 > 110 > 106
+    p = setups.plan("pullback", rows, tc)
+    assert "series of lower highs" in setups.structure_problem("pullback", rows, p, dict(tc, resistance_min_room_x=0))
+    # a fresh 20-session low in the last 5 sessions
+    rows = daily(rise + [106, 110, 106] + [105 - 0.6 * i for i in range(16)], spread=2.0)  # one-way slide, no swing low yet
+    p = setups.plan("pullback", rows, tc)
+    assert "fresh breakdown" in setups.structure_problem("pullback", rows, p, tc)
+    # completed close vs the averages, and relative strength vs SPY
+    base = rise + [140, 150, 140] + [135, 130, 125, 120, 115, 110, 105, 100, 98, 99, 100, 99.5, 100, 99.8, 100]
+    rows = daily(base, spread=2.0)
+    p = setups.plan("pullback", rows, tc)
+    assert "vs the 50-day" in setups.structure_problem("pullback", rows, p, tc, {"sma50": 110.0, "sma200": 90.0})
+    assert setups.structure_problem("pullback", rows, p, tc, {"sma50": 101.0, "sma200": 90.0}) is None
+    tc2 = dict(tc, rs_sessions=10)
+    spy_up = daily([500.0 + 10 * i for i in range(len(base))])
+    assert "weaker than SPY" in setups.structure_problem("pullback", rows, p, tc2, None, spy_up)

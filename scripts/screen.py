@@ -101,6 +101,7 @@ def score(metrics: dict[str, dict], cfg: dict, asof: str) -> list[dict]:
                      "pullback_cand": trend[t] if trend[t] is not None and setups.pullback_candidate(d, tc, asof) else None,
                      "drift_cand": d.get("price_vs_sma50") if setups.drift_candidate(d, tc, asof) else None,
                      "tactical": None, "setup": None, "setup_detail": None, "setup_skipped": None,
+                     "sma50": d.get("sma50"), "sma200": d.get("sma200"),
                      "earnings_date": d.get("earnings_date")})
     return rows
 
@@ -112,7 +113,12 @@ def tactical_check(rows: list[dict], fetcher, cfg: dict, asof: str) -> list[dict
     tc, n = cfg["tactical"], cfg["screen"].get("tactical_check_top", 0)
     drift = sorted((r for r in rows if r["drift_cand"] is not None), key=lambda r: -r["drift_cand"])[:n]
     pull = sorted((r for r in rows if r["pullback_cand"] is not None), key=lambda r: -r["pullback_cand"])[:n]
-    failed, hist = [], {}
+    failed, hist, spy = [], {}, None
+    if pull:
+        try:  # benchmark for the pullback relative-strength check
+            spy = [x for x in fetcher.section("SPY", "history")["data"]["rows"] if x["date"] < asof]
+        except DataError as e:
+            failed.append({"ticker": "SPY", "url": e.url, "field": e.field})
     for r in {id(x): x for x in drift + pull}.values():
         try:
             data = fetcher.section(r["ticker"], "history")["data"]
@@ -131,7 +137,8 @@ def tactical_check(rows: list[dict], fetcher, cfg: dict, asof: str) -> list[dict
     for r in pull:
         h = hist.get(r["ticker"])
         p = setups.plan("pullback", h, tc) if h and r["setup"] is None else None
-        why = setups.structure_problem("pullback", h, p, tc) if p else None
+        why = setups.structure_problem("pullback", h, p, tc, {"sma50": r.get("sma50"), "sma200": r.get("sma200")},
+                                       spy) if p else None
         if why:
             r["setup_skipped"] = f"pullback: {why}"
         elif p:
