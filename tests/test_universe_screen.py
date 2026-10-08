@@ -331,7 +331,7 @@ def test_index_screen_filters_universe(cfg, monkeypatch):
             raise screen.DataError(url, "test", "no page")
 
     monkeypatch.setattr(screen, "read_universe", lambda: uni)
-    monkeypatch.setattr(screen, "recently_researched", lambda days, asof: set())
+    monkeypatch.setattr(screen, "recently_researched", lambda days, asof, kind=None: set())
     monkeypatch.setattr(screen, "deep_dive", lambda rows, f, c: [])
     res = screen.run(F(), cfg, "2026-10-07", index="SP500")
     assert len(seen) == 1 and "/aaa/" in seen[0] and [x["ticker"] for x in res["failed"]] == ["AAA"]
@@ -410,3 +410,32 @@ def test_pullback_trend_quality_checks(cfg):
     tc2 = dict(tc, rs_sessions=10)
     spy_up = daily([500.0 + 10 * i for i in range(len(base))])
     assert "weaker than SPY" in setups.structure_problem("pullback", rows, p, tc2, None, spy_up)
+
+
+
+def test_recent_core_decision_does_not_hide_a_tactical_setup(cfg, monkeypatch):
+    import screen
+    uni = [{"ticker": "AAA", "name": "A", "indexes": "SP500", "screen": "yes"},
+           {"ticker": "BBB", "name": "B", "indexes": "SP500", "screen": "yes"}]
+    recent = {"CORE": {"AAA"}, "TACTICAL": {"BBB"}}
+    seen = []
+
+    class F:
+        def html(self, url):
+            seen.append(url)
+            raise screen.DataError(url, "test", "no page")
+
+    monkeypatch.setattr(screen, "read_universe", lambda: uni)
+    monkeypatch.setattr(screen, "read_watchlist", lambda: {"ONDS": None, "AAA": None})
+    monkeypatch.setattr(screen, "recently_researched", lambda days, asof, kind=None: recent.get(kind, set()))
+    monkeypatch.setattr(screen, "deep_dive", lambda rows, f, c: [])
+    screen.run(F(), cfg, "2026-10-07")
+    # both still screened (each is blocked for one kind only); the watchlist adds ONDS, not AAA twice
+    assert sorted(u.split("/")[-3] for u in seen) == ["aaa", "bbb", "onds"]
+    fake = lambda m, c, a: [{"ticker": t, "core": 50.0, "pullback_cand": 50.0, "drift_cand": 1.0, "setup": None,  # noqa: E731
+                             "tactical": None, "earnings_date": None} for t in ("AAA", "BBB")]
+    monkeypatch.setattr(screen, "score", fake)
+    monkeypatch.setattr(screen, "tactical_check", lambda rows, f, c, a: [])
+    by = {r["ticker"]: r for r in screen.run(F(), cfg, "2026-10-07")["rows"]}
+    assert by["AAA"]["core"] is None and by["AAA"]["pullback_cand"] == 50.0      # recent CORE: tactical still open
+    assert by["BBB"]["core"] == 50.0 and by["BBB"]["pullback_cand"] is None      # recent TACTICAL: core still open

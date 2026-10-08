@@ -304,6 +304,9 @@ def test_recently_researched_counts_only_logged_decisions(tmp_path, monkeypatch)
     (tmp_path / "portfolio").mkdir()
     (tmp_path / "portfolio" / "decisions.csv").write_text("date,ticker\n2026-10-01,LON:SHEL\n2026-01-01,MSFT\n")
     assert screen.recently_researched(90, "2026-10-07") == {"LON-SHEL"}
+    (tmp_path / "portfolio" / "decisions.csv").write_text("date,ticker,type\n2026-10-01,LON:SHEL,CORE\n2026-10-02,AMD,TACTICAL\n")
+    assert screen.recently_researched(90, "2026-10-07", "CORE") == {"LON-SHEL"}
+    assert screen.recently_researched(90, "2026-10-07", "TACTICAL") == {"AMD"}
 
 
 def test_report_lists_new_initiation_reasons(tmp_path):

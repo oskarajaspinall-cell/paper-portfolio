@@ -150,7 +150,7 @@ custom_file = "universe/custom.txt"   # your own tickers, one per line (optional
 # Valuation multiples are used ONLY here for ranking.
 core_picks = 10                   # new initiations per week from the core ranking
 tactical_picks = 10               # ... and from the tactical ranking (total <= max_new_initiations_per_week)
-exclude_researched_days = 90      # skip names with a research note this recent
+exclude_researched_days = 90      # skip names with a decision this recent, of the SAME kind only (a core verdict doesn't hide a new tactical setup)
 tactical_check_top = 40           # stage 2: daily history (setup check + ATR) for the top N candidates of EACH setup (~3 s each)
 min_metrics_per_pillar = 2
 quality = ["roic", "roce", "fcfMargin", "operatingMargin", "fScore", "-debtEbitda"]   # "-" = lower is better
@@ -244,7 +244,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `bin/py` — project Python launcher (`.venv` locally, `python3` in CI).
 - Mac schedule: `bin/install-mac-schedule` (launchd) → `bin/weekly-local` (Fri 22:00) and `bin/fill-pending` (weekdays 22:30: fill orders + re-price holdings daily; no AI).
 - GitHub Actions: `.github/workflows/screen.yml` (Fri 21:00 UTC), `weekly-review.yml` (Sat 08:00 UTC), `fills.yml` (weekdays 21:30 UTC); one concurrency group; `bin/ci-paused` and `bin/ci-finish` handle PAUSED and commit-or-error-log.
-- `universe/` — `watchlist.txt` (always eligible, optional `ir=` domain), `ftse100.txt` (owner-maintained; `screen=no`), `custom.txt` (your own tickers), `ir_domains.txt` (auto-recorded company domains), `universe.csv` (built locally; not in the public repo).
+- `universe/` — `watchlist.txt` (always eligible and always screened, optional `ir=` domain), `ftse100.txt` (owner-maintained; `screen=no`), `custom.txt` (your own tickers), `ir_domains.txt` (auto-recorded company domains), `universe.csv` (built locally; not in the public repo).
 - `portfolio/` — `state.json` (cash, holdings, pending orders), `ledger.csv`, `rejections.csv`, `valuations.csv`, `decisions.csv`.
 - `research/<SLUG>/` — fact sheets, notes, evaluations. `reports/weekly/` — weekly reports (and `-recap.md` summaries). `reports/screen/` — screens. `reports/sample/` — older simulated sample. `runs/<date>/` — each run's working files and log. `docs/index.html` — dashboard (GitHub Pages).
 - `.claude/agents/` — the subagents (researcher, evaluator, portfolio-manager, weekly-reviewer, mc-parameters). `tests/` — pytest suite (`tests/fixtures/*.html` saved site pages stay local, not in the public repo).

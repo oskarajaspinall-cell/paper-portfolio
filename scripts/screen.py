@@ -32,7 +32,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import ROOT, DataError, Ticker, load_config, page_url  # noqa: E402
+from common import ROOT, DataError, Ticker, load_config, page_url, read_watchlist  # noqa: E402
 from fetch_data import Fetcher, page_nodes, parse_info, parse_statistics  # noqa: E402
 import setups  # noqa: E402
 from universe import read_universe  # noqa: E402
@@ -209,16 +209,18 @@ def core_rank_key(r: dict):
     return (r.get("core_deep") is not None, r.get("core_deep") if r.get("core_deep") is not None else r["core"])
 
 
-def recently_researched(days: int, asof: str) -> set[str]:
+def recently_researched(days: int, asof: str, kind: str | None = None) -> set[str]:
     """Folder slugs of names with a REAL decision in the decision log within `days` (dry runs record
-    no decisions, so their research never blocks a name)."""
+    no decisions, so their research never blocks a name). `kind` (CORE/TACTICAL) counts only decisions of
+    that type: a recent core verdict must not hide a new tactical setup (e.g. a post-earnings jump)."""
     import csv
     log = ROOT / "portfolio" / "decisions.csv"
     if not log.exists():
         return set()
     cutoff = (dt.date.fromisoformat(asof) - dt.timedelta(days=days)).isoformat()
     with log.open() as fh:
-        return {Ticker(r["ticker"]).slug for r in csv.DictReader(fh) if r.get("date", "") >= cutoff}
+        return {Ticker(r["ticker"]).slug for r in csv.DictReader(fh)
+                if r.get("date", "") >= cutoff and (kind is None or r.get("type") == kind)}
 
 
 def pick(rows: list[dict], cfg: dict) -> list[dict]:
@@ -249,9 +251,15 @@ def pick(rows: list[dict], cfg: dict) -> list[dict]:
 def run(fetcher, cfg: dict, asof: str, limit: int | None = None, state: dict | None = None,
         index: str | None = None) -> dict:
     held = set((state or {}).get("holdings", {}))
-    recent = recently_researched(cfg["screen"]["exclude_researched_days"], asof)
-    uni = [r for r in read_universe() if r["screen"] == "yes" and r["ticker"] not in held
-           and Ticker(r["ticker"]).slug not in recent
+    days = cfg["screen"]["exclude_researched_days"]
+    recent_core, recent_tac = recently_researched(days, asof, "CORE"), recently_researched(days, asof, "TACTICAL")
+    rows_u = read_universe()
+    if index is None:  # watchlist names the universe doesn't contain are screened too (owner rule 2026-10-08)
+        known = {r["ticker"] for r in rows_u}
+        rows_u += [{"ticker": t, "name": "", "indexes": "WATCHLIST", "screen": "yes"}
+                   for t in read_watchlist() if t not in known]
+    uni = [r for r in rows_u if r["screen"] == "yes" and r["ticker"] not in held
+           and not (Ticker(r["ticker"]).slug in recent_core and Ticker(r["ticker"]).slug in recent_tac)
            and (index is None or index in r["indexes"].split(";"))]
     if limit:
         uni = uni[:limit]
@@ -265,10 +273,16 @@ def run(fetcher, cfg: dict, asof: str, limit: int | None = None, state: dict | N
         except DataError as e:
             failed.append({"ticker": r["ticker"], "url": e.url, "field": e.field})
     rows = score(metrics, cfg, asof)
+    for r in rows:  # a recent decision blocks only the same kind of research
+        slug = Ticker(r["ticker"]).slug
+        if slug in recent_core:
+            r["core"] = None
+        if slug in recent_tac:
+            r["pullback_cand"] = r["drift_cand"] = None
     deep_failed = deep_dive(rows, fetcher, cfg)
     tac_failed = tactical_check(rows, fetcher, cfg, asof)
     return {"asof": asof, "screened": len(metrics), "failed": failed + deep_failed + tac_failed, "excluded_held": sorted(held),
-            "excluded_recent": sorted(recent), "rows": rows, "names": names, "picks": pick(rows, cfg),
+            "excluded_recent": sorted(recent_core | recent_tac), "rows": rows, "names": names, "picks": pick(rows, cfg),
             "deep_dived": sum(1 for r in rows if r.get("history") is not None)}
 
 

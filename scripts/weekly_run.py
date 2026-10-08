@@ -205,9 +205,10 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
 
         cap = cfg["agents"]["max_new_initiations_per_week"] if max_new is None else max_new
         from screen import recently_researched
-        recent = recently_researched(cfg["screen"]["exclude_researched_days"], asof)
+        days = cfg["screen"]["exclude_researched_days"]
+        recent = {k: recently_researched(days, asof, k) for k in ("CORE", "TACTICAL")}  # same kind only
         picks = [p for p in screen_picks(asof) if p["ticker"] not in state["holdings"]
-                 and Ticker(p["ticker"]).slug not in recent]
+                 and Ticker(p["ticker"]).slug not in recent.get(p["type"], set())]
         manifest["skipped"] = []
 
         def initiate(p):
