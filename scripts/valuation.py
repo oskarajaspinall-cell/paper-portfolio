@@ -9,7 +9,8 @@ method). Company figures come ONLY from the stockanalysis.com pages the fact she
 10-year Treasury (macro exception). Analyst targets, forward estimates and stockanalysis.com's own
 calculators are never used: the DCF and EPS x P/E maths are replicated here.
 
-Assumptions are mechanical, from the stock's own history (bear / base / bull), and the evaluator may
+Cost of equity = FRED 10y + clamped beta x ERP + an owner-set country risk premium keyed by the reporting
+currency ([valuation.country_risk_premium]). Assumptions are mechanical, from the stock's own history (bear / base / bull), and the evaluator may
 override one with a cited reason (`valuation_overrides` in its Decision block). Models:
 - dcf / dcf_norm: FCFF (FCF - stock-based pay + after-tax interest paid - after-tax interest earned)
   margin (financials: net income at the cost of equity, no net cash: their cash flow is distorted) x revenue path; growth starts at the scenario
@@ -20,7 +21,8 @@ override one with a cited reason (`valuation_overrides` in its Decision block). 
   CAGR and terminal, minus `bear_growth_haircut`, lowest margin; bull = the stronger CAGR (capped),
   highest margin. Reverse DCF: the growth the price implies at the base margin.
 - fcfe: the same path on levered FCF, discounted at the cost of equity, no net cash added.
-- pe: TTM diluted EPS x own 5y min/median/max P/E (the stockanalysis Fair Value calculator's maths).
+- pe: TTM diluted EPS x own 5y min/median/max P/E (the stockanalysis Fair Value calculator's maths). If TTM
+  EPS (or EBITDA) is > `peak_earnings_x` x its 5y median, bear/base use the 5y average instead (peak guard).
 - pb_roe: BVPS x (ROE - g)/(ke - g) with ROE at the 5y min/median/max (capped).
 - ev_ebitda, ev_revenue: TTM figure x own 5y min/median/max multiple, + net cash, per share.
 - ddm: Gordon growth on the dividend per share.
@@ -129,9 +131,15 @@ def clamp(x, lo, hi):
     return max(lo, min(hi, x))
 
 
-def cost_of_equity(rf: float, beta: float | None, vc: dict) -> float:
+def country_risk(fin_ccy: str | None, vc: dict) -> float:
+    """Owner-set country risk premium (fraction), keyed by the reporting currency."""
+    crp = vc.get("country_risk_premium") or {}
+    return float(crp.get(fin_ccy or "", crp.get("default", 0.0))) / 100
+
+
+def cost_of_equity(rf: float, beta: float | None, vc: dict, crp: float = 0.0) -> float:
     lo, hi = vc["beta_clamp"]
-    return rf + clamp(beta if beta is not None else 1.0, lo, hi) * vc["erp"] / 100
+    return rf + clamp(beta if beta is not None else 1.0, lo, hi) * vc["erp"] / 100 + crp
 
 
 def wacc(inp: dict, ke: float, vc: dict) -> float:
@@ -239,7 +247,7 @@ def model_dcf(inp, vc, kind, ov):
         mg[s] = ov.get((s, "margin"), mg[s])
     if mg["base"] <= 0:
         return {"status": "n/m", "why": "base cash-flow margin is negative"}
-    ke = cost_of_equity(inp["rf"], inp["beta"], vc)
+    ke = cost_of_equity(inp["rf"], inp["beta"], vc, country_risk(inp["fin_ccy"], vc))
     rate = ke if equity_basis else wacc(inp, ke, vc)
     add_cash = 0.0 if equity_basis else nc
     vals = {s: dcf_per_share(rev_t, mg[s], gs[s], rate, vc, add_cash, shares) for s in SCEN}
@@ -262,8 +270,16 @@ def model_multiple(inp, vc, metric, mult, per_share_ev, label, ov):
         return {"status": "n/m", "why": f"fewer than 2 positive years of {label} multiples"}
     ms = {s: ov.get((s, "multiple"), v) for s, v in zip(SCEN, t)}
     nc = g["netcash"][0] or 0.0
-    vals = {s: ((x * ms[s] + nc) / shares if per_share_ev else x * ms[s]) for s in SCEN}
-    return {"status": "ok", "values": vals, "assumptions": {"multiple": ms, f"ttm_{metric}": x}}
+    # peak-earnings guard: a multiple from normal years applied to a one-off spike overstates value
+    fy = [v for v in g[metric][1][:5] if v is not None and v > 0]
+    peak = metric in ("eps", "ebitda") and len(fy) >= 3 and x > vc["peak_earnings_x"] * stats.median(fy)
+    xs = {"bear": min(x, sum(fy) / len(fy)), "base": sum(fy) / len(fy), "bull": x} if peak else {s: x for s in SCEN}
+    vals = {s: ((xs[s] * ms[s] + nc) / shares if per_share_ev else xs[s] * ms[s]) for s in SCEN}
+    a = {"multiple": ms, f"ttm_{metric}": x}
+    if peak:
+        a["peak_earnings"] = (f"TTM {label} is {x / stats.median(fy):.1f}x its 5y median: bear/base use the 5y "
+                              f"average ({sum(fy) / len(fy):,.4g}), bull the TTM figure")
+    return {"status": "ok", "values": vals, "assumptions": a}
 
 
 def model_pb_roe(inp, vc, ov):
@@ -274,7 +290,7 @@ def model_pb_roe(inp, vc, ov):
     t = triple(g["roe"][1][:5])
     if t is None:
         return {"status": "n/m", "why": "fewer than 2 positive years of ROE"}
-    ke, gt = cost_of_equity(inp["rf"], inp["beta"], vc), vc["terminal_growth"] / 100
+    ke, gt = cost_of_equity(inp["rf"], inp["beta"], vc, country_risk(inp["fin_ccy"], vc)), vc["terminal_growth"] / 100
     roes = {s: ov.get((s, "roe"), min(v, vc["roe_cap"] / 100)) for s, v in zip(SCEN, t)}
     pbs = {s: ((r - gt) / (ke - gt) if r > gt else r / ke) for s, r in roes.items()}
     return {"status": "ok", "values": {s: bvps * pbs[s] for s in SCEN}, "cost_of_equity": ke,
@@ -285,7 +301,7 @@ def model_ddm(inp, vc, ov):
     dps = inp["dps"]  # statistics page: already in the QUOTE currency
     if not dps or dps <= 0:
         return {"status": "n/m", "why": "no dividend"}
-    ke, gt = cost_of_equity(inp["rf"], inp["beta"], vc), vc["terminal_growth"] / 100
+    ke, gt = cost_of_equity(inp["rf"], inp["beta"], vc, country_risk(inp["fin_ccy"], vc)), vc["terminal_growth"] / 100
     gs = {"bear": gt - 0.01, "base": gt, "bull": min(gt + 0.01, ke - 0.01)}
     gs = {s: ov.get((s, "growth"), v) for s, v in gs.items()}
     return {"status": "ok", "quote_ccy": True, "values": {s: dps * (1 + gs[s]) / (ke - gs[s]) for s in SCEN},
@@ -368,6 +384,7 @@ def fair_value(inp: dict, industry: str | None, vc: dict, decision: dict | None 
         if r["status"] == "ok" and len(used) < 2:
             used.append(tried[-1])
     out = {"industry": im, "methods": tried, "price": inp["price"], "risk_free": inp["rf"],
+           "country_risk_premium": country_risk(inp["fin_ccy"], vc), "reporting_currency": inp["fin_ccy"],
            "terminal_growth": vc["terminal_growth"] / 100,
            "overrides": [{"method": k[0], "scenario": k[1], "field": k[2], "value": v} for k, v in ov.items()]}
     if not used:
@@ -388,7 +405,9 @@ def render_md(fv: dict, ccy: str, ticker: str, asof: str) -> str:
     L = [f"# Fair value: {ticker} — {asof}",
          f"Industry: {im['industry'] or '[data unavailable]'} [OV]"
          + ("" if im["known"] else " (not in the owner's table: DCF / EV/EBITDA default)")
-         + f" · best method: {im['best']} · 2nd: {im['second']} · risk-free {fv['risk_free'] * 100:.2f}% (FRED DGS10)",
+         + f" · best method: {im['best']} · 2nd: {im['second']} · risk-free {fv['risk_free'] * 100:.2f}% (FRED DGS10)"
+         + f" · country risk premium {fv.get('country_risk_premium', 0) * 100:.1f}% (owner-set, reports in "
+           f"{fv.get('reporting_currency')})",
          "Inform-only (owner rule): assumptions from the stock's own 5-year history; never an analyst target.", ""]
     if fv.get("fair_value"):
         w = fv["weights"]
@@ -427,7 +446,8 @@ def fact_sheet_section(fv: dict, ccy: str) -> list[str]:
          f"Industry {im['industry'] or '[data unavailable]'} [OV]"
          + ("" if im["known"] else " (not in the owner's table: DCF / EV/EBITDA default)")
          + f"; owner's method table: best {im['best']}, 2nd {im['second']}. Risk-free {fv['risk_free'] * 100:.2f}% "
-           "(FRED 10y Treasury, https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10).",
+           "(FRED 10y Treasury, https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10); country risk premium "
+           f"{fv.get('country_risk_premium', 0) * 100:.1f}% (owner-set assumption for {fv.get('reporting_currency')} reporters).",
          "| Item | Bear | Base | Bull | Src |", "|---|---|---|---|---|"]
     if fv.get("fair_value"):
         L += [f"| Fair value ({ccy}) | {f(fv['fair_value']['bear'])} | {f(fv['fair_value']['base'])} | "

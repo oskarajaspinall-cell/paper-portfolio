@@ -1,5 +1,5 @@
 # Fair value: ZTS — 2026-10-07
-Industry: Drug Manufacturers - Specialty & Generic [OV] · best method: DCF / rNPV · 2nd: P/E · risk-free 5.31% (FRED DGS10)
+Industry: Drug Manufacturers - Specialty & Generic [OV] · best method: DCF / rNPV · 2nd: P/E · risk-free 5.31% (FRED DGS10) · country risk premium 0.0% (owner-set, reports in USD)
 Inform-only (owner rule): assumptions from the stock's own 5-year history; never an analyst target.
 
 | | Bear | Base | Bull |

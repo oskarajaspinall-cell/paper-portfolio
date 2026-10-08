@@ -1,5 +1,5 @@
 # Fair value: OTIS — 2026-10-07
-Industry: Specialty Industrial Machinery [OV] · best method: DCF · 2nd: EV/EBITDA · risk-free 5.31% (FRED DGS10)
+Industry: Specialty Industrial Machinery [OV] · best method: DCF · 2nd: EV/EBITDA · risk-free 5.31% (FRED DGS10) · country risk premium 0.0% (owner-set, reports in USD)
 Inform-only (owner rule): assumptions from the stock's own 5-year history; never an analyst target.
 
 | | Bear | Base | Bull |

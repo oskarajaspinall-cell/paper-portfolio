@@ -89,7 +89,29 @@ base_growth_cap = [-5, 20]        # % a year: base = halfway between the 3y/5y r
 bear_growth_haircut = 3           # percentage points off the bear case's year-1 growth
 bull_growth_cap = 25
 roe_cap = 25                      # %, sustainable ROE ceiling for P/B + ROE
+peak_earnings_x = 1.5             # TTM EPS/EBITDA above this x its 5y median = a peak: bear/base use the 5y average
 blend_weights = [2, 1]            # best method : 2nd-best method
+
+[valuation.country_risk_premium]
+# OWNER-SET ASSUMPTIONS (% added to the cost of equity), keyed by the currency the company REPORTS in (where
+# its business really is; incorporation country is unreliable: Tencent/NetEase show as Cayman Islands, PDD as
+# Ireland). No official source publishes these; sovereign-rating-based estimates tend to be lower than what
+# market prices imply for China (policy, property, capital-control risk). Edit freely.
+USD = 0.0
+CAD = 0.0
+CHF = 0.0
+EUR = 0.5
+GBP = 0.5
+JPY = 0.5
+AUD = 0.5
+TWD = 1.0
+KRW = 1.0
+SGD = 0.5
+HKD = 2.0
+INR = 2.0
+CNY = 3.5
+BRL = 3.0
+default = 1.5                     # any other reporting currency
 
 [fills]
 # Next-open orders fill at the first OPEN after the decision time (never an earlier price). Local opening

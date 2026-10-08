@@ -115,3 +115,24 @@ def test_override_checks():
     assert any("cite" in e for e in override_problems([dict(ok, reason="feels right")]))
     assert any("field" in e for e in override_problems([dict(ok, field="multiple")]))
     assert any("scenario" in e for e in override_problems([dict(ok, scenario="best")]))
+
+
+def test_country_risk_premium_by_reporting_currency(vc):
+    assert V.country_risk("USD", vc) == 0.0
+    assert V.country_risk("CNY", vc) == pytest.approx(vc["country_risk_premium"]["CNY"] / 100)
+    assert V.country_risk("ZAR", vc) == pytest.approx(vc["country_risk_premium"]["default"] / 100)
+    us = V.run_model("pb_roe", inputs(), vc, {})
+    cn = V.run_model("pb_roe", inputs(fin_ccy="CNY"), vc, {})
+    assert cn["cost_of_equity"] == pytest.approx(us["cost_of_equity"] + V.country_risk("CNY", vc))
+    assert cn["values"]["base"] < us["values"]["base"]
+    assert V.fair_value(inputs(fin_ccy="CNY"), "Banks - Regional", vc)["country_risk_premium"] > 0
+
+
+
+def test_peak_earnings_guard(vc):
+    spike = inputs(g={"eps": (5.0, [2.0, 1.8, 1.6, 1.5, 1.4])})  # TTM 5.0 vs 5y median 1.6
+    r = V.run_model("pe", spike, vc, {})
+    avg = sum([2.0, 1.8, 1.6, 1.5, 1.4]) / 5
+    assert r["values"]["base"] == pytest.approx(avg * 15.0) and r["values"]["bull"] == pytest.approx(5.0 * 20.0)
+    assert "peak_earnings" in r["assumptions"]
+    assert "peak_earnings" not in V.run_model("pe", inputs(), vc, {})["assumptions"]
