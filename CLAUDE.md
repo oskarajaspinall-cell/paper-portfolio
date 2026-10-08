@@ -71,6 +71,7 @@ drift_time_limit_weeks = 8
 pullback_sma50_band_pct = [-5, 2] # price vs its 50-day average
 pullback_rsi_band = [30, 55]      # 14-day RSI: cooled off, not broken
 pullback_min_days_to_earnings = 30
+resistance_lookback_sessions = 63 # room check: the 3-month peak must be >= min_reward_risk x the stop distance above the close
 
 [fills]
 # Next-open orders fill at the first OPEN after the decision time (never an earlier price). Local opening

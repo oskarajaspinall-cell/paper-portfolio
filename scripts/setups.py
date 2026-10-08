@@ -13,10 +13,45 @@ sessions only) and statistics-page metrics. No model calls, no network.
   dipped back to around its 50-day average without being overbought, and no earnings for
   `pullback_min_days_to_earnings`. Stop: last close minus `stop_atr_multiple` x ATR.
 - Every setup's minimum target is last close + `min_reward_risk` x (last close - stop).
+- Structure checks (owner-approved 2026-10-08, so research isn't spent on trades that can't pass):
+  room to resistance (the highest high of the last `resistance_lookback_sessions`, i.e. the peak the
+  stock came from, must be at least `min_reward_risk` x the stop distance above the close; at new highs
+  or within one ATR of it = clear; minor wiggles inside a pullback are not resistance) and, for pullbacks, an intact uptrend
+  (the close is still above the most recent swing low; swing points are the fact sheet's).
 """
 from __future__ import annotations
 
 import datetime as dt
+
+
+def swing_points(rows: list[dict], half_window: int = 5, keep: int | None = 3) -> dict:
+    """Pivot highs/lows: a bar whose high (low) is the extreme of +/-half_window bars."""
+    highs, lows = [], []
+    for i in range(half_window, len(rows) - half_window):
+        win = rows[i - half_window:i + half_window + 1]
+        if rows[i]["high"] is not None and rows[i]["high"] == max(r["high"] or 0 for r in win):
+            highs.append((rows[i]["date"], rows[i]["high"]))
+        if rows[i]["low"] is not None and rows[i]["low"] == min(r["low"] or float("inf") for r in win):
+            lows.append((rows[i]["date"], rows[i]["low"]))
+    return {"highs": highs[-keep:] if keep else highs, "lows": lows[-keep:] if keep else lows}
+
+
+def structure_problem(setup: str, rows: list[dict], p: dict, tc: dict) -> str | None:
+    """Why this setup can't make a valid trade, or None. Records the nearest resistance on `p`."""
+    sw = swing_points(rows, keep=None)
+    close, risk = p["close"], p["close"] - p["stop"]
+    recent = [r for r in rows[-int(tc["resistance_lookback_sessions"]):] if r.get("high") is not None]
+    peak = max(recent, key=lambda r: r["high"]) if recent else None
+    # within one ATR of the peak = effectively at the high (the latest bars' own highs are not resistance)
+    above = [(peak["high"], peak["date"])] if peak and peak["high"] - close > p["atr14"] else []
+    p["resistance"] = {"price": above[0][0], "date": above[0][1],
+                       "room_x": round((above[0][0] - close) / risk, 2)} if above else None
+    if setup == "pullback" and sw["lows"] and close <= sw["lows"][-1][1]:
+        return f"broke its most recent swing low {sw['lows'][-1][1]:g} ({sw['lows'][-1][0]}): uptrend not intact"
+    if above and above[0][0] - close < tc["min_reward_risk"] * risk:
+        return (f"3-month peak {above[0][0]:g} ({above[0][1]}) is only {p['resistance']['room_x']:.1f}x the "
+                f"stop distance away (needs {tc['min_reward_risk']:g}x)")
+    return None
 
 
 def atr(rows: list[dict], n: int = 14) -> float | None:
@@ -109,7 +144,10 @@ def describe(setup: str, p: dict, signal: dict | None = None) -> str:
     """One line for the researcher/evaluator prompt and the screen report."""
     base = (f"last close {p['close']:g} ({p['close_date']}), ATR(14) {p['atr14']:g} ({p['atr_pct']:.1f}%), "
             f"suggested stop {p['stop']:g} ({p['stop_pct']:+.1f}%), minimum 2:1 target {p['min_target']:g}, "
-            f"risk-based size {p['size_pct']:.1f}%")
+            f"risk-based size {p['size_pct']:.1f}%; "
+            + (f"3-month peak (resistance) {p['resistance']['price']:g} ({p['resistance']['date']}), "
+               f"{p['resistance']['room_x']:.1f}x the stop distance" if p.get("resistance")
+               else "at its 3-month high (clear overhead)"))
     if setup == "drift" and signal:
         return (f"post-earnings drift: {signal['date']} closed {signal['jump_pct']:+.1f}% on {signal['volume_x']:.1f}x "
                 f"average volume, {signal['sessions_ago']} session(s) ago, still holding {signal['held_pct']:.0f}% of the "

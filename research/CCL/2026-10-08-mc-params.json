@@ -1,0 +1,56 @@
+{
+  "ticker": "CCL",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/CCL/2026-10-08-evaluation.md Decision JSON, scenarios.bull.probability"},
+      "probability_evidence": "The 2026-09-29 reaction (+13.4% on 3.7x volume) still held 135% of the jump six sessions later, and TTM ROIC (11.6%), FCF margin (11.5%) are at 5-year highs with net debt/EBITDA improved to 3.28x from 4.55x (research/CCL/2026-10-08.md catalyst section; research/CCL/factsheet-2026-10-08.md RA, CF, IS).",
+      "target_price_12m": {"value": 34.03, "cite": "research/CCL/2026-10-08-evaluation.md Decision JSON, scenarios.bull.target_price_12m (52-week high, HI)"},
+      "target_band": {"value": 0.1717, "cite": "Fact-sheet valuation table 5y-median row (research/CCL/factsheet-2026-10-08.md): re-pricing the bull scenario's 'EV/EBITDA to 5y median' logic through P/E (14.6x -> $33.19), EV/EBITDA (10.1x -> $32.61) and P/FCF (18.8x -> $44.29) spans $32.61-$44.29; half that spread ($5.84) / the $34.03 target = 0.1717."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/CCL/2026-10-08-evaluation.md Decision JSON, scenarios.base.probability"},
+      "probability_evidence": "Price is still -4.6% below the 200-day MA (27.42) and the 50-day MA is -8.2% below the 200-day -- the 12-month downtrend (-10.7%; -26.4pp vs SPY) has not reversed, making a partial multiple recovery (not a re-rating) the modal path (research/CCL/factsheet-2026-10-08.md Price section).",
+      "target_price_12m": {"value": 27.74, "cite": "research/CCL/2026-10-08-evaluation.md Decision JSON, scenarios.base.target_price_12m (P/E to 5y min, RA; capped by 200-day MA, HI)"},
+      "target_band": {"value": 0.0648, "cite": "Fact-sheet valuation table 5y-min row (research/CCL/factsheet-2026-10-08.md): the base scenario's 'P/E to 5y minimum' (12.2x -> $27.74) vs the same minimum-tier logic through EV/EBITDA (8.3x -> $26.80) and P/FCF (12.9x -> $30.36) spans $26.80-$30.36; half that spread ($1.80) / the $27.74 target = 0.0648."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/CCL/2026-10-08-evaluation.md Decision JSON, scenarios.bear.probability"},
+      "probability_evidence": "Macro overlay's small bear tilt (US 10y real yield +0.61pp ~3m to 2.91%; US HY spread +0.36pp ~3m to 3.03%, research/CCL/2026-10-08-macro.md) combined with beta 2.38 and Altman Z 1.42 (distress zone, research/CCL/factsheet-2026-10-08.md ST) raised the bear weighting.",
+      "target_price_12m": {"value": 21.45, "cite": "research/CCL/2026-10-08-evaluation.md Decision JSON, scenarios.bear.target_price_12m (52-week low, HI)"},
+      "target_band": {"value": 0.0838, "cite": "Fact-sheet valuation table 5y-min row (research/CCL/factsheet-2026-10-08.md), the only grounded severe-tier anchors available: P/E min 12.2x -> $27.74, EV/EBITDA min 8.3x -> $26.80, P/FCF min 12.9x -> $30.36 span $26.80-$30.36; half that spread ($1.80) / the $21.45 technical-level bear target = 0.0838."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news (research/CCL/2026-10-08-mc-inputs.json factor_news.SPY): record highs driven narrowly by tech (WSJ, CNBC 2026-10-06) against a same-week pullback on rising yields and a large bearish put-spread trade (Reuters, TipRanks, CNBC 2026-10-07) -- no clear direction, so set to 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/CCL/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "Macro overlay dominant_chain (research/CCL/2026-10-08-macro.md): rising real yields and widening HY spreads; DFII10 (US 10y real yield) +0.61pp ~3m to 2.91% (2026-10-06); factor_news.IEF headlines (research/CCL/2026-10-08-mc-inputs.json) report a 'bond rout deepening' and the 30-year yield at its highest since 2002 -- a modest negative tilt for a 7-10y Treasury ETF whose price falls as yields rise."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/CCL/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings surprise",
+      "reason": "The trade's entire catalyst is a post-earnings drift off the 2026-09-29 beat (research/CCL/2026-10-08.md, 'Post-earnings drift' catalyst); the next quarterly report could reproduce a large surprise move, up or down, as several past quarters have.",
+      "cite": "research/CCL/2026-10-08.md section 1 (catalyst); research/CCL/factsheet-2026-10-08.md Price section (earnings-type reaction row)",
+      "annual_probability": {"value": 0.68, "cite": "5 of the last 20 quarterly earnings weeks in event_weeks (research/CCL/2026-10-08-mc-inputs.json) moved >=15% in magnitude (2021-12-20, 2022-09-26, 2023-06-26, 2024-06-24, 2026-09-28) = 25% per quarter; P(at least one such quarter in 12 months) = 1-(1-0.25)^4 = 0.68."},
+      "impact": {"value": -0.2145, "cite": "Matches the Q3 2022 earnings-release week move exactly (research/CCL/2026-10-08-mc-inputs.json event_weeks / largest_falls, week 2022-09-26)."},
+      "analogue": {"week": "2022-09-26", "move": -0.2145},
+      "assumption": null
+    },
+    {
+      "name": "Market-wide risk-off shock (VIX spike)",
+      "reason": "The macro overlay names a VIX spike/risk-off event as a refresh trigger that would hit this high-beta (2.38) name disproportionately, distinct from the gradual rising-real-yield/HY-spread drift already reflected in the bear scenario and the IEF factor move.",
+      "cite": "research/CCL/2026-10-08-macro.md refresh_triggers: 'VIX spikes (risk-off), which would hit this high-beta (2.38) name disproportionately'",
+      "annual_probability": {"value": 0.70, "cite": "6 of the 7 weekly moves <=-15% in the 5-year weekly history (2021-10-18 to 2026-09-28, research/CCL/2026-10-08-mc-inputs.json all_weekly_moves/event_weeks) were not earnings weeks, i.e. ~1.2/yr; P(at least one in 12 months) = 1-e^-1.2 = 0.70."},
+      "impact": {"value": -0.1826, "cite": "Matches a non-earnings weekly fall exactly (research/CCL/2026-10-08-mc-inputs.json largest_falls, week 2026-03-02; no earnings_release event that week per event_weeks)."},
+      "analogue": {"week": "2026-03-02", "move": -0.1826},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": 0.015, "cite": "research/CCL/factsheet-2026-10-08.md Price section: price +3.9% above the 50-day MA, RSI(14) 58.9 (neutral, room to extend), and the 2026-09-29 earnings reaction still holding 135% of the jump six sessions later -- a modest near-term upward tilt consistent with the post-earnings-drift catalyst."}
+}

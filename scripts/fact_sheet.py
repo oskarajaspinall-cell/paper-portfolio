@@ -100,15 +100,9 @@ def momentum(rows: list[dict], months: int) -> dict | None:
 
 
 def swing_points(rows: list[dict], half_window: int = 5, keep: int = 3) -> dict:
-    """Pivot highs/lows: a bar whose high (low) is the extreme of +/-half_window bars."""
-    highs, lows = [], []
-    for i in range(half_window, len(rows) - half_window):
-        win = rows[i - half_window:i + half_window + 1]
-        if rows[i]["high"] is not None and rows[i]["high"] == max(r["high"] or 0 for r in win):
-            highs.append((rows[i]["date"], rows[i]["high"]))
-        if rows[i]["low"] is not None and rows[i]["low"] == min(r["low"] or float("inf") for r in win):
-            lows.append((rows[i]["date"], rows[i]["low"]))
-    return {"highs": highs[-keep:], "lows": lows[-keep:]}
+    """Pivot highs/lows (shared with the tactical screen: scripts/setups.py)."""
+    import setups
+    return setups.swing_points(rows, half_window, keep)
 
 
 SELL_SIDE = re.compile(

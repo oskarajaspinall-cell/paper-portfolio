@@ -1,0 +1,47 @@
+{
+  "ticker": "TGT",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "RSI(14) 42 and price 3.6% below the 50-day MA sit squarely in the pullback band while the 12-month uptrend (+70.5%) and +54.8pp relative strength vs SPY (12m) remain intact; P/E of 15.7x sits at only the 18th percentile of its 5y range and 57% below the peer median, so de-rating risk is limited (factsheet-2026-10-08.md Price & Valuation tables; evaluation.md bull case).",
+      "target_price_12m": {"value": 170.75, "cite": "evaluation.md Decision JSON scenarios.bull.target_price_12m, = factsheet-2026-10-08.md 52-week high (170.75, [HI])"},
+      "target_band": {"value": 0.0358, "cite": "Half the spread of implied prices when the bull target's implied P/E percentile (170.75/EPS=17.76x -> 32.4% of the 12.9x-27.9x 5y P/E range, factsheet Valuation table) is applied at the same percentile to the P/FCF range (14.1x-20.5x) and to EV/EBITDA (8.0x-14.4x) net-debt-bridged (TTM net debt/EBITDA 1.83x): implied prices 170.75 (P/E) / 158.51 (P/FCF) / 160.14 (EV/EBITDA) -> half-spread 6.11 / target 170.75 = 0.0358; below the 0.287 residual vol cap (mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "EV/EBITDA (9.6x) sits almost exactly at its 5y median (9.7x) and operating margin has stabilized near 5.0% TTM after the 5y decline (8.5%->5.0%), consistent with a roughly flat 12-month outcome (factsheet-2026-10-08.md Valuation/Quality tables; evaluation.md base case).",
+      "target_price_12m": {"value": 150.92, "cite": "evaluation.md Decision JSON scenarios.base.target_price_12m, = factsheet-2026-10-08.md last completed close (150.92 on 2026-10-07, [HI])"},
+      "target_band": {"value": 0.0261, "cite": "Half the spread of implied prices at the base case's current P/E percentile (15.7x -> 18.7% of the 12.9x-27.9x 5y range) applied to P/FCF (14.1x-20.5x) and EV/EBITDA (8.0x-14.4x, net-debt-bridged 1.83x): implied prices 150.92 (P/E) / 149.89 (P/FCF) / 143.05 (EV/EBITDA) -> half-spread 3.94 / target 150.92 = 0.0261; below the 0.287 residual vol cap (mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "Close (150.92) sits below both recent swing lows (153.55, 153.96), breaking the clean bounce pattern; the dip was triggered by TGT's own margin-dilutive cut of prices on ~2,000 items layered on a 5-year margin decline (operating margin 8.5%->5.0%, ROIC 31.8%->13.2%); short interest rose 22.3% MoM; and the macro overlay's moderate bear tilt (real yields +61bp/3m, HY spreads +36bp/3m) raised the bear weight (evaluation.md bear case; research/TGT/2026-10-08-macro.md macro_tilt).",
+      "target_price_12m": {"value": 124.0, "cite": "evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.0740, "cite": "Half the spread of implied prices at the bear case's stated P/E percentile (5y minimum 12.9x -> 0% of the 12.9x-27.9x range, evaluation.md bear basis) applied to P/FCF (14.1x-20.5x) and EV/EBITDA (8.0x-14.4x, net-debt-bridged 1.83x): implied prices 124.0 (P/E) / 138.18 (P/FCF) / 119.84 (EV/EBITDA) -> half-spread 9.17 / target 124.0 = 0.0740; below the 0.287 residual vol cap (mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed over the same week: record highs (ETF Trends 2026-10-07 'Combined Assets in SPY, SPYM Cross $1 Trillion'; Bloomberg/CNBC 'S&P 500 Hits Record High') alongside explicit warnings the rally is narrow and fragile (TipRanks 2026-10-07 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields'; CNBC 2026-10-07 'Two big bearish trades point to skepticism'; WSJ 2026-10-06 'Powered by Tech-and Not Much Else'); no net direction supported, set to 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "research/TGT/2026-10-08-macro.md dominant_chain and macro_tilt (direction: toward bear, moderate): 10y real yield (DFII10) +61bp/3m, 10y nominal (DGS10) +72bp/3m, fed funds +25bp/1m (a rise, not a cut), and DGS2 (4.79%) ~91bp above DFF (3.88%) implying no near-term cuts priced ('higher-for-longer'); consistent with mc-inputs.json factor_news.IEF headlines ('US 30-Year Yields Return to 2002 High', 'Global Bond Markets Sell Off', 'The Bond Rout Is Deepening'). A modest further yield backup implies a modest IEF price decline; kept within the mandated modest range given mixed headlines also showing a partial yield pullback (ETF Trends 2026-10-02, Guardian 2026-10-02)."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Earnings-day margin-miss reaction",
+      "reason": "Next earnings (Nov 18, 2026) is the explicit de-risking deadline for this tactical trade; a 5-year margin decline (operating margin 8.5%->5.0% TTM, ROIC 31.8%->13.2%) and the new price cuts on ~2,000 items raise the risk that an earnings print disappoints on margin.",
+      "cite": "research/TGT/2026-10-08.md section 4 ('Time limit: 2026-11-18 (next earnings date...) exit before the print'); evaluation.md bear case ('operating margin 8.5% to 5.0% TTM'); factsheet-2026-10-08.md Quality table and Price section (Next earnings date).",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.event_weeks lists ~20 quarterly earnings_release weeks since 2021-11; only 1 produced a move as large and negative as the analogue (2024-11-18, -0.1723), vs 1 large positive (2023-11-13, +0.2114) -> ~1 occurrence per 5 years of history = 0.2/year for a move of this magnitude."},
+      "impact": {"value": -0.1723, "cite": "Matches the analogue week's move exactly (largest negative earnings-reaction week in the 5y history)."},
+      "analogue": {"week": "2024-11-18", "move": -0.1723},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

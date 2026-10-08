@@ -298,7 +298,7 @@ def test_tactical_check_confirms_setups_from_history(cfg):
             {"ticker": "P", "drift_cand": None, "pullback_cand": 88, "setup": None, "tactical": None},
             {"ticker": "BAD", "drift_cand": None, "pullback_cand": 80, "setup": None, "tactical": None}]
     hist = {"D": daily([100.0] * 60 + [108.0, 107.0], [1000] * 60 + [3000, 1500]),
-            "NOJUMP": daily([100.0] * 62), "P": daily([100.0] * 30, spread=2.0)}
+            "NOJUMP": daily([100.0] * 62), "P": daily([70.0 + i for i in range(30)], spread=2.0)}  # steady uptrend
 
     class F:
         def section(self, t, page):
@@ -311,7 +311,8 @@ def test_tactical_check_confirms_setups_from_history(cfg):
     assert by["D"]["setup"] == "drift" and by["D"]["tactical"] == pytest.approx(8.0)
     assert "post-earnings drift" in by["D"]["setup_detail"]
     assert by["NOJUMP"]["setup"] is None
-    assert by["P"]["setup"] == "pullback" and by["P"]["tactical"] == 88 and "suggested stop 90" in by["P"]["setup_detail"]
+    assert by["P"]["setup"] == "pullback" and by["P"]["tactical"] == 88 and "suggested stop 89" in by["P"]["setup_detail"]
+    assert "clear overhead" in by["P"]["setup_detail"]  # a steady uptrend sits at its 3-month high
     assert [f["ticker"] for f in failed] == ["BAD"] and by["BAD"]["setup"] is None
 
 
@@ -345,3 +346,35 @@ def test_stage1_reads_a_past_earnings_date_as_just_reported(cfg):
     p = {"price_vs_sma200": 10, "price_vs_sma50": -1, "rsi": 45}
     assert setups.pullback_candidate(dict(p, earnings_date="2026-09-30"), tc, "2026-10-07")    # just reported
     assert not setups.pullback_candidate(dict(p, earnings_date="2026-10-20"), tc, "2026-10-07")  # inside 30 days
+
+
+
+def test_structure_checks_room_to_resistance_and_intact_uptrend(cfg):
+    import setups
+    tc = cfg["tactical"]
+    rise = [80.0 + 2 * i for i in range(12)]                       # 80 .. 102, no pivots
+    fall = lambda top, n: [top - (top - 100) * (i + 1) / n for i in range(n)]  # noqa: E731  gentle slide to 100
+    # a swing high (high 112) just above, then a pullback to 100: stop ~90, 2:1 needs ~120 -> no room
+    rows = daily(rise + [106, 110, 106] + fall(105, 15), spread=2.0)
+    p = setups.plan("pullback", rows, tc)
+    why = setups.structure_problem("pullback", rows, p, tc)
+    assert "3-month peak 112" in why and p["resistance"]["price"] == 112
+    # the last high far above the 2:1 target: room
+    rows = daily(rise + [140, 150, 140] + fall(135, 15), spread=2.0)
+    p = setups.plan("pullback", rows, tc)
+    assert setups.structure_problem("pullback", rows, p, tc) is None and p["resistance"]["room_x"] >= 2
+    # broken structure: a swing low (low 93), a bounce, then a close through it
+    rows = daily(rise + [100, 97, 95, 97, 100, 103, 105, 104, 102, 99, 96, 94, 92], spread=2.0)
+    p = setups.plan("pullback", rows, tc)
+    assert p is not None and "broke its most recent swing low 93" in setups.structure_problem("pullback", rows, p, tc)
+
+
+
+def test_minor_wiggles_are_not_resistance(cfg):
+    import setups
+    tc = cfg["tactical"]
+    # peak 150 a few weeks ago, then a choppy slide to 100 with small bounces just above the close
+    closes = [100.0 + 5 * i for i in range(11)] + [140, 130, 120, 112, 104, 101, 103, 100, 102, 100, 101, 100]
+    rows = daily(closes, spread=2.0)
+    p = setups.plan("pullback", rows, tc)
+    assert setups.structure_problem("pullback", rows, p, tc) is None and p["resistance"]["price"] == 152

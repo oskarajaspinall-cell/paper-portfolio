@@ -1,0 +1,65 @@
+{
+  "ticker": "EXE",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/EXE/2026-10-08-evaluation.md scenarios.bull.probability"},
+      "probability_evidence": "EV/EBITDA sits at the 4th percentile of its own 5-year range and 40% below the peer median (EQT/AR/RRC/CTRA/CNX), with net debt/EBITDA low at 0.46x and Piotroski F-score 8 (research/EXE/factsheet-2026-10-08.md valuation and 'Other' tables) -- a real but not dominant re-rate case per the Bull case in research/EXE/2026-10-08-evaluation.md.",
+      "target_price_12m": {"value": 114, "cite": "research/EXE/2026-10-08-evaluation.md scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.047, "cite": "Half the spread between the bull target's own EV/EBITDA basis (3.5x->4.4x 5y median, implying ~114 via EBITDA=6.776bn and net debt=3.117bn backed out from mkt cap 20.6bn and net debt/EBITDA 0.46x [factsheet-2026-10-08.md 'Other'/quality tables]) and the same proportional peer-gap closure (39.1%, matched to the EV/EBITDA peer-gap move from -40% to -24%) applied to P/E (7.6x vs 11.0x peer median -> ~8.93x, ~104) and P/FCF (8.2x vs 12.5x peer median -> ~9.88x, ~106) [factsheet-2026-10-08.md valuation table]: (114.2-103.5)/114 = 4.7%."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/EXE/2026-10-08-evaluation.md scenarios.base.probability"},
+      "probability_evidence": "The 12.14% FCF yield funds debt paydown and buybacks, but shares outstanding are up 13.24% YoY despite $850m of Q1 2026 buybacks, offsetting the per-share benefit (research/EXE/2026-10-08.md section 5); probability trimmed from an even 0.50 split by the macro overlay's small toward-bear tilt (research/EXE/2026-10-08-macro.md macro_tilt).",
+      "target_price_12m": {"value": 88, "cite": "research/EXE/2026-10-08-evaluation.md scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0, "cite": "Base case basis holds EV/EBITDA at 3.5x (research/EXE/2026-10-08-evaluation.md scenarios.base.basis); with no multiple re-rate posited, pricing the same flat scenario via P/E (7.6x) or P/FCF (8.2x) [factsheet-2026-10-08.md valuation table] implies the same ~88 current price, so the valuation anchors do not disagree."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/EXE/2026-10-08-evaluation.md scenarios.bear.probability"},
+      "probability_evidence": "The 5y ROIC trend is falling (-6.3pp) and net debt/EBITDA spiked from 0.28x to 4.42x within FY2024 alone (research/EXE/2026-10-08.md section 2), a leverage precedent now layered with the Sept 2026 $500m notes pricing (research/EXE/2026-10-08.md section 6); probability raised from 0.25 by the macro overlay's small toward-bear tilt on rising real yields and HY spreads (research/EXE/2026-10-08-macro.md macro_tilt).",
+      "target_price_12m": {"value": 71, "cite": "research/EXE/2026-10-08-evaluation.md scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.050, "cite": "Half the spread between the bear target's own EV/EBITDA basis (3.5x->2.9x 5y minimum, implying ~71 via the same EBITDA/net-debt backout as the bull case) and the same proportional peer-gap widening (26.1%, matched to the EV/EBITDA peer-gap move from -40% to -50%) applied to P/E (7.6x -> ~6.72x, ~78) and P/FCF (8.2x -> ~7.08x, ~76) [factsheet-2026-10-08.md valuation table]: (77.9-70.7)/71 = 5.0%."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed near-term signal in mc-inputs factor_news.SPY: record highs (2026-10-06/07 Bloomberg/CNBC) alongside a tech-led rally 'masking a broader market sell-off' and bearish put-spread activity (CNBC 2026-10-07) and a pullback on rising Treasury yields (Reuters, TipRanks 2026-10-07) -- no clear direction, so 0 per house rule."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/EXE/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "mc-inputs factor_news.IEF headlines (2026-10-01/07): '30-Year Yields Return to 2002 High', 'Global Bond Markets Sell Off on France's Fiscal Worries', 'The Bond Rout Is Deepening' -- predominantly rising-yield/falling-bond-price headlines, reinforced by the macro overlay's dominant_chain (real yields & HY spreads rising; DFII10 +61bp/3m, DGS10 +72bp/3m, research/EXE/2026-10-08-macro.md), giving a modest negative move for the bond-price factor IEF."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/EXE/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Large earnings-day reaction",
+      "reason": "Gas-price-driven results swing sharply at quarterly reports -- ROIC fell to -2.8% in FY2024 -- and the next report is due 2026-10-27.",
+      "cite": "research/EXE/factsheet-2026-10-08.md Price section 'Next earnings date Oct 27, 2026'; research/EXE/2026-10-08.md section 2 'ROIC -2.8% in FY2024'",
+      "annual_probability": {"value": 0.80, "cite": "Of 17 quarterly/annual earnings weeks in mc-inputs.json analogues.event_weeks (2021-2026), 6 moved >=5% in magnitude (1-(1-6/17)^4 = 82%, rounded to 0.80 across 4 reports/year)."},
+      "impact": {"value": -0.0505, "cite": "Matches the FY2024 Q4 annual-report week's observed move (the period note section 2 cites for ROIC -2.8%)."},
+      "analogue": {"week": "2025-02-24", "move": -0.0505},
+      "assumption": null
+    },
+    {
+      "name": "Leverage/credit shock",
+      "reason": "Net debt/EBITDA rising and holding above 2.0x for two consecutive quarters is the note's first invalidation trigger; EXE's net debt/EBITDA already swung from 0.28x to 4.42x within FY2024, and it just priced a new $500m senior notes offering (Sept 2026), layering fresh leverage.",
+      "cite": "research/EXE/2026-10-08.md section 4 (first bullet) and section 6 ('Unusual items')",
+      "annual_probability": {"value": 0.20, "cite": "1 of the 5 fiscal years (FY2021-FY2025) shown in research/EXE/factsheet-2026-10-08.md quality table had a net debt/EBITDA spike (FY2024, to 4.42x) = 1/5 = 0.20/yr."},
+      "impact": {"value": -0.1149, "cite": "Largest single-week fall in mc-inputs.json analogues.largest_falls not already used for the earnings or gas-price jumps."},
+      "analogue": {"week": "2023-11-06", "move": -0.1149},
+      "assumption": null
+    },
+    {
+      "name": "Gas-price collapse",
+      "reason": "EXE is a commodity price-taker with no moat beyond relative cost position; management's own mid-cycle assumption of $3.50-4.00/MMBtu 'to balance the market' shows the business needs a specific gas price to earn its cost of capital, and ROIC swung from 36.6% (FY2022) to -2.8% (FY2024) on gas-price moves alone.",
+      "cite": "research/EXE/2026-10-08.md section 2 (quality) citing https://stockanalysis.com/stocks/exe/transcripts/656934-q2-2026/",
+      "annual_probability": {"value": 0.20, "cite": "Only 1 of the 10 largest weekly falls in mc-inputs.json analogues.largest_falls (over ~5 years, i.e. once per 5 years) exceeds -15%."},
+      "impact": {"value": -0.1822, "cite": "Largest weekly fall in the 5-year history."},
+      "analogue": {"week": "2022-06-13", "move": -0.1822},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.015, "cite": "research/EXE/factsheet-2026-10-08.md Price section: price is -5.0% vs its 50-day MA and -10.1% vs its 200-day MA, with the 50-day MA itself -5.3% below the 200-day MA (a death cross) and 3-month momentum -1.6%; modest negative tilt, within the +/-0.02 cap, 3m horizon only."}
+}

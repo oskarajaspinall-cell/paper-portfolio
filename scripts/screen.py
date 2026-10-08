@@ -100,7 +100,7 @@ def score(metrics: dict[str, dict], cfg: dict, asof: str) -> list[dict]:
                      "core": st.mean([q[t], v[t]]) if q[t] is not None and v[t] is not None else None,
                      "pullback_cand": trend[t] if trend[t] is not None and setups.pullback_candidate(d, tc, asof) else None,
                      "drift_cand": d.get("price_vs_sma50") if setups.drift_candidate(d, tc, asof) else None,
-                     "tactical": None, "setup": None, "setup_detail": None,
+                     "tactical": None, "setup": None, "setup_detail": None, "setup_skipped": None,
                      "earnings_date": d.get("earnings_date")})
     return rows
 
@@ -123,12 +123,18 @@ def tactical_check(rows: list[dict], fetcher, cfg: dict, asof: str) -> list[dict
         h = hist.get(r["ticker"])
         sig = setups.drift_signal(h, tc) if h else None
         p = setups.plan("drift", h, tc, sig) if sig else None
-        if p:
+        why = setups.structure_problem("drift", h, p, tc) if p else None
+        if why:
+            r["setup_skipped"] = f"drift: {why}"
+        elif p:
             r.update(tactical=sig["jump_pct"], setup="drift", setup_detail=setups.describe("drift", p, sig))
     for r in pull:
         h = hist.get(r["ticker"])
         p = setups.plan("pullback", h, tc) if h and r["setup"] is None else None
-        if p:
+        why = setups.structure_problem("pullback", h, p, tc) if p else None
+        if why:
+            r["setup_skipped"] = f"pullback: {why}"
+        elif p:
             r.update(tactical=r["pullback_cand"], setup="pullback", setup_detail=setups.describe("pullback", p))
     return failed
 
@@ -290,6 +296,10 @@ def report_md(res: dict, top: int = 15) -> str:
         lines += ["", f"## Tactical setups: {title}", "| # | Ticker | Name | Setup and risk plan | Next earnings |", "|---|---|---|---|---|"]
         lines += [f"| {i} | {r['ticker']} | {res['names'].get(r['ticker'], '')} | {r['setup_detail']} | {r['earnings_date'] or 'n/a'} |"
                   for i, r in enumerate(tac, 1)] or ["| | none qualified this week | | | |"]
+        skipped = [r for r in res["rows"] if (r.get("setup_skipped") or "").startswith(k + ":")]
+        if skipped:
+            lines += ["", f"Skipped on structure ({len(skipped)}): "
+                      + "; ".join(f"{r['ticker']} — {r['setup_skipped'].split(': ', 1)[1]}" for r in skipped[:top])]
     if res["failed"]:
         lines += ["", "## Failed pages (excluded)"] + [f"- {x['ticker']}: {x['url']} ({x['field']})" for x in res["failed"]]
     return "\n".join(lines) + "\n"
