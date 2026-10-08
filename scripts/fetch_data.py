@@ -371,8 +371,13 @@ PARSERS = {"overview": parse_overview, "income": parse_statement, "balance": par
 
 # --------------------------------------------------------------------------- fetching
 class Fetcher:
-    def __init__(self, cfg: dict | None = None, cache_dir: Path = CACHE_DIR, today: str | None = None):
+    def __init__(self, cfg: dict | None = None, cache_dir: Path = CACHE_DIR, today: str | None = None,
+                 refresh: bool = False):
+        """`refresh`: re-fetch any page cached BEFORE this fetcher was created (once each). The per-day cache
+        otherwise serves a page saved earlier in the day, e.g. a price history saved before the US open,
+        which hides that day's open and close from the fill and re-pricing jobs."""
         cfg = cfg or load_config()
+        self.refresh_before = time.time() if refresh else None
         self.ua = cfg["data"]["user_agent"]
         self.interval = float(cfg["data"]["request_interval_seconds"])
         self.today = today or dt.date.today().isoformat()
@@ -436,7 +441,7 @@ class Fetcher:
         if not url.startswith(BASE_URL + "/"):
             raise DataError(url, "domain", "quantitative data must come from stockanalysis.com")
         cached = self.cache_dir / (url[len(BASE_URL) + 1:].strip("/").replace("/", "__") + ".html")
-        if cached.exists():
+        if cached.exists() and not (self.refresh_before and cached.stat().st_mtime < self.refresh_before):
             return cached.read_text()
         if not self.allowed(url):
             raise DataError(url, "robots.txt", "path disallowed by robots.txt -- STOP and tell the owner")

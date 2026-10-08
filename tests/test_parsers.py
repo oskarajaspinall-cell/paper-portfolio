@@ -231,3 +231,19 @@ def test_rate_limit_is_shared_between_parallel_fetchers(tmp_path, cfg, monkeypat
     [t.join() for t in threads]
     stamps.sort()
     assert len(stamps) == 3 and all(b - a >= 0.29 for a, b in zip(stamps, stamps[1:]))
+
+
+
+def test_fetcher_refresh_refetches_pages_cached_earlier(tmp_path, monkeypatch, cfg):
+    import time
+    from fetch_data import BASE_URL, Fetcher
+    calls = []
+    monkeypatch.setattr(Fetcher, "allowed", lambda self, url: True)
+    monkeypatch.setattr(Fetcher, "_get", lambda self, url: calls.append(url) or f"page {len(calls)}")
+    url = BASE_URL + "/stocks/deck/history/"
+    assert Fetcher(cfg, cache_dir=tmp_path, today="2026-10-08").html(url) == "page 1"   # saved before the open
+    assert Fetcher(cfg, cache_dir=tmp_path, today="2026-10-08").html(url) == "page 1"   # normal: cached
+    time.sleep(0.01)
+    fresh = Fetcher(cfg, cache_dir=tmp_path, today="2026-10-08", refresh=True)
+    assert fresh.html(url) == "page 2" and fresh.html(url) == "page 2"                 # re-fetched once
+    assert len(calls) == 2

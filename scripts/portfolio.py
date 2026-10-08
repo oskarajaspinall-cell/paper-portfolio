@@ -828,7 +828,8 @@ def main(argv=None) -> int:
     cfg = load_config()
     from fetch_data import Fetcher
 
-    mkt = Market(Fetcher(cfg), args.asof, cfg)
+    # fills and re-pricing need today's prices, not a page cached before the market opened
+    mkt = Market(Fetcher(cfg, refresh=args.cmd in ("fill-pending", "mark")), args.asof, cfg)
     state_path = PORT / "state.json"
     try:
         if args.cmd == "submit":
