@@ -1,4 +1,5 @@
 import copy
+import datetime as dt
 import json
 from pathlib import Path
 
@@ -586,3 +587,36 @@ def test_order_never_fills_at_the_open_of_its_own_decision_day(cfg, tmp_path):
     mkt = OpenMarket(cfg, opens={"AAPL": [("2026-10-12", 200.0), ("2026-10-13", 205.0)]}, asof="2026-10-14")
     row = fill_pending(sp, mkt, cfg, WATCH, port_dir=tmp_path)["applied"][0]
     assert (row["fill_price"], row["fill_close_date"]) == (205.0, "2026-10-13")
+
+
+def test_decision_before_the_open_fills_at_that_open(cfg, tmp_path):
+    from portfolio import fill_pending, place_orders
+    sp = tmp_path / "state.json"
+    # decided Monday 02:00 UTC, before New York opens (13:30 UTC in October): Monday's open is not look-ahead
+    place_orders([core_buy("AAPL", conv=4)], sp, OpenMarket(cfg), cfg, WATCH, "2026-10-12", port_dir=tmp_path,
+                 now=dt.datetime(2026, 10, 12, 2, 0, tzinfo=dt.timezone.utc))
+    mkt = OpenMarket(cfg, opens={"AAPL": [("2026-10-12", 200.0), ("2026-10-13", 205.0)]}, asof="2026-10-14")
+    row = fill_pending(sp, mkt, cfg, WATCH, port_dir=tmp_path)["applied"][0]
+    assert (row["fill_price"], row["fill_close_date"]) == (200.0, "2026-10-12")
+
+
+def test_decision_after_the_open_waits_for_the_next(cfg, tmp_path):
+    from portfolio import fill_pending, place_orders
+    sp = tmp_path / "state.json"
+    place_orders([core_buy("AAPL", conv=4)], sp, OpenMarket(cfg), cfg, WATCH, "2026-10-12", port_dir=tmp_path,
+                 now=dt.datetime(2026, 10, 12, 16, 0, tzinfo=dt.timezone.utc))
+    mkt = OpenMarket(cfg, opens={"AAPL": [("2026-10-12", 200.0), ("2026-10-13", 205.0)]}, asof="2026-10-14")
+    row = fill_pending(sp, mkt, cfg, WATCH, port_dir=tmp_path)["applied"][0]
+    assert (row["fill_price"], row["fill_close_date"]) == (205.0, "2026-10-13")
+
+
+def test_first_eligible_open_rules(cfg):
+    from portfolio import first_eligible_open
+    o = lambda at: {"placed": "2026-10-12", **({"placed_at": at} if at else {})}  # noqa: E731
+    assert first_eligible_open(o(None), "AAPL", cfg) == "2026-10-13"                       # old orders: day after
+    # New York opens 13:30 UTC in summer time, 14:30 UTC in winter time
+    assert first_eligible_open(o("2026-10-12T14:00:00+00:00"), "AAPL", cfg) == "2026-10-13"
+    assert first_eligible_open({"placed": "2026-12-14", "placed_at": "2026-12-14T14:00:00+00:00"}, "AAPL", cfg) == "2026-12-14"
+    # Hong Kong: 23:30 UK on the 12th is 06:30 on the 13th in HK, before its 09:30 open
+    assert first_eligible_open(o("2026-10-12T22:30:00+00:00"), "HKG:9999", cfg) == "2026-10-13"
+    assert first_eligible_open(o("2026-10-12T02:00:00+00:00"), "XYZ:ABC", cfg) == "2026-10-13"  # unknown exchange

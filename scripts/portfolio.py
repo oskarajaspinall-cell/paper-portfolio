@@ -37,7 +37,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import ROOT, DataError, core_trigger_problem, load_config, read_watchlist  # noqa: E402
+from common import ROOT, DataError, Ticker, core_trigger_problem, load_config, read_watchlist  # noqa: E402
 
 PORT = ROOT / "portfolio"
 LEDGER_COLS = ["date", "ticker", "type", "side", "shares", "fill_price", "currency", "fill_close_date",
@@ -702,7 +702,25 @@ def run_submit(requests, state_path, mkt, cfg, watch, today, dry_run=False, port
     return summary
 
 
-def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, port_dir=PORT) -> dict:
+def first_eligible_open(order: dict, ticker: str, cfg: dict) -> str:
+    """Earliest session date whose OPEN comes after the decision. With the order's `placed_at` (UTC) and the
+    exchange's opening time ([fills].open_times, local time + timezone; daylight saving via zoneinfo), a
+    decision made before that day's open may fill at it. Otherwise (old orders, unknown exchange) the safe
+    default: the first session after the placing date."""
+    from zoneinfo import ZoneInfo
+    spec = cfg.get("fills", {}).get("open_times", {}).get(Ticker(ticker).exchange or "US")
+    if not order.get("placed_at") or not spec:
+        return (dt.date.fromisoformat(order["placed"]) + dt.timedelta(days=1)).isoformat()
+    tzname, hhmm = spec.split()
+    tz = ZoneInfo(tzname)
+    at = dt.datetime.fromisoformat(order["placed_at"]).astimezone(tz)
+    h, m = map(int, hhmm.split(":"))
+    opens = dt.datetime.combine(at.date(), dt.time(h, m), tzinfo=tz)
+    return (at.date() if at < opens else at.date() + dt.timedelta(days=1)).isoformat()
+
+
+def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, port_dir=PORT,
+                 now: dt.datetime | None = None) -> dict:
     """Owner rule: decided trades fill at the NEXT OPEN. Validate every rule now (on a copy, at the latest
     close) and queue the valid requests as pending orders; nothing is bought or sold yet."""
     state = load_state(state_path, cfg)
@@ -716,6 +734,7 @@ def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, po
         main_rows = [x for x in rows if x["ticker"] == r["ticker"]] or rows or [{}]
         last = main_rows[-1]
         orders.append({"id": f"{today}-{n0 + i + 1}", "placed": today, "request": r,
+                       **({"placed_at": now.astimezone(dt.timezone.utc).isoformat(timespec="seconds")} if now else {}),
                        "estimate": {"side": last.get("side", r["action"]), "shares": last.get("shares", 0),
                                     "price": last.get("fill_price"), "currency": last.get("currency"),
                                     "close_date": last.get("fill_close_date")}})
@@ -734,7 +753,7 @@ def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, po
 
 
 def fill_pending(state_path, mkt, cfg, watch, dry_run=False, port_dir=PORT, max_wait_days: int = 14) -> dict:
-    """Fill each pending order at the open of the first trading day AFTER the day it was placed,
+    """Fill each pending order at the first OPEN after its decision (`first_eligible_open`),
     re-checking every rule at that price. Orders whose open hasn't happened yet stay pending; orders
     older than `max_wait_days` expire. Tactical orders that open beyond their stop/target are rejected."""
     state = load_state(state_path, cfg)
@@ -748,10 +767,8 @@ def fill_pending(state_path, mkt, cfg, watch, dry_run=False, port_dir=PORT, max_
     for o in sorted(pending, key=lambda o: (o["placed"], rank.get(o["request"]["action"], 9))):
         r = o["request"]
         tickers = [r["ticker"]] + ([r["replaces"]] if r.get("replaces") else [])
-        # the open of the first session AFTER the decision day: the placing day's own open has usually
-        # already happened when the decision is made, and using it would be look-ahead
-        after = (dt.date.fromisoformat(o["placed"]) + dt.timedelta(days=1)).isoformat()
-        quotes = {t: mkt.open_quote(t, after) for t in tickers}
+        # never an open from before the decision (look-ahead)
+        quotes = {t: mkt.open_quote(t, first_eligible_open(o, t, cfg)) for t in tickers}
         if any(q is None for q in quotes.values()):
             age = (dt.date.fromisoformat(mkt.asof) - dt.date.fromisoformat(o["placed"])).days
             if age > max_wait_days:
@@ -809,8 +826,11 @@ def main(argv=None) -> int:
     try:
         if args.cmd == "submit":
             reqs = json.loads(Path(args.requests).read_text())
-            out = (place_orders if args.at_next_open else run_submit)(reqs, state_path, mkt, cfg, investable(),
-                                                                       args.asof, args.dry_run)
+            if args.at_next_open:  # the decision time decides which open is the first one after it
+                out = place_orders(reqs, state_path, mkt, cfg, investable(), args.asof, args.dry_run,
+                                   now=dt.datetime.now(dt.timezone.utc))
+            else:
+                out = run_submit(reqs, state_path, mkt, cfg, investable(), args.asof, args.dry_run)
             out["dry_run"] = args.dry_run
             if args.save:
                 Path(args.save).parent.mkdir(parents=True, exist_ok=True)

@@ -57,6 +57,12 @@ max_position_pct = 5
 default_stop_pct = -10
 default_time_limit_months = 3
 
+[fills]
+# Next-open orders fill at the first OPEN after the decision time (never an earlier price). Local opening
+# time + timezone per exchange (daylight saving handled). Exchanges not listed: the first session after
+# the decision date.
+open_times = { US = "America/New_York 09:30", HKG = "Asia/Hong_Kong 09:30", LON = "Europe/London 08:00", TYO = "Asia/Tokyo 09:00", KRX = "Asia/Seoul 09:00", TPE = "Asia/Taipei 09:00", SHA = "Asia/Shanghai 09:30", SHE = "Asia/Shanghai 09:30", NSE = "Asia/Kolkata 09:15", TSX = "America/Toronto 09:30" }
+
 [costs]
 spread_pct = 0.10                 # every trade
 fx_fee_pct = 0.15                 # every trade in a non-USD share (e.g. LSE-listed)
