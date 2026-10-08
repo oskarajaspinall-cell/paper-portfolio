@@ -1,0 +1,47 @@
+{
+ "ticker": "DLTR",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bull.probability"},
+   "probability_evidence": "Evaluation bull case: 12m trend intact (+36.9%, +21.2pp vs SPY), 50-day MA +5.3% above 200-day, Q2 beat-and-raise with ROIC 13.6%/FCF margin 9.9% TTM, and valuation (14.2x P/E, 11.4x EV/EBITDA) below both 5y minimums and peer medians -- but conviction is only 3/5 (AVOID) because the pullback itself fell outside the -5%/+2% band and undercut a prior swing low, so the bull weight is held at 25%, not higher (research/DLTR/2026-10-08-evaluation.md Bull case and Decision.rationale).",
+   "target_price_12m": {"value": 140.87, "cite": "evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+   "target_band": {"value": 0.142, "cite": "Bull basis re-rates TTM P/E 14.2x to the 17.2x peer median (factsheet Valuation, RA/P:DG,WMT,TGT,FIVE): priced on P/E, implied price = (116.30/14.2 EPS)*17.2 = 140.87; on EV/EBITDA (current 11.4x, net debt/EBITDA 2.64x, mkt cap 22.1bn -> EBITDA 2.523bn; peer median 13.2x) implied price = 140.14; on P/FCF (116.30/11.1 FCF/share * peer median 17.2x) implied price = 180.21. Half the spread (180.21-140.14)/2 = 20.04, relative to the 140.87 target = 14.2%."}
+  },
+  "base": {
+   "probability": {"value": 0.50, "cite": "evaluation.md Decision JSON scenarios.base.probability"},
+   "probability_evidence": "Evaluation base case: the pullback setup is 'marginal' (conviction 3/5, AVOID) with no fresh directional catalyst either way, so the evaluator assigns the base case the majority weight by default while bull/bear carry the tail outcomes (research/DLTR/2026-10-08-evaluation.md Decision.rationale: 'Conviction 3, so AVOID; cash is acceptable').",
+   "target_price_12m": {"value": 123.27, "cite": "evaluation.md Decision JSON scenarios.base.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Base basis is a flat-multiple, price-only reversion to the 50-day MA (123.27, factsheet Price/HI), not a re-rating: current P/E 14.2x, EV/EBITDA 11.4x and P/FCF 11.1x (factsheet Valuation, RA) all reconstruct today's 116.30 close with no disagreement between anchors, so there is no valuation-anchor spread underlying this target -- band = 0."}
+  },
+  "bear": {
+   "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bear.probability"},
+   "probability_evidence": "Evaluation bear case: trend structure breaking (swing highs 137.07->134.99, 21-Sep swing low 111.23 undercutting the 27-Aug low 118.11), relative strength -9.1pp/-7.8pp vs SPY over 3m/6m, and the stock sold off on its own beat-and-raise with part of Q2 EPS from one-off tariff refunds -- enough to balance the bull tail at 25% given marginal conviction (research/DLTR/2026-10-08-evaluation.md Bear case).",
+   "target_price_12m": {"value": 85.88, "cite": "evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Bear basis is a flat-multiple, price-only retest of the 6-month low (85.88 on 2026-05-13, factsheet Price/HI), not a re-rating: current P/E 14.2x, EV/EBITDA 11.4x and P/FCF 11.1x (factsheet Valuation, RA) all reconstruct today's 116.30 close with no disagreement between anchors, so there is no valuation-anchor spread underlying this target -- band = 0."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed over the same week: record highs ('S&P closes at record high, breaking 7,800 points', CNBC 2026-10-07) alongside a tech-led pullback and bearish positioning ('S&P 500, Nasdaq ease from record highs as Treasury yields climb', Reuters 2026-10-07; 'two big bearish trades point to skepticism', CNBC 2026-10-07); DLTR's own fact sheet/note carry no market-direction view (macro overlay research/DLTR/2026-10-08-macro.md sets macro_weight=context, not directional). No clear direction -> 0."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week regression, 2023-10-09 to 2026-09-28)"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: yields pushing to multi-decade highs ('US 30-Year Yields Return to 2002 High', Bloomberg 2026-10-07; 'Global Bond Rout Continues', Barrons 2026-10-01) alongside yields retreating on softer data ('US bonds rally after weaker-than-expected jobs report', The Guardian 2026-10-02; 'US Treasury Rebound Pulls Yields Off Multi-Decade Highs', Bloomberg 2026-10-02). Macro overlay (research/DLTR/2026-10-08-macro.md) is weighted 'context' only and names no directional rates call for DLTR. Mixed -> 0."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week regression, 2023-10-09 to 2026-09-28)"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Unscheduled Q3 earnings date within the hold (gap risk)",
+   "reason": "The next earnings date is not shown on stockanalysis.com (last report was Q2 FY2027, 2026-08-27) and the usual early-December Q3 timing would fall inside a 3-month tactical hold, adding gap risk that was not modelled into the entry's target/stop.",
+   "cite": "research/DLTR/2026-10-08-evaluation.md Bear case ('The next Q3 report date is not shown, and the usual early-December timing... would fall inside a 3-month hold, adding gap risk') and research/DLTR/2026-10-08.md section 4 ('the true next date is [data unavailable]')",
+   "annual_probability": {"value": 0.59, "cite": "mc-inputs.json analogues.event_weeks: of the last 20 quarterly earnings_release weeks, 4 (2022-05-23 +29.0%, 2022-08-22 -17.3%, 2024-09-03 -21.3%, 2026-05-26 +22.6%) had |move|>=15% (20% of quarters); at 4 earnings dates/year, P(at least one such week in a year) = 1-(1-0.20)^4 = 0.59"},
+   "impact": {"value": -0.2129, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: Q2 2025 earnings week 2024-09-03, move -0.2129 (largest earnings-week fall in the 5y history)"},
+   "analogue": {"week": "2024-09-03", "move": -0.2129},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}

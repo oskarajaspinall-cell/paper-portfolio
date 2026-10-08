@@ -1,0 +1,233 @@
+{
+ "ticker": "CRM",
+ "date": "2026-10-08",
+ "params_file": "2026-10-08-mc-params.json",
+ "inputs_file": "2026-10-08-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 224.56,
+  "close_date": "2026-10-07",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/crm/history/"
+ },
+ "target_returns": {
+  "bull": 0.28366583541147117,
+  "base": 0.0803348770929817,
+  "bear": -0.21878339864624152
+ },
+ "expected_12m": 0.041432133950837106,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 1.2076424863236421,
+   "IEF": -0.004424140810198739
+  },
+  "r2": 0.2102346648190555,
+  "residual_vol": {
+   "52w": 0.4566345622093861,
+   "156w": 0.3349430643491135,
+   "blended": 0.39578881327924975,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 288.26,
+    "target_band": 0.056
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 242.6,
+    "target_band": 0.005
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 175.43,
+    "target_band": 0.109
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 1.2076424863236421,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": -0.004424140810198739,
+    "move": -0.05,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Quarterly earnings reaction",
+    "p": 0.76,
+    "impact": -0.139,
+    "analogue": {
+     "week": "2024-05-28",
+     "move": -0.139
+    },
+    "cited": true
+   },
+   {
+    "name": "Competitive AI-disruption shock (e.g. a large rival's enterprise-AI launch)",
+    "p": 0.3,
+    "impact": -0.15,
+    "analogue": null,
+    "cited": true
+   },
+   {
+    "name": "Agentforce security-vulnerability disclosure/exploit",
+    "p": 0.2,
+    "impact": -0.1,
+    "analogue": null,
+    "cited": true
+   }
+  ],
+  "tilt": 0.015
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.009407826773442497,
+   "median": -0.008782496756363374,
+   "p5": -0.31822473817029895,
+   "p25": -0.14252220125807175,
+   "p50": -0.008782496756363374,
+   "p75": 0.1442544796589047,
+   "p95": 0.38604397541374635,
+   "prob_loss": 0.5169,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.00014493951056447575,
+    "jumps": -0.07410332928891611,
+    "noise": 0.0007183901224922107,
+    "scenario": 0.05966771885359914
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.013882879441817582,
+   "median": -0.02609946004679998,
+   "p5": -0.43309988690388995,
+   "p25": -0.21483769369028172,
+   "p50": -0.02609946004679998,
+   "p75": 0.19291830609339922,
+   "p95": 0.6012518375615933,
+   "prob_loss": 0.5344,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.0006019882310129097,
+    "jumps": -0.14970291058283994,
+    "noise": 0.0002115109057771674,
+    "scenario": 0.11433543770719827
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.04143213395083715,
+   "median": -0.05811508148894208,
+   "p5": -0.5760440816681813,
+   "p25": -0.31303164485524265,
+   "p50": -0.05811508148894208,
+   "p75": 0.2844180766646972,
+   "p95": 0.9871404867510323,
+   "prob_loss": 0.555,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.0011782923236470086,
+    "jumps": -0.2969608005771147,
+    "noise": 0.004617832150318164,
+    "scenario": 0.2236708754143965
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.04143213395083715,
+   "prob_loss_12m": 0.555
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.45,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.09167705735660832,
+   "prob_loss_12m": 0.5075
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.45,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.008812789454934125,
+   "prob_loss_12m": 0.5992
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.04143213395083709,
+   "prob_loss_12m": 0.5234
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.041432133950837044,
+   "prob_loss_12m": 0.577
+  }
+ ]
+}

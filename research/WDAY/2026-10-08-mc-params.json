@@ -1,0 +1,65 @@
+{
+  "ticker": "WDAY",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "Evaluation scenarios.bull.probability, research/WDAY/2026-10-08-evaluation.md"},
+      "probability_evidence": "RSI(14) has cooled to 48.6 with no earnings-reaction jump in the last 10 sessions and short interest fell -17.0% m/m (covering, not building); fact sheet News & sentiment plus the evaluation's Bull case read this as a buyable dip rather than a reversal (research/WDAY/factsheet-2026-10-08.md; research/WDAY/2026-10-08-evaluation.md Bull case).",
+      "target_price_12m": {"value": 247.40, "cite": "Evaluation scenarios.bull.target_price_12m basis: stock retakes its 52-week high of 247.40 [HI], still below peer-median P/FCF of 22.4x [RA,P:*], research/WDAY/2026-10-08-evaluation.md"},
+      "target_band": {"value": 0.1467, "cite": "Re-rating P/FCF, EV/EBITDA and P/E each to their own 5-year minimum (16.6x, 31.5x, 55.4x) off the 184.26 close and flat TTM fundamentals gives implied prices of 196.07 / 205.73 / 268.66; half the spread (36.29) relative to this scenario's 247.40 target = 14.7% (fact sheet Valuation table, research/WDAY/factsheet-2026-10-08.md)."}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "Evaluation scenarios.base.probability, research/WDAY/2026-10-08-evaluation.md"},
+      "probability_evidence": "The note's central read is that 'the September dip is profit-taking, not a reversal,' with restructuring-driven margin gains continuing (operating margin 10.7% FY2026 / 12.0% TTM, ROIC 18.4% TTM) — the modal continuation path the evaluation prices before any re-rating (research/WDAY/2026-10-08.md Section 2).",
+      "target_price_12m": {"value": 196.07, "cite": "Evaluation scenarios.base.target_price_12m basis: P/FCF re-rates from 15.6x to its 5-year minimum of 16.6x [RA] on flat TTM FCF, i.e. 184.26 x 16.6/15.6, research/WDAY/2026-10-08-evaluation.md"},
+      "target_band": {"value": 0.1851, "cite": "Re-rating P/FCF, EV/EBITDA and P/E each to their own 5-year minimum (16.6x, 31.5x, 55.4x) off the 184.26 close and flat TTM fundamentals gives implied prices of 196.07 / 205.73 / 268.66; half the spread (36.29) relative to this scenario's 196.07 target = 18.5% (fact sheet Valuation table, research/WDAY/factsheet-2026-10-08.md)."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "Evaluation scenarios.bear.probability, research/WDAY/2026-10-08-evaluation.md"},
+      "probability_evidence": "Swing highs have stepped down since August (227.49 -> 211.83 -> 201.00) while the close sits on a 181.47-183.60 support band — a distribution pattern per the evaluation's Bear case — and the macro overlay's small bear tilt from rising real yields (research/WDAY/2026-10-08-macro.md) raised this scenario's probability slightly, per the evaluation's own basis text.",
+      "target_price_12m": {"value": 156.64, "cite": "Evaluation scenarios.bear.target_price_12m basis: lower highs resolve downward and premium-earnings-multiple compression (P/E +48% vs peers [RA]) take the price back to the 200-day MA of 156.64 [ST,HI], research/WDAY/2026-10-08-evaluation.md"},
+      "target_band": {"value": 0.2317, "cite": "Re-rating P/FCF, EV/EBITDA and P/E each to their own 5-year minimum (16.6x, 31.5x, 55.4x) off the 184.26 close and flat TTM fundamentals gives implied prices of 196.07 / 205.73 / 268.66; half the spread (36.29) relative to this scenario's 156.64 target = 23.2% (fact sheet Valuation table, research/WDAY/factsheet-2026-10-08.md)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed SPY factor news: record highs ('S&P closes at record high, breaking 7,800 points', CNBC 2026-10-07; 'S&P 500 Hits Record High as Big Tech Leads', Bloomberg 2026-10-06) alongside a same-week 'tech selloff and elevated Treasury yields' (TipRanks 2026-10-07) and 'two big bearish trades point to skepticism' (CNBC 2026-10-07) (mc-inputs factor_news.SPY, stockanalysis.com); no clear directional read, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "SPY factor historical annualised volatility from the 156-week regression (research/WDAY/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "Macro overlay dominant_chain 'rate/inflation repricing -> real yields -> discount rate': US 10y real yield (DFII10) +0.48pp over 1m / +0.61pp over 3m to 2.91%, and the 2y yield (4.79%) sitting above effective fed funds (3.88%), implying the market prices further tightening (research/WDAY/2026-10-08-macro.md, fred.stlouisfed.org 2026-10-06); corroborated by IEF factor_news ('Global Bond Rout Continues Even as 10-Year Treasury Yield Eases', Barrons 2026-10-01; 'US 30-Year Yields Return to 2002 High', Bloomberg 2026-10-07) (mc-inputs factor_news.IEF). A continued hawkish repricing is modestly negative for 7-10y Treasury prices (IEF), kept modest per the owner's guardrail."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "IEF factor historical annualised volatility from the 156-week regression (research/WDAY/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction",
+      "reason": "WDAY's weekly history shows earnings-release weeks produce some of its largest moves (e.g. -14.35% Q1 2025, +15.35% Q3 2024, +14.77% Q3 2023, -12.83% Q1 2026); the next report is 2026-11-24 with three more inside the 12-month horizon.",
+      "cite": "research/WDAY/2026-10-08-mc-inputs.json analogues.event_weeks (earnings_release entries); fact sheet 'Next earnings date Nov 24, 2026 (Est. Earnings)' [ST,OV]",
+      "annual_probability": {"value": 0.76, "cite": "6 of the last 20 quarterly earnings weeks in mc-inputs analogues.event_weeks had |move| >= 10% (30%/quarter); probability of at least one such quarter in a 4-quarter year = 1-(1-0.30)^4 = 0.76"},
+      "impact": {"value": -0.1435, "cite": "Largest-magnitude earnings-release analogue: week 2024-05-20 (Q1 2025 earnings), move -14.35% (research/WDAY/2026-10-08-mc-inputs.json analogues.event_weeks / all_weekly_moves)"},
+      "analogue": {"week": "2024-05-20", "move": -0.1435},
+      "assumption": null
+    },
+    {
+      "name": "Securities-fraud investigation solicitation",
+      "reason": "A 2026-09-17 law-firm solicitation (SBS Law) invited investors to join a 'fraud investigation' into WDAY; the evaluation flags this as a [Guessing] headline risk that could resolve into a filed suit or formal probe within the horizon.",
+      "cite": "research/WDAY/2026-10-08.md Sections 1 & 5 (businesswire.com, 2026-09-17); evaluation Bear case: 'a law-firm \"fraud\" solicitation add[s] headline risk [Guessing]', research/WDAY/2026-10-08-evaluation.md",
+      "annual_probability": {"value": 0.15, "cite": "No comparable legal-shock week exists in the mc-inputs analogue history (only proxy/earnings/analyst-day/registration event types are tagged); 0.15 reflects that this is an unconfirmed attorney-advertising solicitation, not a filed action, so a materialising legal shock within 12m is judged unlikely but non-zero (note Section 1, tag [Guessing])."},
+      "impact": {"value": -0.08, "cite": "No analogue available; -8% is an assumed, bounded placeholder (well inside the +/-30% [montecarlo].max_jump_impact_assumed cap) given the solicitation is unconfirmed and no financial detail has been disclosed (note Sections 1 & 5)."},
+      "analogue": null,
+      "assumption": "No historical analogue for a legal/fraud-investigation shock in WDAY's weekly history; impact of -8% is an assumed, bounded placeholder for an unconfirmed, as-yet-undetailed securities claim."
+    },
+    {
+      "name": "Additional restructuring/layoff disclosure",
+      "reason": "Workday disclosed its second 2026 layoff round (~500 roles, product/tech team) on 2026-09-29 via an 8-K (items 2.02/2.05); the note flags a further round as a watch item even though the current cuts read as cost discipline.",
+      "cite": "research/WDAY/2026-10-08.md Sections 1 & 5 (businessinsider.com, 2026-09-29; SEC 8-K acc. 0001327811-26-000048)",
+      "annual_probability": {"value": 0.25, "cite": "Two layoff rounds have already occurred in 2026 per the note; 0.25 assumes roughly one further such disclosure is plausible within the next 12 months, in the absence of a tagged analogue in the mc-inputs event table (no 'restructuring' event type present)."},
+      "impact": {"value": -0.05, "cite": "No analogue available; a further cost-cutting disclosure is assumed modestly negative on headline risk (-5%), well inside the +/-30% assumption bound, since operating margin has been rising through prior rounds (fact sheet Quality table: FY2026 operating margin 10.7%, TTM 12.0%)."},
+      "analogue": null,
+      "assumption": "No historical analogue for a standalone restructuring/layoff-disclosure shock in WDAY's weekly history; impact of -5% is an assumed, bounded placeholder reflecting headline risk from a further cost-cutting round, not a worsening of the fundamentals already improving margins."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

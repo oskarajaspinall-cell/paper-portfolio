@@ -1,0 +1,236 @@
+{
+ "ticker": "AVGO",
+ "date": "2026-10-08",
+ "params_file": "2026-10-08-mc-params.json",
+ "inputs_file": "2026-10-08-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 376.51,
+  "close_date": "2026-10-07",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/avgo/history/"
+ },
+ "target_returns": {
+  "bull": 0.31470611670340753,
+  "base": 0.0,
+  "bear": -0.22987437252662613
+ },
+ "expected_12m": 0.009714217417864046,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 2.4447833122154026,
+   "IEF": -0.5503203088082985
+  },
+  "r2": 0.494442303455808,
+  "residual_vol": {
+   "52w": 0.31021705226952834,
+   "156w": 0.35305869211501,
+   "blended": 0.33163787219226915,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 495.0,
+    "target_band": 0.2218
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 376.51,
+    "target_band": 0.2111
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 289.96,
+    "target_band": 0.1981
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 2.4447833122154026,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": -0.5503203088082985,
+    "move": -0.04,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Quarterly earnings surprise",
+    "p": 0.48,
+    "impact": -0.1586,
+    "analogue": {
+     "week": "2024-09-03",
+     "move": -0.1586
+    },
+    "cited": true
+   },
+   {
+    "name": "AI-chip debt-financing confirmation shock",
+    "p": 0.6,
+    "impact": -0.15,
+    "analogue": null,
+    "cited": true
+   },
+   {
+    "name": "Market-wide risk-off shock (VIX spike)",
+    "p": 0.7,
+    "impact": -0.135,
+    "analogue": {
+     "week": "2025-03-31",
+     "move": -0.135
+    },
+    "cited": true
+   }
+  ],
+  "tilt": 0.0
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.006993130034010326,
+   "median": -0.030586351441771287,
+   "p5": -0.3631515805796414,
+   "p25": -0.1724746038040614,
+   "p50": -0.030586351441771287,
+   "p75": 0.1388239058536634,
+   "p95": 0.42613335484193776,
+   "prob_loss": 0.5529,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.004995303174082332,
+    "jumps": -0.10938575703367864,
+    "noise": 0.0003724334830961828,
+    "scenario": 0.06752485568765701
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": -0.012034363426094399,
+   "median": -0.06300048837517674,
+   "p5": -0.4977072671394633,
+   "p25": -0.27311270244869357,
+   "p50": -0.06300048837517674,
+   "p75": 0.1909902021361538,
+   "p95": 0.6599422974991843,
+   "prob_loss": 0.5749,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.009460558432567061,
+    "jumps": -0.2209128885200532,
+    "noise": 0.00010568623390952575,
+    "scenario": 0.13504971137531402
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.009714217417864024,
+   "median": -0.13169118028301385,
+   "p5": -0.6548842856821845,
+   "p25": -0.39845446113840843,
+   "p50": -0.13169118028301385,
+   "p75": 0.2699257820076312,
+   "p95": 1.143958184749885,
+   "prob_loss": 0.5996,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.024100041049194176,
+    "jumps": -0.4396920998757302,
+    "noise": 0.002299545531642265,
+    "scenario": 0.27009942275062804
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.009714217417864024,
+   "prob_loss_12m": 0.5996
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.45,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.06417226634086742,
+   "prob_loss_12m": 0.5616
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.45,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.0447438315051393,
+   "prob_loss_12m": 0.6404
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.009714217417863954,
+   "prob_loss_12m": 0.5962
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.00971421741786408,
+   "prob_loss_12m": 0.6052
+  }
+ ]
+}

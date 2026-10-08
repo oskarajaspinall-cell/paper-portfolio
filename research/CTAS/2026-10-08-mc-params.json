@@ -1,0 +1,47 @@
+{
+  "ticker": "CTAS",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/CTAS/2026-10-08-evaluation.md Decision json scenarios.bull.probability"},
+      "probability_evidence": "Evaluation bull case: ROIC rose 21.5%->28.4% and operating margin 20.2%->23.6% over 5 years [RA,IS], Q1 FY2027 delivered record results and a raised guide [Likely], RSI 49.5 is 'cooled off, not broken' and short interest is low and falling [Certain]; weighted below base/bear because the bear case notes lower highs since August and no rally after the beat-and-raise (research/CTAS/2026-10-08-evaluation.md bear case).",
+      "target_price_12m": {"value": 219.16, "cite": "research/CTAS/2026-10-08-evaluation.md Decision json scenarios.bull.target_price_12m (52-week high, HI)"},
+      "target_band": {"value": 0.0335, "cite": "Valuation-anchor disagreement from factsheet-2026-10-08.md Valuation table: TTM EPS (197.19/38.9x P/E = 5.069) priced at the 5y-median P/E (35.8x) = 181.48 vs TTM FCF/share (197.19/38.5x P/FCF = 5.122) priced at the 5y-median P/FCF (38.3x) = 196.17; half the $14.69 spread ($7.35) / 219.16 target"}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/CTAS/2026-10-08-evaluation.md Decision json scenarios.base.probability"},
+      "probability_evidence": "Evaluation base case: fundamentals compound along the 5-year margin trend (gross margin 46.2%->51.0%, operating margin 20.2%->23.6% [IS]) while EV/EBITDA holds near today's 26.0x [RA]; given the highest single-scenario weight because it requires no re-rating, only continuation of the existing trend, per the evaluation rationale 'the setup barely passes... conviction 3 means AVOID'.",
+      "target_price_12m": {"value": 207.51, "cite": "research/CTAS/2026-10-08-evaluation.md Decision json scenarios.base.target_price_12m (August swing high, HI)"},
+      "target_band": {"value": 0.0354, "cite": "Valuation-anchor disagreement from factsheet-2026-10-08.md Valuation table: TTM EPS (197.19/38.9x P/E = 5.069) priced at the 5y-median P/E (35.8x) = 181.48 vs TTM FCF/share (197.19/38.5x P/FCF = 5.122) priced at the 5y-median P/FCF (38.3x) = 196.17; half the $14.69 spread ($7.35) / 207.51 target"}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "research/CTAS/2026-10-08-evaluation.md Decision json scenarios.bear.probability"},
+      "probability_evidence": "Evaluation bear case: 52-week change is -0.8% and CTAS lags SPY by 16.5pp (12m) and 5.0pp (6m) [Certain]; swing highs stepped down 207.51->204.62->201.45 since August with the September swing low undercutting August's [Certain]; the 2:1 reward:risk sits just under the 219.16 peak with almost no margin [Certain]; rising real yields add a small bear tilt (macro overlay) — given the highest scenario weight because the evaluation's rationale calls this 'distribution, not a dip in a trend'.",
+      "target_price_12m": {"value": 181.5, "cite": "research/CTAS/2026-10-08-evaluation.md Decision json scenarios.bear.target_price_12m (P/E compression to 5y median 35.8x on TTM EPS implied by 197.19 close, RA/HI)"},
+      "target_band": {"value": 0.0405, "cite": "Valuation-anchor disagreement from factsheet-2026-10-08.md Valuation table: TTM EPS (197.19/38.9x P/E = 5.069) priced at the 5y-median P/E (35.8x) = 181.48 vs TTM FCF/share (197.19/38.5x P/FCF = 5.122) priced at the 5y-median P/FCF (38.3x) = 196.17; half the $14.69 spread ($7.35) / 181.5 target"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0, "cite": "mc-inputs.json factor_news.SPY headlines (2026-10-06/07) are mixed: record S&P 500 highs led narrowly by tech (WSJ, Bloomberg) alongside tech-selloff/elevated-yield pressure and bearish put-spread positioning (TipRanks, CNBC, Reuters); CTAS's own news is idiosyncratic (record Q1 FY2027 beat, raised guide, factsheet-2026-10-08.md News & sentiment) and not a broad-market read, so no directional equity-market view is supported -> 0"},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/CTAS/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.03, "cite": "research/CTAS/2026-10-08-macro.md macro_tilt: direction 'toward bear', size 'small', dominant_chain 'real yields -> discount rate -> equity multiple'; macro_bear: 'real yields extend higher ... multiple compresses further'; corroborated by mc-inputs.json factor_news.IEF headlines (Bloomberg/Barrons/WSJ 2026-10-01/05/07: 10y and 30y yields at multi-decade highs, global bond rout) -> modest negative move on the IEF (bond-price) factor"},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/CTAS/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings release surprise",
+      "reason": "The next earnings date is unresolved and may fall within the tactical window, so a quarterly print could move the stock sharply before the 3-month time limit",
+      "cite": "research/CTAS/2026-10-08-evaluation.md bear case: 'The next earnings date is unknown and may fall inside the window [Guessing]'; research/CTAS/2026-10-08.md section 4: 'the fact sheet's \"next earnings date\" field still shows the just-reported Sep 23 date, so true next earnings timing is [data unavailable]'",
+      "annual_probability": {"value": 0.2, "cite": "research/CTAS/2026-10-08-mc-inputs.json analogues.event_weeks: of the 20 quarterly earnings_release weeks in the 5-year history (2021-2026), only 1 (2024-12-16, Q2 2025) produced a move of this magnitude -> ~1-in-5-years, i.e. annual probability ~0.2"},
+      "impact": {"value": -0.115, "cite": "research/CTAS/2026-10-08-mc-inputs.json analogues.largest_falls / event_weeks: week 2024-12-16 (Q2 2025 earnings_release) move -0.115, the largest earnings-related weekly move in the 5-year history"},
+      "analogue": {"week": "2024-12-16", "move": -0.115},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

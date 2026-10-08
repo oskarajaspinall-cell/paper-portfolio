@@ -1,0 +1,56 @@
+{
+  "ticker": "ROST",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/ROST/2026-10-08-evaluation.md Decision json scenarios.bull.probability"},
+      "probability_evidence": "Trend intact: 50-day MA +7.9% above 200-day, price +3.1% above 200-day, RSI(14) 40.2 inside the pullback band (factsheet Price section); Ross is gaining traffic share from rivals as shoppers trade down (Barron's 2026-09-18, cited in note sec.1); the 2026-08-20 beat-and-raise quarter (Reuters) plus TTM ROIC 33.6% and FCF margin rising to 11.4% (factsheet Quality) back the continuation of the 12-month uptrend (evaluation Bull case).",
+      "target_price_12m": {"value": 250.9, "cite": "research/ROST/2026-10-08-evaluation.md Decision json scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0915, "cite": "Valuation anchors disagree at the 'bull' re-rate level: P/FCF 5y-median 28.7x on FCF/share (225.53/25.8) implies 250.93 (= the evaluator's own bull target); P/E 5y-median 25.8x on EPS (225.53/27.3) implies ~213.0; EV/EBITDA 5y-median 18.0x (scaled off current 19.8x, net debt only 0.12x EBITDA so EV~=market cap, factsheet Quality) implies ~205.0. Half the spread (250.93-205.0)/2=22.95, / target 250.9 = 0.0915. factsheet-2026-10-08.md Valuation table."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/ROST/2026-10-08-evaluation.md Decision json scenarios.base.probability"},
+      "probability_evidence": "Evaluator's own rationale: 'the setup passes the mechanical filters, but the edge is unclear' -- price has already broken below the post-earnings swing low (228.05) with lower highs/lows, and 6-month relative strength is -17.4pp vs SPY (evaluation Decision rationale and Bear case), making continuation of the current range the single most likely outcome.",
+      "target_price_12m": {"value": 225.5, "cite": "research/ROST/2026-10-08-evaluation.md Decision json scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0473, "cite": "The base case is explicitly an offset the evaluator names: 'P/FCF below its 5y min (25.8x vs 27.6x) offsets EV/EBITDA above its 5y max (19.8x vs 19.3x)' (evaluation Decision rationale/base basis). Pricing each side of that named offset: EV/EBITDA reverting to its own 5y max 19.3x (scaled off current 19.8x) implies ~219.83; P/FCF reverting to its own 5y min 27.6x on FCF/share implies ~241.19; P/E flat at current 27.3x = 225.53. Half the spread (241.19-219.83)/2=10.68, / target 225.5 = 0.0473. factsheet-2026-10-08.md Valuation table."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "research/ROST/2026-10-08-evaluation.md Decision json scenarios.bear.probability"},
+      "probability_evidence": "Macro overlay's small tilt toward bear (real 10y yield +48bp/1m, +61bp/3m, a persistent 3-month rise; sector rotation into staples per ETF Trends 2026-09-22 cited in the factsheet) combined with ROST's multiple already 108-148% through its own 5y range and +12-62% vs peers (factsheet Valuation), raising de-rating risk (evaluation Bear case; research/ROST/2026-10-08-macro.md macro_tilt).",
+      "target_price_12m": {"value": 201.6, "cite": "research/ROST/2026-10-08-evaluation.md Decision json scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.1003, "cite": "Valuation anchors disagree at the 'bear' peer-median level: P/E peer median 24.4x on EPS implies 201.56 (= the evaluator's own bear target); EV/EBITDA peer median 16.4x (scaled off current 19.8x) implies ~186.85; P/FCF peer median 26.0x on FCF/share implies ~227.27. Half the spread (227.27-186.85)/2=20.21, / target 201.6 = 0.1003. factsheet-2026-10-08.md Valuation table."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs factor_news.SPY headlines are mixed on the same date (2026-10-07): 'S&P closes at record high, breaking 7,800' and 'Combined Assets in SPY, SPYM Cross $1 Trillion' vs 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields' and 'two big bearish trades point to skepticism' / 'beneath the surface, trouble is brewing' -- no net directional view supported, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/ROST/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "research/ROST/2026-10-08-macro.md dominant_chain ('real yields -> discount rate / equity risk premium') and market_pricing: US 10y real yield (DFII10) +48bp/1m, +61bp/3m, a persistent 3-month rise, 2y yield (4.79%) above fed funds (3.88%) implying 'higher for longer'; consistent with mc-inputs factor_news.IEF headlines ('US 30-Year Yields Return to 2002 High', 'Global Bond Markets Sell Off on France's Fiscal Worries', 'The Bond Rout Is Deepening'). Kept modest (-4%) given offsetting headlines of brief yield relief (ETF Trends 2026-10-02, Bloomberg 2026-10-02 rebound)."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/ROST/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Earnings print reaction (2026-11-19)",
+      "reason": "Next earnings date is 2026-11-19, inside the tactical window: the bull case requires reclaiming the 50-day MA and the 239.73 swing high before the print, and the bear case warns the failed-breakout pattern (lower highs/lows) risks deepening into the print.",
+      "cite": "research/ROST/factsheet-2026-10-08.md Price section 'Next earnings date Nov 19, 2026 (Est. Earnings)'; research/ROST/2026-10-08-evaluation.md Bear case 'before the 2026-11-19 print'",
+      "annual_probability": {"value": 0.1813, "cite": "research/ROST/2026-10-08-mc-inputs.json analogues.event_weeks: of 20 quarterly earnings_release weeks over the ~5y history (2021-10-18 to 2026-09-28), 1 produced a move of this size (-0.2193, week 2022-05-16) = annual rate 1/5y=0.2; converted to an annual occurrence probability via p=1-exp(-rate)=0.1813"},
+      "impact": {"value": -0.2193, "cite": "research/ROST/2026-10-08-mc-inputs.json analogues.largest_falls / event_weeks: week 2022-05-16 (Q1 2023 earnings_release), move -0.2193 -- the largest single earnings-week drawdown in the 5y history"},
+      "analogue": {"week": "2022-05-16", "move": -0.2193},
+      "assumption": null
+    },
+    {
+      "name": "Real yield shock / multiple de-rating",
+      "reason": "Macro overlay names a specific, monitored risk chain (real yields -> discount rate -> multiple compression) for a name already 108-148% through its own 5y valuation range, with an explicit refresh trigger if DFII10 climbs past 3.1%.",
+      "cite": "research/ROST/2026-10-08-macro.md dominant_chain and refresh_triggers (DFII10 > 3.1)",
+      "annual_probability": {"value": 0.7981, "cite": "research/ROST/2026-10-08-mc-inputs.json analogues.largest_falls vs analogues.event_weeks: of the 10 largest weekly falls over the ~5y history (2021-10-18 to 2026-09-28), 8 do not coincide with an earnings/filing event_weeks entry (non-earnings, market/rate-driven) = annual rate 8/5y=1.6; converted to an annual occurrence probability via p=1-exp(-rate)=0.7981"},
+      "impact": {"value": -0.0864, "cite": "research/ROST/2026-10-08-mc-inputs.json analogues.largest_falls: week 2025-03-10, move -0.0864 -- a large weekly fall with no matching entry in analogues.event_weeks, i.e. not earnings/filing-driven"},
+      "analogue": {"week": "2025-03-10", "move": -0.0864},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

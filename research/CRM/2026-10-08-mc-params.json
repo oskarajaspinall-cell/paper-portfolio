@@ -1,0 +1,65 @@
+{
+  "ticker": "CRM",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation.json scenarios.bull.probability (research/CRM/2026-10-08-evaluation.md)"},
+      "probability_evidence": "Lower weight reflects the bear case's point that the 263.87 minimum 2:1 target sits inside the 262.33/268.27 double-top zone that has already rejected price twice, so reaching a true breakout target above 288 needs more than a repeat test of resistance [Certain] (research/CRM/2026-10-08-evaluation.md bear case); support comes from Reuters' 2026-10-06 'AI-disruption fears fade, software at fresh 2026 highs' headline (factsheet News & sentiment) and the stock's own +28.5pp 3m relative strength vs SPY [HI].",
+      "target_price_12m": {"value": 288.26, "cite": "evaluation.json scenarios.bull.target_price_12m (research/CRM/2026-10-08-evaluation.md)"},
+      "target_band": {"value": 0.056, "cite": "Valuation-anchor disagreement for the bull re-rate: P/E to its 5y min 26.7x implies 288.33 [RA]; P/FCF to its own 5y min 13.8x implies (224.56/12.1)*13.8=256.13 [RA]; EV/EBITDA re-rated to the peer median 19.2x implies 224.56*(19.2/16.7)=258.17 [RA, P:ORCL/NOW/SAP/MSFT]. Half the spread (288.33-256.13)/2=16.1 relative to the 288.26 target = 5.6%."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation.json scenarios.base.probability (research/CRM/2026-10-08-evaluation.md)"},
+      "probability_evidence": "Highest weight given to the no-re-rate outcome because CRM already trades below its own 5y P/E and P/FCF minimums (fact sheet Valuation table, -1% and -6% position in range) and conviction was only 3/5 ('marginal edge', evaluation rationale) -- i.e. neither the bull breakout nor a bear de-rate is the most likely single path over 12 months.",
+      "target_price_12m": {"value": 242.6, "cite": "evaluation.json scenarios.base.target_price_12m (research/CRM/2026-10-08-evaluation.md)"},
+      "target_band": {"value": 0.005, "cite": "Base case holds P/E flat at 20.8x with ~8% per-share growth from the 7.44% YoY buyback and 34.5% TTM FCF margin [ST,CF,IS] -> 242.6. Cross-checked by holding P/FCF (12.1x) and EV/EBITDA (16.7x) flat with only the buyback-driven +7.44% per-share growth [ST]: 224.56*1.0744=241.6. Half the 1.0 spread relative to the 242.6 target = 0.2%, rounded to 0.5% to allow for the margin-growth component not being split precisely across metrics."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "evaluation.json scenarios.bear.probability (research/CRM/2026-10-08-evaluation.md)"},
+      "probability_evidence": "Supported by the macro overlay's tilt toward bear (real yields DFII10 +0.48pp/1m, a discount-rate headwind for software multiples, research/CRM/2026-10-08-macro.md macro_tilt), short interest up 22.1% month on month [ST], and the live Meta enterprise-AI competitive threat (TipRanks, 2026-09-28) plus unconfirmed 'SalesBleed' Agentforce flaws (Business Wire, 2026-09-24) keeping the AI-disruption narrative active.",
+      "target_price_12m": {"value": 175.43, "cite": "evaluation.json scenarios.bear.target_price_12m (research/CRM/2026-10-08-evaluation.md)"},
+      "target_band": {"value": 0.109, "cite": "Bear target (175.43) is a technical/price-level anchor (2026-07-17 breakout level [HI]), not a multiple re-rate. Cross-checked against EV/EBITDA compressing to its own 5y min 15.9x (current 16.7x is still 2% above its min, unlike P/E and P/FCF which are already below their mins) [RA]: 224.56*(15.9/16.7)=213.76. Half the (213.76-175.43) spread = 19.17, relative to the 175.43 target = 10.9%."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed stockanalysis.com factor_news for SPY (research/CRM/2026-10-08-mc-inputs.json factor_news.SPY): same-week headlines show the S&P 500 at fresh record highs (CNBC, Bloomberg, WSJ, 2026-10-06/07) alongside 'SPY, QQQ pressured by tech selloff and elevated Treasury yields' (TipRanks, 2026-10-07) and a large bearish put spread reported by CNBC (2026-10-07); no net directional view the news supports, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "SPY factor_stats.vol_annual from the 156-week regression (research/CRM/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual); no stock-specific reason cited to adjust it."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "factor_news for IEF is one-directional bearish for Treasuries (research/CRM/2026-10-08-mc-inputs.json factor_news.IEF): 'US 30-Year Yields Return to 2002 High' (Bloomberg, 2026-10-07), 'Global Bond Markets Sell Off on France's Fiscal Worries' (Barron's, 2026-10-05), 'The Bond Rout Is Deepening' (WSJ, 2026-10-01); consistent with the macro overlay's dominant_chain (DFII10 real yields +0.48pp/1m) and macro_bear ('real yields keep rising on hot core CPI/hawkish Fed') in research/CRM/2026-10-08-macro.md. Kept modest (-5%, within the +/-15% guardrail) rather than extrapolating the 'highest since 2002' language directly."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "IEF factor_stats.vol_annual from the 156-week regression (research/CRM/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual); no stock-specific reason cited to adjust it."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction",
+      "reason": "The fact sheet's stale 'next earnings date' (Aug 26, 2026) means the true next report falls near the end of the 3-month tactical window (around late November on the usual quarterly cadence), a discrete event that has repeatedly moved the stock sharply in one week; the evaluation's bear case explicitly flags this as compressing the pullback window.",
+      "cite": "research/CRM/2026-10-08-evaluation.md bear case ('the next report falls around late November... the pullback window shrinks to about six weeks'); research/CRM/2026-10-08.md section 4 (next earnings date stale).",
+      "annual_probability": {"value": 0.76, "cite": "6 of the last 20 quarterly/annual earnings weeks (2021-2026) moved >=10% in magnitude (research/CRM/2026-10-08-mc-inputs.json analogues.event_weeks, types containing earnings_release/annual_report): -10.1%, +14.9%, +15.9%, -13.9%, +13.0%, +22.4%. Per-quarter rate 6/20=30%; annual probability of at least one such move across 4 quarters = 1-(1-0.30)^4 = 0.76."},
+      "impact": {"value": -0.139, "cite": "Matches the analogue week exactly."},
+      "analogue": {"week": "2024-05-28", "move": -0.139},
+      "assumption": null
+    },
+    {
+      "name": "Competitive AI-disruption shock (e.g. a large rival's enterprise-AI launch)",
+      "reason": "Meta's launch of a competing enterprise-AI business dropped the shares ~2% intraday on 2026-09-28, and the 'AI-disruption' narrative for software is live and unresolved (CNBC: 'Salesforce shares sit at the epicenter of AI confusion'; ETF Trends: 'Where AI Competitive Moats Are Evaporating').",
+      "cite": "factsheet-2026-10-08.md News & sentiment: TipRanks 2026-09-28 ('Salesforce Stock (CRM) Falls as Meta Launches New Enterprise AI Business'); CNBC 2026-10-06; ETF Trends 2026-09-30.",
+      "annual_probability": {"value": 0.3, "cite": "No dated analogue table exists for competitor-product-launch events; based on this being the first such named event in the reviewed news window, treated as a low-but-material annual chance of a repeat large-competitor AI entrant."},
+      "impact": {"value": -0.15, "cite": "No historical analogue available; set below the 0.30 assumed-impact cap, modestly larger than the -2% single-day reaction to the Meta announcement to allow for a more sustained competitive shock (note, research/CRM/2026-10-08.md section 1 and 5)."},
+      "analogue": null,
+      "assumption": "No event_weeks entry tags a competitor-product-launch shock in the jump table (research/CRM/2026-10-08-mc-inputs.json analogues.event_weeks only tags earnings/proxy/investor-day events); impact and probability are assumption-based and kept within the max_jump_impact_assumed (0.30) bound."
+    },
+    {
+      "name": "Agentforce security-vulnerability disclosure/exploit",
+      "reason": "An unverified report alleges 'SalesBleed' Agentforce flaws enabling zero-click CRM data theft and AI-agent impersonation; if confirmed or exploited, this is a discrete legal/reputational risk the note flags explicitly (tagged [Guessing] for unconfirmed impact).",
+      "cite": "factsheet-2026-10-08.md News & sentiment: Business Wire 2026-09-24 ('Zenity Labs Uncovers SalesBleed, 3 Salesforce Agentforce Flaws...'); research/CRM/2026-10-08.md section 5 ('Quality red flags').",
+      "annual_probability": {"value": 0.2, "cite": "No dated analogue table exists for security-vulnerability disclosures; this is the first such named event in the reviewed news window, treated as a modest annual chance of a material confirmed exploit (lower than the competitive-shock jump given the note's Guessing tag on unconfirmed impact)."},
+      "impact": {"value": -0.1, "cite": "No historical analogue available; kept modest and well below the 0.30 assumed-impact cap given the unconfirmed/Guessing status of the report (research/CRM/2026-10-08.md section 5)."},
+      "analogue": null,
+      "assumption": "No event_weeks entry tags a security-vulnerability disclosure in the jump table (research/CRM/2026-10-08-mc-inputs.json analogues.event_weeks only tags earnings/proxy/investor-day events); impact and probability are assumption-based and kept within the max_jump_impact_assumed (0.30) bound."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": 0.015, "cite": "Fact sheet Price section: price +0.3% vs the rising 50-day MA which sits +12.1% above the 200-day MA (uptrend intact), RSI(14) 43.5 (cooled, not broken), and relative strength vs SPY +28.5pp over 3 months [HI,ST] -- a textbook pullback-in-uptrend setup supports a modest positive 3-month technical tilt, well inside the +/-0.02 bound."}
+}

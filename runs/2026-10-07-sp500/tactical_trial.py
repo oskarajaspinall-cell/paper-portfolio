@@ -1,5 +1,6 @@
-"""Trial of the new tactical setups (owner rule 2026-10-08): full initiation of the best drift and best
-pullback candidate from the S&P 500 screen, then the portfolio-manager for any BUY. Usage: tactical_trial.py"""
+"""Tactical initiations under the new setups (owner rule 2026-10-08), then the portfolio-manager for any BUY.
+    tactical_trial.py                  the best drift and the best pullback from today's S&P 500 screen
+    tactical_trial.py ROST CRM ...     these tickers (each must still pass today's screen)"""
 import datetime as dt
 import json
 import subprocess
@@ -30,11 +31,21 @@ asof = dt.date.today().isoformat()
 state = json.loads((ROOT / "portfolio" / "state.json").read_text())
 res = screen.run(Fetcher(cfg), cfg, asof, state=state, index="SP500")  # today's pages (cached after the first run)
 picks = []
-for k in ("drift", "pullback"):
-    best = sorted((r for r in res["rows"] if r["setup"] == k), key=lambda r: -r["tactical"])
-    if best:
-        picks.append((best[0]["ticker"], best[0]["setup_detail"]))
-log(f"== tactical trial picks: {picks}")
+if sys.argv[1:]:
+    by = {r["ticker"]: r for r in res["rows"]}
+    for t in sys.argv[1:]:
+        r = by.get(t)
+        if r and r["setup"]:
+            picks.append((t, r["setup_detail"]))
+        else:
+            log(f"!! {t} no longer passes today's screen: {(r or {}).get('setup_skipped') or 'not a candidate'}")
+            print(f"{t} skipped: {(r or {}).get('setup_skipped') or 'not a candidate'}", flush=True)
+else:
+    for k in ("drift", "pullback"):
+        best = sorted((r for r in res["rows"] if r["setup"] == k), key=lambda r: -r["tactical"])
+        if best:
+            picks.append((best[0]["ticker"], best[0]["setup_detail"]))
+log(f"== tactical picks: {picks}")
 
 
 def one(p):
@@ -52,12 +63,12 @@ def one(p):
         return t, None, None
 
 
-with ThreadPoolExecutor(max_workers=2) as pool:
+with ThreadPoolExecutor(max_workers=3) as pool:
     results = list(pool.map(one, picks))
 buys = [ev for t, d, ev in results if d and d["decision"] == "BUY"]
 if buys:
     wr.claude_agent("portfolio-manager", f"Evaluation files: {' '.join(str(e.relative_to(ROOT)) for e in buys)}. Date {asof}. "
-                    "Write the requests to runs/2026-10-07-sp500/requests-tactical-trial.json and submit with --at-next-open "
-                    "--save runs/2026-10-07-sp500/submit-tactical-trial.json (decided trades fill at the next open).", log)
+                    f"Write the requests to runs/2026-10-07-sp500/requests-tactical-{asof}.json and submit with --at-next-open "
+                    f"--save runs/2026-10-07-sp500/submit-tactical-{asof}.json (decided trades fill at the next open).", log)
 log("== tactical trial finished")
 print(json.dumps([(t, d and {k: d.get(k) for k in ("decision", "conviction", "exit_plan", "rationale")}) for t, d, _ in results], indent=1))

@@ -1,0 +1,65 @@
+{
+  "ticker": "AVGO",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/AVGO/2026-10-08-evaluation.md Decision JSON, scenarios.bull.probability"},
+      "probability_evidence": "TTM operating margin 48.8% and ROIC 30.7% are both rising over five years, net debt/EBITDA is only 0.68x, and P/E (48.1x) sits 22% below the peer median (61.7x) with P/FCF 47% below (84.3x); the setup fits the pullback rules (price +1.1% above the 50-day MA, RSI 53.1) after bouncing from 335.81, and custom-AI-chip deals with Anthropic/OpenAI could lift revenue visibility if financing confirms (research/AVGO/2026-10-08-evaluation.md bull case; research/AVGO/factsheet-2026-10-08.md Quality/Valuation/Price tables).",
+      "target_price_12m": {"value": 495.00, "cite": "research/AVGO/2026-10-08-evaluation.md Decision JSON, scenarios.bull.target_price_12m (52-week high, factsheet-2026-10-08.md HI)"},
+      "target_band": {"value": 0.2218, "cite": "Bull target (495.00) implies P/E 63.24x (495.00 / EPS 7.8277, where EPS = current price 376.51 / current P/E 48.1x) -- 39.5% of the 5y P/E range (17.1x-133.8x, factsheet-2026-10-08.md Valuation table). Applying that same percentile to the P/FCF range (11.7x-64.9x -> 32.70x; FCF/share 8.4233 = 376.51/44.7 -> implied price 275.4) and to EV/EBITDA (11.5x-51.2x -> 27.20x; EBITDA 52.53bn backed out from market cap 1,771.4bn and net debt/EBITDA 0.68x [ST,RA] -> implied EV 1,428.9bn, less net debt 35.72bn, over 4.7051bn shares -> implied price 296.1) spans 275.4-495.00; half that spread (109.8) / the 495.00 target = 0.2218; below the 0.3316 blended residual vol cap (mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/AVGO/2026-10-08-evaluation.md Decision JSON, scenarios.base.probability"},
+      "probability_evidence": "The 50-day MA (372.53) sits only 1.2% above the 200-day (368.22), 3-month momentum is just +1.5%, and AVGO trails SPY over 3/6/12 months (-2.4pp/-10.5pp/-6.6pp); earnings growth is offset by the debt-financing overhang, consistent with sideways consolidation around the converging moving averages rather than a re-rating (research/AVGO/2026-10-08-evaluation.md base case and bear case; research/AVGO/factsheet-2026-10-08.md Price table).",
+      "target_price_12m": {"value": 376.51, "cite": "research/AVGO/2026-10-08-evaluation.md Decision JSON, scenarios.base.target_price_12m (last completed close, factsheet-2026-10-08.md HI)"},
+      "target_band": {"value": 0.2111, "cite": "Base target equals the current price, i.e. current P/E 48.1x at the 26.6% position in its 5y range (17.1x-133.8x, factsheet-2026-10-08.md Valuation table, close to the sheet's own stated 27%). Applying that same percentile to P/FCF (11.7x-64.9x -> 25.83x; FCF/share 8.4233 -> implied price 217.6) and EV/EBITDA (11.5x-51.2x -> 22.05x; EBITDA 52.53bn, net debt 35.72bn, 4.7051bn shares -> implied price 238.5) spans 217.6-376.51; half that spread (79.5) / the 376.51 target = 0.2111; below the 0.3316 blended residual vol cap (mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/AVGO/2026-10-08-evaluation.md Decision JSON, scenarios.bear.probability"},
+      "probability_evidence": "Since the 495.00 high, swing highs have kept falling (432.73, 376.59, 366.55) with the close right at the last one, and the 428.35 target sits just under the 432.73 resistance (only 2.2x the stop distance -- no spare room); a fresh $50-60bn debt-financing overhang hit shares premarket, and the macro overlay's moderate bear tilt (real yields +61bp/3m, HY spreads +36bp/3m widening together into the raise) moved 0.05 of probability from bull to bear (research/AVGO/2026-10-08-evaluation.md bear case; research/AVGO/2026-10-08-macro.md macro_tilt).",
+      "target_price_12m": {"value": 289.96, "cite": "research/AVGO/2026-10-08-evaluation.md Decision JSON, scenarios.bear.target_price_12m (52-week low, factsheet-2026-10-08.md HI)"},
+      "target_band": {"value": 0.1981, "cite": "Bear target (289.96) implies P/E 37.04x (289.96 / EPS 7.8277) -- 17.1% of the 5y P/E range (17.1x-133.8x, factsheet-2026-10-08.md Valuation table). Applying that same percentile to P/FCF (11.7x-64.9x -> 20.79x; FCF/share 8.4233 -> implied price 175.1) and EV/EBITDA (11.5x-51.2x -> 18.28x; EBITDA 52.53bn, net debt 35.72bn, 4.7051bn shares -> implied price 196.5) spans 175.1-289.96; half that spread (57.4) / the 289.96 target = 0.1981; below the 0.3316 blended residual vol cap (mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed over the same week: record highs driven narrowly by tech (ETF Trends 2026-10-07 'Combined Assets in SPY, SPYM Cross $1 Trillion'; CNBC/Bloomberg 'S&P 500 Hits Record High') against explicit warnings the rally is narrow and fragile (TipRanks 2026-10-07 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields'; CNBC 2026-10-07 'Two big bearish trades point to skepticism'; WSJ 2026-10-06 'Powered by Tech-and Not Much Else') -- no net direction supported, set to 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/AVGO/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "research/AVGO/2026-10-08-macro.md dominant_chain and macro_tilt (direction: toward bear, moderate): 10y real yield (DFII10) +61bp/3m to 2.91%, 10y nominal (DGS10) +72bp/3m to 5.27%, 2y (DGS2) 4.79% ~91bp above fed funds (3.88%, DFF) implying no near-term cuts priced; consistent with mc-inputs.json factor_news.IEF headlines ('US 30-Year Yields Return to 2002 High', 'Global Bond Markets Sell Off on France's Fiscal Worries', 'The Bond Rout Is Deepening'). A modest further yield backup implies a modest IEF price decline; kept modest given mixed headlines also showing a partial yield pullback (ETF Trends, Guardian, both 2026-10-02)."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/AVGO/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings surprise",
+      "reason": "AVGO's custom-AI-chip narrative has produced some of the largest earnings-day moves in the stock's history in either direction; the next report (timing unconfirmed on the fact sheet) is a discrete catalyst for the 12-month horizon.",
+      "cite": "research/AVGO/2026-10-08-evaluation.md bear case ('the next earnings date is not confirmed'); research/AVGO/factsheet-2026-10-08.md Price table (Next earnings date row, Earnings-type reaction row)",
+      "annual_probability": {"value": 0.48, "cite": "3 of the last 20 quarterly earnings weeks in event_weeks (research/AVGO/2026-10-08-mc-inputs.json) moved >=15% in magnitude (2024-06-12 +0.2335, 2024-09-03 -0.1586, 2024-12-09 +0.2522) = 15% per quarter; P(at least one such quarter in 12 months) = 1-(1-0.15)^4 = 0.478."},
+      "impact": {"value": -0.1586, "cite": "Matches the Q3 2024 earnings-release/company-presentation week move exactly (research/AVGO/2026-10-08-mc-inputs.json event_weeks / largest_falls, week 2024-09-03)."},
+      "analogue": {"week": "2024-09-03", "move": -0.1586},
+      "assumption": null
+    },
+    {
+      "name": "AI-chip debt-financing confirmation shock",
+      "reason": "AVGO is reported to be arranging $50-60bn in private debt for OpenAI/Anthropic custom-chip capacity; confirmation of adverse terms, size or lender pushback would be a discrete, fast-moving event distinct from the gradual real-yield/HY-spread drift already in the bear scenario's target and the IEF factor move.",
+      "cite": "research/AVGO/2026-10-08.md section 5 (Quality red flags) and section 1 (catalyst); research/AVGO/2026-10-08-macro.md refresh_triggers ('SEC 8-K or press confirmation of the final AI-chip debt financing terms/size for AVGO')",
+      "annual_probability": {"value": 0.6, "cite": "Multiple consistent reports across five different outlets within the same 48 hours (Bloomberg, TipRanks, Invezz, WSJ, TheFly -- all cited in research/AVGO/factsheet-2026-10-08.md News & sentiment, 2026-10-06 to 2026-10-08) indicate advanced, active negotiations, making a confirmation or collapse of terms more likely than not within 12 months; no closer base rate is available since no analogous AVGO financing event appears in the 5y history."},
+      "impact": {"value": -0.15, "cite": "No historical AVGO analogue exists for a debt-financing confirmation shock of this scale; assumption kept modest and below the 0.30 cap (montecarlo config max_jump_impact_assumed) since it models only the instantaneous reaction to the financing news, not the full-year de-rate already captured in the bear scenario target (289.96)."},
+      "analogue": null,
+      "assumption": "No analogue in the 5y weekly history for an AVGO-specific debt-financing confirmation event; impact set to -0.15, within the 0.30 cap."
+    },
+    {
+      "name": "Market-wide risk-off shock (VIX spike)",
+      "reason": "The macro overlay names a VIX spike/risk-off event as a refresh trigger that would hit this high-beta (1.48) name disproportionately, distinct from the gradual rising-real-yield/HY-spread drift already reflected in the bear scenario and the IEF factor move.",
+      "cite": "research/AVGO/2026-10-08-macro.md refresh_triggers ('VIX spikes, signalling a broader risk-off repricing of high-multiple semis'); research/AVGO/factsheet-2026-10-08.md Other table (Beta 5y: 1.48)",
+      "annual_probability": {"value": 0.70, "cite": "6 of the weekly moves <=-10% in the 5-year history (2021-10-18 to 2026-09-28, research/AVGO/2026-10-08-mc-inputs.json all_weekly_moves/event_weeks) were not earnings weeks (2025-03-31 -0.135, 2025-03-24 -0.1176, 2026-06-22 -0.1112, 2022-01-18 -0.1059, 2024-04-15 -0.1037, 2024-11-11 -0.1024), i.e. ~1.2/yr; P(at least one in 12 months) = 1-e^-1.2 = 0.70."},
+      "impact": {"value": -0.135, "cite": "Matches a non-earnings weekly fall exactly (research/AVGO/2026-10-08-mc-inputs.json largest_falls, week 2025-03-31; no earnings_release event that week per event_weeks)."},
+      "analogue": {"week": "2025-03-31", "move": -0.135},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}
