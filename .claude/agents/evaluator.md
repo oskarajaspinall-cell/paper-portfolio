@@ -43,7 +43,7 @@ The file must END with the json block. Then run `bin/py scripts/check_docs.py ev
   - Stop from the stock's own volatility (fact sheet ATR): drift just below the reaction day's low (low − 0.25 × ATR); pullback last close − 2.5 × ATR. Never a flat percentage, never tightened to make the ratio work.
   - Target: a level the evidence supports, at least 2 × (price_at_decision − stop) above price_at_decision. A BUY below 2:1 fails the checks; if the honest target can't reach 2:1, it is an AVOID.
   - Time limit: drift ≤8 weeks; pullback before the next earnings date; never beyond 3 months.
-  - Size is set by the rules (a stop-out costs ~0.5% of the portfolio, max 5%); omit `target_weight_pct`.
+  - Size is set by the rules (a stop-out costs ~1% of the portfolio, max 5%); omit `target_weight_pct`.
 - `scenarios` (every decision, new name or holding): exactly three researched outcomes over 12 months, used later by the Monte Carlo step:
   `{"bull": {"probability": 0.25, "target_price_12m": <price>, "basis": "..."}, "base": {...}, "bear": {...}}`
   - Probabilities sum to exactly 1. Targets are YOUR estimates in the share's quoted currency, built from fact-sheet figures (e.g. "EV/EBITDA returns to its 5y median 10.4x [RA] on TTM EBITDA [IS]"); NEVER a sell-side analyst target. bear <= base <= bull.

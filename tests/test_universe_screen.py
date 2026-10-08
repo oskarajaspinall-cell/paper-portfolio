@@ -271,7 +271,7 @@ def test_atr_and_pullback_plan(cfg):
     p = setups.plan("pullback", rows, cfg["tactical"])
     assert p["stop"] == pytest.approx(90.0)          # 100 - 2.5 x 4
     assert p["min_target"] == pytest.approx(120.0)   # 2:1
-    assert p["size_pct"] == pytest.approx(5.0)       # 0.5% / 10% risk
+    assert p["size_pct"] == pytest.approx(5.0)       # 1% / 10% risk = 10%, capped at 5%
 
 
 def test_drift_signal_needs_jump_volume_and_hold(cfg):

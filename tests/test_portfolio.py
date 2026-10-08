@@ -188,15 +188,15 @@ def test_rule_core_position_max(cfg):
 
 def test_tactical_time_limit_default_and_risk_sizing(cfg):
     e = engine(cfg)
-    e.process([tac_buy("NVDA", target=120)])  # stop 90: 10% risk -> 0.5% / 10% = 5% (the cap)
+    e.process([tac_buy("NVDA", target=120)])  # stop 90: 10% risk -> 1% / 10% = 10%, capped at 5%
     ep = e.s["holdings"]["NVDA"]["exit_plan"]
     assert ep["stop"] == 90.0 and ep["time_limit"] == "2027-01-06" and ep["target"] == 120
     w = e.s["holdings"]["NVDA"]["market_value_usd"] / totals(e.s)["total"] * 100
     assert 4.9 < w <= 5.0  # full-size tactical lands at/below the cap after its own costs
     e = engine(cfg)
-    e.process([tac_buy("NVDA", target=140, exit_plan={"target": 140, "stop": 80})])  # 20% risk -> 2.5%
+    e.process([tac_buy("NVDA", target=160, exit_plan={"target": 160, "stop": 70})])  # 30% risk -> 1% / 30% = 3.3%
     w = e.s["holdings"]["NVDA"]["market_value_usd"] / totals(e.s)["total"] * 100
-    assert 2.4 < w <= 2.5  # a stop-out costs ~0.5% of the portfolio
+    assert 3.2 < w <= 3.34  # a stop-out costs ~1% of the portfolio
 
 
 def test_rule_tactical_reward_risk(cfg):

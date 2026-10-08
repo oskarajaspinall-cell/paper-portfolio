@@ -25,7 +25,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 ## Investment approach
 - **Only high conviction is bought**: a BUY or ADD (core or tactical) needs conviction >= `min_buy_conviction` (4). Anything less is AVOID (new names) or HOLD (holdings).
 - **CORE**: good business + attractive valuation, ~12-month horizon. Judged purely against thesis (invalidation) triggers on business fundamentals. No price stops, price levels, moving averages or valuation multiples as triggers.
-- **TACTICAL**: weeks to ~3 months, two setups only (owner rule 2026-10-08): **post-earnings drift** (a real results beat the price is still digesting) and **pullback in an uptrend** (a dip to around the 50-day average). MUST have target, stop and time limit at entry; these execute mechanically. The stop comes from the stock's own volatility (ATR), the target must be ≥2× the stop distance (checked at the decision and again at the fill-day open), and the size is set so a stop-out costs ~0.5% of the portfolio (max 5%).
+- **TACTICAL**: weeks to ~3 months, two setups only (owner rule 2026-10-08): **post-earnings drift** (a real results beat the price is still digesting) and **pullback in an uptrend** (a dip to around the 50-day average). MUST have target, stop and time limit at entry; these execute mechanically. The stop comes from the stock's own volatility (ATR), the target must be ≥2× the stop distance (checked at the decision and again at the fill-day open), and the size is set so a stop-out costs ~1% of the portfolio (max 5%).
 - The label is fixed at entry. A tactical position can NEVER be relabelled core; it can only become core by passing a full core initiation, which records a new entry decision.
 - When a core invalidation trigger fires, the holding gets a full core re-initiation (researcher + evaluator), not a quick review.
 - When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve or sector limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
@@ -60,7 +60,7 @@ default_time_limit_months = 3
 # (capped at max_position_pct), so a stop-out costs about risk_per_trade_pct of the portfolio.
 stop_atr_multiple = 2.5           # pullback stop = last close - 2.5 x ATR(14); drift stop = jump-day low - 0.25 x ATR
 min_reward_risk = 2.0             # (target - entry) / (entry - stop), checked at decision AND at the fill-day open
-risk_per_trade_pct = 0.5
+risk_per_trade_pct = 1.0           # owner 2026-10-08 (was 0.5)
 drift_lookback_sessions = 10      # the earnings reaction must be this recent
 drift_min_jump_pct = 5            # reaction-day close vs prior close
 drift_min_volume_x = 2            # reaction-day volume vs its prior 50-session average
