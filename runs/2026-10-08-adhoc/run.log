@@ -1,0 +1,156 @@
+[18:01:13] == initiate CRWV (CORE)
+[18:01:13] $ claude -p Ticker CRWV, note type CORE, date 2026-10-08. Owner-requested initiation. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[18:01:13] == initiate ONDS (CORE)
+[18:01:13] $ claude -p Ticker ONDS, note type CORE, date 2026-10-08. Owner-requested initiation. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[18:01:13] == initiate GRAB (CORE)
+[18:01:13] $ claude -p Ticker GRAB, note type CORE, date 2026-10-08. Owner-requested initiation. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[18:05:56] check_docs passes. No blocked URLs encountered (the coreweave.com/investors page returned 404 — not an allowlist block, just a dead page) and no data conflicts between the fact sheet and qualitative sources.
+
+- Note: `research/CRWV/2026-10-08.md`
+- Fact sheet: `research/CRWV/factsheet-2026-10-08.md`
+- `OK research/CRWV/2026-10-08.md type=CORE 1=49 2=150 3=143 4=69 5=96 6=55 total=562`
+- No data conflicts. One fetch attempt (coreweave.com/investors) returned HTTP 404 (dead page, not an allowlist block); no other URLs were blocked.
+[18:05:56] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/CRWV/2026-10-08.md
+[18:05:56] OK /Users/oskaraspinall/paper-portfolio/research/CRWV/2026-10-08.md type=CORE 1=49 2=150 3=143 4=69 5=96 6=55 total=562
+[18:05:56] $ claude -p Ticker CRWV, date 2026-10-08. Research: research/CRWV/factsheet-2026-10-08.md, research/CRWV/2026-10-08.md. Macro snapshot: reports/macro/2026-10-08.md. Write research/CRWV/2026-10-08-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[18:06:34] Note path: `research/ONDS/2026-10-08.md`
+Fact sheet path: `research/ONDS/factsheet-2026-10-08.md`
+Check: `OK research/ONDS/2026-10-08.md type=CORE 1=69 2=147 3=138 4=75 5=96 6=89 total=614`
+
+No data conflicts; no blocked URLs (6/6 WebFetch calls used, all allowlisted: sec.gov ×3, ondas.com ×2 one 404, stockanalysis.com fact sheet).
+
+**Decision: AVOID.** Structurally unprofitable (operating margin never positive in 5y, net debt/EBITDA 7.44x TTM rising), Altman Z in distress zone (1.79), Piotroski F weak (3/9), 297% YoY share dilution funding a rapid, unintegrated acquisition spree, and no fact-sheet-computable fair value (negative FCF/EBITDA) against a valuation already 132% above peers on EV/Sales. Fails the core "good business + attractive valuation" bar; conviction well below the min_buy_conviction=4 threshold.
+[18:06:34] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/ONDS/2026-10-08.md
+[18:06:34] OK /Users/oskaraspinall/paper-portfolio/research/ONDS/2026-10-08.md type=CORE 1=69 2=147 3=138 4=75 5=96 6=89 total=614
+[18:06:34] $ claude -p Ticker ONDS, date 2026-10-08. Research: research/ONDS/factsheet-2026-10-08.md, research/ONDS/2026-10-08.md. Macro snapshot: reports/macro/2026-10-08.md. Write research/ONDS/2026-10-08-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[18:06:47] Note path: `research/GRAB/2026-10-08.md`
+Fact sheet path: `research/GRAB/factsheet-2026-10-08.md`
+check_docs: `OK research/GRAB/2026-10-08.md type=CORE 1=37 2=148 3=148 4=60 5=100 6=55 total=548`
+
+Data conflicts: none.
+Blocked URLs: `https://www.reuters.com/legal/transactional/grab-execs-buy-back-shares-after-stock-hits-3-year-low-atome-deal-2026-09-23/` (WebFetch unable to fetch reuters.com; moved on per protocol).
+[18:06:47] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/GRAB/2026-10-08.md
+[18:06:47] OK /Users/oskaraspinall/paper-portfolio/research/GRAB/2026-10-08.md type=CORE 1=37 2=148 3=148 4=60 5=100 6=55 total=548
+[18:06:47] $ claude -p Ticker GRAB, date 2026-10-08. Research: research/GRAB/factsheet-2026-10-08.md, research/GRAB/2026-10-08.md. Macro snapshot: reports/macro/2026-10-08.md. Write research/GRAB/2026-10-08-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[18:08:03] research/ONDS/2026-10-08-macro.md
+OK research/ONDS/2026-10-08-macro.md macro_weight=secondary words=214
+[18:08:03] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/ONDS/2026-10-08-macro.md
+[18:08:03] OK /Users/oskaraspinall/paper-portfolio/research/ONDS/2026-10-08-macro.md macro_weight=secondary words=214
+[18:08:03] $ claude -p Evaluate ONDS for 2026-10-08: fact sheet research/ONDS/factsheet-2026-10-08.md, note research/ONDS/2026-10-08.md, state portfolio/state.json, macro overlay research/ONDS/2026-10-08-macro.md. Owner-requested initiation. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[18:08:06] research/GRAB/2026-10-08-macro.md
+OK research/GRAB/2026-10-08-macro.md macro_weight=secondary words=246
+[18:08:06] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/GRAB/2026-10-08-macro.md
+[18:08:06] OK /Users/oskaraspinall/paper-portfolio/research/GRAB/2026-10-08-macro.md macro_weight=secondary words=246
+[18:08:06] $ claude -p Evaluate GRAB for 2026-10-08: fact sheet research/GRAB/factsheet-2026-10-08.md, note research/GRAB/2026-10-08.md, state portfolio/state.json, macro overlay research/GRAB/2026-10-08-macro.md. Owner-requested initiation. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[18:08:36] research/CRWV/2026-10-08-macro.md
+OK research/CRWV/2026-10-08-macro.md macro_weight=primary words=244
+[18:08:36] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/CRWV/2026-10-08-macro.md
+[18:08:36] OK /Users/oskaraspinall/paper-portfolio/research/CRWV/2026-10-08-macro.md macro_weight=primary words=244
+[18:08:36] $ claude -p Evaluate CRWV for 2026-10-08: fact sheet research/CRWV/factsheet-2026-10-08.md, note research/CRWV/2026-10-08.md, state portfolio/state.json, macro overlay research/CRWV/2026-10-08-macro.md. Owner-requested initiation. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[18:08:38] research/ONDS/2026-10-08-evaluation.md
+OK research/ONDS/2026-10-08-evaluation.md Bear case=132 Bull case=121 decision=AVOID
+[18:08:38] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/ONDS/2026-10-08-evaluation.md
+[18:08:38] OK /Users/oskaraspinall/paper-portfolio/research/ONDS/2026-10-08-evaluation.md Bear case=132 Bull case=121 decision=AVOID
+[18:08:38] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py ONDS --asof 2026-10-08 --eval /Users/oskaraspinall/paper-portfolio/research/ONDS/2026-10-08-evaluation.md
+[18:08:38] {"out": "research/ONDS/2026-10-08-valuation.md", "used": null, "fair_value": {}, "price": 7.19}
+[18:08:38] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py ONDS --asof 2026-10-08
+[18:08:42] {"out": "research/ONDS/2026-10-08-mc-inputs.json", "betas": {"SPY": 2.164, "IEF": -0.333}, "r2": 0.065, "residual_vol": 1.0156}
+[18:08:42] $ claude -p Ticker ONDS, date 2026-10-08. Research: research/ONDS/factsheet-2026-10-08.md, research/ONDS/2026-10-08.md, research/ONDS/2026-10-08-evaluation.md, inputs research/ONDS/2026-10-08-mc-inputs.json, macro overlay research/ONDS/2026-10-08-macro.md. Write research/ONDS/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[18:08:46] research/GRAB/2026-10-08-evaluation.md
+OK research/GRAB/2026-10-08-evaluation.md Bear case=137 Bull case=128 decision=AVOID
+[18:08:46] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/GRAB/2026-10-08-evaluation.md
+[18:08:46] OK /Users/oskaraspinall/paper-portfolio/research/GRAB/2026-10-08-evaluation.md Bear case=137 Bull case=128 decision=AVOID
+[18:08:46] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py GRAB --asof 2026-10-08 --eval /Users/oskaraspinall/paper-portfolio/research/GRAB/2026-10-08-evaluation.md
+[18:08:46] {"out": "research/GRAB/2026-10-08-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 4.43, "base": 5.25, "bull": 46.86}, "price": 3.08}
+[18:08:46] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py GRAB --asof 2026-10-08
+[18:08:50] {"out": "research/GRAB/2026-10-08-mc-inputs.json", "betas": {"SPY": 1.495, "IEF": -0.426}, "r2": 0.3, "residual_vol": 0.3329}
+[18:08:50] $ claude -p Ticker GRAB, date 2026-10-08. Research: research/GRAB/factsheet-2026-10-08.md, research/GRAB/2026-10-08.md, research/GRAB/2026-10-08-evaluation.md, inputs research/GRAB/2026-10-08-mc-inputs.json, macro overlay research/GRAB/2026-10-08-macro.md. Write research/GRAB/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[18:09:10] research/CRWV/2026-10-08-evaluation.md
+OK research/CRWV/2026-10-08-evaluation.md Bear case=135 Bull case=122 decision=AVOID
+[18:09:10] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/CRWV/2026-10-08-evaluation.md
+[18:09:10] OK /Users/oskaraspinall/paper-portfolio/research/CRWV/2026-10-08-evaluation.md Bear case=135 Bull case=122 decision=AVOID
+[18:09:10] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py CRWV --asof 2026-10-08 --eval /Users/oskaraspinall/paper-portfolio/research/CRWV/2026-10-08-evaluation.md
+[18:09:10] {"out": "research/CRWV/2026-10-08-valuation.md", "used": null, "fair_value": {}, "price": 88.45}
+[18:09:10] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py CRWV --asof 2026-10-08
+[18:09:11] 
+[18:09:11] !! MONTE CARLO FAILED for CRWV: /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py CRWV --asof 2026-10-08 exited 2: MC INPUTS FAILED — nothing written: only 78 common completed weeks (need >= 104) [missing]
+[18:09:11] == CRWV: AVOID 2
+[18:09:11] == initiate HIMS (CORE)
+[18:09:11] $ claude -p Ticker HIMS, note type CORE, date 2026-10-08. Owner-requested initiation. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[18:11:07] You've hit your session limit · resets 8:20pm (Europe/London)
+[18:11:07] !! FAILED HIMS: claude -p Ticker HIMS, note type CORE, date 2026-10-08. Owner-requested initiation. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[18:12:34] You've hit your session limit · resets 8:20pm (Europe/London)
+[18:12:34] !! MONTE CARLO FAILED for ONDS: claude -p Ticker ONDS, date 2026-10-08. Research: research/ONDS/factsheet-2026-10-08.md, research/ONDS/2026-10-08.md, research/ONDS/2026-10-08-evaluation.md, inputs research/ONDS/2026-10-08-mc-inputs.json, macro overlay research/ONDS/2026-10-08-macro.md. Write research/ONDS/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text exited 1: 
+[18:12:34] == ONDS: AVOID 2
+[18:12:37] You've hit your session limit · resets 8:20pm (Europe/London)
+[18:12:37] !! MONTE CARLO FAILED for GRAB: claude -p Ticker GRAB, date 2026-10-08. Research: research/GRAB/factsheet-2026-10-08.md, research/GRAB/2026-10-08.md, research/GRAB/2026-10-08-evaluation.md, inputs research/GRAB/2026-10-08-mc-inputs.json, macro overlay research/GRAB/2026-10-08-macro.md. Write research/GRAB/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text exited 1: 
+[18:12:37] == GRAB: AVOID 3
+[18:12:37] == finished
+[20:21:40] == Monte Carlo retry ONDS
+[20:21:40] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py ONDS --asof 2026-10-08
+[20:21:41] {"out": "research/ONDS/2026-10-08-mc-inputs.json", "betas": {"SPY": 2.164, "IEF": -0.333}, "r2": 0.065, "residual_vol": 1.0156}
+[20:21:41] $ claude -p Ticker ONDS, date 2026-10-08. Research: research/ONDS/factsheet-2026-10-08.md, research/ONDS/2026-10-08.md, research/ONDS/2026-10-08-evaluation.md, inputs research/ONDS/2026-10-08-mc-inputs.json, macro overlay research/ONDS/2026-10-08-macro.md. Write research/ONDS/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[20:28:14] This fails on the research itself (the bear scenario's target price implies a drift outside the configured sanity bounds), not on anything in my parameters file, so per instructions I'm not changing any numbers.
+
+research/ONDS/2026-10-08-mc-params.json
+
+```
+MONTE CARLO FAILED — nothing written:
+- bear drift -69.2% outside -60% to +80%
+```
+[20:28:14] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/ONDS/2026-10-08-mc-params.json
+[20:28:15] 
+[20:28:15] !! MONTE CARLO FAILED for ONDS: /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/ONDS/2026-10-08-mc-params.json exited 2: MONTE CARLO FAILED — nothing written:
+- bear drift -69.2% outside -60% to +80%
+[20:28:15] == Monte Carlo retry GRAB
+[20:28:15] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py GRAB --asof 2026-10-08
+[20:28:16] {"out": "research/GRAB/2026-10-08-mc-inputs.json", "betas": {"SPY": 1.495, "IEF": -0.426}, "r2": 0.3, "residual_vol": 0.3329}
+[20:28:16] $ claude -p Ticker GRAB, date 2026-10-08. Research: research/GRAB/factsheet-2026-10-08.md, research/GRAB/2026-10-08.md, research/GRAB/2026-10-08-evaluation.md, inputs research/GRAB/2026-10-08-mc-inputs.json, macro overlay research/GRAB/2026-10-08-macro.md. Write research/GRAB/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[20:31:19] The simulation ran successfully.
+
+**Parameters file:** `research/GRAB/2026-10-08-mc-params.json`
+
+**Final output:**
+```
+{"3m": {"mean": 0.0181, "median": 0.0344, "p5": -0.4132, "p25": -0.0979, "p50": 0.0344, "p75": 0.164, "p95": 0.3538, "prob_loss": 0.4257}, "6m": {"mean": 0.0429, "median": 0.0427, "p5": -0.5003, "p25": -0.1904, "p50": 0.0427, "p75": 0.258, "p95": 0.5991, "prob_loss": 0.4481}, "12m": {"mean": 0.113, "median": 0.0345, "p5": -0.6259, "p25": -0.2844, "p50": 0.0345, "p75": 0.4184, "p95": 1.1286, "prob_loss": 0.4717}}
+```
+[20:31:19] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/GRAB/2026-10-08-mc-params.json
+[20:31:22] {"3m": {"mean": 0.0181, "median": 0.0344, "p5": -0.4132, "p25": -0.0979, "p50": 0.0344, "p75": 0.164, "p95": 0.3538, "prob_loss": 0.4257}, "6m": {"mean": 0.0429, "median": 0.0427, "p5": -0.5003, "p25": -0.1904, "p50": 0.0427, "p75": 0.258, "p95": 0.5991, "prob_loss": 0.4481}, "12m": {"mean": 0.113, "median": 0.0345, "p5": -0.6259, "p25": -0.2844, "p50": 0.0345, "p75": 0.4184, "p95": 1.1286, "prob_loss": 0.4717}}
+[20:31:22] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_backtest.py GRAB --asof 2026-10-08
+[20:31:26] {"3m": {"in_p5_p95": 7, "in_p25_p75": 4, "n": 8}, "6m": {"in_p5_p95": 7, "in_p25_p75": 4, "n": 8}}
+[20:31:26] == retry initiate HIMS
+[20:31:26] $ claude -p Ticker HIMS, note type CORE, date 2026-10-08. Owner-requested initiation. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[20:35:05] research/HIMS/2026-10-08.md
+research/HIMS/factsheet-2026-10-08.md
+OK research/HIMS/2026-10-08.md type=CORE 1=38 2=146 3=138 4=79 5=73 6=88 total=562
+
+No data conflicts. Blocked URL: https://www.hims.com/investor-relations (403 Forbidden; not retried per instructions).
+[20:35:05] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HIMS/2026-10-08.md
+[20:35:06] OK /Users/oskaraspinall/paper-portfolio/research/HIMS/2026-10-08.md type=CORE 1=38 2=146 3=138 4=79 5=73 6=88 total=562
+[20:35:06] $ claude -p Ticker HIMS, date 2026-10-08. Research: research/HIMS/factsheet-2026-10-08.md, research/HIMS/2026-10-08.md. Macro snapshot: reports/macro/2026-10-08.md. Write research/HIMS/2026-10-08-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[20:37:20] research/HIMS/2026-10-08-macro.md
+OK research/HIMS/2026-10-08-macro.md macro_weight=secondary words=230
+[20:37:20] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HIMS/2026-10-08-macro.md
+[20:37:20] OK /Users/oskaraspinall/paper-portfolio/research/HIMS/2026-10-08-macro.md macro_weight=secondary words=230
+[20:37:20] $ claude -p Evaluate HIMS for 2026-10-08: fact sheet research/HIMS/factsheet-2026-10-08.md, note research/HIMS/2026-10-08.md, state portfolio/state.json, macro overlay research/HIMS/2026-10-08-macro.md. Owner-requested initiation. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[20:37:55] research/HIMS/2026-10-08-evaluation.md
+OK research/HIMS/2026-10-08-evaluation.md Bear case=122 Bull case=96 decision=AVOID
+[20:37:55] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HIMS/2026-10-08-evaluation.md
+[20:37:56] OK /Users/oskaraspinall/paper-portfolio/research/HIMS/2026-10-08-evaluation.md Bear case=122 Bull case=96 decision=AVOID
+[20:37:56] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py HIMS --asof 2026-10-08 --eval /Users/oskaraspinall/paper-portfolio/research/HIMS/2026-10-08-evaluation.md
+[20:37:56] {"out": "research/HIMS/2026-10-08-valuation.md", "used": null, "fair_value": {}, "price": 29.54}
+[20:37:56] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py HIMS --asof 2026-10-08
+[20:38:01] {"out": "research/HIMS/2026-10-08-mc-inputs.json", "betas": {"SPY": 2.457, "IEF": 1.042}, "r2": 0.158, "residual_vol": 0.8762}
+[20:38:01] $ claude -p Ticker HIMS, date 2026-10-08. Research: research/HIMS/factsheet-2026-10-08.md, research/HIMS/2026-10-08.md, research/HIMS/2026-10-08-evaluation.md, inputs research/HIMS/2026-10-08-mc-inputs.json, macro overlay research/HIMS/2026-10-08-macro.md. Write research/HIMS/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[20:49:24] Good, no stray test artifacts were created in the project (the diagnostic run used only scratchpad files).
+
+Diagnosis: I ran the script, got a jump/citation-level failure, fixed the jump calibration (lowered the FDA/litigation/squeeze probabilities) per the "fix and re-run once" rule, and re-ran — the result was essentially unchanged. A diagnostic run with `jumps: []` (zero jumps) in scratchpad reproduced the same ~-42.8% median, proving the failure is driven by the measured residual volatility in the inputs file (blended 87.6%, from `2026-10-08-mc-inputs.json`) relative to the evaluation's bear/bull target range, not by anything correctable in my parameters file. Per the instructions, I did not alter any further numbers to force a pass.
+
+research/HIMS/2026-10-08-mc-params.json
+
+MONTE CARLO FAILED — nothing written:
+- 12m median -42.8% outside the researched bear-to-bull range -32.2% to +21.4%
+[20:49:24] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/HIMS/2026-10-08-mc-params.json
+[20:49:25] 
+[20:49:25] !! MONTE CARLO FAILED for HIMS: /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/HIMS/2026-10-08-mc-params.json exited 2: MONTE CARLO FAILED — nothing written:
+- 12m median -42.8% outside the researched bear-to-bull range -32.2% to +21.4%

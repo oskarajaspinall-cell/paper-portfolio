@@ -1,0 +1,65 @@
+{
+  "ticker": "HIMS",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "research/HIMS/2026-10-08-evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Short interest is 24.76% of float, down 9.8% month-on-month, so the note's bull case argues any clean quarter or regulatory clarity 'could squeeze the stock sharply' [Likely], while EV/Sales (2.8x) sits below its own 5-year median (3.4x), leaving room to re-rate up if margins turn positive again (research/HIMS/2026-10-08.md Valuation/Unusual items; factsheet-2026-10-08.md statistics & valuation table).",
+      "target_price_12m": {"value": 35.87, "cite": "research/HIMS/2026-10-08-evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0, "cite": "factsheet-2026-10-08.md Fair value section: DCF (best) and rNPV (best) and P/E (second) are all [data unavailable]; the evaluation's bull target used a single valuation anchor (EV/Sales re-rating to its 5y median [RA]) with no second method computed for the same scenario, so no disagreement between valuation anchors exists in the research to size a band from."}
+    },
+    "base": {
+      "probability": {"value": 0.4, "cite": "research/HIMS/2026-10-08-evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "TTM fundamentals are already near breakeven rather than clearly improving or collapsing (operating margin -3.8% vs +5.2% FY2025, EV/Sales already at 2.8x, within its own 5y range) [Certain], consistent with the evaluation's base case holding the current multiple flat rather than assuming a resolution either way (research/HIMS/2026-10-08.md Quality/Valuation; factsheet-2026-10-08.md ratios/valuation table).",
+      "target_price_12m": {"value": 29.54, "cite": "research/HIMS/2026-10-08-evaluation.md Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0, "cite": "factsheet-2026-10-08.md Fair value section: DCF/rNPV/P/E all [data unavailable]; the base case holds the current EV/Sales multiple flat with no alternative method computed for the same scenario, so no disagreement between valuation anchors is available to size a band from."}
+    },
+    "bear": {
+      "probability": {"value": 0.4, "cite": "research/HIMS/2026-10-08-evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "Two FDA warning letters (Sept and Dec 2025) and a February 2026 FDA statement naming Hims directly target the compounded-GLP-1 line that drives growth [Certain], alongside deteriorating fundamentals (TTM operating margin -3.8%, FCF conversion -58.5%, Piotroski F 2/9, Altman Z 1.98) and a pending securities class action [Certain/Likely], plus the macro overlay's small toward-bear tilt from rising real yields on a beta-2.43, richly-priced stock (research/HIMS/2026-10-08.md Quality/Unusual items; research/HIMS/2026-10-08-macro.md macro_tilt).",
+      "target_price_12m": {"value": 20.04, "cite": "research/HIMS/2026-10-08-evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.0, "cite": "factsheet-2026-10-08.md Fair value section: DCF/rNPV/P/E all [data unavailable]; the bear target used a single valuation anchor (EV/Sales compression to its 5y minimum [RA]) with no second method computed for the same scenario, so no disagreement between valuation anchors is available to size a band from."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "research/HIMS/2026-10-08-mc-inputs.json factor_news.SPY headlines are mixed/contradictory on 2026-10-06/07 (record highs above 7,800 vs. 'two big bearish trades point to skepticism' and a 'tech rally masking a broader market sell-off'), so no clear 12m directional view is supported; set to 0 per house rule for mixed/silent news."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/HIMS/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression, annualised)."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "research/HIMS/2026-10-08-mc-inputs.json factor_news.IEF headlines (2026-10-01..07) consistently describe rising/multi-decade-high yields and a deepening bond rout (Bloomberg 'US 30-Year Yields Return to 2002 High'; WSJ 'The Bond Rout Is Deepening'; Barrons 'Global Bond Markets Sell Off on France's Fiscal Worries'), reinforced by the macro overlay's cited DFII10 real yield +0.48pp 1m/+0.61pp 3m and its 'toward bear, small' tilt on rates (research/HIMS/2026-10-08-macro.md); kept modest (-4%) given one headline notes a brief yield pullback."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/HIMS/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression, annualised)."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "FDA action restricting compounded GLP-1 products",
+      "reason": "The compounded-GLP-1 weight-loss line is Hims's main growth driver and faces direct, recurring regulatory risk: FDA warning letters in September and December 2025 and a February 2026 FDA statement naming Hims, while manufacturers push to add semaglutide/tirzepatide to the restricted-compounding list.",
+      "cite": "research/HIMS/2026-10-08.md Quality section (SEC 10-K, https://www.sec.gov/Archives/edgar/data/1773751/000177375126000022/hims-20251231.htm); restated in research/HIMS/2026-10-08-evaluation.md Bear case.",
+      "annual_probability": {"value": 0.2, "cite": "Of the roughly 260 weeks in research/HIMS/2026-10-08-mc-inputs.json's ~5-year history, exactly one (2026-02-09) shows a fall of this severity coinciding with an FDA action naming Hims; count-based rate = 1 event / ~5 years of history."},
+      "impact": {"value": -0.2919, "cite": "Matches the stock's -29.19% move in the week of 2026-02-09 (research/HIMS/2026-10-08-mc-inputs.json analogues.largest_falls), which coincides with the February 2026 FDA statement naming Hims described in research/HIMS/2026-10-08.md Quality section."},
+      "analogue": {"week": "2026-02-09", "move": -0.2919},
+      "assumption": null
+    },
+    {
+      "name": "Securities class-action litigation",
+      "reason": "Multiple plaintiff law firms (Kaplan Fox, Robbins LLP) are soliciting investors ahead of a November 2, 2026 lead-plaintiff deadline in a pending securities class action against Hims & Hers.",
+      "cite": "research/HIMS/2026-10-08.md Unusual items section (https://www.newsfilecorp.com/release/317760/Kaplan-Fox-Kilsheimer-LLP-Reminds-Hims-Hers-Health-Inc.-HIMS-Investors-of-the-Approaching-Lead-Plaintiff-Deadline-on-November-2-2026); also listed in factsheet-2026-10-08.md News & sentiment.",
+      "annual_probability": {"value": 0.1, "cite": "No base-rate data on case outcomes is available from stockanalysis.com or the allowlisted sources; 0.1 is a conservative estimate that an adverse litigation development (certification, settlement or unfavorable ruling) occurs within 12 months, reflecting the imminent Nov 2, 2026 lead-plaintiff deadline named in research/HIMS/2026-10-08.md Unusual items, kept low because the allegations are unconfirmed by any filing (research/HIMS/2026-10-08.md Unusual items)."},
+      "impact": {"value": -0.15, "cite": "No week in research/HIMS/2026-10-08-mc-inputs.json's price history isolates a litigation-specific move from the regulatory-driven declines already captured by the FDA jump above; -15% is a conservative assumption for an adverse litigation development, within the +-30% max_jump_impact_assumed bound."},
+      "analogue": null,
+      "assumption": "No historical analogue isolates a litigation-only price move (the underlying allegations track the already-modelled regulatory/margin deterioration); impact is capped at the ±30% assumption bound and set conservatively at -15%."
+    },
+    {
+      "name": "Short squeeze on high short interest",
+      "reason": "Short interest is 24.76% of float (down 9.8% month-on-month); the evaluation's bull case notes any clean quarter or regulatory clarity 'could squeeze the stock sharply'.",
+      "cite": "research/HIMS/2026-10-08-evaluation.md Bull case; factsheet-2026-10-08.md statistics/News & sentiment (short interest 24.76%, -9.8% MoM).",
+      "annual_probability": {"value": 0.2, "cite": "Four weeks with moves of at least +40% occur in the ~5 years of weekly history in research/HIMS/2026-10-08-mc-inputs.json analogues.largest_rises (roughly 1 such week per year); 0.2 is a conservative count-based estimate given short interest, while still elevated at 24.76%, has already fallen 9.8% month-on-month (factsheet-2026-10-08.md statistics)."},
+      "impact": {"value": 0.4532, "cite": "Matches the stock's +45.32% move in the week of 2025-04-28 (research/HIMS/2026-10-08-mc-inputs.json analogues.largest_rises/all_weekly_moves), used as the analogue for a squeeze-type rally given current short interest of 24.76% of float (factsheet-2026-10-08.md statistics)."},
+      "analogue": {"week": "2025-04-28", "move": 0.4532},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

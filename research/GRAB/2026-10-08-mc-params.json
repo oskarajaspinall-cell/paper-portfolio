@@ -1,0 +1,74 @@
+{
+  "ticker": "GRAB",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/GRAB/2026-10-08-evaluation.md Decision block scenarios.bull.probability"},
+      "probability_evidence": "Insiders including CEO Anthony Tan bought roughly $30M of stock after shares hit a 3-year low (Reuters 2026-09-23; TipRanks 2026-09-22), short interest fell 18.7% month-on-month (factsheet ST), and five straight years of margin improvement with EV/Sales (2.1x) below its own 5y minimum (3.9x, factsheet RA) support a re-rating case; probability kept at 25% because the mechanical fair-value table's own base/bull figures lean on pre-profit-era multiples (5y max EV/Sales 52.9x) and were discounted by the evaluator down to the fact sheet's bear fair value of 4.43, signalling this path is plausible but not modal.",
+      "target_price_12m": {"value": 4.43, "cite": "research/GRAB/2026-10-08-evaluation.md Decision block scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.066, "cite": "Fact sheet Valuation table (RA; peers P:SE,P:UBER,P:HKG:3690): peer-median-implied prices from current price $3.08 scaled by each multiple vs peer median: P/E 26.9x->peer 25.7x implies $2.943; EV/EBITDA 23.2x->peer 19.4x implies $2.576; EV/Sales 2.1x->peer 1.9x implies $2.787 (P/B excluded: note §3 flags peers as more capital-light, not comparable). Half-spread $0.184 / average implied price $2.768 = 6.6%; well under the 33.3% blended residual vol (mc-inputs regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/GRAB/2026-10-08-evaluation.md Decision block scenarios.base.probability"},
+      "probability_evidence": "EV/Sales (2.1x) sits close to the peer median (1.9x; factsheet RA, peers SE/UBER/HKG:3690) rather than at an extreme, while the stock trades below both its 50-day (3.33) and 200-day (3.80) moving averages (factsheet ST,HI) and carries a weak Piotroski F-score of 2 and Altman Z of 0.61 (factsheet ST) — a muddled quality/valuation picture consistent with a reversion toward the recent 50-day average rather than a re-rating or a further breakdown, which the evaluator weights as the modal (highest-probability) outcome.",
+      "target_price_12m": {"value": 3.33, "cite": "research/GRAB/2026-10-08-evaluation.md Decision block scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.066, "cite": "Same cross-method peer-multiple disagreement as the bull scenario: half-spread $0.184 / average implied price $2.768 = 6.6% (factsheet Valuation table, RA, peers); under the 33.3% blended residual vol cap (mc-inputs)."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/GRAB/2026-10-08-evaluation.md Decision block scenarios.bear.probability"},
+      "probability_evidence": "TTM FCF margin is still negative (-4.3%, factsheet CF,IS) with FCF conversion at -26.8% (CF,IS); the $1.49bn cash outlay for 60% of Atome adds consumer-lending credit risk while FCF is negative (note §5); Indonesian commission caps on two-wheel taxis threaten take rates and could extend to delivery (note §2). The macro overlay's small 'toward bear' tilt from rising US real yields (DFII10 2.91%, +61bp/3m) and a strengthening dollar (DTWEXBGS +2.86 over 1m) (research/GRAB/2026-10-08-macro.md) lifts this probability slightly above a symmetric split.",
+      "target_price_12m": {"value": 2.74, "cite": "research/GRAB/2026-10-08-evaluation.md Decision block scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.066, "cite": "Same cross-method peer-multiple disagreement as the bull scenario: half-spread $0.184 / average implied price $2.768 = 6.6% (factsheet Valuation table, RA, peers); under the 33.3% blended residual vol cap (mc-inputs)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0, "cite": "mc-inputs factor_news.SPY headlines are mixed, not a clear single direction: 'Combined Assets in SPY, SPYM Cross $1 Trillion' / S&P record highs above 7,800 (ETF Trends, CNBC, Bloomberg, all 2026-10-06/07) vs 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields' and 'ease from record highs as Treasury yields climb' (TipRanks, Reuters, 2026-10-07) and 'bearish trades point to skepticism' (CNBC 2026-10-07); set to 0 given mixed signal, per the house rule."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "research/GRAB/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431154014991791"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "mc-inputs factor_news.IEF headlines are consistently bearish for bond prices: 'US 30-Year Yields Return to 2002 High' (Bloomberg 2026-10-07), 'Global Bond Markets Sell Off on France's Fiscal Worries... yields... highest since 2002' (Barrons 2026-10-05), 'The Bond Rout Is Deepening' (WSJ 2026-10-01), 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002' (Bloomberg 2026-10-01); corroborated by the macro overlay's market_pricing (DGS10 5.27% +72bp/3m, DFII10 2.91% +61bp/3m, research/GRAB/2026-10-08-macro.md). Kept modest (-5%, within the +/-15% bound) despite the consistent direction because two headlines in the same set show partial yield relief ('Navigating Fixed Income Duration as Treasury Yields Retreat', ETF Trends 2026-10-02; 'US bonds rally after weaker-than-expected jobs report', Guardian 2026-10-02)."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "research/GRAB/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.06460381100458489"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction (Q3 2026, due ~Nov 2, 2026)",
+      "reason": "GRAB's next earnings report falls inside the 12-month horizon; its quarterly reports have historically driven large one-week stock price swings.",
+      "cite": "research/GRAB/factsheet-2026-10-08.md Price section 'Next earnings date | Nov 2, 2026 (Est. Earnings)' [ST,OV]; research/GRAB/2026-10-08-evaluation.md Decision.triggers #4 references 'Q3 2026 results (due around Nov 2, 2026)'",
+      "annual_probability": {"value": 0.4, "cite": "research/GRAB/2026-10-08-mc-inputs.json analogues.event_weeks: of GRAB's 20 quarterly earnings-release weeks from 2021-2026, only 2 produced a move of comparable extreme magnitude (2021-11-08 Q3 2021, +0.3722; 2022-02-28 Q4 2021, -0.4207) -- about 2 per ~5 years of quarters, i.e. ~0.4/year."},
+      "impact": {"value": -0.4207, "cite": "research/GRAB/2026-10-08-mc-inputs.json analogues.event_weeks: 'Q4 2021' annual_report/earnings_release week 2022-02-28, move -0.4207 (also analogues.largest_falls #1)"},
+      "analogue": {"week": "2022-02-28", "move": -0.4207},
+      "assumption": null
+    },
+    {
+      "name": "Indonesia two-wheel/delivery commission-cap regulatory shock",
+      "reason": "Management flagged Indonesian commission caps on two-wheel taxis that could extend to delivery, compressing take rates.",
+      "cite": "research/GRAB/2026-10-08.md note §2 'Indonesian commission caps on two-wheel taxis that could extend to delivery' [Likely] (https://stockanalysis.com/stocks/grab/transcripts/660332-q2-2026/)",
+      "annual_probability": {"value": 0.3, "cite": "No Indonesia-specific regulatory event appears in the 5-year filings/event history (research/GRAB/2026-10-08-mc-inputs.json analogues.event_weeks lists only earnings/registration/M&A/press-release events, none regulatory); estimated at roughly once per ~3 years, reflecting the note's 'Likely but not yet in effect' framing of a single emerging risk rather than a counted historical frequency."},
+      "impact": {"value": -0.15, "cite": "No matching historical analogue for an Indonesia-specific regulatory shock exists in mc-inputs event_weeks/largest_falls; impact assumed at half of the [montecarlo].max_jump_impact_assumed cap of 0.30, reflecting that it affects one country's take rate, not the whole platform."},
+      "analogue": null,
+      "assumption": "No historical analogue for this specific regulatory risk in GRAB's price history; impact is assumed and kept well within the 0.30 cap for an unprecedented single-country regulatory event."
+    },
+    {
+      "name": "Atome Financial stake completion / BNPL credit-risk integration",
+      "reason": "Grab paid $1.49bn cash for an initial 60% stake in Atome Financial, a consumer-lending BNPL platform (remaining 40% due roughly two years later), moving capital into credit risk while FCF is negative.",
+      "cite": "research/GRAB/2026-10-08.md note §5 and §2 (https://www.cnbc.com/2026/09/16/grab-financial-services-atome-purchase-.html; https://stockanalysis.com/stocks/grab/transcripts/752694-investor-update/); research/GRAB/2026-10-08-evaluation.md Bear case: 'The large cash outlay for 60% of Atome, a consumer lender, moves capital into credit risk while FCF is negative'",
+      "annual_probability": {"value": 0.6, "cite": "research/GRAB/2026-10-08-mc-inputs.json analogues.event_weeks: 3 comparable press_release/investor-update strategic-deal weeks over ~5 years (Investor Day 2022 2022-09-27; M&A announcement 2026-03-23; Investor update/Atome 2026-09-15) ≈ 0.6/yr"},
+      "impact": {"value": -0.0836, "cite": "research/GRAB/2026-10-08-mc-inputs.json analogues.event_weeks: 'Investor update' (Atome stake announcement) week 2026-09-14, move -0.0836"},
+      "analogue": {"week": "2026-09-14", "move": -0.0836},
+      "assumption": null
+    },
+    {
+      "name": "Uber/Delivery Hero combination intensifying foodpanda competition",
+      "reason": "A possible Uber/Delivery Hero combination could sharpen foodpanda competition against Grab's delivery business.",
+      "cite": "research/GRAB/2026-10-08.md note §2 [Likely] (https://stockanalysis.com/stocks/grab/transcripts/660332-q2-2026/)",
+      "annual_probability": {"value": 0.15, "cite": "Note tags this 'Likely' but it remains an unconfirmed, speculative combination (no announced deal); estimated low at roughly once per ~7 years, below the ~0.6/yr counted frequency of GRAB's own confirmed strategic-deal events (mc-inputs event_weeks)."},
+      "impact": {"value": -0.12, "cite": "No historical analogue for this specific competitive-consolidation scenario exists in mc-inputs event_weeks/largest_falls; impact assumed, kept below the 0.30 max_jump_impact_assumed cap and smaller than the Indonesia regulatory shock since it is an indirect competitive threat rather than a direct take-rate cut."},
+      "analogue": null,
+      "assumption": "No historical analogue for a competitor-consolidation shock; impact is assumed and kept well within the 0.30 cap."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.02, "cite": "research/GRAB/factsheet-2026-10-08.md Price section: -7.6% vs 50-day MA, -19.0% vs 200-day MA, -21.6% 3-month momentum, -51.3% 12-month change, relative strength vs SPY -25.6pp over 3m (ST,HI); set at the maximum allowed magnitude given the consistent negative trend across all horizons shown."}
+}

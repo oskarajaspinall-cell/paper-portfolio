@@ -133,6 +133,13 @@ def test_peak_earnings_guard(vc):
     spike = inputs(g={"eps": (5.0, [2.0, 1.8, 1.6, 1.5, 1.4])})  # TTM 5.0 vs 5y median 1.6
     r = V.run_model("pe", spike, vc, {})
     avg = sum([2.0, 1.8, 1.6, 1.5, 1.4]) / 5
-    assert r["values"]["base"] == pytest.approx(avg * 15.0) and r["values"]["bull"] == pytest.approx(5.0 * 20.0)
+    assert r["values"]["base"] == pytest.approx(avg * 15.0) and r["values"]["bull"] == pytest.approx(5.0 * 18.0)  # 2nd-highest P/E
     assert "peak_earnings" in r["assumptions"]
     assert "peak_earnings" not in V.run_model("pe", inputs(), vc, {})["assumptions"]
+
+
+
+def test_one_bubble_year_does_not_set_the_bull_case():
+    assert V.triple([2.0, 3.0, 2.5, 40.0, 2.2]) == (2.0, 2.5, 3.0)
+    assert V.triple([2.0, 3.0, 40.0]) == (2.0, 3.0, 40.0)   # too short a history to drop one
+    assert V.triple([5.0]) is None

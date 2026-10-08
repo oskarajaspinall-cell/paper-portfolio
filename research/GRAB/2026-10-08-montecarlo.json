@@ -1,0 +1,243 @@
+{
+ "ticker": "GRAB",
+ "date": "2026-10-08",
+ "params_file": "2026-10-08-mc-params.json",
+ "inputs_file": "2026-10-08-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 3.08,
+  "close_date": "2026-10-07",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/grab/history/"
+ },
+ "target_returns": {
+  "bull": 0.4383116883116882,
+  "base": 0.08116883116883122,
+  "bear": -0.11038961038961037
+ },
+ "expected_12m": 0.112987012987013,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 1.4947712981104104,
+   "IEF": -0.425776579153417
+  },
+  "r2": 0.30036218108410984,
+  "residual_vol": {
+   "52w": 0.3395969454465173,
+   "156w": 0.3261985031442953,
+   "blended": 0.3328977242954063,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 4.43,
+    "target_band": 0.066
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 3.33,
+    "target_band": 0.066
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 2.74,
+    "target_band": 0.066
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 1.4947712981104104,
+    "move": 0,
+    "unc": 0.1431
+   },
+   {
+    "ticker": "IEF",
+    "beta": -0.425776579153417,
+    "move": -0.05,
+    "unc": 0.0646
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Quarterly earnings reaction (Q3 2026, due ~Nov 2, 2026)",
+    "p": 0.4,
+    "impact": -0.4207,
+    "analogue": {
+     "week": "2022-02-28",
+     "move": -0.4207
+    },
+    "cited": true
+   },
+   {
+    "name": "Indonesia two-wheel/delivery commission-cap regulatory shock",
+    "p": 0.3,
+    "impact": -0.15,
+    "analogue": null,
+    "cited": true
+   },
+   {
+    "name": "Atome Financial stake completion / BNPL credit-risk integration",
+    "p": 0.6,
+    "impact": -0.0836,
+    "analogue": {
+     "week": "2026-09-14",
+     "move": -0.0836
+    },
+    "cited": true
+   },
+   {
+    "name": "Uber/Delivery Hero combination intensifying foodpanda competition",
+    "p": 0.15,
+    "impact": -0.12,
+    "analogue": null,
+    "cited": true
+   }
+  ],
+  "tilt": -0.02
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.01814919713701107,
+   "median": 0.034419401685820555,
+   "p5": -0.41323720929506846,
+   "p25": -0.09790905697184779,
+   "p50": 0.034419401685820555,
+   "p75": 0.16400064802861328,
+   "p95": 0.35378083560836954,
+   "prob_loss": 0.4257,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.005045135728659789,
+    "jumps": -0.10819069289106496,
+    "noise": 0.0003738483127833228,
+    "scenario": 0.0924953010547751
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.04291374724623912,
+   "median": 0.042739841433244954,
+   "p5": -0.5002792666560066,
+   "p25": -0.19038416484439197,
+   "p50": 0.042739841433244954,
+   "p75": 0.2580191474126077,
+   "p95": 0.5991270571659706,
+   "prob_loss": 0.4481,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.009783022499760766,
+    "jumps": -0.2188208866914888,
+    "noise": 0.00010608772310972943,
+    "scenario": 0.19165726877621686
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.11298701298701298,
+   "median": 0.034545731019577496,
+   "p5": -0.6258725275276942,
+   "p25": -0.284367814521883,
+   "p50": 0.034545731019577496,
+   "p75": 0.4183709697683532,
+   "p95": 1.1286170348165685,
+   "prob_loss": 0.4717,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.02279092941894862,
+    "jumps": -0.4378830516287486,
+    "noise": 0.002308281226558977,
+    "scenario": 0.3899812042191004
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.11298701298701298,
+   "prob_loss_12m": 0.4717
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.45,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.1678571428571429,
+   "prob_loss_12m": 0.4341
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.45,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.0581168831168832,
+   "prob_loss_12m": 0.5086
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.1129870129870129,
+   "prob_loss_12m": 0.4642
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.1129870129870129,
+   "prob_loss_12m": 0.4799
+  }
+ ]
+}

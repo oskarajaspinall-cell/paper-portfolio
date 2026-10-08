@@ -1,0 +1,65 @@
+{
+ "ticker": "ONDS",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.15, "cite": "evaluation scenarios.bull.probability (research/ONDS/2026-10-08-evaluation.md)"},
+   "probability_evidence": "Low weight despite real order momentum: >$270m of orders secured since June 30 and a raised FY2026 revenue guide ($525-550m) on the Q2 2026 call (fact sheet News; note Section 6) have not yet shown up in margins — operating margin is -121.0% TTM and FCF margin -98.7% (fact sheet IS,CF) — and integrating five-plus acquisitions inside two months carries meaningful execution risk [Likely] (note Section 6); the macro overlay's moderate bear tilt (rising real yields/HY spreads taxing the equity-funding model) further discounts a re-rate scenario (research/ONDS/2026-10-08-macro.md).",
+   "target_price_12m": {"value": 14.16, "cite": "evaluation scenarios.bull.target_price_12m (research/ONDS/2026-10-08-evaluation.md), itself the 6-month price high of 14.16 on 2026-06-02 (fact sheet HI), used because the fact sheet's DCF/EV-EBITDA fair value is [data unavailable]"},
+   "target_band": {"value": 0.4934, "cite": "Fact sheet Valuation table: pricing the bull case off each available multiple's own 5y high — P/B 5y max 7.7x implies 7.19*(7.7/2.4)=23.07; EV/Sales 5y max 78.3x implies 7.19*(78.3/15.2)=37.04 — half the spread (6.98) relative to the 14.16 price-history target = 49.3%, reflecting how far the only two computable multiples (EV/Sales, P/B) diverge at their historical extremes since no fair-value anchor exists"}
+  },
+  "base": {
+   "probability": {"value": 0.40, "cite": "evaluation scenarios.base.probability (research/ONDS/2026-10-08-evaluation.md)"},
+   "probability_evidence": "Modal case below 50% because the evaluation explicitly shifted weight toward bear: P/B holding at its current 2.4x (fact sheet RA) assumes revenue growth from order momentum merely offsets continued heavy dilution (shares +297.32% YoY, fact sheet ST) and a -121.0% operating margin (fact sheet IS); the macro overlay's moderate bear tilt (10y real yield +48bp/1m, HY spread +35bp/1m, research/ONDS/2026-10-08-macro.md) was cited as the reason probability was shifted from base toward bear.",
+   "target_price_12m": {"value": 7.19, "cite": "evaluation scenarios.base.target_price_12m (research/ONDS/2026-10-08-evaluation.md), P/B holding at its current 2.4x (fact sheet RA)"},
+   "target_band": {"value": 0.0, "cite": "Fact sheet Valuation table: both computable multiples held at their current level imply the same current price — P/B at current 2.4x and EV/Sales at current 15.2x both give 7.19 — so there is no disagreement between the fact sheet's two valuation anchors for the base case"}
+  },
+  "bear": {
+   "probability": {"value": 0.45, "cite": "evaluation scenarios.bear.probability (research/ONDS/2026-10-08-evaluation.md)"},
+   "probability_evidence": "Highest-weighted scenario: Altman Z of 1.79 (distress zone), net debt/EBITDA of 7.44x TTM and Piotroski F of 3/9 (fact sheet BS,ST) combine with heavy ongoing dilution (shares +297.32% YoY) and the macro overlay's moderate bear tilt — 10y real yield +48bp over 1m/+61bp over 3m and HY spread +35bp/+36bp (research/ONDS/2026-10-08-macro.md) — which directly worsens financing terms for a debt-laden, equity-funded roll-up, making a credit/dilution-driven de-rate the most likely outcome.",
+   "target_price_12m": {"value": 3.6, "cite": "evaluation scenarios.bear.target_price_12m (research/ONDS/2026-10-08-evaluation.md), P/B compressing from 2.4x to its 5y minimum of 1.2x (fact sheet RA)"},
+   "target_band": {"value": 0.0723, "cite": "Fact sheet Valuation table: pricing the bear case off each available multiple's own 5y low — P/B 5y min 1.2x implies 7.19*(1.2/2.4)=3.60 (the evaluator's chosen basis); EV/Sales 5y min 6.5x implies 7.19*(6.5/15.2)=3.07 — half the spread (0.26) relative to the 3.60 target = 7.2%"}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs factor_news.SPY is mixed: 'S&P closes at record high, breaking 7,800 points' driven by tech (CNBC 2026-10-06, https://www.cnbc.com/2026/10/06/chart-a-look-at-the-sp-500s-remarkable-and-defiant-trip-a-new-record.html) vs. the same-week 'tech selloff and elevated Treasury yields' pressuring the index and 'two big bearish trades point to skepticism' (TipRanks and CNBC, 2026-10-07) — no net directional view supported, so 0 (research/ONDS/2026-10-08-mc-inputs.json)"},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs regression.factor_stats.SPY.vol_annual = 14.31% (research/ONDS/2026-10-08-mc-inputs.json)"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.04, "cite": "mc-inputs factor_news.IEF is consistently bearish for 7-10y Treasury prices: 'US 30-Year Yields Return to 2002 High' (Bloomberg, 2026-10-07), 'Global Bond Markets Sell Off on France's Fiscal Worries' (Barrons, 2026-10-05, https://www.barrons.com/articles/u-s-bonds-10-year-yield-france-japan-253db64d), 'The Bond Rout Is Deepening' (WSJ, 2026-10-01, https://www.wsj.com/finance/commodities-futures/the-bond-rout-is-deepening-even-as-oil-tankers-return-to-the-strait-of-hormuz-30d8189d); direction corroborated by the macro overlay's dominant_chain (rising real yields & HY spreads, research/ONDS/2026-10-08-macro.md) — kept modest since no magnitude is taken from the headlines"},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs regression.factor_stats.IEF.vol_annual = 6.46% (research/ONDS/2026-10-08-mc-inputs.json)"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Quarterly earnings disappointment",
+   "reason": "The thesis hinges on whether the TTM net-margin/ROE inflection is real or a one-off; evaluation triggers (operatingMargin>0, fcfMargin>0) are explicitly checked at quarterly earnings, next due 2026-11-12.",
+   "cite": "fact sheet Price section 'Next earnings date: Nov 12, 2026' and evaluation triggers (research/ONDS/2026-10-08-evaluation.md)",
+   "annual_probability": {"value": 0.82, "cite": "mc-inputs event_weeks: 7 of the last 20 quarterly earnings weeks since 2021 moved -10% or worse (e.g. 2022-11-14 Q3 2022 -24.67%, 2023-03-13 Q4 2022 -15.31%, 2023-05-15 Q1 2023 -15.0%, 2023-08-14 Q2 2023 -11.4%, 2024-08-12 Q2 2024 -10.12%, 2021-11-15 Q3 2021 -14.62%, 2026-03-23 Q4 2025 -12.52%); ~35%/quarter implies ~1-(0.65)^4=82% chance of at least one such week in 12 months (research/ONDS/2026-10-08-mc-inputs.json)"},
+   "impact": {"value": -0.2467, "cite": "mc-inputs analogue week 2022-11-14 (Q3 2022 earnings release), move -24.67%, the worst of the earnings-tagged event weeks"},
+   "analogue": {"week": "2022-11-14", "move": -0.2467},
+   "assumption": null
+  },
+  {
+   "name": "Dilutive equity/registration filing",
+   "reason": "Growth is funded almost entirely by issuing equity (shares +297.32% YoY; 2026 acquisitions paid mostly in stock per the SEC 10-Q); continued expansion likely requires further share issuance, debt, or both, and the macro overlay flags a new equity/convertible raise as a refresh trigger with financing terms worsened by rising real yields and HY spreads.",
+   "cite": "note Section 5 'Capital allocation and cash conversion' (research/ONDS/2026-10-08.md) and macro overlay refresh trigger 'Ondas announces a new equity or convertible raise' (research/ONDS/2026-10-08-macro.md)",
+   "annual_probability": {"value": 1.0, "cite": "mc-inputs event_weeks: 5 distinct SEC Registration Filing weeks across the ~5-year history (2021-10-18, 2022-06-27, 2024-01-29, 2024-02-05, 2025-04-14) ≈ one per year (research/ONDS/2026-10-08-mc-inputs.json)"},
+   "impact": {"value": -0.0998, "cite": "mc-inputs analogue week 2022-06-27 (Registration Filing), move -9.98%, the worst of the five registration-filing weeks"},
+   "analogue": {"week": "2022-06-27", "move": -0.0998},
+   "assumption": null
+  },
+  {
+   "name": "M&A integration stumble",
+   "reason": "Ondas acquired GATE Technologies, Bron Technologies, Aran Defense and three further defense-technology businesses within about two months (Aug-Sept 2026); 'integrating five-plus acquisitions inside two months carries meaningful execution risk [Likely]'.",
+   "cite": "note Section 6 'Unusual items' (research/ONDS/2026-10-08.md) and evaluation bear case (research/ONDS/2026-10-08-evaluation.md)",
+   "annual_probability": {"value": 0.3, "cite": "note Section 6: five-plus acquisitions integrated within roughly two months (Aug-Sept 2026); a reasoned estimate given this named risk has no clean standalone frequency count in the mc-inputs event history"},
+   "impact": {"value": -0.20, "cite": "no clean historical analogue distinguishes an acquisition-announcement-day reaction (mc-inputs 'M&A announcement' week 2026-07-06, -2.02%) from a later integration-failure shock; set within the ±30% assumption bound ([montecarlo].max_jump_impact_assumed)"},
+   "analogue": null,
+   "assumption": "No historical analogue for integration-failure risk distinct from the 2026-07-06 M&A announcement-day reaction (-2.02%); impact set at -20%, within the ±30% bound for an assumption-based jump."
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": {"value": -0.015, "cite": "fact sheet Price section: price -9.8% vs 50-day MA, -23.7% vs 200-day MA, 6-month momentum -23.9%, RSI(14) 38.4 (not oversold) — a modest bearish technical tilt for the 3-month horizon only, within the ±2% cap"}
+}

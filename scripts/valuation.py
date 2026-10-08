@@ -183,8 +183,12 @@ def implied_growth(target_ps: float, rev0, margin, rate, vc, net_cash, shares) -
 
 
 def triple(values: list[float]) -> tuple[float, float, float] | None:
-    vs = [v for v in values if v is not None and v > 0]
-    return (min(vs), stats.median(vs), max(vs)) if len(vs) >= 2 else None
+    """(bear, base, bull) = (min, median, high) of the positive history. With 4+ years the bull case is
+    the SECOND-highest value, so one bubble year (e.g. a 2021 SPAC valuation) can't set it."""
+    vs = sorted(v for v in values if v is not None and v > 0)
+    if len(vs) < 2:
+        return None
+    return vs[0], stats.median(vs), (vs[-2] if len(vs) >= 4 else vs[-1])
 
 
 # --------------------------------------------------------------------------- models
