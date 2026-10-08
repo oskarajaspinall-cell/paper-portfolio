@@ -6,8 +6,12 @@ by percentile rank within the screened set (config [screen]):
     quality, valuation, momentum (price vs 50/200-day computed from the page's own quote and averages)
 Core score = mean(quality, valuation). Stage 2: the top `deep_dive_top` core candidates also get
 their ratios page (5-year history) read, adding a history pillar (valuation vs own 5y range,
-ROIC/ROCE trend, worst-year ROIC); they are ranked by mean(quality, valuation, history). Tactical score = momentum, only for names whose earnings date
-falls inside `tactical_earnings_window_days`.
+ROIC/ROCE trend, worst-year ROIC); they are ranked by mean(quality, valuation, history).
+Tactical (owner rule 2026-10-08, scripts/setups.py): two setups. Stage 1 from the statistics page:
+post-earnings-drift candidates (results just reported, above the 50-day average) and pullback candidates
+(uptrend intact, back near the 50-day average, RSI cooled, no earnings for a month). Stage 2 reads the
+daily history of the top `tactical_check_top` of each to confirm the earnings reaction and size a
+volatility stop (ATR). Picks alternate between the two setups.
 
 A page that fails to load or parse is EXCLUDED and listed in the report (never guessed). Pages are
 cached per day, so an interrupted run resumes where it stopped.
@@ -30,6 +34,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT, DataError, Ticker, load_config, page_url  # noqa: E402
 from fetch_data import Fetcher, page_nodes, parse_info, parse_statistics  # noqa: E402
+import setups  # noqa: E402
 from universe import read_universe  # noqa: E402
 
 OUT = ROOT / "reports" / "screen"
@@ -82,29 +87,50 @@ def pillar_scores(metrics: dict[str, dict], spec: list[str], min_metrics: int) -
     return out
 
 
-def overextended(d: dict, sc: dict) -> bool:
-    """Tactical candidates need momentum WITHOUT being stretched: the evaluator rejects names whose
-    upside to a sensible target is smaller than the stop (overbought, far above trend)."""
-    rsi, above = d.get("rsi"), d.get("price_vs_sma200")
-    return ((rsi is not None and rsi > sc.get("tactical_max_rsi", 100))
-            or (above is not None and above > sc.get("tactical_max_above_sma200_pct", 1e9)))
-
-
 def score(metrics: dict[str, dict], cfg: dict, asof: str) -> list[dict]:
     sc = cfg["screen"]
     q = pillar_scores(metrics, sc["quality"], sc["min_metrics_per_pillar"])
     v = pillar_scores(metrics, sc["valuation"], sc["min_metrics_per_pillar"])
     m = pillar_scores(metrics, sc["momentum"], sc["min_metrics_per_pillar"])
-    window_end = (dt.date.fromisoformat(asof) + dt.timedelta(days=sc["tactical_earnings_window_days"])).isoformat()
+    trend = pillar_scores(metrics, ["ch1y", "price_vs_sma200"], 2)  # pullbacks: rank by the strength of the uptrend
+    tc = cfg["tactical"]
     rows = []
     for t, d in metrics.items():
-        ed = d.get("earnings_date")
         rows.append({"ticker": t, "quality": q[t], "valuation": v[t], "momentum": m[t],
                      "core": st.mean([q[t], v[t]]) if q[t] is not None and v[t] is not None else None,
-                     "tactical": m[t] if m[t] is not None and ed and asof < ed <= window_end
-                     and not overextended(d, sc) else None,
-                     "earnings_date": ed})
+                     "pullback_cand": trend[t] if trend[t] is not None and setups.pullback_candidate(d, tc, asof) else None,
+                     "drift_cand": d.get("price_vs_sma50") if setups.drift_candidate(d, tc, asof) else None,
+                     "tactical": None, "setup": None, "setup_detail": None,
+                     "earnings_date": d.get("earnings_date")})
     return rows
+
+
+def tactical_check(rows: list[dict], fetcher, cfg: dict, asof: str) -> list[dict]:
+    """Stage 2 for tactical: daily history for the top `tactical_check_top` candidates of each setup.
+    Drift needs a confirmed earnings reaction; both need an ATR stop. Sets `tactical` (drift: the reaction
+    size in %; pullback: the uptrend score), `setup` and `setup_detail`. Returns failed pages."""
+    tc, n = cfg["tactical"], cfg["screen"].get("tactical_check_top", 0)
+    drift = sorted((r for r in rows if r["drift_cand"] is not None), key=lambda r: -r["drift_cand"])[:n]
+    pull = sorted((r for r in rows if r["pullback_cand"] is not None), key=lambda r: -r["pullback_cand"])[:n]
+    failed, hist = [], {}
+    for r in {id(x): x for x in drift + pull}.values():
+        try:
+            data = fetcher.section(r["ticker"], "history")["data"]
+            hist[r["ticker"]] = [x for x in data["rows"] if x["date"] < asof]
+        except DataError as e:
+            failed.append({"ticker": r["ticker"], "url": e.url, "field": e.field})
+    for r in drift:
+        h = hist.get(r["ticker"])
+        sig = setups.drift_signal(h, tc) if h else None
+        p = setups.plan("drift", h, tc, sig) if sig else None
+        if p:
+            r.update(tactical=sig["jump_pct"], setup="drift", setup_detail=setups.describe("drift", p, sig))
+    for r in pull:
+        h = hist.get(r["ticker"])
+        p = setups.plan("pullback", h, tc) if h and r["setup"] is None else None
+        if p:
+            r.update(tactical=r["pullback_cand"], setup="pullback", setup_detail=setups.describe("pullback", p))
+    return failed
 
 
 def history_metrics(ratios: dict) -> dict:
@@ -185,16 +211,25 @@ def recently_researched(days: int, asof: str) -> set[str]:
 def pick(rows: list[dict], cfg: dict) -> list[dict]:
     sc, cap = cfg["screen"], cfg["agents"]["max_new_initiations_per_week"]
     picks: list[dict] = []
-    for kind, n in (("core", sc["core_picks"]), ("tactical", sc["tactical_picks"])):
-        cands = [r for r in rows if r[kind] is not None]
-        ranked = sorted(cands, key=core_rank_key, reverse=True) if kind == "core" else \
-            sorted(cands, key=lambda r: -r[kind])
-        for r in ranked:
-            if len([p for p in picks if p["type"] == kind.upper()]) >= n or len(picks) >= cap:
-                break
-            if r["ticker"] not in {p["ticker"] for p in picks}:
-                sc_ = r.get("core_deep") if kind == "core" and r.get("core_deep") is not None else r[kind]
-                picks.append({"ticker": r["ticker"], "type": kind.upper(), "score": round(sc_, 1)})
+    ranked = sorted((r for r in rows if r["core"] is not None), key=core_rank_key, reverse=True)
+    for r in ranked:
+        if len(picks) >= min(sc["core_picks"], cap):
+            break
+        sc_ = r.get("core_deep") if r.get("core_deep") is not None else r["core"]
+        picks.append({"ticker": r["ticker"], "type": "CORE", "score": round(sc_, 1)})
+    # tactical: alternate the two setups, best first within each
+    queues = {k: sorted((r for r in rows if r.get("setup") == k and r.get("tactical") is not None),
+                        key=lambda r: -r["tactical"]) for k in ("drift", "pullback")}
+    n_tac = 0
+    while n_tac < sc["tactical_picks"] and len(picks) < cap and any(queues.values()):
+        for k in ("drift", "pullback"):
+            while queues[k] and queues[k][0]["ticker"] in {p["ticker"] for p in picks}:
+                queues[k].pop(0)
+            if queues[k] and n_tac < sc["tactical_picks"] and len(picks) < cap:
+                r = queues[k].pop(0)
+                picks.append({"ticker": r["ticker"], "type": "TACTICAL", "score": round(r["tactical"], 1),
+                              "setup": k, "setup_detail": r["setup_detail"]})
+                n_tac += 1
     return picks
 
 
@@ -218,7 +253,8 @@ def run(fetcher, cfg: dict, asof: str, limit: int | None = None, state: dict | N
             failed.append({"ticker": r["ticker"], "url": e.url, "field": e.field})
     rows = score(metrics, cfg, asof)
     deep_failed = deep_dive(rows, fetcher, cfg)
-    return {"asof": asof, "screened": len(metrics), "failed": failed + deep_failed, "excluded_held": sorted(held),
+    tac_failed = tactical_check(rows, fetcher, cfg, asof)
+    return {"asof": asof, "screened": len(metrics), "failed": failed + deep_failed + tac_failed, "excluded_held": sorted(held),
             "excluded_recent": sorted(recent), "rows": rows, "names": names, "picks": pick(rows, cfg),
             "deep_dived": sum(1 for r in rows if r.get("history") is not None)}
 
@@ -236,19 +272,24 @@ def report_md(res: dict, top: int = 15) -> str:
              "History).", "",
              "## This week's picks for initiation"]
     for p in res["picks"]:
-        lines.append(f"- {p['ticker']} ({res['names'].get(p['ticker'], '')}): {p['type']}, score {p['score']} — "
+        lines.append(f"- {p['ticker']} ({res['names'].get(p['ticker'], '')}): {p['type']}"
+                     + (f" ({p['setup']})" if p.get("setup") else "") + f", score {p['score']} — "
                      f"{page_url(p['ticker'], 'statistics/')}")
-    for kind in ("core", "tactical"):
+    for kind in ("core",):
         cands = [r for r in res["rows"] if r[kind] is not None]
-        ranked = (sorted(cands, key=core_rank_key, reverse=True) if kind == "core"
-                  else sorted(cands, key=lambda r: -r[kind]))[:top]
+        ranked = sorted(cands, key=core_rank_key, reverse=True)[:top]
         lines += ["", f"## Top {kind} scores", "| # | Ticker | Name | Score | Quality | Valuation | History | Momentum | Earnings | Source |",
                   "|---|---|---|---|---|---|---|---|---|---|"]
         for i, r in enumerate(ranked, 1):
-            score_ = r.get("core_deep") if kind == "core" and r.get("core_deep") is not None else r[kind]
+            score_ = r.get("core_deep") if r.get("core_deep") is not None else r[kind]
             lines.append(f"| {i} | {r['ticker']} | {res['names'].get(r['ticker'], '')} | {f(score_)} | {f(r['quality'])} | "
                          f"{f(r['valuation'])} | {f(r.get('history'))} | {f(r['momentum'])} | {r['earnings_date'] or 'n/a'} | "
                          f"{page_url(r['ticker'], 'statistics/')} |")
+    for k, title in (("drift", "Post-earnings drift"), ("pullback", "Pullback in uptrend")):
+        tac = sorted((r for r in res["rows"] if r.get("setup") == k), key=lambda r: -r["tactical"])[:top]
+        lines += ["", f"## Tactical setups: {title}", "| # | Ticker | Name | Setup and risk plan | Next earnings |", "|---|---|---|---|---|"]
+        lines += [f"| {i} | {r['ticker']} | {res['names'].get(r['ticker'], '')} | {r['setup_detail']} | {r['earnings_date'] or 'n/a'} |"
+                  for i, r in enumerate(tac, 1)] or ["| | none qualified this week | | | |"]
     if res["failed"]:
         lines += ["", "## Failed pages (excluded)"] + [f"- {x['ticker']}: {x['url']} ({x['field']})" for x in res["failed"]]
     return "\n".join(lines) + "\n"

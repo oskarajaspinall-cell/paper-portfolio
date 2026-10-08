@@ -1,0 +1,56 @@
+{
+  "ticker": "BR",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/BR/2026-10-08-evaluation.md Decision json scenarios.bull.probability"},
+      "probability_evidence": "Bull case: every quality metric improved for five years (ROIC 10.6%->17.5%, operating margin 13.3%->17.4%, FCF margin 7.3%->17.1%, net debt/EBITDA 3.14x->1.72x), FCF conversion 113.7%, P/E 23% below peers and EV/EBITDA 13% below peers, 1.01% share shrink, low short interest (2.61%, -11.9% m/m) and Piotroski 7 -- no distress signs, so a re-rating toward peer multiples is plausible if fundamentals simply hold (research/BR/2026-10-08-evaluation.md bull case).",
+      "target_price_12m": {"value": 209.0, "cite": "research/BR/2026-10-08-evaluation.md Decision json scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.1577, "cite": "Half the spread between BR's current price (160.13, factsheet Price section) re-rated to the peer-median P/E (21.8x -> 209.03 implied), EV/EBITDA (13.4x -> 183.40 implied) and P/FCF (12.6x -> 143.09 implied) multiples [factsheet-2026-10-08.md Valuation table, peers FIS/SSNC/JKHY/ADP]: half-spread 32.97 / bull target 209.0 = 15.8%."}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "research/BR/2026-10-08-evaluation.md Decision json scenarios.base.probability"},
+      "probability_evidence": "Base case: multiples stay depressed but the 7.07% FCF yield and the 1.01% YoY share-count shrink from buybacks give a modest recovery toward the 200-day moving average (169.76) rather than a re-rating or further de-rating (research/BR/2026-10-08-evaluation.md base case; factsheet-2026-10-08.md Price and Valuation sections).",
+      "target_price_12m": {"value": 170.0, "cite": "research/BR/2026-10-08-evaluation.md Decision json scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.1939, "cite": "Same valuation-anchor disagreement as the bull/bear bands (half-spread 32.97 between P/E-, EV/EBITDA- and P/FCF-implied prices at peer-median multiples [factsheet-2026-10-08.md Valuation table]), expressed against the base target: 32.97 / 170.0 = 19.4%."}
+    },
+    "bear": {
+      "probability": {"value": 0.25, "cite": "research/BR/2026-10-08-evaluation.md Decision json scenarios.bear.probability"},
+      "probability_evidence": "Bear case: the 32.4% 12-month de-rating is unexplained, P/FCF (14.1x) is already 12% above the peer median and P/B 66% above it, client concentration is a disclosed structural risk, and Nov 3 earnings could confirm the market's worry -- so a further fall to the 5-year P/E floor (14.1x, near the 52-week low of 133.83) is treated as ordinary downside, not a tail case (research/BR/2026-10-08-evaluation.md bear case).",
+      "target_price_12m": {"value": 135.0, "cite": "research/BR/2026-10-08-evaluation.md Decision json scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.2442, "cite": "Same valuation-anchor disagreement (half-spread 32.97 between P/E-, EV/EBITDA- and P/FCF-implied prices at peer-median multiples [factsheet-2026-10-08.md Valuation table]), expressed against the bear target: 32.97 / 135.0 = 24.4%; below the blended residual vol of 24.46% (mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record S&P 500 highs (ETF Trends, CNBC, Bloomberg, 2026-10-06/07) driven narrowly by Big Tech (WSJ: 'powered by tech and not much else') against a tech selloff, elevated Treasury yields pressuring stocks and a reported 100,000-lot bearish put spread (TipRanks, CNBC, Reuters, 2026-10-07) -- no net directional view is supported, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "mc-inputs.json factor_news.IEF headlines are consistently about rising/record yields and a deepening bond selloff: '30-Year Yields Return to 2002 High' (Bloomberg 2026-10-07), 'Global Bond Markets Sell Off on France's Fiscal Worries' (Barrons 2026-10-05), 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002' (Bloomberg 2026-10-01), 'The Bond Rout Is Deepening' (WSJ 2026-10-01); this is consistent with the macro overlay's observation of rising US 10y real/nominal yields (research/BR/2026-10-08-macro.md, DFII10 +61bp, DGS10 +72bp to 2026-10-06). A modest negative move (bond prices fall as yields rise) is kept well within the modest/15% bound given one mixed headline (ETF Trends 2026-10-02: yields pulled back from a brief peak)."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Extreme earnings-day move (next report Nov 3, 2026)",
+      "reason": "Bear case names the Nov 3, 2026 earnings report as the catalyst that could confirm the market's de-rating worry",
+      "cite": "research/BR/2026-10-08-evaluation.md bear case: 'Earnings on Nov 3 could confirm the market's worry [Likely]'; factsheet-2026-10-08.md Price section 'Next earnings date: Nov 3, 2026 (Est. Earnings)'",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.event_weeks lists ~20 quarterly earnings weeks since 2021; only one (2022-10-31, Q1 2023 release) produced a move of this magnitude (-10.38%), an empirical ~1/20 per-quarter rate; 1-(1-1/20)^4 ~= 20% chance of at least one such quarter in a year."},
+      "impact": {"value": -0.1038, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2022-10-31 (tagged 'Q1 2023' earnings_release), move -0.1038"},
+      "analogue": {"week": "2022-10-31", "move": -0.1038},
+      "assumption": null
+    },
+    {
+      "name": "Loss or reduction of a major client",
+      "reason": "The FY2026 10-K discloses client concentration among a small number of large clients as a structural risk to revenue",
+      "cite": "research/BR/2026-10-08.md section 2 ('The 10-K flags client concentration among a small number of large clients as a structural risk [Certain]') and section 6 ('Client concentration among a small number of large clients is a disclosed structural risk [Certain]'), source: Broadridge FY2026 10-K https://www.sec.gov/Archives/edgar/data/1383312/000162828026052243/br-20260630.htm",
+      "annual_probability": {"value": 0.1, "cite": "Assumption: no week in mc-inputs.json's 5-year weekly-move history is tied to a client-loss announcement, i.e. this disclosed risk has not realized in that window; probability set low (10%/yr) to reflect a disclosed-but-unrealized structural risk, per the 'no analogue' assumption rule."},
+      "impact": {"value": -0.2, "cite": "Assumption: no historical analogue for a client-loss shock exists in mc-inputs.json; impact kept within the +/-30% max_jump_impact_assumed bound ([montecarlo] config), sized below the cap to reflect a partial-revenue-loss structural event rather than a catastrophic one."},
+      "analogue": null,
+      "assumption": "No historical weekly move in mc-inputs.json (largest_falls, event_weeks, all_weekly_moves) is tied to a client-concentration/loss event; impact and probability are therefore assumption-based rather than analogue-based, with impact held within the configured max_jump_impact_assumed (0.30) bound."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,56 @@
+{
+ "ticker": "FDS",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "evaluation.json scenarios.bull.probability, research/FDS/2026-10-08-evaluation.md"},
+   "probability_evidence": "Record FY2026 organic ASV growth of 7.0% (Q4 FY2026 earnings release, 2026-09-30, fact sheet News & sentiment) and all five of FDS's current multiples sitting ~11% below their own 5y minimum (e.g. P/E 18.7x vs 20.9x min; factsheet-2026-10-08.md Valuation/RA) support the odds of a P/FCF re-rating toward its 5y low of 15.8x, as named in the evaluation's bull basis.",
+   "target_price_12m": {"value": 315, "cite": "evaluation.json scenarios.bull.target_price_12m, research/FDS/2026-10-08-evaluation.md"},
+   "target_band": {"value": 0.0155, "cite": "Fact sheet Valuation table 5y-minimum multiples re-rate the current price (272.78) by different degrees depending on anchor: P/E 20.9x/18.7x=+11.76% -> 304.9; EV/EBITDA 14.1x/12.5x=+12.80% -> 307.8; P/FCF 15.8x/13.7x=+15.33% -> 314.6 (factsheet-2026-10-08.md Valuation). Spread 304.9-314.6 = 9.76; half-spread 4.88 / target 315 = 1.55%."}
+  },
+  "base": {
+   "probability": {"value": 0.45, "cite": "evaluation.json scenarios.base.probability, research/FDS/2026-10-08-evaluation.md"},
+   "probability_evidence": "FCF margin rose 2.2pp to 28.6% TTM and FCF/NI reached 132.6% while shares outstanding fell 4.62% YoY (factsheet-2026-10-08.md Quality/Other); continuing buybacks without a new catalyst is the most likely path given 95%+ ASV/client retention (SEC 10-K, cited in note.md) and no evidence yet of client losses (Scotia Wealth expansion, fact sheet News).",
+   "target_price_12m": {"value": 285, "cite": "evaluation.json scenarios.base.target_price_12m, research/FDS/2026-10-08-evaluation.md"},
+   "target_band": {"value": 0.0, "cite": "Fact sheet Valuation table shows P/E, EV/EBITDA and P/FCF all sitting at the same -11% position versus their own 5y minimum (factsheet-2026-10-08.md Valuation: Position in 5y range column), i.e. no disagreement between these anchors at current levels; the base target's move above the current price comes entirely from buyback-driven per-share accretion (shares -4.62% YoY, ST), not from choosing between valuation anchors, so the band is 0."}
+  },
+  "bear": {
+   "probability": {"value": 0.30, "cite": "evaluation.json scenarios.bear.probability, research/FDS/2026-10-08-evaluation.md"},
+   "probability_evidence": "FY2026 operating margin fell 3.9pp (32.2%->28.3%) and the SEC 10-K names Bloomberg, LSEG, S&P Market Intelligence, MSCI and Morningstar AI-enabled products eroding demand (note.md s2); short interest is 10.86% of float and rose 7.0% month-on-month (factsheet-2026-10-08.md News & sentiment), consistent with informed capital betting on continued structural margin erosion; the macro overlay's small bear tilt (rising real yields capping the re-rating leg) adds to this probability (research/FDS/2026-10-08-macro.md macro_tilt).",
+   "target_price_12m": {"value": 240, "cite": "evaluation.json scenarios.bear.target_price_12m, research/FDS/2026-10-08-evaluation.md"},
+   "target_band": {"value": 0.0688, "cite": "Bear basis assumes FY2026's operating-margin decline (32.2%->28.3%, -12.11% relative; factsheet-2026-10-08.md Quality/IS) repeats at a flat multiple. Margin-sensitive anchors (P/E, EV/EBITDA, P/FCF, all held flat) imply 272.78*0.8789=239.8, matching the 240 target; the margin-insensitive EV/Sales anchor (revenue and multiple both assumed flat, factsheet-2026-10-08.md Valuation) implies an unchanged 272.78. Spread 272.78-239.8=33.0; half-spread 16.5 / target 240 = 6.88%."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news for the US equity market factor: stockanalysis.com SPY headlines show record highs ('Combined Assets in SPY, SPYM Cross $1 Trillion', ETF Trends, 2026-10-07) alongside 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields' (TipRanks, 2026-10-07) and a large bearish put-spread trade (CNBC, 2026-10-07) (2026-10-08-mc-inputs.json factor_news.SPY). No consistent 12m direction, so 0."},
+   "uncertainty_12m": {"value": 0.1431, "cite": "2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431 (156-week weekly regression, blended residual-vol methodology)."}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.03, "cite": "Macro overlay (research/FDS/2026-10-08-macro.md) macro_tilt: small, toward bear, driven by US 10y real yield (DFII10) +61bp/3m and HY credit spread (BAMLH0A0HYM2) +36bp/3m, arguing for continued modest upward pressure on yields / downward pressure on 7-10y Treasury prices (IEF) over 12m; corroborated by mc-inputs.json factor_news.IEF headlines ('US 30-Year Yields Return to 2002 High', Bloomberg, 2026-10-07; 'Global Bond Markets Sell Off on France's Fiscal Worries', Barrons, 2026-10-05). Kept modest per house rule given the overlay's own 'small' sizing."},
+   "uncertainty_12m": {"value": 0.0646, "cite": "2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646 (156-week weekly regression)."}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Earnings-day margin miss",
+   "reason": "FY2026 operating margin fell 3.9pp (32.2%->28.3%) on AI-driven competitive/pricing pressure; a severe quarterly earnings miss repeating or extending this dynamic is the acute form of the bear thesis.",
+   "cite": "factsheet-2026-10-08.md Quality table and note.md s2/s4 (margin decline); evaluation.md bear case (operating margin fall cited as the live risk).",
+   "annual_probability": {"value": 0.34, "cite": "2026-10-08-mc-inputs.json analogues.event_weeks: of 20 quarterly earnings weeks (Q1 2022-Q4 2026), 2 saw a >=10% weekly drop (Q4 2022 -11.96%, Q4 2025 -20.09%), a ~10%/quarter rate; annualised over 4 quarters, P(>=1)=1-(0.90)^4=0.34."},
+   "impact": {"value": -0.2009, "cite": "2026-10-08-mc-inputs.json analogues.largest_falls / event_weeks: week of 2025-09-15, Q4 2025 earnings release, move -0.2009 (the largest weekly fall in the 5y history)."},
+   "analogue": {"week": "2025-09-15", "move": -0.2009},
+   "assumption": null
+  },
+  {
+   "name": "AI-competitive disruption shock (unscheduled)",
+   "reason": "SEC 10-K names Bloomberg, LSEG Data & Analytics, S&P Market Intelligence, MSCI and Morningstar's AI-enabled products as a risk to FactSet's demand; elevated and rising short interest (10.86% of float, +7.0% month-on-month) is consistent with this risk being actively priced by some investors ahead of any single disclosed event.",
+   "cite": "note.md s2 (10-K competitive/AI risk) and s6 (short interest); factsheet-2026-10-08.md Other/News & sentiment.",
+   "annual_probability": {"value": 0.45, "cite": "2026-10-08-mc-inputs.json analogues: 3 of the 10 largest weekly falls in the 5y history (2026-02-02 -18.49%, 2026-09-08 -13.99%, 2026-01-26 -11.27%) are not tied to any entry in the event_weeks table (no earnings/proxy/M&A filing that week) — a rate of ~0.6/year; P(>=1/year)=1-exp(-0.6)=0.45."},
+   "impact": {"value": -0.1849, "cite": "2026-10-08-mc-inputs.json analogues.largest_falls: week of 2026-02-02, move -0.1849, the largest weekly fall in the history not tied to a scheduled filing/earnings event."},
+   "analogue": {"week": "2026-02-02", "move": -0.1849},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": {"value": -0.01, "cite": "factsheet-2026-10-08.md Price: price is 3.6% below its 50-day MA (282.95) with descending swing highs (295.58 Jul29 -> 320.48 Sep3 -> 289.78 Sep21) and descending swing lows (290.31 Aug27 -> 255.87 Sep11 -> 252.05 Sep29) since early September, and RSI(14) is a neutral-to-weak 47.6 (Other). A modest near-term bearish tilt, well inside the +-2% annualised 3m-only cap."}
+}

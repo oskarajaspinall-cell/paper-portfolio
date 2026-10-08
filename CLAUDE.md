@@ -25,7 +25,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 ## Investment approach
 - **Only high conviction is bought**: a BUY or ADD (core or tactical) needs conviction >= `min_buy_conviction` (4). Anything less is AVOID (new names) or HOLD (holdings).
 - **CORE**: good business + attractive valuation, ~12-month horizon. Judged purely against thesis (invalidation) triggers on business fundamentals. No price stops, price levels, moving averages or valuation multiples as triggers.
-- **TACTICAL**: weeks to ~3 months, specific catalyst. MUST have target, stop and time limit at entry; these execute mechanically.
+- **TACTICAL**: weeks to ~3 months, two setups only (owner rule 2026-10-08): **post-earnings drift** (a real results beat the price is still digesting) and **pullback in an uptrend** (a dip to around the 50-day average). MUST have target, stop and time limit at entry; these execute mechanically. The stop comes from the stock's own volatility (ATR), the target must be ≥2× the stop distance (checked at the decision and again at the fill-day open), and the size is set so a stop-out costs ~0.5% of the portfolio (max 5%).
 - The label is fixed at entry. A tactical position can NEVER be relabelled core; it can only become core by passing a full core initiation, which records a new entry decision.
 - When a core invalidation trigger fires, the holding gets a full core re-initiation (researcher + evaluator), not a quick review.
 - When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve or sector limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
@@ -54,8 +54,23 @@ min_buy_conviction = 4            # owner rule: only buy/add with high convictio
 [tactical]
 max_sleeve_pct = 25
 max_position_pct = 5
-default_stop_pct = -10
 default_time_limit_months = 3
+# Setups (scripts/setups.py): post-earnings drift and pullback-in-uptrend. Stops from each stock's own
+# volatility; every entry needs reward:risk >= min_reward_risk; size = risk_per_trade_pct / stop distance
+# (capped at max_position_pct), so a stop-out costs about risk_per_trade_pct of the portfolio.
+stop_atr_multiple = 2.5           # pullback stop = last close - 2.5 x ATR(14); drift stop = jump-day low - 0.25 x ATR
+min_reward_risk = 2.0             # (target - entry) / (entry - stop), checked at decision AND at the fill-day open
+risk_per_trade_pct = 0.5
+drift_lookback_sessions = 10      # the earnings reaction must be this recent
+drift_min_jump_pct = 5            # reaction-day close vs prior close
+drift_min_volume_x = 2            # reaction-day volume vs its prior 50-session average
+drift_min_hold_pct = 50           # still holding at least half of the jump
+drift_recent_report_days = 21     # stage 1: the site shows the date just reported (in the past) until the next is set...
+drift_min_days_to_next_earnings = 60   # ...or the next report is already far away: either way results were just out
+drift_time_limit_weeks = 8
+pullback_sma50_band_pct = [-5, 2] # price vs its 50-day average
+pullback_rsi_band = [30, 55]      # 14-day RSI: cooled off, not broken
+pullback_min_days_to_earnings = 30
 
 [fills]
 # Next-open orders fill at the first OPEN after the decision time (never an earlier price). Local opening
@@ -89,14 +104,13 @@ custom_file = "universe/custom.txt"   # your own tickers, one per line (optional
 
 [screen]
 # Weekly Python screen over universe/universe.csv (one statistics page per stock, no model calls).
-# Percentile scores within the screened set. Core score = quality + valuation; tactical = momentum
-# with an earnings date inside the window. Valuation multiples are used ONLY here for ranking.
+# Percentile scores within the screened set. Core score = quality + valuation. Tactical = the two setups in
+# [tactical] (drift ranked by the size of the earnings reaction, pullback by the strength of the uptrend).
+# Valuation multiples are used ONLY here for ranking.
 core_picks = 10                   # new initiations per week from the core ranking
 tactical_picks = 10               # ... and from the tactical ranking (total <= max_new_initiations_per_week)
 exclude_researched_days = 90      # skip names with a research note this recent
-tactical_earnings_window_days = 42
-tactical_max_rsi = 70             # skip overbought names (14-day RSI above this) for tactical picks
-tactical_max_above_sma200_pct = 40  # skip names already this far above their 200-day average
+tactical_check_top = 40           # stage 2: daily history (setup check + ATR) for the top N candidates of EACH setup (~3 s each)
 min_metrics_per_pillar = 2
 quality = ["roic", "roce", "fcfMargin", "operatingMargin", "fScore", "-debtEbitda"]   # "-" = lower is better
 valuation = ["fcfYield", "earningsYield", "-evEbitda", "-pe"]
@@ -176,7 +190,8 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/fetch_data.py` — stockanalysis.com scraper (pages → JSON with `source_url`; news feeds; robots, rate limit, cache).
 - `scripts/fact_sheet.py <TICKER> --peers A B C` — one-page `research/<SLUG>/factsheet-<date>.md` (quality, valuation, price, news & sentiment).
 - `scripts/portfolio.py` — validates trades against every rule, places next-open orders, fills them, marks to market, computes returns. All arithmetic lives here.
-- **Fills (owner rule):** trades decided by the agents are validated at once and queued as pending orders that fill at the OPEN of the next trading day (`portfolio.py submit --at-next-open`, then `fill-pending`). Mechanical tactical exits still fill at the first close that crossed the stop/target.
+- **Fills (owner rule):** trades decided by the agents are validated at once and queued as pending orders that fill at the first OPEN after the decision time (per exchange, `[fills]`) (`portfolio.py submit --at-next-open`, then `fill-pending`). Mechanical tactical exits still fill at the first close that crossed the stop/target.
+- `scripts/setups.py` — tactical setups (drift signal, pullback filter, ATR, volatility stop, 2:1 target, risk-based size).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.
 - `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions (3 new initiations at a time); any failure (other than a skipped new initiation) restores `portfolio/` and writes `runs/<date>/error.log`.

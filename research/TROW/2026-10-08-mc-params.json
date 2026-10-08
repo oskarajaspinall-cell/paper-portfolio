@@ -1,0 +1,56 @@
+{
+  "ticker": "TROW",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/TROW/2026-10-08-evaluation.md Decision JSON block, scenarios.bull.probability"},
+      "probability_evidence": "ETF/fixed-income inflows and large mandates in Q2 2026 (earnings call transcript, 2026-07-31, [OV]) plus the F/m Investments acquisition announced 2026-08-20 to expand fixed-income ETF/SMA capabilities ([OV] headline) are named as the specific route to outflow stabilisation that would support this scenario (note Section 3, evaluator bull case) [Guessing].",
+      "target_price_12m": {"value": 138, "cite": "research/TROW/2026-10-08-evaluation.md Decision JSON block, scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0722, "cite": "Fact sheet valuation table (research/TROW/factsheet-2026-10-08.md): scenario basis reverts P/E to its 5y median 13.8x (current 10.4x) implying $138.09; the same reversion applied to EV/EBITDA's 5y median 8.2x (current 6.6x) implies $129.30 and to P/FCF's 5y median 15.1x (current 13.3x) implies $118.15; half the spread of these three implied prices ($19.94/2=$9.97) relative to the $138 target = 7.22%."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/TROW/2026-10-08-evaluation.md Decision JSON block, scenarios.base.probability"},
+      "probability_evidence": "FY2025 net outflows of $56.9bn against $216.7bn of market-driven AUM growth (10-K, cited in note Section 1) and continuing net outflows in Q2 2026 (-$6.5bn, transcript) and the August 2026 month-end AUM release (-$7.9bn, PRNewswire [OV]) show the outflow trend persisting through the latest data without a clear inflection, consistent with 'outflows continue, offset by buybacks' being the modal case.",
+      "target_price_12m": {"value": 110, "cite": "research/TROW/2026-10-08-evaluation.md Decision JSON block, scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.1070, "cite": "Fact sheet valuation table: scenario basis reverts P/E to its 5y minimum 11.0x (current 10.4x) implying $110.07; the same floor-reversion applied to EV/EBITDA's 5y minimum 7.2x (current 6.6x) implies $113.53 and to P/FCF's 5y minimum 11.5x (current 13.3x) implies $89.99; half the spread of these three implied prices ($23.55/2=$11.77) relative to the $110 target = 10.70%."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/TROW/2026-10-08-evaluation.md Decision JSON block, scenarios.bear.probability"},
+      "probability_evidence": "Beta of 1.47 [ST], short interest of 13.12% and rising (+4.6% month-on-month) [ST], a Piotroski F-score of only 4 [ST], and the 10-K's own admission that passive managers 'have gained and may continue to gain market share from active managers like us' together support a scenario where a market drawdown compounds ongoing outflows (evaluator bear case, note Sections 2 and 6).",
+      "target_price_12m": {"value": 85, "cite": "research/TROW/2026-10-08-evaluation.md Decision JSON block, scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.1481, "cite": "Fact sheet quality table (research/TROW/factsheet-2026-10-08.md): scenario basis compresses net margin to its FY2022 5y low of 24.0% (TTM 29.3%) at the unchanged 10.4x P/E, implying $85.22; applying each margin line's own 5y low to its respective current multiple instead — operating margin's FY2023 low of 29.5% (TTM 33.4%) on the current 6.6x EV/EBITDA-equivalent implies $91.86, and FCF margin's FY2023 low of 14.1% (TTM 22.0%) on the current 13.3x P/FCF-equivalent implies $66.69 — half the spread of these three implied prices ($25.17/2=$12.59) relative to the $85 target = 14.81%."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed signal in the SPY-proxy headlines in mc-inputs.json factor_news.SPY: S&P 500 at record highs led by big tech (CNBC, WSJ, Bloomberg, 2026-10-06/07) versus a same-day tech selloff and rising Treasury yields pressuring stocks plus a large bearish put-spread trade (TipRanks, CNBC, Reuters, 2026-10-07); the macro overlay (research/TROW/2026-10-08-macro.md) sets macro_tilt direction=neutral, size=small for the chain touching SPY — net signal mixed, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/TROW/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression)."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed signal in the IEF-proxy headlines in mc-inputs.json factor_news.IEF: a deepening bond rout with 10y/30y yields at multi-decade highs (Bloomberg, Barrons, WSJ, 2026-10-01/05/07) versus a bond-market 'breather' and yield retreat after a weaker-than-expected jobs report (ETF Trends, The Guardian, Bloomberg, 2026-10-02); the macro overlay (research/TROW/2026-10-08-macro.md) sets macro_tilt direction=neutral, size=small for the real-yield chain — net signal mixed, so 0."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/TROW/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression)."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings / AUM report surprise",
+      "reason": "Next earnings date is Oct 29, 2026 (factsheet Price section); every quarterly release is a potential surprise catalyst given the ongoing outflow trend (FY2025 net outflows $56.9bn per 10-K; Q2 2026 net outflows $6.5bn per transcript, both cited in note Sections 1 and 5).",
+      "cite": "research/TROW/factsheet-2026-10-08.md Price section (next earnings date); research/TROW/2026-10-08.md Sections 1 and 5 (outflow trend); research/TROW/2026-10-08-mc-inputs.json analogues.event_weeks (quarterly earnings-tagged weekly moves).",
+      "annual_probability": {"value": 0.25, "cite": "Quarterly reporting cadence confirmed by the four earnings_release-tagged weeks per year in mc-inputs.json analogues.event_weeks; expressed per the house convention of ~4 occurrences/year (i.e. probability 1/4 of a given quarter's release being the realised jump week)."},
+      "impact": {"value": -0.105, "cite": "mc-inputs.json analogues.event_weeks: Q4 2025 earnings week (2026-02-02), the worst earnings-tagged weekly move in the 5y history, move -0.105."},
+      "analogue": {"week": "2026-02-02", "move": -0.105},
+      "assumption": null
+    },
+    {
+      "name": "Net-outflow / AUM disclosure shock",
+      "reason": "Monthly AUM press releases (e.g. August 2026: $1.90tn AUM, net outflows -$7.9bn, PRNewswire [OV], cited in factsheet News & sentiment) are a recurring catalyst distinct from quarterly earnings dates; the single largest weekly fall in TROW's 5-year history was tied to exactly this kind of non-earnings 'Business Update' disclosure.",
+      "cite": "research/TROW/factsheet-2026-10-08.md News & sentiment (monthly AUM release headlines, Aug/Jul 2026); research/TROW/2026-10-08-mc-inputs.json analogues.event_weeks ('Business Update' entry, week 2022-09-12) and analogues.largest_falls (same week ranks #1).",
+      "annual_probability": {"value": 0.2, "cite": "Only one non-earnings 'Business Update' disclosure event appears across the ~5-year (260-week) history in mc-inputs.json analogues.event_weeks (2022-09-12), an empirical rate of about 1 per 5 years = 0.2/year."},
+      "impact": {"value": -0.1054, "cite": "mc-inputs.json analogues.event_weeks and analogues.largest_falls: week 2022-09-12, 'Business Update', move -0.1054, the largest single weekly fall in the 5y history."},
+      "analogue": {"week": "2022-09-12", "move": -0.1054},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

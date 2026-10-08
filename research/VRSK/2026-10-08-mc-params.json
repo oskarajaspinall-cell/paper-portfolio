@@ -1,0 +1,56 @@
+{
+ "ticker": "VRSK",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bull.probability"},
+   "probability_evidence": "Management guided (Sept-2026 Barclays and U.S. All Stars conference transcripts) to organic constant-currency growth accelerating to 6%-8% in H2 2026, with Q3 2026 results on Nov 5, 2026 (factsheet Price section) as the near-term confirmation catalyst (2026-10-08.md 'Unusual items'; factsheet News & sentiment).",
+   "target_price_12m": {"value": 205, "cite": "evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+   "target_band": {"value": 0.109, "cite": "Half the spread of implied prices across the fact sheet's four valuation anchors (Valuation table 'vs peers' column: P/E +6%, EV/EBITDA +22%, EV/Sales +34%, P/FCF -1%), applied to the current close of 168.68 (price/(1+vs_peer)): P/FCF 170.38, P/E 159.13, EV/EBITDA 138.26, EV/Sales 125.88; half-spread 22.25 / bull target 205 = 0.109."}
+  },
+  "base": {
+   "probability": {"value": 0.45, "cite": "evaluation.md Decision JSON scenarios.base.probability"},
+   "probability_evidence": "Current P/FCF of 17.8x already sits essentially in line with the 4-peer median of 18.0x (-1%, factsheet Valuation table), consistent with a steady-state outcome where the multiple merely holds rather than re-rates or de-rates further; FCF margin 39.4% TTM supports continued buyback-funded FCF growth (factsheet Quality table).",
+   "target_price_12m": {"value": 180, "cite": "evaluation.md Decision JSON scenarios.base.target_price_12m"},
+   "target_band": {"value": 0.124, "cite": "Half the spread of implied prices across the fact sheet's four valuation anchors (Valuation table 'vs peers' column: P/E +6%, EV/EBITDA +22%, EV/Sales +34%, P/FCF -1%), applied to the current close of 168.68 (price/(1+vs_peer)): P/FCF 170.38, P/E 159.13, EV/EBITDA 138.26, EV/Sales 125.88; half-spread 22.25 / base target 180 = 0.124."}
+  },
+  "bear": {
+   "probability": {"value": 0.30, "cite": "evaluation.md Decision JSON scenarios.bear.probability"},
+   "probability_evidence": "Short interest rose 36.9% month-over-month to 3.58% of float and net debt/EBITDA rose to 2.68x from 1.83x at FY2025-end (factsheet Quality/News & sentiment tables); macro overlay applies a small bear tilt because US 10y real yields (DFII10) rose to 2.91% (+0.61pp over 3m) and fed funds rose to 3.88% (+0.25pp, an actual hike), pressuring the discount rate on VRSK's EV/EBITDA (+22% vs peers) and EV/Sales (+34% vs peers) premiums (research/VRSK/2026-10-08-macro.md).",
+   "target_price_12m": {"value": 135, "cite": "evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+   "target_band": {"value": 0.165, "cite": "Half the spread of implied prices across the fact sheet's four valuation anchors (Valuation table 'vs peers' column: P/E +6%, EV/EBITDA +22%, EV/Sales +34%, P/FCF -1%), applied to the current close of 168.68 (price/(1+vs_peer)): P/FCF 170.38, P/E 159.13, EV/EBITDA 138.26, EV/Sales 125.88; half-spread 22.25 / bear target 135 = 0.165."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed/offsetting as of 2026-10-07: S&P 500 closed at record highs led narrowly by tech (WSJ, CNBC), yet the same day's coverage flags 'big bearish trades point to skepticism' (CNBC) and a tech-selloff/elevated-Treasury-yield pullback (TipRanks, Reuters); no net directional read, so 0."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression, 2023-10-09 to 2026-09-28)."}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.05, "cite": "mc-inputs.json factor_news.IEF headlines describe a deepening, multi-decade bond rout as of early Oct 2026 (Bloomberg: '30-Year Yields Return to 2002 High'; Barrons: 'Global Bond Markets Sell Off'; WSJ: 'Bond Rout Is Deepening'), consistent with the macro overlay's measured rise in DFII10 (+0.61pp 3m to 2.91%), DGS10 (+0.72pp 3m to 5.27%) and an actual DFF hike (+0.25pp to 3.88%) (research/VRSK/2026-10-08-macro.md); kept modest at -5% given the overlay also notes a partial early-October retreat (ETF Trends, 'Treasury Yields Retreat')."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression, 2023-10-09 to 2026-09-28)."}
+  }
+ },
+ "jumps": [
+  {
+   "name": "AccuLynx Delaware Chancery Court ruling / litigation risk",
+   "reason": "Verisk 'strongly disagrees' with an August-2026 Delaware Chancery Court ruling concerning the AccuLynx acquisition; the note states the headline gives no detail on quantum or remedy, so financial impact cannot be quantified from available data.",
+   "cite": "research/VRSK/2026-10-08.md 'Unusual items' section (TheFly, 2026-08-10) and factsheet-2026-10-08.md News & sentiment.",
+   "annual_probability": {"value": 0.2, "cite": "Only one adverse-litigation headline of this kind appears in the ~5-year stockanalysis.com weekly history used by mc-inputs.json (2021-10-18 to 2026-09-28) -> roughly 1 event per 5 years = 0.2/yr."},
+   "impact": {"value": -0.0529, "cite": "mc-inputs.json analogues.all_weekly_moves week 2026-08-10 (-0.0529), the week of the TheFly AccuLynx-ruling headline dated 2026-08-10."},
+   "analogue": {"week": "2026-08-10", "move": -0.0529},
+   "assumption": null
+  },
+  {
+   "name": "Quarterly earnings surprise (Q3 2026 report, Nov 5, 2026)",
+   "reason": "Next earnings date is Nov 5, 2026, a scheduled, dated catalyst; management guided explicitly to organic constant-currency growth accelerating to 6%-8% in H2 2026 (Barclays transcript), making a miss or beat against that stated guidance a discrete, quantifiable risk.",
+   "cite": "factsheet-2026-10-08.md Price section ('Next earnings date | Nov 5, 2026') and 2026-10-08.md 'Unusual items' (Barclays 24th Annual Global Financial Services Conference transcript, 2026-09-15).",
+   "annual_probability": {"value": 0.25, "cite": "Verisk reports quarterly, i.e. 4 scheduled earnings events per year; this jump models one such event = 1/4 = 0.25/yr (mc-inputs.json analogues.event_weeks lists one earnings_release week per quarter)."},
+   "impact": {"value": -0.0913, "cite": "mc-inputs.json analogues.event_weeks: Q1 2022 earnings_release week 2022-05-02, move -0.0913, the largest-magnitude earnings-week move in the 5-year event history."},
+   "analogue": {"week": "2022-05-02", "move": -0.0913},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": {"value": -0.02, "cite": "factsheet-2026-10-08.md Price section: close 7.1% below the 50-day MA and 10.9% below the 200-day MA, 3-month momentum -12.3%, 6-month momentum -6.8%, near its 52-week low of 155.94 (HI,ST) -- consistent negative short-term technical trend, capped at the configured ±2% annualised maximum."}
+}

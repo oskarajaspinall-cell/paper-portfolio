@@ -1,0 +1,56 @@
+{
+ "ticker": "CTSH",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "evaluation.md Decision json: scenarios.bull.probability = 0.25"},
+   "probability_evidence": "Bull case lists every multiple below its 5y minimum and the peer median (EV/EBITDA 6.6x vs 8.1x min/8.6x peers; P/FCF 9.9x vs peers 11.8x; FCF yield 10.11%) plus rising FCF conversion (117% TTM) and ongoing buybacks (shares -3.24% YoY) [Certain], but the evaluator caps conviction at 3/5 and tags the re-rating trigger 'Guessing' ('Stable returns alone could lift the multiple back toward its 5-year floor [Guessing]') because five years of falling ROIC/gross margin are unresolved - weighted below base and bear for that reason.",
+   "target_price_12m": {"value": 70.0, "cite": "evaluation.md Decision json: scenarios.bull.target_price_12m = 70.0, basis 'EV/EBITDA re-rates from 6.6x to its 5-year minimum of 8.1x'"},
+   "target_band": {"value": 0.1220, "cite": "Fact sheet Valuation table (RA): re-rating the bull story's 'returns stabilise' thesis to each multiple's own 5y minimum gives three different implied prices from current close 57.07 - P/E 12.5x->12.8x: 58.44; EV/EBITDA 6.6x->8.1x: 70.03 (the evaluation's own basis); P/FCF 9.9x->13.1x: 75.52. Spread 75.52-58.44=17.08; half-spread 8.54; band = 8.54/70.0 = 0.1220."}
+  },
+  "base": {
+   "probability": {"value": 0.45, "cite": "evaluation.md Decision json: scenarios.base.probability = 0.45"},
+   "probability_evidence": "Evaluator's own rationale gives the base case the modal weight: 'Valuation and cash conversion are attractive, but the thesis needs returns to stabilise... show no sign of that yet' - i.e. the current slow-erosion-offset-by-FCF-yield/buybacks pattern (base scenario basis) continuing is the single most likely path, consistent with the AVOID/conviction-3 decision (neither a high-conviction re-rating nor an acute break).",
+   "target_price_12m": {"value": 59.0, "cite": "evaluation.md Decision json: scenarios.base.target_price_12m = 59.0, basis 'Multiples stay near P/E 12.5x as slow ROIC erosion offsets the 10.11% FCF yield and 3.24% share shrink'"},
+   "target_band": {"value": 0.0, "cite": "Fact sheet Valuation table (RA): the base basis holds the multiple at its current level (P/E stays at 12.5x, no re-rate). Applying the same 'multiple unchanged' assumption to EV/EBITDA (6.6x) and P/FCF (9.9x) gives the identical implied price (current 57.07 plus the FCF-yield/buyback uplift to 59) as the P/E anchor - the three anchors agree exactly, so there is no anchor-disagreement band for the base case; no second valuation anchor is cited for base beyond 'stay near P/E 12.5x'."}
+  },
+  "bear": {
+   "probability": {"value": 0.30, "cite": "evaluation.md Decision json: scenarios.bear.probability = 0.30"},
+   "probability_evidence": "Bear case cites concrete, already-in-train deterioration rather than a hypothetical: ROIC down every year to 14.8% TTM, gross margin down to 33.4% [Certain]; Piotroski F only 4 [Certain]; net debt/EBITDA moved from net cash (-0.19x) to 0.26x 'as bolt-on M&A begins' [Certain]; and the macro overlay notes real yields +48bp/1m cap any re-rating [Likely] (research/CTSH/2026-10-08-macro.md). This concrete evidence outweighs the bull case's single 'Guessing'-tagged re-rating hope, so bear is weighted above bull.",
+   "target_price_12m": {"value": 45.0, "cite": "evaluation.md Decision json: scenarios.bear.target_price_12m = 45.0, basis 'the multiple de-rates toward the June low of 37.08'"},
+   "target_band": {"value": 0.0880, "cite": "Fact sheet Price section (HI): bear basis explicitly targets 'the June low of 37.08' (6-month low, 2026-06-30) as the de-rating direction, distinct from the evaluator's stated bear target of 45.0 - the spread between these two cited price anchors is the uncertainty in the bear target itself: (45.0-37.08)=7.92; half-spread 3.96; band = 3.96/45.0 = 0.0880."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed/offsetting: record highs ('S&P 500 Hits Record High as Big Tech Leads', 2026-10-06; 'S&P closes at record high, breaking 7,800 points', 2026-10-07) alongside risk warnings ('SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields', 2026-10-07; 'Two big bearish trades point to skepticism', 2026-10-07). No clear net direction, so set to 0 per the mixed-news rule."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431 (156-week regression, 2023-10-09 to 2026-09-28)"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: yields climbing to multi-decade highs ('US 30-Year Yields Return to 2002 High', 2026-10-07; 'Global Bond Markets Sell Off on France's Fiscal Worries', 2026-10-05) offset by stabilisation headlines ('Navigating Fixed Income Duration as Treasury Yields Retreat', 2026-10-02; 'US Treasury Rebound Pulls Yields Off Multi-Decade Highs', 2026-10-02). The macro overlay (research/CTSH/2026-10-08-macro.md) sets macro_tilt.direction = 'neutral', size 'small', given CTSH's low beta (0.85) - no net directional view supported, so set to 0."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646 (156-week regression, 2023-10-09 to 2026-09-28)"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Q3 2026 earnings deterioration surprise",
+   "reason": "Bear case flags the Oct 29, 2026 Q3 print as a near-term risk ('Q3 results on Oct 29 could show further deterioration [Guessing]'), and CTSH's earnings weeks have historically produced the stock's largest single-week moves.",
+   "cite": "evaluation.md bear case; fact sheet Price section 'Next earnings date: Oct 29, 2026 (Earnings Date)'",
+   "annual_probability": {"value": 0.20, "cite": "mc-inputs.json analogues.event_weeks: of 20 quarterly earnings-release weeks in the 2021-10-18 to 2026-09-28 history, 1 (Q3 2022, 2022-10-31, -16.49%) moved >=15% - roughly a 1-in-5-year frequency, so annual_probability = 0.20."},
+   "impact": {"value": -0.1649, "cite": "mc-inputs.json analogues.event_weeks: Q3 2022 earnings release, week 2022-10-31, move -0.1649 (also the largest fall in analogues.largest_falls)"},
+   "analogue": {"week": "2022-10-31", "move": -0.1649},
+   "assumption": null
+  },
+  {
+   "name": "Debt-funded bolt-on M&A announcement",
+   "reason": "Note and bear case flag that net debt/EBITDA moved from net cash (-0.19x) to 0.26x 'as bolt-on M&A begins' in 2026, a recurring discrete catalyst type already seen once in CTSH's event history (tagged 'M&A Announcement').",
+   "cite": "research/CTSH/2026-10-08.md section 5 Capital allocation: 'consistent with 2026 bolt-on acquisition activity disclosed in the 10-Q'; evaluation.md bear case: 'Net debt/EBITDA has moved from net cash (-0.19x) to 0.26x as bolt-on M&A begins'",
+   "annual_probability": {"value": 0.20, "cite": "mc-inputs.json analogues.event_weeks: exactly 1 event tagged 'M&A Announcement' (2024-06-10) across the ~5-year history (2021-10-18 to 2026-09-28) - roughly a 1-in-5-year frequency, so annual_probability = 0.20."},
+   "impact": {"value": -0.0255, "cite": "mc-inputs.json analogues.event_weeks: M&A Announcement, week 2024-06-10, move -0.0255"},
+   "analogue": {"week": "2024-06-10", "move": -0.0255},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}

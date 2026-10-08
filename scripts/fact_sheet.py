@@ -338,6 +338,16 @@ def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str) -> str:
     w(f"| 3-month momentum | {mom(m3)} | HI |")
     w(f"| 6-month momentum | {mom(m6)} | HI |")
     w(f"| 12-month (52-week) change | {sf(m12, 1, '%')} | ST |")
+    import setups
+    tcfg = load_config()["tactical"]
+    a14 = setups.atr(rows)
+    atr_txt = NA if a14 is None else f"{a14:.4g} {ccy_p} ({a14 / last['close'] * 100:.1f}% of last close)"
+    w(f"| ATR (14-day average true range) | {atr_txt} | HI |")
+    sig = setups.drift_signal(rows, tcfg)
+    w("| Earnings-type reaction (last "
+      f"{tcfg['drift_lookback_sessions']} sessions: ≥{tcfg['drift_min_jump_pct']}% on ≥{tcfg['drift_min_volume_x']}x volume) | "
+      + (f"{sig['date']}: {sig['jump_pct']:+.1f}% on {sig['volume_x']:.1f}x volume, day low {sig['day_low']:g}, "
+         f"{sig['held_pct']:.0f}% of the jump held" if sig else "none") + " | HI |")
     w(f"| Relative strength vs SPY 3m / 6m / 12m | {rel(m3 and m3['pct'], s3 and s3['pct'])} / "
       f"{rel(m6 and m6['pct'], s6 and s6['pct'])} / {rel(m12, s12)} (local-currency returns) | HI,SPY-HI,ST,SPY-OV |")
     w(f"| SPY 3m / 6m / 12m | {mom(s3)} / {mom(s6)} / {sf(s12, 1, '%')} | SPY-HI,SPY-OV |")

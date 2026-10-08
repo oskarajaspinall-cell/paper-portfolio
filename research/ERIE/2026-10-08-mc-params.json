@@ -1,0 +1,56 @@
+{
+ "ticker": "ERIE",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "evaluation.json scenarios.bull.probability (research/ERIE/2026-10-08-evaluation.md)"},
+   "probability_evidence": "Every current multiple already sits below its 5-year minimum (P/E 19.8x vs 26.8x min, EV/EBITDA 13.3x vs 17.9x min, P/FCF 20.6x vs 26.3x min [RA], factsheet-2026-10-08.md Valuation table), and the Q1/Q2 2026 earnings calls showed improved underwriting, higher net income and strong investment returns despite moderating premium growth (note research/ERIE/2026-10-08.md section 6, factsheet News row 2026-07-31), supporting fee sustainability if premium growth stabilises (evaluation.md Bull case, basis).",
+   "target_price_12m": {"value": 294.76, "cite": "evaluation.json scenarios.bull.target_price_12m: P/E re-rates from 19.8x to its 5-year minimum of 26.8x on flat TTM earnings (research/ERIE/2026-10-08-evaluation.md)"},
+   "target_band": {"value": 0.0284, "cite": "Half the spread of the bull re-rating applied separately via each anchor's own 5y minimum from factsheet-2026-10-08.md Valuation table: P/E (26.8/19.8x) -> $294.76, EV/EBITDA (17.9/13.3x) -> $293.09, P/FCF (26.3/20.6x) -> $278.03; spread $16.73 / 2 / $294.76 = 2.84%"}
+  },
+  "base": {
+   "probability": {"value": 0.5, "cite": "evaluation.json scenarios.base.probability (research/ERIE/2026-10-08-evaluation.md)"},
+   "probability_evidence": "Most likely path per the note: operating margin has already risen to 18.4% TTM offsetting the premium-growth moderation flagged on the Q2 2026 call (research/ERIE/2026-10-08.md section 2 and 6; factsheet-2026-10-08.md News row 2026-07-31), with no re-rating or de-rating catalyst identified, so the current multiple holds (evaluation.md Base case, basis).",
+   "target_price_12m": {"value": 217.77, "cite": "evaluation.json scenarios.base.target_price_12m: P/E holds at 19.8x as margin gains offset moderating premium growth (research/ERIE/2026-10-08-evaluation.md)"},
+   "target_band": {"value": 0.0, "cite": "Base case holds all current multiples and margins flat (no re-rating), so every valuation anchor in factsheet-2026-10-08.md (P/E 19.8x, EV/EBITDA 13.3x, P/FCF 20.6x) reproduces exactly the current price $217.77 by definition; no disagreement between anchors under this scenario"}
+  },
+  "bear": {
+   "probability": {"value": 0.25, "cite": "evaluation.json scenarios.bear.probability (research/ERIE/2026-10-08-evaluation.md)"},
+   "probability_evidence": "Fee rate is already at the 25% cap, premium growth is moderating with lower retention (note research/ERIE/2026-10-08.md section 3, Q1 2026 call per factsheet News row 2026-04-24), the stock still trades at a +129% P/E premium to peers despite the decline, and short interest is elevated at 9.5% of float with the stock down 31.1% over 12 months (factsheet-2026-10-08.md Other and Price sections) -- consistent with the Bear case's 'weather-hit Exchange could pressure that rate' risk (evaluation.md Bear case).",
+   "target_price_12m": {"value": 163.33, "cite": "evaluation.json scenarios.bear.target_price_12m: net margin reverts from 14.0% TTM to the FY2022 level of 10.5% at an unchanged 19.8x P/E (research/ERIE/2026-10-08-evaluation.md)"},
+   "target_band": {"value": 0.0333, "cite": "Half the spread of the bear margin-reversion applied via three margin lenses from factsheet-2026-10-08.md Quality table (FY2022 vs TTM): net margin 10.5/14.0 -> $163.33 (P/E lens), operating margin 13.5/18.4 -> $159.78 (EV/EBITDA lens), FCF margin 10.5/13.4 -> $170.64 (P/FCF lens); spread $10.86 / 2 / $163.33 = 3.33%"}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news in mc-inputs.json factor_news.SPY: record highs and a tech-led rally (ETF Trends, Bloomberg, CNBC 2026-10-06/07) alongside a large bearish put-spread trade, elevated Treasury yields and a tech-selloff pullback (TipRanks, CNBC, Reuters 2026-10-07) -- no clear net direction, so 0 per house rule"},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week regression, stockanalysis.com SPY history)"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.08, "cite": "mc-inputs.json factor_news.IEF: dominant theme is a deepening global bond rout with 10y/30y Treasury yields at multi-decade highs (Bloomberg, Barrons, WSJ, 2026-10-01 to 2026-10-07) driven by fiscal and inflation concerns, only briefly interrupted by a weaker jobs report; a modest -8% expected move on IEF (bond prices fall as yields rise) reflects this persistent direction, kept within the +/-15% modest-move bound"},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week regression, stockanalysis.com IEF history)"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Quarterly earnings surprise",
+   "reason": "Quarterly earnings releases have historically produced outsized weekly moves in both directions (e.g. +15.67% Q4 2023, -11.95% Q1 2025), and the next earnings date (Oct 29, 2026) is flagged in the fact sheet's Price section against a backdrop of moderating premium growth and lower retention noted on the Q1 2026 call",
+   "cite": "factsheet-2026-10-08.md Price section 'Next earnings date'; research/ERIE/2026-10-08.md section 6 and News row 2026-04-24 (Q1 2026 call: slower premium growth and lower retention)",
+   "annual_probability": {"value": 0.84, "cite": "mc-inputs.json analogues.event_weeks: 7 of the 19 quarterly earnings weeks since 2021-10 had |move| >= 8% (~37% per quarter); probability of at least one such surprise in 4 quarters = 1-(1-0.37)^4 ~= 0.84"},
+   "impact": {"value": -0.1195, "cite": "mc-inputs.json analogues.event_weeks Q1 2025 earnings week (2025-04-21), move -11.95%, also the #2 largest weekly fall in analogues.largest_falls"},
+   "analogue": {"week": "2025-04-21", "move": -0.1195},
+   "assumption": null
+  },
+  {
+   "name": "Weather catastrophe pressuring the Exchange's capital and fee rate",
+   "reason": "The Bear case names the risk that 'a weather-hit Exchange could pressure that rate', since Indemnity's management fee is reset by its own Board weighing the Exchange's capital needs against Indemnity's results",
+   "cite": "research/ERIE/2026-10-08-evaluation.md Bear case; research/ERIE/2026-10-08.md section 2 (fee-rate governance tension)",
+   "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.largest_falls: the week of 2022-12-27 (-9.97%, concurrent with Winter Storm Elliott's major insured losses across ERIE's Great Lakes/Northeast footprint) is the only large non-earnings-week fall in the ~5-year history plausibly tied to a regional weather catastrophe -- 1 occurrence in 5 years ~= 0.2/yr"},
+   "impact": {"value": -0.0997, "cite": "mc-inputs.json analogues.largest_falls week 2022-12-27, move -9.97%"},
+   "analogue": {"week": "2022-12-27", "move": -0.0997},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}

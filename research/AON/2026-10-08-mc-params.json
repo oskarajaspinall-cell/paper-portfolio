@@ -1,0 +1,59 @@
+{
+ "ticker": "AON",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.2, "cite": "research/AON/2026-10-08-evaluation.md Decision JSON block, scenarios.bull.probability"},
+   "probability_evidence": "Operating margin is 28.5% TTM (+10.0pp over 5y), ROIC 16.1% (+3.2pp) and gross margin 48.2%, all rising, while every multiple sits below its own 5-year minimum (P/E 14.9x vs a 20.5x floor) and FCF yield is 5.66% (fact sheet Quality/Valuation); beta 0.69 and RSI 28.4 suggest much of the USI integration/leverage fear is already priced (fact sheet 'Other'/'News & sentiment'; evaluation Bull case). The evaluation's own bull basis states the probability was cut from 0.25 by the macro overlay's moderate bear tilt on financing costs (research/AON/2026-10-08-macro.md macro_tilt)."
+   ,
+   "target_price_12m": {"value": 372, "cite": "research/AON/2026-10-08-evaluation.md Decision JSON block, scenarios.bull.target_price_12m ('P/E re-rates from 14.9x to its 5y minimum 20.5x')"},
+   "target_band": {"value": 0.1243, "cite": "Fact sheet Valuation table (research/AON/factsheet-2026-10-08.md), re-rating the bull case's 'to 5-year minimum' logic across the three earnings/cash-flow multiples at the 270.47 current price, fundamentals held flat: P/E to its 5y min 20.5x implies 372.13 (the evaluator's chosen basis, vs the stated 372 target); EV/EBITDA to its 5y min 16.3x (vs current 12.2x) implies ~361.37; P/FCF to its 5y min 18.3x (vs current 17.7x) implies ~279.64. P/B excluded as an anchor: the note calls it 'a less meaningful gauge for an asset-light, buyback-shrunk-equity business' (note Section 3). Half the spread (372.13-279.64)/2=46.25 relative to the 372 target = 0.1243; within the mc-inputs blended residual volatility ceiling 0.2319 (research/AON/2026-10-08-mc-inputs.json regression.residual_vol.blended)."}
+  },
+  "base": {
+   "probability": {"value": 0.45, "cite": "research/AON/2026-10-08-evaluation.md Decision JSON block, scenarios.base.probability"},
+   "probability_evidence": "EV/EBITDA (12.2x) already sits close to the peer median (12.4x, -2%) even as the P/E discount (14.9x vs a 20.3x peer median) is explained by guided EPS accretion only from 2028 (i.e. dilution through 2027) and suspended buybacks (8-K, https://www.sec.gov/Archives/edgar/data/315293/000119312526375328/d108801dex991.htm; fact sheet Valuation). The evaluation's base basis treats this 'EV/EBITDA near peer median, earnings discount explained by dilution' split, with dilution offsetting the 18.5% TTM FCF margin, as the modal (highest-probability) outcome."
+   ,
+   "target_price_12m": {"value": 275, "cite": "research/AON/2026-10-08-evaluation.md Decision JSON block, scenarios.base.target_price_12m ('EV/EBITDA holds near the 12.4x peer median vs 12.2x now')"},
+   "target_band": {"value": 0.2061, "cite": "Fact sheet Valuation table, re-rating the base case's 'holds near peer median' logic across the three earnings/cash-flow multiples at the 270.47 current price, fundamentals held flat: EV/EBITDA to the 12.4x peer median implies 274.91 (the evaluator's chosen basis, vs the stated 275 target); P/E to the 20.3x peer median (vs current 14.9x) implies ~368.49; P/FCF to the 16.7x peer median (vs current 17.7x) implies ~255.19. P/B excluded (note Section 3, 'a less meaningful gauge'). Half the spread (368.49-255.19)/2=56.65 relative to the 275 target = 0.2061 -- the wide spread itself reflects that AON's discount is concentrated in earnings-based multiples (P/E, P/FCF) while EV-based multiples already sit near peers (note Section 3), a genuine disagreement between anchors; within the mc-inputs blended residual volatility ceiling 0.2319 (research/AON/2026-10-08-mc-inputs.json regression.residual_vol.blended)."}
+  },
+  "bear": {
+   "probability": {"value": 0.35, "cite": "research/AON/2026-10-08-evaluation.md Decision JSON block, scenarios.bear.probability"},
+   "probability_evidence": "Net debt/EBITDA is already 2.50x TTM before the ~$17.0bn all-debt USI deal, FCF conversion has fallen from 162.9% (FY2021) to 83.0% TTM, and Altman Z is 1.67 (fact sheet Quality/Other). The macro overlay's dominant chain -- rising 10y Treasury yield (5.27%, +0.72pp/3m) and widening US HY credit spread (3.03%, +0.35pp/1m) raising the coupon AON locks in on the new USI debt -- tilts bear, moderate (research/AON/2026-10-08-macro.md macro_tilt); the evaluation's bear basis states the probability was raised from 0.25 to 0.35 for that tilt."
+   ,
+   "target_price_12m": {"value": 230, "cite": "research/AON/2026-10-08-evaluation.md Decision JSON block, scenarios.bear.target_price_12m ('FCF margin slips to its 5y low 16.8% with P/FCF de-rating below 17.7x')"},
+   "target_band": {"value": 0.034, "cite": "Fact sheet Quality/Valuation tables: applying only the bear case's FCF-margin-to-5y-low leg (16.8% vs 18.5% TTM, ratio 0.9081) at an UNCHANGED multiple to each of the three earnings/cash-flow anchors gives the same margin-only price of 270.47x0.9081=245.62 for P/E, EV/EBITDA and P/FCF alike (fundamentals-only effect, no re-rating); the evaluator's P/FCF-based target of 230 additionally de-rates the multiple itself ('de-rating below 17.7x'), which is the one anchor-specific assumption in the bear case. Half the spread between the margin-only anchor (245.62) and the P/FCF target (230) = 7.81, relative to the 230 target = 0.034; well within the mc-inputs blended residual volatility ceiling 0.2319 (research/AON/2026-10-08-mc-inputs.json regression.residual_vol.blended)."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed as of 2026-10-06/07: record highs led by big tech ('Combined Assets in SPY, SPYM Cross $1 Trillion', 'S&P 500 Hits Record High as Big Tech Leads') alongside breadth/risk warnings ('SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields', 'Two big bearish trades point to skepticism', 'powered by tech-and not much else'); the macro overlay (research/AON/2026-10-08-macro.md) addresses rates/credit, not the broad equity factor directly. Per house rule, mixed/silent news -> 0."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/AON/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)."}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.04, "cite": "Macro overlay (research/AON/2026-10-08-macro.md): 10y Treasury yield 5.27% (+0.49pp/1m, +0.72pp/3m) and 10y real yield (DFII10) 2.91% (+0.48pp/1m, +0.61pp/3m) are rising, driven almost entirely by real yield not inflation expectations, with the 2s10s curve steepening to ~0.48pp from ~0.36pp three months ago -- a 'less-dovish near-term pricing' chain that implies continued downward pressure on 7-10y Treasury (IEF) prices; corroborated by mc-inputs.json factor_news.IEF headlines ('US 30-Year Yields Return to 2002 High', 'The Bond Rout Is Deepening Even as Oil Tankers Return to the Strait of Hormuz', 'Global Bond Markets Sell Off on France's Fiscal Worries'). Kept modest (-4%, within the +-15% bound) given one IEF headline shows a partial yield retreat on a cooler PCE print."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/AON/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)."}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Q3 2026 earnings reaction (ahead of USI close)",
+   "reason": "Next earnings are Oct 30, 2026 (fact sheet Price section), before the ~$17.0bn USI deal is expected to close in Q4 2026; AON's own quarterly earnings weeks have produced some of its largest historical weekly moves (e.g. -10.3% on the Q1 2022 print), a discrete event-timing risk distinct from the gradual leverage/dilution path already priced into the bear scenario's target.",
+   "cite": "Fact sheet Price section ('Next earnings date | Oct 30, 2026'); research/AON/2026-10-08-mc-inputs.json analogues.event_weeks (earnings_release-tagged weekly moves).",
+   "annual_probability": {"value": 0.8, "cite": "research/AON/2026-10-08-mc-inputs.json analogues.event_weeks: of 20 quarterly earnings_release-tagged weeks over the ~4.95-year history (history_from 2021-10-18 to history_to 2026-09-28), 4 produced a move >=5% in magnitude (2022-04-25 -10.3%, 2024-04-22 -8.11%, 2025-04-21 -8.59%, 2024-07-22 +9.06%), implying roughly 4/4.95 = 0.8/yr chance of an earnings print causing a jump-sized move."},
+   "impact": {"value": -0.103, "cite": "research/AON/2026-10-08-mc-inputs.json analogues.event_weeks and analogues.largest_falls: Q1 2022 earnings_release week 2022-04-25, move -0.103, the largest weekly fall in the 5y history and the worst earnings-tagged move."},
+   "analogue": {"week": "2022-04-25", "move": -0.103},
+   "assumption": null
+  },
+  {
+   "name": "USI deal regulatory approval / closing disruption",
+   "reason": "Aon's ~$17.0bn all-new-debt acquisition of USI from KKR is expected to close in Q4 2026 'subject to regulatory approval' (Reuters); a delay, block or renegotiation of terms is a discrete event risk distinct from the gradual EPS-dilution and deleveraging path already priced into the bear scenario's target.",
+   "cite": "Note Section 6 'Unusual items' and https://www.reuters.com/legal/transactional/aon-buy-usi-insurance-services-17-billion-deal-2026-08-31/ ('subject to regulatory approval'), research/AON/2026-10-08.md.",
+   "annual_probability": {"value": 0.4, "cite": "research/AON/2026-10-08-mc-inputs.json analogues.event_weeks: 2 'M&A Announcement'/'M&A announcement'-tagged weeks appear across the ~4.95-year history (2023-12-18 and 2026-08-31), implying roughly 2/4.95 = 0.4/yr."},
+   "impact": {"value": -0.0909, "cite": "research/AON/2026-10-08-mc-inputs.json analogues.event_weeks and analogues.largest_falls: 'M&A announcement' week 2026-08-31 (the USI deal announcement itself), move -0.0909."},
+   "analogue": {"week": "2026-08-31", "move": -0.0909},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}

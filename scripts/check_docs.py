@@ -210,6 +210,15 @@ def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
         for k in ("target", "stop", "time_limit"):
             if ep.get(k) in (None, ""):
                 errs.append(f"TACTICAL decision needs exit_plan.{k}")
+        px = d.get("price_at_decision")
+        if dec in ("BUY", "ADD") and isinstance(px, (int, float)) and all(
+                isinstance(ep.get(k), (int, float)) for k in ("target", "stop")):
+            mrr = cfg["tactical"]["min_reward_risk"]
+            if not ep["stop"] < px < ep["target"]:
+                errs.append(f"TACTICAL exit_plan needs stop < price_at_decision ({px}) < target")
+            elif (ep["target"] - px) / (px - ep["stop"]) < mrr - 1e-9:
+                errs.append(f"TACTICAL BUY needs reward:risk >= {mrr} from price_at_decision "
+                            f"(now {(ep['target'] - px) / (px - ep['stop']):.2f})")
     errs += scenario_problems(d.get("scenarios"))
     if dec == "BUY" and len(held) >= cfg["portfolio"]["max_holdings"] and not (d.get("replaces") and d.get("replacement_reason")):
         errs.append("portfolio is at max holdings: BUY must name 'replaces' and 'replacement_reason'")

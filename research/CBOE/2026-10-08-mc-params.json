@@ -1,0 +1,65 @@
+{
+  "ticker": "CBOE",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/CBOE/2026-10-08-evaluation.md Decision block, scenarios.bull.probability"},
+      "probability_evidence": "Bull case: P/E 22.0x is below its 5y minimum of 24.0x and P/FCF (15.7x) is 37% below peer median despite rising ROIC (12.7%->26.9% TTM) and FCF margin (15.6%->37.0% TTM) (research/CBOE/2026-10-08-evaluation.md Bull case; factsheet-2026-10-08.md Valuation/Quality tables); the macro overlay's upside catalyst is a volatility spike converting to earnings at 36% TTM operating margin (research/CBOE/2026-10-08-macro.md macro_bull), but the overlay's small bear tilt is why bull probability is trimmed to 0.25 rather than weighted higher.",
+      "target_price_12m": {"value": 338, "cite": "research/CBOE/2026-10-08-evaluation.md Decision block, scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0702, "cite": "Half-spread of 'normalized' (5y-median multiple) implied prices on unchanged TTM fundamentals: P/E median 26.4x x EPS(=281.57/22.0=12.80) = 337.9; P/FCF median 19.7x x FCF/share(=281.57/15.7=17.93) = 353.1; EV/EBITDA median 16.1x on EBITDA backed out from EV/EBITDA 14.8x, net debt/EBITDA -0.40x and market cap 29.5bn (EBITDA=1.941bn, net cash 0.776bn) = 305.7 (factsheet-2026-10-08.md Valuation table [RA], Market cap [ST]). Spread = 353.1-305.7 = 47.4; half = 23.7; /338 target = 0.0702."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/CBOE/2026-10-08-evaluation.md Decision block, scenarios.base.probability"},
+      "probability_evidence": "Base case is the modal outcome: FCF yield 6.38% and a 16th consecutive annual dividend increase (Q3 2026 raised 19% to $0.86/share) support a steady, largely un-rerated return (factsheet-2026-10-08.md Valuation/News tables; research/CBOE/2026-10-08.md Section 5); the macro overlay notes growing recurring data/clearing revenue and a low beta (0.41) limit both the up- and down-side read-through from the volatility/rates backdrop (research/CBOE/2026-10-08-macro.md).",
+      "target_price_12m": {"value": 292, "cite": "research/CBOE/2026-10-08-evaluation.md Decision block, scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0812, "cite": "Same $23.7 half-spread of 5y-median-multiple implied prices (P/E, P/FCF, EV/EBITDA on unchanged TTM fundamentals; see bull target_band cite) applied to the base target: 23.7/292 = 0.0812."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/CBOE/2026-10-08-evaluation.md Decision block, scenarios.bear.probability"},
+      "probability_evidence": "Bear case: EV/EBITDA is only mid-range (45% of its 5y range) and EV/Sales (5.7x) sits above its 5y maximum, showing the 'cheap' P/E/P/FCF signal rests on five-year-high TTM operating margin (36.0%) driven by volume-sensitive transaction revenue (research/CBOE/2026-10-08-evaluation.md Bear case; factsheet-2026-10-08.md Valuation/Quality tables); the macro overlay's small bear tilt (VIX 15.01, -1.12 over 3m; DFII10 real yield 2.91%, +0.61pp over 3m) adds to this probability (research/CBOE/2026-10-08-macro.md macro_tilt).",
+      "target_price_12m": {"value": 226, "cite": "research/CBOE/2026-10-08-evaluation.md Decision block, scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.1049, "cite": "Same $23.7 half-spread of 5y-median-multiple implied prices (see bull target_band cite) applied to the bear target: 23.7/226 = 0.1049."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed and same-day contradictory (2026-10-06/07): record highs 'S&P closes at record high, breaking 7,800 points' and 'Combined Assets in SPY, SPYM Cross $1 Trillion' vs 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields' and 'two big bearish trades point to skepticism'; no net directional signal, so 0 per the mixed-news rule."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/CBOE/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week regression)."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "mc-inputs.json factor_news.IEF headlines (2026-10-01/05/07) consistently describe a deepening bond rout and multi-decade-high yields ('US 30-Year Yields Return to 2002 High', 'Global Bond Markets Sell Off on France's Fiscal Worries', 'The Bond Rout Is Deepening', 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002'); the macro overlay corroborates with DFII10 (10y real yield) at 2.91%, +0.48pp ~1m / +0.61pp ~3m, part of its rates->discount-rate chain (research/CBOE/2026-10-08-macro.md dominant_chain, market_pricing). Rising yields imply a modest negative view on IEF (bond prices), kept modest given a few countervailing headlines (Oct 2 Treasury rebound/retreat)."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/CBOE/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week regression)."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "SEC blocks or materially delays Kalshi-contested KPI/event-contract launches",
+      "reason": "Kalshi has asked the SEC to slow Cboe's new KPI/event-contract product launches, an unresolved regulatory dispute on Cboe's main new growth line",
+      "cite": "research/CBOE/2026-10-08.md Section 2 & 6 (https://www.pymnts.com/legal/2026/kalshi-asks-sec-to-slow-product-launches-from-rival-cboe/); research/CBOE/2026-10-08-evaluation.md trigger: 'The SEC blocks or materially delays Cboe's KPI/event-contract launches following Kalshi's objection'",
+      "annual_probability": {"value": 0.25, "cite": "Assumption: the SEC dispute was actively live and unresolved as of the 2026-08-25 PYMNTS report and still unresolved as of the 2026-10-08 fact sheet; no prior SEC product-launch block appears anywhere in the 5-year weekly history (research/CBOE/2026-10-08-mc-inputs.json analogues), so there is no counted base rate — 0.25 reflects a live, time-bound regulatory process rather than a measured frequency."},
+      "impact": {"value": -0.10, "cite": "Assumption, capped within the max_jump_impact_assumed bound (0.30) because no historical analogue exists for an SEC product-launch block in research/CBOE/2026-10-08-mc-inputs.json analogues; -0.10 reflects a growth-line delay, not an existential event, consistent with the evaluation treating this as an overhang on one product line, not the core franchise."},
+      "analogue": null,
+      "assumption": "No historical analogue for an SEC product-launch block exists in the 5-year weekly history (research/CBOE/2026-10-08-mc-inputs.json largest_falls/event_weeks); impact is assumed at -10%, within the 30% cap for jumps without an analogue."
+    },
+    {
+      "name": "Quarterly earnings surprise",
+      "reason": "Bear case: 'The 52-week range of 371.18 to 227.15 shows earnings sensitivity can swing the price hard despite a beta of 0.41'; next earnings release 2026-10-30",
+      "cite": "research/CBOE/2026-10-08-evaluation.md Bear case; research/CBOE/factsheet-2026-10-08.md Price table (Next earnings date, 52-week high/low)",
+      "annual_probability": {"value": 4, "cite": "Quarterly reporting cadence (4 earnings releases/year); research/CBOE/2026-10-08-mc-inputs.json analogues.event_weeks lists one earnings-tagged week every quarter across the full 5-year history."},
+      "impact": {"value": -0.0223, "cite": "research/CBOE/2026-10-08-mc-inputs.json analogues.event_weeks: Q1 2023 earnings release, week 2023-05-01, move -2.23% — the most adverse earnings-tagged weekly move in the 5-year history."},
+      "analogue": {"week": "2023-05-01", "move": -0.0223},
+      "assumption": null
+    },
+    {
+      "name": "Volatility-spike shock lifts options/futures volumes",
+      "reason": "Macro overlay bull case: a volatility shock (geopolitical/credit/policy) lifts VIX/SPX options and clearing volumes, converting to earnings at Cboe's 36% TTM operating margin",
+      "cite": "research/CBOE/2026-10-08-macro.md macro_bull",
+      "annual_probability": {"value": 0.2, "cite": "research/CBOE/2026-10-08-mc-inputs.json analogues.largest_rises: exactly one non-earnings, non-scheduled-event weekly rise >=8% (2024-07-15, +8.93%) across the ~5-year history (2021-10-18 to 2026-09-28), implying roughly a 1-in-5-year, ~0.2/yr frequency for an idiosyncratic volatility-driven jump of this size."},
+      "impact": {"value": 0.0893, "cite": "research/CBOE/2026-10-08-mc-inputs.json analogues.largest_rises: week 2024-07-15, move +8.93% (not an earnings or scheduled-event week per analogues.event_weeks)."},
+      "analogue": {"week": "2024-07-15", "move": 0.0893},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

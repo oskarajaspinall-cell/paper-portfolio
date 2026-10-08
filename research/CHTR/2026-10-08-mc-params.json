@@ -1,0 +1,65 @@
+{
+  "ticker": "CHTR",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "research/CHTR/2026-10-08-evaluation.md Decision JSON, scenarios.bull.probability"},
+      "probability_evidence": "The bull case rests on Cox synergies (>$1bn guide) and a capex decline that are 'guided, not yet shown' in results (evaluation rationale; note section 5 transcript cite), and the CFO stepping down Oct 15, 2026 mid-integration adds execution risk right as these need to be delivered (note section 6; https://www.reuters.com/business/charter-communications-cfo-fischer-step-down-october-2026-08-31/) — consistent with assigning this outcome the lowest of the three probabilities.",
+      "target_price_12m": {"value": 188.0, "cite": "research/CHTR/2026-10-08-evaluation.md Decision JSON, scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.155, "cite": "Fact sheet Valuation table 'vs peers' column: EV/EBITDA -21% vs peer median, P/FCF +10% vs peer median (research/CHTR/factsheet-2026-10-08.md), a 31pp spread between the two cash-flow/leverage-aware anchors; half-spread = 15.5pp = 0.155. The note's Valuation section flags this exact disagreement: 'unexceptional on EV/EBITDA and EV/Sales (-21%/-19% vs peers)... the discount looks largest on raw cash generation' (research/CHTR/2026-10-08.md)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/CHTR/2026-10-08-evaluation.md Decision JSON, scenarios.base.probability"},
+      "probability_evidence": "Base case assumes EV/EBITDA stays near its current 5.2x with flat 24.0% operating margins (research/CHTR/factsheet-2026-10-08.md ratios/income-statement rows) and relies on the 24.91% FCF yield funding buybacks/debt paydown as capex is guided down from the mid-$11bn range toward under $8bn (note section 5, Goldman Sachs Communacopia transcript) — the 'no re-rating, steady capital return' outcome, consistent with it carrying the highest of the three probabilities.",
+      "target_price_12m": {"value": 115.0, "cite": "research/CHTR/2026-10-08-evaluation.md Decision JSON, scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.155, "cite": "Fact sheet Valuation table 'vs peers' column: EV/EBITDA -21% vs peer median, P/FCF +10% vs peer median (research/CHTR/factsheet-2026-10-08.md), a 31pp spread between the two cash-flow/leverage-aware anchors; half-spread = 15.5pp = 0.155. The note's Valuation section flags this exact disagreement: 'unexceptional on EV/EBITDA and EV/Sales (-21%/-19% vs peers)... the discount looks largest on raw cash generation' (research/CHTR/2026-10-08.md)."}
+    },
+    "bear": {
+      "probability": {"value": 0.35, "cite": "research/CHTR/2026-10-08-evaluation.md Decision JSON, scenarios.bear.probability"},
+      "probability_evidence": "Altman Z of 0.67 (distress zone) and net debt/EBITDA of 4.41x against a 5.2x EV/EBITDA multiple (research/CHTR/factsheet-2026-10-08.md statistics/ratios rows), FCF margin down from 16.6% to 8.0% over five years (cash-flow/income-statement rows), and the macro overlay's moderate bear tilt from rising real yields (DFII10 +0.61pp/3m to 2.91%) and widening HY credit spreads (BAMLH0A0HYM2 +0.36pp/3m) that raise the cost of capital for this leveraged balance sheet (research/CHTR/2026-10-08-macro.md) support a bear probability above a symmetric 1/3 default.",
+      "target_price_12m": {"value": 55.0, "cite": "research/CHTR/2026-10-08-evaluation.md Decision JSON, scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.155, "cite": "Fact sheet Valuation table 'vs peers' column: EV/EBITDA -21% vs peer median, P/FCF +10% vs peer median (research/CHTR/factsheet-2026-10-08.md), a 31pp spread between the two cash-flow/leverage-aware anchors; half-spread = 15.5pp = 0.155. The note's Valuation section flags this exact disagreement: 'unexceptional on EV/EBITDA and EV/Sales (-21%/-19% vs peers)... the discount looks largest on raw cash generation' (research/CHTR/2026-10-08.md)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "research/CHTR/2026-10-08-mc-inputs.json factor_news.SPY is mixed: 'S&P closes at record high, breaking 7,800 points' (CNBC, 2026-10-07) and 'Combined Assets in SPY, SPYM Cross $1 Trillion' (ETF Trends, 2026-10-07) vs 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields' (TipRanks, 2026-10-07) and 'Two big bearish trades point to skepticism' beneath the record high (CNBC, 2026-10-07) and 'a broader market sell-off' masked by tech (WSJ, 2026-10-06) — no net directional read, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/CHTR/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "research/CHTR/2026-10-08-macro.md: DFII10 (10y real yield) +0.48pp/1m, +0.61pp/3m to 2.91%; DGS10 +0.49/+0.72pp to 5.27% (FRED, 2026-10-06), with macro_tilt 'toward bear, moderate' driven by rates expected to stay elevated or rise further; corroborated by research/CHTR/2026-10-08-mc-inputs.json factor_news.IEF headlines ('US 30-Year Yields Return to 2002 High', Bloomberg, 2026-10-07; 'Global Bond Markets Sell Off on France's Fiscal Worries', Barrons, 2026-10-05; 'The Bond Rout Is Deepening', WSJ, 2026-10-01) — rising yields imply a modest further decline in IEF's price."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/CHTR/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Earnings / Cox-integration synergy disappointment",
+      "reason": "Q3 2026 release (Nov 6, 2026) could show continuing broadband subscriber losses and Cox synergy delivery behind the >$1bn guide under the new interim CFO.",
+      "cite": "research/CHTR/2026-10-08-evaluation.md Decision JSON triggers: 'The Q3 2026 release (Nov 6, 2026) or later shows broadband subscriber losses stabilising, with Cox synergy delivery on track against the >$1bn guide under the new CFO'; bear case cites flat ROIC and falling FCF margin as the execution risk.",
+      "annual_probability": {"value": 0.19, "cite": "Of ~20 quarterly earnings-week moves in research/CHTR/2026-10-08-mc-inputs.json event_weeks (2021 Q3 - 2026 Q2), 1 reached this magnitude (-23.87%, Q1 2026, week 2026-04-20): per-quarter probability ~1/20=0.05; over 4 releases/year, P(at least one) = 1-(0.95)^4, approx 0.19."},
+      "impact": {"value": -0.2387, "cite": "research/CHTR/2026-10-08-mc-inputs.json analogues.largest_falls / event_weeks: week of 2026-04-20 (Q1 2026 earnings release, 2026-04-24), move -23.87%, the single largest weekly fall in the 5-year history."},
+      "analogue": {"week": "2026-04-20", "move": -0.2387},
+      "assumption": null
+    },
+    {
+      "name": "Leverage / credit-distress shock",
+      "reason": "Net debt/EBITDA of 4.41x against a 5.2x EV/EBITDA multiple and an Altman Z of 0.67 (distress zone) mean a credit-driven repricing could hit the equity disproportionately hard if leverage deteriorates or the risk premium on leveraged credits rises further.",
+      "cite": "research/CHTR/2026-10-08-evaluation.md bear case: 'Net debt/EBITDA is 4.41x against 5.2x EV/EBITDA, so small changes in the multiple swing the equity violently... Altman Z of 0.67 sits in the distress zone'; triggers: 'Net debt/EBITDA... rises above 5.0x' and 'Altman Z-score... falls further, e.g. below 0.3'.",
+      "annual_probability": {"value": 0.63, "cite": "Of the 10 largest weekly falls in research/CHTR/2026-10-08-mc-inputs.json analogues.largest_falls over the ~5-year history, roughly 5 (2022-09-19, 2022-12-12, 2025-07-28, 2026-06-15, 2026-09-14) are not tied to a scheduled earnings/filing event in event_weeks, i.e. an average rate of about 1/year; converting that Poisson rate to an annual probability of at least one occurrence, 1-exp(-1), approx 0.63."},
+      "impact": {"value": -0.1343, "cite": "research/CHTR/2026-10-08-mc-inputs.json analogues.largest_falls: week of 2026-06-15, move -13.43%, not tied to any scheduled filing/earnings event in event_weeks."},
+      "analogue": {"week": "2026-06-15", "move": -0.1343},
+      "assumption": null
+    },
+    {
+      "name": "CFO transition disrupts Cox integration execution",
+      "reason": "CFO Jessica Fischer steps down October 15, 2026, mid-integration of the Cox acquisition, with Kevin Howard named interim CFO, raising execution risk at a sensitive point in realizing the guided >$1bn of synergies.",
+      "cite": "research/CHTR/2026-10-08.md section 6 'Unusual items'; https://www.reuters.com/business/charter-communications-cfo-fischer-step-down-october-2026-08-31/; https://www.prnewswire.com/news-releases/charter-announces-chief-financial-officer-transition-302865300.html; evaluation bear case.",
+      "annual_probability": {"value": 0.3, "cite": "CFO departure itself is certain (already announced, effective 2026-10-15, Reuters 2026-08-31), but a materially disruptive market reaction during the Cox integration is less than certain; 0.3 reflects that uncertainty, with no historical analogue available to calibrate it more precisely (see assumption)."},
+      "impact": {"value": -0.08, "cite": "No matching week in research/CHTR/2026-10-08-mc-inputs.json largest_falls/event_weeks for a CFO/leadership-transition shock specifically; impact is an assumed value capped well below the montecarlo config's max_jump_impact_assumed of 0.30 for an unanalogued jump."},
+      "analogue": null,
+      "assumption": "No historical analogue exists in the jump table for a CFO/leadership transition; the announcement week itself (2026-08-31) moved only -1.06% (research/CHTR/2026-10-08-mc-inputs.json analogues.all_weekly_moves), too small to use as a tail-risk analogue, so a modest, capped impact is assumed instead."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.02, "cite": "Fact sheet Price section (research/CHTR/factsheet-2026-10-08.md): price is -23.0% vs its 50-day MA and -38.3% vs its 200-day MA, with -22.5% 3-month and -52.2% 6-month momentum, and a new 6-month/52-week low of 104.91 made 2026-10-05, two trading days before the decision date — a consistent, persistent downtrend across all horizons, so the maximum allowed bearish 3-month tilt is applied."}
+}

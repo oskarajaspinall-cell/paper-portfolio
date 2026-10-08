@@ -1,0 +1,229 @@
+{
+ "ticker": "VRSK",
+ "date": "2026-10-08",
+ "params_file": "2026-10-08-mc-params.json",
+ "inputs_file": "2026-10-08-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 168.68,
+  "close_date": "2026-10-07",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/vrsk/history/"
+ },
+ "target_returns": {
+  "bull": 0.21531894711880484,
+  "base": 0.06710931942138965,
+  "bear": -0.19966801043395788
+ },
+ "expected_12m": 0.024128527389139193,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.26133385222188316,
+   "IEF": 0.4827221594468337
+  },
+  "r2": 0.037811719839423,
+  "residual_vol": {
+   "52w": 0.36736639890607103,
+   "156w": 0.25412180624987496,
+   "blended": 0.310744102577973,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 205,
+    "target_band": 0.109
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 180,
+    "target_band": 0.124
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 135,
+    "target_band": 0.165
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.26133385222188316,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.4827221594468337,
+    "move": -0.05,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "AccuLynx Delaware Chancery Court ruling / litigation risk",
+    "p": 0.2,
+    "impact": -0.0529,
+    "analogue": {
+     "week": "2026-08-10",
+     "move": -0.0529
+    },
+    "cited": true
+   },
+   {
+    "name": "Quarterly earnings surprise (Q3 2026 report, Nov 5, 2026)",
+    "p": 0.25,
+    "impact": -0.0913,
+    "analogue": {
+     "week": "2022-05-02",
+     "move": -0.0913
+    },
+    "cited": true
+   }
+  ],
+  "tilt": -0.02
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.0038048392125020164,
+   "median": -0.015014914544076162,
+   "p5": -0.23204297033211055,
+   "p25": -0.1076218374552704,
+   "p50": -0.015014914544076162,
+   "p75": 0.0901014781546276,
+   "p95": 0.2548484901438718,
+   "prob_loss": 0.5417,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.006043689930173177,
+    "jumps": -0.010522244662859762,
+    "noise": 0.0005672503017954295,
+    "scenario": 0.0009279467386265849
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.0009915073626951022,
+   "median": -0.023086237140204316,
+   "p5": -0.33100151521547466,
+   "p25": -0.1600651726297418,
+   "p50": -0.023086237140204316,
+   "p75": 0.13581408968324943,
+   "p95": 0.4074202768166162,
+   "prob_loss": 0.5415,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.01224586793679481,
+    "jumps": -0.021107368548563033,
+    "noise": 0.00016897756377808406,
+    "scenario": 0.008522560143919833
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.024128527389139266,
+   "median": -0.03358572388120021,
+   "p5": -0.4659352331099553,
+   "p25": -0.2410297930796728,
+   "p50": -0.03358572388120021,
+   "p75": 0.22484058737557602,
+   "p95": 0.7009083548845847,
+   "prob_loss": 0.5386,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.024294455172115526,
+    "jumps": -0.04127564509344096,
+    "noise": 0.0038739205570579886,
+    "scenario": 0.02371178695450634
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.024128527389139266,
+   "prob_loss_12m": 0.5386
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.45,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.06562722314441549,
+   "prob_loss_12m": 0.4887
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.45,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.017370168366137,
+   "prob_loss_12m": 0.5865
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.024128527389139204,
+   "prob_loss_12m": 0.5123
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.024128527389139214,
+   "prob_loss_12m": 0.5556
+  }
+ ]
+}

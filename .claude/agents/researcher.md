@@ -51,13 +51,20 @@ Governance, short interest, specific macro exposure, only if material. Otherwise
 ```
 # <Company> (<TICKER>) — Tactical initiation — <YYYY-MM-DD>
 ## 1. Catalyst and why now
-The specific catalyst with a date or window. ≤120 words.
+The setup the screen found (post-earnings drift or pullback in uptrend, given in the caller's prompt) and
+the evidence for it. Drift: what the results showed (a genuine beat in revenue/earnings, raised guidance)
+vs a one-off; cite the fact sheet's "Earnings-type reaction" row and headlines. Pullback: why the uptrend
+is intact and what caused the dip. ≤120 words.
 ## 2. What the price already assumes
 ≤100 words.
 ## 3. Price setup
-From the fact sheet: trend vs 50/200-day, momentum, relative strength, swing levels. ≤80 words.
+From the fact sheet: trend vs 50/200-day, momentum, relative strength, swing levels, ATR. ≤80 words.
 ## 4. Proposed exit plan
-Target, stop (default -10% from last close) and time limit (≤3 months), in the share's quoted currency, each with its reasoning.
+Target, stop and time limit in the share's quoted currency, each with its reasoning (CLAUDE.md [tactical]):
+stop from the stock's own volatility — drift: just below the reaction day's low (low − 0.25 × ATR);
+pullback: last close − 2.5 × ATR(14). Target at least 2 × (last close − stop) above the last close, and
+only as high as the evidence supports. Time limit: drift ≤8 weeks; pullback before the next earnings
+date, ≤3 months.
 ## 5. Quality red flags
 Distress, dilution, accounting concerns. "None" if clean. ≤50 words.
 ## Sources

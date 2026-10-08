@@ -211,7 +211,8 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             try:
                 step(f"initiate {p['ticker']}")
                 return research_and_evaluate(p["ticker"], p["type"], asof,
-                                             "New initiation from this week's screen. Decide BUY or AVOID.",
+                                             "New initiation from this week's screen. Decide BUY or AVOID."
+                                             + (f" Screen setup: {p['setup_detail']}." if p.get("setup_detail") else ""),
                                              agent, log, rundir)
             except Exception as e:  # noqa: BLE001
                 log(f"SKIPPED initiation {p['ticker']}: {e}")

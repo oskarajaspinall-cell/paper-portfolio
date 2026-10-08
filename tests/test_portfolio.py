@@ -34,7 +34,7 @@ def core_buy(t, conv=4, **kw):
 
 def tac_buy(t, target, conviction=3, **kw):
     r = {"ticker": t, "action": "BUY", "position_type": "TACTICAL", "conviction": conviction, "reason": "catalyst",
-         "thesis": "Q3 results 2026-10-29", "exit_plan": {"target": target}}
+         "thesis": "Q3 results 2026-10-29", "exit_plan": {"target": target, "stop": 90.0}}
     r.update(kw)
     return r
 
@@ -186,21 +186,32 @@ def test_rule_core_position_max(cfg):
     assert only_rule(e) == "CORE_POSITION_MAX"
 
 
-def test_tactical_defaults_filled(cfg):
+def test_tactical_time_limit_default_and_risk_sizing(cfg):
     e = engine(cfg)
-    e.process([tac_buy("NVDA", target=120)])
+    e.process([tac_buy("NVDA", target=120)])  # stop 90: 10% risk -> 0.5% / 10% = 5% (the cap)
     ep = e.s["holdings"]["NVDA"]["exit_plan"]
-    assert ep["stop"] == pytest.approx(90.0) and ep["time_limit"] == "2027-01-06" and ep["target"] == 120
+    assert ep["stop"] == 90.0 and ep["time_limit"] == "2027-01-06" and ep["target"] == 120
     w = e.s["holdings"]["NVDA"]["market_value_usd"] / totals(e.s)["total"] * 100
     assert 4.9 < w <= 5.0  # full-size tactical lands at/below the cap after its own costs
+    e = engine(cfg)
+    e.process([tac_buy("NVDA", target=140, exit_plan={"target": 140, "stop": 80})])  # 20% risk -> 2.5%
+    w = e.s["holdings"]["NVDA"]["market_value_usd"] / totals(e.s)["total"] * 100
+    assert 2.4 < w <= 2.5  # a stop-out costs ~0.5% of the portfolio
+
+
+def test_rule_tactical_reward_risk(cfg):
+    e = engine(cfg)
+    e.process([tac_buy("NVDA", target=115)])  # +15 vs -10 = 1.5:1
+    assert only_rule(e) == "TACTICAL_REWARD_RISK"
 
 
 @pytest.mark.parametrize("plan", [
     {},                                                         # no target
     {"target": 120, "stop": 105},                               # stop above close
     {"target": 95},                                             # target below close
-    {"target": 120, "time_limit": "2027-03-01"},                # beyond 3 months
-    {"target": 120, "time_limit": "2026-10-01"},                # in the past
+    {"target": 120},                                            # no stop (no default any more)
+    {"target": 120, "stop": 90, "time_limit": "2027-03-01"},    # beyond 3 months
+    {"target": 120, "stop": 90, "time_limit": "2026-10-01"},    # in the past
 ])
 def test_rule_tactical_exit_plan(cfg, plan):
     e = engine(cfg)
@@ -517,13 +528,23 @@ def test_fill_waits_for_the_open_then_fills_at_it(cfg, tmp_path):
 def test_tactical_order_cancelled_if_it_opens_beyond_target(cfg, tmp_path):
     from portfolio import fill_pending, place_orders
     sp = tmp_path / "state.json"
-    place_orders([tac_buy("NVDA", target=110, conviction=4)], sp, OpenMarket(cfg), cfg, WATCH, "2026-10-10",
+    place_orders([tac_buy("NVDA", target=125, conviction=4)], sp, OpenMarket(cfg), cfg, WATCH, "2026-10-10",
                  port_dir=tmp_path)
-    out = fill_pending(sp, OpenMarket(cfg, opens={"NVDA": [("2026-10-12", 115.0)]}, asof="2026-10-13"), cfg, WATCH,
+    out = fill_pending(sp, OpenMarket(cfg, opens={"NVDA": [("2026-10-12", 126.0)]}, asof="2026-10-13"), cfg, WATCH,
                        port_dir=tmp_path)
     assert out["applied"] == [] and out["rejected"][0]["rule"] == "TACTICAL_EXIT_PLAN"
     assert "at the open of 2026-10-12" in out["rejected"][0]["detail"]
     assert json.loads(sp.read_text())["pending"] == []
+
+
+def test_tactical_order_cancelled_if_the_open_breaks_reward_risk(cfg, tmp_path):
+    from portfolio import fill_pending, place_orders
+    sp = tmp_path / "state.json"
+    place_orders([tac_buy("NVDA", target=125, conviction=4)], sp, OpenMarket(cfg), cfg, WATCH, "2026-10-10",
+                 port_dir=tmp_path)  # 2.5:1 at the 100 close
+    out = fill_pending(sp, OpenMarket(cfg, opens={"NVDA": [("2026-10-12", 104.0)]}, asof="2026-10-13"), cfg, WATCH,
+                       port_dir=tmp_path)  # gapped up: (125-104)/(104-90) = 1.5:1, no chasing
+    assert out["applied"] == [] and out["rejected"][0]["rule"] == "TACTICAL_REWARD_RISK"
 
 
 def test_order_expires_without_an_open(cfg, tmp_path):

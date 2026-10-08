@@ -1,0 +1,110 @@
+{
+  "ticker": "MCD",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {
+        "value": 0.2,
+        "cite": "research/MCD/2026-10-08-evaluation.md scenarios.bull.probability"
+      },
+      "probability_evidence": "RSI 24.7 is deeply oversold, FCF yield 4.75% with a 50-year unbroken dividend record and active buybacks, Piotroski 7 / Altman Z 4.98, and Nov 4 2026 earnings could show US comps stabilising (evaluation bull case; factsheet News & sentiment, Price sections).",
+      "target_price_12m": {
+        "value": 310.7,
+        "cite": "research/MCD/2026-10-08-evaluation.md scenarios.bull.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.0234,
+        "cite": "Spread of bull-case valuation anchors on current TTM figures: P/E->5y-min 18.8x->25.3x gives 310.71 [RA]; EV/EBITDA->5y-min 14.5x->18.6x gives 296.16 [RA]; P/FCF->5y-min 21.1x->28.2x gives 308.57 [RA]. Half the spread (14.55/2=7.275) over the target 310.70 = 2.34%; below the blended residual vol of 15.84% (mc-inputs.json regression.residual_vol.blended)."
+      }
+    },
+    "base": {
+      "probability": {
+        "value": 0.45,
+        "cite": "research/MCD/2026-10-08-evaluation.md scenarios.base.probability"
+      },
+      "probability_evidence": "MCD already trades near peer-level multiples (P/E 18.8x vs 18.2x peer median +3%; P/FCF 21.1x vs 21.4x peer median -1%), consistent with the de-rating being a reset that has largely completed rather than a mispricing still to close (factsheet Valuation table; note \u00a73).",
+      "target_price_12m": {
+        "value": 234.16,
+        "cite": "research/MCD/2026-10-08-evaluation.md scenarios.base.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.0735,
+        "cite": "Spread of base-case valuation anchors on current TTM figures: P/FCF->peer median 21.1x->21.4x gives 234.16 [RA,P:QSR,P:YUM,P:SBUX,P:WEN]; P/E->peer median 18.8x->18.2x gives 223.51 [RA]; EV/EBITDA->peer median 14.5x->16.2x gives 257.94 [RA]. Half the spread (34.43/2=17.215) over the target 234.16 = 7.35%; below the blended residual vol of 15.84% (mc-inputs.json regression.residual_vol.blended)."
+      }
+    },
+    "bear": {
+      "probability": {
+        "value": 0.35,
+        "cite": "research/MCD/2026-10-08-evaluation.md scenarios.bear.probability"
+      },
+      "probability_evidence": "Weakening US traffic despite value deals, franchisee pushback on an $800,000 revamp bill, the new AI-pricing antitrust class action, FCF conversion down 10.2pp to 88.3%, net debt/EBITDA of 3.60x, plus the macro overlay's small toward-bear real-yield tilt (note \u00a72, \u00a76; evaluation bear case; research/MCD/2026-10-08-macro.md macro_tilt).",
+      "target_price_12m": {
+        "value": 213.73,
+        "cite": "research/MCD/2026-10-08-evaluation.md scenarios.bear.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.077,
+        "cite": "Spread of bear-case valuation anchors applying the same operating-margin cut (45.7%->43.7% [IS]) to each multiple's peer-median re-rate: P/E->18.2x gives 213.73 [RA] (evaluation basis); EV/EBITDA->16.2x peer median gives 246.62 [RA]; P/FCF->21.4x peer median gives 223.89 [RA]. Half the spread (32.89/2=16.445) over the target 213.73 = 7.70%; below the blended residual vol of 15.84% (mc-inputs.json regression.residual_vol.blended)."
+      }
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {
+        "value": 0.0,
+        "cite": "mc-inputs.json factor_news.SPY headlines (2026-10-06/07) are mixed: S&P 500 at record highs driven narrowly by big tech (WSJ, CNBC) alongside a broader-market selloff, elevated Treasury yields pressuring stocks (TipRanks, Reuters), and large bearish put-spread positioning (CNBC) -> no clear directional read, set to 0."
+      },
+      "uncertainty_12m": {
+        "value": 0.1431154014991791,
+        "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual"
+      }
+    },
+    "IEF": {
+      "expected_12m_move": {
+        "value": -0.03,
+        "cite": "research/MCD/2026-10-08-macro.md dominant_chain ('rising real yields -> higher discount rate... ') and macro_bear, corroborated by mc-inputs.json factor_news.IEF headlines of a deepening bond rout and 30y/10y yields at multi-decade highs (Bloomberg, Barrons, WSJ, 2026-10-01/05/07); kept modest (-3%) because the overlay weights this macro_weight 'secondary' with a 'small' bear tilt, and one headline (ETF Trends/Guardian, 2026-10-02) notes a partial yield pullback on a weak jobs print."
+      },
+      "uncertainty_12m": {
+        "value": 0.06460381100458489,
+        "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"
+      }
+    }
+  },
+  "jumps": [
+    {
+      "name": "AI-pricing antitrust class action",
+      "reason": "A nationwide class action filed in Chicago federal court alleges MCD's AI pricing tool lets franchisees exchange non-public price/sales data; the evaluation names class certification or an FTC/DOJ action as a change-of-mind trigger and as a bear-case driver.",
+      "cite": "research/MCD/2026-10-08.md \u00a76 Unusual items; research/MCD/2026-10-08-evaluation.md triggers[3] and bear case; factsheet News & sentiment (Guardian 2026-10-07, TipRanks/TheFly/New York Post 2026-10-02 to 2026-10-06)",
+      "annual_probability": {
+        "value": 0.25,
+        "cite": "Assumption: the suit is newly filed (reported from 2026-10-02) and active across the full 12-month horizon, so a material development (certification ruling, FTC/DOJ escalation, or dismissal) is plausible but not highly likely within the year; no base-rate data exists in the research or inputs file."
+      },
+      "impact": {
+        "value": -0.15,
+        "cite": "Assumption, bounded by [montecarlo] max_jump_impact_assumed = 0.30 (config): no litigation-tagged week exists in mc-inputs.json analogues.event_weeks (which only tags earnings/proxy/investor-day filings), so the impact is not drawn from a historical analogue."
+      },
+      "analogue": null,
+      "assumption": "No antitrust/litigation analogue exists in the 5-year weekly history (mc-inputs.json event_weeks contains no litigation-tagged week); annual_probability and impact are therefore bounded assumptions, not historical analogues, per the allowed exception for jumps lacking an analogue."
+    },
+    {
+      "name": "Q3 2026 earnings miss amid weakening US traffic",
+      "reason": "Next earnings date is Nov 4, 2026, during a period of reportedly slowing US comparable sales despite value-menu deals; the evaluation's triggers tie operating margin, FCF margin and ROIC deterioration to the next 10-Q/10-K.",
+      "cite": "factsheet Price section ('Next earnings date Nov 4, 2026 (Earnings Date)' [ST,OV]); research/MCD/2026-10-08.md \u00a72 (TipRanks traffic article); research/MCD/2026-10-08-evaluation.md triggers[0-2]",
+      "annual_probability": {
+        "value": 1.0,
+        "cite": "Quarterly earnings reports are certain to occur (4/year; mc-inputs.json analogues.event_weeks shows one earnings_release event per quarter without exception), so the annual probability of at least one such earnings-week move within the 12-month horizon is 1.0."
+      },
+      "impact": {
+        "value": -0.038,
+        "cite": "mc-inputs.json analogues.event_weeks: Q1 2026 earnings (event_date 2026-05-07, week 2026-05-04), move -0.038 \u2014 the most recent earnings-week reaction, occurring during the current US-traffic-weakness period."
+      },
+      "analogue": {
+        "week": "2026-05-04",
+        "move": -0.038
+      },
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

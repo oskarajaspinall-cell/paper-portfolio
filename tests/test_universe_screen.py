@@ -63,22 +63,28 @@ def test_pillar_needs_min_metrics_and_ignores_negative_multiples():
 def test_score_and_pick(cfg):
     base = {"roic": 0, "roce": 0, "fcfMargin": 0, "operatingMargin": 0, "fScore": 0, "debtEbitda": 1,
             "fcfYield": 0, "earningsYield": 0, "evEbitda": 10, "pe": 10, "ch1y": 0, "price_vs_sma200": 0,
-            "price_vs_sma50": 0, "earnings_date": None}
+            "price_vs_sma50": 0, "rsi": 50, "earnings_date": None}
     good = dict(base, roic=50, roce=50, fcfMargin=30, operatingMargin=30, fScore=8, debtEbitda=0.5, fcfYield=8,
                 earningsYield=8, evEbitda=6, pe=8)
-    mom = dict(base, ch1y=80, price_vs_sma200=30, price_vs_sma50=10, earnings_date="2026-10-29")
-    late = dict(mom, earnings_date="2027-03-01")  # outside the 42-day window
+    pull = dict(base, ch1y=60, price_vs_sma200=15, price_vs_sma50=-2, rsi=42, earnings_date="2026-12-01")
+    hot = dict(pull, price_vs_sma50=12, rsi=74)                     # not a pullback: stretched
+    soon = dict(pull, earnings_date="2026-10-20")                    # earnings inside the window
+    just = dict(base, price_vs_sma50=6, earnings_date="2027-01-20")  # just reported: drift candidate
     import copy
     cfg = copy.deepcopy(cfg)
-    cfg["screen"].update(core_picks=1, tactical_picks=1)
-    cfg["agents"]["max_new_initiations_per_week"] = 2
-    rows = score({"GOOD": good, "MOM": mom, "LATE": late, "MID": base}, cfg, "2026-10-06")
+    cfg["screen"].update(core_picks=1, tactical_picks=2)
+    cfg["agents"]["max_new_initiations_per_week"] = 3
+    rows = score({"GOOD": good, "PULL": pull, "HOT": hot, "SOON": soon, "JUST": just, "MID": base}, cfg, "2026-10-06")
     by = {r["ticker"]: r for r in rows}
-    assert by["LATE"]["tactical"] is None and by["MOM"]["tactical"] is not None
+    assert by["PULL"]["pullback_cand"] is not None
+    assert by["HOT"]["pullback_cand"] is None and by["SOON"]["pullback_cand"] is None
+    assert by["JUST"]["drift_cand"] == 6 and by["PULL"]["drift_cand"] is None
+    # stage 2 decides the setup; simulate its result
+    by["PULL"].update(tactical=by["PULL"]["pullback_cand"], setup="pullback", setup_detail="p")
+    by["JUST"].update(tactical=9.5, setup="drift", setup_detail="d")
     picks = pick(rows, cfg)
-    assert picks == [{"ticker": "GOOD", "type": "CORE", "score": pytest.approx(by["GOOD"]["core"], abs=0.05)},
-                     {"ticker": "MOM", "type": "TACTICAL", "score": pytest.approx(by["MOM"]["tactical"], abs=0.05)}]
-    assert len(picks) <= cfg["agents"]["max_new_initiations_per_week"]
+    assert [(p["ticker"], p["type"], p.get("setup")) for p in picks] == [
+        ("GOOD", "CORE", None), ("JUST", "TACTICAL", "drift"), ("PULL", "TACTICAL", "pullback")]
 
 
 def test_stock_metrics_from_real_page():
@@ -239,29 +245,74 @@ def test_top_n_name_without_history_keeps_stage1_score(cfg):
     assert sorted(rows, key=core_rank_key, reverse=True)[0]["ticker"] == "A"
 
 
-def test_pick_ten_and_ten_within_cap(cfg):
+def test_pick_ten_and_ten_within_cap_alternating_setups(cfg):
     rows = [{"ticker": f"C{i}", "core": 100 - i, "tactical": None} for i in range(30)] + \
-           [{"ticker": f"T{i}", "core": None, "tactical": 100 - i} for i in range(30)]
+           [{"ticker": f"D{i}", "core": None, "tactical": 20 - i / 10, "setup": "drift", "setup_detail": ""} for i in range(30)] + \
+           [{"ticker": f"P{i}", "core": None, "tactical": 100 - i, "setup": "pullback", "setup_detail": ""} for i in range(2)]
     picks = pick(rows, cfg)
     assert len(picks) == cfg["agents"]["max_new_initiations_per_week"] == 20
     assert [p["ticker"] for p in picks if p["type"] == "CORE"] == [f"C{i}" for i in range(10)]
-    assert [p["ticker"] for p in picks if p["type"] == "TACTICAL"] == [f"T{i}" for i in range(10)]
+    # alternate drift / pullback; when pullbacks run out, drift fills the rest
+    assert [p["ticker"] for p in picks if p["type"] == "TACTICAL"] == ["D0", "P0", "D1", "P1"] + [f"D{i}" for i in range(2, 8)]
 
 
-def test_tactical_excludes_overextended(cfg):
-    import copy
-    from screen import overextended
-    c = copy.deepcopy(cfg)
-    sc = c["screen"]
-    assert overextended({"rsi": 75, "price_vs_sma200": 10}, sc)
-    assert overextended({"rsi": 55, "price_vs_sma200": 130}, sc)
-    assert not overextended({"rsi": 62, "price_vs_sma200": 25}, sc)
-    base = {"roic": 10, "roce": 10, "fcfMargin": 10, "operatingMargin": 10, "fScore": 5, "debtEbitda": 1,
-            "fcfYield": 5, "earningsYield": 5, "evEbitda": 10, "pe": 15, "earnings_date": "2026-10-29"}
-    hot = dict(base, ch1y=300, price_vs_sma200=130, price_vs_sma50=30, rsi=78)
-    ok = dict(base, ch1y=40, price_vs_sma200=20, price_vs_sma50=6, rsi=60)
-    rows = {r["ticker"]: r for r in score({"HOT": hot, "OK": ok, "MID": dict(ok, ch1y=5)}, c, "2026-10-07")}
-    assert rows["HOT"]["tactical"] is None and rows["OK"]["tactical"] is not None
+def daily(closes, vols=None, spread=1.0):
+    vols = vols or [1000] * len(closes)
+    d0 = __import__("datetime").date(2026, 6, 1)
+    return [{"date": (d0 + __import__("datetime").timedelta(days=i)).isoformat(), "open": c, "high": c + spread,
+             "low": c - spread, "close": c, "volume": v} for i, (c, v) in enumerate(zip(closes, vols))]
+
+
+def test_atr_and_pullback_plan(cfg):
+    import setups
+    rows = daily([100.0] * 30, spread=2.0)          # true range 4 every day
+    assert setups.atr(rows) == pytest.approx(4.0)
+    assert setups.atr(rows[:10]) is None
+    p = setups.plan("pullback", rows, cfg["tactical"])
+    assert p["stop"] == pytest.approx(90.0)          # 100 - 2.5 x 4
+    assert p["min_target"] == pytest.approx(120.0)   # 2:1
+    assert p["size_pct"] == pytest.approx(5.0)       # 0.5% / 10% risk
+
+
+def test_drift_signal_needs_jump_volume_and_hold(cfg):
+    import setups
+    tc = cfg["tactical"]
+    closes = [100.0] * 60 + [108.0, 107.0, 106.0]
+    vols = [1000] * 60 + [3500, 1500, 1200]
+    sig = setups.drift_signal(daily(closes, vols), tc)
+    assert sig["jump_pct"] == pytest.approx(8.0) and sig["volume_x"] == pytest.approx(3.5)
+    assert sig["held_pct"] == pytest.approx(75.0) and sig["sessions_ago"] == 2 and sig["day_low"] == 107.0
+    assert setups.drift_signal(daily(closes, [1000] * 63), tc) is None                    # no volume surge
+    assert setups.drift_signal(daily(closes[:-1] + [102.0], vols), tc) is None            # faded below half
+    assert setups.drift_signal(daily([100.0] * 60 + [108.0] + [107.0] * 12, vols + [1000] * 10), tc) is None  # too old
+    assert setups.plan("drift", daily(closes, vols), tc, sig) is None   # already below the jump-day low: broken
+    ok = daily([100.0] * 60 + [108.0, 107.8, 108.4], vols)
+    p = setups.plan("drift", ok, tc, setups.drift_signal(ok, tc))
+    assert p["stop"] == pytest.approx(107.0 - 0.25 * setups.atr(ok)) and p["min_target"] > 108.4
+
+
+def test_tactical_check_confirms_setups_from_history(cfg):
+    import screen
+    rows = [{"ticker": "D", "drift_cand": 6, "pullback_cand": None, "setup": None, "tactical": None},
+            {"ticker": "NOJUMP", "drift_cand": 5, "pullback_cand": None, "setup": None, "tactical": None},
+            {"ticker": "P", "drift_cand": None, "pullback_cand": 88, "setup": None, "tactical": None},
+            {"ticker": "BAD", "drift_cand": None, "pullback_cand": 80, "setup": None, "tactical": None}]
+    hist = {"D": daily([100.0] * 60 + [108.0, 107.0], [1000] * 60 + [3000, 1500]),
+            "NOJUMP": daily([100.0] * 62), "P": daily([100.0] * 30, spread=2.0)}
+
+    class F:
+        def section(self, t, page):
+            if t not in hist:
+                raise screen.DataError(f"https://x/{t}", "history", "no page")
+            return {"data": {"rows": hist[t]}}
+
+    failed = screen.tactical_check(rows, F(), cfg, "2026-12-31")
+    by = {r["ticker"]: r for r in rows}
+    assert by["D"]["setup"] == "drift" and by["D"]["tactical"] == pytest.approx(8.0)
+    assert "post-earnings drift" in by["D"]["setup_detail"]
+    assert by["NOJUMP"]["setup"] is None
+    assert by["P"]["setup"] == "pullback" and by["P"]["tactical"] == 88 and "suggested stop 90" in by["P"]["setup_detail"]
+    assert [f["ticker"] for f in failed] == ["BAD"] and by["BAD"]["setup"] is None
 
 
 def test_index_screen_filters_universe(cfg, monkeypatch):
@@ -281,3 +332,16 @@ def test_index_screen_filters_universe(cfg, monkeypatch):
     monkeypatch.setattr(screen, "deep_dive", lambda rows, f, c: [])
     res = screen.run(F(), cfg, "2026-10-07", index="SP500")
     assert len(seen) == 1 and "/aaa/" in seen[0] and [x["ticker"] for x in res["failed"]] == ["AAA"]
+
+
+def test_stage1_reads_a_past_earnings_date_as_just_reported(cfg):
+    import setups
+    tc = cfg["tactical"]
+    d = {"price_vs_sma50": 4, "earnings_date": "2026-09-30"}       # reported a week ago, next date not set
+    assert setups.drift_candidate(d, tc, "2026-10-07")
+    assert not setups.drift_candidate(dict(d, earnings_date="2026-08-01"), tc, "2026-10-07")   # too long ago
+    assert not setups.drift_candidate(dict(d, earnings_date="2026-10-20"), tc, "2026-10-07")   # report still ahead
+    assert setups.drift_candidate(dict(d, earnings_date="2026-12-15"), tc, "2026-10-07")       # next one far away
+    p = {"price_vs_sma200": 10, "price_vs_sma50": -1, "rsi": 45}
+    assert setups.pullback_candidate(dict(p, earnings_date="2026-09-30"), tc, "2026-10-07")    # just reported
+    assert not setups.pullback_candidate(dict(p, earnings_date="2026-10-20"), tc, "2026-10-07")  # inside 30 days

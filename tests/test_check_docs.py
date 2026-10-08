@@ -114,10 +114,18 @@ def test_allowed_decisions(cfgd, dec, ticker, ok):
 
 def test_eval_requires_triggers_or_exit_plan(cfgd):
     assert any("triggers" in e for e in check_eval(evaluation({"triggers": [{"text": "a"}]}), STATE, cfgd)[0])
-    tac = {"position_type": "TACTICAL", "triggers": None, "exit_plan": {"target": 4000, "stop": 3270}}
+    tac = {"position_type": "TACTICAL", "triggers": None, "price_at_decision": 3600,
+           "exit_plan": {"target": 4300, "stop": 3270}}
     assert any("time_limit" in e for e in check_eval(evaluation(tac), STATE, cfgd)[0])
     tac["exit_plan"]["time_limit"] = "2026-12-31"
     assert check_eval(evaluation(tac), STATE, cfgd)[0] == []
+
+
+def test_tactical_buy_needs_two_to_one(cfgd):
+    tac = {"position_type": "TACTICAL", "triggers": None, "price_at_decision": 3600,
+           "exit_plan": {"target": 4000, "stop": 3270, "time_limit": "2026-12-31"}}  # +400 vs -330
+    assert any("reward:risk >= 2" in e for e in check_eval(evaluation(tac), STATE, cfgd)[0])
+    assert check_eval(evaluation(dict(tac, decision="AVOID")), STATE, cfgd)[0] == []  # an AVOID may record a poor plan
 
 
 def test_eval_word_limit_and_end_block(cfgd):

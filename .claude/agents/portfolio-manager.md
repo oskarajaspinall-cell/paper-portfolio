@@ -12,7 +12,7 @@ The caller gives you: the list of evaluation files for this run (may be none), t
 ## Steps
 1. For each evaluation file run `bin/py scripts/check_docs.py eval <path>`. Skip any that FAIL and report them; never "fix" a decision yourself.
 2. Read only the final ```json Decision block of each passing file. Map each one to a trade request:
-   - BUY → `{"ticker", "action": "BUY", "position_type", "conviction", "thesis", "reason": <rationale>, "research_note", "triggers" (CORE) or "exit_plan" and optional "target_weight_pct" (TACTICAL), "replaces", "replacement_reason", "core_initiation"}`
+   - BUY → `{"ticker", "action": "BUY", "position_type", "conviction", "thesis", "reason": <rationale>, "research_note", "triggers" (CORE) or "exit_plan" (TACTICAL; omit "target_weight_pct": the rules size it from the stop), "replaces", "replacement_reason", "core_initiation"}`
    - ADD / TRIM → same fields with that action (including the evaluator's new `triggers` and `thesis`). SELL → `{"ticker", "action": "SELL", "position_type", "reason"}`.
    - HOLD on a holding → `{"ticker", "action": "HOLD", "position_type", "conviction", "thesis", "reason": <rationale>, "research_note", "triggers" (CORE)}`: no trade, but it records the new decision (refreshed thesis, triggers and conviction).
    - AVOID → no trade request (list it as "no trade").

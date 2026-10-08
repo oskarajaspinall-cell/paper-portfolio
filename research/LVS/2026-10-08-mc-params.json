@@ -1,0 +1,56 @@
+{
+ "ticker": "LVS",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "research/LVS/2026-10-08-evaluation.md Decision JSON scenarios.bull.probability"},
+   "probability_evidence": "Bull case: LVS holds one of six Macao concessions (to Dec 2032) and one of two Singapore licences (duopoly protected to Jan 2031) — statutory scarcity, not brand/scale — while TTM ROIC is 19.8%, FCF margin 19.7% and FCF yield 11.65%, with LVS still ~23% below peer P/E and EV/EBITDA medians (research/LVS/2026-10-08.md §2-3; research/LVS/2026-10-08-evaluation.md bull case).",
+   "target_price_12m": {"value": 46.37, "cite": "research/LVS/2026-10-08-evaluation.md Decision JSON scenarios.bull.target_price_12m, basis: P/E re-rates 13.9x→18.0x peer median on flat TTM earnings"},
+   "target_band": {"value": 0.00299, "cite": "Half the spread between the P/E-based target (46.37: 18.0x peer P/E vs 13.9x current [RA,P:WYNN,P:MGM,P:MLCO]) and the EV/EBITDA-based target (46.65: 9.9x peer EV/EBITDA vs 7.6x current, same sources) — factsheet-2026-10-08.md Valuation table, both anchors showing LVS cheap vs peers in the same direction"}
+  },
+  "base": {
+   "probability": {"value": 0.5, "cite": "research/LVS/2026-10-08-evaluation.md Decision JSON scenarios.base.probability"},
+   "probability_evidence": "Base case: the evaluator's rationale finds the probability-weighted 12m value roughly equal to the current price — quality/licence strengths are offset by an unexplained 31.5% 12m drawdown and LVS trading pricier than peers on P/FCF (8.6x vs 5.0x) and EV/Sales (2.6x vs 2.0x); conviction scored 3/5, 'good, not compelling' (research/LVS/2026-10-08-evaluation.md decision rationale; factsheet-2026-10-08.md Valuation table).",
+   "target_price_12m": {"value": 38.10, "cite": "research/LVS/2026-10-08-evaluation.md Decision JSON scenarios.base.target_price_12m, basis: P/E holds at 13.9x while 6.01% YoY share reduction [ST] lifts per-share earnings"},
+   "target_band": {"value": 0.0, "cite": "No disagreement across valuation anchors for this mechanism: holding either P/E (13.9x) or P/FCF (8.6x) flat while per-share value grows by the same 6.01% YoY buyback-driven factor [factsheet-2026-10-08.md 'Other' table, ST] gives an identical 38.10 target either way, so the band is 0."}
+  },
+  "bear": {
+   "probability": {"value": 0.25, "cite": "research/LVS/2026-10-08-evaluation.md Decision JSON scenarios.bear.probability"},
+   "probability_evidence": "Bear case: Macao EBITDA was hit by low VIP hold and renovations remove ~400-500 keys/quarter into 2027; LVS already trades above peers on P/FCF (8.6x vs 5.0x) and EV/Sales (2.6x vs 2.0x), leaving no valuation cushion, while 2.57x net debt/EBITDA and $787m of Q2 2026 buybacks leave little balance-sheet slack if EBITDA slips (research/LVS/2026-10-08-evaluation.md bear case; research/LVS/2026-10-08.md §2,§5).",
+   "target_price_12m": {"value": 20.82, "cite": "research/LVS/2026-10-08-evaluation.md Decision JSON scenarios.bear.target_price_12m, basis: P/FCF de-rates 8.6x→5.0x peer median"},
+   "target_band": {"value": 0.1615, "cite": "Half the spread between the P/FCF-based target (20.82: de-rating 8.6x to the 5.0x peer P/FCF [RA,P:WYNN,P:MGM,P:MLCO]) and the EV/Sales-based target (27.55: de-rating 2.6x to the 2.0x peer EV/Sales, same sources) — factsheet-2026-10-08.md Valuation table shows LVS trading above peers on both of these multiples, the largest documented anchor disagreement"}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "Mixed/conflicting SPY headlines as of 2026-10-07 — record highs led by tech (CNBC, WSJ, Bloomberg) alongside a broader sell-off underneath, elevated Treasury yields pressuring stocks (TipRanks) and a large bearish put-spread trade (CNBC) — no net directional read (research/LVS/2026-10-08-mc-inputs.json factor_news.SPY)."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/LVS/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual (14.3% annualised, 156-week weekly regression)"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.04, "cite": "Bond-market headlines through 2026-10-07 are predominantly one-directional — 'Global Bond Markets Sell Off' (Barrons), 'The Bond Rout Is Deepening' (WSJ), 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002' (Bloomberg), yields 'resumed their climb' (Reuters) — consistent with the macro overlay's US 10y real yield (DFII10) rising to 2.91% (+0.61pp over 3m) and its macro_bear chain ('real yields keep climbing'); rising yields imply IEF price pressure, kept modest given the brief early-Oct pullback also reported (ETF Trends) (research/LVS/2026-10-08-mc-inputs.json factor_news.IEF; research/LVS/2026-10-08-macro.md)."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/LVS/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual (6.5% annualised, 156-week weekly regression)"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Q3 2026 earnings surprise (Oct 21, 2026)",
+   "reason": "LVS reports Q3 2026 earnings on Oct 21, 2026, two weeks after this valuation date; the bear case flags that results 'could reset the base,' and quarterly prints have produced double-digit weekly moves repeatedly over the regression window (e.g. Q3 2025 +18.7%, Q4 2025 -12.0%, Q2 2022 +12.9%).",
+   "cite": "research/LVS/factsheet-2026-10-08.md Price section ('Next earnings date Oct 21, 2026'); research/LVS/2026-10-08-evaluation.md bear case ('Earnings on Oct 21 could reset the base [Guessing]')",
+   "annual_probability": {"value": 0.48, "cite": "3 of the last 20 quarterly earnings weeks in research/LVS/2026-10-08-mc-inputs.json analogues.event_weeks moved ≥12% (|move|): +12.9% (2022-07-18), +18.7% (2025-10-20), -12.0% (2026-01-26) — a 15% per-quarter base rate implies 1-(1-0.15)^4 ≈ 48% chance of at least one such move across the 4 quarterly prints in the next 12 months"},
+   "impact": {"value": -0.1204, "cite": "Matches the analogue week exactly (research/LVS/2026-10-08-mc-inputs.json analogues.all_weekly_moves['2026-01-26'] = -0.1204, the Q4 2025 earnings week)"},
+   "analogue": {"week": "2026-01-26", "move": -0.1204},
+   "assumption": null
+  },
+  {
+   "name": "Macao concession / Singapore licence impairment",
+   "reason": "LVS operates on one of six Macao gaming concessions (renewed to Dec 2032) and one of two Singapore casino licences (duopoly protected to Jan 2031, 30-year concession from Aug 2006); the evaluation's core invalidation triggers include early revocation, material amendment, or non-renewal of either licence, which the note identifies as the central moat and the central risk if lost.",
+   "cite": "research/LVS/2026-10-08-evaluation.md trigger: 'Macao concession (due Dec 2032) or Singapore license ... is revoked, materially amended, or not renewed ahead of schedule'; research/LVS/2026-10-08.md §2 (licence scarcity, SEC 10-K source)",
+   "annual_probability": {"value": 0.02, "cite": "No Macao or Singapore concession/licence has been revoked or materially amended during the 5-year history underlying research/LVS/2026-10-08-mc-inputs.json analogues; set to a low but nonzero tail probability given no observed base rate to count"},
+   "impact": {"value": -0.30, "cite": "Capped at the ±30% assumed-jump bound ([montecarlo] max_jump_impact_assumed in the project config) since no historical analogue exists for this risk"},
+   "analogue": null,
+   "assumption": "No historical analogue: no Macao/Singapore concession has been revoked or materially amended in the 5-year price history used for the jump-analogue table (research/LVS/2026-10-08-mc-inputs.json analogues), so impact is capped at the ±30% assumed-jump bound rather than taken from an observed week."
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}

@@ -519,8 +519,8 @@ class Engine:
         ep = dict(r.get("exit_plan") or {})
         if ep.get("target") is None:
             raise Reject("TACTICAL_EXIT_PLAN", "tactical entry needs exit_plan.target")
-        if ep.get("stop") is None:
-            ep["stop"] = round(q["close"] * (1 + tc["default_stop_pct"] / 100), 4)
+        if ep.get("stop") is None:  # owner rule 2026-10-08: a volatility-based stop is part of every plan
+            raise Reject("TACTICAL_EXIT_PLAN", "tactical entry needs exit_plan.stop (volatility-based, see setups.py)")
         if not ep.get("time_limit"):
             ep["time_limit"] = _add_months(self.today, tc["default_time_limit_months"])
         max_limit = _add_months(self.today, tc["default_time_limit_months"])
@@ -531,11 +531,18 @@ class Engine:
             raise Reject("TACTICAL_EXIT_PLAN", f"time_limit must be after today and on/before {max_limit}")
         if not r.get("thesis"):
             raise Reject("SCHEMA", "missing 'thesis' (catalyst)")
+        # reward:risk from the entry price (last close at decision; the OPEN when a next-open order fills)
+        rr = (ep["target"] - q["close"]) / (q["close"] - ep["stop"])
+        if rr < tc["min_reward_risk"] - 1e-9:
+            raise Reject("TACTICAL_REWARD_RISK", f"reward:risk {rr:.2f} at {q['close']} (target {ep['target']}, "
+                                                 f"stop {ep['stop']}) is below {tc['min_reward_risk']}")
         r["exit_plan"] = ep
         w = r.get("target_weight_pct", tc["max_position_pct"])
         if not 0 < w <= tc["max_position_pct"]:
             raise Reject("TACTICAL_POSITION_MAX", f"tactical size {w}% exceeds {tc['max_position_pct']}%")
-        return float(w)
+        # risk-based size: a stop-out costs about risk_per_trade_pct of the portfolio
+        risk_w = tc["risk_per_trade_pct"] / ((q["close"] - ep["stop"]) / q["close"])
+        return float(min(w, risk_w))
 
     def _new_holding(self, t, ptype, r, q) -> dict:
         return {"type": ptype, "shares": 0, "currency": q["currency"], "sector": self.mkt.sector(t),

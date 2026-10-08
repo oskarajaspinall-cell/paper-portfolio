@@ -1,0 +1,56 @@
+{
+ "ticker": "APP",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "evaluation.md Decision block scenarios.bull.probability"},
+   "probability_evidence": "Bull needs the litigation overhang to clear while fundamentals stay exceptional (TTM ROIC 132.7%, FCF margin 66.3%, net debt/EBITDA 0.09x, Piotroski F 7, Altman Z 24.42 — no financial stress, factsheet-2026-10-08.md Quality/Other); evaluation.md Bull case notes 'if Q3 margins hold, the litigation discount could unwind quickly in a beta-2.56 stock', but the suits are unresolved allegations, not findings [Guessing] (note 2026-10-08.md Section 6), which is why the evaluator kept this the lowest-probability scenario.",
+   "target_price_12m": {"value": 492.26, "cite": "evaluation.md Decision block scenarios.bull.target_price_12m"},
+   "target_band": {"value": 0.063, "cite": "Anchor disagreement: evaluation's P/E-to-5y-min anchor (37.8x/21.6x x $281.29 = $492.26, factsheet-2026-10-08.md Valuation+evaluation.md) vs an alternative anchor closing the P/FCF discount to the peer median (41.0x/20.8x x $281.29 = ~$554.47, factsheet-2026-10-08.md Valuation P/FCF row); half the spread ($31.1) / target ($492.26) = 6.3%."}
+  },
+  "base": {
+   "probability": {"value": 0.45, "cite": "evaluation.md Decision block scenarios.base.probability"},
+   "probability_evidence": "Base assumes margins hold (TTM operating margin 77.4%, factsheet-2026-10-08.md Quality) but EV/EBITDA stays pinned near its current bottom-quartile 17.5x while the lead-plaintiff process (deadline 16 Nov 2026) and the Unity TRO denial remain unresolved (note 2026-10-08.md Sections 2 and 6); the evaluator assigned this the highest probability as the holding-pattern outcome while litigation is pending.",
+   "target_price_12m": {"value": 281.29, "cite": "evaluation.md Decision block scenarios.base.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Base's basis is an unchanged price at an unchanged EV/EBITDA multiple (17.5x, evaluation.md scenarios.base.basis); applying any other current multiple (e.g. current P/E 21.6x, factsheet-2026-10-08.md Valuation) to unchanged earnings is tautologically the same current price, so there is no re-rating assumption generating anchor disagreement for this target: band = 0."}
+  },
+  "bear": {
+   "probability": {"value": 0.3, "cite": "evaluation.md Decision block scenarios.bear.probability"},
+   "probability_evidence": "Bear requires FCF margin to fall from 66.3% to the note's 50% thesis-break level, consistent with the litigation attacking the AXON AI moat directly and the Unity Ad Quality SDK competitive threat (TRO denied, note 2026-10-08.md Sections 2, 4 and 6); evaluation.md Decision block states the probability was 'raised from 0.25 for the moderate bear tilt from rising real yields in research/APP/2026-10-08-macro.md'.",
+   "target_price_12m": {"value": 212.13, "cite": "evaluation.md Decision block scenarios.bear.target_price_12m"},
+   "target_band": {"value": 0.049, "cite": "Anchor disagreement: evaluation's P/FCF-margin-degradation anchor (50%/66.3% x $281.29 = $212.13, factsheet-2026-10-08.md Valuation+evaluation.md) vs an alternative anchor de-rating EV/EBITDA to its own 5y minimum with EBITDA unchanged (11.9x/17.5x x $281.29 = ~$191.28, factsheet-2026-10-08.md Valuation EV/EBITDA row); half the spread ($10.4) / target ($212.13) = 4.9%."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs (ETF Trends 2026-10-07 'Combined Assets in SPY, SPYM Cross $1 Trillion'; CNBC 2026-10-06 S&P record) alongside warnings beneath the surface (TipRanks 2026-10-07 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields'; CNBC 2026-10-07 'two big bearish trades point to skepticism'); no net directional read is supported, so 0 per house rule for mixed/silent news."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week regression, 2023-10-09 to 2026-09-28)."}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.04, "cite": "macro overlay research/APP/2026-10-08-macro.md: dominant_chain is US real yields -> discount rate -> equity multiple, with macro_bear 'real yields continue grinding higher' and macro_tilt 'toward bear, moderate'; corroborated by mc-inputs.json factor_news.IEF headlines (Bloomberg 2026-10-07 'US 30-Year Yields Return to 2002 High'; Barrons 2026-10-05 'Global Bond Markets Sell Off'; Bloomberg 2026-10-01 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002'). Kept modest (-4%) because the overlay's weight is 'secondary' and the tilt is explicitly 'moderate', and some headlines (ETF Trends/Guardian 2026-10-02) show yields retreating on weaker data."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week regression, 2023-10-09 to 2026-09-28)."}
+  }
+ },
+ "jumps": [
+  {
+   "name": "AI-claims securities/regulatory litigation shock",
+   "reason": "Since late Sept/Oct 2026 at least four law firms (Kaplan Fox, BFA Law, Robbins LLP) have filed or publicized securities class actions alleging AppLovin misled investors on the strength of its AI models and the feasibility of its AI video creative tool -- disputing the AXON flywheel behind the 77.4% operating margin directly; San Diego County's new Consumer Fairness and Public Protection Unit has separately sued AppLovin. Lead-plaintiff deadline is 16 Nov 2026, inside the 12-month horizon.",
+   "cite": "note research/APP/2026-10-08.md Section 6 'Unusual items'; factsheet-2026-10-08.md News & sentiment (GlobeNewsWire 2026-10-05, Newsfile Corp 2026-10-01/2026-10-06, Business Wire 2026-10-05).",
+   "annual_probability": {"value": 0.5, "cite": "The lead-plaintiff deadline (16 Nov 2026) falls inside the 12-month horizon and four firms have already filed/publicized suits since 30 Sept 2026 (factsheet-2026-10-08.md News & sentiment), but allegations are unproven [Guessing] (note Section 2) and the 30 June 10-Q disclosed no material loss contingency (note Section 2/6), so a material adverse court or settlement development within 12 months is treated as roughly even odds rather than certain."},
+   "impact": {"value": -0.2, "cite": "No analogue available (see assumption); set below the ±30% assumption cap in [montecarlo].max_jump_impact_assumed, scaled from the magnitude of past filing/regulatory-type weekly moves in mc-inputs.json analogues.event_weeks (e.g. M&A Announcement week 2022-02-28 -12.13%, Registration Filing week 2021-11-22 -9.08%) given the greater severity of allegations striking at the core AI moat."},
+   "analogue": null,
+   "assumption": "No historical analogue exists in APP's price/event history for an AI-claims securities-fraud litigation shock -- per the note this is the company's first such suit -- so impact is a stated assumption capped at the ±30% bound rather than drawn from a specific week."
+  },
+  {
+   "name": "Q3 2026 earnings surprise (Nov 4, 2026)",
+   "reason": "Next earnings date is Nov 4, 2026, before the litigation lead-plaintiff deadline; historical quarterly-report weeks have produced outsized moves in both directions (e.g. +77.3% the week of the Q3 2024 report, -12.4% the week of the Q2 2026 report).",
+   "cite": "factsheet-2026-10-08.md Price section 'Next earnings date Nov 4, 2026'; mc-inputs.json analogues.event_weeks.",
+   "annual_probability": {"value": 0.98, "cite": "Reported quarterly, ~4 events/year (factsheet-2026-10-08.md 'Next earnings date'); converted to the jump model's annual Bernoulli hazard so expected occurrences per year ≈ 4 (1 - e^-4 ≈ 0.98)."},
+   "impact": {"value": -0.124, "cite": "Matches the analogue week exactly (mc-inputs.json analogues.all_weekly_moves['2026-08-03'] = -0.124, the Q2 2026 earnings-release week), used as the conservative/downside representative earnings-event magnitude given the note's concern that results land 'before the litigation is resolved' (note Section 2)."},
+   "analogue": {"week": "2026-08-03", "move": -0.124},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}
