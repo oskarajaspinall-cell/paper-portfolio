@@ -78,6 +78,19 @@ pullback_min_sma50_over_sma200_pct = 5  # ...the 50-day at least this far above 
 pullback_min_rs_6m_pp = 0         # ...and beating SPY over rs_sessions (percentage points)
 rs_sessions = 120                 # ~6 months
 
+[valuation]
+# Fair value (scripts/valuation.py), inform-only. Method per industry: valuation/industry_methods.csv
+# (owner's table). Cost of equity = FRED 10y Treasury + beta (clamped) x equity risk premium.
+erp = 5.0                         # equity risk premium, %
+beta_clamp = [0.6, 2.0]
+terminal_growth = 2.5             # %, perpetual growth after the explicit years
+explicit_years = 10
+base_growth_cap = [-5, 20]        # % a year: base = halfway between the 3y/5y revenue CAGR and terminal growth
+bear_growth_haircut = 3           # percentage points off the bear case's year-1 growth
+bull_growth_cap = 25
+roe_cap = 25                      # %, sustainable ROE ceiling for P/B + ROE
+blend_weights = [2, 1]            # best method : 2nd-best method
+
 [fills]
 # Next-open orders fill at the first OPEN after the decision time (never an earlier price). Local opening
 # time + timezone per exchange (daylight saving handled). Exchanges not listed: the first session after
@@ -187,7 +200,7 @@ weekly_flag_move_pct = 8
 
 ## How an initiation runs (manual or automated)
 1. `researcher` (ticker, CORE or TACTICAL, date) → fact sheet + note, checked by `check_docs.py note`.
-2. `evaluator` → `research/<SLUG>/<date>-evaluation.md`: Bear, Bull, then one Decision ```json block, checked by `check_docs.py eval`.
+2. `evaluator` → `research/<SLUG>/<date>-evaluation.md`: Bear, Bull, then one Decision ```json block, checked by `check_docs.py eval`. It reads the fact sheet's fair value and may override an assumption with a cited reason (`valuation_overrides`); `scripts/valuation.py --eval` then writes the final `<date>-valuation.md`.
 2b. Monte Carlo (never blocks the decision): `scripts/mc_inputs.py` (3y weekly factor regression, blended residual vol, factor correlation, jump-analogue table; stockanalysis.com chart-data history) → `mc-parameters` agent writes `<date>-mc-params.json` (factor scenarios, scenario bands + probability evidence, mandatory jumps with historical analogues; every value cited) → `scripts/montecarlo.py` (numpy; scenario means calibrated to targets; reconciliation checks; attribution + sensitivity) → `<date>-montecarlo.json/.md`; `scripts/mc_backtest.py` → `<date>-mc-backtest.json/.md` (8-quarter calibration coverage). Symmetric default probabilities stop with `<date>-mc-needs-review.md` until the owner approves them.
 3. `portfolio-manager` → trade requests → `portfolio.py submit --at-next-open` (validated now, filled at the next market open; `--dry-run` when asked).
 Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
@@ -197,6 +210,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/fact_sheet.py <TICKER> --peers A B C` — one-page `research/<SLUG>/factsheet-<date>.md` (quality, valuation, price, news & sentiment).
 - `scripts/portfolio.py` — validates trades against every rule, places next-open orders, fills them, marks to market, computes returns. All arithmetic lives here.
 - **Fills (owner rule):** trades decided by the agents are validated at once and queued as pending orders that fill at the first OPEN after the decision time (per exchange, `[fills]`) (`portfolio.py submit --at-next-open`, then `fill-pending`). Mechanical tactical exits still fill at the first close that crossed the stop/target.
+- `scripts/valuation.py` + `valuation/industry_methods.csv` — industry-appropriate fair value (owner's 145-industry method table: best + 2nd-best method; DCF, through-cycle DCF, FCFE, P/E, P/B+ROE, EV/EBITDA, EV/Revenue, DDM, P/FFO proxy; NAV/rNPV/SOTP need data stockanalysis.com doesn't show → `[data unavailable]`, next method used). Bear/base/bull from the stock's own history + reverse DCF; CAPM discount (FRED 10y + beta × `[valuation].erp`). Inform-only: shown in the fact sheet, logged as `fair_value_base` in the decision log, never a buy rule.
 - `scripts/setups.py` — tactical setups (drift signal, pullback filter, ATR, volatility stop, 2:1 target, risk-based size).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.

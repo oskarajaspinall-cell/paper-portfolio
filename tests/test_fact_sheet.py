@@ -119,3 +119,12 @@ def test_fact_sheet_news_section():
     news = [l for l in sec.splitlines() if l.startswith("- ")]
     assert 1 <= len(news) <= 12 and all(l.endswith("[OV]") or l.endswith("[HI]") for l in news)
     assert "price target raised" not in sec.lower()
+
+
+
+def test_fact_sheet_fair_value_section():
+    md = build("AAPL", [], FixtureFetcher(), "2026-10-06")
+    sec = md.split("## Fair value", 1)[1].split("\n## ", 1)[0]
+    assert "Consumer Electronics [OV]" in sec and "best DCF, 2nd EV/EBITDA" in sec
+    assert "| DCF (best) |" in sec and "| EV/EBITDA (second) |" in sec and "Reverse DCF" in sec
+    assert "328.09" not in sec  # never the analyst target

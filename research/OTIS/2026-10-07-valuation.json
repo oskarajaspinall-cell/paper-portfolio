@@ -1,0 +1,102 @@
+{
+ "industry": {
+  "industry": "Specialty Industrial Machinery",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 40.20106315767,
+    "base": 60.38727301580945,
+    "bull": 60.49397446951032
+   },
+   "implied_growth": 0.03450399205171019,
+   "discount_rate": 0.0815457607550529,
+   "cost_of_equity": 0.09605,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.01634128405940131,
+     "base": 0.01754191305028634,
+     "bull": 0.017850220319947985
+    },
+    "cash_flow_margin": {
+     "bear": 0.10466192062267723,
+     "base": 0.12050020119374959,
+     "bull": 0.12050020119374959
+    },
+    "cagr_3y": 0.017850220319947985,
+    "cagr_5y": 0.0023174318811973738,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 90.51852612658878,
+    "base": 96.78212864295801,
+    "bull": 99.05302349467198
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 16.396,
+     "base": 17.32,
+     "bull": 17.655
+    },
+    "ttm_ebitda": 2640000000
+   }
+  }
+ ],
+ "price": 66.45,
+ "risk_free": 0.053099999999999994,
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 56.97355081397626,
+  "base": 72.51889155819231,
+  "bull": 73.34699081123087
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.14261022100863419,
+  "base": 0.09133019651154717,
+  "bull": 0.10379218677548319
+ },
+ "implied_growth": 0.03450399205171019,
+ "ticker": "OTIS",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/otis/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/otis/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/otis/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/otis/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/otis/statistics/"
+ }
+}

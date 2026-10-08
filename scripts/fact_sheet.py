@@ -176,7 +176,7 @@ VAL_METRICS = [  # (label, ratios key, statistics key, scale)
 ]
 
 
-def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str) -> str:
+def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str, fv_out: dict | None = None) -> str:
     T = Ticker(ticker)
     sec = {p: fetcher.section(ticker, p) for p in
            ("overview", "income", "balance", "cashflow", "ratios", "statistics", "history")}
@@ -320,6 +320,17 @@ def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str) -> str:
     def mom(m):
         return NA if not m else f"{m['pct']:+.1f}% ({m['from']}→{m['to']})"
 
+    # ---- Fair value (scripts/valuation.py: zero extra requests; failure never blocks the fact sheet)
+    import valuation
+    try:
+        fv, vccy = valuation.compute(ticker, asof, fetcher, load_config())
+        for line in valuation.fact_sheet_section(fv, vccy):
+            w(line)
+        if fv_out is not None:
+            fv_out.update(fv=fv, ccy=vccy)
+    except (DataError, KeyError, ValueError, ZeroDivisionError) as e:
+        w(f"\n## Fair value\n[data unavailable] — {e}")
+
     w("\n## Price")
     w(f"| Item | Value | Src |\n|---|---|---|")
     w(f"| Last completed close | {f(last['close'], 2)} {ccy_p} on {last['date']}"
@@ -399,7 +410,8 @@ def main(argv=None) -> int:
         print("ERROR: pass 3-5 peer tickers (or none)", file=sys.stderr)
         return 2
     try:
-        md = build(args.ticker, args.peers, Fetcher(), args.asof)
+        fvo: dict = {}
+        md = build(args.ticker, args.peers, Fetcher(), args.asof, fvo)
     except DataError as e:
         print(f"ERROR: {e}", file=sys.stderr)
         return 2
@@ -410,6 +422,12 @@ def main(argv=None) -> int:
     path = ROOT / "research" / Ticker(args.ticker).slug / f"factsheet-{args.asof}.md"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(md)
+    if fvo.get("fv"):  # research/<SLUG>/<date>-valuation.json/.md (re-written with any evaluator overrides later)
+        import json as _json
+        import valuation
+        base = path.parent / f"{args.asof}-valuation"
+        base.with_suffix(".json").write_text(_json.dumps(fvo["fv"], indent=1, default=str))
+        base.with_suffix(".md").write_text(valuation.render_md(fvo["fv"], fvo["ccy"], args.ticker, args.asof))
     print(path)
     return 0
 

@@ -1,0 +1,97 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 32.31624966114669,
+    "base": 50.150325136263234,
+    "bull": 84.83439708036407
+   },
+   "cost_of_equity": 0.09795,
+   "assumptions": {
+    "roe": {
+     "bear": 0.11071,
+     "base": 0.15801,
+     "bull": 0.25
+    },
+    "justified_pb": {
+     "bear": 1.174914324880055,
+     "base": 1.8233036326250862,
+     "bull": 3.084304318026046
+    },
+    "bvps": 23.499378
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 75.2387704117435,
+    "base": 131.94981417671397,
+    "bull": 142.36717459349396
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.338,
+     "base": 12.869,
+     "bull": 13.885
+    },
+    "ttm_eps": 8.76003
+   }
+  }
+ ],
+ "price": 27.3,
+ "risk_free": 0.053099999999999994,
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 46.6237565780123,
+  "base": 77.41682148308014,
+  "bull": 104.0119895847407
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.7078299112825017,
+  "base": 1.8357810067062323,
+  "bull": 2.8099629884520403
+ },
+ "implied_growth": null,
+ "ticker": "HKG:2628",
+ "asof": "2026-10-07",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.1704648838908858,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/2628/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/2628/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/2628/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/2628/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/2628/statistics/"
+ }
+}

@@ -96,3 +96,10 @@ def pytest_pyfunc_call(pyfuncitem):
     exc = outcome.excinfo
     if exc and isinstance(exc[1], FileNotFoundError) and _is_site_data(exc[1].filename):
         outcome.force_exception(pytest.skip.Exception(SITE_DATA_REASON, _use_item_location=True))
+
+
+@pytest.fixture(autouse=True)
+def _no_fred_in_tests(monkeypatch):
+    """Fair value needs FRED's 10y yield; tests never touch the network."""
+    import valuation
+    monkeypatch.setattr(valuation, "risk_free_pct", lambda asof, cfg: 4.5)

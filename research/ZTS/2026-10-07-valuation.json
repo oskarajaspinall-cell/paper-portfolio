@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Drug Manufacturers - Specialty & Generic",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 50.30033909497352,
+    "base": 92.3227241471047,
+    "bull": 102.11869345793727
+   },
+   "implied_growth": -0.010588028789688776,
+   "discount_rate": 0.07874490696400492,
+   "cost_of_equity": 0.0901,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.007711268807209362,
+     "base": 0.03866210360737875,
+     "bull": 0.054225876815096274
+    },
+    "cash_flow_margin": {
+     "bear": 0.1733521571782178,
+     "base": 0.24576372703412072,
+     "bull": 0.250553183880726
+    },
+    "cagr_3y": 0.054225876815096274,
+    "cagr_5y": 0.05042253761441873,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 127.141925936,
+    "base": 198.03102714000002,
+    "bull": 347.39704792000003
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 20.744,
+     "base": 32.31,
+     "bull": 56.68
+    },
+    "ttm_eps": 6.129094
+   }
+  }
+ ],
+ "price": 71.33,
+ "risk_free": 0.053099999999999994,
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 75.91420137531568,
+  "base": 127.55882514473647,
+  "bull": 183.87814494529152
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.06426750841603379,
+  "base": 0.7882913941502381,
+  "bull": 1.5778514642547528
+ },
+ "implied_growth": -0.010588028789688776,
+ "ticker": "ZTS",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/zts/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/zts/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/zts/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/zts/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/zts/statistics/"
+ }
+}

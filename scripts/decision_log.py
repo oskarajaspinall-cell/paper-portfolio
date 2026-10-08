@@ -26,7 +26,7 @@ from fetch_data import Fetcher  # noqa: E402
 LOG = ROOT / "portfolio" / "decisions.csv"
 HORIZONS = (1, 3, 6, 12)
 COLS = (["date", "ticker", "type", "decision", "conviction", "price", "currency", "price_date", "price_usd",
-         "spy_close", "evaluation", "note"]
+         "spy_close", "evaluation", "note", "fair_value_base"]
         + [f"{k}_{h}m" for h in HORIZONS for k in ("ret", "spy", "excess", "hit")])
 POSITIVE = {"BUY", "ADD", "HOLD"}
 
@@ -83,7 +83,13 @@ def record(eval_paths: list[str], mkt, asof: str, rows: list[dict]) -> list[dict
             note = (f"relabelled {d['decision']}->AVOID: conviction {d['conviction']} is below the minimum {m} "
                     "to buy (owner rule); the trade was not made")
             d["decision"] = "AVOID"
-        rows.append({"note": note, "date": asof, "ticker": d["ticker"], "type": d["position_type"], "decision": d["decision"],
+        fvp = Path(p if Path(p).is_absolute() else ROOT / p)
+        fvp = fvp.with_name(fvp.name.replace("-evaluation.md", "-valuation.json"))
+        fv_base = ""
+        if fvp.name.endswith("-valuation.json") and fvp.exists():  # inform-only fair value (scripts/valuation.py), kept so its accuracy can be measured later
+            base = (json.loads(fvp.read_text()).get("fair_value") or {}).get("base")
+            fv_base = "" if base is None else round(base, 4)
+        rows.append({"note": note, "fair_value_base": fv_base, "date": asof, "ticker": d["ticker"], "type": d["position_type"], "decision": d["decision"],
                      "conviction": d["conviction"], "price": d["price_at_decision"], "currency": q["currency"],
                      "price_date": d["price_date"], "price_usd": round(q["price_usd"], 6),
                      "spy_close": s["close"], "evaluation": rel})

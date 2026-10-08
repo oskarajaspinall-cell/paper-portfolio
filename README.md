@@ -29,6 +29,11 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Trades fill at the next market open**: decisions become pending orders filled at the
 opening price of the next trading day; a tactical order that opens beyond its stop or target is cancelled.
+Every fact sheet includes a **fair value**: the industry-appropriate method from
+`valuation/industry_methods.csv` (e.g. DCF for software, P/B + ROE for banks and insurers, EV/EBITDA when a
+mine or reserve NAV isn't available), with bear/base/bull assumptions taken from the stock's own five-year history,
+a discount rate of the 10-year Treasury yield + beta × 5%, and a reverse DCF showing the growth the price implies.
+It informs the research only (no buy rule) and is logged with each decision so its accuracy can be checked later.
 After each evaluation, a **Monte Carlo simulation** (numpy, 10,000 paths, fixed seed) turns the researched
 bull/base/bear scenarios into return distributions for 3, 6 and 12 months (`research/<TICKER>/<date>-montecarlo.md`);
 the AI only extracts cited parameters, never results. Each research note includes the stock's recent **news headlines** (analyst price targets and ratings are

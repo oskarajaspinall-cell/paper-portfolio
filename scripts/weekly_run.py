@@ -87,6 +87,10 @@ def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, l
     if not ev.exists():
         raise StepFailed(f"evaluator wrote no evaluation at {ev}")
     check_doc("eval", ev, log)
+    try:  # final fair value with any evaluator overrides (inform-only: a failure never blocks the decision)
+        sh(PY + ["scripts/valuation.py", ticker, "--asof", asof, "--eval", str(ev)], log)
+    except StepFailed as e:
+        log(f"!! FAIR VALUE NOT UPDATED for {ticker}: {e}")
     run_montecarlo(ticker, slug, asof, agent, log, run)
     return ev
 

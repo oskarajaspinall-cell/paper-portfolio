@@ -220,11 +220,42 @@ def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
                 errs.append(f"TACTICAL BUY needs reward:risk >= {mrr} from price_at_decision "
                             f"(now {(ep['target'] - px) / (px - ep['stop']):.2f})")
     errs += scenario_problems(d.get("scenarios"))
+    errs += override_problems(d.get("valuation_overrides"))
     if dec == "BUY" and len(held) >= cfg["portfolio"]["max_holdings"] and not (d.get("replaces") and d.get("replacement_reason")):
         errs.append("portfolio is at max holdings: BUY must name 'replaces' and 'replacement_reason'")
     if d.get("replaces") and d["replaces"] not in held:
         errs.append(f"replaces {d['replaces']!r} is not a current holding")
     return errs, counts
+
+
+OVERRIDE_FIELDS = {"dcf": ("growth", "margin"), "dcf_norm": ("growth", "margin"), "fcfe": ("growth", "margin"),
+                   "pe": ("multiple",), "ev_ebitda": ("multiple",), "ev_revenue": ("multiple",), "p_ffo": ("multiple",),
+                   "pb_roe": ("roe",), "ddm": ("growth",)}
+
+
+def override_problems(ovs) -> list[str]:
+    """Optional evaluator overrides of fair-value assumptions: each must cite why (owner rule)."""
+    if ovs in (None, []):
+        return []
+    if not isinstance(ovs, list):
+        return ["valuation_overrides must be a list"]
+    errs = []
+    for o in ovs:
+        if not isinstance(o, dict):
+            errs.append("each valuation_override must be an object"); continue
+        m, sc, fld = o.get("method"), o.get("scenario"), o.get("field")
+        if m not in OVERRIDE_FIELDS:
+            errs.append(f"valuation_override method {m!r} must be one of {sorted(OVERRIDE_FIELDS)}")
+        elif fld not in OVERRIDE_FIELDS[m]:
+            errs.append(f"valuation_override field {fld!r} not valid for {m} (use {OVERRIDE_FIELDS[m]})")
+        if sc not in ("bear", "base", "bull"):
+            errs.append(f"valuation_override scenario {sc!r} must be bear, base or bull")
+        if not isinstance(o.get("value"), (int, float)):
+            errs.append("valuation_override value must be a number (rates as fractions, e.g. 0.06)")
+        reason = str(o.get("reason") or "")
+        if not re.search(r"\[[A-Z]{2}[^\]]*\]|https?://|research/", reason):
+            errs.append("valuation_override reason must cite a source (a fact-sheet code like [IS], a URL or a research file)")
+    return errs
 
 
 MACRO_WEIGHTS = ("none", "context", "secondary", "primary")
