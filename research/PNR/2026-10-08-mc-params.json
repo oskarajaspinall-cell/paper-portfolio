@@ -1,0 +1,65 @@
+{
+ "ticker": "PNR",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "evaluation.md Decision block scenarios.bull.probability (trimmed from 0.30 for the macro overlay's moderate bear tilt)"},
+   "probability_evidence": "Short interest is only 3.97% of float and fell 16.3% month-on-month (factsheet 'Other'/'News & sentiment'), i.e. the sell-off is not a crowded, building short thesis; evaluation's bull case argues Pool channel destocking 'usually resolves within a few quarters' and the balance sheet is not distressed (Altman Z 4.99) (2026-10-08.md note sections 2-3; evaluation.md Bull case).",
+   "target_price_12m": {"value": 61.35, "cite": "evaluation.md Decision block scenarios.bull.target_price_12m: P/E re-rates from 13.1x to its 5-year minimum of 15.4x on TTM earnings (factsheet Valuation table)"},
+   "target_band": {"value": 0.25, "cite": "Fact sheet Valuation table, re-rating the bull case's 'to 5-year minimum' logic across all three cash/earnings multiples at 52.19 current price: P/E to 15.4x implies 61.35 (the evaluator's chosen basis); EV/EBITDA to its 5y min 13.1x (vs current 9.7x) implies ~70.49; P/FCF to its 5y min 21.9x (vs current 12.4x) implies ~92.18. Half the spread (92.18-61.35)/2=15.42 relative to the 61.35 target = 0.251, rounded to 0.25."}
+  },
+  "base": {
+   "probability": {"value": 0.40, "cite": "evaluation.md Decision block scenarios.base.probability (trimmed from 0.45 for the macro overlay's moderate bear tilt)"},
+   "probability_evidence": "Evaluation's base case holds earnings near TTM while 'litigation and the CFO transition keep the discount' (evaluation.md Base case basis); CFO churn (third CFO in ~12 months, Bob Hau starting 2026-11-01) and live securities class actions are facts the note documents as ongoing overhangs with no near-term resolution (2026-10-08.md section 2, 6).",
+   "target_price_12m": {"value": 52.0, "cite": "evaluation.md Decision block scenarios.base.target_price_12m: earnings hold near TTM and P/E stays near 13.1x (factsheet Valuation table)"},
+   "target_band": {"value": 0.01, "cite": "Fact sheet Valuation table: the base case holds each multiple at its CURRENT level (P/E 13.1x, EV/EBITDA 9.7x, P/FCF 12.4x), so P/E-, EV/EBITDA- and P/FCF-implied prices all converge on the 52.19 spot price (factsheet Price section, last close); only trivial rounding (~52.19 vs the 52.0 target) separates the anchors, half-spread/target approx 0.002, rounded up to a conservative 0.01."}
+  },
+  "bear": {
+   "probability": {"value": 0.35, "cite": "evaluation.md Decision block scenarios.bear.probability (raised from 0.25 because the macro overlay's moderate bear tilt argues against the bull case)"},
+   "probability_evidence": "Macro overlay's dominant_chain argues rates->financing cost->Pool demand and rates->discount rate->multiple both work against the bull case, with real yields +61bp/3m and fed funds +25bp (a hike) (research/PNR/2026-10-08-macro.md Overlay block, macro_tilt 'toward bear, moderate'); evaluation's bear case also notes TTM figures 'do not yet fully show the cut' from the Q2 2026 guidance reduction (evaluation.md Bear case).",
+   "target_price_12m": {"value": 37.7, "cite": "evaluation.md Decision block scenarios.bear.target_price_12m: net margin reverts from 16.2% TTM to the FY2022 trough of 11.7% at an unchanged 13.1x P/E (factsheet Quality table, income statement)"},
+   "target_band": {"value": 0.22, "cite": "Fact sheet Quality table: applying the bear case's 'revert to FY2022 trough' logic to each profitability metric at unchanged multiples gives divergent implied prices. Net margin (16.2% TTM -> 11.7% FY2022, ratio 0.722) implies 52.19x0.722=37.70 (the evaluator's chosen P/E basis); operating margin (22.8% TTM -> 15.4% FY2022, ratio 0.675) as an EV/EBITDA proxy implies ~35.25; FCF margin (16.8% TTM -> 6.7% FY2022, ratio 0.399) as a P/FCF proxy implies ~20.81. Half the spread (37.70-20.81)/2=8.45 relative to the 37.70 target = 0.224, rounded to 0.22."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed/directionally unclear as of 2026-10-06/07: record highs ('Combined Assets in SPY, SPYM Cross $1 Trillion', 'S&P 500 Hits Record High as Big Tech Leads') alongside breadth and risk warnings ('SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields', 'Two big bearish trades point to skepticism', 'powered by tech-and not much else'); per house rule, mixed news -> 0."},
+   "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431 (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.03, "cite": "Macro overlay (research/PNR/2026-10-08-macro.md): 10y real yield (DFII10) 2.91% up 61bp/3m and fed funds (DFF) 3.88% up 25bp (a hike), with the 2y yield (4.79%) above fed funds implying the curve prices further tightening, i.e. continued upward pressure on yields / downward pressure on long-duration Treasury prices; corroborated by mc-inputs.json factor_news.IEF headlines ('US 30-Year Yields Return to 2002 High', 'The Bond Rout Is Deepening', 'Global Bond Markets Sell Off'). Kept modest (-3%, within the +-15% bound) given one IEF headline shows a partial yield retreat on a cooler PCE print and weak jobs report."},
+   "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646 (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Severe earnings/guidance shock (Q3 2026 report, 2026-10-20)",
+   "reason": "Next earnings are 2026-10-20, 12 days after this note, 'before the thesis can be tested'; the prior quarter's preliminary release already disclosed Pool destocking 'more pronounced than previously estimated' with a deep guidance cut, triggering an -18.03% week and the same-day CFO resignation.",
+   "cite": "research/PNR/2026-10-08.md sections 2 and 6 ('Next earnings are 2026-10-20... before the thesis can be tested'; preliminary Q2 2026 release and CFO resignation, SEC 8-K pnr-20260710.htm)",
+   "annual_probability": {"value": 0.20, "cite": "mc-inputs.json analogues.event_weeks: only one earnings-related move of comparable severity (-18.03%, the 2026-07-13 Q2 2026 pre-release week) occurred across the ~5-year history (2021-10-18 to 2026-09-28), i.e. about 1-in-5 years."},
+   "impact": {"value": -0.1803, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2026-07-13, move -0.1803 (Q2 2026 earnings pre-release presentation, the guidance-cut/CFO-resignation week)"},
+   "analogue": {"week": "2026-07-13", "move": -0.1803},
+   "assumption": null
+  },
+  {
+   "name": "Securities class-action / governance shock",
+   "reason": "Multiple law firms (Kaplan Fox, Robbins LLP) filed securities class actions alleging investors were misled around the guidance cut; the lead-plaintiff deadline (2026-10-02) has passed and litigation now proceeds.",
+   "cite": "research/PNR/2026-10-08.md section 6 'Unusual items' and factsheet-2026-10-08.md News & sentiment (GlobeNewsWire/Newsfile Kaplan Fox and Robbins LLP headlines, 2026-09-14 to 2026-09-28)",
+   "annual_probability": {"value": 0.15, "cite": "Assumption: no historical analogue week exists for a litigation-specific shock in PNR's price history (event_weeks in mc-inputs.json has no 'legal' type); litigation proceeding from lead-plaintiff selection through potential certification typically develops over 1-3 years, so a material adverse development within the next 12 months is estimated as plausible but not the base case."},
+   "impact": {"value": -0.10, "cite": "Assumption, capped well within the +-0.30 bound for jumps without a historical analogue (per [montecarlo].max_jump_impact_assumed): a moderate negative reaction to an adverse litigation development (e.g. class certification or a damaging unsealed filing), given no comparable precedent in PNR's own price history."},
+   "analogue": null,
+   "assumption": "No matching week in mc-inputs.json analogues (no litigation/legal event type in event_weeks); impact is a bounded assumption, not a historical analogue."
+  },
+  {
+   "name": "Leverage / M&A integration shock (Taco Group Holdings)",
+   "reason": "The debt-funded Taco Group Holdings acquisition closed 2026-10-01, stacking new leverage on a net debt/EBITDA already risen from 1.24x (FY2021) to 1.62x (TTM); the evaluator's own invalidation trigger is 'Debt/EBITDA rises above 3.0x'.",
+   "cite": "research/PNR/2026-10-08.md sections 4-5 and evaluation.md triggers[2] (Debt/EBITDA > 3.0x); factsheet-2026-10-08.md Quality table (net debt/EBITDA) and News (Taco Group Holdings acquisition completion, 2026-10-01)",
+   "annual_probability": {"value": 0.20, "cite": "mc-inputs.json analogues.event_weeks: only one M&A-announcement event week appears across the ~5-year history (2022-02-28, 'M&A Announcement'), i.e. about 1-in-5 years."},
+   "impact": {"value": -0.0307, "cite": "mc-inputs.json analogues.event_weeks: week 2022-02-28, move -0.0307 ('M&A Announcement')"},
+   "analogue": {"week": "2022-02-28", "move": -0.0307},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}

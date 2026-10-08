@@ -1,0 +1,56 @@
+{
+  "ticker": "TPR",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation.md Decision block scenarios.bull.probability"},
+      "probability_evidence": "Bull case: ROIC rose from 20.7% to 43.5% TTM, FCF margin from 11.4% to 22.6%, and net debt/EBITDA fell to 1.39x; an 8.05% FCF yield funds a 5.53% annual share-count reduction and a 16% dividend raise with no re-rating needed; P/E is a 25% discount to peers despite structurally higher margins; and the macro overlay ties the 3-month sell-off to stock-specific sentiment rather than rates or credit, so a solid Nov 5 print could reverse it (research/TPR/2026-10-08-evaluation.md Bull case; research/TPR/2026-10-08-macro.md Assessment).",
+      "target_price_12m": {"value": 150.9, "cite": "evaluation.md Decision block scenarios.bull.target_price_12m: margins hold and P/FCF re-rates from 12.4x to its 5y max of 16.5x on steady TTM FCF as the sentiment-driven sell-off reverses"},
+      "target_band": {"value": 0.0059, "cite": "Half the spread of the bull target priced on P/FCF (16.5x, 5y max, flat FCF/share -> $150.92, factsheet-2026-10-08.md Valuation table) vs EV/EBITDA (16.0x, 5y max, on flat EBITDA/share and net debt/share since margins hold -> $149.15, derived from EV/EBITDA 12.5x and net debt/EBITDA 1.39x, Valuation and Quality tables); P/E's 5y max (98.8x) is excluded as distorted by FY2025's depressed 2.6% net margin (factsheet Quality table), not a valuation signal; spread $1.77 / 2 / $150.9 target = 0.59%"}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "evaluation.md Decision block scenarios.base.probability"},
+      "probability_evidence": "Base is the modal/status-quo outcome: valuation is cheap only on P/E (7th percentile of 5y range), while EV/EBITDA (12.5x) sits above its 5y median (9.3x) and in line with peers, and P/FCF (12.4x) is at its 5y median, so quality is excellent but the stock is fairly rather than mispriced -- consistent with conviction 3 (AVOID) and no clear catalyst before the Nov 5 print (evaluation.md Bear case and Decision rationale).",
+      "target_price_12m": {"value": 114.0, "cite": "evaluation.md Decision block scenarios.base.target_price_12m: P/FCF stays near its 5y median of 12.5x on flat TTM FCF, with buybacks (-5.53% shares YoY) offsetting no re-rating"},
+      "target_band": {"value": 0.0, "cite": "Base case holds each anchor's CURRENT multiple flat (P/E 15.6x, EV/EBITDA 12.5x, P/FCF 12.4x, factsheet-2026-10-08.md Valuation table) and grows per-share by the -5.53% YoY buyback factor (factsheet Other table) -- the P/E, EV/EBITDA and P/FCF implied prices all converge at ~$120.06 (to the cent), so there is no cross-anchor disagreement in this scenario"}
+    },
+    "bear": {
+      "probability": {"value": 0.25, "cite": "evaluation.md Decision block scenarios.bear.probability"},
+      "probability_evidence": "Bear case: EV/EBITDA (12.5x) is already above its 5y median (9.3x) and in line with peers, not cheap; margins are at 5y peaks (gross 76.6%, operating 23.3%) with Coach at 86.4% of sales, so any promotional creep flows straight to earnings; the stock already fell 22.5% in 3 months, lagged SPY by 26.4pp, and short interest (8.09%, +3.2% vs prior month) signals informed sellers expect a weaker Nov 5 print (evaluation.md Bear case; factsheet-2026-10-08.md Price and News & sentiment tables).",
+      "target_price_12m": {"value": 78.7, "cite": "evaluation.md Decision block scenarios.bear.target_price_12m: Coach promotional pressure from peak margins (operating margin 23.3%) compresses P/FCF to its 5y min of 8.6x"},
+      "target_band": {"value": 0.1164, "cite": "Bear case compresses each anchor's multiple to its own 5y minimum on flat per-share fundamentals (the promotional-pressure shock hits the multiple, not FCF/EBITDA/EPS): P/FCF 5y min 8.6x -> $78.66 (the evaluator's target); EV/EBITDA 5y min 7.3x -> $60.33 (derived from EV/EBITDA 12.5x and net debt/EBITDA 1.39x); P/E 5y min 9.1x -> $66.16 (factsheet-2026-10-08.md Valuation table); spread $18.33 ($78.66-$60.33) / 2 / $78.7 target = 11.6%"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: the S&P 500 hit a record high above 7,800 led narrowly by megacap tech (CNBC, WSJ, Bloomberg 2026-10-06/07), while the same days show it 'easing from record highs' on climbing Treasury yields (Reuters 2026-10-07) and a 100,000-lot bearish put spread signalling skepticism (CNBC 2026-10-07) -- no clear net direction, so 0"},
+      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431 (156-week weekly regression, stockanalysis.com SPY history)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: a global bond rout pushed 30-year and French 10-year yields to multi-decade highs (Bloomberg, Barron's, WSJ 2026-10-01/05/07) against a Treasury rebound and yields pulling back on a cooler PCE print and a weak jobs report (ETF Trends, The Guardian, Bloomberg 2026-10-02) -- no clear net direction, so 0"},
+      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646 (156-week weekly regression, stockanalysis.com IEF history)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Earnings print (Nov 5, 2026 and subsequent quarters)",
+      "reason": "Next earnings date is Nov 5, 2026, inside the 12-month horizon; rising short interest (8.09% of float, +3.2% vs prior month) signals informed sellers positioned for a weaker print, and TPR's weekly history shows quarterly reports routinely drive double-digit single-week moves in either direction",
+      "cite": "research/TPR/2026-10-08.md section 6 ('Next earnings print is November 5, 2026, inside the 12-month core horizon'); research/TPR/2026-10-08-evaluation.md Bear case ('short interest...keeps rising, a sign that informed sellers expect a weaker print on Nov 5'); factsheet-2026-10-08.md Price table 'Next earnings date'",
+      "annual_probability": {"value": 0.59, "cite": "mc-inputs.json analogues.event_weeks: of the 20 completed quarterly-report weeks (2021-11-08 to 2026-08-10), 4 showed a weekly move of 10% or more in magnitude (2024-11-04 +11.18%, 2025-02-03 +10.20%, 2026-02-02 +19.85%, 2026-08-10 -20.56%) -- a per-quarter rate of 20%, so P(at least one such move across the 4 quarters in a year) = 1-(1-0.2)^4 = 0.59"},
+      "impact": {"value": -0.2056, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2026-08-10, -20.56%, tagged Q4 2026 annual_report/earnings_release (the most recent and largest earnings-tagged fall)"},
+      "analogue": {"week": "2026-08-10", "move": -0.2056},
+      "assumption": null
+    },
+    {
+      "name": "Coach brand-concentration shock (design misstep, promotional creep, or tariff/China exposure)",
+      "reason": "10-K-sourced vulnerability: Coach alone is 86% of sales, so any single-brand misstep (design missteps, promotional creep, tariff/China exposure) has outsized earnings impact, and Kate Spade remains sub-scale at 13%",
+      "cite": "research/TPR/2026-10-08.md section 2 ('The key vulnerability is concentration risk: Coach alone is 86% of sales, so any single-brand misstep (design missteps, promotional creep, tariff/China exposure) has outsized earnings impact, and Kate Spade remains sub-scale at 13% of sales')",
+      "annual_probability": {"value": 0.45, "cite": "mc-inputs.json analogues.all_weekly_moves / event_weeks: 3 weeks with an unscheduled (no earnings/filing tag) fall of 10% or more over the ~5-year history (2022-02-28 -10.03%, 2025-03-03 -11.91%, 2025-03-31 -10.41%) -- a rate of ~0.6/year; Poisson P(at least one in a year) = 1-e^-0.6 = 0.45"},
+      "impact": {"value": -0.1191, "cite": "mc-inputs.json analogues.largest_falls: week 2025-03-03, -11.91%, not tagged to any scheduled report"},
+      "analogue": {"week": "2025-03-03", "move": -0.1191},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,56 @@
+{
+  "ticker": "EOG",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/EOG/2026-10-08-evaluation.md Decision JSON scenarios.bull.probability=0.25"},
+      "probability_evidence": "Bull case: TTM ROIC 19.8%/ROE 22.5%, 8.74% FCF yield, P/FCF 11.4x at the 15th percentile of its 5y range with 96.2% FCF conversion TTM, buybacks cutting shares 3.33% YoY, near-unlevered balance sheet (0.23x net debt/EBITDA, Altman Z 3.69, Piotroski 7) and low beta 0.37, with the FY21-25 fundamental decline read as cyclical not competitive (research/EOG/2026-10-08-evaluation.md Bull case; research/EOG/2026-10-08.md section 2).",
+      "target_price_12m": {"value": 158, "cite": "research/EOG/2026-10-08-evaluation.md Decision JSON scenarios.bull.target_price_12m=158, basis: P/FCF re-rates from 11.4x to 5y median 12.5x on TTM FCF"},
+      "target_band": {"value": 0.044, "cite": "Half the spread between bull-case implied prices from three valuation anchors at TTM fundamentals: P/FCF re-rate to 5y median 12.5x = $158.13, P/E re-rate to 5y max 11.4x = $145.49, EV/EBITDA at its already-current 5y-max 5.5x = $144.21 (fact sheet 5y multiple ranges, research/EOG/factsheet-2026-10-08.md Valuation table); half-spread $6.96 / $158 target = 0.044."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/EOG/2026-10-08-evaluation.md Decision JSON scenarios.base.probability=0.45"},
+      "probability_evidence": "Base case: EOG already sits near the top of its own 5y P/E (92nd pct) and EV/EBITDA (75th pct) ranges, so the bear case argues the price already reflects mid-cycle commodity strength, while the bull case's upside depends on a further re-rating that has not yet happened; absent a catalyst, returns come only from buybacks/dividend on a flat multiple (research/EOG/2026-10-08-evaluation.md Bear case and Base scenario basis).",
+      "target_price_12m": {"value": 145, "cite": "research/EOG/2026-10-08-evaluation.md Decision JSON scenarios.base.target_price_12m=145, basis: EV/EBITDA holds at 5.5x on roughly flat TTM EBITDA"},
+      "target_band": {"value": 0.005, "cite": "Base case holds each multiple at its current level (P/E 11.3x, P/FCF 11.4x, EV/EBITDA 5.5x; research/EOG/factsheet-2026-10-08.md Valuation table), so all three anchors imply ~$144.21 (today's price) with a computed half-spread of effectively $0 against the $145 target; a minimal 0.005 floor is used rather than claiming literally zero anchor disagreement."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/EOG/2026-10-08-evaluation.md Decision JSON scenarios.bear.probability=0.30"},
+      "probability_evidence": "Bear case: five-year fundamental deterioration (ROIC 20.7%→16.0%, FCF margin 25.0%→15.2% FY21-25), net debt/EBITDA rising from -0.10x to 0.49x in FY2025, TTM results flattered by strong oil prices as a high-water mark, the macro overlay's small bear tilt from dollar strength and a +0.48pp 1-month jump in the 10y real yield, and added uncertainty from the CFO transition ahead of Q3 results (research/EOG/2026-10-08-evaluation.md Bear case; research/EOG/2026-10-08-macro.md macro_tilt).",
+      "target_price_12m": {"value": 119, "cite": "research/EOG/2026-10-08-evaluation.md Decision JSON scenarios.bear.target_price_12m=119, basis: P/E falls back to 5y minimum of 9.3x on TTM EPS"},
+      "target_band": {"value": 0.084, "cite": "Half the spread between bear-case implied prices from three valuation anchors at TTM fundamentals: P/E fall to 5y min 9.3x = $118.69, P/FCF fall to 5y min 10.5x = $132.83, EV/EBITDA fall to 5y min 5.3x = $138.74 (fact sheet 5y multiple ranges, research/EOG/factsheet-2026-10-08.md Valuation table); half-spread $10.02 / $119 target = 0.084."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed factor_news for SPY (research/EOG/2026-10-08-mc-inputs.json factor_news.SPY): record highs and $1tn combined SPY/SPYM assets (ETF Trends, Bloomberg, CNBC 2026-10-06/07) set against tech-led gains masking a broader sell-off, elevated Treasury yields pressuring stocks, and a large bearish put-spread trade (TipRanks, Reuters, WSJ, CNBC 2026-10-07); no net directional view supported, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/EOG/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.03, "cite": "factor_news for IEF (research/EOG/2026-10-08-mc-inputs.json factor_news.IEF) is dominated by rising-yield/falling-bond-price headlines: '30-Year Yields Return to 2002 High', 'Global Bond Markets Sell Off on France's Fiscal Worries', 'Bond Rout Is Deepening', 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002' (Bloomberg/Barrons/WSJ, 2026-10-01 to 10-07), only partly offset by brief rebounds (ETF Trends, Guardian, Bloomberg 2026-10-02); consistent with the macro overlay's cited DFII10 +0.48pp/1m and DGS10 +0.49pp/1m rise (research/EOG/2026-10-08-macro.md market_pricing), which implies lower bond prices. Modest negative move, within the ±15% guard."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/EOG/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Earnings surprise (quarterly release)",
+      "reason": "EOG's revenue and earnings are driven each quarter by realized oil/gas volumes and prices; the next release is Q3 2026 on Nov 5, 2026, and the analogue history shows earnings weeks can move the stock sharply in either direction. Earnings occur every quarter, so a reporting event is certain within the 12m horizon.",
+      "cite": "research/EOG/factsheet-2026-10-08.md Price section 'Next earnings date Nov 5, 2026 (Earnings Date)'; research/EOG/2026-10-08-mc-inputs.json analogues.event_weeks earnings_release entries",
+      "annual_probability": {"value": 1, "cite": "Quarterly reporting cadence means at least one earnings-driven move is certain within the 12m horizon; research/EOG/2026-10-08-mc-inputs.json analogues.event_weeks lists 4 earnings_release weeks per year, so probability of an earnings-week shock occurring in the year is 1."},
+      "impact": {"value": -0.0938, "cite": "Largest adverse earnings-week move in the 5y analogue history: Q2 2026 release week, research/EOG/2026-10-08-mc-inputs.json analogues.event_weeks entry week 2026-08-03, move -0.0938."},
+      "analogue": {"week": "2026-08-03", "move": -0.0938},
+      "assumption": null
+    },
+    {
+      "name": "CFO transition execution risk",
+      "reason": "Ann Janssen's retirement and Jeff Hibbard's appointment as incoming CFO (announced 2026-09-24); his first full quarter (Q3 2026, reported ~Nov 5-6, 2026) is flagged as a watch point for any change in capital-allocation tone.",
+      "cite": "research/EOG/2026-10-08.md section 6 'Unusual items'; research/EOG/2026-10-08-evaluation.md Bear case: 'A CFO change ahead of Q3 results on Nov 5 adds some uncertainty about capital allocation [Guessing]'",
+      "annual_probability": {"value": 1, "cite": "One-off, already-announced transition expected to play out within the 12m horizon (assumption; no comparable prior event in the analogue history)."},
+      "impact": {"value": -0.05, "cite": "Assumption bounded well under the 0.30 no-analogue cap ([montecarlo].max_jump_impact_assumed), sized to the evaluator's own framing of 'some uncertainty' rather than a major shock [Guessing], research/EOG/2026-10-08-evaluation.md Bear case."},
+      "analogue": null,
+      "assumption": "No prior CFO-transition week appears in the 5-year analogue history in research/EOG/2026-10-08-mc-inputs.json (largest_falls/largest_rises/event_weeks); impact is an assumed, modest value reflecting the evaluator's 'some uncertainty' (not major-shock) framing, kept at |0.05|, under the 0.30 cap for jumps without an analogue."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": 0.01, "cite": "Fact sheet Price section: 3-month momentum +7.2% (2026-07-07→2026-10-07) and relative strength vs SPY +3.2pp over 3m (research/EOG/factsheet-2026-10-08.md); 6m momentum flat (-0.0%) and price -0.2% vs its 50-day MA, so the tilt is kept small and positive."}
+}

@@ -1,0 +1,236 @@
+{
+ "ticker": "PNR",
+ "date": "2026-10-08",
+ "params_file": "2026-10-08-mc-params.json",
+ "inputs_file": "2026-10-08-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 52.19,
+  "close_date": "2026-10-07",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/pnr/history/"
+ },
+ "target_returns": {
+  "bull": 0.17551255029699186,
+  "base": -0.0036405441655489312,
+  "bear": -0.27763939452002295
+ },
+ "expected_12m": -0.05475186817397963,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 1.0569916218808597,
+   "IEF": 0.5189526932420496
+  },
+  "r2": 0.29599890985013466,
+  "residual_vol": {
+   "52w": 0.31639319119895915,
+   "156w": 0.24252649894771322,
+   "blended": 0.2794598450733362,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 61.35,
+    "target_band": 0.25
+   },
+   "base": {
+    "probability": 0.4,
+    "target_price_12m": 52.0,
+    "target_band": 0.01
+   },
+   "bear": {
+    "probability": 0.35,
+    "target_price_12m": 37.7,
+    "target_band": 0.22
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 1.0569916218808597,
+    "move": 0.0,
+    "unc": 0.1431
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.5189526932420496,
+    "move": -0.03,
+    "unc": 0.0646
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Severe earnings/guidance shock (Q3 2026 report, 2026-10-20)",
+    "p": 0.2,
+    "impact": -0.1803,
+    "analogue": {
+     "week": "2026-07-13",
+     "move": -0.1803
+    },
+    "cited": true
+   },
+   {
+    "name": "Securities class-action / governance shock",
+    "p": 0.15,
+    "impact": -0.1,
+    "analogue": null,
+    "cited": true
+   },
+   {
+    "name": "Leverage / M&A integration shock (Taco Group Holdings)",
+    "p": 0.2,
+    "impact": -0.0307,
+    "analogue": {
+     "week": "2022-02-28",
+     "move": -0.0307
+    },
+    "cited": true
+   }
+  ],
+  "tilt": 0.0
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.021683505095255594,
+   "median": -0.030285251218663094,
+   "p5": -0.2518653642531943,
+   "p25": -0.12179896482794828,
+   "p50": -0.030285251218663094,
+   "p75": 0.0704361698057832,
+   "p95": 0.23193394026383987,
+   "prob_loss": 0.5858,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.4,
+    "bear": 0.35
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.003922792862630096,
+    "jumps": -0.01770311687922726,
+    "noise": 0.0003794419449092375,
+    "scenario": -0.01217863156094983
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": -0.03907293838709998,
+   "median": -0.061248988762407044,
+   "p5": -0.3713340980169126,
+   "p25": -0.19914121711207597,
+   "p50": -0.061248988762407044,
+   "p75": 0.09844102308076949,
+   "p95": 0.36874036320132153,
+   "prob_loss": 0.6077,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.4,
+    "bear": 0.35
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.008217032991290472,
+    "jumps": -0.03524335802348579,
+    "noise": 0.00011198339870852774,
+    "scenario": -0.02435726312189966
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": -0.05475186817397969,
+   "median": -0.11353034634624302,
+   "p5": -0.5386363680366945,
+   "p25": -0.31679947958582094,
+   "p50": -0.11353034634624302,
+   "p75": 0.14926102884043196,
+   "p95": 0.6282879778450898,
+   "prob_loss": 0.6247,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.4,
+    "bear": 0.35
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.014693182638042859,
+    "jumps": -0.06928410146367599,
+    "noise": 0.003369468341732997,
+    "scenario": -0.04871452624379932
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.4,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.05475186817397969,
+   "prob_loss_12m": 0.6247
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.4,
+    "bear": 0.24999999999999997
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.009436673692278168,
+   "prob_loss_12m": 0.5726
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.4,
+    "bear": 0.44999999999999996
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.10006706265568113,
+   "prob_loss_12m": 0.677
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.4,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": -0.05475186817397961,
+   "prob_loss_12m": 0.6183
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.4,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": -0.05475186817397971,
+   "prob_loss_12m": 0.6274
+  }
+ ]
+}
