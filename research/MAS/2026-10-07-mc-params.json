@@ -1,0 +1,65 @@
+{
+  "ticker": "MAS",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.20, "cite": "evaluation.scenarios.bull.probability, research/MAS/2026-10-07-evaluation.md"},
+      "probability_evidence": "Evaluation basis: 'probability cut from 0.25 by the macro overlay's moderate bear tilt' (research/MAS/2026-10-07-evaluation.md, scenarios.bull.basis), reflecting that the +0.71pp 3m rise in US 10y real yields (research/MAS/2026-10-07-macro.md) delays the re-rating catalyst even though the valuation discount itself (12.1x P/FCF vs 17.1x 5y median, 18-37% below peer medians on P/E/EV-EBITDA/P-FCF) is genuine (factsheet-2026-10-07.md, Valuation table).",
+      "target_price_12m": {"value": 77.0, "cite": "evaluation.scenarios.bull.target_price_12m, research/MAS/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.1618, "cite": "Half the spread of implied prices from re-rating each multiple to its 5y median (factsheet-2026-10-07.md Valuation table: P/E 15.7x->16.6x gives $73.94; EV/EBITDA 11.0x->11.9x gives the evaluator's $77.00 target; P/FCF 12.1x->17.1x gives $98.86), relative to the $77.00 target: (98.86-73.94)/2 / 77.00 = 0.1618."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation.scenarios.base.probability, research/MAS/2026-10-07-evaluation.md"},
+      "probability_evidence": "Decision rationale: 'Quality is genuine... but the valuation gap to its own history is narrow on earnings multiples, the FCF yield is partly one-off, ROIC is drifting lower... Good, not compelling' (research/MAS/2026-10-07-evaluation.md, decision.rationale) - a balanced base case gets the residual probability after the macro overlay shifted weight from bull to bear.",
+      "target_price_12m": {"value": 70.0, "cite": "evaluation.scenarios.base.target_price_12m, research/MAS/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.0005, "cite": "Base basis holds each multiple at its current level (factsheet-2026-10-07.md Valuation table: P/E 15.7x, EV/EBITDA 11.0x, P/FCF 12.1x all unchanged), so the three multiples imply essentially the same price ($69.93 via P/E and P/FCF vs the evaluator's $70.00 via EV/EBITDA): (70.00-69.93)/2 / 70.00 = 0.0005."}
+    },
+    "bear": {
+      "probability": {"value": 0.35, "cite": "evaluation.scenarios.bear.probability, research/MAS/2026-10-07-evaluation.md"},
+      "probability_evidence": "Evaluation basis: 'probability raised from 0.25 per the macro overlay's moderate bear tilt' (research/MAS/2026-10-07-evaluation.md, scenarios.bear.basis), consistent with the macro overlay's dominant_chain (rising real yields -> mortgage rates -> remodel demand -> MAS revenue/multiple; research/MAS/2026-10-07-macro.md) and the bear case's point that TTM FCF is flattered by a one-off tariff refund (research/MAS/2026-10-07-evaluation.md, Bear case).",
+      "target_price_12m": {"value": 58.0, "cite": "evaluation.scenarios.bear.target_price_12m, research/MAS/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.1576, "cite": "Half the spread of implied prices from compressing each multiple to its 5y minimum (factsheet-2026-10-07.md Valuation table: P/E 15.7x->12.5x gives $55.69; EV/EBITDA 11.0x->9.5x gives the evaluator's $58.00 target; P/FCF 12.1x->12.8x gives $73.98, since current P/FCF is already below its own 5y minimum per factsheet note '-9% (below min)'), relative to the $58.00 target: (73.98-55.69)/2 / 58.00 = 0.1576."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news (mc-inputs.json factor_news.SPY): record highs driven narrowly by AI megacaps (WSJ/MarketWatch/CNBC, 2026-10-06) alongside caution that only four trillion-dollar stocks are beating the index and breadth is narrow/overbought (Barrons, Market Watch, 2026-10-06); no directional view the news supports for MAS's own SPY beta, so set to 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "regression.factor_stats.SPY.vol_annual, research/MAS/2026-10-07-mc-inputs.json"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.03, "cite": "Macro overlay tilt 'moderate toward bear': US 10y real yield (DFII10) +0.52pp 1m/+0.71pp 3m, hawkish repricing 'still underway, not reversing', 2y yield ~1pp above fed funds implying no near-term cuts priced (research/MAS/2026-10-07-macro.md, macro_tilt/market_pricing) translates to a modest expected decline in 7-10y Treasury prices (IEF), since bond prices move inversely to yields."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "regression.factor_stats.IEF.vol_annual, research/MAS/2026-10-07-mc-inputs.json"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings guidance reset",
+      "reason": "Next earnings release is Oct 28, 2026, inside the 12m horizon; bear case flags 'Q3 results on Oct 28 could reset guidance [Guessing]', and FY2026 guidance was recently raised partly on a one-off tariff refund that may not repeat.",
+      "cite": "factsheet-2026-10-07.md Price table ('Next earnings date: Oct 28, 2026') and research/MAS/2026-10-07-evaluation.md Bear case ('Q3 results on Oct 28 could reset guidance').",
+      "annual_probability": {"value": 4, "cite": "Quarterly reporting cadence - 4 earnings releases per year, per the event_weeks table in research/MAS/2026-10-07-mc-inputs.json (Q1-Q4 entries each year)."},
+      "impact": {"value": -0.0983, "cite": "Largest adverse earnings-week move in the analogue table: Q2 2026 earnings release week 2026-07-27, move -0.0983 (mc-inputs.json analogues.event_weeks)."},
+      "analogue": {"week": "2026-07-27", "move": -0.0983},
+      "assumption": null
+    },
+    {
+      "name": "Tariff/raw-material cost policy shock",
+      "reason": "Ongoing tariff and raw-material (brass, resins, titanium dioxide, Asia-sourced plumbing parts) cost exposure that the 10-K says is 'hard to fully pass through'; FY2026 EPS guidance was lifted partly by a one-time $95M net tariff refund in Q2 2026 that is a policy-dependent, non-recurring item.",
+      "cite": "research/MAS/2026-10-07.md section 2 ('Tariff and raw-material exposure... hard to fully pass through') and section 6 ('$95M net tariff refund', Q2 2026 transcript).",
+      "annual_probability": {"value": 1, "cite": "Assumption: US tariff policy on building-products inputs has shifted at least roughly annually in the recent trade environment referenced by the 10-K and Q2 2026 transcript; no discrete tariff-event week is separately tagged in mc-inputs.json's event_weeks table."},
+      "impact": {"value": -0.12, "cite": "No historical weekly move in mc-inputs.json is tagged to a tariff announcement; impact set well below the max_jump_impact_assumed cap of 0.30 (config [montecarlo]), scaled to a cost-shock materially smaller than the largest unexplained weekly fall (-0.1298, week 2022-06-13, mc-inputs.json analogues.largest_falls)."},
+      "analogue": null,
+      "assumption": "No historical analogue in mc-inputs.json tags a tariff-specific weekly move; impact is a bounded assumption, kept at |0.12| <= the 0.30 cap."
+    },
+    {
+      "name": "Home Depot concentration / Behr exclusivity change",
+      "reason": "Home Depot is ~38% of FY2025 net sales and holds exclusive North American Behr distribution, a single-retailer dependency explicitly named as a core-thesis invalidation trigger.",
+      "cite": "research/MAS/2026-10-07.md sections 2 and 6 (10-K) and evaluation trigger: 'The Home Depot share of net sales or Behr exclusive distribution arrangement changes materially' (research/MAS/2026-10-07-evaluation.md, triggers).",
+      "annual_probability": {"value": 0.05, "cite": "Assumption: long-standing exclusive retail distribution/customer-concentration arrangements of this kind change rarely (structural, multi-year contracts); no base-rate count is available in mc-inputs.json, so a low annual probability (~once per 20 years) is used."},
+      "impact": {"value": -0.25, "cite": "No historical weekly move in mc-inputs.json is tagged to a Home Depot/Behr contract event; impact set near the max_jump_impact_assumed cap of 0.30 (config [montecarlo]) given ~38% sales concentration with one buyer (research/MAS/2026-10-07.md section 2, 10-K)."},
+      "analogue": null,
+      "assumption": "No historical analogue in mc-inputs.json tags a single-customer-concentration event; impact is a bounded assumption, kept at |0.25| <= the 0.30 cap."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

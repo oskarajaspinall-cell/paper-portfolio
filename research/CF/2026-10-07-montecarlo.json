@@ -1,0 +1,229 @@
+{
+ "ticker": "CF",
+ "date": "2026-10-07",
+ "params_file": "2026-10-07-mc-params.json",
+ "inputs_file": "2026-10-07-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 116.02,
+  "close_date": "2026-10-06",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/cf/history/"
+ },
+ "target_returns": {
+  "bull": 0.20668850198241695,
+  "base": -0.06912601275642127,
+  "bear": -0.2673676952249612
+ },
+ "expected_12m": -0.05964488881227369,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": -0.1447316230701509,
+   "IEF": -1.05827132372965
+  },
+  "r2": 0.04830537789594336,
+  "residual_vol": {
+   "52w": 0.3705562935367609,
+   "156w": 0.32329985097648023,
+   "blended": 0.3469280722566206,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 140,
+    "target_band": 0.1903
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 108,
+    "target_band": 0.2467
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 85,
+    "target_band": 0.3134
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": -0.1447316230701509,
+    "move": 0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": -1.05827132372965,
+    "move": 0,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Quarterly earnings miss",
+    "p": 0.3,
+    "impact": -0.0866,
+    "analogue": {
+     "week": "2026-08-03",
+     "move": -0.0866
+    },
+    "cited": true
+   },
+   {
+    "name": "Trade-policy shock to fertilizer pricing (Belarus potash deal)",
+    "p": 1,
+    "impact": -0.102,
+    "analogue": {
+     "week": "2026-09-21",
+     "move": -0.102
+    },
+    "cited": true
+   }
+  ],
+  "tilt": 0.0
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.02562150048522285,
+   "median": -0.025734371197655325,
+   "p5": -0.22687185114727643,
+   "p25": -0.10926940247307473,
+   "p50": -0.025734371197655325,
+   "p75": 0.057393918847067606,
+   "p95": 0.17958259390482234,
+   "prob_loss": 0.5857,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.0003918698204062756,
+    "jumps": -6.785875666671702,
+    "noise": 0.0003896045692256418,
+    "scenario": 6.751492885084826
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": -0.04431829546843626,
+   "median": -0.05033521575567368,
+   "p5": -0.36856145479860886,
+   "p25": -0.18320514596780377,
+   "p50": -0.05033521575567368,
+   "p75": 0.08781201023224194,
+   "p95": 0.2983254625805523,
+   "prob_loss": 0.5982,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.0005472450089208536,
+    "jumps": -13.57196872865116,
+    "noise": 0.0001105589091858513,
+    "scenario": 13.502985770169651
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": -0.059644888812273665,
+   "median": -0.09383690939653624,
+   "p5": -0.571079409379616,
+   "p25": -0.30362078691336347,
+   "p50": -0.09383690939653624,
+   "p75": 0.1504581883514332,
+   "p95": 0.5623263324776273,
+   "prob_loss": 0.6071,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.0006833462202083775,
+    "jumps": -27.143602306202858,
+    "noise": 0.0024055663277698903,
+    "scenario": 27.005971540339303
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.059644888812273665,
+   "prob_loss_12m": 0.6071
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.45,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.012239269091535316,
+   "prob_loss_12m": 0.5516
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.45,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.10705050853301157,
+   "prob_loss_12m": 0.6639
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": -0.05964488881227387,
+   "prob_loss_12m": 0.6035
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": -0.059644888812273644,
+   "prob_loss_12m": 0.6129
+  }
+ ]
+}

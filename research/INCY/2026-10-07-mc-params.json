@@ -1,0 +1,56 @@
+{
+  "ticker": "INCY",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation decision block scenarios.bull.probability = 0.25, research/INCY/2026-10-07-evaluation.md"},
+      "probability_evidence": "Since September 2026, Incyte has stacked three diversification proof-points (Atebrioz FDA approval with Mirum 2026-09-25, Niktimvo Brazil regulatory approval via Knight Therapeutics 2026-10-06, Specialised Therapeutics' Opzelura partnership expanded 2026-09-20) plus management's post-2029 15-20% CAGR guidance from five late-stage programs (Cantor Fitzgerald conference transcript, 2026-09-10) [factsheet News & sentiment]; the note's section 2 cites this as the basis for pipeline execution offsetting the Jakafi cliff.",
+      "target_price_12m": {"value": 133.0, "cite": "evaluation decision block scenarios.bull.target_price_12m = 133.0, research/INCY/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.0564, "cite": "Half the spread between upward-direction valuation anchors each reverting to its OWN 5-year minimum (the only three multiples currently below their 5y min, so able to re-rate up to it): P/E 14.4x→15.1x ≈$118.3, EV/EBITDA 9.6x→11.5x ≈$130.8, P/FCF 12.1x→14.3x ≈$133.3 (factsheet Valuation table, 5y min column; TTM net income/EBITDA/FCF backed out from current multiples and the $23.2bn market cap [ST]); half-spread $7.5 ÷ $133.0 target."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation decision block scenarios.base.probability = 0.45, research/INCY/2026-10-07-evaluation.md"},
+      "probability_evidence": "The 10-K names Jakafi/Jakavi single-franchise dependence as a principal risk and the fact sheet gives no Jakafi revenue split to size the step-down (note section 2); the evaluator's rationale treats this inability to measure the cliff's size as the modal, base-rate outcome rather than the bull diversification case or the bear acceleration case.",
+      "target_price_12m": {"value": 118.0, "cite": "evaluation decision block scenarios.base.target_price_12m = 118.0, research/INCY/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.0636, "cite": "Same anchor-disagreement calculation as the bull case (P/E→$118.3, EV/EBITDA→$130.8, P/FCF→$133.3, factsheet Valuation table 5y-min column), since the base case applies the identical 'edges back toward its own floor' logic via P/E alone; half-spread $7.5 ÷ $118.0 target."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation decision block scenarios.bear.probability = 0.30, research/INCY/2026-10-07-evaluation.md"},
+      "probability_evidence": "Momentum is weak into the Oct 27, 2026 results (price 8.4% below the 50-day MA, 3-month momentum -2.5%) [factsheet Price], short interest rose 6.6% month-on-month to 5.86% of float, and shares outstanding grew 3.08% YoY from deal funding [factsheet Other] — all cited in the evaluation's bear case as reasons cliff fears could deepen rather than fade.",
+      "target_price_12m": {"value": 95.0, "cite": "evaluation decision block scenarios.bear.target_price_12m = 95.0, research/INCY/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.0737, "cite": "Half the spread between downward-direction valuation anchors each reverting to its OWN 5-year minimum (the only two multiples currently ABOVE their 5y min, so able to fall to it): EV/Sales 3.2x→2.7x ≈$98.5, P/B 3.6x→2.7x ≈$84.5 (factsheet Valuation table 5y min column; TTM sales/book value backed out from current multiples and the $23.2bn market cap [ST]); half-spread $7.0 ÷ $95.0 target."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.04, "cite": "mc-inputs.json factor_news.SPY: multiple 2026-10-06 headlines confirm the S&P 500 at record highs (Bloomberg, WSJ, CNBC, Invezz, MarketWatch) and a Goldman Sachs forecast of a further record high before year-end (MarketWatch 'facing rate chaos and narrow breadth... still bullish', 2026-10-06); kept modest because the same headlines flag narrow breadth and overbought megacaps (Barrons, 2026-10-06)."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431 (3y weekly regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "mc-inputs.json factor_news.IEF: 'Global Bond Markets Sell Off' and 10-year yields 'Highest Level Since 2002' (Barrons, Bloomberg, WSJ, all 2026-10-01/05), most recently Barrons 2026-10-05 'Global Bond Rout Continues... on France's Fiscal Worries'; corroborated by the macro overlay's DFII10 real yield +0.52pp in the past month (2026-10-05, research/INCY/2026-10-07-macro.md); tempered for the intervening 2026-10-02 rally (Guardian/Bloomberg/ETF Trends) to a modest move."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646 (3y weekly regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Large earnings-week move",
+      "reason": "Quarterly earnings are the single biggest source of one-week volatility in INCY's history, and the next release (Q3 2026, Oct 27, 2026) falls inside the 12-month horizon; the evaluation's bear case flags weak momentum heading into it.",
+      "cite": "factsheet Price section 'Next earnings date: Oct 27, 2026 (Est. Earnings)'; evaluation bear case: 'Momentum is weak: the stock sits 8.4% below its 50-day average going into the Oct 27 results.'",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.largest_falls: only one of the ~20 quarterly earnings_release weeks tagged in event_weeks over the 5-year history (2021-10 to 2026-09) reached this magnitude (-10.55%, week 2023-05-01, tagged 'Q1 2023' earnings_release) — 1-in-5-years ≈ 0.2/yr."},
+      "impact": {"value": -0.1055, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2023-05-01 ('Q1 2023' earnings_release), move -0.1055, the largest fall in the 5-year history."},
+      "analogue": {"week": "2023-05-01", "move": -0.1055},
+      "assumption": null
+    },
+    {
+      "name": "Negative pipeline/regulatory update",
+      "reason": "The bull case and the note's valuation section make non-Jakafi pipeline execution (Opzelura, Niktimvo, Atebrioz, five late-stage programs) central to offsetting the Jakafi cliff; the note states 'if pipeline reads out poorly, the discount could still widen', and evaluation trigger #3 names a failure of non-Jakafi products to grow as a thesis-breaking event.",
+      "cite": "note section 3 ('if Jakafi erodes earlier than 2028 or pipeline reads out poorly, the discount could still widen'); evaluation trigger: 'Non-Jakafi products...fail to rise as a share of total product revenue over the next four quarters'.",
+      "annual_probability": {"value": 0.4, "cite": "mc-inputs.json event_weeks: 2 non-earnings 'Investor Update'/'Status Update' weeks with moves beyond -8.5% in the ~5-year history (2024-12-09 Investor Update -9.71%; 2025-03-17 Status Update -8.75%) ≈ 0.4/yr."},
+      "impact": {"value": -0.0971, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2024-12-09 ('Investor Update'), move -0.0971, the second-largest fall in the 5-year history."},
+      "analogue": {"week": "2024-12-09", "move": -0.0971},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

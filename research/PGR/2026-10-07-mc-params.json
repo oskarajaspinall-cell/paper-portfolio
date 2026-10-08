@@ -1,0 +1,56 @@
+{
+  "ticker": "PGR",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation Decision JSON scenarios.bull.probability, research/PGR/2026-10-07-evaluation.md"},
+      "probability_evidence": "ROIC rose from 15.4% to 32.9% FY21-FY25 and the company captured ~75% of 2025 industry auto premium growth, with the property-turnaround largely complete (note, Quality section; Q2 2026 transcript https://stockanalysis.com/stocks/pgr/transcripts/650481-q2-2026/); the stock is already 13.7% lower over 12 months and 30.1pp behind SPY while P/E, EV/EBITDA and P/FCF all sit below their own 5-year minimums, so some soft-market risk looks priced in (fact sheet Price/Valuation sections). The evaluation's own bull basis also raises the probability slightly for the macro overlay's small toward-bull tilt (rising real yields, flat breakevens lifting float income) in research/PGR/2026-10-07-macro.md macro_tilt.",
+      "target_price_12m": {"value": 242, "cite": "evaluation Decision JSON scenarios.bull.target_price_12m ('EV/Sales re-rates from 1.4x toward its 5y median 1.6x'), research/PGR/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.0121, "cite": "P/FCF implied price at its own 5y median (9.0x x current FCF/share $27.54 [=212.05/7.7x, fact sheet Valuation] = $247.85) vs the EV/Sales-based bull target $242 implies a 1.2% half-spread; well within the mc-inputs blended residual volatility ceiling 0.2483 (research/PGR/2026-10-07-mc-inputs.json regression.residual_vol.blended). P/E and EV/EBITDA excluded as alternate anchors: both are already below their own 5y minimum at the current price (fact sheet Valuation 'Position in 5y range' column), so they cannot independently confirm a median-level re-rating the way P/FCF (also near its own range) can."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation Decision JSON scenarios.base.probability, research/PGR/2026-10-07-evaluation.md"},
+      "probability_evidence": "Management explicitly flags a softening market and is cutting rates in 16 states covering 37% of net written premium YTD, even as the property combined ratio improved to 78% YTD and personal-lines policies-in-force surpassed 40 million (Q2 2026 transcript https://stockanalysis.com/stocks/pgr/transcripts/650481-q2-2026/). This offsetting mix of continued growth against the rate cuts management itself describes supports a roughly flat-earnings, flat-multiple outcome as the modal (highest-probability) case, as the evaluation's base basis states.",
+      "target_price_12m": {"value": 212, "cite": "evaluation Decision JSON scenarios.base.target_price_12m ('P/E stays at 10.7x on roughly flat TTM earnings'), research/PGR/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.0001, "cite": "P/FCF implied price at its own current level, unchanged (7.7x x current FCF/share $27.54 [=212.05/7.7x, fact sheet Valuation] = $212.05) vs the P/E-based base target $212 (also a 'flat' assumption) implies a negligible ~0.01% half-spread -- the two earnings/cash-flow anchors agree closely when both are held flat, consistent with the base case's own 'roughly flat TTM earnings' basis; well within the mc-inputs blended residual volatility ceiling 0.2483 (research/PGR/2026-10-07-mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation Decision JSON scenarios.bear.probability, research/PGR/2026-10-07-evaluation.md"},
+      "probability_evidence": "TTM ROE of 34.9% sits near the opposite extreme of the FY2022 cyclical trough (4.2%); management's own soft-market/rate-cut commentary (16 states, 37% of NWP YTD) and a reported August operating EPS miss on the core loss ratio (TheFly via TipRanks, 2026-09-18, Guessing-tagged in the note) point the same direction. FCF conversion is falling (174.9% FY2024 to 136.4% TTM) and buybacks are negligible (shares -0.14% YoY), leaving no capital-return cushion if earnings soften, with Q3 2026 results due Oct 14, 2026 (note sections 2, 3 and 5; evaluation bear case).",
+      "target_price_12m": {"value": 194, "cite": "evaluation Decision JSON scenarios.bear.target_price_12m ('P/B de-rates from 3.6x to its 5y minimum of 3.3x, near the 52-week low of 189.20'), research/PGR/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.0536, "cite": "P/FCF implied price at its own 5y minimum (7.8x x current FCF/share $27.54 [=212.05/7.7x, fact sheet Valuation] = $214.80) vs the P/B-based bear target $194 implies a 5.4% half-spread; within the mc-inputs blended residual volatility ceiling 0.2483 (research/PGR/2026-10-07-mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.04, "cite": "mc-inputs.json factor_news.SPY: majority of headlines report the S&P 500 at record highs on an AI-led rally (Bloomberg, WSJ, CNBC, Invezz, MarketWatch, all 2026-10-06), with a Goldman Sachs view that 'stocks are not expensive in a historical context' and forecasts a record high before year-end; tempered modest (not larger) given Barrons/MarketWatch caution in the same set on narrow breadth and overbought megacaps."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/PGR/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "Macro overlay (research/PGR/2026-10-07-macro.md) market_pricing/dominant_chain: 2y Treasury yield (4.84%, FRED DGS2, 2026-10-05) ~0.96pp above effective fed funds (3.88%, FRED DFF) implies the market is not pricing near-term cuts ('higher for longer'), and 10y real yield (DFII10) rose +0.52pp/1m and +0.71pp/3m to 2.95% while breakevens stayed roughly flat -- a real-yield-driven rise that implies continued downward pressure on 7-10y Treasury (IEF) prices."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/PGR/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings reaction",
+      "reason": "Scheduled Q3 2026 earnings on Oct 14, 2026, with underwriting margins highly cycle-sensitive (TTM ROE 34.9% vs the FY2022 trough of 4.2%) and management already flagging soft-market rate cuts in 16 states; the evaluation's bear case explicitly notes 'Q3 results on Oct 14 could confirm the margin squeeze' -- a discrete event-timing risk distinct from the gradual ROE/multiple normalisation already priced into the bear scenario's target.",
+      "cite": "Fact sheet Price section ('Next earnings date | Oct 14, 2026') and evaluation bear case ('Q3 results on Oct 14 could confirm the margin squeeze'), research/PGR/2026-10-07-evaluation.md",
+      "annual_probability": {"value": 0.6, "cite": "research/PGR/2026-10-07-mc-inputs.json analogues.event_weeks: of 20 historical earnings-related disclosure weeks (15 quarterly_report + 5 annual_report, 2021-2026), 3 produced a move >=5% in magnitude (2023-05-01 Q1'23 -5.04%, 2024-11-04 Q3'24 +7.75%, 2025-11-03 Q3'25 +5.47%) over ~4.95 years of history (history_from 2021-10-18 to history_to 2026-09-28), implying roughly a 0.6/yr chance of an earnings print causing a jump-sized move."},
+      "impact": {"value": -0.0504, "cite": "research/PGR/2026-10-07-mc-inputs.json analogues.event_weeks: Q1 2023 quarterly_report week 2023-05-01, move -0.0504 (the largest decline among labeled earnings-related weeks)."},
+      "analogue": {"week": "2023-05-01", "move": -0.0504},
+      "assumption": null
+    },
+    {
+      "name": "Monthly operating-results miss (core loss ratio surprise)",
+      "reason": "Unlike quarterly-only peers, PGR publishes monthly operating results; the August 2026 release showed operating EPS of $1.49 missing a sell-side estimate of $1.52 on the core loss ratio and net items, which the note flags as 'directionally consistent with the soft-market competitive pressure' management itself describes -- a recurring monthly disclosure cadence (12x/year) creates discrete surprise risk around each release, distinct from the quarterly earnings print modelled separately above and from the gradual soft-market normalisation already built into the bear scenario's target.",
+      "cite": "Note section 6 'Unusual items' (TheFly via TipRanks, 2026-09-18, 'Keefe says Progressive August operating earnings missed estimate', Guessing-tagged) and fact sheet News & sentiment (GlobeNewsWire 'Progressive Reports August 2026 Results', 2026-09-18), research/PGR/2026-10-07.md and research/PGR/factsheet-2026-10-07.md",
+      "annual_probability": {"value": 0.5, "cite": "Assumption: the fact sheet's news window shows only one such flagged miss (August 2026) among the monthly GlobeNewsWire releases cited (July and August 2026), and the mc-inputs event_weeks table does not tag monthly disclosures separately from quarterly reports (research/PGR/2026-10-07-mc-inputs.json has no monthly_report event type), so no historical count is available; a conservative roughly-biennial rate is assumed given only one instance is documented in the available news."},
+      "impact": {"value": -0.08, "cite": "Assumption: no analogue is tagged for monthly disclosure weeks in the mc-inputs history (only quarterly_report/annual_report/proxy/slides/shareholder_letter event types are tracked), so the impact is bounded conservatively below the Q3-earnings analogue's -5.04% move, reflecting a single data point (one month's loss ratio) carrying less information than a full quarterly report; capped well under the mc-inputs max_jump_impact_assumed bound of 0.30."},
+      "analogue": null,
+      "assumption": "No historical analogue exists for monthly-disclosure weeks in the mc-inputs event table; annual probability and impact are the researcher's bounded, conservative estimates from the single documented instance (August 2026 miss), not a measured rate."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

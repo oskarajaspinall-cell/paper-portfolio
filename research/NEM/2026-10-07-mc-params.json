@@ -1,0 +1,56 @@
+{
+  "ticker": "NEM",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/NEM/2026-10-07-evaluation.md Decision json scenarios.bull.probability"},
+      "probability_evidence": "Bull requires the real-yield/dollar rally to stall so gold holds (macro overlay macro_bull, research/NEM/2026-10-07-macro.md); probability is the residual after the overlay's moderate bear tilt took 0.05 off the symmetric default and added it to bear instead (evaluation Decision json base.basis, research/NEM/2026-10-07-evaluation.md).",
+      "target_price_12m": {"value": 135.29, "cite": "research/NEM/2026-10-07-evaluation.md Decision json scenarios.bull.target_price_12m (= 52-week high, HI)"},
+      "target_band": {"value": 0.1234, "cite": "Fact sheet Valuation table (factsheet-2026-10-07.md): peer-median multiples imply divergent fair prices at current fundamentals (price 116.39) -- P/E 12.9x -> $102.15, EV/EBITDA 7.5x -> $126.51, P/FCF 10.0x -> $93.11; half the $33.40 spread ($16.70) as a fraction of the bull target $135.29."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/NEM/2026-10-07-evaluation.md Decision json scenarios.base.probability"},
+      "probability_evidence": "Base is the modal case: buyback accretion (shares -3.94% YoY, ST) offsets a modest give-back from the 55.2% TTM operating margin (IS) with EV/EBITDA near its current 6.9x (RA); the macro overlay's moderate bear tilt took 0.05 off bull rather than off base (evaluation Decision json base.basis; research/NEM/2026-10-07-macro.md).",
+      "target_price_12m": {"value": 115.0, "cite": "research/NEM/2026-10-07-evaluation.md Decision json scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.1452, "cite": "Fact sheet Valuation table (factsheet-2026-10-07.md): peer-median multiples imply divergent fair prices at current fundamentals (price 116.39) -- P/E 12.9x -> $102.15, EV/EBITDA 7.5x -> $126.51, P/FCF 10.0x -> $93.11; half the $33.40 spread ($16.70) as a fraction of the base target $115.00."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/NEM/2026-10-07-evaluation.md Decision json scenarios.bear.probability"},
+      "probability_evidence": "Bear probability includes +0.05 added by the macro overlay's moderate bear tilt: real yields (DFII10 2.95%, +0.71pp 3m) and the dollar (DTWEXBGS 121.4, +2.86 1m) have already moved sharply against gold while NEM's EV/Sales (91st percentile) and P/B (above 5y max) sit rich, so a catch-up gold correction would hit the richest part of the multiple first (research/NEM/2026-10-07-macro.md macro_tilt; evaluation Decision json bear.basis).",
+      "target_price_12m": {"value": 76.05, "cite": "research/NEM/2026-10-07-evaluation.md Decision json scenarios.bear.target_price_12m (= 52-week low, HI)"},
+      "target_band": {"value": 0.2196, "cite": "Fact sheet Valuation table (factsheet-2026-10-07.md): peer-median multiples imply divergent fair prices at current fundamentals (price 116.39) -- P/E 12.9x -> $102.15, EV/EBITDA 7.5x -> $126.51, P/FCF 10.0x -> $93.11; half the $33.40 spread ($16.70) as a fraction of the bear target $76.05."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.05, "cite": "mc-inputs.json factor_news.SPY headlines (2026-10-06): Bloomberg 'S&P 500 Hits Record High as Big Tech Leads' and MarketWatch 'The S&P 500 is facing rate chaos and narrow breadth. Why one Goldman Sachs insider is still bullish...forecasts a record high for the S&P 500 before year-end' -- modest positive tilt kept well under +15% given narrow (AI-led) breadth noted in the same headlines."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/NEM/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly-return regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.03, "cite": "research/NEM/2026-10-07-macro.md macro_tilt (moderate, toward bear): DFII10 real yield 2.95% (+0.71pp 3m) and DTWEXBGS dollar index 121.4 (+2.86 1m) both rising, implying continued upward pressure on yields / downward pressure on 7-10y Treasury prices; corroborated by mc-inputs.json factor_news.IEF headlines 'The Bond Rout Is Deepening Even as Oil Tankers Return to the Strait of Hormuz' (WSJ, 2026-10-01) and 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002' (Bloomberg, 2026-10-01), tempered by a same-week rebound headline so kept modest."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/NEM/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly-return regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings release",
+      "reason": "Q3 2026 results due 2026-10-22, a known discrete catalyst inside the 12m window; prior earnings weeks have produced NEM's single largest historical weekly moves.",
+      "cite": "factsheet-2026-10-07.md Price section 'Next earnings date | Oct 22, 2026 (Earnings Date)'; evaluation triggers reference TTM operatingMargin/fcfMargin read at results (research/NEM/2026-10-07-evaluation.md).",
+      "annual_probability": {"value": 0.6, "cite": "mc-inputs.json analogues.event_weeks (earnings_release tag): of 19 quarterly earnings weeks from Q3 2021 to Q2 2026, 4 (Q1'22 -12.1%, Q2'22 -11.9%, Q3'24 -16.0%, Q2'25 +13.0%) moved >=10% in the earnings week; Poisson rate ~4 such quarters / 4.75y = 0.84/yr implies an annual probability of at least one such move of 1-e^-0.84 ~ 0.6."},
+      "impact": {"value": -0.1597, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2024-10-21 (Q3 2024 earnings_release), move -0.1597 -- the largest single weekly fall in the 5y history."},
+      "analogue": {"week": "2024-10-21", "move": -0.1597},
+      "assumption": null
+    },
+    {
+      "name": "Gold price shock (real-yield / dollar driven correction)",
+      "reason": "NEM sells gold at spot with no differentiated pricing, so a sudden rise in real yields or the dollar can move the stock sharply outside of earnings weeks; this risk is not captured by the SPY/IEF factor model (US market proxy set has no gold factor) and is distinct from the gradual de-rate already built into the bear scenario's target.",
+      "cite": "research/NEM/2026-10-07-macro.md dominant_chain ('real yields (DFII10) + trade-weighted dollar (DTWEXBGS) -> gold price -> NEM revenue and margin -> EV/Sales and P/B multiple') and macro_bear; research/NEM/2026-10-07.md Business section ('revenue tracks metal prices... rather than any differentiated product pricing').",
+      "annual_probability": {"value": 1.0, "cite": "mc-inputs.json analogues.largest_falls vs event_weeks: of the 10 largest weekly falls over the ~5y history (2021-10-18 to 2026-09-28), 5 do not coincide with any tagged earnings/filing event (2026-03-16, 2022-05-09, 2026-03-02, 2026-04-27, 2026-01-26) -- about 1 non-earnings shock-sized fall per year."},
+      "impact": {"value": -0.1258, "cite": "mc-inputs.json analogues.largest_falls week 2026-03-16, move -0.1258 -- not listed in event_weeks, i.e. a market/macro-driven move rather than a scheduled corporate event."},
+      "analogue": {"week": "2026-03-16", "move": -0.1258},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

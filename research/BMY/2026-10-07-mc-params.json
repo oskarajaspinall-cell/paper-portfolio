@@ -1,0 +1,56 @@
+{
+  "ticker": "BMY",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/BMY/2026-10-07-evaluation.md Decision JSON, scenarios.bull.probability"},
+      "probability_evidence": "Growth Portfolio already supplies 55% of revenue with 7 assets each annualising above $1bn (bull case, bms.com investors), and recent proof points landed in the weeks before this evaluation: FDA pediatric label expansion for Camzyos (2026-09-30), first Phase 3 EXCALIBER-RRMM data for iberdomide (2026-09-25) and a cell therapy meeting its primary endpoint in a mid-stage trial (2026-09-08) (evaluation bull case; fact sheet News & sentiment). The bull case itself flags the re-rating as conditional on Q3 results (Oct 29, 2026) confirming the Growth Portfolio offsets legacy erosion [Guessing tag in bull case], which the evaluator has not yet seen, so it is weighted lowest (25%) of the three scenarios.",
+      "target_price_12m": {"value": 74.0, "cite": "research/BMY/2026-10-07-evaluation.md Decision JSON, scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0347, "cite": "Bull's basis re-rates EV/EBITDA to its 5y max of 9.8x (factsheet-2026-10-07.md Valuation table, RA), implying $71.22 on the current price of $59.59 (RA/HI) holding fundamentals constant. Applying the identical move-to-5y-max to the other two multiples not distorted by the FY2024 one-off net-income swing (note sec.6; fact sheet IS/RA) -- EV/Sales (3.2x->4.1x) and P/FCF (10.6x->13.4x) -- implies $76.35 and $75.33 respectively (P/E and P/B excluded: both derive from net income/book value, which FY2024's -18.5% net margin and -38.9% ROE distort, per note sec.6). Half the spread ($76.35-$71.22)/2=$2.57 is 3.5% of the $74 target, below the 25.6% blended residual volatility (mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/BMY/2026-10-07-evaluation.md Decision JSON, scenarios.base.probability"},
+      "probability_evidence": "The bear case's own finding -- EV/EBITDA at 8.2x is 'essentially its 5y median of 8.1x' (evaluation bear case, RA) -- shows the stock is already priced near its historical cash-flow-multiple centre, making 'growth assets and legacy erosion roughly net out' (base basis) the single most likely path rather than a re-rating or de-rating; the decision rationale calls the expected 12m return 'roughly flat', consistent with weighting this outcome the plurality (45%).",
+      "target_price_12m": {"value": 60.0, "cite": "research/BMY/2026-10-07-evaluation.md Decision JSON, scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.1139, "cite": "Base's basis holds EV/EBITDA near its 5y median of 8.1x (8.2x now; factsheet RA), implying $58.86 on the current $59.59 (HI). Applying the identical move-to-5y-median to EV/Sales (3.2x->3.3x) and P/FCF (10.6x->8.5x) -- the two other multiples unaffected by the FY2024 net-income anomaly (note sec.6) -- implies $61.45 and $47.78 respectively; the P/FCF anchor is pulled down because current P/FCF (10.6x) sits above its own 5y median (8.5x; fact sheet RA), exactly the disagreement the bear case highlights ('on cash flow, the stock is not cheap against its own history'). Half the spread ($61.45-$47.78)/2=$6.84 is 11.4% of the $60 target, below the 25.6% blended residual volatility (mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/BMY/2026-10-07-evaluation.md Decision JSON, scenarios.bear.probability"},
+      "probability_evidence": "The deteriorating-fundamentals trend is already running: FCF margin down from 32.8% to 23.3% TTM, FCF/NI conversion down from 217.8% to 123.2%, net debt/EBITDA up from 1.47x to 1.80x (note sec.5; fact sheet CF/IS/BS), Altman Z at 2.59 in the 'grey zone' (note sec.6; fact sheet ST), against Eliquis/Revlimid loss-of-exclusivity still ahead (note sec.1-2). The evaluator weights this continuation path second-highest (30%, above bull's 25%) given the trend lines are presently moving the wrong way, not yet the base case.",
+      "target_price_12m": {"value": 48.0, "cite": "research/BMY/2026-10-07-evaluation.md Decision JSON, scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.1424, "cite": "Bear's basis reverts P/FCF to its 5y median of 8.5x from 10.6x (factsheet RA), implying $47.78 on the current $59.59 (HI) -- matching the stated $48 target closely. Applying the identical move-to-5y-median to EV/EBITDA (8.2x->8.1x) and EV/Sales (3.2x->3.3x) -- the two other multiples unaffected by the FY2024 net-income anomaly (note sec.6) -- implies $58.86 and $61.45 respectively, i.e. little further downside signal since both are already at or below their own median (the exact disagreement the bear case flags for EV/EBITDA: 'essentially its 5y median'). Half the spread ($61.45-$47.78)/2=$6.84 is 14.2% of the $48 target, below the 25.6% blended residual volatility (mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.05, "cite": "research/BMY/2026-10-07-mc-inputs.json factor_news.SPY: multiple 2026-10-06 headlines (Bloomberg, WSJ, CNBC, MarketWatch, Invezz) report the S&P 500 at fresh record highs on AI/mega-cap strength, with MarketWatch citing a Goldman Sachs insider still forecasting a record high before year-end; moderated to a modest +5% given the same MarketWatch/Barron's headlines flagging narrow breadth ('Only Four Trillion-Dollar Stocks Are Beating the S&P 500') and 'rate chaos'."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/BMY/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "research/BMY/2026-10-07-mc-inputs.json factor_news.IEF: Barron's/Bloomberg/WSJ headlines (2026-10-01/02/05) report a 'global bond rout' with 10-year Treasury yields at the 'highest level since 2002' and French yields near 5%, implying lower IEF prices; moderated to -4% given partially offsetting headlines (Bloomberg, The Guardian) of a 'US Treasury rebound' pulling yields off multi-decade highs after a weaker-than-expected jobs report."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/BMY/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings / legacy-erosion print risk (Q3 2026, Oct 29 2026)",
+      "reason": "Fact sheet names the next earnings date as Oct 29, 2026, and the note ties the thesis directly to that print ('If Q3 results on Oct 29, 2026 confirm that the growth assets offset legacy erosion...'); the bear case separately notes legacy revenue (Eliquis, Revlimid) keeps eroding while pipeline readouts carry binary risk, both of which surface at quarterly reports.",
+      "cite": "research/BMY/factsheet-2026-10-07.md Price section (next earnings date); research/BMY/2026-10-07.md sec.3 (bull basis tied to Q3 print); research/BMY/2026-10-07-evaluation.md bear case",
+      "annual_probability": {"value": 0.19, "cite": "research/BMY/2026-10-07-mc-inputs.json analogues.event_weeks: of 20 quarterly earnings-release weeks from Q3 2021 through Q2 2026, 1 (2023-10-23, Q3 2023) produced a fall of >=9% magnitude, a per-quarter rate of 1/20=0.05; probability of at least one such print in a year of 4 quarterly releases is 1-(1-0.05)^4=0.19."},
+      "impact": {"value": -0.0964, "cite": "research/BMY/2026-10-07-mc-inputs.json analogues.largest_falls / event_weeks: week of 2023-10-23 (Q3 2023 earnings release) moved -9.64%, the largest weekly fall in the stock's 5-year history."},
+      "analogue": {"week": "2023-10-23", "move": -0.0964},
+      "assumption": null
+    },
+    {
+      "name": "Pipeline / regulatory binary-readout risk",
+      "reason": "Bear case: 'legacy revenue keeps eroding while pipeline readouts carry binary risk' [Likely]; the note names the late-stage programs this risk attaches to -- milvexian, iberdomide/mezigdomide/arlo-cel, golcadomide, Cobenfy, iza-bren/pumitamig and Sotyktu -- as distinct from the continuous legacy loss-of-exclusivity already built into the base/bear targets.",
+      "cite": "research/BMY/2026-10-07-evaluation.md bear case; research/BMY/2026-10-07.md sec.2 (named pipeline programs)",
+      "annual_probability": {"value": 1.0, "cite": "research/BMY/2026-10-07-mc-inputs.json analogues.event_weeks: of 8 non-earnings scientific/investor-disclosure weeks (Investor Day, JPM Healthcare Conference x3, Guggenheim Healthcare Talks Oncology Day, ASCO 2023, R&D Day 2023, M&A Announcement) between 2021-10-18 and 2026-09-28 (~4.95 years), 5 produced a negative weekly move, a rate of ~1.0/year."},
+      "impact": {"value": -0.0302, "cite": "research/BMY/2026-10-07-mc-inputs.json analogues.event_weeks: week of 2023-02-06 (Guggenheim Healthcare Talks Oncology Day, event_date 2023-02-09) moved -3.02%, the largest negative move among the non-earnings disclosure weeks in the history."},
+      "analogue": {"week": "2023-02-06", "move": -0.0302},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.01, "cite": "research/BMY/factsheet-2026-10-07.md Price section: price is 7.4% below its 50-day MA, RSI(14) at 34.9 approaching oversold, and the stock has pulled back from its 2026-09-03 swing high of 68.24 to a 2026-09-24 swing low of 60.59 -- a near-term downtrend -- even though it sits just 0.2% above its 200-day MA; modest negative tilt given support is still intact."}
+}

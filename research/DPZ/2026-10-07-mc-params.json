@@ -1,0 +1,56 @@
+{
+  "ticker": "DPZ",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.20, "cite": "research/DPZ/2026-10-07-evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "The macro overlay's tilt is explicitly 'moderate, toward bear' because the 10y real yield (DFII10) rose 71bp over 3 months and HY spreads widened 44bp (research/DPZ/2026-10-07-macro.md Facts/macro_tilt), directly opposing the discount-rate relief the bull re-rating needs; short interest is elevated and rising (10.79% of float, +12.5% month-over-month) and the shares sit below both the 50-day and 200-day moving averages (factsheet Other and Price tables) — evidence against a near-term re-rating, consistent with the lower bull weight.",
+      "target_price_12m": {"value": 376, "cite": "research/DPZ/2026-10-07-evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.1665, "cite": "Fact sheet Valuation table: reverting each of P/E (17.4x), EV/EBITDA (14.6x) and P/FCF (15.3x) to the peer median (21.6x, 16.2x, 23.3x respectively) off the current price (302.87) implies 375.98/336.06/461.23; half the spread between the highest and lowest (62.59) relative to the bull target (376) = 16.65% (research/DPZ/factsheet-2026-10-07.md Valuation table)."}
+    },
+    "base": {
+      "probability": {"value": 0.50, "cite": "research/DPZ/2026-10-07-evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "ROIC is 62.2% TTM and rising, operating margin is 19.3% TTM (up from 17.9% FY2021), and FCF conversion is 109.5% TTM; Altman Z of 3.15 and Piotroski F of 7 show no distress (factsheet Quality and Other tables) — fundamentals holding steady while shares outstanding fall 2.45% YoY (buyback-led per-share growth with no re-rating either way) is the modal outcome the note describes.",
+      "target_price_12m": {"value": 310, "cite": "research/DPZ/2026-10-07-evaluation.md Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.2019, "cite": "Same peer-median reversion exercise as the bull/bear cases (P/E-implied 375.98, EV/EBITDA-implied 336.06, P/FCF-implied 461.23 off the current price 302.87); half the spread (62.59) relative to the base target (310) = 20.19% (research/DPZ/factsheet-2026-10-07.md Valuation table)."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/DPZ/2026-10-07-evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "Franchisee stress is already visible (roughly 13 stores closed after one operator's financial failure) and an October 50%-off pizza promotion hints at weak traffic (research/DPZ/2026-10-07.md section 2 and Bear case); short interest is elevated and rising (10.79% of float, +12.5% month-over-month, factsheet Other table); and the macro overlay's tilt is explicitly 'moderate, toward bear' because rising real yields and wider HY spreads raise refinancing costs on the 4.84x net debt/EBITDA leverage (research/DPZ/2026-10-07-macro.md macro_tilt) — three independent sources support raising the bear weight above a baseline 0.25.",
+      "target_price_12m": {"value": 259, "cite": "research/DPZ/2026-10-07-evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.2416, "cite": "Same peer-median reversion exercise (P/E-implied 375.98, EV/EBITDA-implied 336.06, P/FCF-implied 461.23 off the current price 302.87); half the spread (62.59) relative to the bear target (259) = 24.16% (research/DPZ/factsheet-2026-10-07.md Valuation table)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed as of 2026-10-06: record highs driven narrowly by 'Magnificent Seven'/AI (CNBC, MarketWatch) and a Goldman bull call, alongside explicit cautions ('narrow breadth', 'overbought', 'rate chaos' per Barron's/MarketWatch); no clear single direction is supported, so expected_12m_move = 0 (research/DPZ/2026-10-07-mc-inputs.json factor_news.SPY)."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "3y weekly regression factor_stats.SPY.vol_annual (research/DPZ/2026-10-07-mc-inputs.json regression.factor_stats.SPY)."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "Macro overlay dominant_chain (real yields + credit spreads -> equity discount rate / cost of debt -> DPZ's multiple and buyback-funded EPS growth) and macro_tilt ('moderate, toward bear') are driven by the DFII10 10y real yield rising +71bp over 3 months and the 2y/fed-funds spread (96bp) implying further tightening priced (research/DPZ/2026-10-07-macro.md Facts, Overlay JSON macro_tilt/market_pricing); since IEF is the rates/bond-price factor, a continued rise in real yields implies a modest further fall in IEF's price, kept modest at -5% per the 'moderate' size of the overlay's tilt."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "3y weekly regression factor_stats.IEF.vol_annual (research/DPZ/2026-10-07-mc-inputs.json regression.factor_stats.IEF)."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings surprise",
+      "reason": "Q3 2026 results land Oct 13, 2026, six days after this note, with a new CEO (Joe Jordan, insider, took over Oct 1) presenting his first quarter; the note explicitly flags expected volatility around the print, and large earnings-week moves (both directions) have historically been the stock's biggest single-week swings.",
+      "cite": "research/DPZ/2026-10-07.md section 6 ('Unusual items': next earnings Oct 13, 2026, expect volatility around the print) and factsheet Price table 'Next earnings date' (research/DPZ/factsheet-2026-10-07.md).",
+      "annual_probability": {"value": 0.6115, "cite": "Of the 19 earnings-tagged weeks in the 5y history (mc-inputs.json analogues.event_weeks, types including earnings_release), 4 moved >=6% in either direction (2022-04-25 -10.78%, 2023-02-21 -16.76%, 2024-07-15 -17.76%, 2026-04-27 -8.17%); per-quarter probability of a shock-sized move = 4/19 = 0.2105, so the probability of at least one such quarter in a 4-quarter (12m) window = 1-(1-0.2105)^4 = 0.6115 (research/DPZ/2026-10-07-mc-inputs.json analogues.event_weeks)."},
+      "impact": {"value": -0.1776, "cite": "Matches the analogue exactly: the single largest weekly fall in the 5y history, which coincided with the Q2 2024 earnings release (research/DPZ/2026-10-07-mc-inputs.json analogues.event_weeks, Q2 2024 row)."},
+      "analogue": {"week": "2024-07-15", "move": -0.1776},
+      "assumption": null
+    },
+    {
+      "name": "Franchisee-system distress (accelerating beyond the current ~13-store closure)",
+      "reason": "Press reports describe roughly 13 store closures in one state tied to a single franchisee's financial struggles, flagged in the note as a 'watch item for franchisee-system health' distinct from the gradual margin reset already priced into the bear scenario's target (which assumes operating margin reverts to the FY2022 16.5% level, not a discrete contagion event).",
+      "cite": "research/DPZ/2026-10-07.md section 2 (franchisee closures watch item) and factsheet News & sentiment (Fast Company 2026-09-10, New York Post 2026-09-22 store-closure headlines).",
+      "annual_probability": {"value": 0.15, "cite": "No analogue in the history is tagged as a franchisee/legal distress event (mc-inputs.json events_source_url only captures SEC filing-type events: earnings, proxy, investor presentation); assumption: a discrete, system-wide franchisee-distress shock (beyond the single operator already reported) is estimated at roughly once every six to seven years given it has not previously appeared as a tagged event in this 5-year history, hence 0.15."},
+      "impact": {"value": -0.12, "cite": "Assumption, capped below the ±30% bound for jumps without an analogue (montecarlo max_jump_impact_assumed); set below the worst historical earnings-week move (-17.76%) to reflect a material but not catastrophic franchisee-system shock, since no stronger historical analogue is available."},
+      "analogue": null,
+      "assumption": "No matching week in the mc-inputs.json analogue table is tagged as a franchisee/legal distress event; probability and impact are therefore stated assumptions, not analogue-derived, and impact is kept within the ±30% cap for assumed jumps."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -734,7 +734,7 @@ def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, po
 
 
 def fill_pending(state_path, mkt, cfg, watch, dry_run=False, port_dir=PORT, max_wait_days: int = 14) -> dict:
-    """Fill each pending order at the open of the first trading day on/after the day it was placed,
+    """Fill each pending order at the open of the first trading day AFTER the day it was placed,
     re-checking every rule at that price. Orders whose open hasn't happened yet stay pending; orders
     older than `max_wait_days` expire. Tactical orders that open beyond their stop/target are rejected."""
     state = load_state(state_path, cfg)
@@ -748,7 +748,10 @@ def fill_pending(state_path, mkt, cfg, watch, dry_run=False, port_dir=PORT, max_
     for o in sorted(pending, key=lambda o: (o["placed"], rank.get(o["request"]["action"], 9))):
         r = o["request"]
         tickers = [r["ticker"]] + ([r["replaces"]] if r.get("replaces") else [])
-        quotes = {t: mkt.open_quote(t, o["placed"]) for t in tickers}
+        # the open of the first session AFTER the decision day: the placing day's own open has usually
+        # already happened when the decision is made, and using it would be look-ahead
+        after = (dt.date.fromisoformat(o["placed"]) + dt.timedelta(days=1)).isoformat()
+        quotes = {t: mkt.open_quote(t, after) for t in tickers}
         if any(q is None for q in quotes.values()):
             age = (dt.date.fromisoformat(mkt.asof) - dt.date.fromisoformat(o["placed"])).days
             if age > max_wait_days:

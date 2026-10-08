@@ -1,0 +1,56 @@
+{
+  "ticker": "MO",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "research/MO/2026-10-07-evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Set against a macro overlay whose tilt is 'moderate, toward bear' (not bull) and a stock that already trails SPY by 8.3pp/14.7pp/12.1pp over 3m/6m/12m (factsheet Price table) while the 10y real yield has risen +71bp in 3m (macro overlay Facts) — the bull path requires this trend to reverse, which the research treats as the lower-probability outcome.",
+      "target_price_12m": {"value": 77.06, "cite": "research/MO/2026-10-07-evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0836, "cite": "Fact sheet Valuation table: reverting each of P/E (14.0x), EV/EBITDA (7.1x), EV/Sales (5.3x) and P/FCF (10.3x) to its own 5y median off the current price (68.55) implies 67.11/55.94/54.23/56.49; half the spread between the highest and lowest (6.44) relative to the bull target (77.06) = 8.36% (research/MO/factsheet-2026-10-07.md Valuation table)."}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "research/MO/2026-10-07-evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "ROIC (46.1% TTM, rising) and FCF margin (44.6% TTM, rising) are at/near 5y highs, net debt/EBITDA is a moderate 1.41x (down from 1.93x) and Altman Z 5.34 / Piotroski F 7 show no distress (factsheet Quality and Other tables) — a continuation of current fundamentals, with no re-rating either way, is the modal outcome the note describes.",
+      "target_price_12m": {"value": 67.11, "cite": "research/MO/2026-10-07-evaluation.md Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0960, "cite": "Same cross-multiple reversion-to-5y-median exercise as the bull/bear cases (P/E 67.11, EV/EBITDA 55.94, EV/Sales 54.23, P/FCF 56.49 off 68.55 current price); half the spread (6.44) relative to the base target (67.11) = 9.60% (research/MO/factsheet-2026-10-07.md Valuation table)."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "research/MO/2026-10-07-evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "P/FCF (166% of its 5y range, above max) and EV/Sales (159%, above max) are already at above-history valuations, FCF conversion has fallen from 332.8% to 114.3% (factsheet Valuation and Quality tables), and the macro overlay's tilt is explicitly 'moderate, toward bear' because the 2y/fed-funds spread (96bp) implies the market still prices further tightening (research/MO/2026-10-07-macro.md Overlay JSON macro_tilt) — three independent sources point the same direction, supporting the highest single-scenario weight after base.",
+      "target_price_12m": {"value": 54.70, "cite": "research/MO/2026-10-07-evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.1178, "cite": "Same cross-multiple reversion-to-5y-median exercise (P/E 67.11, EV/EBITDA 55.94, EV/Sales 54.23, P/FCF 56.49 off 68.55 current price); half the spread (6.44) relative to the bear target (54.70) = 11.78% (research/MO/factsheet-2026-10-07.md Valuation table)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed as of 2026-10-06: record highs driven narrowly by 'Magnificent Seven'/AI (CNBC, MarketWatch) and a Goldman bull call, alongside explicit cautions ('narrow breadth', 'overbought', 'rate chaos' per Barron's/MarketWatch); no clear single direction is supported, so expected_12m_move = 0 (research/MO/2026-10-07-mc-inputs.json factor_news.SPY)."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "3y weekly regression factor_stats.SPY.vol_annual (research/MO/2026-10-07-mc-inputs.json regression.factor_stats.SPY)."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "Macro overlay dominant_chain (real yields -> MO's multiple) and macro_tilt ('moderate, toward bear') are driven by the DFII10 10y real yield rising +71bp over 3m and the 2y/fed-funds spread (96bp) implying further tightening priced (research/MO/2026-10-07-macro.md Facts, Overlay JSON macro_tilt/market_pricing); since IEF is the rates/bond-price factor, a continued rise in real yields implies a modest further fall in IEF's price, kept modest at -5% per the 'moderate' size of the overlay's tilt."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "3y weekly regression factor_stats.IEF.vol_annual (research/MO/2026-10-07-mc-inputs.json regression.factor_stats.IEF)."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings surprise",
+      "reason": "Altria's thesis rests entirely on price/mix continuing to offset structurally declining cigarette volumes; a quarterly print that breaks that algebra (or beats it) has historically produced the largest single-week moves in the stock, and the next earnings date (Oct 29, 2026) falls inside the 12m horizon.",
+      "cite": "research/MO/2026-10-07.md section 2 (durability of pricing power) and section 4 (ROIC/gross-margin/FCF-margin invalidation triggers, checked each release); factsheet Price table 'Next earnings date' (research/MO/factsheet-2026-10-07.md).",
+      "annual_probability": {"value": 0.82, "cite": "6 of the 17 earnings-tagged weeks in the 5y history (mc-inputs.json event_weeks with type earnings_release) moved >=6% in either direction (2021-10-25 -8.5%, 2023-10-23 -8.0%, 2024-10-28 +8.4%, 2025-10-27 -12.8%, 2026-04-27 +11.5%, 2026-07-27 -6.4%); per-quarter probability 6/17=0.353, so probability of at least one such quarter in a 4-quarter (12m) window = 1-(1-0.353)^4 = 0.82 (research/MO/2026-10-07-mc-inputs.json analogues.event_weeks)."},
+      "impact": {"value": -0.1282, "cite": "Matches the analogue exactly: the worst earnings-week move in the 5y history."},
+      "analogue": {"week": "2025-10-27", "move": -0.1282},
+      "assumption": null
+    },
+    {
+      "name": "FDA regulatory/litigation shock (nicotine-alternative approvals or adverse ruling)",
+      "reason": "The FDA is reportedly speeding up vape/pouch approvals (a competitive threat to on!/NJOY, Altria's only growth category), Juul2 was already authorised on 2026-08-28, and Altria sued the FDA on 2026-09-02 over its review process — a surprise adverse court ruling or a wave of competitor approvals is a discrete, binary-type risk distinct from the gradual share-erosion already built into the bear scenario's target.",
+      "cite": "research/MO/factsheet-2026-10-07.md News & sentiment (Reuters 2026-09-23 FDA speed-up, Reuters/TipRanks 2026-09-02 Altria sues FDA, Reuters/WSJ 2026-08-28 Juul2 authorisation); research/MO/2026-10-07.md section 2 and 'Unusual items'.",
+      "annual_probability": {"value": 0.3, "cite": "No analogue in the history is tagged as a regulatory/legal event (mc-inputs.json events_source_url only captures SEC filing-type events: earnings, proxy, AGM, conference); assumption: a materially price-moving regulatory/legal shock (distinct from routine newsflow) is estimated at roughly once every three years given the currently elevated but so-far incremental regulatory activity (3 FDA-related headlines in the 6 weeks to 2026-09-23 per the factsheet), hence 0.3."},
+      "impact": {"value": -0.15, "cite": "Assumption, capped below the ±30% bound for jumps without an analogue (montecarlo max_jump_impact_assumed); set below the worst historical earnings-week move (-12.8%) to reflect a material but not catastrophic regulatory shock, since no stronger historical analogue is available."},
+      "analogue": null,
+      "assumption": "No matching week in the mc-inputs.json analogue table is tagged as a regulatory/legal event; impact and probability are therefore stated assumptions, not analogue-derived, and impact is kept within the ±30% cap for assumed jumps."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

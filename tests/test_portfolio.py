@@ -576,3 +576,13 @@ def test_week_return_spans_seven_days_with_daily_rows():
     assert rt["week"]["from"] == "2026-10-05"
     assert rt["week"]["total"] == pytest.approx(104000 / 100500 - 1)
     assert rt["week"]["spy"] == pytest.approx(105 / 101 - 1)
+
+
+def test_order_never_fills_at_the_open_of_its_own_decision_day(cfg, tmp_path):
+    from portfolio import fill_pending, place_orders
+    sp = tmp_path / "state.json"
+    place_orders([core_buy("AAPL", conv=4)], sp, OpenMarket(cfg), cfg, WATCH, "2026-10-12", port_dir=tmp_path)
+    # decided on Monday after the open: Monday's open is look-ahead; Tuesday's open is the fill
+    mkt = OpenMarket(cfg, opens={"AAPL": [("2026-10-12", 200.0), ("2026-10-13", 205.0)]}, asof="2026-10-14")
+    row = fill_pending(sp, mkt, cfg, WATCH, port_dir=tmp_path)["applied"][0]
+    assert (row["fill_price"], row["fill_close_date"]) == (205.0, "2026-10-13")

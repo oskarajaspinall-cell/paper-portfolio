@@ -1,0 +1,65 @@
+{
+ "ticker": "AOS",
+ "date": "2026-10-07",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "research/AOS/2026-10-07-evaluation.md Decision JSON scenarios.bull.probability"},
+   "probability_evidence": "Every multiple sits below its own 5y minimum (P/FCF 12.0x vs 17.1x floor; FCF yield 8.37%) and FCF conversion of 127.8% TTM keeps funding buybacks (shares -3.71% YoY) even without a re-rating catalyst (factsheet-2026-10-07.md Valuation/Quality/Other); but the upside case requires the China strategic review to actually resolve into a partnership or exit, an unconfirmed, open-ended process tagged [Guessing] in the evaluation's Bull case (note.md §2,§6 '10-Q: strategic review of partnerships and other alternatives'), and the macro overlay finds no stock-specific macro tailwind, treating rate/dollar moves as generic and keeping the overlay at 'context' weight (research/AOS/2026-10-07-macro.md) -- hence the minority 25% weight.",
+   "target_price_12m": {"value": 68.00, "cite": "research/AOS/2026-10-07-evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+   "target_band": {"value": 0.1029, "cite": "Half the spread of implied prices re-rating each multiple to its own 5y median on the 56.90 close (factsheet-2026-10-07.md Price, HI): P/E 15.4x->22.0x = 81.29; EV/EBITDA 10.4x->12.3x = 67.30 (matches the bull basis's own re-rate anchor); EV/Sales 2.1x->2.6x = 70.45; P/B 4.2x->5.3x = 71.80 (factsheet Valuation table, RA). P/FCF (12.0x vs 17.1x/20.9x/27.2x) is excluded: TTM FCF conversion of 127.8% is anomalously elevated versus FY2025's 100.0% (factsheet Quality table, 'falling -16.2pp' trend over FY2021-25 despite the TTM uptick), making its re-rating comparison unreliable. Spread (81.29-67.30=13.99), half (6.99), relative to the 68.00 target = 10.29%; below the 0.22374078380887447 blended residual vol in 2026-10-07-mc-inputs.json."}
+  },
+  "base": {
+   "probability": {"value": 0.45, "cite": "research/AOS/2026-10-07-evaluation.md Decision JSON scenarios.base.probability"},
+   "probability_evidence": "The current 15.4x P/E is already close to the WTS/PNR/LII/MAS peer median (15.8x) and only modestly below it on EV/EBITDA (10.4x vs 11.7x, -11%) (factsheet-2026-10-07.md Valuation), so continuation of today's multiple regime -- with the 8.37% FCF yield and -3.71% YoY buyback-driven share count doing the per-share work (factsheet ST/Valuation) -- is the modal outcome absent a confirmed China resolution or a deeper guidance cut; this is the largest weight (45%) as the status-quo case ahead of Q3 results on Oct 29, 2026.",
+   "target_price_12m": {"value": 60.00, "cite": "research/AOS/2026-10-07-evaluation.md Decision JSON scenarios.base.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Base basis holds multiples 'near the current 15.4x P/E' (research/AOS/2026-10-07-evaluation.md scenarios.base.basis) rather than re-rating toward any multiple's own 5y range; applying that same 'multiple unchanged' assumption to EV/EBITDA (10.4x), EV/Sales (2.1x) and P/B (4.2x) at their current levels yields an identical implied price (the 56.90 close itself, factsheet-2026-10-07.md Price) under all four anchors, so there is no anchor disagreement to band beyond the already-measured residual volatility."}
+  },
+  "bear": {
+   "probability": {"value": 0.30, "cite": "research/AOS/2026-10-07-evaluation.md Decision JSON scenarios.bear.probability"},
+   "probability_evidence": "ROIC has fallen every year from 40.6% (FY2022) to 23.0% TTM and ROCE has rolled over from 31.9% (FY2025) to 24.9% TTM (factsheet-2026-10-07.md Quality); China third-party sales fell 28% YoY with segment margin down to 5.2% from 10.5%, and management's FY2026 guidance explicitly excludes any tariff impact (note.md §2,§6, 10-Q); net debt/EBITDA moved from net cash to 0.63x after the debt-funded Leonard Valve deal while buybacks continue (note.md §5); short interest is elevated at 9.80% of float, consistent with bearish positioning into the Oct 29, 2026 print (factsheet Other/News) -- set at 30%, the largest downside weight given the unresolved China drag and unquantified tariff risk.",
+   "target_price_12m": {"value": 47.00, "cite": "research/AOS/2026-10-07-evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Bear basis holds P/E 'unchanged' at 15.4x while earnings fall (research/AOS/2026-10-07-evaluation.md scenarios.bear.basis); applying the same 'multiple unchanged, metric falls proportionally' assumption to EV/EBITDA (10.4x), EV/Sales (2.1x) and P/B (4.2x) at their current levels yields an identical proportional de-rating under all four anchors, so there is no anchor disagreement to band beyond the already-measured residual volatility."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "2026-10-07-mc-inputs.json factor_news.SPY headlines (2026-10-06) are mixed: S&P 500 at record highs on an AI-led rally and a Goldman Sachs call for a record high before year-end, alongside explicit caution on 'narrow breadth' (Barron's: only four trillion-dollar stocks beating the index) and 'rate chaos' (MarketWatch); no single directional view is supported, so 0. AOS's own thesis is company-specific (North America duopoly, China subsidy unwind), not macro-driven (research/AOS/2026-10-07-macro.md), consistent with no overlay tilt on this factor."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": 0.0, "cite": "2026-10-07-mc-inputs.json factor_news.IEF headlines are mixed: 'Global Bond Markets Sell Off' and '10-Year Bond Yields Hit Highest Level Since 2002' (Barrons/Bloomberg, 2026-10-01) versus 'Treasury yields retreat' and 'US Treasury Rebound Pulls Yields Off Multi-Decade Highs' (ETF Trends/Bloomberg, 2026-10-02/06); no clear forward direction, so 0. The macro overlay (research/AOS/2026-10-07-macro.md) explicitly keeps rising real yields and a firmer dollar as 'generic sector-wide headwinds, not AOS-specific' at 'context' weight, so it sets no directional tilt on IEF for this stock."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Q3 2026 earnings release (Oct 29, 2026) confirms guidance cut / tariff impact",
+   "reason": "Next earnings date is Oct 29, 2026; management already narrowed FY2026 diluted EPS guidance to $3.60-3.75 from $3.60-3.90 and explicitly excluded recently announced tariff changes from that guidance, an unquantified downside flagged in the bear case, against a backdrop of ROIC falling for three straight years to 23.0% TTM.",
+   "cite": "note.md §3,§6 (10-Q); research/AOS/2026-10-07-evaluation.md Bear case; factsheet-2026-10-07.md Price 'Next earnings date: Oct 29, 2026'",
+   "annual_probability": {"value": 0.2, "cite": "The single largest weekly decline in the entire 5-year history (-9.34%, 2026-10-07-mc-inputs.json analogues.largest_falls rank #1) coincided exactly with the Q1 2022 earnings-release week (analogues.event_weeks); among the 19 quarterly earnings_release weeks in that table (2021-2026), only this one reached that magnitude, implying roughly a 1-in-5-year (0.2 annual) frequency for an earnings-driven shock of this size."},
+   "impact": {"value": -0.0934, "cite": "Equal to its analogue's observed move."},
+   "analogue": {"week": "2022-04-25", "move": -0.0934},
+   "assumption": null
+  },
+  {
+   "name": "Tariff cost impact (newly announced trade tariffs, excluded from FY2026 guidance)",
+   "reason": "Management states FY2026 guidance excludes any impact from recently announced tariff changes, an explicit, unquantified downside risk named in the 10-Q.",
+   "cite": "note.md §6 'Management also flagged that FY2026 guidance excludes any impact from recently announced tariff changes, an unquantified downside risk' (10-Q: https://www.sec.gov/Archives/edgar/data/91142/000009114226000098/aos-20260630.htm)",
+   "annual_probability": {"value": 0.5, "cite": "FY2026 guidance (ending within this 12-month horizon) already excludes the tariff impact, meaning it is likely to be clarified or realised in a guidance update within the year; no historical analogue exists for a tariff-specific weekly move in 2026-10-07-mc-inputs.json's tables, so this is a bounded judgment tied to the guidance timing, not a frequency count."},
+   "impact": {"value": -0.10, "cite": "No magnitude is given in the research beyond 'unquantified downside risk'; bounded modest assumption, below the max_jump_impact_assumed 0.30 cap for jumps without a historical analogue."},
+   "analogue": null,
+   "assumption": "No matching week in mc-inputs.json's largest_falls/largest_rises/event_weeks tables for a tariff-specific announcement; impact is a bounded assumption below the 0.30 cap for assumed (non-analogue) jumps."
+  },
+  {
+   "name": "China business strategic review outcome (partnership or exit announcement)",
+   "reason": "Management is running a strategic review of 'partnerships and other alternatives' for the China business after third-party sales fell 28% YoY and segment margin compressed to 5.2% from 10.5%; the bull case frames a resolution as the catalyst for the market to value the North America business on its own merits.",
+   "cite": "note.md §2 (10-Q, 'strategic review of partnerships and other alternatives'); research/AOS/2026-10-07-evaluation.md Bull case 'If China is resolved through a partnership or exit, the market may value the higher-quality North American business on its own merits [Guessing]'",
+   "annual_probability": {"value": 0.3, "cite": "An active but open-ended review with no stated resolution timeline named in the 10-Q; set below even odds given the lack of a committed timeline within the 12-month horizon."},
+   "impact": {"value": 0.12, "cite": "No quantified re-rating target is given for this standalone event in the research (the bull scenario's 68.00 target already prices a broader EV/EBITDA re-rate, captured in target_band, not here); bounded modest positive assumption below the 0.30 cap, reflecting the bull case's qualitative framing without duplicating the bull scenario's full target."},
+   "analogue": null,
+   "assumption": "No matching week in mc-inputs.json's largest_falls/largest_rises/event_weeks tables for a China-specific strategic-transaction announcement; impact is a bounded assumption, not an observed analogue."
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": {"value": -0.015, "cite": "factsheet-2026-10-07.md Price table: price -4.9% vs 50-day MA and -11.4% vs 200-day MA, 3-month momentum -8.9% (2026-07-06 to 2026-10-06), 6-month momentum -11.4%, 50-day MA itself -6.8% below the 200-day MA, relative strength vs SPY -12.6pp/3m -- a persistent short-term downtrend (RSI 14-day 37.5, not deeply oversold); modest negative tilt applied only to the 3m horizon per house rule."}
+}

@@ -1,0 +1,239 @@
+{
+ "ticker": "EQT",
+ "date": "2026-10-07",
+ "params_file": "2026-10-07-mc-params.json",
+ "inputs_file": "2026-10-07-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 52.47,
+  "close_date": "2026-10-06",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/eqt/history/"
+ },
+ "target_returns": {
+  "bull": 0.400800457404231,
+  "base": 0.05774728416237851,
+  "bear": -0.1423670668953687
+ },
+ "expected_12m": 0.06632361349342483,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.5156320809911187,
+   "IEF": -0.4302203333479353
+  },
+  "r2": 0.051735583728543366,
+  "residual_vol": {
+   "52w": 0.3201115817695031,
+   "156w": 0.3295613887279191,
+   "blended": 0.3248364852487111,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.2,
+    "target_price_12m": 73.5,
+    "target_band": 0.1804
+   },
+   "base": {
+    "probability": 0.5,
+    "target_price_12m": 55.5,
+    "target_band": 0.239
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 45.0,
+    "target_band": 0.0137
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.5156320809911187,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": -0.4302203333479353,
+    "move": 0.0,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Quarterly earnings beat/miss shock (gas-price driven)",
+    "p": 0.2,
+    "impact": -0.1183,
+    "analogue": {
+     "week": "2025-07-21",
+     "move": -0.1183
+    },
+    "cited": true
+   },
+   {
+    "name": "Extreme Appalachian gas-price / basis-differential shock",
+    "p": 0.2,
+    "impact": -0.2506,
+    "analogue": {
+     "week": "2022-06-13",
+     "move": -0.2506
+    },
+    "cited": true
+   },
+   {
+    "name": "Equity-funded M&A / dilution surprise",
+    "p": 0.4,
+    "impact": -0.109,
+    "analogue": {
+     "week": "2024-03-11",
+     "move": -0.109
+    },
+    "cited": true
+   }
+  ],
+  "tilt": 0.0
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.008354599708913472,
+   "median": 0.010158468614749897,
+   "p5": -0.25049970858928033,
+   "p25": -0.08756453709442313,
+   "p50": 0.010158468614749897,
+   "p75": 0.10675645711047727,
+   "p95": 0.2529743487299273,
+   "prob_loss": 0.4686,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.0002544146739176803,
+    "jumps": -0.03977464079516968,
+    "noise": 0.0005361084905739639,
+    "scenario": 0.03589752278866078
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.021183376727603665,
+   "median": 0.00836319502416673,
+   "p5": -0.3495853965231172,
+   "p25": -0.143572677184376,
+   "p50": 0.00836319502416673,
+   "p75": 0.17239653531880578,
+   "p95": 0.4384636474773889,
+   "prob_loss": 0.4867,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.0005615515425746581,
+    "jumps": -0.07841943871053345,
+    "noise": 5.6323782835252164e-05,
+    "scenario": 0.07179504557732155
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.0663236134934249,
+   "median": 0.0010118870503820574,
+   "p5": -0.4884224623691263,
+   "p25": -0.2360750327750868,
+   "p50": 0.0010118870503820574,
+   "p75": 0.2957383778363184,
+   "p95": 0.8535660898005414,
+   "prob_loss": 0.4994,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.0001758893570242308,
+    "jumps": -0.15621789680785736,
+    "noise": 0.002463354395142039,
+    "scenario": 0.1435900911546431
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.0663236134934249,
+   "prob_loss_12m": 0.4994
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.30000000000000004,
+    "base": 0.5,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.1206403659233848,
+   "prob_loss_12m": 0.4426
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.1,
+    "base": 0.5,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.012006861063464885,
+   "prob_loss_12m": 0.5492
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.06632361349342483,
+   "prob_loss_12m": 0.4928
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.06632361349342498,
+   "prob_loss_12m": 0.527
+  }
+ ]
+}

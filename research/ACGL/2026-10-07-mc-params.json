@@ -1,0 +1,47 @@
+{
+  "ticker": "ACGL",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.27, "cite": "research/ACGL/2026-10-07-evaluation.md Decision JSON scenarios.bull.probability = 0.27"},
+      "probability_evidence": "Shares outstanding fell 5.02% YoY on continued heavy buybacks ($1.9bn repurchased in H1-26, $2.2bn remaining of a $3.0bn board authorization) while FCF conversion stays at 129.0% TTM; Reinsurance combined ratio improved to 76.6% YTD (from 78.5%) and the Mortgage segment is a high-margin offset to Insurance-segment softness (research/ACGL/2026-10-07.md §5 and §2; evaluation Bull case). Probability is raised slightly from a symmetric base per the macro overlay's small toward-bull tilt: higher real yields (DFII10 2.95%, +71bp/3m) lift reinvestment income on the float (research/ACGL/2026-10-07-macro.md macro_tilt).",
+      "target_price_12m": {"value": 122.0, "cite": "research/ACGL/2026-10-07-evaluation.md Decision JSON scenarios.bull.target_price_12m = 122.0"},
+      "target_band": {"value": 0.0524, "cite": "Applying the bull case's 5y-max re-rating uniformly to each per-share equity anchor from the 94.82 USD close (factsheet Valuation table): P/B to 5y-max 1.8x on BVPS (94.82/1.4=67.73) -> 121.91 (matches the evaluation's 122 target basis); P/FCF to 5y-max 6.1x on FCF/share (94.82/5.3=17.89) -> 109.13. P/E and EV/EBITDA/EV/Sales excluded as cross-check anchors: the evaluation's Bear case states ACGL's low P/E 'looks cheap only because TTM earnings include unusually strong underwriting' (peak-cycle distortion), and EV/EBITDA, EV/Sales are not standard anchors for a (re)insurer whose profit is underwriting margin plus net investment income on float, not EBITDA/Sales (research/ACGL/2026-10-07.md §1). Half the spread (121.91-109.13)/2=6.39 relative to the 122.0 target = 5.24%, below the blended residual vol (20.9%, mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/ACGL/2026-10-07-evaluation.md Decision JSON scenarios.base.probability = 0.45"},
+      "probability_evidence": "The Insurance segment combined ratio worsened to 98.5% in Q2-26 from 93.4% a year earlier (97.5% YTD vs 93.1%) as property pricing softens, while ROE holds near 19.9% TTM -- the modal outcome of a capped re-rating absent either a cycle snap-back or confirmed underwriting losses (research/ACGL/2026-10-07.md §2; evaluation Base case basis).",
+      "target_price_12m": {"value": 102.0, "cite": "research/ACGL/2026-10-07-evaluation.md Decision JSON scenarios.base.target_price_12m = 102.0"},
+      "target_band": {"value": 0.042, "cite": "Applying the base case's 5y-median re-rating uniformly to each per-share equity anchor from 94.82 USD: P/B to 5y-median 1.5x on BVPS 67.73 -> 101.59 (matches the evaluation's 102 target basis); P/FCF to 5y-median 5.2x on FCF/share 17.89 -> 93.03. P/E and EV-based multiples excluded for the same peak-cycle-distortion and insurer-business-model reasons as the bull case (research/ACGL/2026-10-07-evaluation.md Bear case; research/ACGL/2026-10-07.md §1). Half the spread (101.59-93.03)/2=4.28 relative to the 102.0 target = 4.20%, below the blended residual vol (20.9%, mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.28, "cite": "research/ACGL/2026-10-07-evaluation.md Decision JSON scenarios.bear.probability = 0.28"},
+      "probability_evidence": "P/B of 1.4x sits near its 5y median (1.5x) and only 5% below peers despite rising returns -- on book value, 'the right anchor for an insurer,' ACGL is not cheap; ROE has already eased from 28.4% (FY23) to 19.9% TTM and a soft market would push it lower still; the stock has lagged SPY by 20.4pp over 6 months, and the business has no moat beyond underwriting skill and capital (research/ACGL/2026-10-07-evaluation.md Bear case). Probability is trimmed slightly from a symmetric base per the macro overlay's small toward-bull tilt (research/ACGL/2026-10-07-macro.md macro_tilt).",
+      "target_price_12m": {"value": 81.0, "cite": "research/ACGL/2026-10-07-evaluation.md Decision JSON scenarios.bear.target_price_12m = 81.0"},
+      "target_band": {"value": 0.0452, "cite": "Bear case basis: P/E to 5y-min 6.3x on EPS (94.82/7.4=12.81) -> 80.73 (matches the evaluation's 81 target basis). Cross-check anchors at their own 5y-min: P/B to 1.3x on BVPS 67.73 -> 88.05; P/FCF to 4.8x on FCF/share 17.89 -> 85.88. EV-based multiples excluded as non-standard anchors for an insurer (research/ACGL/2026-10-07.md §1). Half the spread (88.05-80.73)/2=3.66 relative to the 81.0 target = 4.52%, below the blended residual vol (20.9%, mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news for the US equity factor (research/ACGL/2026-10-07-mc-inputs.json factor_news.SPY): record-high headlines led by a narrow group of megacaps (Bloomberg, CNBC, Invezz, MarketWatch, 2026-10-06) are offset by the same day's WSJ 'hits a new record high, powered by tech-and not much else' and Barron's 'Only Four Trillion-Dollar Stocks Are Beating the S&P 500' and MarketWatch 'facing rate chaos and narrow breadth' flagging concentration/valuation risk; no net direction is used, per house rule for mixed news."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "research/ACGL/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.02, "cite": "Macro overlay (research/ACGL/2026-10-07-macro.md) dominant_chain 'real yields -> reinvestment yield on investment float -> net investment income / AFS bond marks', macro_bull 'real yields stay elevated or rise further', macro_tilt {direction: 'toward bull', size: 'small'} for ACGL via the NII channel; this implies yields are more likely to stay elevated than reverse, a modest headwind to bond (IEF) prices. Kept small given the overlay's 'secondary' weight and 'small' tilt size (vs. a 'moderate' tilt elsewhere), tempered further by mixed factor_news.IEF in mc-inputs.json (bond-rout headlines from Barron's/WSJ/Bloomberg, 2026-10-01/05, vs. the same week's rebound/easing headlines from The Guardian/Bloomberg/ETF Trends on a weak jobs report and cooler PCE, 2026-10-02)."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "research/ACGL/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings release (second consecutive weak Insurance-segment print)",
+      "reason": "Q3 2026 results are due Oct 27, 2026, inside the 12-month horizon; the bear case flags that results 'could show a second weak Insurance quarter' after the segment's combined ratio already worsened to 98.5% in Q2-26 from 93.4%, and the evaluation's own trigger #4 is explicitly keyed to this print ('Insurance segment combined ratio exceeds 100% for two consecutive quarters').",
+      "cite": "research/ACGL/2026-10-07-evaluation.md Bear case and Decision JSON triggers[3]; research/ACGL/factsheet-2026-10-07.md Price section 'Next earnings date: Oct 27, 2026' and News & sentiment 'Arch Capital Group Ltd. to Report 2026 Third Quarter Results on October 27' (Business Wire, 2026-09-28).",
+      "annual_probability": {"value": 0.76, "cite": "research/ACGL/2026-10-07-mc-inputs.json analogues.event_weeks (earnings_release entries): 6 of the last 20 quarterly earnings weeks (2021-10-25 to 2026-07-27) moved >=5% in magnitude (2022-10-24 +17.52%, 2023-02-13 +5.59%, 2023-07-24 -6.10%, 2023-10-30 +5.15%, 2024-10-28 -8.81%, 2025-02-10 -5.67%), a 30% per-quarter base rate; annual probability of at least one such quarter = 1-(1-0.30)^4 = 0.76."},
+      "impact": {"value": -0.0881, "cite": "research/ACGL/2026-10-07-mc-inputs.json analogues.largest_falls / event_weeks: Q3 2024 earnings week 2024-10-28, move -0.0881, the worst earnings-tagged week in the 5y history, used as the earnings-miss tail matching the bear case's 'second weak Insurance quarter' risk."},
+      "analogue": {"week": "2024-10-28", "move": -0.0881},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

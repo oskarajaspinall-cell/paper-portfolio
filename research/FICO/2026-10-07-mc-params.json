@@ -1,0 +1,56 @@
+{
+  "ticker": "FICO",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "research/FICO/2026-10-07-evaluation.md Decision JSON scenarios.bull.probability = 0.2"},
+      "probability_evidence": "Under 12 CFR Part 1254 the FHFA must validate/approve any replacement score before it can be used for GSE mortgages, making VantageScore displacement slow and procedural, and UWM (the largest mortgage lender) just reaffirmed FICO Scores on all credit pulls on 2026-10-06 (research/FICO/2026-10-07.md §2 'What would prove this wrong'; evaluation Bull case; factsheet News & sentiment UWM/Business Wire headlines 2026-10-06).",
+      "target_price_12m": {"value": 990, "cite": "research/FICO/2026-10-07-evaluation.md Decision JSON scenarios.bull.target_price_12m = 990"},
+      "target_band": {"value": 0.0244, "cite": "Applying the bull case's 5-year-minimum re-rating uniformly to each valuation anchor from the current 695.46 USD close (factsheet Valuation table): P/E to 27.9x -> 989.97, P/FCF to 20.7x -> 953.38, EV/EBITDA to 21.8x -> 941.68. Half the spread (989.97-941.68)/2=24.14 relative to the 990 target = 2.4%."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/FICO/2026-10-07-evaluation.md Decision JSON scenarios.base.probability = 0.45"},
+      "probability_evidence": "Evaluation states the probability was cut from a symmetric split by the macro overlay's moderate bear tilt (research/FICO/2026-10-07-macro.md macro_tilt: 'moderate toward bear' because real/nominal yields have risen over the quarter and are reinforcing the regulatory overhang via depressed mortgage origination and a higher discount rate).",
+      "target_price_12m": {"value": 705, "cite": "research/FICO/2026-10-07-evaluation.md Decision JSON scenarios.base.target_price_12m = 705"},
+      "target_band": {"value": 0.1348, "cite": "Applying the base case's peer-median-convergence benchmark uniformly to each valuation anchor from 695.46 USD (factsheet Valuation table peer-median column): P/E to peer median 25.2x -> 894.16, P/FCF to peer median 19.2x -> 884.29, EV/EBITDA to peer median 16.3x -> 704.10 (matches the 705 target basis). Half the spread (894.16-704.10)/2=95.03 relative to the 705 target = 13.5%."}
+    },
+    "bear": {
+      "probability": {"value": 0.35, "cite": "research/FICO/2026-10-07-evaluation.md Decision JSON scenarios.bear.probability = 0.35"},
+      "probability_evidence": "Evaluation states the probability was raised by the overlay's moderate bear tilt from higher real yields and weak origination (research/FICO/2026-10-07-macro.md macro_bear chain), alongside 9.28% short interest up 8.0% month-on-month showing material bearish positioning (factsheet News & sentiment) and net debt/EBITDA risen to 4.23x from 2.60x (factsheet Quality table).",
+      "target_price_12m": {"value": 505, "cite": "research/FICO/2026-10-07-evaluation.md Decision JSON scenarios.bear.target_price_12m = 505"},
+      "target_band": {"value": 0.0719, "cite": "Applying the bear case's FY2023-margin-reversion benchmark at each anchor's constant current multiple from 695.46 USD (factsheet Quality table margins, Valuation table multiples): P/FCF constant 15.1x with FCF margin reverting 41.6%->30.3% -> 506.55 (matches the 505 target basis); P/E constant 19.6x with net margin reverting 34.1%->28.4% -> 579.21; EV/EBITDA constant 16.1x with operating margin reverting 52.1%->42.3% (EBITDA proxy) -> 564.64. Half the spread (579.21-506.55)/2=36.33 relative to the 505 target = 7.2%."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news for the US equity factor (research/FICO/2026-10-07-mc-inputs.json factor_news.SPY): record-high headlines (Bloomberg, CNBC, Invezz, MarketWatch, 2026-10-06) are offset by WSJ's same-day 'hits a new record high, powered by tech-and not much else' and Barrons' 'only four trillion-dollar stocks are beating the S&P 500' flagging narrow breadth/concentration risk; no net direction is used, per house rule for mixed news."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "research/FICO/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "Macro overlay dominant_chain and macro_bear (research/FICO/2026-10-07-macro.md): 10y Treasury yield (DGS10) 5.31% (+0.83pp/3m) and 10y real yield (DFII10) 2.95% (+0.71pp/3m), tilt 'moderate toward bear' on rates staying elevated/rising further; corroborated by factor_news.IEF (research/FICO/2026-10-07-mc-inputs.json): Barrons 'Global Bond Markets Sell Off', WSJ 'The Bond Rout Is Deepening', Bloomberg '10-Year Bond Yields Hit Highest Level Since 2002' (2026-10-01/05). Rising yields imply IEF (bond price) falls; kept modest given the overlay is 'secondary' weight and 'moderate' not large tilt size."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "research/FICO/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "FHFA mortgage-pricing simplification / VantageScore displacement shock",
+      "reason": "The FHFA's 2026-10-01 move to simplify mortgage pricing goes directly at the mortgage-Scores toll-booth and drove a >20% single-week drop; the bureaus that distribute FICO Score jointly own competing VantageScore, so a formal VantageScore adoption decision is a live, unresolved binary risk.",
+      "cite": "research/FICO/2026-10-07.md §2 ('the market reacted to an FHFA move... intraday drop of >20%') and §6 'Unusual items'; evaluation Bear case and trigger #4 (FHFA/GSE formal VantageScore adoption decision).",
+      "annual_probability": {"value": 0.6, "cite": "research/FICO/2026-10-07-mc-inputs.json analogues.largest_falls: 3 weekly moves of magnitude >=20% in 5 years of history (2026-09-28: -0.2339; 2026-03-09: -0.2336; 2025-05-19: -0.2305) => ~0.6/year; the most recent (week of 2026-09-28) coincides with the FHFA shock dated 2026-10-01."},
+      "impact": {"value": -0.2339, "cite": "research/FICO/2026-10-07-mc-inputs.json analogues.largest_falls, week 2026-09-28, move -0.2339 (the week containing the 2026-10-01 FHFA shock described in the note)."},
+      "analogue": {"week": "2026-09-28", "move": -0.2339},
+      "assumption": null
+    },
+    {
+      "name": "Quarterly earnings reaction (next: 2026-11-04)",
+      "reason": "Next earnings (Nov 4, 2026) is the next data point the evaluator flags as the test of how much Scores economics have changed since the FHFA shock; prior quarterly earnings weeks show material two-way moves.",
+      "cite": "research/FICO/factsheet-2026-10-07.md Price table 'Next earnings date: Nov 4, 2026'; evaluation rationale ('Cash is preferred until the FHFA outcome and the Nov 4 results show how much Scores economics have changed').",
+      "annual_probability": {"value": 0.76, "cite": "research/FICO/2026-10-07-mc-inputs.json analogues.event_weeks (earnings_release entries): 6 of the 20 quarterly earnings weeks (2021-11-08 to 2026-07-27) moved >=7% in magnitude (2022-01-24 +15.48%, 2022-11-07 +39.56%, 2023-11-06 +7.12%, 2024-11-04 +17.26%, 2025-07-28 -9.88%, 2026-07-27 -9.25%), a 30% per-quarter base rate; P(at least one such quarter in 4 quarters/12m) = 1-(1-0.30)^4 = 0.76."},
+      "impact": {"value": -0.0925, "cite": "research/FICO/2026-10-07-mc-inputs.json analogues.event_weeks, Q3 2026 earnings release, week 2026-07-27, move -0.0925 (most recent quarterly earnings-week reaction, within the >=7% threshold used for annual_probability)."},
+      "analogue": {"week": "2026-07-27", "move": -0.0925},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

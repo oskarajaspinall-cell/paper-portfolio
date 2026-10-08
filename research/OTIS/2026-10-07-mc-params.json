@@ -1,0 +1,56 @@
+{
+ "ticker": "OTIS",
+ "date": "2026-10-07",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bull.probability"},
+   "probability_evidence": "ROIC 65.3% TTM and ROCE 84.2% TTM, both still rising over 5y, operating margin 16.6% TTM near its 5y high, and TTM FCF margin (11.5%) actually above FY2025 (10.0%) despite the guidance cut; management cites modernization backlog +26% YoY and AI-driven pricing (evaluation.md Bull case; note.md §2-3, Q2 2026 transcript); low beta 0.86 and Altman Z 3.11 bound the downside if this plays out (fact sheet Other) -- tempered to 25% by the macro overlay's small bear tilt (research/OTIS/2026-10-07-macro.md).",
+   "target_price_12m": {"value": 87.0, "cite": "evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+   "target_band": {"value": 0.0861, "cite": "Bull basis re-rates P/E to its 5y min 22.5x (fact sheet Valuation, RA); applying the same proportional re-rating to the other two valuation anchors' own 5y mins (EV/EBITDA 16.4x, P/FCF 22.6x) on the 66.45 close (fact sheet Price, HI) gives implied prices of 87.45 / 86.49 / 101.47; half the spread (7.49) relative to the 87.0 target = 8.61%."}
+  },
+  "base": {
+   "probability": {"value": 0.5, "cite": "evaluation.md Decision JSON scenarios.base.probability"},
+   "probability_evidence": "All four current multiples (P/E 17.1x, EV/EBITDA 12.6x, EV/Sales 2.2x, P/FCF 14.8x) already sit below their own 5y minimums and 16-39% below the JCI/CARR/HON/LII peer median (fact sheet Valuation), so continuation of the current depressed multiple regime plus the 6.77% FCF yield funding buybacks (-2.55% shares YoY, fact sheet ST) is the modal outcome absent a re-rating catalyst or a confirmed structural margin break.",
+   "target_price_12m": {"value": 73.0, "cite": "evaluation.md Decision JSON scenarios.base.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Base basis holds the P/E near its current 17.1x (fact sheet RA; evaluation.md Decision JSON scenarios.base.basis) rather than re-rating toward any multiple's own 5y range; applying that same 'multiple unchanged' assumption to EV/EBITDA (12.6x) and P/FCF (14.8x) yields an identical implied price under all three anchors (no re-rating gap between them), so there is no anchor disagreement to band beyond the already-measured residual volatility."}
+  },
+  "bear": {
+   "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bear.probability"},
+   "probability_evidence": "Q2 2026 service operating margin fell 170bp on labour/material inflation, forcing an FY2026 operating-profit guidance cut, while net debt/EBITDA has risen to 3.04x TTM from 2.62x FY2021 and FCF conversion fell from 127.9% to 112.9% (note.md §2; fact sheet RA/CF/IS); CEO Judy Marks retires with no named successor until H1 2027 and Q3 results (Oct 28, 2026) land with momentum still negative (-27.4% 12m, fact sheet Price/News); the macro overlay adds a small bear tilt from rising real yields, a stronger dollar and wider HY spreads (research/OTIS/2026-10-07-macro.md).",
+   "target_price_12m": {"value": 56.0, "cite": "evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Bear basis holds EV/EBITDA 'near' its current 12.6x (fact sheet RA; evaluation.md Decision JSON scenarios.bear.basis) rather than further de-rating any multiple below the already-depressed current level; applying the same 'multiple unchanged, metric falls' assumption to P/E (17.1x) and P/FCF (14.8x) yields an identical implied price under all three anchors, so there is no anchor disagreement to band beyond the already-measured residual volatility."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines (2026-10-06) are mixed: S&P 500 at record highs on an AI-led rally and a Goldman Sachs forecast for a record high before year-end, but alongside explicit caution on 'narrow breadth' (Barron's: only four trillion-dollar stocks beating the index, several overbought) and 'rate chaos' (MarketWatch); no single directional view is supported, so 0."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.03, "cite": "research/OTIS/2026-10-07-macro.md: 10y real yield (DFII10) 2.95%, +0.52pp in 1m and +0.71pp in 3m, and HY spread (BAMLH0A0HYM2) 3.12%, +0.44pp in 1m, both still trending up as of the FRED facts cited; the overlay's dominant_chain names 'US real yields & credit spreads -> discount rate / refinancing cost' and its macro_tilt is 'small, toward bear'; a continuing rise in yields is a modest headwind to 7-10y Treasury prices (IEF), kept modest given mc-inputs.json factor_news.IEF headlines are themselves mixed (bond-rout headlines alongside 'yields eased' / 'Treasury rebound' headlines)."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Q3 2026 earnings / service-margin confirmation (Oct 28, 2026)",
+   "reason": "Q2 2026 service margin fell 170bp on labour and aging-equipment material cost inflation, forcing an FY2026 operating-profit guidance cut; Q3 2026 results on Oct 28, 2026 are the next catalyst that could confirm the squeeze is structural (bear) or transitory (bull), and the evaluation's bear case explicitly flags 'Q3 results land on Oct 28 with momentum still negative'.",
+   "cite": "note.md §2 (Q2 2026 transcript, service margin -170bp, guidance cut); evaluation.md Bear case; fact sheet Price 'Next earnings date: Oct 28, 2026'",
+   "annual_probability": {"value": 0.25, "cite": "Quarterly earnings releases occur 4x/year; modelled as one representative discrete earnings-week shock per year (1/4 of the annual earnings calendar), consistent with mc_inputs.json event_weeks tagging each quarterly earnings_release week."},
+   "impact": {"value": -0.097, "cite": "Equal to its analogue's observed move."},
+   "analogue": {"week": "2025-07-21", "move": -0.097},
+   "assumption": null
+  },
+  {
+   "name": "CEO succession outcome (successor named, expected H1 2027)",
+   "reason": "CEO Judy Marks announced her retirement; a successor is expected to be named in H1 2027, which the note flags as 'a governance watch item' -- within the 12-month horizon from this valuation date.",
+   "cite": "note.md §6 'CEO Judy Marks announced retirement; a successor is expected... This is a governance watch item'; fact sheet News & sentiment headline 2026-09-15 'Otis Implements Long-Standing CEO Succession Plan'",
+   "annual_probability": {"value": 0.5, "cite": "The successor announcement itself is expected within the 12m horizon (H1 2027), but whether it produces a market-moving single-week reaction (vs. a non-event) is uncertain; assumed at even odds given no historical precedent for this specific stock to calibrate frequency from."},
+   "impact": {"value": -0.08, "cite": "No historical analogue for a CEO-succession week exists in this stock's price history (not in mc-inputs.json analogues); assumption bounded well within the ±30% cap for assumed (non-analogue) jumps, reflecting the note's characterisation of this as a governance watch item rather than an immediate operational risk."},
+   "analogue": null,
+   "assumption": "No matching week in mc-inputs.json's largest_falls/largest_rises/event_weeks tables for a CEO transition event; impact is a bounded assumption, not an observed analogue."
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": {"value": -0.015, "cite": "fact sheet Price: price -5.3% below the 50-day MA and -14.6% below the 200-day MA, 3-month momentum -9.6% (2026-07-06 to 2026-10-06), 6-month momentum -14.6%, with the 50-day MA itself -9.9% below the 200-day MA -- a persistent short-term downtrend; modest negative tilt applied only to the 3m horizon per house rule."}
+}

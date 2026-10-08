@@ -1,0 +1,917 @@
+{
+ "ticker": "HIG",
+ "asof": "2026-10-07",
+ "market": "US",
+ "factors": [
+  {
+   "ticker": "SPY",
+   "etf": true,
+   "name": "US equity market",
+   "source_url": "https://stockanalysis.com/api/symbol/e/spy/history?range=5Y&period=Weekly"
+  },
+  {
+   "ticker": "IEF",
+   "etf": true,
+   "name": "US 7-10y Treasuries (rates)",
+   "source_url": "https://stockanalysis.com/api/symbol/e/ief/history?range=5Y&period=Weekly"
+  }
+ ],
+ "stock_source_url": "https://stockanalysis.com/api/symbol/s/hig/history?range=5Y&period=Weekly",
+ "events_source_url": "https://stockanalysis.com/stocks/hig/filings/",
+ "regression": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "alpha_weekly": 0.002290003395783278,
+  "betas": {
+   "SPY": 0.3737946036860458,
+   "IEF": 0.3956970377441943
+  },
+  "r2": 0.09403251371523025,
+  "residual_vol": {
+   "52w": 0.21486810423349378,
+   "156w": 0.1890714624183062,
+   "blended": 0.2019697833259,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  },
+  "stock_vol": 0.19864135885545442,
+  "factor_stats": {
+   "SPY": {
+    "mean_annual": 0.20647555436180595,
+    "vol_annual": 0.1431154014991791
+   },
+   "IEF": {
+    "mean_annual": 0.03339359707629187,
+    "vol_annual": 0.06460381100458489
+   }
+  },
+  "correlation": {
+   "factors": [
+    "SPY",
+    "IEF"
+   ],
+   "matrix": [
+    [
+     1.0,
+     0.071325
+    ],
+    [
+     0.071325,
+     1.0
+    ]
+   ],
+   "psd": true
+  }
+ },
+ "analogues": {
+  "largest_falls": [
+   {
+    "week": "2023-03-06",
+    "move": -0.0943
+   },
+   {
+    "week": "2024-10-21",
+    "move": -0.0798
+   },
+   {
+    "week": "2025-03-31",
+    "move": -0.0708
+   },
+   {
+    "week": "2026-05-26",
+    "move": -0.0654
+   },
+   {
+    "week": "2023-03-13",
+    "move": -0.0638
+   },
+   {
+    "week": "2024-12-09",
+    "move": -0.0624
+   },
+   {
+    "week": "2026-09-21",
+    "move": -0.0581
+   },
+   {
+    "week": "2022-06-13",
+    "move": -0.0576
+   },
+   {
+    "week": "2024-04-08",
+    "move": -0.0529
+   },
+   {
+    "week": "2022-09-19",
+    "move": -0.0525
+   }
+  ],
+  "largest_rises": [
+   {
+    "week": "2022-05-23",
+    "move": 0.0885
+   },
+   {
+    "week": "2024-07-22",
+    "move": 0.0843
+   },
+   {
+    "week": "2022-08-08",
+    "move": 0.0748
+   },
+   {
+    "week": "2022-10-24",
+    "move": 0.074
+   },
+   {
+    "week": "2024-11-04",
+    "move": 0.0667
+   },
+   {
+    "week": "2025-02-24",
+    "move": 0.0614
+   },
+   {
+    "week": "2022-03-14",
+    "move": 0.0583
+   },
+   {
+    "week": "2025-04-28",
+    "move": 0.0581
+   },
+   {
+    "week": "2026-02-02",
+    "move": 0.0555
+   },
+   {
+    "week": "2023-03-27",
+    "move": 0.054
+   }
+  ],
+  "event_weeks": [
+   {
+    "event_date": "2021-10-29",
+    "event": "Q3 2021",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2021-10-25",
+    "move": -0.0158
+   },
+   {
+    "event_date": "2021-11-16",
+    "event": "Investor Day 2021",
+    "types": [
+     "slides"
+    ],
+    "week": "2021-11-15",
+    "move": -0.0289
+   },
+   {
+    "event_date": "2022-02-04",
+    "event": "Q4 2021",
+    "types": [
+     "annual_report",
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2022-01-31",
+    "move": -0.0096
+   },
+   {
+    "event_date": "2022-04-08",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2022-04-04",
+    "move": 0.0219
+   },
+   {
+    "event_date": "2022-04-08",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2022-04-04",
+    "move": 0.0219
+   },
+   {
+    "event_date": "2022-04-29",
+    "event": "Q1 2022",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2022-04-25",
+    "move": -0.0221
+   },
+   {
+    "event_date": "2022-05-02",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2022-05-02",
+    "move": 0.0312
+   },
+   {
+    "event_date": "2022-07-29",
+    "event": "Q2 2022",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2022-07-25",
+    "move": 0.0108
+   },
+   {
+    "event_date": "2022-10-28",
+    "event": "Q3 2022",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2022-10-24",
+    "move": 0.074
+   },
+   {
+    "event_date": "2023-02-03",
+    "event": "Q4 2022",
+    "types": [
+     "annual_report",
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2023-01-30",
+    "move": -0.0243
+   },
+   {
+    "event_date": "2023-04-06",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2023-04-03",
+    "move": 0.0024
+   },
+   {
+    "event_date": "2023-04-06",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2023-04-03",
+    "move": 0.0024
+   },
+   {
+    "event_date": "2023-04-28",
+    "event": "Q1 2023",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2023-04-24",
+    "move": 0.0209
+   },
+   {
+    "event_date": "2023-04-28",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2023-04-24",
+    "move": 0.0209
+   },
+   {
+    "event_date": "2023-07-28",
+    "event": "Q2 2023",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2023-07-24",
+    "move": -0.0259
+   },
+   {
+    "event_date": "2023-10-27",
+    "event": "Q3 2023",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2023-10-23",
+    "move": 0.0003
+   },
+   {
+    "event_date": "2024-02-02",
+    "event": "Q4 2023",
+    "types": [
+     "annual_report",
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2024-01-29",
+    "move": 0.0404
+   },
+   {
+    "event_date": "2024-03-26",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2024-03-25",
+    "move": 0.0289
+   },
+   {
+    "event_date": "2024-04-05",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2024-04-01",
+    "move": 0.0018
+   },
+   {
+    "event_date": "2024-04-05",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2024-04-01",
+    "move": 0.0018
+   },
+   {
+    "event_date": "2024-04-26",
+    "event": "Q1 2024",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2024-04-22",
+    "move": -0.0369
+   },
+   {
+    "event_date": "2024-07-26",
+    "event": "Q2 2024",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2024-07-22",
+    "move": 0.0843
+   },
+   {
+    "event_date": "2024-10-25",
+    "event": "Q3 2024",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2024-10-21",
+    "move": -0.0798
+   },
+   {
+    "event_date": "2025-01-31",
+    "event": "Q4 2024",
+    "types": [
+     "annual_report",
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2025-01-27",
+    "move": 0.0005
+   },
+   {
+    "event_date": "2025-04-10",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2025-04-07",
+    "move": 0.0218
+   },
+   {
+    "event_date": "2025-04-10",
+    "event": "Proxy Filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2025-04-07",
+    "move": 0.0218
+   },
+   {
+    "event_date": "2025-04-25",
+    "event": "Q1 2025",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2025-04-21",
+    "move": 0.0081
+   },
+   {
+    "event_date": "2025-07-29",
+    "event": "Q2 2025",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2025-07-28",
+    "move": -0.0028
+   },
+   {
+    "event_date": "2025-10-28",
+    "event": "Q3 2025",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2025-10-27",
+    "move": -0.0074
+   },
+   {
+    "event_date": "2026-01-30",
+    "event": "Q4 2025",
+    "types": [
+     "annual_report",
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2026-01-26",
+    "move": 0.0501
+   },
+   {
+    "event_date": "2026-03-30",
+    "event": "Corporate presentation",
+    "types": [
+     "slides"
+    ],
+    "week": "2026-03-30",
+    "move": 0.0292
+   },
+   {
+    "event_date": "2026-04-09",
+    "event": "Proxy filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2026-04-06",
+    "move": 0.0076
+   },
+   {
+    "event_date": "2026-04-09",
+    "event": "Proxy filing",
+    "types": [
+     "proxy"
+    ],
+    "week": "2026-04-06",
+    "move": 0.0076
+   },
+   {
+    "event_date": "2026-04-24",
+    "event": "Q1 2026",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2026-04-20",
+    "move": -0.0385
+   },
+   {
+    "event_date": "2026-06-03",
+    "event": "Transaction presentation",
+    "types": [
+     "slides"
+    ],
+    "week": "2026-06-01",
+    "move": 0.0443
+   },
+   {
+    "event_date": "2026-07-24",
+    "event": "Q2 2026",
+    "types": [
+     "earnings_release",
+     "quarterly_report",
+     "slides"
+    ],
+    "week": "2026-07-20",
+    "move": 0.0019
+   }
+  ],
+  "all_weekly_moves": {
+   "2021-10-18": 0.0275,
+   "2021-10-25": -0.0158,
+   "2021-11-01": -0.0151,
+   "2021-11-08": -0.0011,
+   "2021-11-15": -0.0289,
+   "2021-11-22": -0.0062,
+   "2021-11-29": -0.0323,
+   "2021-12-06": 0.0227,
+   "2021-12-13": -0.0066,
+   "2021-12-20": 0.0084,
+   "2021-12-27": 0.0113,
+   "2022-01-03": 0.0437,
+   "2022-01-10": 0.0054,
+   "2022-01-18": -0.0432,
+   "2022-01-24": 0.0271,
+   "2022-01-31": -0.0096,
+   "2022-02-07": 0.0145,
+   "2022-02-14": -0.0141,
+   "2022-02-22": 0.003,
+   "2022-02-28": -0.041,
+   "2022-03-07": -0.0077,
+   "2022-03-14": 0.0583,
+   "2022-03-21": 0.0263,
+   "2022-03-28": -0.0023,
+   "2022-04-04": 0.0219,
+   "2022-04-11": 0.0111,
+   "2022-04-18": -0.0459,
+   "2022-04-25": -0.0221,
+   "2022-05-02": 0.0312,
+   "2022-05-09": -0.0355,
+   "2022-05-16": -0.0397,
+   "2022-05-23": 0.0885,
+   "2022-05-31": -0.006,
+   "2022-06-06": -0.0501,
+   "2022-06-13": -0.0576,
+   "2022-06-21": 0.0208,
+   "2022-06-27": 0.0084,
+   "2022-07-05": -0.0086,
+   "2022-07-11": -0.0408,
+   "2022-07-18": 0.0125,
+   "2022-07-25": 0.0108,
+   "2022-08-01": -0.0048,
+   "2022-08-08": 0.0748,
+   "2022-08-15": -0.0022,
+   "2022-08-22": -0.0379,
+   "2022-08-29": -0.0124,
+   "2022-09-06": 0.0312,
+   "2022-09-12": -0.0249,
+   "2022-09-19": -0.0525,
+   "2022-09-26": 0.0003,
+   "2022-10-03": 0.0339,
+   "2022-10-10": 0.0111,
+   "2022-10-17": 0.0377,
+   "2022-10-24": 0.074,
+   "2022-10-31": 0.0226,
+   "2022-11-07": -0.0022,
+   "2022-11-14": 0.0008,
+   "2022-11-21": 0.0309,
+   "2022-11-28": 0.0039,
+   "2022-12-05": -0.0158,
+   "2022-12-12": -0.0058,
+   "2022-12-19": 0.0259,
+   "2022-12-27": -0.0039,
+   "2023-01-03": 0.0405,
+   "2023-01-09": -0.0281,
+   "2023-01-17": -0.0213,
+   "2023-01-23": 0.0211,
+   "2023-01-30": -0.0243,
+   "2023-02-06": 0.0326,
+   "2023-02-13": 0.0161,
+   "2023-02-21": -0.0061,
+   "2023-02-27": -0.0004,
+   "2023-03-06": -0.0943,
+   "2023-03-13": -0.0638,
+   "2023-03-20": 0.0061,
+   "2023-03-27": 0.054,
+   "2023-04-03": 0.0024,
+   "2023-04-10": -0.0261,
+   "2023-04-17": 0.022,
+   "2023-04-24": 0.0209,
+   "2023-05-01": -0.0177,
+   "2023-05-08": -0.003,
+   "2023-05-15": 0.0246,
+   "2023-05-22": -0.0358,
+   "2023-05-30": 0.0336,
+   "2023-06-05": 0.0109,
+   "2023-06-12": 0.0079,
+   "2023-06-20": -0.0196,
+   "2023-06-26": 0.022,
+   "2023-07-03": 0.0099,
+   "2023-07-10": -0.0307,
+   "2023-07-17": 0.0519,
+   "2023-07-24": -0.0259,
+   "2023-07-31": 0.0039,
+   "2023-08-07": 0.0149,
+   "2023-08-14": -0.0242,
+   "2023-08-21": -0.0004,
+   "2023-08-28": 0.0149,
+   "2023-09-05": -0.013,
+   "2023-09-11": 0.021,
+   "2023-09-18": -0.0001,
+   "2023-09-25": -0.0284,
+   "2023-10-02": 0.0008,
+   "2023-10-09": -0.0001,
+   "2023-10-16": -0.008,
+   "2023-10-23": 0.0003,
+   "2023-10-30": 0.0528,
+   "2023-11-06": -0.0022,
+   "2023-11-13": 0.0347,
+   "2023-11-20": 0.021,
+   "2023-11-27": 0.0019,
+   "2023-12-04": 0.0059,
+   "2023-12-11": 0.0199,
+   "2023-12-18": -0.0034,
+   "2023-12-26": 0.0102,
+   "2024-01-02": 0.0304,
+   "2024-01-08": -0.008,
+   "2024-01-16": 0.0348,
+   "2024-01-22": 0.0211,
+   "2024-01-29": 0.0404,
+   "2024-02-05": 0.0054,
+   "2024-02-12": 0.0248,
+   "2024-02-20": 0.0303,
+   "2024-02-26": -0.0101,
+   "2024-03-04": 0.0255,
+   "2024-03-11": 0.0228,
+   "2024-03-18": 0.011,
+   "2024-03-25": 0.0289,
+   "2024-04-01": 0.0018,
+   "2024-04-08": -0.0529,
+   "2024-04-15": 0.012,
+   "2024-04-22": -0.0369,
+   "2024-04-29": 0.0273,
+   "2024-05-06": 0.0408,
+   "2024-05-13": 0.0126,
+   "2024-05-20": -0.0183,
+   "2024-05-28": 0.0214,
+   "2024-06-03": -0.0207,
+   "2024-06-10": -0.0137,
+   "2024-06-17": 0.0349,
+   "2024-06-24": -0.0233,
+   "2024-07-01": -0.0182,
+   "2024-07-08": 0.0308,
+   "2024-07-15": -0.0063,
+   "2024-07-22": 0.0843,
+   "2024-07-29": -0.009,
+   "2024-08-05": -0.0041,
+   "2024-08-12": 0.0209,
+   "2024-08-19": 0.0196,
+   "2024-08-26": 0.0309,
+   "2024-09-03": -0.0099,
+   "2024-09-09": 0.0076,
+   "2024-09-16": 0.0083,
+   "2024-09-23": 0.004,
+   "2024-09-30": 0.0112,
+   "2024-10-07": -0.0062,
+   "2024-10-14": 0.0395,
+   "2024-10-21": -0.0798,
+   "2024-10-28": -0.0193,
+   "2024-11-04": 0.0667,
+   "2024-11-11": 0.0044,
+   "2024-11-18": 0.0235,
+   "2024-11-25": 0.0215,
+   "2024-12-02": -0.0265,
+   "2024-12-09": -0.0624,
+   "2024-12-16": -0.0233,
+   "2024-12-23": 0.0058,
+   "2024-12-30": -0.0055,
+   "2025-01-06": -0.0291,
+   "2025-01-13": 0.0529,
+   "2025-01-21": -0.0039,
+   "2025-01-27": 0.0005,
+   "2025-02-03": 0.0177,
+   "2025-02-10": -0.0136,
+   "2025-02-18": -0.0048,
+   "2025-02-24": 0.0614,
+   "2025-03-03": 0.0003,
+   "2025-03-10": 0.0093,
+   "2025-03-17": 0.003,
+   "2025-03-24": 0.0249,
+   "2025-03-31": -0.0708,
+   "2025-04-07": 0.0218,
+   "2025-04-14": 0.0151,
+   "2025-04-21": 0.0081,
+   "2025-04-28": 0.0581,
+   "2025-05-05": 0.0148,
+   "2025-05-12": 0.0282,
+   "2025-05-19": -0.0168,
+   "2025-05-27": 0.0071,
+   "2025-06-02": 0.0001,
+   "2025-06-09": -0.0317,
+   "2025-06-16": 0.0071,
+   "2025-06-23": -0.0114,
+   "2025-06-30": 0.0025,
+   "2025-07-07": -0.0324,
+   "2025-07-14": 0.0159,
+   "2025-07-21": 0.004,
+   "2025-07-28": -0.0028,
+   "2025-08-04": 0.042,
+   "2025-08-11": 0.0187,
+   "2025-08-18": 0.0265,
+   "2025-08-25": -0.0128,
+   "2025-09-02": -0.0009,
+   "2025-09-08": 0.0065,
+   "2025-09-15": -0.0118,
+   "2025-09-22": 0.0165,
+   "2025-09-29": 0.0026,
+   "2025-10-06": -0.0333,
+   "2025-10-13": -0.0353,
+   "2025-10-20": 0.0052,
+   "2025-10-27": -0.0074,
+   "2025-11-03": 0.0421,
+   "2025-11-10": 0.0343,
+   "2025-11-17": 0.0194,
+   "2025-11-24": 0.0043,
+   "2025-12-01": -0.0513,
+   "2025-12-08": 0.0454,
+   "2025-12-15": 0.0274,
+   "2025-12-22": -0.0024,
+   "2025-12-29": -0.0112,
+   "2026-01-05": -0.0062,
+   "2026-01-12": -0.049,
+   "2026-01-20": -0.0075,
+   "2026-01-26": 0.0501,
+   "2026-02-02": 0.0555,
+   "2026-02-09": -0.0092,
+   "2026-02-17": 0.0067,
+   "2026-02-23": -0.0096,
+   "2026-03-02": -0.007,
+   "2026-03-09": -0.0454,
+   "2026-03-16": -0.0021,
+   "2026-03-23": -0.0025,
+   "2026-03-30": 0.0292,
+   "2026-04-06": 0.0076,
+   "2026-04-13": 0.019,
+   "2026-04-20": -0.0385,
+   "2026-04-27": 0.0101,
+   "2026-05-04": -0.0279,
+   "2026-05-11": 0.0144,
+   "2026-05-18": 0.0157,
+   "2026-05-26": -0.0654,
+   "2026-06-01": 0.0443,
+   "2026-06-08": -0.0191,
+   "2026-06-15": -0.0106,
+   "2026-06-22": 0.044,
+   "2026-06-29": 0.0296,
+   "2026-07-06": 0.0067,
+   "2026-07-13": 0.0107,
+   "2026-07-20": 0.0019,
+   "2026-07-27": 0.0098,
+   "2026-08-03": 0.0097,
+   "2026-08-10": -0.0367,
+   "2026-08-17": -0.0139,
+   "2026-08-24": 0.018,
+   "2026-08-31": 0.0031,
+   "2026-09-08": -0.0145,
+   "2026-09-14": -0.0328,
+   "2026-09-21": -0.0581,
+   "2026-09-28": 0.0147
+  },
+  "history_from": "2021-10-18",
+  "history_to": "2026-09-28"
+ },
+ "factor_news": {
+  "SPY": {
+   "pages": [
+    "https://stockanalysis.com/etf/spy/",
+    "https://stockanalysis.com/etf/spy/history/"
+   ],
+   "removed_sell_side": 1,
+   "headlines": [
+    {
+     "date": "2026-10-06",
+     "source": "Bloomberg Markets and Finance",
+     "title": "S&P 500 Hits Record High as Big Tech Leads",
+     "summary": "The Close brings you the latest news and analysis leading up to the final minutes and seconds before and after the closing bell on Wall Street. Today's guests are UBS Alignment Partners Managing Direc...",
+     "url": "DdDdm3BnubY"
+    },
+    {
+     "date": "2026-10-06",
+     "source": "WSJ",
+     "title": "The S&P 500 Hits a New Record High, Powered by Tech\u00e2and Not Much Else",
+     "summary": "Most U.S. stocks are down, but the market's AI engine is firing on all cylinders.",
+     "url": "https://www.wsj.com/finance/stocks/the-s-p-500-hits-a-new-record-high-powered-by-techand-not-much-else-66e01705"
+    },
+    {
+     "date": "2026-10-06",
+     "source": "CNBC",
+     "title": "Chart: A look at the S&P 500's remarkable and defiant trip a new record",
+     "summary": "S&P 500 surpassed its August peak on Tuesday. Stocks recovered despite the Iran war's oil shock, rising borrowing costs and the Fed's first rate hike.",
+     "url": "https://www.cnbc.com/2026/10/06/chart-a-look-at-the-sp-500s-remarkable-and-defiant-trip-a-new-record.html"
+    },
+    {
+     "date": "2026-10-06",
+     "source": "Invezz",
+     "title": "S&P 500 hits record high as AI stocks rise and Treasury yields ease further",
+     "summary": "US stocks ended higher on Tuesday, with the S&P 500 and Nasdaq Composite reaching record closing highs as technology stocks gained and Treasury yields eased from multi-year peaks. The S&P 500 rose 0.6...",
+     "url": "https://invezz.com/news/2026/10/06/sp-500-hits-record-high-as-ai-stocks-rise-and-treasury-yields-ease-further/"
+    },
+    {
+     "date": "2026-10-06",
+     "source": "Market Watch",
+     "title": "The S&P 500 is back in record territory as the \u00e2Magnificent Seven' ride to the rescue",
+     "summary": "After trading sideways for much of the past year, the \u00e2Magnificent Seven\u00e2 have been staging a comeback, helping to re-energize a bull market threatened by rising bond yields and stubbornly high crude-...",
+     "url": "https://www.marketwatch.com/story/the-s-p-500-is-back-in-record-territory-as-the-magnificent-seven-ride-to-the-rescue-e062724d"
+    },
+    {
+     "date": "2026-10-06",
+     "source": "Barrons",
+     "title": "Only Four Trillion-Dollar Stocks Are Beating the S&P 500. What's Next for the Megacaps?",
+     "summary": "Only four trillion-dollar companies, including Nvidia and Apple, have beaten the S&P 500 this year, but recent rallies have left several looking overbought.",
+     "url": "https://www.barrons.com/articles/trillion-dollar-stocks-sp-500-nvidia-apple-696e41b3"
+    },
+    {
+     "date": "2026-10-06",
+     "source": "Bloomberg Markets and Finance",
+     "title": "S&P 500 Nears Record High; OpenAI in $30B Funding Talks with UAE, BlackRock",
+     "summary": "The S&P 500 is poised to move closer to its first record high since August as bonds rally and lower oil prices help ease worries over inflation. OpenAI is said to be in talks with BlackRock and multip...",
+     "url": "R0ICV4gAI9E"
+    },
+    {
+     "date": "2026-10-06",
+     "source": "Market Watch",
+     "title": "The S&P 500 is facing rate chaos and narrow breadth. Why one Goldman Sachs insider is still bullish on stocks.",
+     "summary": "Stocks are not expensive in an historical context, seasonal factors are supportive and Goldman Sachs hedge fund research forecasts a record high for the S&P 500 before year-end.",
+     "url": "https://www.marketwatch.com/story/the-s-p-500-is-facing-rate-chaos-and-narrow-breadth-why-one-goldman-sachs-insider-is-still-bullish-on-stocks-84a20206"
+    }
+   ]
+  },
+  "IEF": {
+   "pages": [
+    "https://stockanalysis.com/etf/ief/",
+    "https://stockanalysis.com/etf/ief/history/"
+   ],
+   "removed_sell_side": 1,
+   "headlines": [
+    {
+     "date": "2026-10-05",
+     "source": "Barrons",
+     "title": "Global Bond Markets Sell Off on France's Fiscal Worries",
+     "summary": "Japan, Europe, and the U.S. were feeling the fallout from France, where yields on its benchmark 10-year note climbed closer to 5%, the highest since 2002.",
+     "url": "https://www.barrons.com/articles/u-s-bonds-10-year-yield-france-japan-253db64d"
+    },
+    {
+     "date": "2026-10-02",
+     "source": "ETF Trends",
+     "title": "Navigating Fixed Income Duration as Treasury Yields Retreat",
+     "summary": "Yesterday's cooler-than-expected PCE print finally gave the bond market a breather, pulling Treasury yields down from their brief 5.3% peak. For financial advisors, this recent whiplash brings fixed i...",
+     "url": "https://www.etftrends.com/fixed-income-content-hub/navigating-fixed-income-duration-as-treasury-yields-retreat/"
+    },
+    {
+     "date": "2026-10-02",
+     "source": "The Guardian",
+     "title": "US bonds rally after weaker-than-expected jobs report shows hiring slowdown \u2013 business live",
+     "summary": "Rolling coverage of the latest economic and financial news",
+     "url": "https://www.theguardian.com/business/live/2026/oct/02/french-bond-sell-off-euro-crisis-cuts-tax-rises-eurozone-inflation-us-jobs-report-latest-news-updates"
+    },
+    {
+     "date": "2026-10-02",
+     "source": "Bloomberg Markets and Finance",
+     "title": "US Treasury Rebound Pulls Yields Off Multi-Decade Highs",
+     "summary": "\"Bloomberg: The Asia Trade\" brings you everything you need to know to get ahead as the trading day begins in Asia. Bloomberg TV is live from Tokyo and Sydney with Shery Ahn and Haidi Stroud-Watts, get...",
+     "url": "-l67iosF8DA"
+    },
+    {
+     "date": "2026-10-01",
+     "source": "WSJ",
+     "title": "The Bond Rout Is Deepening Even as Oil Tankers Return to the Strait of Hormuz",
+     "summary": "Supply chains that transform crude into fuel are still under siege, and that is keeping prices high\u2014helping drive a brutal bond selloff.",
+     "url": "https://www.wsj.com/finance/commodities-futures/the-bond-rout-is-deepening-even-as-oil-tankers-return-to-the-strait-of-hormuz-30d8189d"
+    },
+    {
+     "date": "2026-10-01",
+     "source": "Bloomberg Markets and Finance",
+     "title": "US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002",
+     "summary": "US Treasuries rebounded from the global bond selloff that raced through European markets on Thursday, pulling 10-year yields back from a 24-year high.Bloomberg's Ira Jersey joins to discuss.",
+     "url": "YUQRr0unVSE"
+    },
+    {
+     "date": "2026-10-01",
+     "source": "Barrons",
+     "title": "Global Bond Rout Continues Even as 10-Year Treasury Yield Eases",
+     "summary": "U.S. Treasury yields pulled back Thursday, but long-term borrowing costs in Britain and France continued to climb.",
+     "url": "https://www.barrons.com/articles/global-bond-selloff-treasury-yields-d6b95c28"
+    },
+    {
+     "date": "2026-10-01",
+     "source": "ETF Trends",
+     "title": "Moving Averages of the Ivy Portfolio and S&P 500: September 2026",
+     "summary": "This article provides an update on the monthly moving averages we track for the S&P 500 and the Ivy Portfolio after the close of the last business day of the month. Key Takeaways The Ivy Portfolio 10-...",
+     "url": "https://www.etftrends.com/equity-etf-content-hub/moving-averages-ivy-portfolio-sp-500-september-2026/"
+    }
+   ]
+  }
+ },
+ "notes": [
+  ""
+ ]
+}

@@ -1,0 +1,233 @@
+{
+ "ticker": "AOS",
+ "date": "2026-10-07",
+ "params_file": "2026-10-07-mc-params.json",
+ "inputs_file": "2026-10-07-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 56.9,
+  "close_date": "2026-10-06",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/aos/history/"
+ },
+ "target_returns": {
+  "bull": 0.195079086115993,
+  "base": 0.054481546572934914,
+  "bear": -0.17398945518453424
+ },
+ "expected_12m": 0.021089630931458696,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.6587325071167314,
+   "IEF": 0.6423188087451899
+  },
+  "r2": 0.20264253036916902,
+  "residual_vol": {
+   "52w": 0.2378563169065789,
+   "156w": 0.20962525071117005,
+   "blended": 0.22374078380887447,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 68.0,
+    "target_band": 0.1029
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 60.0,
+    "target_band": 0.0
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 47.0,
+    "target_band": 0.0
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.6587325071167314,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.6423188087451899,
+    "move": 0.0,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Q3 2026 earnings release (Oct 29, 2026) confirms guidance cut / tariff impact",
+    "p": 0.2,
+    "impact": -0.0934,
+    "analogue": {
+     "week": "2022-04-25",
+     "move": -0.0934
+    },
+    "cited": true
+   },
+   {
+    "name": "Tariff cost impact (newly announced trade tariffs, excluded from FY2026 guidance)",
+    "p": 0.5,
+    "impact": -0.1,
+    "analogue": null,
+    "cited": true
+   },
+   {
+    "name": "China business strategic review outcome (partnership or exit announcement)",
+    "p": 0.3,
+    "impact": 0.12,
+    "analogue": null,
+    "cited": true
+   }
+  ],
+  "tilt": -0.015
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.0018615441395787927,
+   "median": -0.00785331626294293,
+   "p5": -0.19577026760257057,
+   "p25": -0.08765964636555464,
+   "p50": -0.00785331626294293,
+   "p75": 0.07842940756029053,
+   "p95": 0.20802260223715513,
+   "prob_loss": 0.5256,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.0001433315174025891,
+    "jumps": -0.014930416564459922,
+    "noise": 0.00046497753300147877,
+    "scenario": 0.004607747275370008
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.002040585121216912,
+   "median": -0.011377478718580872,
+   "p5": -0.2818473556275075,
+   "p25": -0.1264697085503647,
+   "p50": -0.011377478718580872,
+   "p75": 0.11659763316461758,
+   "p95": 0.3257173741859487,
+   "prob_loss": 0.5245,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -4.813911840583885e-06,
+    "jumps": -0.029447160871485016,
+    "noise": 0.0001353236550117756,
+    "scenario": 0.014215494550740022
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.021089630931458693,
+   "median": -0.014587624440514833,
+   "p5": -0.3886341326141538,
+   "p25": -0.188077266948416,
+   "p50": -0.014587624440514833,
+   "p75": 0.19738242012143292,
+   "p95": 0.5475204883081043,
+   "prob_loss": 0.5215,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.0008656192859920384,
+    "jumps": -0.05596515765589029,
+    "noise": 0.0024868333854111027,
+    "scenario": 0.03343098910148004
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.021089630931458693,
+   "prob_loss_12m": 0.5215
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.45,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.05799648506151135,
+   "prob_loss_12m": 0.4642
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.45,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.01581722319859412,
+   "prob_loss_12m": 0.5747
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.02108963093145874,
+   "prob_loss_12m": 0.502
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.02108963093145875,
+   "prob_loss_12m": 0.5386
+  }
+ ]
+}

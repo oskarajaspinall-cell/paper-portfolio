@@ -1,0 +1,65 @@
+{
+  "ticker": "EQT",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "research/EQT/2026-10-07-evaluation.md Decision.scenarios.bull.probability"},
+      "probability_evidence": "The bull case's incremental driver beyond the cheap multiples -- LNG-export/data-center demand lifting Appalachian realisations -- is the only claim in either case tagged [Guessing] rather than [Likely]/[Certain] in the evaluation's Bull case paragraph, the weakest-evidenced leg of the thesis, consistent with assigning it the lowest (20%) weight despite the EV/EBITDA re-rating arithmetic itself being straightforward.",
+      "target_price_12m": {"value": 73.5, "cite": "research/EQT/2026-10-07-evaluation.md Decision.scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.1804, "cite": "Bull target (73.5) is anchored on EV/EBITDA re-rating from 5.5x to the 5y median 7.4x on TTM EBITDA with net debt at 0.79x EBITDA (factsheet Valuation/Quality, Src RA, https://stockanalysis.com/stocks/eqt/financials/ratios/). Deriving per-share TTM figures from the current multiples (price 52.47 / P/E 12.1x = EPS 4.336; price/P/FCF 8.7x = FCF/share 6.031; EBITDA/share 11.140 solved from EV/EBITDA 5.5x and net debt/EBITDA 0.79x) and repricing the SAME TTM fundamentals on the OTHER two multiples at their own 5y medians (factsheet Valuation table: P/E 5y median 12.8x -> implied 55.5; P/FCF 5y median 13.6x -> implied 82.0; EV/EBITDA 5y median 7.4x -> implied 73.6, the target basis) gives a spread of 26.5 between the three anchor-implied prices; half that spread (13.3) / target (73.5) = 0.180."}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "research/EQT/2026-10-07-evaluation.md Decision.scenarios.base.probability"},
+      "probability_evidence": "Management's own raised FY2026 volume guidance and lowered capex (Reuters, 'EQT sees higher 2026 US natgas output on lower spending', 2026-09-22) roughly offsets the 5.93% YoY share dilution discussed in the note's capital-allocation section (research/EQT/2026-10-07.md section 5), with no near-term catalyst identified in either the fact sheet or note to drive a larger re-rating or de-rating within 12 months -- consistent with the base case taking the modal (50%) weight.",
+      "target_price_12m": {"value": 55.5, "cite": "research/EQT/2026-10-07-evaluation.md Decision.scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.239, "cite": "Base target (55.5) is anchored on P/E re-rating from 12.1x to the 5y median 12.8x on flat TTM earnings (factsheet Valuation, Src RA). Using the same TTM-derived per-share fundamentals as the bull calculation (EPS 4.336, FCF/share 6.031, EBITDA/share 11.140, net debt/EBITDA 0.79x; factsheet Valuation/Quality RA), repricing on the OTHER two multiples at their 5y medians gives EV/EBITDA-median implied 73.6 and P/FCF-median implied 82.0, versus the P/E-median implied 55.5 (the target basis); spread 26.5, half-spread 13.3 / target 55.5 = 0.239."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "research/EQT/2026-10-07-evaluation.md Decision.scenarios.bear.probability"},
+      "probability_evidence": "The bear case rests on facts already realized rather than a forecast: the Q2 2026 EPS miss on weaker gas prices (Reuters, 'EQT misses quarterly profit estimates on weaker natural gas prices', 2026-07-21) and the FY2024 margin collapse to 6.8% operating margin / 1.2% ROIC from FY2023's 49.4% / 11.5% (factsheet Quality table, Src IS/RA) are concrete historical precedent for margin reversion, giving the bear case firmer grounding than the bull case's forward-looking LNG/data-center story -- consistent with a 30% weight, above a symmetric 1/3 default.",
+      "target_price_12m": {"value": 45.0, "cite": "research/EQT/2026-10-07-evaluation.md Decision.scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.0137, "cite": "Bear target (45.0) reverts TTM FCF margin (40.4%) to the FY2025 level (34.7%, factsheet Quality, Src CF,IS) at the unchanged current P/FCF 8.7x. Applying the same proportional margin-reversion factor (34.7/40.4=0.859) to EPS and EBITDA/share (derived as for the bull/base calculations) and holding net-debt dollars fixed, then repricing on the OTHER two multiples UNCHANGED (current P/E 12.1x -> implied 45.1; current EV/EBITDA 5.5x -> implied 43.8; factsheet Valuation RA) versus the P/FCF-based target basis of 45.1 gives a spread of only 1.24; half-spread (0.62) / target 45.0 = 0.014 -- a small band because the bear case assumes no multiple re-rating, so the three anchors barely disagree."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed/contradictory: record highs led by a narrow set of AI megacaps (WSJ, CNBC, MarketWatch, 2026-10-06) alongside explicit warnings of narrow breadth and overbought trillion-dollar stocks (Barrons, 2026-10-06) and 'rate chaos' (MarketWatch, 2026-10-06); no net directional read, and neither the EQT fact sheet nor note expresses a market-direction view."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/EQT/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly factor regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: a global bond sell-off pushing 10y yields to multi-decade highs on French fiscal worries and an oil-driven inflation shock (Barrons/WSJ/Bloomberg, 2026-10-01/10-05) versus a Treasury rebound and easing yields on a weak jobs report and cooler PCE print (Bloomberg/Guardian/ETF Trends, 2026-10-02); no net directional read. The macro overlay (research/EQT/2026-10-07-macro.md) explicitly sets macro_weight='context' and states the 3m rise in real yields 'stays background, not modeled' for EQT's thesis, so it does not set a factor direction per the house rule that only a secondary/primary-weighted overlay may do so."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/EQT/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly factor regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings beat/miss shock (gas-price driven)",
+      "reason": "EQT's earnings are highly sensitive to near-term gas prices; Q2 2026 missed Wall Street profit estimates (EPS $0.39 vs $0.42 consensus) on weaker natural gas prices even as volume guidance was raised, and net margin has swung from -16.7% (FY21) to 34.2% (FY23) to 4.6% (FY24) on gas-price cyclicality.",
+      "cite": "Reuters, 'EQT misses quarterly profit estimates on weaker natural gas prices', 2026-07-21 (factsheet News & sentiment); note section 2 Quality (income-statement net margin swings); next earnings date 2026-10-20 (factsheet Price section, Src ST,OV)",
+      "annual_probability": {"value": 0.2, "cite": "research/EQT/2026-10-07-mc-inputs.json analogues.event_weeks lists 20 quarterly earnings-tagged weeks across the ~5-year history (Q3 2021-Q2 2026, 4/year), of which only 1 (Q2 2025, 2025-07-21) matched the -11.83% magnitude used as impact -> 1 occurrence per 5 years = 0.2/year probability of an earnings print of this magnitude"},
+      "impact": {"value": -0.1183, "cite": "research/EQT/2026-10-07-mc-inputs.json analogues.largest_falls and analogues.event_weeks: the Q2 2025 earnings week (2025-07-21) move of -11.83% is the largest earnings-tagged weekly move in the 5y regression history"},
+      "analogue": {"week": "2025-07-21", "move": -0.1183},
+      "assumption": null
+    },
+    {
+      "name": "Extreme Appalachian gas-price / basis-differential shock",
+      "reason": "CEO Toby Rice states Appalachian gas near $4 could see New England prices surge toward $20 on pipeline-takeaway bottlenecks; EQT's cash flows are exposed to sudden regional commodity-price/basis dislocations beyond normal cyclicality.",
+      "cite": "Fox Business, 'Energy CEO says Americans aren't benefiting from low prices because of one major roadblock', 2026-09-29 (factsheet News & sentiment); note section 2 Quality",
+      "annual_probability": {"value": 0.2, "cite": "research/EQT/2026-10-07-mc-inputs.json analogues.largest_falls contains exactly one weekly fall of this magnitude (>=25%) across the ~5-year history (2022-06-13), implying roughly 1 occurrence per 5 years, ~0.2/year"},
+      "impact": {"value": -0.2506, "cite": "research/EQT/2026-10-07-mc-inputs.json analogues.largest_falls: week 2022-06-13, move -25.06%, the single largest weekly fall in the 5y history"},
+      "analogue": {"week": "2022-06-13", "move": -0.2506},
+      "assumption": null
+    },
+    {
+      "name": "Equity-funded M&A / dilution surprise",
+      "reason": "Shares outstanding grew 5.93% YoY, consistent with stock-funded M&A (Equitrans Midstream); the note flags continued dilutive equity-funded M&A as a bear risk, and it is one of the evaluation's four invalidation triggers.",
+      "cite": "factsheet Other: Shares change YoY 5.93% (Src ST); note section 5 Capital allocation; evaluation trigger 'YoY share count growth exceeds the current 5.93%'",
+      "annual_probability": {"value": 0.4, "cite": "research/EQT/2026-10-07-mc-inputs.json analogues.event_weeks lists 2 'M&A Announcement' event weeks across the ~5-year history (2022-09-06, 2024-03-11), implying roughly 0.4/year"},
+      "impact": {"value": -0.109, "cite": "research/EQT/2026-10-07-mc-inputs.json analogues.event_weeks: M&A Announcement week 2024-03-11, move -10.9% (also listed in analogues.largest_falls)"},
+      "analogue": {"week": "2024-03-11", "move": -0.109},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

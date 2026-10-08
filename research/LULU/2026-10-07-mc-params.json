@@ -1,0 +1,56 @@
+{
+  "ticker": "LULU",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation.md Decision block scenarios.bull.probability"},
+      "probability_evidence": "Bull requires comp stabilization and an EV/Sales re-rate, but none of the four re-initiation triggers has fired: Q2 FY2026 comps were -9% (Americas -12%) and Q3 guided down 10-11% (note section 2, SEC Q2 FY2026 release), gross margin is 54.9% TTM vs the >58% trigger, ROIC is 23.7% TTM vs the >35% trigger, and FCF margin is 12.2% TTM vs the >15% trigger (factsheet-2026-10-07.md Quality table; evaluation.md triggers). The valuation support cited for the bull case (13.07% FCF yield, near-net-cash balance sheet 0.32x net debt/EBITDA, Altman Z 6.17) is present but unconfirmed by any operating inflection, consistent with the lowest of the three probabilities.",
+      "target_price_12m": {"value": 135, "cite": "evaluation.md Decision block scenarios.bull.target_price_12m: EV/Sales re-rates from 1.0x toward the 1.5x peer median on slightly lower sales"},
+      "target_band": {"value": 0.2189, "cite": "Half the spread of the bull target priced on EV/Sales (1.0x -> 1.5x peer median, factsheet-2026-10-07.md Valuation table, giving $135 at an implied -3.8% sales factor g=135/(93.61*1.5)=0.9618) vs. the same g applied to a full P/E re-rate to its 16.6x peer median (93.61*(16.6/7.7)*0.9618=$194.11): spread $59.11 / 2 / $135 target = 21.89%"}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation.md Decision block scenarios.base.probability"},
+      "probability_evidence": "Base is the modal outcome because every quality metric is already falling with no stabilization evidence yet: ROIC -8.9pp, ROCE -5.2pp and FCF margin -7.6pp over 5 years, Q3 FY2026 revenue guided down 10-11% (factsheet-2026-10-07.md Quality table; note section 2) -- a trend-continuation outcome (flat multiple, further earnings slip offset by buybacks) is better evidenced currently than either a reversal (bull) or a legal/short-interest-driven escalation (bear).",
+      "target_price_12m": {"value": 90, "cite": "evaluation.md Decision block scenarios.base.target_price_12m: P/E holds near 7.7x while earnings slip further, buybacks roughly offset the decline"},
+      "target_band": {"value": 0.0, "cite": "Base case holds the CURRENT multiple flat (P/E and P/FCF both 7.7x, factsheet-2026-10-07.md Valuation table) and applies the same earnings-decline factor g=90/93.61=0.9614 to either anchor; since price=current_price*(multiple_new/multiple_current)*g and the ratio is 1 for any flat multiple, every anchor priced this way converges on $90 -- no cross-anchor disagreement"}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation.md Decision block scenarios.bear.probability"},
+      "probability_evidence": "Bear is supported by concrete overhangs beyond simple earnings erosion: short interest is high and rising (13.55% of float, +2.3% MoM), Piotroski F-score is only 4, and repeated plaintiff-firm notices (8 since 2026-09-22) cite a securities-fraud investigation tied to the post-guidance-cut drop (factsheet-2026-10-07.md Other/News & sentiment; note section 6) -- these are specific negative-signal facts, but still a tail relative to the base continuation case.",
+      "target_price_12m": {"value": 65, "cite": "evaluation.md Decision block scenarios.bear.target_price_12m: margin erosion extends and earnings reset lower at a flat multiple"},
+      "target_band": {"value": 0.2638, "cite": "Half the spread of the bear target priced on a flat P/E (7.7x, factsheet Valuation table) with a generic earnings-decline factor g=65/93.61=0.6943 (giving $65 by construction) vs. the SAME flat P/FCF multiple (7.7x) but with the FCF-margin collapse the bear basis itself cites (FY2023 low of 4.0% vs 12.2% TTM, factsheet Quality table: factor 4.0/12.2=0.3279), giving 93.61*0.3279=$30.71: spread $34.29 / 2 / $65 target = 26.38%"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs led by a narrow set of megacap/AI names (WSJ, Market Watch 2026-10-06) alongside explicit narrow-breadth/overbought warnings (Barron's, Market Watch 2026-10-06) and 'rate chaos' concerns -- no clear net direction, so 0"},
+      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431154 (156-week weekly regression, stockanalysis.com SPY history)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: a global bond sell-off on France's fiscal worries pushing yields toward multi-decade highs (Barron's, WSJ 2026-10-01/05) against a Treasury rebound and easing yields on a weak jobs print (Bloomberg, The Guardian 2026-10-02) -- no clear net direction, so 0"},
+      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646038 (156-week weekly regression, stockanalysis.com IEF history)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings print",
+      "reason": "LULU's earnings releases routinely drive double-digit single-week moves in either direction, most recently the Q2 FY2026 print that cut comps/guidance and dropped the stock ~17% in the week; the next quarterly report falls within the 12m horizon",
+      "cite": "research/LULU/2026-10-07.md section 2 (Q2 FY2026 comps -9%, Americas -12%, Q3 guidance down 10-11%, SEC release); factsheet-2026-10-07.md Price table 'Next earnings date'",
+      "annual_probability": {"value": 0.88, "cite": "mc-inputs.json analogues.event_weeks: of 17 completed earnings_release weeks (Q1 2023 to Q2 2027), 7 showed a weekly move of 12% or more in magnitude -- a per-quarter rate of ~41.2%, so P(at least one such move across the 4 quarters in a year) = 1-(1-0.412)^4 = 0.880"},
+      "impact": {"value": -0.1701, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2025-09-02, -17.01%, tagged Q2 2026 earnings_release/quarterly_report"},
+      "analogue": {"week": "2025-09-02", "move": -0.1701},
+      "assumption": null
+    },
+    {
+      "name": "Securities-fraud investigation / litigation escalation",
+      "reason": "Eight distinct plaintiff-firm (BFA Law) notices since 2026-09-22 announce an active securities-fraud investigation into Lululemon's growth disclosures, tied to the post-guidance-cut drop; a formal complaint filing or other litigation disclosure within 12 months would be a further discrete, price-moving event",
+      "cite": "research/LULU/2026-10-07.md section 6; factsheet-2026-10-07.md News & sentiment section (GlobeNewsWire/PRNewswire notices dated 2026-09-22 through 2026-10-07)",
+      "annual_probability": {"value": 0.35, "cite": "Assumption: no week in mc-inputs.json's event_weeks/largest_falls tables is tagged as a litigation event (only earnings/proxy/annual-report filings are tagged). The unusually high frequency of plaintiff-firm notices (8 in the 16 days to 2026-10-07, factsheet News & sentiment) indicates active, intensifying legal interest, so a higher-than-typical likelihood of a formal complaint filing or other litigation disclosure within 12 months is assumed at 0.35, rather than analogue-derived."},
+      "impact": {"value": -0.15, "cite": "Assumption, capped below the +/-30% bound for jumps without an analogue ([montecarlo].max_jump_impact_assumed); set in line with comparable legal-overhang assumptions used elsewhere (e.g. -0.12 to -0.15) since no dollar liability estimate or matching historical week exists in the research or mc-inputs.json."},
+      "analogue": null,
+      "assumption": "No matching week in mc-inputs.json's largest_falls/largest_rises/event_weeks tables is tagged as a litigation/regulatory event; probability and impact are therefore stated assumptions, not analogue-derived, and impact is kept within the +/-30% cap for assumed jumps."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

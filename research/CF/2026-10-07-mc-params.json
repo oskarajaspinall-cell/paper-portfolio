@@ -1,0 +1,56 @@
+{
+  "ticker": "CF",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/CF/2026-10-07-evaluation.md Decision.scenarios.bull.probability"},
+      "probability_evidence": "Bull case: 0.29x net debt/EBITDA, Altman Z 3.34, Piotroski 7, 8.51% YoY share-count reduction, 20% dividend hike, 10.88% FCF yield and 4.8x EV/EBITDA (below 5y median 5.7x and peer median 7.0x) mean no re-rating is needed to compound, and the Belarus-potash sell-off concerns potash not CF's nitrogen book (research/CF/2026-10-07-evaluation.md Bull case).",
+      "target_price_12m": {"value": 140, "cite": "research/CF/2026-10-07-evaluation.md Decision.scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.1903, "cite": "Valuation-anchor disagreement in the fact sheet's Valuation table: at TTM fundamentals, 5y-median P/E (10.0x) implies ~$134.9 and 5y-median EV/EBITDA (5.7x) implies ~$137.8, while 5y-median P/FCF (6.7x) implies only ~$84.5 because current P/FCF (9.2x) already sits above its own 5y maximum (120% of range) (research/CF/factsheet-2026-10-07.md Valuation table). Half the $53.3 spread ($26.64) / $140 target = 0.1903; below the 0.3469 blended residual vol cap (research/CF/2026-10-07-mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/CF/2026-10-07-evaluation.md Decision.scenarios.base.probability"},
+      "probability_evidence": "Base case: TTM operating margin (38.6%) and ROIC (24.5%) sit above every fiscal year except the FY2022 spike, a cyclical-peak signal, but the balance sheet (0.29x net debt/EBITDA) and buyback-driven 8.51% YoY share-count fall are genuine offsets, making partial (not full) margin reversion the modal path (research/CF/2026-10-07-evaluation.md Bear case and Decision.scenarios.base.basis).",
+      "target_price_12m": {"value": 108, "cite": "research/CF/2026-10-07-evaluation.md Decision.scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.2467, "cite": "Same valuation-anchor disagreement as the bull case (half-spread $26.64 from the fact sheet's Valuation table, research/CF/factsheet-2026-10-07.md) / $108 target = 0.2467; below the 0.3469 blended residual vol cap (research/CF/2026-10-07-mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/CF/2026-10-07-evaluation.md Decision.scenarios.bear.probability"},
+      "probability_evidence": "Bear case: Q2 2026 EPS $4.73 missed consensus $5.44 and revenue $2.22B missed $2.44B (research/CF/factsheet-2026-10-07.md News & sentiment, TheFly 2026-08-05); FCF margin fell from 36.1% to 24.7% and FCF/NI from 257% to 91% as Blue Point capex rises before 2029 output, and P/FCF (9.2x) and P/B (3.1x) both sit above their own 5y maximum (research/CF/2026-10-07-evaluation.md Bear case).",
+      "target_price_12m": {"value": 85, "cite": "research/CF/2026-10-07-evaluation.md Decision.scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.3134, "cite": "Same valuation-anchor disagreement as the bull case (half-spread $26.64 from the fact sheet's Valuation table, research/CF/factsheet-2026-10-07.md) / $85 target = 0.3134; below the 0.3469 blended residual vol cap (research/CF/2026-10-07-mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0, "cite": "Factor news for SPY is mixed: record-high headlines driven narrowly by a handful of AI/megacap names (CNBC, MarketWatch 2026-10-06: 'S&P 500 Hits a New Record High, Powered by Tech-and Not Much Else') alongside explicit caution on 'rate chaos and narrow breadth' (MarketWatch 2026-10-06) and overbought megacaps (Barrons 2026-10-06); no clear net direction, so 0 (research/CF/2026-10-07-mc-inputs.json factor_news.SPY). Macro overlay also treats this as background context, not a thesis driver (research/CF/2026-10-07-macro.md)."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/CF/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0, "cite": "Factor news for IEF is mixed/conflicting day to day: a deepening global bond rout and 10y yields at a 2002 high (WSJ, Bloomberg 2026-10-01; Barrons 2026-10-05 on France-led selloff) versus Treasury yields easing from multi-year peaks the same week (Bloomberg, Invezz 2026-10-02/10-06); no clear net direction, so 0 (research/CF/2026-10-07-mc-inputs.json factor_news.IEF). Macro overlay states CF's thesis is not driven by rates/the dollar (research/CF/2026-10-07-macro.md)."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/CF/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings miss",
+      "reason": "CF reported Q2 2026 EPS $4.73 vs consensus $5.44 and revenue $2.22B vs consensus $2.44B, a discrete earnings-release risk that recurs every quarter",
+      "cite": "research/CF/factsheet-2026-10-07.md News & sentiment (TheFly, 2026-08-05); research/CF/2026-10-07-evaluation.md Bear case",
+      "annual_probability": {"value": 0.30, "cite": "Of the 20 quarterly earnings-release weeks in the 5-year history (research/CF/2026-10-07-mc-inputs.json analogues.event_weeks), 6 produced a weekly move of -5% or worse (2023-02-13 -0.0857, 2024-04-29 -0.0739, 2025-02-18 -0.0555, 2025-08-04 -0.1163, 2026-05-04 -0.0625, 2026-08-03 -0.0866), i.e. a severe adverse earnings reaction occurs about 0.30x/year"},
+      "impact": {"value": -0.0866, "cite": "analogue week 2026-08-03 (Q2 2026 earnings release), move -0.0866, research/CF/2026-10-07-mc-inputs.json analogues.event_weeks"},
+      "analogue": {"week": "2026-08-03", "move": -0.0866},
+      "assumption": null
+    },
+    {
+      "name": "Trade-policy shock to fertilizer pricing (Belarus potash deal)",
+      "reason": "Trump signaled a potential US-Belarus potash supply deal that could undercut Canadian/competitor fertilizer exporters' pricing power; the headline hit CF and peer fertilizer stocks even though it concerns potash, not CF's nitrogen book directly",
+      "cite": "research/CF/factsheet-2026-10-07.md News & sentiment (WSJ and Barrons, 2026-09-21); research/CF/2026-10-07.md section 2",
+      "annual_probability": {"value": 1, "cite": "Of the 10 largest weekly declines in the 5-year history, about half (2022-04-18, 2026-09-21, 2022-08-29, 2023-03-13, 2025-01-21, 2025-02-03) are not tied to earnings or proxy-filing weeks per research/CF/2026-10-07-mc-inputs.json analogues.event_weeks, implying roughly one comparable policy/macro-driven shock per year"},
+      "impact": {"value": -0.102, "cite": "analogue week 2026-09-21 (Belarus potash headline), move -0.102, research/CF/2026-10-07-mc-inputs.json analogues.largest_falls"},
+      "analogue": {"week": "2026-09-21", "move": -0.102},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

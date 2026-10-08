@@ -1,0 +1,56 @@
+{
+ "ticker": "PYPL",
+ "date": "2026-10-07",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.22, "cite": "evaluation.json Decision block scenarios.bull.probability, research/PYPL/2026-10-07-evaluation.md"},
+   "probability_evidence": "Evaluation bull case: ROIC 22.3%, ROE 24.5%, operating margin up 1.7pp to 17.6% TTM, gross margin roughly stable 39.6%-41.5% since FY23 (suggesting the steepest take-rate erosion has passed), and the new Meta Muse checkout tie-up (Barron's, 2026-09-22) add a distribution channel; probability trimmed from a symmetric 0.25 by the macro overlay's small bear tilt (research/PYPL/2026-10-07-macro.md macro_tilt).",
+   "target_price_12m": {"value": 75.38, "cite": "evaluation.json Decision block scenarios.bull.target_price_12m, research/PYPL/2026-10-07-evaluation.md: P/FCF re-rates 7.1x -> 5y min 9.8x on TTM FCF (54.61 x 9.8/7.1)"},
+   "target_band": {"value": 0.134, "cite": "Fact sheet Valuation table 5y-min column (factsheet-2026-10-07.md, Src RA/P:V/P:MA/P:SQ/P:FI): reverting current multiples to their own 5y minimums implies 55.14 (P/E 10.4/10.3), 59.56 (EV/EBITDA 8.4/7.7), 61.89 (EV/Sales 1.7/1.5), 75.39 (P/FCF 9.8/7.1 - the basis used for this target), 61.44 (P/B 2.7/2.4) on the 54.61 close; half the $20.25 spread ($10.13) / $75.38 target = 0.134"}
+  },
+  "base": {
+   "probability": {"value": 0.48, "cite": "evaluation.json Decision block scenarios.base.probability, research/PYPL/2026-10-07-evaluation.md"},
+   "probability_evidence": "Evaluation rationale: valuation is compelling (7.1x P/FCF, 10.3x P/E, below every 5y multiple minimum) but gross/FCF margin erosion, rising net debt/EBITDA (-0.41x FY23 -> 0.46x TTM) and no cited revenue-growth evidence mean the most likely path is per-share FCF compounding via the -7.83% YoY buyback (statistics page) at an unchanged 7.1x P/FCF, not a re-rating or de-rating.",
+   "target_price_12m": {"value": 58.89, "cite": "evaluation.json Decision block scenarios.base.target_price_12m, research/PYPL/2026-10-07-evaluation.md: multiple stays at 7.1x P/FCF while -7.83% YoY share count lifts per-share FCF (54.61 x 1.0783)"},
+   "target_band": {"value": 0.172, "cite": "Same 5y-min valuation-anchor spread as the bull case (fact sheet Valuation table, 5y-min column): half the $20.25 implied-price spread across P/E/EV-EBITDA/EV-Sales/P-FCF/P-B ($10.13) / $58.89 base target = 0.172"}
+  },
+  "bear": {
+   "probability": {"value": 0.30, "cite": "evaluation.json Decision block scenarios.bear.probability, research/PYPL/2026-10-07-evaluation.md"},
+   "probability_evidence": "Evaluation bear case: gross margin fell 47.0%->40.5% TTM (-5.5pp 5y), FCF margin fell 21.3%->16.8% FY24->FY25, net debt/EBITDA rose from -0.41x to 0.46x while buybacks shrank the count 7.83%, and the takeover floor appears gone after reports Stripe/Advent walked away (Invezz, 2026-10-06); raised from a symmetric 0.25 by the macro overlay's small bear tilt (rising short rates and widening HY spreads pressuring the BNPL book, research/PYPL/2026-10-07-macro.md).",
+   "target_price_12m": {"value": 47.53, "cite": "evaluation.json Decision block scenarios.bear.target_price_12m, research/PYPL/2026-10-07-evaluation.md: FCF margin falls from 19.3% TTM to the FY2025 level of 16.8% at an unchanged 7.1x P/FCF (54.61 x 16.8/19.3)"},
+   "target_band": {"value": 0.213, "cite": "Same 5y-min valuation-anchor spread as the bull case (fact sheet Valuation table, 5y-min column): half the $20.25 implied-price spread across P/E/EV-EBITDA/EV-Sales/P-FCF/P-B ($10.13) / $47.53 bear target = 0.213"}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.06, "cite": "mc-inputs.json factor_news.SPY headlines, 2026-10-06: 'S&P 500 Hits Record High as Big Tech Leads' (Bloomberg), 'S&P 500 hits record high as AI stocks rise and Treasury yields ease further' (Invezz) - broad market at record highs; kept modest given narrow breadth caution ('Only Four Trillion-Dollar Stocks Are Beating the S&P 500', Barrons; 'rate chaos and narrow breadth', MarketWatch)"},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.03, "cite": "mc-inputs.json factor_news.IEF headlines: 'Global Bond Markets Sell Off on France's Fiscal Worries' (Barrons, 2026-10-05), 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002' (Bloomberg, 2026-10-01), partly offset by 'US bonds rally after weaker-than-expected jobs report' (Guardian, 2026-10-02); consistent with the macro overlay's dominant tightening chain (DGS10 5.31% +83bp/3m, DFF 3.88% +25bp/1m, research/PYPL/2026-10-07-macro.md) - modest negative assumed for the rates factor"},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Quarterly earnings surprise",
+   "reason": "PayPal's weekly-return history shows outsized moves around quarterly earnings: 10 of the last 20 quarterly earnings weeks (2021-11 to 2026-07) saw a >=10% weekly move, and the next earnings date (2026-10-27) is a named near-term catalyst the bear case flags as able to confirm margin erosion.",
+   "cite": "factsheet-2026-10-07.md Price section ('Next earnings date: Oct 27, 2026'); evaluation bear case ('Q3 results on 2026-10-27 could confirm erosion'); mc-inputs.json analogues.event_weeks (earnings_release entries)",
+   "annual_probability": {"value": 0.9375, "cite": "mc-inputs.json analogues.event_weeks: 10 of 20 quarterly earnings weeks since 2021-11-08 had a >=10% move (~50% per quarter); probability of at least one such quarter in the next 4 = 1-(1-0.5)^4 = 0.9375"},
+   "impact": {"value": -0.2329, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2026-02-02 (Q4 2025 earnings release), move -0.2329 - the largest earnings-week analogue in the history"},
+   "analogue": {"week": "2026-02-02", "move": -0.2329},
+   "assumption": null
+  },
+  {
+   "name": "Takeover speculation collapse",
+   "reason": "Third-party reports describe a ~$53bn takeover approach this summer followed by reports that Stripe/Advent International abandoned the buyout; the research note flags this as relevant to sizing because 'a confirmed failed deal removes a speculative floor under the stock', a discrete, named risk not built into either scenario's target (which are based on margins/multiples, not M&A).",
+   "cite": "research/PYPL/2026-10-07.md section 6 'Unusual items' (TipRanks 2026-09-25; Invezz 2026-10-06, 'PayPal stock has formed an island reversal'); factsheet-2026-10-07.md News & sentiment",
+   "annual_probability": {"value": 0.3, "cite": "research/PYPL/2026-10-07.md section 6: M&A speculation has already cycled through rumor (2026-09-18), renewed reports (2026-09-25) and reported abandonment (2026-10-06) within seven weeks, implying a moderate chance of a further confirmed, price-moving resolution within the next year"},
+   "impact": {"value": -0.15, "cite": "No single historical week isolates an M&A-collapse-specific move distinct from other news in the same window (mc-inputs.json all_weekly_moves 2026-09 to 2026-10 mixes the rumor/abandonment headlines with ordinary volatility); impact assumed at -15%, within the +-30% cap for an unanalogued jump, reflecting a modest rather than dominant speculative floor per the note"},
+   "analogue": null,
+   "assumption": "No historical analogue isolates an M&A-collapse-specific weekly move; impact assumed at -15% (below the +-30% cap for assumptions with no analogue), per research/PYPL/2026-10-07.md section 6."
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}

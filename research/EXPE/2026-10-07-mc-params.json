@@ -1,0 +1,56 @@
+{
+  "ticker": "EXPE",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "Copied exactly from evaluation.md Decision block scenarios.bull.probability (research/EXPE/2026-10-07-evaluation.md)."},
+      "probability_evidence": "Note sec.2/5: five years of uninterrupted margin/ROIC improvement (ROIC 3.0%->43.1%, op margin 3.0%->17.4% TTM) and ongoing buybacks ($5.7bn authorization left) give a real re-rating base; evaluation bull case ties the scenario to a specific near-term catalyst: 'If Q3 results on Nov 5 show bookings holding through the Muse integration, the AI discount could unwind' (research/EXPE/2026-10-07-evaluation.md bull case, [Guessing]).",
+      "target_price_12m": {"value": 311, "cite": "Copied exactly from evaluation.md Decision block scenarios.bull.target_price_12m (research/EXPE/2026-10-07-evaluation.md)."},
+      "target_band": {"value": 0.0136, "cite": "Bull basis re-rates P/E from 16.2x to its 5y min 19.4x -> implied $311.44 (factsheet valuation table). Re-rating EV/EBITDA instead, from 10.3x to its own 5y min 12.0x (both multiples are currently below their 5y min per factsheet), implies $303.00. Half the spread ($4.22) over the $311 target = 1.36%."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "Copied exactly from evaluation.md Decision block scenarios.base.probability (research/EXPE/2026-10-07-evaluation.md)."},
+      "probability_evidence": "Evaluation rationale: 'Quality and buybacks are real, but EV/EBITDA is in line with peers' (only -4% vs peer median per factsheet valuation table) and AI-agent impact on take rate has 'no evidence yet either way' - the no-re-rating, no-de-rating path is the modal outcome (research/EXPE/2026-10-07-evaluation.md Decision.rationale).",
+      "target_price_12m": {"value": 276, "cite": "Copied exactly from evaluation.md Decision block scenarios.base.target_price_12m (research/EXPE/2026-10-07-evaluation.md)."},
+      "target_band": {"value": 0.0292, "cite": "Base basis holds P/E at 16.2x while the 6.17% YoY buyback-driven share count reduction (factsheet 'Other' table) lifts EPS and price to $276.17. Pricing the same flat scenario on EV/EBITDA instead (a firm-level, not per-share, multiple that buybacks do not mechanically lift) implies roughly unchanged price (~$260.07, factsheet Price section last close). Half the spread ($8.05) over the $276 target = 2.92%."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "Copied exactly from evaluation.md Decision block scenarios.bear.probability (research/EXPE/2026-10-07-evaluation.md)."},
+      "probability_evidence": "Macro overlay tilts small toward bear (real yields +0.71pp/3m, HY spreads +0.44pp/1m, pressuring beta-1.36 discretionary travel demand; research/EXPE/2026-10-07-macro.md), short interest rose 20.9% month-over-month (factsheet News & sentiment), and Altman Z of 1.45 sits in the classic distress zone (factsheet 'Other' table) - evaluation explicitly raised the bear weight by 0.05 for the macro overlay (research/EXPE/2026-10-07-evaluation.md scenarios.bear.basis).",
+      "target_price_12m": {"value": 182, "cite": "Copied exactly from evaluation.md Decision block scenarios.bear.target_price_12m (research/EXPE/2026-10-07-evaluation.md)."},
+      "target_band": {"value": 0.0263, "cite": "Bear basis compresses P/FCF from 7.0x to its 5y min 4.9x -> implied $182.05 (factsheet valuation table). Compressing EV/Sales instead, from 1.9x to its own 5y min 1.4x, implies $191.63. Half the spread ($4.79) over the $182 target = 2.63%."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed/offsetting: record highs led by 'Big Tech'/AI (Bloomberg, WSJ, Invezz 2026-10-06) versus caution on 'rate chaos and narrow breadth' and only four trillion-dollar stocks beating the index (MarketWatch, Barrons 2026-10-06); no net directional view is supported, so 0 per house rule."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (0.1431), 156-week regression to 2026-09-28."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "mc-inputs.json factor_news.IEF headlines ('Global Bond Markets Sell Off', 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002', 'Bond Rout Is Deepening', all 2026-10-01/05) plus the macro overlay's market_pricing finding that the 2y Treasury (4.84%) sits ~1pp above effective fed funds (3.88%), implying the market prices further tightening ahead rather than cuts (research/EXPE/2026-10-07-macro.md); a continued rate-rise path implies further downward pressure on 7-10y Treasury prices, kept modest at -5% given some countervailing 'yields retreat'/'bond rally' headlines in the same set."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (0.0646), 156-week regression to 2026-09-28."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "AI trip-planning agent disintermediation (Muse integration)",
+      "reason": "Expedia is joining Meta's Muse AI agent for trip planning (announced 2026-09-22); peer OTA metasearch brand trivago fell ~10% on the news, and the research names this as the clearest emerging threat to EXPE's take-rate economics, with Q3 earnings (Nov 5) a near-term test of whether it helps or hurts.",
+      "cite": "research/EXPE/2026-10-07.md Sec.2 ('clearest emerging threat is AI trip-planning agents disintermediating OTA search...Expedia is joining Meta's Muse agent...pressured peer brand trivago roughly 10%') and evaluation.md Decision.triggers ('Q3 2026 results or filings show the Muse/AI-agent channel is lowering B2C take rate or direct traffic share').",
+      "annual_probability": {"value": 1.0, "cite": "Five distinct Muse/AI-related headlines (trivago selloff, Muse integration announcement, Washington layoffs, Vrbo/Escapia launch context, Cramer 'consumer inertia' piece) appeared within the single week of Sept 22-29, 2026 in the factsheet's News & sentiment section, indicating this is an active, ongoing catalyst likely to produce at least one more comparable market-moving update within 12 months (e.g. Q3 earnings commentary on Muse traction, Nov 5, 2026)."},
+      "impact": {"value": -0.0543, "cite": "Matches EXPE's own weekly return for the week of 2026-09-21 (-5.43%), the week containing the Muse-integration announcement, trivago selloff and Washington-state layoffs news cluster (mc-inputs.json analogues.all_weekly_moves['2026-09-21'])."},
+      "analogue": {"week": "2026-09-21", "move": -0.0543},
+      "assumption": null
+    },
+    {
+      "name": "Quarterly earnings release",
+      "reason": "EXPE's largest historical weekly share-price swings (both directions) are earnings-driven; the next report, Nov 5 2026, is explicitly named as a near-term catalyst in the note and evaluation triggers.",
+      "cite": "research/EXPE/factsheet-2026-10-07.md Price section ('Next earnings date: Nov 5, 2026 (Est. Earnings)') and evaluation.md Decision.triggers ('Q3 2026 results or filings show the Muse/AI-agent channel is lowering B2C take rate...').",
+      "annual_probability": {"value": 4, "cite": "Quarterly reporting cadence: mc-inputs.json analogues.event_weeks lists one earnings_release event per fiscal quarter (Q1-Q4 each year, 2021-2026)."},
+      "impact": {"value": -0.2427, "cite": "Largest earnings-driven weekly fall in the 5y history: week of 2022-05-02 (Q1 2022 earnings release), -24.27% (mc-inputs.json analogues.largest_falls and matching analogues.event_weeks entry for 'Q1 2022')."},
+      "analogue": {"week": "2022-05-02", "move": -0.2427},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,56 @@
+{
+  "ticker": "IT",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/IT/2026-10-07-evaluation.md scenarios.bull.probability"},
+      "probability_evidence": "Q2 2026 earnings call reported accelerating contract value and raised full-year guidance (transcript /stocks/it/transcripts/660529-q2-2026/, cited in evaluation bull case and note §3), and Altman Z 4.10 / Piotroski F 6 rule out distress (fact sheet ST) — the AI-disruption fear the bear case rests on may be overdone.",
+      "target_price_12m": {"value": 269, "cite": "research/IT/2026-10-07-evaluation.md scenarios.bull.target_price_12m (basis: P/E re-rates from 17.1x to its 5-year minimum of 24.9x, fact sheet RA)"},
+      "target_band": {"value": 0.085, "cite": "Fact sheet RA valuation table: reverting each multiple to its own 5-year minimum (not just P/E 17.1x→24.9x used for the $269 target) implies $298 on EV/EBITDA (9.8x→15.0x) and $315 on P/FCF (9.1x→15.5x), holding TTM EPS/EBITDA/FCF flat (fact sheet RA, ST; market cap 11.8bn OV). Half the spread of $269/$298/$315 relative to the $269 target = 8.5%."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/IT/2026-10-07-evaluation.md scenarios.base.probability"},
+      "probability_evidence": "Gross, operating and net margins all declined over five years (-1.1pp/-2.4pp/-5.5pp, fact sheet IS) and the fact sheet has no revenue or contract-value growth series to verify the thesis (evaluation bear case), leaving the AI-disruption question open even as the 8.83% YoY buyback-driven share count reduction (fact sheet ST) continues to compound per-share value.",
+      "target_price_12m": {"value": 201, "cite": "research/IT/2026-10-07-evaluation.md scenarios.base.target_price_12m (basis: P/E stays at 17.1x below its 5-year floor, fact sheet RA, while the 8.83% YoY share-count reduction funded by the 11.04% FCF yield, fact sheet ST, lifts per-share value)"},
+      "target_band": {"value": 0.0, "cite": "The base case holds the current multiple flat (P/E 17.1x, fact sheet RA) and grows only per-share value via the 8.83% YoY buyback (fact sheet ST); holding EV/EBITDA (9.8x) and P/FCF (9.1x) flat under the same uniform per-share accretion implies the identical $201 price, so the fact sheet's valuation anchors do not disagree for this scenario."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/IT/2026-10-07-evaluation.md scenarios.bear.probability"},
+      "probability_evidence": "Short interest is 14.53% of float and rose 13.6% month-on-month despite a 36.9% three-month rally — informed money adding to the bear side (fact sheet ST, cited in evaluation bear case and note §6) — while operating margin fell 2.4pp over five years (fact sheet IS).",
+      "target_price_12m": {"value": 124, "cite": "research/IT/2026-10-07-evaluation.md scenarios.bear.target_price_12m (basis: margin erosion continues, fact sheet IS, and rising short interest is vindicated, fact sheet ST, so shares retest the 52-week low of 124.25, fact sheet HI)"},
+      "target_band": {"value": 0.0, "cite": "The bear target is set from the 52-week low price level (fact sheet HI), not from a P/E, EV/EBITDA or P/FCF re-rating, so there is no fact-sheet valuation-anchor disagreement to band for this scenario."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.07, "cite": "mc-inputs factor_news.SPY: S&P 500 hitting record highs on AI/tech leadership (Bloomberg/WSJ/Invezz/MarketWatch 2026-10-06) and a Goldman Sachs insider still bullish forecasting a record high before year-end despite 'rate chaos and narrow breadth' (MarketWatch 2026-10-06); modest positive tilt given the narrow-breadth caution noted alongside the record highs."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs regression.factor_stats.SPY.vol_annual (156-week regression, stockanalysis.com SPY weekly history)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs factor_news.IEF headlines (2026-10-01 to 2026-10-05) are mixed: 'Global Bond Markets Sell Off' and '10-Year Bond Yields Hit Highest Level Since 2002' (Barrons/Bloomberg, bearish for IEF) alongside 'US bonds rally after weaker-than-expected jobs report' and 'Treasury Rebound Pulls Yields Off Multi-Decade Highs' (The Guardian/Bloomberg, bullish for IEF); net direction unclear so set to 0 per house rule for mixed news."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs regression.factor_stats.IEF.vol_annual (156-week regression, stockanalysis.com IEF weekly history)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Earnings print vindicates AI-disruption bear case",
+      "reason": "The research's central unresolved risk is whether generative AI erodes demand for paid research seats; the bear case cites rising short interest (14.53% of float, +13.6% MoM) as informed money already positioning for a disappointing print, and the fact sheet cannot verify the contract-value growth the thesis needs.",
+      "cite": "research/IT/2026-10-07-evaluation.md bear case; research/IT/2026-10-07.md §6 (short interest); factsheet-2026-10-07.md News & sentiment (ST)",
+      "annual_probability": {"value": 0.6, "cite": "mc-inputs analogues.event_weeks: 3 earnings-release weeks with a >8% fall in ~4.75 years of history (2022-05-02 -13.0%, 2025-08-04 -30.3%, 2026-02-02 -25.4%) = 3/4.75 ≈ 0.6/yr."},
+      "impact": {"value": -0.303, "cite": "mc-inputs analogues.largest_falls / event_weeks: week of 2025-08-04 (Q2 2025 earnings release), move -30.3%."},
+      "analogue": {"week": "2025-08-04", "move": -0.303},
+      "assumption": null
+    },
+    {
+      "name": "Earnings print accelerates contract value, AI fear fades",
+      "reason": "The bull case rests on the Q2 2026 earnings call reporting accelerating contract value and raised full-year guidance, suggesting the AI-disruption fear may be overdone; this is a recurring quarterly catalyst, not a one-off.",
+      "cite": "research/IT/2026-10-07-evaluation.md bull case; research/IT/2026-10-07.md §3 (Q2 2026 call); factsheet-2026-10-07.md News & sentiment, Q2 2026 transcript (/stocks/it/transcripts/660529-q2-2026/)",
+      "annual_probability": {"value": 1.0, "cite": "mc-inputs analogues.event_weeks: 5 earnings-release weeks with a >8% rise in ~4.75 years of history (2022-08-01 +11.3%, 2023-10-30 +18.7%, 2024-11-04 +8.7%, 2026-05-04 +8.4%, 2026-08-03 +22.9%) = 5/4.75 ≈ 1.0/yr."},
+      "impact": {"value": 0.229, "cite": "mc-inputs analogues.largest_rises / event_weeks: week of 2026-08-03 (Q2 2026 earnings release), move +22.9%."},
+      "analogue": {"week": "2026-08-03", "move": 0.229},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

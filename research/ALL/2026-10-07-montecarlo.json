@@ -1,0 +1,229 @@
+{
+ "ticker": "ALL",
+ "date": "2026-10-07",
+ "params_file": "2026-10-07-mc-params.json",
+ "inputs_file": "2026-10-07-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 224.27,
+  "close_date": "2026-10-06",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/all/history/"
+ },
+ "target_returns": {
+  "bull": 0.3333481963704461,
+  "base": 0.1111160654568153,
+  "bear": -0.2777901636420387
+ },
+ "expected_12m": 0.08055914745619104,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.32535026115420856,
+   "IEF": 0.1999843128881745
+  },
+  "r2": 0.047796151650271956,
+  "residual_vol": {
+   "52w": 0.25616302536828045,
+   "156w": 0.2196085341120331,
+   "blended": 0.2378857797401568,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.3,
+    "target_price_12m": 299.03,
+    "target_band": 0.23
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 249.19,
+    "target_band": 0.1652
+   },
+   "bear": {
+    "probability": 0.25,
+    "target_price_12m": 161.97,
+    "target_band": 0.23
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.32535026115420856,
+    "move": 0.04,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.1999843128881745,
+    "move": -0.04,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Q3 2026 earnings reaction",
+    "p": 0.6,
+    "impact": -0.0526,
+    "analogue": {
+     "week": "2021-11-01",
+     "move": -0.0526
+    },
+    "cited": true
+   },
+   {
+    "name": "Severe catastrophe-loss quarter (hurricane/wildfire cluster)",
+    "p": 0.5,
+    "impact": -0.0933,
+    "analogue": {
+     "week": "2022-10-17",
+     "move": -0.0933
+    },
+    "cited": true
+   }
+  ],
+  "tilt": 0.0
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.01012114179045884,
+   "median": 0.010572470391265801,
+   "p5": -0.17660422272431203,
+   "p25": -0.06859914188129394,
+   "p50": 0.010572470391265801,
+   "p75": 0.0866222592661202,
+   "p95": 0.19995260746795787,
+   "prob_loss": 0.4622,
+   "scenario_share": {
+    "bull": 0.3,
+    "base": 0.45,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.0011738944679988096,
+    "jumps": -0.029857748053872278,
+    "noise": 0.0003460184729562825,
+    "scenario": 0.03185194246288726
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.02539989368110239,
+   "median": 0.018406050071791413,
+   "p5": -0.2898046076849443,
+   "p25": -0.11060306754574778,
+   "p50": 0.018406050071791413,
+   "p75": 0.15722642432042946,
+   "p95": 0.3590159269746773,
+   "prob_loss": 0.4639,
+   "scenario_share": {
+    "bull": 0.3,
+    "base": 0.45,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.0022258760391179167,
+    "jumps": -0.06030277043400351,
+    "noise": 9.818485047993436e-05,
+    "scenario": 0.06370388492577451
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.0805591474561911,
+   "median": 0.047782776619995526,
+   "p5": -0.467863329110072,
+   "p25": -0.19063641486276922,
+   "p50": 0.047782776619995526,
+   "p75": 0.3091369741657097,
+   "p95": 0.7472305621968818,
+   "prob_loss": 0.4494,
+   "scenario_share": {
+    "bull": 0.3,
+    "base": 0.45,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.004961191613397232,
+    "jumps": -0.1190512741629545,
+    "noise": 0.0018707428479397216,
+    "scenario": 0.12740776985154903
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.3,
+    "base": 0.45,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.0805591474561911,
+   "prob_loss_12m": 0.4494
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.4,
+    "base": 0.45,
+    "bear": 0.15
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.14167298345743967,
+   "prob_loss_12m": 0.3787
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.19999999999999998,
+    "base": 0.45,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.01944531145494262,
+   "prob_loss_12m": 0.5212
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.3,
+    "base": 0.45,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.080559147456191,
+   "prob_loss_12m": 0.4353
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.3,
+    "base": 0.45,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.08055914745619118,
+   "prob_loss_12m": 0.4746
+  }
+ ]
+}

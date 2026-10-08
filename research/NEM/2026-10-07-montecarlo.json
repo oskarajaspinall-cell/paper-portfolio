@@ -1,0 +1,229 @@
+{
+ "ticker": "NEM",
+ "date": "2026-10-07",
+ "params_file": "2026-10-07-mc-params.json",
+ "inputs_file": "2026-10-07-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 116.39,
+  "close_date": "2026-10-06",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/nem/history/"
+ },
+ "target_returns": {
+  "bull": 0.1623850846292636,
+  "base": -0.011942606753157503,
+  "bear": -0.34659334994415325
+ },
+ "expected_12m": -0.06875590686485095,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.8324819978723831,
+   "IEF": 0.7904202508779006
+  },
+  "r2": 0.09888826183622923,
+  "residual_vol": {
+   "52w": 0.44181736712221364,
+   "156w": 0.4012684970423214,
+   "blended": 0.42154293208226756,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 135.29,
+    "target_band": 0.1234
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 115.0,
+    "target_band": 0.1452
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 76.05,
+    "target_band": 0.2196
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.8324819978723831,
+    "move": 0.05,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.7904202508779006,
+    "move": -0.03,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Quarterly earnings release",
+    "p": 0.6,
+    "impact": -0.1597,
+    "analogue": {
+     "week": "2024-10-21",
+     "move": -0.1597
+    },
+    "cited": true
+   },
+   {
+    "name": "Gold price shock (real-yield / dollar driven correction)",
+    "p": 1.0,
+    "impact": -0.1258,
+    "analogue": {
+     "week": "2026-03-16",
+     "move": -0.1258
+    },
+    "cited": true
+   }
+  ],
+  "tilt": 0.0
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.024165655255163086,
+   "median": -0.027473487364966166,
+   "p5": -0.27534960223674726,
+   "p25": -0.13057913193021006,
+   "p50": -0.027473487364966166,
+   "p75": 0.07740728967343176,
+   "p95": 0.24071645092585503,
+   "prob_loss": 0.5729,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.004308099993659113,
+    "jumps": -8.508470268758716,
+    "noise": 0.000473397991104456,
+    "scenario": 8.465985992980356
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": -0.04556138166866666,
+   "median": -0.061918159709620654,
+   "p5": -0.40599290789610176,
+   "p25": -0.21286990069759631,
+   "p50": -0.061918159709620654,
+   "p75": 0.1023932200901636,
+   "p95": 0.376924861170118,
+   "prob_loss": 0.6033,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.008251850724546409,
+    "jumps": -17.019115491368037,
+    "noise": 0.00013433714499628947,
+    "scenario": 16.93197198596071
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": -0.06875590686485068,
+   "median": -0.11651406796025088,
+   "p5": -0.5881099678697022,
+   "p25": -0.33990255240872724,
+   "p50": -0.11651406796025088,
+   "p75": 0.1411753663176433,
+   "p95": 0.614380158558399,
+   "prob_loss": 0.6231,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.017623833550863655,
+    "jumps": -34.03833538052089,
+    "noise": 0.002922938684467154,
+    "scenario": 33.86394397192142
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.06875590686485068,
+   "prob_loss_12m": 0.6231
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.45,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.01785806340751113,
+   "prob_loss_12m": 0.5657
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.45,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.11965375032219595,
+   "prob_loss_12m": 0.6742
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": -0.06875590686485374,
+   "prob_loss_12m": 0.6162
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": -0.06875590686485229,
+   "prob_loss_12m": 0.6314
+  }
+ ]
+}

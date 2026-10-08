@@ -1,0 +1,56 @@
+{
+  "ticker": "ALL",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.30, "cite": "evaluation Decision JSON scenarios.bull.probability, research/ALL/2026-10-07-evaluation.md"},
+      "probability_evidence": "Macro overlay tilt toward bull, small: rising real/nominal yields (10y real DFII10 2.95%, +71bp/3m; 10y nominal DGS10 5.31%, +83bp/3m) and a renewed fed-funds hike (DFF 3.88%, +25bp/3m) lift reinvestment yield on Allstate's bond portfolio per the overlay's dominant_chain (research/ALL/2026-10-07-macro.md); separately, RSI of 29.6 after a -9.7% 3-month move signals oversold conditions (fact sheet Price/News sections).",
+      "target_price_12m": {"value": 299.03, "cite": "evaluation Decision JSON scenarios.bull.target_price_12m ('P/B re-rates to its 5y max of 2.4x from 1.8x'), research/ALL/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.23, "cite": "P/FCF implied price at its own 5y max (9.2x x current FCF/share $48.75 [=224.27/4.6x, fact sheet Valuation] = $448.58) vs the P/B-based bull target $299.03 implies a 25.0% half-spread; capped at the mc-inputs blended residual volatility ceiling 0.2379 (research/ALL/2026-10-07-mc-inputs.json regression.residual_vol.blended) per the max-band rule. P/E and EV/EBITDA excluded as anchors: their 5y maxima (22.5x, 50.4x) reflect trough/near-zero-earnings years applied to currently cyclically-elevated TTM earnings, the exact distortion the note's Valuation section warns against (research/ALL/2026-10-07.md)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation Decision JSON scenarios.base.probability, research/ALL/2026-10-07-evaluation.md"},
+      "probability_evidence": "Base case assumes P/B re-rates only to the 4-peer (PGR, TRV, CB, HIG) median of 2.0x from 1.8x, supported by ongoing buybacks (shares outstanding -1.96% YoY) and book-value growth at a still-elevated TTM ROE of 46.1%, with partial (not full) normalization of that ROE (fact sheet Quality/Valuation; evaluation base basis).",
+      "target_price_12m": {"value": 249.19, "cite": "evaluation Decision JSON scenarios.base.target_price_12m ('P/B moves to the 2.0x peer median from 1.8x'), research/ALL/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.1652, "cite": "P/FCF implied price at the peer median (6.8x x current FCF/share $48.75 = $331.53, fact sheet Valuation peer-median column) vs the P/B-based base target $249.19 implies a 16.5% half-spread; within the mc-inputs blended residual volatility 0.2379 (research/ALL/2026-10-07-mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.25, "cite": "evaluation Decision JSON scenarios.bear.probability, research/ALL/2026-10-07-evaluation.md"},
+      "probability_evidence": "Catastrophe losses are structural to the homeowners book, not one-off: $748m (Aug 2026) and $682m (Jul 2026) estimated losses, each roughly 1% of market cap (note, Unusual items; PRNewswire monthly releases listed in fact sheet News); FCF conversion has swung as low as -2,106.9% (FY2023), undermining the 21.6% FCF yield as a reliable floor (note, Capital allocation and cash conversion); Piotroski F-score of 4 is weak (fact sheet Other).",
+      "target_price_12m": {"value": 161.97, "cite": "evaluation Decision JSON scenarios.bear.target_price_12m ('P/B back to its 5y min of 1.3x'), research/ALL/2026-10-07-evaluation.md"},
+      "target_band": {"value": 0.23, "cite": "P/FCF implied price at its own 5y min (5.5x x current FCF/share $48.75 = $268.15) vs the P/B-based bear target $161.97 implies a 32.8% half-spread; capped at the mc-inputs blended residual volatility ceiling 0.2379 (research/ALL/2026-10-07-mc-inputs.json regression.residual_vol.blended) per the max-band rule."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.04, "cite": "mc-inputs.json factor_news.SPY: majority of headlines report the S&P 500 at record highs on an AI-led rally (Bloomberg, WSJ, CNBC, Invezz, MarketWatch 2026-10-06), with a Goldman Sachs view that 'stocks are not expensive in a historical context' and forecasts a record high before year-end; tempered modest (not larger) given Barrons/MarketWatch caution on narrow breadth and overbought megacaps in the same set."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/ALL/2026-10-07-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "Macro overlay (research/ALL/2026-10-07-macro.md) market_pricing/dominant_chain: 2y yield (4.84%, FRED DGS2) ~96bp above effective fed funds (3.88%, FRED DFF) implies the curve prices further tightening, not cuts, alongside 10y nominal yield (DGS10) +83bp over 3m to 5.31% and a renewed fed-funds hike (not cut); continued upward pressure on yields implies downward pressure on 7-10y Treasury (IEF) prices."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/ALL/2026-10-07-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings reaction",
+      "reason": "Scheduled Q3 2026 earnings call Nov 4-5, 2026, with underwriting margins highly cycle-sensitive (TTM ROE 46.1% vs FY2021 18.7%; TTM ROIC 32.6% vs FY2021 15.5%), creating event risk around the print distinct from the gradual mean-reversion already priced into the bear-scenario target.",
+      "cite": "Fact sheet Price section ('Next earnings date | Nov 4, 2026') and News & sentiment (PRNewswire 'Allstate to hold Q3 2026 earnings call Nov. 5, 2026'); evaluation bear case ('Q3 results come on Nov 4')",
+      "annual_probability": {"value": 0.6, "cite": "research/ALL/2026-10-07-mc-inputs.json analogues.event_weeks: of 19 historical quarterly earnings_release weeks (2021-2026), 3 produced a move >=5% in magnitude (2021-11-01 Q3'21 -5.26%, 2023-10-30 Q3'23 +6.84%, 2025-11-03 Q3'25 +5.62%) over ~4.9 years of history, implying roughly a 0.6/yr chance of an earnings print causing a jump-sized move"},
+      "impact": {"value": -0.0526, "cite": "research/ALL/2026-10-07-mc-inputs.json analogues.event_weeks: Q3 2021 earnings_release week 2021-11-01, move -0.0526 (the largest decline among labeled earnings_release weeks)"},
+      "analogue": {"week": "2021-11-01", "move": -0.0526},
+      "assumption": null
+    },
+    {
+      "name": "Severe catastrophe-loss quarter (hurricane/wildfire cluster)",
+      "reason": "Catastrophe losses are structural and recurring in Allstate's homeowners book (monthly disclosures of $748m Aug 2026, $682m Jul 2026), and a cluster of severe events within a single quarter is a discrete tail risk beyond the routine monthly pattern already reflected in the bear scenario's gradual margin/P-B reversion.",
+      "cite": "Note, Unusual items section ('Monthly catastrophe-loss disclosures are routine... August 2026 estimated cat losses of $748m... July 2026 of $682m'); PRNewswire 'August 2026 Monthly Release' and 'July 2026 Monthly Release' (fact sheet News & sentiment)",
+      "annual_probability": {"value": 0.5, "cite": "research/ALL/2026-10-07-mc-inputs.json analogues.largest_falls: 4 of the 10 largest weekly declines over the past ~5 years fell within the Jun-Nov hurricane season (2022-10-17 -9.33%, 2026-09-21 -8.90%, 2023-07-10 -6.55%, 2022-07-11 -6.47%), consistent with a catastrophe-driven selloff occurring roughly every other year"},
+      "impact": {"value": -0.0933, "cite": "research/ALL/2026-10-07-mc-inputs.json analogues.largest_falls: week 2022-10-17, move -0.0933, within the active 2022 Atlantic hurricane season"},
+      "analogue": {"week": "2022-10-17", "move": -0.0933},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,47 @@
+{
+  "ticker": "STZ",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "research/STZ/2026-10-07-evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Transcript: Q2 beat expectations, FY27 comparable EPS guidance reaffirmed at $11.20-$11.90, and management said September trends support landing at the high end if they continue, with marketing-led share gains and healthier distributor inventories (research/STZ/2026-10-07.md §3, https://stockanalysis.com/stocks/stz/transcripts/702832-q2-2027/); set below base because this requires demand trends to improve rather than merely hold.",
+      "target_price_12m": {"value": 161, "cite": "research/STZ/2026-10-07-evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0596, "cite": "Fact sheet valuation table (factsheet-2026-10-07.md): applying the bull basis (re-rate to 5y-minimum multiple) to the other two multiples gives P/E 16.2x/10.4x×115.67=$180.18 and P/FCF 15.3x/10.9x×115.67=$162.36, vs the EV/EBITDA-based target of $161 (which uses unchanged net debt/EBITDA 2.96x [RA] to convert the EV re-rating to equity value). Spread = (180.18-161)/2 = 9.59, /161 = 5.96%."}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "research/STZ/2026-10-07-evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "Reaffirmed FY27 guidance (https://stockanalysis.com/stocks/stz/transcripts/702832-q2-2027/) offsetting but not reversing management's own description of industry-wide softening beer demand (https://www.cnbc.com/2026/10/07/constellation-brands-earnings-beer-demand.html) is the most likely near-term path, hence the modal 0.5 weight.",
+      "target_price_12m": {"value": 124, "cite": "research/STZ/2026-10-07-evaluation.md Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0422, "cite": "Fact sheet valuation table: applying the base basis (converge to peer median, n=4 peer sample) to P/FCF gives 10.7x/10.9x×115.67=$113.55, vs the EV/EBITDA peer-median target of $124 (also n=4 peers). P/E peer median (22.1x) is excluded because the fact sheet/note flag that comparison as a thin n=2 sample, 'not a clean read' (research/STZ/2026-10-07.md §3). Spread = (124-113.55)/2 = 5.225, /124 = 4.22%."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "research/STZ/2026-10-07-evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "CNBC: 'Constellation is getting creative to bring back beer drinkers as overall demand weakens' and Barron's: 'Constellation Brands signals weak demand for two flagship beer brands' (factsheet News & sentiment); short interest up 15.2% in the past month and shares already 19.1% below the 200-day MA (factsheet Other/Price sections), consistent with a real but not base-case probability of a demand-driven derating.",
+      "target_price_12m": {"value": 88, "cite": "research/STZ/2026-10-07-evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.0804, "cite": "Fact sheet valuation table: applying the bear basis (margin cut ratio 15.2%/20.0%=0.76, same multiple) to EPS at unchanged P/E 10.4x gives 0.76×115.67=$87.91 (matches the P/FCF-based target of $88), but to EBITDA at unchanged EV/EBITDA 8.8x with net debt/EBITDA 2.96x [RA] held as a flat dollar amount (debt does not shrink just because earnings fall) gives equity value ratio 0.6384 → $73.85. Spread = (88-73.85)/2 = 7.075, /88 = 8.04%."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.04, "cite": "mc-inputs.json factor_news.SPY: multiple 2026-10-06 headlines on the S&P 500 hitting record highs on AI/megacap leadership (CNBC, Invezz, MarketWatch) and a Goldman Sachs view forecasting a record high before year-end, tempered by MarketWatch's caution on 'rate chaos and narrow breadth' — net modestly positive, kept well inside ±15%."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.03, "cite": "mc-inputs.json factor_news.IEF: dominant theme is a global bond selloff — Barron's 'Global Bond Markets Sell Off on France's Fiscal Worries,' Bloomberg 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002,' WSJ 'The Bond Rout Is Deepening' — partially offset by Guardian/Bloomberg items on yields easing after a weak jobs report; net mildly negative for Treasury prices, kept modest."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Earnings/guidance miss",
+      "reason": "A future quarterly earnings call where management cuts FY27 guidance instead of holding or raising it, confirming that the currently 'tepid' beer demand is a structural reset rather than a temporary soft patch.",
+      "cite": "Evaluation trigger: \"Management cuts FY27 comparable EPS guidance below the reaffirmed range on a later earnings call, confirming that beer depletion weakness is structural.\" (research/STZ/2026-10-07-evaluation.md); CNBC: \"Constellation is getting creative to bring back beer drinkers as overall demand weakens\" (research/STZ/factsheet-2026-10-07.md News & sentiment).",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.event_weeks: 19 quarterly earnings-release weeks across the ~4.95y history (2021-10 to 2026-09), of which only 1 (week 2025-01-06, Q3 2025) produced a move of this magnitude (-18.07%) -- about once every 5 years, annual probability ~1/4.95 = 0.20."},
+      "impact": {"value": -0.1807, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2025-01-06 (Q3 2025 earnings release, event_date 2025-01-10) moved -18.07%, the single largest weekly fall in the 5-year history."},
+      "analogue": {"week": "2025-01-06", "move": -0.1807},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.02, "cite": "Fact sheet Price section: price -8.3% vs 50-day MA and -19.1% vs 200-day MA, with the 50-day itself -11.7% below the 200-day (confirmed downtrend), and 3-month momentum -11.5% vs SPY's +3.7% (-15.2pp relative) (factsheet-2026-10-07.md Price); capped at the max allowed |0.02| annualised, 3-month horizon only."}
+}

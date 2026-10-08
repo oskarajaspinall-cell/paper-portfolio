@@ -1,0 +1,56 @@
+{
+  "ticker": "GDDY",
+  "date": "2026-10-07",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation.md Decision block scenarios.bull.probability"},
+      "probability_evidence": "Q2 2026 (last reported quarter) bookings grew 6% y/y with no promotional-pricing commentary in the SEC earnings release, so the securities-fraud allegations are not yet corroborated in reported numbers; buybacks continue (6.24% of shares retired YoY) and net debt/EBITDA keeps falling (4.35x to 1.91x TTM) even while returning cash, and a reported (unconfirmed) Gen Digital approach shows a strategic buyer sees value too (note.md Unusual items; factsheet ST/BS/IS).",
+      "target_price_12m": {"value": 142, "cite": "evaluation.md Decision block scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.1147, "cite": "Half the spread of the bull case priced on P/FCF re-rating 7.3x to its 5y min 10.6x (factsheet Valuation table) on flat TTM FCF/share ($13.45 from the 13.70% FCF yield, factsheet ST) = $142.56, vs. the same re-rate logic applied to EV/EBITDA (10.9x to its 5y min 15.7x) and EV/Sales (3.0x to its 5y min 3.5x), both on flat TTM EBITDA/share ($10.92) and revenue/share ($39.68) implied from EV/EBITDA, EV/Sales and net debt/EBITDA 1.91x (factsheet RA/ST, market cap 12.5bn/price 98.18 -> 127.3m shares), giving $150.60 and $118.02 respectively; spread $32.58 / 2 / $142 target = 11.47% (P/E's 5y min of 10.9x is below the current 14.6x, so it cannot support a bull re-rate and is excluded as an anchor)"}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "evaluation.md Decision block scenarios.base.probability"},
+      "probability_evidence": "The modal path: litigation is unproven (note.md Unusual items) but short interest rose 43.9% month-on-month to 6.19% of float (factsheet News & sentiment) and the stock is down 28.5% over 12 months, so the market keeps pricing an unresolved overhang rather than a clean resolution either way; the 13.70% FCF yield and ongoing 6.24% buyback (factsheet ST) continue compounding per-share value regardless of the litigation outcome.",
+      "target_price_12m": {"value": 115, "cite": "evaluation.md Decision block scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0, "cite": "Base case is a single-anchor story (partial P/FCF re-rate from 7.3x toward the 10.6x floor, factsheet RA, plus the 6.24% buyback growth, factsheet ST): applying the same per-share growth and the same proportional multiple expansion (10.2%) to P/E and EV/EBITDA converges on $114.9-$117.3 (within ~2% of $115, i.e. rounding/assumption noise, not a genuine cross-anchor disagreement), so band = 0"}
+    },
+    "bear": {
+      "probability": {"value": 0.25, "cite": "evaluation.md Decision block scenarios.bear.probability"},
+      "probability_evidence": "Short interest up 43.9% month-on-month to 6.19% of float and the stock already 45.0pp behind SPY over 12 months (factsheet Price/News tables) show the market positioning for an adverse outcome; book equity is near zero (P/B 1,855.9x) and Altman Z is 1.63 (factsheet ST), a thin cushion if Q3 results (Oct 29, 2026) confirm the alleged bookings slowdown.",
+      "target_price_12m": {"value": 73, "cite": "evaluation.md Decision block scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.0, "cite": "Bear case is a single-anchor story (P/E compresses from 14.6x to its 5y min 10.9x on flat TTM EPS $6.72, factsheet RA/ST): EV/EBITDA, EV/Sales and P/FCF are already below their own 5-year minimums (factsheet Valuation table), so there is no further '5y-min' de-rate room to use as an alternative anchor, leaving no second anchor to disagree with the P/E-derived $73; band = 0"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: S&P 500 record highs led by a narrow set of megacap/AI names (WSJ, Market Watch, Bloomberg 2026-10-06) against explicit narrow-breadth/overbought warnings (Barron's 2026-10-06) and 'rate chaos' (Market Watch 2026-10-06); macro-2026-10-07.md finds no primary macro transmission for GDDY either -- no clear net direction, so 0"},
+      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431 (156-week weekly regression, stockanalysis.com SPY history)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: a global bond sell-off on France's fiscal worries pushing 10y yields toward multi-decade highs (Barron's, WSJ 2026-10-01/05) against a Treasury rebound and easing yields on a weak jobs print (Bloomberg, The Guardian 2026-10-02); macro-2026-10-07.md treats GDDY as low-leverage (net debt/EBITDA 1.91x) with no rate exposure large enough to drive the thesis -- no clear net direction, so 0"},
+      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646 (156-week weekly regression, stockanalysis.com IEF history)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Securities-fraud class actions / promotional-discount disclosure allegations",
+      "reason": "At least six plaintiffs' firms have filed or noticed securities-fraud class actions since late September 2026 alleging GoDaddy failed to disclose a promotional discount that materially hurt total-bookings growth, with lead-plaintiff deadlines of Oct 20 and Oct 26, 2026; short interest has risen 43.9% month-on-month consistent with the market positioning for an adverse outcome",
+      "cite": "research/GDDY/2026-10-07.md section 6 (Unusual items); factsheet-2026-10-07.md News & sentiment (BFA Law, Kaplan Fox, Robbins LLP notices, Sept-Oct 2026; short interest +43.9%)",
+      "annual_probability": {"value": 0.33, "cite": "mc-inputs.json analogues.all_weekly_moves: of 260 weekly moves (2021-10-18 to 2026-09-28), 6 fell -10% or worse; excluding the 4 tied to scheduled earnings weeks per analogues.event_weeks (2022-10-31, 2025-02-10, 2025-08-04, 2026-07-27), 2 non-earnings shocks remain (2024-09-03 -10.40%, 2026-03-09 -13.55%) over ~5 years = 0.4/yr; Poisson P(>=1 in a year) = 1-e^-0.4 = 0.330"},
+      "impact": {"value": -0.1355, "cite": "mc-inputs.json analogues.largest_falls / all_weekly_moves: week 2026-03-09, -13.55%, not tied to any scheduled earnings/report event per analogues.event_weeks"},
+      "analogue": {"week": "2026-03-09", "move": -0.1355},
+      "assumption": null
+    },
+    {
+      "name": "Quarterly earnings print (next: Oct 29, 2026)",
+      "reason": "Next earnings date is Oct 29, 2026, three weeks after this initiation and before the Oct 20/26 litigation lead-plaintiff deadlines; the note's invalidation triggers are checked at the TTM/quarterly level and the stock's weekly history shows earnings prints routinely drive double-digit single-week moves in either direction",
+      "cite": "factsheet-2026-10-07.md Price table 'Next earnings date'; research/GDDY/2026-10-07.md section 4 (triggers checked each quarter) and section 6 (Q3 results could confirm a slowdown)",
+      "annual_probability": {"value": 0.68, "cite": "mc-inputs.json analogues.event_weeks: of 20 completed quarterly earnings weeks (2021-11-01 to 2026-07-27), 5 showed a weekly move of 10% or more in magnitude (2022-10-31 -16.76%, 2023-10-30 +19.40%, 2025-02-10 -13.82%, 2025-08-04 -14.78%, 2026-07-27 -11.19%) -- a per-quarter rate of 25%, so P(at least one such move across the 4 quarters in a year) = 1-(1-0.25)^4 = 0.684"},
+      "impact": {"value": -0.1119, "cite": "mc-inputs.json analogues.event_weeks: week 2026-07-27, -11.19%, tagged Q2 2026 earnings_release (most recent quarterly print)"},
+      "analogue": {"week": "2026-07-27", "move": -0.1119},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}
