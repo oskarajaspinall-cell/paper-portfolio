@@ -103,3 +103,13 @@ def _no_fred_in_tests(monkeypatch):
     """Fair value needs FRED's 10y yield; tests never touch the network."""
     import valuation
     monkeypatch.setattr(valuation, "risk_free_pct", lambda asof, cfg: 4.5)
+
+
+@pytest.fixture(autouse=True)
+def _no_yahoo_in_tests(monkeypatch):
+    """Portfolio prices may come from yfinance; tests never touch the network."""
+    import prices
+
+    def blocked(sym, period):
+        raise RuntimeError("network disabled in tests")
+    monkeypatch.setattr(prices.YahooPrices, "_yf", staticmethod(blocked))

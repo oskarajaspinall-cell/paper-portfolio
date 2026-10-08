@@ -24,7 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT, DataError, load_config  # noqa: E402
 from fetch_data import Fetcher  # noqa: E402
-from portfolio import Market, load_state, mark, totals  # noqa: E402
+from portfolio import Market, load_state, mark, price_provider, totals  # noqa: E402
 
 
 # --------------------------------------------------------------------------- flag rules (pure)
@@ -227,7 +227,7 @@ def main(argv=None) -> int:
     cfg = load_config()
     f = Fetcher(cfg)
     try:
-        res = scan(load_state(ROOT / "portfolio" / "state.json", cfg), Market(f, a.asof, cfg), f, cfg, a.asof)
+        res = scan(load_state(ROOT / "portfolio" / "state.json", cfg), Market(f, a.asof, cfg, price_provider(cfg)), f, cfg, a.asof)
     except DataError as e:
         print(f"ERROR: {e}", file=sys.stderr)
         return 2

@@ -54,23 +54,64 @@ MINOR_UNITS = {"GBX": ("GBP", 100), "GBp": ("GBP", 100), "ZAC": ("ZAR", 100), "Z
 
 
 # --------------------------------------------------------------------------- market data
-class Market:
-    """Closes, sectors and USD rates, all from stockanalysis.com (via a Fetcher-like object).
-    Fills use the most recent COMPLETED daily close (date < asof)."""
+EXPECTED_CCY = {None: "USD", "LON": "GBX", "HKG": "HKD", "SHA": "CNY", "SHE": "CNY", "TPE": "TWD", "KRX": "KRW",
+                "TYO": "JPY", "NSE": "INR", "TSX": "CAD"}
 
-    def __init__(self, fetcher, asof: str, cfg: dict):
-        self.f, self.asof, self.cfg = fetcher, asof, cfg
+
+def price_provider(cfg: dict):
+    """The primary portfolio-price source per config [prices] (owner-approved 2026-10-08), or None."""
+    if (cfg.get("prices") or {}).get("source") == "yfinance":
+        from prices import YahooPrices
+        return YahooPrices()
+    return None
+
+
+class Market:
+    """Daily prices, sectors and USD rates. Prices come from the optional `prices` provider (Yahoo via
+    yfinance, owner-approved) with stockanalysis.com as the fallback; sectors and FX are stockanalysis.com.
+    Fills use the most recent COMPLETED daily close (date < asof), or a next-open order's opening price."""
+
+    def __init__(self, fetcher, asof: str, cfg: dict, prices=None):
+        self.f, self.asof, self.cfg, self.price_source = fetcher, asof, cfg, prices
         self._hist, self._sector, self._fx = {}, {}, {}
+        self.fallbacks: list[str] = []
+
+    def _primary(self, ticker: str) -> dict | None:
+        if not self.price_source:
+            return None
+        try:
+            y = self.price_source.history(ticker)
+            want = EXPECTED_CCY.get(Ticker(ticker).exchange)
+            if want and y["currency"] != want:
+                raise DataError(y["url"], "currency", f"Yahoo quotes {y['currency']}, expected {want}")
+            return y
+        except DataError as e:
+            self.fallbacks.append(f"{ticker}: {e}")
+            return None
 
     def history(self, ticker: str) -> dict:
         if ticker not in self._hist:
-            s = self.f.section(ticker, "history")
-            rows = [r for r in s["data"]["rows"] if r["date"] < self.asof]
+            y = self._primary(ticker)
+            if y:
+                all_rows, url, ccy, news, src = y["rows"], y["url"], y["currency"], [], "yfinance"
+            else:
+                s = self.f.section(ticker, "history")
+                all_rows, url, ccy = s["data"]["rows"], s["source_url"], s["data"]["info"]["price_currency"]
+                news, src = s["data"].get("news", []), "stockanalysis"
+            rows = [r for r in all_rows if r["date"] < self.asof]
             if not rows:
-                raise DataError(s["source_url"], "history.close", f"no completed close before {self.asof}")
-            self._hist[ticker] = {"url": s["source_url"], "rows": rows, "all_rows": s["data"]["rows"],
-                                  "currency": s["data"]["info"]["price_currency"], "news": s["data"].get("news", [])}
+                raise DataError(url, "history.close", f"no completed close before {self.asof}")
+            self._hist[ticker] = {"url": url, "rows": rows, "all_rows": all_rows, "currency": ccy, "news": news,
+                                  "source": src}
         return self._hist[ticker]
+
+    def stockanalysis_open(self, ticker: str, day: str) -> float | None:
+        """Cross-check: stockanalysis.com's opening price for `day`, if its page already shows that day."""
+        try:
+            rows = self.f.section(ticker, "history")["data"]["rows"]
+        except DataError:
+            return None
+        return next((r.get("open") for r in rows if r["date"] == day), None)
 
     def sector(self, ticker: str) -> str:
         if ticker not in self._sector:
@@ -96,6 +137,7 @@ class Market:
         r = rows[0]
         q = self.price(ticker, r["open"], r["date"], h["currency"], h["url"])
         q["basis"] = "open"
+        q["source"] = h.get("source", "stockanalysis")
         return q
 
     def quote(self, ticker: str, on_or_before: str | None = None) -> dict:
@@ -104,7 +146,9 @@ class Market:
         if not rows:
             raise DataError(h["url"], "history.close", f"no close on/before {on_or_before}")
         last = rows[-1]
-        return self.price(ticker, last["close"], last["date"], h["currency"], h["url"])
+        q = self.price(ticker, last["close"], last["date"], h["currency"], h["url"])
+        q["source"] = h.get("source", "stockanalysis")
+        return q
 
     def price(self, ticker, close, date, ccy, url) -> dict:
         fx = None
@@ -759,6 +803,21 @@ def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, po
     return summary
 
 
+def price_check(mkt, ticker: str, q: dict, cfg: dict) -> str:
+    """Ledger note on the fill price's source; a Yahoo open is cross-checked against stockanalysis.com's
+    open for the same day when that page already shows it (>cross_check_pct apart -> '!! PRICE CHECK')."""
+    src = q.get("source", "stockanalysis")
+    if src != "yfinance":
+        return f"; open from {src}"
+    sa = mkt.stockanalysis_open(ticker, q["date"])
+    if sa is None:
+        return "; open from yfinance (stockanalysis.com shows no open for that day yet)"
+    diff = abs(q["close"] / sa - 1) * 100
+    lim = float((cfg.get("prices") or {}).get("cross_check_pct", 1.0))
+    flag = f" !! PRICE CHECK: {diff:.2f}% apart (> {lim:g}%)" if diff > lim else ""
+    return f"; open {q['close']:g} from yfinance, stockanalysis.com {sa:g}{flag}"
+
+
 def fill_pending(state_path, mkt, cfg, watch, dry_run=False, port_dir=PORT, max_wait_days: int = 14) -> dict:
     """Fill each pending order at the first OPEN after its decision (`first_eligible_open`),
     re-checking every rule at that price. Orders whose open hasn't happened yet stay pending; orders
@@ -792,7 +851,9 @@ def fill_pending(state_path, mkt, cfg, watch, dry_run=False, port_dir=PORT, max_
         eng.override = quotes
         eng.process([r])
         for row in eng.ledger:
-            row["reason"] = f"{row['reason']} [order {o['id']} filled at the open of {row['fill_close_date']}]"
+            q = quotes.get(row["ticker"], {})
+            row["reason"] = (f"{row['reason']} [order {o['id']} filled at the open of {row['fill_close_date']}"
+                             f"{price_check(mkt, row['ticker'], q, cfg)}]")
         for rej in eng.rejections:
             rej["detail"] = f"at the open of {fill_day}: {rej['detail']}"
         eng.update_baseline()
@@ -829,7 +890,7 @@ def main(argv=None) -> int:
     from fetch_data import Fetcher
 
     # fills and re-pricing need today's prices, not a page cached before the market opened
-    mkt = Market(Fetcher(cfg, refresh=args.cmd in ("fill-pending", "mark")), args.asof, cfg)
+    mkt = Market(Fetcher(cfg, refresh=args.cmd in ("fill-pending", "mark")), args.asof, cfg, price_provider(cfg))
     state_path = PORT / "state.json"
     try:
         if args.cmd == "submit":

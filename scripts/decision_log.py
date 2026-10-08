@@ -149,9 +149,9 @@ def main(argv=None) -> int:
     if a.cmd == "table":
         print(hit_table(rows))
         return 0
-    from portfolio import Market
+    from portfolio import Market, price_provider
     cfg = load_config()
-    mkt = Market(Fetcher(cfg), a.asof, cfg)
+    mkt = Market(Fetcher(cfg), a.asof, cfg, price_provider(cfg))
     try:
         if a.cmd == "record":
             n0 = len(rows)
