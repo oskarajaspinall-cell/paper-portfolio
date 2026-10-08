@@ -946,3 +946,72 @@ OK research/APA/2026-10-07-macro.md macro_weight=secondary words=250
 [20:33:39] !! MONTE CARLO FAILED for EXPE: claude -p Ticker EXPE, date 2026-10-07. Research: research/EXPE/factsheet-2026-10-07.md, research/EXPE/2026-10-07.md, research/EXPE/2026-10-07-evaluation.md, inputs research/EXPE/2026-10-07-mc-inputs.json, macro overlay research/EXPE/2026-10-07-macro.md. Write research/EXPE/2026-10-07-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text exited 1: 
 [20:33:39] == done EXPE
 [20:33:39] == research loop stopped (repeated failures: usage limit?)
+[02:58:41] == research loop: 466 names queued, best first: ['TPR', 'EOG', 'PNR', 'MCD', 'VRSK', 'TROW', 'AON', 'LVS', 'FDS', 'APP']
+[02:58:41] == initiate TPR
+[02:58:41] == initiate EOG
+[02:58:41] == initiate PNR
+[02:58:41] $ claude -p Ticker TPR, note type CORE, date 2026-10-08. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:58:41] $ claude -p Ticker EOG, note type CORE, date 2026-10-08. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:58:41] $ claude -p Ticker PNR, note type CORE, date 2026-10-08. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[03:02:58] research/EOG/2026-10-08.md
+research/EOG/factsheet-2026-10-08.md
+OK research/EOG/2026-10-08.md type=CORE 1=72 2=132 3=129 4=53 5=97 6=70 total=553
+
+Blocked/failed fetches: https://www.eogresources.com/investors and https://www.eogresources.com/operations both returned 404 (page not found, not an allowlist block); no data conflicts found.
+[03:02:58] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/EOG/2026-10-08.md
+[03:02:58] OK /Users/oskaraspinall/paper-portfolio/research/EOG/2026-10-08.md type=CORE 1=72 2=132 3=129 4=53 5=97 6=70 total=553
+[03:02:58] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/macro_data.py --asof 2026-10-08
+[03:03:33] {"out": "reports/macro/2026-10-08.md", "series": 11, "unavailable": []}
+[03:03:33] $ claude -p Ticker EOG, date 2026-10-08. Research: research/EOG/factsheet-2026-10-08.md, research/EOG/2026-10-08.md. Macro snapshot: reports/macro/2026-10-08.md. Write research/EOG/2026-10-08-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[03:04:03] research/TPR/2026-10-08.md
+research/TPR/factsheet-2026-10-08.md
+OK research/TPR/2026-10-08.md type=CORE 1=50 2=131 3=148 4=35 5=67 6=109 total=540
+
+No data conflicts. One blocked/failed fetch: https://investors.tapestry.com/ (timed out; not retried per instructions).
+[03:04:03] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TPR/2026-10-08.md
+[03:04:03] OK /Users/oskaraspinall/paper-portfolio/research/TPR/2026-10-08.md type=CORE 1=50 2=131 3=148 4=35 5=67 6=109 total=540
+[03:04:03] $ claude -p Ticker TPR, date 2026-10-08. Research: research/TPR/factsheet-2026-10-08.md, research/TPR/2026-10-08.md. Macro snapshot: reports/macro/2026-10-08.md. Write research/TPR/2026-10-08-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[03:06:05] research/EOG/2026-10-08-macro.md
+OK research/EOG/2026-10-08-macro.md macro_weight=secondary words=243
+[03:06:05] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/EOG/2026-10-08-macro.md
+[03:06:05] OK /Users/oskaraspinall/paper-portfolio/research/EOG/2026-10-08-macro.md macro_weight=secondary words=243
+[03:06:05] $ claude -p Evaluate EOG for 2026-10-08: fact sheet research/EOG/factsheet-2026-10-08.md, note research/EOG/2026-10-08.md, state portfolio/state.json, macro overlay research/EOG/2026-10-08-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[03:06:09] research/TPR/2026-10-08-macro.md
+OK research/TPR/2026-10-08-macro.md macro_weight=context words=77
+[03:06:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/TPR/2026-10-08-macro.md
+[03:06:09] OK /Users/oskaraspinall/paper-portfolio/research/TPR/2026-10-08-macro.md macro_weight=context words=77
+[03:06:09] $ claude -p Evaluate TPR for 2026-10-08: fact sheet research/TPR/factsheet-2026-10-08.md, note research/TPR/2026-10-08.md, state portfolio/state.json, macro overlay research/TPR/2026-10-08-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[03:06:37] research/EOG/2026-10-08-evaluation.md
+OK research/EOG/2026-10-08-evaluation.md Bear case=126 Bull case=75 decision=AVOID
+[03:06:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/EOG/2026-10-08-evaluation.md
+[03:06:37] OK /Users/oskaraspinall/paper-portfolio/research/EOG/2026-10-08-evaluation.md Bear case=126 Bull case=75 decision=AVOID
+[03:06:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py EOG --asof 2026-10-08
+[03:06:38] research/TPR/2026-10-08-evaluation.md
+OK research/TPR/2026-10-08-evaluation.md Bear case=123 Bull case=101 decision=AVOID
+[03:06:38] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TPR/2026-10-08-evaluation.md
+[03:06:38] OK /Users/oskaraspinall/paper-portfolio/research/TPR/2026-10-08-evaluation.md Bear case=123 Bull case=101 decision=AVOID
+[03:06:38] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py TPR --asof 2026-10-08
+[03:07:08] {"out": "research/EOG/2026-10-08-mc-inputs.json", "betas": {"SPY": 0.166, "IEF": -1.001}, "r2": 0.059, "residual_vol": 0.2784}
+[03:07:08] $ claude -p Ticker EOG, date 2026-10-08. Research: research/EOG/factsheet-2026-10-08.md, research/EOG/2026-10-08.md, research/EOG/2026-10-08-evaluation.md, inputs research/EOG/2026-10-08-mc-inputs.json, macro overlay research/EOG/2026-10-08-macro.md. Write research/EOG/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[03:07:11] {"out": "research/TPR/2026-10-08-mc-inputs.json", "betas": {"SPY": 1.008, "IEF": 0.536}, "r2": 0.162, "residual_vol": 0.3685}
+[03:07:11] $ claude -p Ticker TPR, date 2026-10-08. Research: research/TPR/factsheet-2026-10-08.md, research/TPR/2026-10-08.md, research/TPR/2026-10-08-evaluation.md, inputs research/TPR/2026-10-08-mc-inputs.json, macro overlay research/TPR/2026-10-08-macro.md. Write research/TPR/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[03:07:15] research/PNR/2026-10-08.md
+research/PNR/factsheet-2026-10-08.md
+OK research/PNR/2026-10-08.md type=CORE 1=57 2=137 3=120 4=73 5=87 6=80 total=554
+
+No data conflicts. All qualitative claims sourced from sec.gov (allowlisted) and headline URLs listed in the fact sheet (businesswire.com/globenewswire.com article pages were not fetched, only cited as listed headlines); no blocked URLs encountered.
+[03:07:15] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/PNR/2026-10-08.md
+[03:07:15] OK /Users/oskaraspinall/paper-portfolio/research/PNR/2026-10-08.md type=CORE 1=57 2=137 3=120 4=73 5=87 6=80 total=554
+[03:07:15] $ claude -p Ticker PNR, date 2026-10-08. Research: research/PNR/factsheet-2026-10-08.md, research/PNR/2026-10-08.md. Macro snapshot: reports/macro/2026-10-08.md. Write research/PNR/2026-10-08-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[04:00:01] research/PNR/2026-10-08-macro.md
+OK research/PNR/2026-10-08-macro.md macro_weight=secondary words=248
+[04:00:01] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/PNR/2026-10-08-macro.md
+[04:00:01] OK /Users/oskaraspinall/paper-portfolio/research/PNR/2026-10-08-macro.md macro_weight=secondary words=248
+[04:00:01] $ claude -p Evaluate PNR for 2026-10-08: fact sheet research/PNR/factsheet-2026-10-08.md, note research/PNR/2026-10-08.md, state portfolio/state.json, macro overlay research/PNR/2026-10-08-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[04:00:53] research/PNR/2026-10-08-evaluation.md
+OK research/PNR/2026-10-08-evaluation.md Bear case=147 Bull case=131 decision=AVOID
+[04:00:53] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/PNR/2026-10-08-evaluation.md
+[04:00:53] OK /Users/oskaraspinall/paper-portfolio/research/PNR/2026-10-08-evaluation.md Bear case=147 Bull case=131 decision=AVOID
+[04:00:53] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py PNR --asof 2026-10-08
+[04:00:57] {"out": "research/PNR/2026-10-08-mc-inputs.json", "betas": {"SPY": 1.057, "IEF": 0.519}, "r2": 0.296, "residual_vol": 0.2795}
+[04:00:57] $ claude -p Ticker PNR, date 2026-10-08. Research: research/PNR/factsheet-2026-10-08.md, research/PNR/2026-10-08.md, research/PNR/2026-10-08-evaluation.md, inputs research/PNR/2026-10-08-mc-inputs.json, macro overlay research/PNR/2026-10-08-macro.md. Write research/PNR/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
