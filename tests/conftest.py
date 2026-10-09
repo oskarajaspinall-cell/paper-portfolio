@@ -120,3 +120,10 @@ def _no_cash_reserve_by_default(monkeypatch):
     """Rule tests isolate their own rule; the cash-reserve tests set a reserve explicitly."""
     import portfolio
     monkeypatch.setattr(portfolio, "current_reserve", lambda cfg, asof: {"pct": 0.0, "regime": None, "dip_multiplier": 1.0})
+
+
+@pytest.fixture(autouse=True)
+def _entry_watch_in_tmp(monkeypatch, tmp_path_factory):
+    """Tests never write the real portfolio/entry_watch.csv."""
+    import entry_watch
+    monkeypatch.setattr(entry_watch, "WATCH", tmp_path_factory.mktemp("watch") / "entry_watch.csv")

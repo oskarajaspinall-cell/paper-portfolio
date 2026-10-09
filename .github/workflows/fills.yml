@@ -46,6 +46,7 @@ jobs:
         run: |
           bin/py scripts/portfolio.py fill-pending --asof "${{ steps.date.outputs.asof }}"
           bin/py scripts/portfolio.py mark --phase daily --asof "${{ steps.date.outputs.asof }}"
+          bin/py scripts/entry_watch.py check --asof "${{ steps.date.outputs.asof }}" || echo "entry watch not updated"
           bin/py scripts/dashboard.py
 
       - name: Commit to main

@@ -17,8 +17,10 @@ python_out=$(bin/py scripts/portfolio.py fill-pending --asof "$ASOF") || { echo 
 echo "$python_out"
 # Daily re-pricing (no AI): every holding at its latest close, a valuation point, a fresh dashboard.
 bin/py scripts/portfolio.py mark --phase daily --asof "$ASOF" || { echo "!! daily re-pricing failed"; exit 1; }
+# Entry prices (no AI): a conviction-3+ name closing at/below its entry price is re-researched first next run
+bin/py scripts/entry_watch.py check --asof "$ASOF" || echo "!! entry watch not updated"
 if git diff --quiet -- portfolio; then echo "nothing changed"; exit 0; fi
 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
-git add -A -- portfolio docs "$LOG"
+git add -A -- portfolio docs reports/entry-watch "$LOG"
 git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
 echo "== end $(date)"

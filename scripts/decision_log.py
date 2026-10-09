@@ -89,6 +89,12 @@ def record(eval_paths: list[str], mkt, asof: str, rows: list[dict]) -> list[dict
         if fvp.name.endswith("-valuation.json") and fvp.exists():  # inform-only fair value (scripts/valuation.py), kept so its accuracy can be measured later
             base = (json.loads(fvp.read_text()).get("fair_value") or {}).get("base")
             fv_base = "" if base is None else round(base, 4)
+        try:  # entry price for conviction-3+ names (owner rule 2026-10-09)
+            import entry_watch
+            entry_watch.record_decision(dict(d, ticker=d["ticker"]), Path(p if Path(p).is_absolute() else ROOT / p),
+                                        asof, mkt.cfg, q["currency"])
+        except Exception as e:  # noqa: BLE001  never blocks the decision log
+            note = (note + "; " if note else "") + f"entry watch not updated: {str(e)[:80]}"
         rows.append({"note": note, "fair_value_base": fv_base, "date": asof, "ticker": d["ticker"], "type": d["position_type"], "decision": d["decision"],
                      "conviction": d["conviction"], "price": d["price_at_decision"], "currency": q["currency"],
                      "price_date": d["price_date"], "price_usd": round(q["price_usd"], 6),

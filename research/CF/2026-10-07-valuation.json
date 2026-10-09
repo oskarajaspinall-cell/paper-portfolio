@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Agricultural Inputs",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 123.06228295934035,
+    "base": 209.17725614583702,
+    "bull": 309.2067486817418
+   },
+   "implied_growth": -0.14554308456160336,
+   "discount_rate": 0.08456724683938636,
+   "cost_of_equity": 0.09309999999999999,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.08812385072504646,
+     "base": -0.017748364912248387,
+     "bull": 0.02025424180109936
+    },
+    "cash_flow_margin": {
+     "bear": 0.24947459361674634,
+     "base": 0.3049029288084162,
+     "bull": 0.37907803303762616
+    },
+    "cagr_3y": -0.1412477014500929,
+    "cagr_5y": 0.02025424180109936,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 71.55109050207867,
+    "base": 133.20697153821556,
+    "bull": 160.9508794371602
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.181,
+     "base": 5.67,
+     "bull": 6.79
+    },
+    "ttm_ebitda": 3873000000
+   }
+  }
+ ],
+ "price": 116.02,
+ "risk_free": 0.053099999999999994,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 105.89188547358646,
+  "base": 183.85382794329652,
+  "bull": 259.7881256002146
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.08729628104131648,
+  "base": 0.5846735730330679,
+  "bull": 1.2391667436667348
+ },
+ "implied_growth": -0.14554308456160336,
+ "ticker": "CF",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/cf/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/cf/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/cf/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/cf/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/cf/statistics/"
+ }
+}

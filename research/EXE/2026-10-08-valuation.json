@@ -1,0 +1,80 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Exploration & Production",
+  "known": true,
+  "best": "Reserve NAV",
+  "second": "EV/EBITDAX",
+  "best_models": [
+   "nav"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 29.996186552866444,
+    "base": 52.28322245872691,
+    "bull": 140.6483819117687
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 2.902,
+     "base": 4.414,
+     "bull": 5.475
+    },
+    "ttm_ebitda": 6721000000,
+    "peak_earnings": "TTM EBITDA is 1.8x its 5y median: bear/base use the 5y average (3.535e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 88.12,
+ "risk_free": 0.0527,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 29.996186552866444,
+  "base": 52.28322245872691,
+  "bull": 140.6483819117687
+ },
+ "used": [
+  "ev_ebitda"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.6595984276796818,
+  "base": -0.40668154268353485,
+  "bull": 0.5961005664068166
+ },
+ "implied_growth": null,
+ "ticker": "EXE",
+ "asof": "2026-10-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-07",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/exe/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/exe/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/exe/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/exe/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/exe/statistics/"
+ }
+}

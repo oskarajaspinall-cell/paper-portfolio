@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 87.22805358737152,
+    "base": 170.9449146784141,
+    "bull": 195.76402963817915
+   },
+   "cost_of_equity": 0.09309999999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.11195,
+     "base": 0.1954,
+     "bull": 0.22014
+    },
+    "justified_pb": {
+     "bear": 1.276798825256975,
+     "base": 2.5022026431718065,
+     "bull": 2.8654919236417036
+    },
+    "bvps": 68.317774
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 80.311160622,
+    "base": 103.9502079,
+    "bull": 104.745876158
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.258,
+     "base": 8.1,
+     "bull": 8.162
+    },
+    "ttm_eps": 12.833359
+   }
+  }
+ ],
+ "price": 94.82,
+ "risk_free": 0.053099999999999994,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 84.92242259891435,
+  "base": 148.61334575227608,
+  "bull": 165.4246451447861
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.10438280321752413,
+  "base": 0.5673206681319984,
+  "bull": 0.7446176454839286
+ },
+ "implied_growth": null,
+ "ticker": "ACGL",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/acgl/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/acgl/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/acgl/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/acgl/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/acgl/statistics/"
+ }
+}

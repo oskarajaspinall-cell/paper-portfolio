@@ -1,0 +1,100 @@
+{
+ "industry": {
+  "industry": "Insurance - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 94.33756002290748,
+    "base": 154.0679881506608,
+    "bull": 178.22099096563878
+   },
+   "cost_of_equity": 0.09309999999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.11542,
+     "base": 0.17267,
+     "bull": 0.19582
+    },
+    "justified_pb": {
+     "bear": 1.3277533039647578,
+     "base": 2.1684287812041116,
+     "bull": 2.508370044052864
+    },
+    "bvps": 71.050518
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 85.17927600000002,
+    "base": 88.04862000000001,
+    "bull": 158.824769136
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.737,
+     "base": 10.065,
+     "bull": 10.263
+    },
+    "ttm_eps": 15.475472,
+    "peak_earnings": "TTM EPS is 1.9x its 5y median: bear/base use the 5y average (8.748), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 126.79,
+ "risk_free": 0.053099999999999994,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 91.28479868193831,
+  "base": 132.06153210044053,
+  "bull": 171.7555836890925
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.28003155862498375,
+  "base": 0.04157687594006254,
+  "bull": 0.3546461368332874
+ },
+ "implied_growth": null,
+ "ticker": "HIG",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/hig/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/hig/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/hig/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/hig/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/hig/statistics/"
+ }
+}

@@ -248,6 +248,11 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
         recent = {k: recently_researched(days, asof, k) for k in ("CORE", "TACTICAL")}  # same kind only
         picks = [p for p in screen_picks(asof) if p["ticker"] not in state["holdings"]
                  and Ticker(p["ticker"]).slug not in recent.get(p["type"], set())]
+        # entry-price hits (owner rule 2026-10-09) go first and bypass the 90-day rule: the price reached the
+        # level we set, so re-research whether it's now a BUY (it fell for a reason; nothing is bought blindly)
+        hits = [{"ticker": h["ticker"], "type": "CORE", "entry_hit": h} for h in state.get("entry_hits", [])
+                if h["ticker"] not in state["holdings"]]
+        picks = hits + [p for p in picks if p["ticker"] not in {h["ticker"] for h in hits}]
         manifest["skipped"] = []
 
         def initiate(p):
@@ -255,7 +260,10 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             try:
                 step(f"initiate {p['ticker']}")
                 return research_and_evaluate(p["ticker"], p["type"], asof,
-                                             "New initiation from this week's screen. Decide BUY or AVOID."
+                                             ("Re-research: the price reached the entry price we set "
+                                              f"({p['entry_hit']['entry_price']} vs close {p['entry_hit']['close']} on "
+                                              f"{p['entry_hit']['hit_date']}). Find out why it fell; decide BUY or AVOID."
+                                              if p.get("entry_hit") else "New initiation from this week's screen. Decide BUY or AVOID.")
                                              + (f" Screen setup: {p['setup_detail']}." if p.get("setup_detail") else ""),
                                              agent, log, rundir)
             except Exception as e:  # noqa: BLE001

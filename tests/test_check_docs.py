@@ -83,7 +83,8 @@ def evaluation(decision, bear="Too expensive. [Likely]", bull="Great business. [
                        "bear": {"probability": 0.25, "target_price_12m": 250, "basis": "margin reverts [IS]"}},
          "ticker": "AAPL", "decision": "BUY", "position_type": "CORE", "conviction": 3, "thesis": "x",
          "rationale": "y", "price_at_decision": 332.89, "price_date": "2026-10-05",
-         "research_note": "research/AAPL/2026-10-06.md", "triggers": [{"text": "a"}, {"text": "b"}]}
+         "research_note": "research/AAPL/2026-10-06.md", "triggers": [{"text": "a"}, {"text": "b"}],
+         "entry_price": 300.0, "entry_basis": "valuation file: base fair value 375 x 0.8"}
     d.update(decision)
     return "# Evaluation\n" + "".join(f"## {h}\n{body[h]}\n" for h in secs) + \
         "## Decision\n```json\n" + json.dumps(d) + "\n```\n"
@@ -199,3 +200,19 @@ def test_eval_scenarios_validated(cfgd, mutate, msg):
     mutate(d["scenarios"])
     errs, _ = check_eval(evaluation(d), STATE, cfgd)
     assert any(msg in e for e in errs), errs
+
+
+
+def test_entry_price_rules(cfgd):
+    base = {"decision": "AVOID", "conviction": 3}
+    assert check_eval(evaluation(base), STATE, cfgd)[0] == []
+    no = evaluation(dict(base, entry_price="x"))
+    assert any("positive number" in e for e in check_eval(no, STATE, cfgd)[0])
+    above = evaluation(dict(base, entry_price=340.0))
+    assert any("below price_at_decision" in e for e in check_eval(above, STATE, cfgd)[0])
+    uncited = evaluation(dict(base, entry_basis="feels right"))
+    assert any("cite its anchor" in e for e in check_eval(uncited, STATE, cfgd)[0])
+    null_ok = evaluation(dict(base, entry_price=None, entry_basis="ROIC is falling for five years: a lower price would not fix it"))
+    assert check_eval(null_ok, STATE, cfgd)[0] == []
+    low = evaluation({"decision": "AVOID", "conviction": 2, "entry_price": None, "entry_basis": ""})
+    assert check_eval(low, STATE, cfgd)[0] == []  # below conviction 3: not required

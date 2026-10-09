@@ -1,0 +1,80 @@
+{
+ "industry": {
+  "industry": "Gold",
+  "known": true,
+  "best": "Mine NAV",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 33.76412070945838,
+    "base": 43.05114061094411,
+    "bull": 86.7119117135315
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 5.907,
+     "base": 7.584,
+     "bull": 7.857
+    },
+    "ttm_ebitda": 12904000000,
+    "peak_earnings": "TTM EBITDA is 2.1x its 5y median: bear/base use the 5y average (6.555e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 57.95,
+ "risk_free": 0.053099999999999994,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 33.76412070945838,
+  "base": 43.05114061094411,
+  "bull": 86.7119117135315
+ },
+ "used": [
+  "ev_ebitda"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.4173577099316932,
+  "base": -0.2570985226756841,
+  "bull": 0.4963228941075324
+ },
+ "implied_growth": null,
+ "ticker": "TSX:ABX",
+ "asof": "2026-10-07",
+ "quote_currency": "CAD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.421095,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tsx/ABX/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tsx/ABX/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tsx/ABX/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tsx/ABX/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tsx/ABX/statistics/"
+ }
+}

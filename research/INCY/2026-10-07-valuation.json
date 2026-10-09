@@ -1,0 +1,87 @@
+{
+ "industry": {
+  "industry": "Biotechnology",
+  "known": true,
+  "best": "rNPV / probability-adjusted DCF",
+  "second": "EV/Revenue / pipeline value",
+  "best_models": [
+   "rnpv"
+  ],
+  "second_models": [
+   "ev_revenue",
+   "pipeline"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 99.2495364199696,
+    "base": 112.91439796952336,
+    "bull": 146.62294648076698
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 2.728,
+     "base": 3.21,
+     "bull": 4.399
+    },
+    "ttm_revenue": 5819530000
+   }
+  },
+  {
+   "model": "pipeline",
+   "label": "pipeline value",
+   "slot": "second",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline asset values, not on stockanalysis.com]"
+  }
+ ],
+ "price": 112.73,
+ "risk_free": 0.053099999999999994,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 99.2495364199696,
+  "base": 112.91439796952336,
+  "bull": 146.62294648076698
+ },
+ "used": [
+  "ev_revenue"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.11958186445516195,
+  "base": 0.00163574886475093,
+  "bull": 0.30065596097548997
+ },
+ "implied_growth": null,
+ "ticker": "INCY",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/incy/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/incy/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/incy/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/incy/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/incy/statistics/"
+ }
+}

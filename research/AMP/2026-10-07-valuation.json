@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 410.5002234788073,
+    "base": 583.7484474978938,
+    "bull": 868.2202260192356
+   },
+   "implied_growth": 0.018810726632351504,
+   "discount_rate": 0.1083595,
+   "cost_of_equity": 0.1083595,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.027581688550373754,
+     "base": 0.05923342982239442,
+     "bull": 0.09677034218883018
+    },
+    "cash_flow_margin": {
+     "bear": 0.15879721669980118,
+     "base": 0.19900196582489038,
+     "bull": 0.2552095003360968
+    },
+    "cagr_3y": 0.09677034218883018,
+    "cagr_5y": 0.09016337710074751,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 408.92764620400004,
+    "base": 529.312500948,
+    "bull": 622.540387084
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.878,
+     "base": 12.786,
+     "bull": 15.038
+    },
+    "ttm_eps": 41.397818
+   }
+  }
+ ],
+ "price": 496.61,
+ "risk_free": 0.053099999999999994,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 409.97603105387157,
+  "base": 565.6031319812625,
+  "bull": 786.3269463741572
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.17445071373135546,
+  "base": 0.1389281971391283,
+  "bull": 0.5833892720125595
+ },
+ "implied_growth": 0.018810726632351504,
+ "ticker": "AMP",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/amp/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/amp/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/amp/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/amp/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/amp/statistics/"
+ }
+}

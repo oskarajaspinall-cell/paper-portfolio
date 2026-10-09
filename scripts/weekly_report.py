@@ -65,6 +65,10 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
                       if rg["dip"]["multiplier"] < 1 else "")
                    + (f"; {len(scan.get('dips') or [])} holding(s) flagged to top up in the dip" if scan.get("dips") else "")
                    + f". Details: reports/regime/{rg['asof']}.md")
+    hits = (state.get("entry_hits") or [])
+    if hits:
+        out.append("- Entry prices reached (re-researched first this run): "
+                   + ", ".join(f"{h['ticker']} {h['close']} <= {h['entry_price']}" for h in hits) + ".")
     out.append(f"- Scan: {len(scan.get('review', []))} reviewed, {len(scan.get('reinitiate', []))} core re-initiation(s), "
                f"{len(scan.get('unflagged', []))} unchanged; new initiations: "
                + (", ".join(f"{d['ticker']} {d['decision']}" for d in decisions if d.get("kind") == "new") or "none")

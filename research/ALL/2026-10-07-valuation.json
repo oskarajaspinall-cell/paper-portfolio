@@ -1,0 +1,100 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 296.82380219148314,
+    "base": 386.39502981908953,
+    "bull": 412.3061828193833
+   },
+   "cost_of_equity": 0.09309999999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.18698,
+     "base": 0.23586,
+     "bull": 0.25
+    },
+    "justified_pb": {
+     "bear": 2.3785609397944203,
+     "base": 3.0963289280469897,
+     "bull": 3.3039647577092515
+    },
+    "bvps": 124.791338
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 107.28018886999999,
+    "base": 224.6516833,
+    "bull": 1126.294268745
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 5.358,
+     "base": 11.22,
+     "bull": 22.485
+    },
+    "ttm_eps": 50.090917,
+    "peak_earnings": "TTM EPS is 2.9x its 5y median: bear/base use the 5y average (20.02), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 224.27,
+ "risk_free": 0.053099999999999994,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 233.64259775098876,
+  "base": 332.480580979393,
+  "bull": 650.3022114612555
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.041791580465460054,
+  "base": 0.4825013643349221,
+  "bull": 1.8996397710851007
+ },
+ "implied_growth": null,
+ "ticker": "ALL",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/all/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/all/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/all/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/all/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/all/statistics/"
+ }
+}

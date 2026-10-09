@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 75.85441329900776,
+    "base": 109.70029267088644,
+    "bull": 163.62660574421793
+   },
+   "implied_growth": 0.006387970990600324,
+   "discount_rate": 0.1184785,
+   "cost_of_equity": 0.1184785,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.023422718169154626,
+     "base": 0.019731249707737004,
+     "bull": 0.04077043516925727
+    },
+    "cash_flow_margin": {
+     "bear": 0.2401054189014241,
+     "base": 0.2926238145416228,
+     "bull": 0.40184308971701926
+    },
+    "cagr_3y": 0.04077043516925727,
+    "cagr_5y": -0.011845436338309256,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 109.280836422,
+    "base": 137.430288954,
+    "bull": 149.522799702
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.971,
+     "base": 13.797,
+     "bull": 15.011
+    },
+    "ttm_eps": 9.960882
+   }
+  }
+ ],
+ "price": 104.07,
+ "risk_free": 0.0527,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 86.99655434000518,
+  "base": 118.94362476525764,
+  "bull": 158.92533706347862
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.16405732353218816,
+  "base": 0.14291942697470583,
+  "bull": 0.527100384966644
+ },
+ "implied_growth": 0.006387970990600324,
+ "ticker": "TROW",
+ "asof": "2026-10-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-07",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/trow/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/trow/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/trow/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/trow/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/trow/statistics/"
+ }
+}

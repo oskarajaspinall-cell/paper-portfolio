@@ -62,7 +62,11 @@ def batch_report(tickers: list[str], n: int) -> tuple[str, str]:
                 order = "order NOT placed (portfolio-manager failed; retry needed)"
             buys.append(t)
         why = (d.get("rationale") or "").replace("|", "/").replace("\n", " ")
-        rows.append(f"| {t} | {d['decision']} {d['conviction']} | {fv_txt} | {why} {('**' + order + '**') if order else ''} |")
+        import entry_watch
+        ew = next((r for r in entry_watch.read() if r["ticker"] == t), None)
+        entry = (f"{float(ew['entry_price']):,.2f} ({ew['source']})" if ew else
+                 ("n/a: " + str(d.get("entry_basis"))[:80] if d.get("decision") not in ("BUY", "ADD") and "entry_price" in d else ""))
+        rows.append(f"| {t} | {d['decision']} {d['conviction']} | {fv_txt} | {entry} | {why} {('**' + order + '**') if order else ''} |")
     with (ROOT / "portfolio" / "decisions.csv").open() as fh:
         decided = {r["ticker"] for r in csv.DictReader(fh)}
     uni = json.loads((run / "loop-queue.json").read_text())
@@ -73,7 +77,7 @@ def batch_report(tickers: list[str], n: int) -> tuple[str, str]:
     head = (f"Research batch {n:02d}: {len(rows)} researched, {len(buys)} BUY"
             + (f" ({', '.join(buys)})" if buys else "") + f", {len(rows) - len(buys)} AVOID")
     md = "\n".join([f"# {head} — {dt.datetime.now():%Y-%m-%d %H:%M}", "",
-                    "| Stock | Decision | Fair value (base) vs price | Why |", "|---|---|---|---|", *rows, "",
+                    "| Stock | Decision | Fair value (base) vs price | Entry price | Why |", "|---|---|---|---|---|", *rows, "",
                     f"S&P 500 researched: {len(decided & sp)} of {len(sp)} ({len(uni)} left in the queue). "
                     f"Portfolio ${tt['total']:,.0f}, cash {tt['cash'] / tt['total'] * 100:.1f}% vs a {res['pct']:g}% "
                     f"reserve ({res['regime']}); {tt['n']} holdings, {len(stt.get('pending', []))} order(s) pending."]) + "\n"
@@ -120,7 +124,9 @@ st = json.loads((ROOT / "portfolio" / "state.json").read_text())
 ranked = json.loads((run / "loop-queue.json").read_text())  # yesterday's S&P 500 core ranking, best first
 queue = [t for t in ranked if t not in SKIP and not (ROOT / "research" / Ticker(t).slug / f"{dt.date.today()}.md").exists()
          and not list((ROOT / "research" / Ticker(t).slug).glob("*-evaluation.md"))] + sorted(SKIP)
-(run / "loop-queue.json").write_text(json.dumps(queue))
+hits = [h["ticker"] for h in st.get("entry_hits", []) if h["ticker"] not in st.get("holdings", {})]
+queue = hits + [t for t in queue if t not in hits]  # entry-price hits first (owner rule 2026-10-09)
+(run / "loop-queue.json").write_text(json.dumps([t for t in queue if t not in hits]))
 log(f"== research loop: {len(queue)} names queued, best first: {queue[:10]}")
 
 

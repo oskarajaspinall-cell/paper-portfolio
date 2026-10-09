@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Advertising Agencies",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 20.125087897525646,
+    "base": 151.6804449337206,
+    "bull": 269.58985678457617
+   },
+   "implied_growth": 0.29373329694938455,
+   "discount_rate": 0.14885505805074367,
+   "cost_of_equity": 0.1527,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.07427630530905589,
+     "base": 0.12048343577848812,
+     "bull": 0.2483811324958407
+    },
+    "cash_flow_margin": {
+     "bear": 0.10751089998797038,
+     "base": 0.6470406705398818,
+     "bull": 0.7262260065316272
+    },
+    "cagr_3y": 0.2483811324958407,
+    "cagr_5y": 0.1835526106181118,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 57.17091579068416,
+    "base": 262.45413255175544,
+    "bull": 875.1959303302737
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.929,
+     "base": 53.766,
+     "bull": 54.9
+    },
+    "ttm_ebitda": 5414906000,
+    "peak_earnings": "TTM EBITDA is 6.1x its 5y median: bear/base use the 5y average (1.664e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 281.29,
+ "risk_free": 0.0527,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 32.47369719524515,
+  "base": 188.6050074730655,
+  "bull": 471.45854796647535
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8845543844600051,
+  "base": -0.32949977790513174,
+  "bull": 0.6760586866453671
+ },
+ "implied_growth": 0.29373329694938455,
+ "ticker": "APP",
+ "asof": "2026-10-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-07",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/app/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/app/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/app/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/app/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/app/statistics/"
+ }
+}

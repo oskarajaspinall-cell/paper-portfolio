@@ -221,11 +221,41 @@ def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
                             f"(now {(ep['target'] - px) / (px - ep['stop']):.2f})")
     errs += scenario_problems(d.get("scenarios"))
     errs += override_problems(d.get("valuation_overrides"))
+    errs += entry_problems(d, cfg)
     if dec == "BUY" and len(held) >= cfg["portfolio"]["max_holdings"] and not (d.get("replaces") and d.get("replacement_reason")):
         errs.append("portfolio is at max holdings: BUY must name 'replaces' and 'replacement_reason'")
     if d.get("replaces") and d["replaces"] not in held:
         errs.append(f"replaces {d['replaces']!r} is not a current holding")
     return errs, counts
+
+
+def entry_problems(d: dict, cfg: dict) -> list[str]:
+    """Entry price (owner rule 2026-10-09): every conviction-3+ AVOID/HOLD/TRIM states the price at which it
+    would buy (or null, with a reason, when price isn't the obstacle)."""
+    ec = cfg.get("entry")
+    try:
+        conv = int(d.get("conviction") or 0)
+    except (TypeError, ValueError):
+        return []
+    if not ec or conv < ec["min_conviction"] or d.get("decision") in ("BUY", "ADD", "SELL"):
+        return []
+    if "entry_price" not in d:
+        return [f"conviction {conv} {d.get('decision')}: add entry_price (the price that would justify conviction 4) "
+                "and entry_basis, or entry_price null with the reason price isn't the obstacle"]
+    ep, basis = d["entry_price"], str(d.get("entry_basis") or "")
+    errs = []
+    if ep is None:
+        if len(basis.split()) < 4:
+            errs.append("entry_price null needs entry_basis explaining why a lower price wouldn't change the decision")
+        return errs
+    if not isinstance(ep, (int, float)) or ep <= 0:
+        return ["entry_price must be a positive number in the share's quoted currency, or null"]
+    px = d.get("price_at_decision")
+    if isinstance(px, (int, float)) and ep >= px:
+        errs.append(f"entry_price {ep} must be below price_at_decision {px} (otherwise this would be a BUY now)")
+    if not re.search(r"\[[A-Z]{2}[^\]]*\]|valuation|https?://", basis):
+        errs.append("entry_basis must cite its anchor: a fact-sheet code like [RA], the valuation file, or a URL")
+    return errs
 
 
 OVERRIDE_FIELDS = {"dcf": ("growth", "margin"), "dcf_norm": ("growth", "margin"), "fcfe": ("growth", "margin"),

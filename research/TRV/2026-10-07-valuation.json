@@ -1,0 +1,100 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 204.40571271483117,
+    "base": 241.78022594419977,
+    "bull": 383.32774298443474
+   },
+   "cost_of_equity": 0.09309999999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.11267,
+     "base": 0.1287,
+     "bull": 0.18941
+    },
+    "justified_pb": {
+     "bear": 1.2873715124816447,
+     "base": 1.522760646108664,
+     "bull": 2.41424375917768
+    },
+    "bvps": 158.777564
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 182.33794,
+    "base": 193.89457,
+    "bull": 547.179817802
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.366,
+     "base": 11.023,
+     "bull": 14.654
+    },
+    "ttm_eps": 37.339963,
+    "peak_earnings": "TTM EPS is 2.6x its 5y median: bear/base use the 5y average (17.59), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 360.64,
+ "risk_free": 0.053099999999999994,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 197.0497884765541,
+  "base": 225.81834062946652,
+  "bull": 437.94510125695643
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.45361083496962584,
+  "base": -0.3738400049094207,
+  "bull": 0.21435531626263438
+ },
+ "implied_growth": null,
+ "ticker": "TRV",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/trv/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/trv/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/trv/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/trv/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/trv/statistics/"
+ }
+}

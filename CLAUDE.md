@@ -104,6 +104,14 @@ dip_steps = [[10, 0.5], [20, 0.0]]  # S&P 500 % below its 52-week high -> reserv
 notch_override = 1                # the macro view may move the regime at most this many steps
 dip_add_gap_pp = 2                # in a dip, flag holdings this far below their conviction size (ADD eligible)
 
+[entry]
+# Entry prices (owner rule 2026-10-09; scripts/entry_watch.py): every conviction-3+ AVOID/HOLD carries the price
+# at which the same evidence would justify conviction 4 (evaluator-set, or base fair value less the margin of
+# safety). A daily close at/below it -> the stock is re-researched first at the next run. Never an automatic buy.
+min_conviction = 3
+margin_of_safety_pct = 20
+expiry_days = 90
+
 [prices]
 # Portfolio prices (owner-approved 2026-10-08): fills use the OPEN and re-pricing uses the CLOSE from Yahoo
 # Finance via yfinance (unofficial, personal use), with stockanalysis.com as the automatic fallback. Used by

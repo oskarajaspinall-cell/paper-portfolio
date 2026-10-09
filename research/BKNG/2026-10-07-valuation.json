@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Travel Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 123.90683408210737,
+    "base": 230.6937825550031,
+    "bull": 417.35402894771147
+   },
+   "implied_growth": 0.02426466211061245,
+   "discount_rate": 0.09747918769920014,
+   "cost_of_equity": 0.1074215,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.0642434939093612,
+     "base": 0.1163497738294718,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.21780793757985034,
+     "base": 0.3238808749690167,
+     "bull": 0.34613554827384435
+    },
+    "cagr_3y": 0.1634869878187224,
+    "cagr_5y": 0.2519121074991648,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 115.51290373206943,
+    "base": 155.78108415204494,
+    "bull": 259.96240434414136
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 14.42,
+     "base": 19.267,
+     "bull": 20.212
+    },
+    "ttm_ebitda": 10413000000,
+    "peak_earnings": "TTM EBITDA is 1.6x its 5y median: bear/base use the 5y average (6.617e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 157.63,
+ "risk_free": 0.053099999999999994,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 121.1088572987614,
+  "base": 205.7228830873504,
+  "bull": 364.89015407985477
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.23168903572440913,
+  "base": 0.3050998102350466,
+  "bull": 1.314852211380161
+ },
+ "implied_growth": 0.02426466211061245,
+ "ticker": "BKNG",
+ "asof": "2026-10-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/bkng/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/bkng/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/bkng/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/bkng/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/bkng/statistics/"
+ }
+}
