@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Telecom Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 27.349090812874145,
+    "base": 52.02798269619693,
+    "bull": 73.04577954054736
+   },
+   "implied_growth": -0.09156771370938566,
+   "discount_rate": 0.07004160076871421,
+   "cost_of_equity": 0.0928,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.02551494027400712,
+     "base": 0.011834384695169304,
+     "bull": 0.013367419328691454
+    },
+    "cash_flow_margin": {
+     "bear": 0.14736291831275208,
+     "base": 0.18864439307130676,
+     "bull": 0.24131848610095644
+    },
+    "cagr_3y": 0.013367419328691454,
+    "cagr_5y": -0.01602988054801424,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 23.198170065137354,
+    "base": 26.017198244123477,
+    "bull": 27.048084395355424
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.943,
+     "base": 7.386,
+     "bull": 7.548
+    },
+    "ttm_ebitda": 44939000000
+   }
+  }
+ ],
+ "price": 24.87,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 25.965450563628547,
+  "base": 43.35772121217244,
+  "bull": 57.71321449215005
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.04404706729507635,
+  "base": 0.7433743953426797,
+  "bull": 1.3205956772074807
+ },
+ "implied_growth": -0.09156771370938566,
+ "ticker": "T",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/t/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/t/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/t/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/t/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/t/statistics/"
+ }
+}
