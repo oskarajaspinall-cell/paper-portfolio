@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "JKHY",
+    "action": "BUY",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A 22.7%-ROIC, 27.3%-FCF-margin core-banking franchise with multi-year contracts trades in the bottom decile of its own 5-year multiples, where the price implies just 0.4% growth against 7.3% delivered.",
+    "reason": "Quality is proven and rising, and the balance sheet is nearly debt-free. The price implies near-zero growth against roughly 7% delivered and guided. The premium to peers and renewal price compression keep conviction at 4, not 5. A 7% position takes Technology to about 21%, within the 30% cap, and cash covers it.",
+    "research_note": "research/JKHY/2026-10-08.md",
+    "triggers": [
+      {"text": "TTM FCF margin falls below 20%, reversing the 5-year rising trend (now 27.3%).", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 20}},
+      {"text": "TTM net margin falls below 17%, under the FY2024 trough of 17.2%, signalling renewal price compression is biting.", "check": {"source": "statistics", "field": "profitMargin", "op": "<", "value": 17}},
+      {"text": "TTM ROIC falls below 19%, the FY2024 trough, evidencing moat erosion.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 19}},
+      {"text": "Annual revenue growth (income statement) falls below 5% for two consecutive fiscal years, undercutting the 7%-8% growth target."}
+    ]
+  }
+]

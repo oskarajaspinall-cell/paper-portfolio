@@ -1,0 +1,47 @@
+{
+  "ticker": "PTC",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.10, "cite": "evaluation Decision block scenarios.bull.probability, research/PTC/2026-10-08-evaluation.md"},
+      "probability_evidence": "The evaluation explicitly labels this outcome 'a speculative outcome with no evidence in the note' (bull case, research/PTC/2026-10-08-evaluation.md) — the only support is the generic possibility of a competing/raised bid; no second bidder appears in the fact sheet's news & sentiment section (research/PTC/factsheet-2026-10-08.md), which is why the probability is kept low.",
+      "target_price_12m": {"value": 206.82, "cite": "evaluation Decision block scenarios.bull.target_price_12m = 52-week high [HI], research/PTC/2026-10-08-evaluation.md"},
+      "target_band": {"value": 0.2319, "cite": "Fact sheet bull-case fair-value anchors disagree: DCF 125.76 vs EV/Revenue 221.66 (research/PTC/factsheet-2026-10-08.md Fair value table); half the $95.90 spread ($47.95) / the 206.82 target = 23.2%."}
+    },
+    "base": {
+      "probability": {"value": 0.75, "cite": "evaluation Decision block scenarios.base.probability, research/PTC/2026-10-08-evaluation.md"},
+      "probability_evidence": "The deal is a signed, definitive agreement — SEC 8-K Item 1.01 filed 2026-10-05 (research/PTC/2026-10-08.md, confirmed via SEC EDGAR) — and the shares have held 103% of the 33.5% announcement-day jump on 19.8x average volume (research/PTC/factsheet-2026-10-08.md Price section), consistent with the market already pricing completion; the evaluation's bull case notes 'most announced US cash deals close' (research/PTC/2026-10-08-evaluation.md).",
+      "target_price_12m": {"value": 196.05, "cite": "evaluation Decision block scenarios.base.target_price_12m = reaction-day high [HI], research/PTC/2026-10-08-evaluation.md"},
+      "target_band": {"value": 0.2904, "cite": "Fact sheet base-case fair-value anchors disagree: DCF 95.18 vs EV/Revenue 209.08 (research/PTC/factsheet-2026-10-08.md Fair value table); half the $113.90 spread ($56.95) / the 196.05 target = 29.0%."}
+    },
+    "bear": {
+      "probability": {"value": 0.15, "cite": "evaluation Decision block scenarios.bear.probability, research/PTC/2026-10-08-evaluation.md"},
+      "probability_evidence": "Deal-completion risk from pending regulatory/shareholder approval is flagged by two active shareholder-fairness law-firm investigations (Halper Sadeh 2026-10-06, Brodsky & Smith 2026-10-05, research/PTC/factsheet-2026-10-08.md News & sentiment) and by Schneider Electric's own shares falling ~9% on the announcement, signalling investor skepticism about the price paid (Invezz, 2026-10-05, research/PTC/factsheet-2026-10-08.md News & sentiment) — both cited in the note's Unusual items section (research/PTC/2026-10-08.md).",
+      "target_price_12m": {"value": 133.15, "cite": "evaluation Decision block scenarios.bear.target_price_12m = fact sheet standalone base fair value, research/PTC/2026-10-08-evaluation.md"},
+      "target_band": {"value": 0.30, "cite": "Fact sheet bear-case fair-value anchors disagree sharply (DCF 31.49 vs EV/Revenue 164.48, research/PTC/factsheet-2026-10-08.md Fair value table); half that spread relative to the 133.15 target (~50%) exceeds the measured residual volatility (31.4% blended, research/PTC/2026-10-08-mc-inputs.json regression.residual_vol.blended), so the band is capped at 30%, just under that ceiling."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news for SPY (research/PTC/2026-10-08-mc-inputs.json factor_news.SPY): record highs (WSJ, CNBC 2026-10-06) alongside a tech-led selloff pressuring the broader market and a large bearish put-spread trade (CNBC, Reuters 2026-10-07); no clear direction, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "regression.factor_stats.SPY.vol_annual, research/PTC/2026-10-08-mc-inputs.json"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news for IEF (research/PTC/2026-10-08-mc-inputs.json factor_news.IEF): a deepening bond rout and 10y/30y yields at multi-decade highs (Bloomberg, WSJ, Barrons, late Sept/early Oct 2026) alongside a Treasury rebound and yields easing on a weak jobs report (Bloomberg, The Guardian, ETF Trends, 2026-10-01/02); no clear direction, so 0."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "regression.factor_stats.IEF.vol_annual, research/PTC/2026-10-08-mc-inputs.json"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Schneider Electric merger agreement termination",
+      "reason": "PTC's price is now pinned to a pending Schneider Electric cash takeover (8-K Item 1.01 filed 2026-10-05); the deal could fail to close on regulatory or shareholder grounds, reverting the shares toward standalone value.",
+      "cite": "research/PTC/2026-10-08.md 'Unusual items' section (8-K Item 1.01, 2026-10-05; two shareholder-fairness investigations: Halper Sadeh, Brodsky & Smith) and evaluation bear case, research/PTC/2026-10-08-evaluation.md",
+      "annual_probability": {"value": 0.15, "cite": "evaluation Decision block scenarios.bear.probability (the deal-break probability over the 12m horizon), research/PTC/2026-10-08-evaluation.md"},
+      "impact": {"value": -0.30, "cite": "Capped at the ±30% maximum for an assumption without an analogue (see assumption); approximates but is held below the fact sheet's implied break-scenario drop of -31.2% (133.15 base fair value vs 193.60 last close, research/PTC/factsheet-2026-10-08.md)."},
+      "analogue": null,
+      "assumption": "No week in PTC's 5y history (research/PTC/2026-10-08-mc-inputs.json analogues.all_weekly_moves) corresponds to a merger-termination event; the single 'M&A announcement' event-week on record (2026-03-16, -3.9%) is an unrelated, much smaller move, so no analogue is used and the impact is bounded at the ±30% assumption cap."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

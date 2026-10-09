@@ -1,0 +1,131 @@
+{
+  "ticker": "SCHW",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {
+        "value": 0.25,
+        "cite": "research/SCHW/2026-10-08-evaluation.md Decision JSON, scenarios.bull.probability"
+      },
+      "probability_evidence": "Record net-new-asset quarter and the Anthropic/Claude advisor tie-up support organic scale growth, and the 17.4x P/E sits 43% below its own 5y floor and 16% below peer median (20.6x) [factsheet Quality/Valuation], but AI-competition headlines (Vanguard) and rising short interest/bearish options flow temper how likely a peer re-rating is -> weighted below base/bear.",
+      "target_price_12m": {
+        "value": 113.0,
+        "cite": "research/SCHW/2026-10-08-evaluation.md Decision JSON, scenarios.bull.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.1968,
+        "cite": "Fact sheet fair-value table bull row: FCFE DCF 103.68 vs P/E-method 148.16 (research/SCHW/factsheet-2026-10-08.md Fair value table); half the 44.48 spread (22.24) relative to the evaluation's bull target 113.0 = 19.68%."
+      }
+    },
+    "base": {
+      "probability": {
+        "value": 0.43,
+        "cite": "research/SCHW/2026-10-08-evaluation.md Decision JSON, scenarios.base.probability"
+      },
+      "probability_evidence": "Price (95.58) already sits close to the fact sheet's FCFE DCF base fair value (93.55, -2.1%), and the reverse DCF implies the market is already pricing steady 4.6% growth fading to terminal -> the no-surprise, continuation-of-trend outcome is given the largest single weight.",
+      "target_price_12m": {
+        "value": 93.55,
+        "cite": "research/SCHW/2026-10-08-evaluation.md Decision JSON, scenarios.base.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.0635,
+        "cite": "Fact sheet fair-value table base row: FCFE DCF 93.55 vs P/E-method 81.66 (research/SCHW/factsheet-2026-10-08.md Fair value table); half the 11.89 spread (5.945) relative to the 93.55 target = 6.35%."
+      }
+    },
+    "bear": {
+      "probability": {
+        "value": 0.32,
+        "cite": "research/SCHW/2026-10-08-evaluation.md Decision JSON, scenarios.bear.probability"
+      },
+      "probability_evidence": "Macro overlay's moderate toward-bear tilt -- a one-month, broad-based hawkish repricing (fed funds +0.25pp, 10y +0.49pp, research/SCHW/2026-10-08-macro.md) that revives the specific 2022-23 cash-sorting/AFS-HTM-markdown mechanism which cut net margin to 26.8% in FY2023 -- is the cited reason the evaluator raised this probability above a symmetric default.",
+      "target_price_12m": {
+        "value": 69.64,
+        "cite": "research/SCHW/2026-10-08-evaluation.md Decision JSON, scenarios.bear.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.0985,
+        "cite": "Fact sheet fair-value table bear row: FCFE DCF 55.92 vs P/E-method 69.64 (research/SCHW/factsheet-2026-10-08.md Fair value table); half the 13.72 spread (6.86) relative to the 69.64 target = 9.85%."
+      }
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {
+        "value": 0.0,
+        "cite": "Factor news is mixed/offsetting: SPY and combined SPY/SPYM assets hit record highs (ETF Trends, TipRanks, CNBC, Bloomberg, 2026-10-06/07) while the same window shows 'two big bearish trades point to skepticism' (CNBC) and a tech rally 'masking a broader market sell-off... trouble is brewing' (CNBC) -- research/SCHW/2026-10-08-mc-inputs.json factor_news.SPY; no net directional view is supported, so 0."
+      },
+      "uncertainty_12m": {
+        "value": 0.1431154014991791,
+        "cite": "research/SCHW/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual"
+      }
+    },
+    "IEF": {
+      "expected_12m_move": {
+        "value": -0.05,
+        "cite": "Macro overlay's dominant_chain and market_pricing: 10y Treasury 5.27% (+0.49pp ~1m/+0.72pp ~3m, FRED DGS10) with the 2y (4.79%) ~91bp above fed funds implying the market still prices higher-for-longer rather than cuts (research/SCHW/2026-10-08-macro.md); consistent with factor_news.IEF headlines 'Global Bond Markets Sell Off' (Barrons, 2026-10-05) and 'The Bond Rout Is Deepening' (WSJ, 2026-10-01) in research/SCHW/2026-10-08-mc-inputs.json. Kept modest (-5%) since one headline (ETF Trends, 2026-10-02) notes a cooler PCE print pulled yields back from their peak, i.e. the move is not one-directional."
+      },
+      "uncertainty_12m": {
+        "value": 0.06460381100458489,
+        "cite": "research/SCHW/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual"
+      }
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings reaction (Oct 15)",
+      "reason": "Next earnings date is Oct 15, 2026; the evaluation's bear case flags that the release will reveal the client cash-sorting/net interest trend and that 'buying a week before is a coin-flip'.",
+      "cite": "research/SCHW/factsheet-2026-10-08.md Price section 'Next earnings date | Oct 15, 2026'; research/SCHW/2026-10-08-evaluation.md Bear case 'Q3 results on Oct 15 will reveal the cash mix; buying a week before is a coin-flip'.",
+      "annual_probability": {
+        "value": 0.34,
+        "cite": "Of 20 quarterly earnings_release weeks in the 5y history (research/SCHW/2026-10-08-mc-inputs.json analogues.event_weeks), only 2 (Q1 2022 -15.02%, Q2 2024 -17.64%) reached >=15% magnitude, the threshold matching the chosen impact: 2/20=10% per quarter -> 1-(0.9)^4=0.34 annual probability of at least one such reaction."
+      },
+      "impact": {
+        "value": -0.1764,
+        "cite": "Largest earnings-week move in the 5y history: Q2 2024 release (event_date 2024-07-16), week 2024-07-15, move -0.1764 -- research/SCHW/2026-10-08-mc-inputs.json analogues.event_weeks."
+      },
+      "analogue": {
+        "week": "2024-07-15",
+        "move": -0.1764
+      },
+      "assumption": null
+    },
+    {
+      "name": "Banking-sector deposit-flight / AFS-HTM mark-to-market shock",
+      "reason": "Macro overlay and bear case both name the 2022-23 cash-sorting/AFS-HTM-markdown playbook (SVB-era banking stress) as the acute tail risk to Schwab's securities book and deposit base -- an abrupt liquidity-event shock, distinct from the gradual NIM-compression effect already built into the bear scenario's 69.64 target.",
+      "cite": "research/SCHW/2026-10-08-macro.md dominant_chain 'long yields -> AFS/HTM unrealized losses -> book value/P/B multiple'; research/SCHW/2026-10-08-evaluation.md Bear case 'revives the 2022-23 cash-sorting and AFS/HTM-markdown playbook'.",
+      "annual_probability": {
+        "value": 0.2,
+        "cite": "Only one weekly move beyond -20% in the 5-year history (2023-03-06, -24.17%, coinciding with the March 2023 regional-bank stress episode) -- research/SCHW/2026-10-08-mc-inputs.json analogues.largest_falls; ~1 event per 5 years of history."
+      },
+      "impact": {
+        "value": -0.2417,
+        "cite": "research/SCHW/2026-10-08-mc-inputs.json analogues.largest_falls, week 2023-03-06, move -0.2417."
+      },
+      "analogue": {
+        "week": "2023-03-06",
+        "move": -0.2417
+      },
+      "assumption": null
+    },
+    {
+      "name": "AI/fintech competitive disruption (Vanguard)",
+      "reason": "The note and fact sheet flag AI-driven competitive pressure from Vanguard as a real risk to Schwab's scale/low-cost moat, separate from the valuation-based scenarios.",
+      "cite": "research/SCHW/2026-10-08.md Quality section 'a headline flags AI-driven pressure from Vanguard [Likely]'; research/SCHW/factsheet-2026-10-08.md News & sentiment, 2026-09-22 'Schwab slips amid AI competition from Vanguard, IBD reports'.",
+      "annual_probability": {
+        "value": 0.5,
+        "cite": "Within the single month covered by the fact sheet's news window, two separate AI-competitive-threat headlines appeared (TheFly 2026-09-22 'Schwab slips amid AI competition from Vanguard'; CNBC 2026-09-29 'Muse is crushing these consumer stocks', research/SCHW/factsheet-2026-10-08.md News & sentiment); extrapolated conservatively (not compounding a one-month rate) to a 50% probability that a comparable competitive-driven selloff recurs over the next 12 months."
+      },
+      "impact": {
+        "value": -0.0591,
+        "cite": "research/SCHW/2026-10-08-mc-inputs.json analogues.all_weekly_moves, week 2026-09-21 (covering the 2026-09-22 competition headline), move -0.0591."
+      },
+      "analogue": {
+        "week": "2026-09-21",
+        "move": -0.0591
+      },
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

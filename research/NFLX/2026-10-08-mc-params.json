@@ -1,0 +1,47 @@
+{
+  "ticker": "NFLX",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/NFLX/2026-10-08-evaluation.md Decision json scenarios.bull.probability"},
+      "probability_evidence": "All four regions grew in H1 2026, ROIC (32.4%), operating margin (29.7%) and FCF margin (23.1%) are near 5y highs, and P/E, EV/EBITDA and P/FCF all sit below their 5y minimums; Disney licensing titles ('Ice Age', 'Will Trent') to Netflix evidences persisting platform power (evaluation bull case; fact sheet Quality/Valuation tables; https://www.reuters.com/business/media-telecom/disney-licenses-lineup-movies-tv-shows-netflix-including-ice-age-will-trent-2026-10-02/).",
+      "target_price_12m": {"value": 92.5, "cite": "research/NFLX/2026-10-08-evaluation.md Decision json scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.30, "cite": "Fact sheet Fair value table, Bull row: DCF $35.86 vs EV/EBITDA $122.51 implies a half-spread of 46.8% of the $92.50 target (half*(122.51-35.86)/92.5); capped at the mc-inputs.json regression.residual_vol.blended ceiling of 33.5% (0.3347541375104222) per the target_band rule."}
+    },
+    "base": {
+      "probability": {"value": 0.40, "cite": "research/NFLX/2026-10-08-evaluation.md Decision json scenarios.base.probability"},
+      "probability_evidence": "Revenue growth is already slowing toward the ~15% H1 2026 pace shown on the income statement, without yet breaking the five-year margin/ROIC improvement trend, making a 'multiple stays compressed while growth moderates' outcome the modal case (evaluation base case basis; fact sheet income-statement regional growth figures).",
+      "target_price_12m": {"value": 64.74, "cite": "research/NFLX/2026-10-08-evaluation.md Decision json scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.24, "cite": "Fact sheet Fair value table, Base row: DCF $28.84 vs EV/EBITDA $60.46 implies a half-spread of 24.4% of the $64.74 target (half*(60.46-28.84)/64.74 = 0.2442); within the mc-inputs.json regression.residual_vol.blended ceiling of 33.5%."}
+    },
+    "bear": {
+      "probability": {"value": 0.35, "cite": "research/NFLX/2026-10-08-evaluation.md Decision json scenarios.bear.probability"},
+      "probability_evidence": "Co-CEO Sarandos said Netflix is 'not growing as fast as I want' two weeks before Q3 results (TipRanks/Bloomberg headlines, 2026-10-01); the reverse DCF requires 30.2% year-one growth versus the ~15% delivered; EV/EBITDA is still 47% above peers; and the macro overlay's moderate toward-bear tilt (real-yield-driven cost-of-equity pressure amplified by a 1.61 beta) reinforces downside (evaluation bear case; research/NFLX/2026-10-08-macro.md).",
+      "target_price_12m": {"value": 46.83, "cite": "research/NFLX/2026-10-08-evaluation.md Decision json scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.30, "cite": "Fact sheet Fair value table, Bear row: DCF -$1.39 vs EV/EBITDA $46.83 implies a half-spread of 51.5% of the $46.83 target (half*(46.83-(-1.39))/46.83); capped at the mc-inputs.json regression.residual_vol.blended ceiling of 33.5% (0.3347541375104222) per the target_band rule."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed over 2026-10-06/07: record highs ('S&P closes at record high, breaking 7,800 points', CNBC Intl TV; 'S&P 500 Hits Record High as Big Tech Leads', Bloomberg) alongside selloff/skepticism signals on the same dates ('SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields', TipRanks; 'Two big bearish trades point to skepticism', CNBC; 'S&P 500, Nasdaq ease from record highs as Treasury yields climb', Reuters) -- no net directional signal, set to 0 per the factor rule."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/NFLX/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "mc-inputs.json factor_news.IEF headlines skew toward a continuing bond rout as of the most recent dates ('US 30-Year Yields Return to 2002 High', Bloomberg, 2026-10-07; 'Global Bond Markets Sell Off on France's Fiscal Worries', Barrons, 2026-10-05; 'The Bond Rout Is Deepening...', WSJ, 2026-10-01), consistent with the macro overlay's facts (research/NFLX/2026-10-08-macro.md: 10y real yield DFII10 2.91% up +0.61pp over 3m, 10y nominal DGS10 5.27%, both real-rate-led); a modest negative 12m move for the Treasury-price ETF (within the +/-15% bound for non-extraordinary news)."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/NFLX/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings (Oct 20) confirms growth deceleration",
+      "reason": "Co-CEO Sarandos said two weeks before Q3 2026 results that Netflix is 'not growing as fast as I want'; the evaluation's bear case states a guide-down at the Oct 20 report would confirm deceleration is structural.",
+      "cite": "research/NFLX/2026-10-08-evaluation.md bear case ('that comment came two weeks before Q3 results on Oct 20... A guide-down there would confirm deceleration'); fact sheet Price section 'Next earnings date: Oct 20, 2026'.",
+      "annual_probability": {"value": 0.4, "cite": "research/NFLX/2026-10-08-mc-inputs.json analogues.event_weeks: 2 of roughly 20 quarterly reports since Oct 2021 produced a >20% weekly move tied to subscriber/growth disappointment (Q4 2021: -24.4% on 2022-01-18; Q1 2022: -36.8% on 2022-04-18) over the ~5-year history, i.e. about 0.4/year."},
+      "impact": {"value": -0.2439, "cite": "research/NFLX/2026-10-08-mc-inputs.json analogues.event_weeks, Q4 2021 report (week 2022-01-18, move -0.2439) -- a subscriber/growth-miss reaction directly analogous to the current co-CEO deceleration comment."},
+      "analogue": {"week": "2022-01-18", "move": -0.2439},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

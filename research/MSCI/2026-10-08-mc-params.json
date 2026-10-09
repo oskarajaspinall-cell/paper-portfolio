@@ -1,0 +1,56 @@
+{
+ "ticker": "MSCI",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.2, "cite": "Evaluation decision JSON scenarios.bull.probability (research/MSCI/2026-10-08-evaluation.md)"},
+   "probability_evidence": "The macro overlay's moderate tilt toward bear cuts the bull probability: US 10y real yield (DFII10) rose +0.61pp/3m while MSCI underperformed SPY by -12.6pp over the same window despite calm risk appetite (VIX 15.01, -1.12pp/3m) (research/MSCI/2026-10-08-macro.md macro_tilt).",
+   "target_price_12m": {"value": 655, "cite": "Evaluation decision JSON scenarios.bull.target_price_12m (research/MSCI/2026-10-08-evaluation.md): P/E re-rates to its 5-year minimum of 35.9x [RA] on TTM EPS."},
+   "target_band": {"value": 0.24, "cite": "Half the spread between the fact sheet's two valuation anchors for the bull case -- DCF/FCFE best $334.18 vs P/E second-best $780.14 (factsheet-2026-10-08.md fair-value table) -- divided by the $655 target is 34%; capped just under the blended residual volatility 24.77% (research/MSCI/2026-10-08-mc-inputs.json regression.residual_vol.blended), the bound that target_band may not exceed."}
+  },
+  "base": {
+   "probability": {"value": 0.45, "cite": "Evaluation decision JSON scenarios.base.probability (research/MSCI/2026-10-08-evaluation.md)"},
+   "probability_evidence": "The macro overlay assesses the AUM/equity-level (ABF) channel as 'benign' with VIX calm (15.01, -1.12pp/3m) and HY spreads still low (3.03%, +0.36pp/3m) (research/MSCI/2026-10-08-macro.md), supporting a steady-state outcome (P/E holds at 30.4x) as the modal case ahead of the 2026-10-20 Q3 print.",
+   "target_price_12m": {"value": 583, "cite": "Evaluation decision JSON scenarios.base.target_price_12m (research/MSCI/2026-10-08-evaluation.md): P/E holds at 30.4x [RA] while the 4.85% YoY share-count reduction [ST] lifts EPS."},
+   "target_band": {"value": 0.24, "cite": "Half the spread between the fact sheet's two valuation anchors for the base case -- DCF/FCFE best $249.65 vs P/E second-best $774.17 (factsheet-2026-10-08.md fair-value table) -- divided by the $583 target is 45%; capped just under the blended residual volatility 24.77% (research/MSCI/2026-10-08-mc-inputs.json regression.residual_vol.blended), the bound that target_band may not exceed."}
+  },
+  "bear": {
+   "probability": {"value": 0.35, "cite": "Evaluation decision JSON scenarios.bear.probability (research/MSCI/2026-10-08-evaluation.md)"},
+   "probability_evidence": "The macro overlay raises the bear probability: real yields (DFII10) rose +0.61pp/3m and nominal 10y (DGS10) +0.72pp/3m while MSCI fell -8.7% (-12.6pp vs SPY) over the same window, and ABF (26.6% of H1 2026 revenue, 10-Q) has no valuation cushion since the price already sits far above the base DCF (research/MSCI/2026-10-08-macro.md macro_tilt and macro_bear).",
+   "target_price_12m": {"value": 480, "cite": "Evaluation decision JSON scenarios.bear.target_price_12m (research/MSCI/2026-10-08-evaluation.md): P/E compresses to the 26.3x peer median [RA, P:SPGI/MCO/FDS/LSEG]."},
+   "target_band": {"value": 0.24, "cite": "Half the spread between the fact sheet's two valuation anchors for the bear case -- DCF/FCFE best $192.70 vs P/E second-best $654.73 (factsheet-2026-10-08.md fair-value table) -- divided by the $480 target is 48%; capped just under the blended residual volatility 24.77% (research/MSCI/2026-10-08-mc-inputs.json regression.residual_vol.blended), the bound that target_band may not exceed."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "Mixed factor_news.SPY in research/MSCI/2026-10-08-mc-inputs.json: 2026-10-06/07 headlines show the S&P 500 at record highs driven only by big tech ('S&P 500 Hits Record High as Big Tech Leads', WSJ 'powered by tech-and not much else') alongside explicit skepticism ('Two big bearish trades point to skepticism', CNBC) and a same-day pullback from highs as yields climbed (Reuters) -- no clear net direction, so 0."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/MSCI/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.05, "cite": "factor_news.IEF in research/MSCI/2026-10-08-mc-inputs.json shows a rising-yield/bond-selloff tone through early October 2026 ('US 30-Year Yields Return to 2002 High', 'Global Bond Markets Sell Off on France's Fiscal Worries', 'The Bond Rout Is Deepening', 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002'), consistent with the macro overlay's dominant chain ('real yields -> discount rate') and macro_bear ('real yields keep rising') (research/MSCI/2026-10-08-macro.md); modest -5% move for the bond-price factor, within the +-15% bound."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/MSCI/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Q3 2026 earnings release (2026-10-20)",
+   "reason": "A discrete, scheduled quarterly-earnings event named explicitly in the bear case; MSCI's weekly history shows double-digit single-week swings around earnings reactions (e.g., -12.39% the week of the Q2 2026 release, +18.13% the week of the Q3 2022 release).",
+   "cite": "Evaluation bear case: 'Q3 results are due 2026-10-20 [Certain] (ST)' (research/MSCI/2026-10-08-evaluation.md); fact sheet Price section 'Next earnings date Oct 20, 2026' [ST,OV] (research/MSCI/factsheet-2026-10-08.md); event_weeks Q2 2026 entry in research/MSCI/2026-10-08-mc-inputs.json.",
+   "annual_probability": {"value": 0.25, "cite": "MSCI reports quarterly results four times a year (Q1-Q4); a single earnings-week shock models one such report, so 1/4 = 0.25 per report-driven path; next report 2026-10-20 (factsheet Price section, ST/OV)."},
+   "impact": {"value": -0.1239, "cite": "research/MSCI/2026-10-08-mc-inputs.json analogues.largest_falls / event_weeks: Q2 2026 earnings week 2026-07-20, move -12.39%."},
+   "analogue": {"week": "2026-07-20", "move": -0.1239},
+   "assumption": null
+  },
+  {
+   "name": "BlackRock client-concentration shock (index in-sourcing/dual-sourcing)",
+   "reason": "BlackRock is 11.8% of MSCI's total revenue and 19.8% of Index-segment revenue; the note and evaluation name BlackRock disclosing in-sourcing or dual-sourcing of index benchmarks as direct evidence the switching-cost moat is failing -- a discrete, idiosyncratic client/business risk distinct from the continuous ROIC/margin/leverage triggers.",
+   "cite": "research/MSCI/2026-10-08.md section 4 ('BlackRock's share of consolidated revenue or Index-segment revenue... rises further, or BlackRock discloses in-sourcing/dual-sourcing of index benchmarks'); 10-Q https://www.sec.gov/Archives/edgar/data/1408198/000140819826000046/msci-20260630.htm.",
+   "annual_probability": {"value": 0.05, "cite": "No week in the 5-year weekly history (research/MSCI/2026-10-08-mc-inputs.json analogues, 2021-10-18 to 2026-09-28, largest_falls/largest_rises/event_weeks) matches a BlackRock concentration shock; zero occurrences observed over ~5 years implies a low-frequency tail, taken here as roughly once per 20 years (0.05/yr)."},
+   "impact": {"value": -0.2, "cite": "No historical analogue exists for this specific risk; impact is a stated assumption bounded by [montecarlo].max_jump_impact_assumed = 0.30 (CLAUDE.md config), set below the cap given the risk is a partial client-relationship erosion rather than a total loss."},
+   "analogue": null,
+   "assumption": "No historical analogue for a BlackRock client-concentration/in-sourcing shock exists in the stock's 5-year weekly history (research/MSCI/2026-10-08-mc-inputs.json analogues); impact set at -20%, within the +-30% bound for an assumed jump (config montecarlo.max_jump_impact_assumed = 0.30)."
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": {"value": -0.015, "cite": "Fact sheet Price section (research/MSCI/factsheet-2026-10-08.md): price is -0.8% vs its 50-day MA and -3.0% vs its 200-day MA, the 50-day MA sits -2.3% below the 200-day MA, and 3-month momentum is -8.7%, a mildly bearish short-term setup (RSI 51.4 is neutral, so the tilt is kept modest and well inside the +-2% annualised bound)."}
+}

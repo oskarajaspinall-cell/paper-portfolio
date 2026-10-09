@@ -1,0 +1,47 @@
+{
+  "ticker": "WRB",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.28, "cite": "evaluation.json scenarios.bull.probability (research/WRB/2026-10-08-evaluation.md Decision block)"},
+      "probability_evidence": "Q2 2026 operating EPS rose 21% YoY on record investment income and strong underwriting, with insurance premiums up mid-single digits (fact sheet News, Q2 2026 earnings call transcript); ROIC/ROE have risen every year FY2021-TTM (fact sheet Quality) supporting a case where ROE holds near its 20.2% TTM level.",
+      "target_price_12m": {"value": 77.06, "cite": "evaluation.json scenarios.bull.target_price_12m = fact sheet Fair value bull case (research/WRB/2026-10-08-evaluation.md; fact sheet Fair value table)"},
+      "target_band": {"value": 0.0472, "cite": "Fact sheet Fair value: bull-case implied prices disagree between P/B+ROE (79.48) and P/E (72.21); band = half the spread (3.635) relative to the bull target 77.06"}
+    },
+    "base": {
+      "probability": {"value": 0.50, "cite": "evaluation.json scenarios.base.probability (research/WRB/2026-10-08-evaluation.md Decision block)"},
+      "probability_evidence": "Current P/E (14.3x) and EV/EBITDA (10.7x) sit almost exactly on their own 5y medians (14.6x / 10.7x), not at either extreme (fact sheet Valuation), consistent with a base case where multiples stay near their medians.",
+      "target_price_12m": {"value": 73.89, "cite": "evaluation.json scenarios.base.target_price_12m = fact sheet Fair value base case (research/WRB/2026-10-08-evaluation.md; fact sheet Fair value table)"},
+      "target_band": {"value": 0.0319, "cite": "Fact sheet Fair value: base-case implied prices disagree between P/B+ROE (75.46) and P/E (70.75); band = half the spread (2.355) relative to the base target 73.89"}
+    },
+    "bear": {
+      "probability": {"value": 0.22, "cite": "evaluation.json scenarios.bear.probability (research/WRB/2026-10-08-evaluation.md Decision block)"},
+      "probability_evidence": "Q2 2026 earnings call flagged competitive pressure in the reinsurance segment and attributed EPS growth to record investment income rather than underwriting (fact sheet News, Q2 2026 transcript); FCF conversion has drifted down from 207% (FY2021) to 180% (TTM) (fact sheet Quality), supporting a softening-returns bear case.",
+      "target_price_12m": {"value": 60.62, "cite": "evaluation.json scenarios.bear.target_price_12m = fact sheet Fair value bear case (research/WRB/2026-10-08-evaluation.md; fact sheet Fair value table)"},
+      "target_band": {"value": 0.0486, "cite": "Fact sheet Fair value: bear-case implied prices disagree between P/B+ROE (58.66) and P/E (64.55); band = half the spread (2.945) relative to the bear target 60.62"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY is mixed: record highs and $1tn combined assets (ETF Trends, CNBC) alongside a tech-driven narrow rally, bearish hedging flows and a selloff pressured by Treasury yields (CNBC 'bearish trades'; TipRanks 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields', both 2026-10-07) - no clear directional signal, so 0"},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "research/WRB/2026-10-08-macro.md macro_tilt ('toward bull, small') and dominant_chain: tilt assumes the real/nominal yield rise continues in an orderly, growth/term-premium-led fashion (not a pause or reversal), which for the 7-10y Treasury price factor (IEF) implies a further modest price decline, consistent with FRED's already-recorded +0.72pp 3-month rise in the 10y yield (DGS10) cited in the overlay"},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction",
+      "reason": "Next earnings (Q3 2026) due 2026-10-19, within the 12m horizon; the prior (Q2 2026) call flagged competitive pressure in the reinsurance segment, a named risk to the next earnings reaction",
+      "cite": "fact sheet News (earnings-date headline, 2026-09-22) and evaluation bear case citing the Q2 2026 transcript's reinsurance competitive-pressure comment (research/WRB/2026-10-08-evaluation.md)",
+      "annual_probability": {"value": 0.76, "cite": "mc-inputs.json analogues.event_weeks: 6 of the last 20 quarterly earnings weeks (2021-10-18 to 2026-07-20) moved >=5% in either direction; at 4 earnings/year, P(at least one such move in 12m) = 1-(1-6/20)^4 = 0.76"},
+      "impact": {"value": -0.0698, "cite": "mc-inputs.json analogues.all_weekly_moves week 2024-04-22 (Q1 2024 earnings reaction, event_weeks), move -0.0698 - a downside earnings reaction analogue consistent with the bear case's reinsurance competitive-pressure risk"},
+      "analogue": {"week": "2024-04-22", "move": -0.0698},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

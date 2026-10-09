@@ -1,0 +1,56 @@
+{
+  "ticker": "CINF",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.3, "cite": "evaluation.md scenarios.bull.probability (2026-10-08-evaluation.md)"},
+      "probability_evidence": "CINF trades 29% below the 5-peer P/E median and 35% below peer P/B with a 13.71% FCF yield and P/FCF below its 5y minimum, funded by near-zero net debt and 0.57% YoY buybacks (factsheet-2026-10-08.md Valuation/Other); rising real yields (DFII10 +61bp/3m to 2.91%) are an unpriced tailwind to investment income per the macro overlay's small toward-bull tilt (research/CINF/2026-10-08-macro.md), which could let a clean Q3 close part of the gap to the 5y median P/E of 9.3x (evaluation.md bull case).",
+      "target_price_12m": {"value": 197.17, "cite": "evaluation.md scenarios.bull.target_price_12m (2026-10-08-evaluation.md)"},
+      "target_band": {"value": 0.1949, "cite": "Half the spread between the fact sheet's bull-scenario valuation anchors (P/B+ROE $284.56 vs P/E $207.68, factsheet-2026-10-08.md Fair value table), relative to the $197.17 target: (284.56-207.68)/2/197.17=19.49%; within the mc-inputs.json blended residual volatility ceiling of 21.77%."}
+    },
+    "base": {
+      "probability": {"value": 0.48, "cite": "evaluation.md scenarios.base.probability (2026-10-08-evaluation.md)"},
+      "probability_evidence": "Q2 2026 non-GAAP EPS of $1.43 missed the $1.82 consensus and management described a softening market with higher catastrophe losses (factsheet-2026-10-08.md News & sentiment, OV); P/B of 1.5x sits at its own 5-year median (54th percentile of range, factsheet Valuation table), not cheap versus CINF's own history, so the base case keeps P/B near its median while book compounds at the FY2023-FY2025 sustainable ROE of 16.0-17.6% (evaluation.md base case; factsheet Quality table RA).",
+      "target_price_12m": {"value": 170.0, "cite": "evaluation.md scenarios.base.target_price_12m (2026-10-08-evaluation.md)"},
+      "target_band": {"value": 0.217, "cite": "Computed half-spread between the fact sheet's base-scenario valuation anchors (P/B+ROE $271.93 vs P/E $197.17, factsheet-2026-10-08.md Fair value table) relative to the $170.00 target is (271.93-197.17)/2/170.00=21.99%, which exceeds the mc-inputs.json blended residual volatility of 21.77%; capped at 21.70% (just under that measured ceiling) per the montecarlo.py bound."}
+    },
+    "bear": {
+      "probability": {"value": 0.22, "cite": "evaluation.md scenarios.bear.probability (2026-10-08-evaluation.md)"},
+      "probability_evidence": "FY2022 shows a single investment-portfolio mark-to-market drawdown produced ROE of -4.1% and FCF conversion of -418% (factsheet-2026-10-08.md Quality table, RA); management flagged a softening market and higher catastrophe losses on the Q2 2026 earnings call (factsheet News & sentiment, OV transcript), and Q3 2026 results land Oct 26, 2026, inside the 12m horizon, giving a concrete near-term catalyst for a further operating miss (evaluation.md bear case).",
+      "target_price_12m": {"value": 131.09, "cite": "evaluation.md scenarios.bear.target_price_12m (2026-10-08-evaluation.md)"},
+      "target_band": {"value": 0.217, "cite": "Computed half-spread between the fact sheet's bear-scenario valuation anchors (P/B+ROE $254.95 vs P/E $131.09, factsheet-2026-10-08.md Fair value table) relative to the $131.09 target is (254.95-131.09)/2/131.09=47.25%, which far exceeds the mc-inputs.json blended residual volatility of 21.77%; capped at 21.70% (just under that measured ceiling) per the montecarlo.py bound."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "Mixed/conflicting SPY factor news in mc-inputs.json factor_news.SPY: record highs ('S&P closes at record high, breaking 7,800 points', CNBC 2026-10-07) alongside warnings the rally is narrow and masks a broader sell-off ('Stocks made a record high. Two big bearish trades point to skepticism', CNBC 2026-10-07; 'Stock Market Today: SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields', TipRanks 2026-10-07) -- no clear direction, so 0 per house rule for mixed news."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "mc-inputs.json factor_news.IEF headlines dominated by a bond rout ('US 30-Year Yields Return to 2002 High', Bloomberg 2026-10-07; 'Global Bond Markets Sell Off on France's Fiscal Worries', Barrons 2026-10-05; 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002', Bloomberg 2026-10-01), outweighing a single cooler-PCE breather (ETF Trends 2026-10-02); corroborated by research/CINF/2026-10-08-macro.md: DGS10 +72bp/3m to 5.27% and DFII10 +61bp/3m to 2.91%, with a refresh trigger expecting DFII10 toward 3.25% -- a modest further yield rise implies a modest IEF (bond price) decline, kept small per the overlay's 'small' tilt sizing."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression)."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction (Q3 2026 reports Oct 26, 2026)",
+      "reason": "Evaluation bear case: 'Q3 results land 26 October; a further operating miss is plausible,' and Q2 2026 non-GAAP EPS missed consensus ($1.43 vs $1.82); models the risk of another large adverse earnings-week reaction within the 12m horizon.",
+      "cite": "research/CINF/2026-10-08-evaluation.md bear case; factsheet-2026-10-08.md News & sentiment (Q2 2026 EPS miss)",
+      "annual_probability": {"value": 0.35, "cite": "mc-inputs.json analogues.event_weeks: 2 of the last ~20 quarterly earnings weeks produced a >7% adverse weekly move (Q1 2022 -10.24% on 2022-04-25; Q2 2022 -12.17% on 2022-07-25); P(>=1 in 4 reports/yr) = 1-(0.9)^4 ~= 0.35."},
+      "impact": {"value": -0.1217, "cite": "mc-inputs.json analogues.event_weeks, Q2 2022 earnings week (2022-07-25), move -0.1217 -- the largest adverse earnings-week reaction in the regression history."},
+      "analogue": {"week": "2022-07-25", "move": -0.1217},
+      "assumption": null
+    },
+    {
+      "name": "Risk-off shock hitting the equity book and AOCI simultaneously",
+      "reason": "Macro overlay bear case: 'A risk-off shock (VIX and HY spreads spiking) hits CINF's equity securities and widens AOCI losses on its bond book simultaneously, compressing reported book value and EPS...echoing FY2022'; FY2022 ROE of -4.1% and FCF conversion of -418% in the fact sheet show this is a realised, material risk.",
+      "cite": "research/CINF/2026-10-08-macro.md macro_bear; factsheet-2026-10-08.md Quality table (FY2022 ROE -4.1%, RA)",
+      "annual_probability": {"value": 0.45, "cite": "mc-inputs.json analogues.largest_falls: 3 weekly falls of >=9.5% in the ~5y history (2022-07-25 -12.17%, 2022-04-25 -10.24%, 2025-03-31 -9.52%) => Poisson rate ~0.6/yr, P(>=1/yr)=1-e^-0.6~=0.45."},
+      "impact": {"value": -0.0952, "cite": "mc-inputs.json analogues.largest_falls, week 2025-03-31, move -0.0952 -- a non-earnings market-wide fall, distinct from the earnings jump above."},
+      "analogue": {"week": "2025-03-31", "move": -0.0952},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Entertainment",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -1.3881868612904062,
+    "base": 28.84416041957649,
+    "bull": 35.85758412369594
+   },
+   "implied_growth": 0.30241405450579295,
+   "discount_rate": 0.1285765272731998,
+   "cost_of_equity": 0.13335,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.037806332784868404,
+     "base": 0.07175246232083586,
+     "bull": 0.12639718371360664
+    },
+    "cash_flow_margin": {
+     "bear": 0.003085805813378234,
+     "base": 0.229964265028148,
+     "bull": 0.229964265028148
+    },
+    "cagr_3y": 0.12639718371360664,
+    "cagr_5y": 0.11061266556973681,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 46.82819424402047,
+    "base": 60.46029481705812,
+    "bull": 122.5117754192884
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 23.711,
+     "base": 30.365,
+     "bull": 36.317
+    },
+    "ttm_ebitda": 14726931000,
+    "peak_earnings": "TTM EBITDA is 2.0x its 5y median: bear/base use the 5y average (8.818e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 69.7,
+ "risk_free": 0.0527,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 14.68394017381322,
+  "base": 39.382871885403695,
+  "bull": 64.7423145555601
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7893265398305134,
+  "base": -0.43496597008029136,
+  "bull": -0.07112891598909477
+ },
+ "implied_growth": 0.30241405450579295,
+ "ticker": "NFLX",
+ "asof": "2026-10-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-07",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/nflx/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/nflx/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/nflx/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/nflx/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/nflx/statistics/"
+ }
+}

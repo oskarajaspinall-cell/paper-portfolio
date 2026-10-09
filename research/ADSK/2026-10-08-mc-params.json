@@ -1,0 +1,47 @@
+{
+  "ticker": "ADSK",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/ADSK/2026-10-08-evaluation.md scenarios.bull.probability (copied exactly)"},
+      "probability_evidence": "Quality at multi-year highs (TTM ROIC 57.6%, operating margin 28.1% rising +8.0pp/5y, FCF margin 36.4%) with every multiple 33-44% below peer median and below the stock's own 5y minimum (factsheet RA/valuation); agentic AI across Forma/Fusion/Flow and the Eaton Workbench 360 partnership (PRNewswire/BusinessWire 2026-09-09/09-10/09-15) support the bull thesis that AI extends rather than erodes the moat, and buybacks (-1.62% shares YoY) compound per-share value (evaluation bull case; note §5).",
+      "target_price_12m": {"value": 300, "cite": "research/ADSK/2026-10-08-evaluation.md scenarios.bull.target_price_12m (copied exactly)"},
+      "target_band": {"value": 0.32, "cite": "Half-spread of the fact sheet's bull-case valuation anchors (DCF 186.93 vs EV/Revenue 405.65; half-spread 109.36) relative to the $300 target = 36.5%, which exceeds the inputs file's blended residual volatility (research/ADSK/2026-10-08-mc-inputs.json regression.residual_vol.blended = 32.9%); capped at that measured ceiling per the house rule that target_band must not exceed residual volatility."}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "research/ADSK/2026-10-08-evaluation.md scenarios.base.probability (copied exactly)"},
+      "probability_evidence": "Guidance reset at the 2026-08-28 Q2 FY2027 print (beat on revenue and EPS, but Q3/FY guidance fell short of Street expectations, stock fell ~4%, Barrons https://www.barrons.com/articles/autodesk-earnings-stock-price-a695556f) signals growth converging toward the fact sheet's mechanical base fair value of 219.04 rather than the 20.6% year-1 growth the price implied, cushioned by ongoing buybacks (-1.62% shares YoY, factsheet ST) and net-cash balance sheet.",
+      "target_price_12m": {"value": 225, "cite": "research/ADSK/2026-10-08-evaluation.md scenarios.base.target_price_12m (copied exactly)"},
+      "target_band": {"value": 0.32, "cite": "Half-spread of the fact sheet's base-case valuation anchors (DCF 144.84 vs EV/Revenue 367.44; half-spread 111.30) relative to the $225 target = 49.5%, which exceeds the inputs file's blended residual volatility (research/ADSK/2026-10-08-mc-inputs.json regression.residual_vol.blended = 32.9%); capped at that measured ceiling per the house rule that target_band must not exceed residual volatility."}
+    },
+    "bear": {
+      "probability": {"value": 0.25, "cite": "research/ADSK/2026-10-08-evaluation.md scenarios.bear.probability (copied exactly)"},
+      "probability_evidence": "The 10-K concedes 'limited barriers to entry' and names Adobe, Bentley, Dassault Systèmes and PTC as AI-native competitors capable of eroding seat-based pricing (SEC 10-K, cited in note §2); momentum is already weak (12-month -27.7%, -43.5pp vs SPY, 50-day MA below 200-day MA, factsheet Price section), consistent with the market re-anchoring on the lower DCF value rather than EV/Revenue.",
+      "target_price_12m": {"value": 165, "cite": "research/ADSK/2026-10-08-evaluation.md scenarios.bear.target_price_12m (copied exactly)"},
+      "target_band": {"value": 0.32, "cite": "Half-spread of the fact sheet's bear-case valuation anchors (DCF 50.05 vs EV/Revenue 275.35; half-spread 112.65) relative to the $165 target = 68.3%, which exceeds the inputs file's blended residual volatility (research/ADSK/2026-10-08-mc-inputs.json regression.residual_vol.blended = 32.9%); capped at that measured ceiling per the house rule that target_band must not exceed residual volatility."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0, "cite": "Mixed signal, no directional read taken: mc-inputs factor_news.SPY shows the S&P 500 at record highs (CNBC/WSJ 2026-10-06/07) alongside a tech-led pullback, elevated Treasury yields and a large bearish put-spread trade (TipRanks, Reuters, CNBC, all 2026-10-07); the macro overlay (research/ADSK/2026-10-08-macro.md) explicitly treats macro as 'context' only, not a lever specific to ADSK's thesis, so no directional tilt is applied."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/ADSK/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual (14.3% annualised weekly-return volatility, 156-week regression)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0, "cite": "Mixed signal, no directional read taken: mc-inputs factor_news.IEF shows a global bond selloff with 30y/10y yields at multi-decade highs (Bloomberg/Barrons/WSJ, 2026-10-01/05/07) alongside yield retreats/rebounds on a cooler PCE print and a weak jobs report (ETF Trends, Bloomberg, Guardian, all 2026-10-02); the macro overlay does not supply a dominant_chain or macro_tilt for this factor, so no directional tilt is applied."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/ADSK/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual (6.5% annualised weekly-return volatility, 156-week regression)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Earnings/guidance surprise (quarterly print)",
+      "reason": "ADSK's last print (Q2 FY2027, reported 2026-08-28) beat on revenue and EPS but Q3/FY guidance fell short of Street expectations, and the stock fell ~4% that day; the evaluation's reconsideration trigger is explicitly keyed to the next report (est. Nov 24, 2026) beating AND raising guidance, confirming guidance risk is a live, repeating catalyst each quarter.",
+      "cite": "research/ADSK/factsheet-2026-10-08.md Price section ('Next earnings date Nov 24, 2026 (Est. Earnings)'); research/ADSK/2026-10-08.md §6 ('Q2 FY2027 results... beat on both revenue and EPS, but FY and Q3 guidance fell short... stock fell ~4%', citing https://www.barrons.com/articles/autodesk-earnings-stock-price-a695556f); research/ADSK/2026-10-08-evaluation.md triggers ('Reconsider for BUY if next results... beat AND guidance is raised rather than cut')",
+      "annual_probability": {"value": 0.2, "cite": "research/ADSK/2026-10-08-mc-inputs.json analogues.event_weeks: exactly 1 earnings-week move of this magnitude (-21.19%, week 2021-11-22, 'Q3 2022' earnings_release) across the 5-year analogue history (2021-10-18 to 2026-09-28, analogues.history_from/history_to) -> 1 occurrence / 5 years ≈ 0.20 annual probability"},
+      "impact": {"value": -0.2119, "cite": "research/ADSK/2026-10-08-mc-inputs.json analogues.event_weeks, week 2021-11-22 (Q3 2022 earnings_release), move -0.2119 — the largest earnings-week reaction in the stock's 5-year history, and also the top entry in analogues.largest_falls"},
+      "analogue": {"week": "2021-11-22", "move": -0.2119},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

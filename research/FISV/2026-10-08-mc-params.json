@@ -1,0 +1,65 @@
+{
+  "ticker": "FISV",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation Decision.scenarios.bull.probability, research/FISV/2026-10-08-evaluation.md"},
+      "probability_evidence": "Bull rests on a real switching-cost moat still winning business (Clover: Hard Rock Stadium, Winnipeg Blue Bombers venue wins), shrinking share count (-5.21% YoY) and falling short interest (-9.8% MoM) — but these offset, rather than reverse, the falling ROIC/margins and distress-zone Altman Z, so it is kept a minority scenario (note research/FISV/2026-10-08.md §3, §5; factsheet News & sentiment table).",
+      "target_price_12m": {"value": 54.2, "cite": "evaluation Decision.scenarios.bull.target_price_12m: P/E re-rates from 8.7x to its 5-year minimum of 10.4x on TTM EPS as margins stabilise after Project Elevate, research/FISV/2026-10-08-evaluation.md"},
+      "target_band": {"value": 0.2342, "cite": "Half the spread between the fact sheet's two bull fair-value anchors (DCF 263.42 vs EV/Revenue 163.48), as a fraction of their average (213.45): (263.42-163.48)/2 / 213.45 = 0.2342; factsheet Fair value table, research/FISV/factsheet-2026-10-08.md"}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation Decision.scenarios.base.probability, research/FISV/2026-10-08-evaluation.md"},
+      "probability_evidence": "Base is the modal scenario in the evaluation's own thesis — 'a likely value trap... until results show margins stabilising' — reflecting that trailing fundamentals are deteriorating (operating margin 21.4% TTM vs 26.9% FY2025, ROIC 6.8% TTM vs 8.7% FY2025, net debt/EBITDA 3.54x TTM vs 2.72x FY2024) but not yet collapsing (evaluation Decision.thesis/rationale; factsheet Quality table).",
+      "target_price_12m": {"value": 47.7, "cite": "evaluation Decision.scenarios.base.target_price_12m: earnings hold and P/E stays at 8.7x, per-share value lifted only by the 5.21% YoY share-count reduction, research/FISV/2026-10-08-evaluation.md"},
+      "target_band": {"value": 0.0764, "cite": "Half the spread between the fact sheet's two base fair-value anchors (DCF 183.90 vs EV/Revenue 157.81), as a fraction of their average (170.855): (183.90-157.81)/2 / 170.855 = 0.0764; factsheet Fair value table, research/FISV/factsheet-2026-10-08.md"}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation Decision.scenarios.bear.probability, research/FISV/2026-10-08-evaluation.md"},
+      "probability_evidence": "Bear is supported by concrete, already-filed evidence of strain: Altman Z-score 1.47 (distress zone, <1.8), net debt/EBITDA rising from 2.72x to 3.54x TTM while buybacks continued, an 8-K (Item 5.02, filed 2026-09-22) disclosing exit/disposal restructuring costs, and Jana Partners' Reuters-reported push for far deeper cost cuts (2026-09-28) — a material but not dominant probability since margins/returns are still positive, not negative (note research/FISV/2026-10-08.md §2, §6; factsheet Quality/Other tables).",
+      "target_price_12m": {"value": 36.0, "cite": "evaluation Decision.scenarios.bear.target_price_12m: Q3 (Nov 3) shows a second margin-compression step of the same size as FY2025->TTM at an unchanged 8.7x P/E, research/FISV/2026-10-08-evaluation.md"},
+      "target_band": {"value": 0.2707, "cite": "Half the spread between the fact sheet's two bear fair-value anchors (DCF 120.05 vs EV/Revenue 68.89), as a fraction of their average (94.47): (120.05-68.89)/2 / 94.47 = 0.2707; factsheet Fair value table, research/FISV/factsheet-2026-10-08.md"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed over the same week (combined AUM crossing $1tn and a record S&P close above 7,800 vs a tech-driven selloff, elevated Treasury yields and a large bearish put spread signalling skepticism) with no net direction supported; no FISV-specific macro tilt on SPY is set by the macro overlay (research/FISV/2026-10-08-macro.md, macro_weight: context)."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431154 (3y weekly regression, research/FISV/2026-10-08-mc-inputs.json)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: several report yields climbing to multi-decade/2002 highs and a deepening global bond rout (bearish for IEF), others report yields retreating/bonds rallying on a cooler PCE print and weak jobs data (bullish for IEF); no net direction supported. The macro overlay (research/FISV/2026-10-08-macro.md) gives macro_weight 'context' only and sets no explicit factor-level macro_tilt."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646038 (3y weekly regression, research/FISV/2026-10-08-mc-inputs.json)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction (Q3 2026, Nov 3)",
+      "reason": "Next earnings date is Nov 3, 2026, landing amid activist pressure and restructuring; the bear case explicitly flags Q3 as the test of whether margin compression deepens.",
+      "cite": "factsheet Price table ('Next earnings date | Nov 3, 2026'), research/FISV/factsheet-2026-10-08.md; evaluation Bear case ('-64.5% 12-month fall... and Q3 results on Nov 3 mean the trailing figures the multiples rely on may still be too high'), research/FISV/2026-10-08-evaluation.md",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues: only 1 of ~20 quarterly earnings_release weeks in the 5-year history (2021-10-18 to 2026-09-28) produced a move of this magnitude (week 2025-10-27, -0.4672, tagged Q3 2025 in analogues.event_weeks) -> about 1-in-5 years, 0.2/yr."},
+      "impact": {"value": -0.4672, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2025-10-27, move -0.4672, tagged event 'Q3 2025' earnings_release — the largest single-week move in the 5-year history."},
+      "analogue": {"week": "2025-10-27", "move": -0.4672},
+      "assumption": null
+    },
+    {
+      "name": "Leverage / credit-distress shock",
+      "reason": "Net debt/EBITDA rose from 2.72x (FY2024) to 3.54x TTM while buybacks continued, and the Altman Z-score of 1.47 sits in the distress zone (<1.8), raising the risk of a sudden market re-rating of balance-sheet risk independent of a scheduled earnings date.",
+      "cite": "factsheet Quality table (net debt/EBITDA 3.54x TTM) and Other table (Altman Z 1.47), research/FISV/factsheet-2026-10-08.md; note §2, §6 ('net debt/EBITDA has climbed... Altman Z-score is 1.47 — inside the distress zone'), research/FISV/2026-10-08.md",
+      "annual_probability": {"value": 0.8, "cite": "4 weekly falls >=8% in mc-inputs.json analogues.largest_falls are NOT tagged to any earnings/proxy/report event in analogues.event_weeks (2026-06-15, 2026-03-09, 2025-05-12, 2026-09-14) over the 5-year history (2021-10-18 to 2026-09-28) ≈ 0.8/yr."},
+      "impact": {"value": -0.1008, "cite": "mc-inputs.json analogues.largest_falls: week 2026-03-09, move -0.1008 — not tagged to any event in analogues.event_weeks, the largest untagged (idiosyncratic) weekly fall."},
+      "analogue": {"week": "2026-03-09", "move": -0.1008},
+      "assumption": null
+    },
+    {
+      "name": "Activist / governance escalation",
+      "reason": "Jana Partners is pushing Fiserv to more than double planned cost cuts and adopt Palantir tooling (Reuters, 2026-09-28); an 8-K (Item 5.02, filed 2026-09-22) already discloses exit/disposal restructuring costs, consistent with pressure-driven, not strength-driven, change.",
+      "cite": "note §2, §6 ('Activist Jana Partners is pushing Fiserv to more than double its planned cost reductions...'), research/FISV/2026-10-08.md; factsheet News & sentiment ('Jana urges Fiserv to boost cost cuts, use Palantir products, Reuters reports', 2026-09-28), research/FISV/factsheet-2026-10-08.md",
+      "annual_probability": {"value": 1, "cite": "Proxy/governance filings recur about once per year in mc-inputs.json analogues.event_weeks (one proxy filing per year, 2022-2026); the Jana/Reuters report (2026-09-28) is dated this governance cadence."},
+      "impact": {"value": -0.0456, "cite": "mc-inputs.json analogues.all_weekly_moves: week 2026-09-28, move -0.0456 — the week of the Reuters-reported Jana Partners activist push (2026-09-28)."},
+      "analogue": {"week": "2026-09-28", "move": -0.0456},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.02, "cite": "factsheet Price table: price -10.0% vs 50-day MA, -19.5% vs 200-day MA, 50d MA -10.6% below 200d MA, -14.0% 3-month momentum, and a sequence of lower swing highs (56.63 Aug5 -> 55.98 Aug13 -> 53.99 Aug31) and lower swing lows (49.56 Aug6 -> 50.89 Aug20 -> 48.37 Sep10) through 2026-10-07, research/FISV/factsheet-2026-10-08.md"}
+}

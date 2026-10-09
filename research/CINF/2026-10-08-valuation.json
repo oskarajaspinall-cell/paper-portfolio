@@ -1,0 +1,106 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 254.94753844575393,
+    "base": 254.26948648180243,
+    "bull": 284.55580753830156
+   },
+   "cost_of_equity": 0.0827,
+   "assumptions": {
+    "roe": {
+     "bear": 0.16036,
+     "base": 0.16,
+     "bull": 0.17608
+    },
+    "justified_pb": {
+     "bear": 2.345927209705373,
+     "base": 2.3396880415944543,
+     "bull": 2.6183708838821493
+    },
+    "bvps": 108.676662
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 131.09105201999998,
+    "base": 197.16636728,
+    "bull": 207.677386
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.186,
+     "base": 9.304,
+     "bull": 9.8
+    },
+    "ttm_eps": 21.19157
+   }
+  }
+ ],
+ "price": 161.61,
+ "risk_free": 0.0527,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [
+  {
+   "method": "pb_roe",
+   "scenario": "base",
+   "field": "roe",
+   "value": 0.16
+  }
+ ],
+ "fair_value": {
+  "bear": 213.66204297050263,
+  "base": 235.23511341453494,
+  "bull": 258.9296670255344
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.32208429534374483,
+  "base": 0.45557275796383223,
+  "bull": 0.6021883981531735
+ },
+ "implied_growth": null,
+ "ticker": "CINF",
+ "asof": "2026-10-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-07",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/cinf/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/cinf/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/cinf/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/cinf/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/cinf/statistics/"
+ }
+}

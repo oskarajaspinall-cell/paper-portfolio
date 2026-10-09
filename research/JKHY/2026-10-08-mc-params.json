@@ -1,0 +1,56 @@
+{
+  "ticker": "JKHY",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/JKHY/2026-10-08-evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Every valuation multiple sits in the bottom 3-8% of its own 5-year range (fact sheet Valuation table) while FY2026 non-GAAP revenue grew 7.3% and management guided a step-up to 7%-8% growth by FY2029, citing record core wins (Investor Day 2026 transcript, https://stockanalysis.com/stocks/jkhy/transcripts/750018-investor-day-2026/); the bull case requires growth holding near delivered levels and multiples re-rating toward the 5y median EV/EBITDA of 22.5x [RA].",
+      "target_price_12m": {"value": 203.00, "cite": "research/JKHY/2026-10-08-evaluation.md Decision JSON scenarios.bull.target_price_12m (fact sheet bull blended fair value 203.00)"},
+      "target_band": {"value": 0.0736, "cite": "Fact sheet fair-value table: bull DCF 193.04 vs EV/EBITDA 222.90 (spread 29.86); half-spread 14.93 / bull target 203.00 = 0.0736; below the 0.2654 blended residual vol in research/JKHY/2026-10-08-mc-inputs.json regression.residual_vol.blended"}
+    },
+    "base": {
+      "probability": {"value": 0.50, "cite": "research/JKHY/2026-10-08-evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "The reverse DCF shows the 145.69 close implies only 0.4% year-1 revenue growth versus 7.3% delivered (fact sheet Fair value section), but the stock's +13% EV/EBITDA premium to peers FI/FIS/ACIW/QTWO (fact sheet Valuation table) caps a full re-rating, so the base case reaches the DCF-only fair value of 175.62 rather than the full blended 189.78.",
+      "target_price_12m": {"value": 175.62, "cite": "research/JKHY/2026-10-08-evaluation.md Decision JSON scenarios.base.target_price_12m (fact sheet base DCF-only fair value 175.62)"},
+      "target_band": {"value": 0.1209, "cite": "Fact sheet fair-value table: base DCF 175.62 vs EV/EBITDA 218.09 (spread 42.47); half-spread 21.235 / base target 175.62 = 0.1209; below the 0.2654 blended residual vol in research/JKHY/2026-10-08-mc-inputs.json regression.residual_vol.blended"}
+    },
+    "bear": {
+      "probability": {"value": 0.25, "cite": "research/JKHY/2026-10-08-evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "The 10-K discloses price compression on renegotiated contracts and warns that fintech point-solutions may reduce demand for integrated cores (https://www.sec.gov/Archives/edgar/data/779152/000077915226000067/jkhy-20260630.htm), consistent with ROE down 2.8pp and ROIC down 1.3pp over five years (fact sheet Quality table) and no catalyst evidence yet with the stock 7% below both moving averages.",
+      "target_price_12m": {"value": 107.21, "cite": "research/JKHY/2026-10-08-evaluation.md Decision JSON scenarios.bear.target_price_12m (fact sheet bear blended fair value 107.21)"},
+      "target_band": {"value": 0.2052, "cite": "Fact sheet fair-value table: bear DCF 92.54 vs EV/EBITDA 136.54 (spread 44.00); half-spread 22.00 / bear target 107.21 = 0.2052; below the 0.2654 blended residual vol in research/JKHY/2026-10-08-mc-inputs.json regression.residual_vol.blended"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs above 7,800 and SPY/SPYM assets crossing $1tn (ETF Trends, CNBC 2026-10-06/07) vs a tech selloff, elevated Treasury yields pressuring SPY/QQQ, and a 100,000-lot bearish put spread (TipRanks, CNBC, Reuters 2026-10-07); no net directional view supported, and the macro overlay (research/JKHY/2026-10-08-macro.md) assigns only 'context' weight with no factor-specific tilt."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/JKHY/2026-10-08-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: a deepening global bond rout and 10y/30y yields at multi-decade highs (Bloomberg, Barrons, WSJ 2026-10-01/05/07) vs yields retreating after a cooler PCE print and a rally after a weak jobs report (ETF Trends, The Guardian, Bloomberg 2026-10-02); no net directional view supported, and the macro overlay (research/JKHY/2026-10-08-macro.md) assigns only 'context' weight with no factor-specific tilt."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/JKHY/2026-10-08-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction",
+      "reason": "Next earnings date is 2026-11-03 (Est. Earnings); quarterly/annual report releases have historically produced the largest single-week moves in the regression history, including a -9.71% week on the FY2023 annual report/Q4 earnings release.",
+      "cite": "Fact sheet Price section 'Next earnings date Nov 3, 2026 (Est. Earnings)' [ST,OV]; research/JKHY/2026-10-08-mc-inputs.json analogues.event_weeks (2023-08-16 'Q4 2023', types earnings_release/annual_report, week 2023-08-14 move -0.0971)",
+      "annual_probability": {"value": 4, "cite": "JKHY reports quarterly (4 earnings releases/yr), per the event_weeks cadence in research/JKHY/2026-10-08-mc-inputs.json"},
+      "impact": {"value": -0.0971, "cite": "research/JKHY/2026-10-08-mc-inputs.json analogues.event_weeks week 2023-08-14 move -0.0971 (worst historical earnings/annual-report reaction)"},
+      "analogue": {"week": "2023-08-14", "move": -0.0971},
+      "assumption": null
+    },
+    {
+      "name": "Growth-guidance disappointment from point-solution competition / contract price compression",
+      "reason": "The 10-K discloses price compression on renegotiated contracts and warns that fintech point-solutions and nontraditional providers may reduce demand for broader integrated offerings [Likely]; such disappointments have historically surfaced at Investor Day strategy updates (e.g. the September 2026 Investor Day week fell -3.89%).",
+      "cite": "research/JKHY/2026-10-08.md section 2 (quoting the 10-K, https://www.sec.gov/Archives/edgar/data/779152/000077915226000067/jkhy-20260630.htm); research/JKHY/2026-10-08-mc-inputs.json analogues.event_weeks Investor Day rows (2022-05-09, 2023-05-15, 2024-09-05, 2026-09-14)",
+      "annual_probability": {"value": 0.8, "cite": "4 Investor Day events over the ~5-year history in research/JKHY/2026-10-08-mc-inputs.json analogues.event_weeks (2022-05-09, 2023-05-15, 2024-09-05, 2026-09-14) / 5 years = 0.8/yr"},
+      "impact": {"value": -0.0517, "cite": "research/JKHY/2026-10-08-mc-inputs.json analogues.event_weeks week 2022-05-09 'Investor Day 2022' move -0.0517 (worst historical Investor Day reaction)"},
+      "analogue": {"week": "2022-05-09", "move": -0.0517},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.015, "cite": "Fact sheet Price section: price -7.1% vs 50-day MA and -7.2% vs 200-day MA, RSI(14) 38.9, 3m/6m momentum -0.7%/-7.8%, and relative strength vs SPY -4.6pp/-22.8pp/-17.1pp over 3m/6m/12m [ST,HI,SPY-HI,SPY-OV]"}
+}

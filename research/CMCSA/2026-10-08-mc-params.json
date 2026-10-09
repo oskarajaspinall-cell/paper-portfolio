@@ -1,0 +1,116 @@
+{
+  "ticker": "CMCSA",
+  "date": "2026-10-08",
+  "scenarios": {
+    "bull": {
+      "probability": {
+        "value": 0.2,
+        "cite": "Evaluation decision block scenarios.bull.probability, research/CMCSA/2026-10-08-evaluation.md"
+      },
+      "probability_evidence": "Assigned the lowest probability (20%) because the bear case's deteriorating fundamentals dominate: domestic broadband revenue fell to $6.3bn from $6.6bn YoY in Q2 2026 (SEC 10-Q) and operating margin slid to 14.7% TTM from 18.8% FY24 (fact sheet income statement), leaving a clean re-rate to peer multiples the least likely path absent resolved NBCUniversal separation terms.",
+      "target_price_12m": {
+        "value": 34.0,
+        "cite": "Evaluation decision block scenarios.bull.target_price_12m, research/CMCSA/2026-10-08-evaluation.md"
+      },
+      "target_band": {
+        "value": 0.179,
+        "cite": "Fact sheet Fair Value table EV/EBITDA-method implied prices bracketing the evaluator's bull basis: bear-case EV/EBITDA 27.94 and base-case EV/EBITDA 40.13 (the evaluation bull basis cites these two anchors directly); half the spread (6.095) / target (34.0) = 0.179."
+      }
+    },
+    "base": {
+      "probability": {
+        "value": 0.45,
+        "cite": "Evaluation decision block scenarios.base.probability, research/CMCSA/2026-10-08-evaluation.md"
+      },
+      "probability_evidence": "Assigned the highest probability (45%) as the central/status-quo case: RSI 23.0 and price below both the 50-day (-14.8%) and 200-day (-21.5%) moving averages show an unbroken downtrend with no catalyst before the Oct 22, 2026 earnings date (fact sheet Price section), consistent with gradual broadband erosion and margin compression continuing without resolution of separation terms.",
+      "target_price_12m": {
+        "value": 24.0,
+        "cite": "Evaluation decision block scenarios.base.target_price_12m, research/CMCSA/2026-10-08-evaluation.md"
+      },
+      "target_band": {
+        "value": 0.162,
+        "cite": "Fact sheet Valuation table: re-rating last close (20.94) fully to peer-median multiples gives disagreeing implied prices by method -- P/E (-16% vs 8.1x peer median) implies 20.94/(1-0.16)=24.93, EV/EBITDA (-36% vs 7.2x peer median) implies 20.94/(1-0.36)=32.72; half the spread (3.895) / target (24.0) = 0.162."
+      }
+    },
+    "bear": {
+      "probability": {
+        "value": 0.35,
+        "cite": "Evaluation decision block scenarios.bear.probability, research/CMCSA/2026-10-08-evaluation.md"
+      },
+      "probability_evidence": "Raised to 35% (above a simple residual share) by the macro overlay's small bear tilt: the 10y Treasury yield at 5.27% (+0.72pp/3m, FRED DGS10) raises the cost of debt just as 2.43x net debt/EBITDA must be split with NBCUniversal ahead of the mid-2027 separation (research/CMCSA/2026-10-08-macro.md), layered on the already-negative broadband and margin trend (SEC 10-Q; fact sheet income statement).",
+      "target_price_12m": {
+        "value": 16.5,
+        "cite": "Evaluation decision block scenarios.bear.target_price_12m, research/CMCSA/2026-10-08-evaluation.md"
+      },
+      "target_band": {
+        "value": 0.131,
+        "cite": "Fact sheet Valuation/Price sections: the evaluator's bear anchor (P/E compressing to its 5-year minimum of 5.4x from 6.8x) implies 20.94*(5.4/6.8)=16.63 versus the no-re-rate anchor at last close 20.94 (other multiples -- EV/EBITDA, P/FCF, P/B -- are already below their own 5-year minimums, so cannot serve as a further-downside anchor); half the spread (2.156) / target (16.5) = 0.131."
+      }
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {
+        "value": 0.0,
+        "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs (CNBC 'S&P closes at record high, breaking 7,800 points', 2026-10-07) alongside skepticism and a tech-led broader sell-off with elevated yields (TipRanks 'SPY, QQQ Pressured by Tech Selloff and Elevated Treasury Yields'; Reuters 'S&P 500, Nasdaq ease from record highs as Treasury yields climb', both 2026-10-07; CNBC bearish 100,000-lot put spread, 2026-10-07); mixed news -> 0 per house rule."
+      },
+      "uncertainty_12m": {
+        "value": 0.1431154014991791,
+        "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression)"
+      }
+    },
+    "IEF": {
+      "expected_12m_move": {
+        "value": -0.04,
+        "cite": "mc-inputs.json factor_news.IEF headlines describe a one-directional bond rout (Bloomberg 'US 30-Year Yields Return to 2002 High', 2026-10-07; Barrons 'Global Bond Markets Sell Off on France's Fiscal Worries', 2026-10-05; WSJ 'The Bond Rout Is Deepening...', 2026-10-01), reinforced by the macro overlay's small, secondary-weight bear tilt (10y yield 5.27%, +0.72pp/3m, DGS10, raising CMCSA's refinancing cost into the NBCUniversal debt split; research/CMCSA/2026-10-08-macro.md dominant_chain); kept modest (-4%) since the overlay is secondary-weight and small, and a partial early-October rebound (ETF Trends 'Navigating Fixed Income Duration as Treasury Yields Retreat', 2026-10-02) tempers the move."
+      },
+      "uncertainty_12m": {
+        "value": 0.06460381100458489,
+        "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression)"
+      }
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings surprise",
+      "reason": "CMCSA's next earnings (Oct 22, 2026) is a known binary catalyst; both the bull and bear cases hinge on whether broadband revenue decline and margin compression continue or stabilise.",
+      "cite": "Fact sheet Price section 'Next earnings date Oct 22, 2026' [ST,OV]; note section 4 'What would prove this wrong' (domestic broadband revenue, operating margin trajectory).",
+      "annual_probability": {
+        "value": 0.6,
+        "cite": "mc-inputs.json analogues.event_weeks: 3 of 20 quarterly earnings-release weeks (2021-10-25 through 2026-07-20) moved >=10% in magnitude -- 2022-04-25 Q1 2022 (-0.1238), 2022-07-25 Q2 2022 (-0.1192), 2025-01-27 Q4 2024 (-0.1053) -- 3 events over the ~4.95-year history (2021-10-18 to 2026-09-28) = ~0.6/year."
+      },
+      "impact": {
+        "value": -0.1238,
+        "cite": "Largest earnings-tied move: Q1 2022 earnings release week 2022-04-25, -0.1238 (mc-inputs.json analogues.largest_falls and analogues.event_weeks)."
+      },
+      "analogue": {
+        "week": "2022-04-25",
+        "move": -0.1238
+      },
+      "assumption": null
+    },
+    {
+      "name": "NBCUniversal separation execution/terms",
+      "reason": "The planned NBCUniversal separation (targeted mid-2027) is unfinalized and will reallocate CMCSA's 2.43x net debt/EBITDA and dividend capacity on unknown terms; both the note and evaluation bear case flag this as a known unresolved structural risk.",
+      "cite": "research/CMCSA/2026-10-08.md sections 1 and 6 ('Unusual items'); evaluation Bear case: 'The NBCUniversal separation (mid-2027, unfinalized) will reallocate 2.43x net debt/EBITDA and dividend capacity on unknown terms.'",
+      "annual_probability": {
+        "value": 0.2,
+        "cite": "mc-inputs.json analogues.event_weeks lists one 'Spin-off' press-release week (2026-06-29, +0.0407, the market's reaction to the disclosed separation plan) in the ~5-year history (2021-10-18 to 2026-09-28) -- 1 event / ~5 years = ~0.2/year."
+      },
+      "impact": {
+        "value": 0.0407,
+        "cite": "Analogue week 2026-06-29 ('Spin-off' press release/slides), move +0.0407 (mc-inputs.json analogues.event_weeks)."
+      },
+      "analogue": {
+        "week": "2026-06-29",
+        "move": 0.0407
+      },
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {
+    "value": -0.02,
+    "cite": "Fact sheet Price section: 3-month momentum -10.6%, 6-month -25.1%, 12-month -32.6%, relative strength vs SPY -14.5pp/-43.0pp/-48.4pp (3m/6m/12m), price -14.8%/-21.5% below its 50-/200-day MAs, RSI(14) 23.0 -- an unbroken downtrend; set at the [montecarlo] max_technical_tilt magnitude of -0.02."
+  }
+}
