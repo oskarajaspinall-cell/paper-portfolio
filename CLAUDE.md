@@ -29,6 +29,8 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - **TACTICAL**: weeks to ~3 months, two setups only (owner rule 2026-10-08): **post-earnings drift** (a real results beat the price is still digesting) and **pullback in an uptrend** (a dip to around the 50-day average). MUST have target, stop and time limit at entry; these execute mechanically. The stop comes from the stock's own volatility (ATR), the target must be ≥2× the stop distance (checked at the decision and again at the fill-day open), and the size is set so a stop-out costs ~1% of the portfolio (max 5%).
 - The label is fixed at entry. A tactical position can NEVER be relabelled core; it can only become core by passing a full core initiation, which records a new entry decision.
 - When a core invalidation trigger fires, the holding gets a full core re-initiation (researcher + evaluator), not a quick review.
+- **Fair value reached** (owner rule 2026-10-09): when a core holding's close reaches its latest base fair value, the weekly scan sends it to a full re-initiation (once per crossing; `[core].fv_review_*`). Fair value is one model estimate, NEVER a sell signal on its own: the re-initiation decides on the whole evidence whether the thesis has played out.
+- **Text-only triggers** (owner rule 2026-10-09): triggers no script can check (bookings, share, guidance, regulation) are tested by the weekly reviewer against every new release/filing of the holding; one that is met escalates to a re-initiation.
 - **Cash is a holding** (owner rule 2026-10-09): `scripts/regime.py` scores official macro indicators into a regime (risk-on / neutral / defensive); the weekly `macro-strategist` may move it one notch with cited official sources. The regime sets a cash reserve (`[cash_strategy]`, 10/20/35%) that new buys can't spend (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0, and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
 - When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve or sector limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
 
@@ -51,6 +53,8 @@ max_sector_pct = 30               # stockanalysis.com sector classification
 # conviction -> target position size (% of portfolio). 1 = no position.
 conviction_size_pct = { "1" = 0, "2" = 3, "3" = 5, "4" = 7, "5" = 10 }
 trim_above_pct = 15
+fv_review_rearm_pct = 10          # fair value reached (owner rule 2026-10-09): one re-initiation per crossing; re-arms
+fv_review_days = 90               # ...after a further 10% rise or 90 days. Fair value is a prompt, never a sell signal.
 min_buy_conviction = 4            # owner rule: only buy/add with high conviction (core AND tactical); below -> AVOID/HOLD
 
 [tactical]

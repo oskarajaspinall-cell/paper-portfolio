@@ -6,7 +6,13 @@ For each holding it reads every daily close since the last run (stockanalysis.co
   - flags a CORE invalidation trigger whose `check` is met (stockanalysis.com statistics page),
   - TACTICAL exits, mechanically: the FIRST close that crossed the stop or target (up to the time limit)
     is the fill; if none and the time limit has passed, the last close is the fill,
-  - CORE positions above `trim_above_pct` get a mechanical TRIM back to that cap.
+  - CORE positions above `trim_above_pct` get a mechanical TRIM back to that cap,
+  - flags a CORE holding whose close reached its latest base fair value (owner rule 2026-10-09): a full
+    re-initiation re-examines it. Fair value is ONE model estimate, a prompt to look again, never a sell
+    signal: the re-initiation decides HOLD/ADD/TRIM/SELL on the whole evidence. It fires once per crossing
+    (portfolio/fv_reviews.json) and re-arms only after a further `fv_review_rearm_pct` rise or `fv_review_days`,
+  - every flagged CORE holding carries its text-only (non-mechanical) triggers, which the weekly reviewer
+    tests against any new release/filing.
 Unflagged holdings get a one-line "no material change" entry. Mechanical exits/trims are written as
 trade requests and applied later in the run by portfolio.py (so a failed run applies nothing).
 
@@ -91,6 +97,53 @@ def events_in_window(events: list[dict], after: str, asof: str) -> list[dict]:
     return [e for e in events if after < e["date"] < asof]
 
 
+def latest_base_fair_value(ticker: str) -> dict | None:
+    """The newest valuation file's base fair value (quoted currency), or None."""
+    from common import Ticker
+    vs = sorted((ROOT / "research" / Ticker(ticker).slug).glob("*-valuation.json"))
+    if not vs:
+        return None
+    v = json.loads(vs[-1].read_text())
+    base = (v.get("fair_value") or {}).get("base")
+    if not isinstance(base, (int, float)) or base <= 0:
+        return None
+    return {"base": base, "currency": v.get("quote_currency", ""), "file": str(vs[-1].relative_to(ROOT)),
+            "asof": v.get("asof") or vs[-1].name[:10]}
+
+
+def fair_value_reached(close: float, fv: dict | None, prior: dict | None, asof: str, cfg: dict) -> bool:
+    """True when the close is at/above the base fair value and this crossing hasn't been reviewed yet. After a
+    review it re-arms once the price rises a further `fv_review_rearm_pct` above the reviewed close, or after
+    `fv_review_days` (the holding stays in the portfolio only while the evidence supports it)."""
+    if not fv or close < fv["base"]:
+        return False
+    if not prior:
+        return True
+    c = cfg["core"]
+    if close >= float(prior["close"]) * (1 + c.get("fv_review_rearm_pct", 10) / 100):
+        return True
+    return (dt.date.fromisoformat(asof) - dt.date.fromisoformat(prior["date"])).days >= c.get("fv_review_days", 90)
+
+
+FV_REVIEWS = ROOT / "portfolio" / "fv_reviews.json"
+
+
+def load_fv_reviews(path: Path | None = None) -> dict:
+    path = path or FV_REVIEWS
+    return json.loads(path.read_text()) if path.exists() else {}
+
+
+def record_fv_reviews(done: list[dict], asof: str, path: Path | None = None) -> None:
+    """Called by the weekly run after the re-initiations: these crossings have been reviewed."""
+    path = path or FV_REVIEWS
+    rec = load_fv_reviews(path)
+    for d in done:
+        rec[d["ticker"]] = {"date": asof, "close": d["close"], "base": d["base"], "valuation": d["file"]}
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(rec, indent=1, sort_keys=True))
+    tmp.replace(path)
+
+
 # --------------------------------------------------------------------------- scan
 def latest_macro(ticker: str) -> dict | None:
     """The newest macro-overlay block for a holding, or None."""
@@ -156,7 +209,9 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> 
         fred = FredFetcher(cfg)
     thr = cfg["agents"]["weekly_flag_move_pct"]
     out = {"asof": asof, "last_run": last_run, "flagged": [], "reinitiate": [], "review": [],
-           "unflagged": [], "exits": [], "trims": [], "mechanical_requests": [], "notes": [], "macro": []}
+           "unflagged": [], "exits": [], "trims": [], "mechanical_requests": [], "notes": [], "macro": [],
+           "fair_value_reached": []}
+    fv_prior = load_fv_reviews()
     for t, h in sorted(state["holdings"].items()):
         hist = mkt.history(t)
         ref = reference_close(hist["rows"], last_run, h.get("entry_close_date"))
@@ -194,6 +249,18 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> 
                 out["reinitiate"].append(t)
             if unchecked:
                 out["notes"].append(f"{t}: triggers without a mechanical check (reviewed when flagged): {unchecked}")
+                fig["text_triggers"] = unchecked  # the reviewer tests these against any new release/filing
+            fv = latest_base_fair_value(t)
+            if fv and fv["currency"] and fv["currency"] != hist["currency"]:
+                out["notes"].append(f"{t}: fair value in {fv['currency']} vs prices in {hist['currency']}; not compared")
+                fv = None
+            if fair_value_reached(last["close"], fv, fv_prior.get(t), asof, cfg):
+                reasons.append(f"FAIR VALUE: close {last['close']} {hist['currency']} reached the base fair value "
+                               f"{fv['base']:.2f} ({fv['file']}); re-examine (one model estimate, not a sell signal)")
+                fig["fair_value"] = fv
+                out["fair_value_reached"].append({"ticker": t, "close": last["close"], **fv})
+                if t not in out["reinitiate"]:
+                    out["reinitiate"].append(t)
         if fred is not None:
             mcx = macro_check(t, last_run, asof, fred)
             if mcx["fired"]:

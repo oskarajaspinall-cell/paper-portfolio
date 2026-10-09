@@ -564,3 +564,37 @@ def test_monte_carlo_only_for_buys_and_holdings(tmp_path, monkeypatch, decision,
     wr.research_and_evaluate("XYZ", "CORE", "2026-10-10", "why", agent, logs.append, tmp_path)
     assert (ran == ["XYZ"]) == runs
     assert runs or any("Monte Carlo skipped" in m for m in logs)
+
+
+def test_fair_value_reached_fires_once_per_crossing(cfg):
+    from weekly_scan import fair_value_reached
+    fv = {"base": 100.0}
+    assert not fair_value_reached(99.0, fv, None, "2026-10-09", cfg)
+    assert fair_value_reached(100.0, fv, None, "2026-10-09", cfg)
+    assert not fair_value_reached(100.0, None, None, "2026-10-09", cfg)  # no valuation: never
+    prior = {"date": "2026-10-09", "close": 101.0}
+    assert not fair_value_reached(105.0, fv, prior, "2026-10-16", cfg)   # already reviewed this crossing
+    assert fair_value_reached(111.2, fv, prior, "2026-10-16", cfg)       # a further 10% rise re-arms
+    assert fair_value_reached(102.0, fv, prior, "2027-01-08", cfg)       # 90 days later re-arms
+
+
+def test_scan_fair_value_reinitiates_and_records(cfg, monkeypatch, tmp_path):
+    import weekly_scan as WS
+    flat = rows([("2026-09-04", 100), ("2026-09-08", 101), ("2026-09-14", 102)])
+    s = empty_state(cfg)
+    s["last_scan"] = "2026-09-05"
+    text = [{"text": "Bookings growth below 4% for two quarters"}]
+    s["holdings"] = {"FV": holding("FV", "CORE", 50, triggers=text), "LOW": holding("LOW", "CORE", 50, triggers=text)}
+    s["cash_usd"] = 60000
+    vals = {"FV": {"base": 101.5, "currency": "USD", "file": "research/FV/v.json", "asof": "2026-09-01"},
+            "LOW": {"base": 150.0, "currency": "USD", "file": "research/LOW/v.json", "asof": "2026-09-01"}}
+    monkeypatch.setattr(WS, "latest_base_fair_value", lambda t: vals[t])
+    f = ScanFetcher(events={"LOW": [{"date": "2026-09-10", "title": "Q3", "types": ["earnings_release"]}]}, stats={})
+    res = scan(s, ScanMarket({"FV": flat, "LOW": flat}, cfg), f, cfg, "2026-09-20")
+    assert res["reinitiate"] == ["FV"] and res["review"] == ["LOW"]
+    fl = {x["ticker"]: x for x in res["flagged"]}
+    assert any(r.startswith("FAIR VALUE:") and "not a sell signal" in r for r in fl["FV"]["reasons"])
+    assert fl["LOW"]["figures"]["text_triggers"] == ["Bookings growth below 4% for two quarters"]
+    WS.record_fv_reviews(res["fair_value_reached"], "2026-09-20")
+    again = scan(s, ScanMarket({"FV": flat, "LOW": flat}, cfg), ScanFetcher(events={}, stats={}), cfg, "2026-09-27")
+    assert again["reinitiate"] == []  # the crossing was reviewed

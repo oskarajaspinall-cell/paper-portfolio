@@ -127,3 +127,10 @@ def _entry_watch_in_tmp(monkeypatch, tmp_path_factory):
     """Tests never write the real portfolio/entry_watch.csv."""
     import entry_watch
     monkeypatch.setattr(entry_watch, "WATCH", tmp_path_factory.mktemp("watch") / "entry_watch.csv")
+
+
+@pytest.fixture(autouse=True)
+def _fv_reviews_in_tmp(monkeypatch, tmp_path_factory):
+    """Tests never read or write the real portfolio/fv_reviews.json."""
+    import weekly_scan
+    monkeypatch.setattr(weekly_scan, "FV_REVIEWS", tmp_path_factory.mktemp("fv") / "fv_reviews.json")

@@ -234,13 +234,26 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
                     reinit.append(t)
 
         evals = []
+        fvr = {f["ticker"]: f for f in scan.get("fair_value_reached", [])}
         for t in dict.fromkeys(reinit):
             step(f"reinitiate {t}")
             h = state["holdings"][t]
-            why = (f"This is a full re-initiation of an existing {h['type']} holding "
-                   f"(scan: {'core or macro trigger fired' if t in scan['reinitiate'] else 'escalated by weekly review'}). "
+            src = ("the price reached its base fair value" if t in fvr and t in scan["reinitiate"] else
+                   "core or macro trigger fired" if t in scan["reinitiate"] else "escalated by weekly review")
+            why = (f"This is a full re-initiation of an existing {h['type']} holding (scan: {src}). "
                    f"Decide ADD, HOLD, TRIM or SELL.")
+            if t in fvr:
+                f = fvr[t]
+                why += (f" The close {f['close']} reached the base fair value {f['base']:.2f} from {f['file']}. "
+                        "Owner rule: fair value is ONE model estimate, not a sell signal and not the thesis. Re-examine "
+                        "whether the original thesis has played out or still has room: has the business improved so the "
+                        "old fair value is stale, does the evidence (quality trend, cash returns, peers, own history) "
+                        "still support holding, and is there a better use of the capital? SELL or TRIM only if the "
+                        "whole evidence says the opportunity is spent; HOLD is right when the thesis is still running.")
             evals.append(("reinitiation", research_and_evaluate(t, h["type"], asof, why, agent, log, rundir)))
+        if fvr and not dry_run:
+            from weekly_scan import record_fv_reviews
+            record_fv_reviews([f for t, f in fvr.items() if t in reinit], asof, port / "fv_reviews.json")
 
         cap = cfg["agents"]["max_new_initiations_per_week"] if max_new is None else max_new
         from screen import recently_researched
