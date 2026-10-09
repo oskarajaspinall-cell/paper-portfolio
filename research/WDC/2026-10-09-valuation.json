@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Computer Hardware",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -42.191519202289065,
+    "base": 89.82400699181308,
+    "bull": 179.1325985407582
+   },
+   "implied_growth": 0.4814176385473671,
+   "discount_rate": 0.14168353060060873,
+   "cost_of_equity": 0.14196150000000002,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.06222039012778595,
+     "base": 0.05851596231062865,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.20305850679456436,
+     "base": 0.2643752736279898,
+     "bull": 0.2643752736279898
+    },
+    "cagr_3y": 0.2735046294980865,
+    "cagr_5y": -0.0894407802555719,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 32.230142036553524,
+    "base": 222.8934861618799,
+    "bull": 907.2631383812011
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 5.183,
+     "base": 36.839,
+     "bull": 69.391
+    },
+    "ttm_ebitda": 5002000000,
+    "peak_earnings": "TTM EBITDA is 2.0x its 5y median: bear/base use the 5y average (2.307e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 393.31,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -17.384298789341535,
+  "base": 134.180500048502,
+  "bull": 421.8427784875725
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.0441999918368248,
+  "base": -0.6588428973367013,
+  "bull": 0.07254526578925646
+ },
+ "implied_growth": 0.4814176385473671,
+ "ticker": "WDC",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/wdc/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/wdc/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/wdc/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/wdc/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/wdc/statistics/"
+ }
+}

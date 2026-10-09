@@ -1,0 +1,112 @@
+{
+ "industry": {
+  "industry": "Diagnostics & Research",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 56.49896267035714,
+    "base": 173.50462584868293,
+    "bull": 198.33552809640418
+   },
+   "implied_growth": 0.33260790804556395,
+   "discount_rate": 0.11909827992331622,
+   "cost_of_equity": 0.121158,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.020302914125119156,
+     "base": 0.05270727320824935,
+     "bull": 0.08522326458275908
+    },
+    "cash_flow_margin": {
+     "bear": 0.11148730902342632,
+     "base": 0.2678756537116675,
+     "bull": 0.2678756537116675
+    },
+    "cagr_3y": 0.08522326458275908,
+    "cagr_5y": 0.07560582825023832,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 492.1949197452706,
+    "base": 713.7118158388793,
+    "bull": 716.5517760452076
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.863,
+     "base": 12.763,
+     "bull": 12.813
+    },
+    "ttm_revenue": 4553223000
+   }
+  }
+ ],
+ "price": 513.14,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 201.73094836199496,
+  "base": 353.57368917874834,
+  "bull": 371.074277412672
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6068695709514071,
+  "base": -0.3109605776615576,
+  "bull": -0.27685567795792176
+ },
+ "implied_growth": 0.33260790804556395,
+ "ticker": "IDXX",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/idxx/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/idxx/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/idxx/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/idxx/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/idxx/statistics/"
+ }
+}
