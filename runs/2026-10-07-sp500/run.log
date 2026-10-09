@@ -3380,3 +3380,152 @@ OK research/PG/2026-10-09-evaluation.md Bear case=123 Bull case=109 decision=AVO
 [13:03:50] {"out": "research/PG/2026-10-09-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 96.9, "base": 112.01, "bull": 122.8}, "price": 150.59}
 [13:03:50] Monte Carlo skipped for PG (AVOID: informational only, runs for BUY/ADD and holdings)
 [13:03:52] == done PG
+[13:03:55] == Research batch 03: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-09-batch-03.md; uploaded to GitHub
+[13:03:55] == initiate ITW
+[13:03:55] $ claude -p Ticker ITW, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[13:27:12] API Error: Can't reach the API server — check your internet or DNS (ENOTFOUND)
+[13:27:12] !! FAILED RDDT: claude -p Ticker RDDT, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[13:27:12] == initiate LOW
+[13:27:12] $ claude -p Ticker LOW, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[13:28:48] API Error: Can't reach the API server — check your internet or DNS (ENOTFOUND)
+[13:28:48] !! FAILED YUM: claude -p Ticker YUM, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[13:28:48] == initiate ALGN
+[13:28:48] $ claude -p Ticker ALGN, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[13:28:49] API Error: Can't reach the API server — check your internet or DNS (ENOTFOUND)
+[13:28:49] !! FAILED ITW: claude -p Ticker ITW, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[13:31:01] API Error: Can't reach the API server — check your internet or DNS (ENOTFOUND)
+[13:31:01] !! FAILED LOW: claude -p Ticker LOW, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[13:33:01] API Error: Can't reach the API server — check your internet or DNS (ENOTFOUND)
+[13:33:01] !! FAILED ALGN: claude -p Ticker ALGN, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[13:33:01] == research loop stopped (repeated failures: usage limit?)
+[14:16:37] == research loop: 389 names queued, best first: ['RDDT', 'YUM', 'ITW', 'LOW', 'ALGN', 'UBER', 'DAL', 'PPG', 'KVUE', 'NVR']
+[14:16:37] == initiate RDDT
+[14:16:37] == initiate YUM
+[14:16:37] == initiate ITW
+[14:16:37] $ claude -p Ticker RDDT, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:16:37] $ claude -p Ticker YUM, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:16:37] $ claude -p Ticker ITW, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:18:45] research/ITW/2026-10-09.md
+research/ITW/factsheet-2026-10-09.md
+OK research/ITW/2026-10-09.md type=CORE 1=51 2=123 3=139 4=73 5=73 6=48 total=507
+
+No data conflicts. Two IR-page fetches (itw.com/about-us/, itw.com/investors/, itw.com/the-itw-business-model/) returned 404 and were not retried.
+[14:18:45] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/ITW/2026-10-09.md
+[14:18:45] OK /Users/oskaraspinall/paper-portfolio/research/ITW/2026-10-09.md type=CORE 1=51 2=123 3=139 4=73 5=73 6=48 total=507
+[14:18:45] $ claude -p Ticker ITW, date 2026-10-09. Research: research/ITW/factsheet-2026-10-09.md, research/ITW/2026-10-09.md. Macro snapshot: reports/macro/2026-10-09.md. Write research/ITW/2026-10-09-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:20:13] research/RDDT/2026-10-09.md
+research/RDDT/factsheet-2026-10-09.md
+OK research/RDDT/2026-10-09.md type=CORE 1=51 2=139 3=149 4=44 5=67 6=102 total=552
+
+Blocked URLs (all qualitative fetches failed, so the note relies on fact sheet + listed news headlines only):
+- https://redditinc.com/investors
+- https://redditinc.com/press
+- https://redditinc.com (unable to fetch, not a 503)
+- https://www.sec.gov/cgi-bin/browse-edgar?... (×3, all 503/empty)
+- https://www.reuters.com/legal/litigation/reddit-anthropic-lawsuit (unable to fetch)
+
+No data conflicts found.
+[14:20:13] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/RDDT/2026-10-09.md
+[14:20:13] OK /Users/oskaraspinall/paper-portfolio/research/RDDT/2026-10-09.md type=CORE 1=51 2=139 3=149 4=44 5=67 6=102 total=552
+[14:20:13] $ claude -p Ticker RDDT, date 2026-10-09. Research: research/RDDT/factsheet-2026-10-09.md, research/RDDT/2026-10-09.md. Macro snapshot: reports/macro/2026-10-09.md. Write research/RDDT/2026-10-09-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:20:35] research/ITW/2026-10-09-macro.md
+OK research/ITW/2026-10-09-macro.md macro_weight=secondary words=235
+[14:20:35] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/ITW/2026-10-09-macro.md
+[14:20:35] OK /Users/oskaraspinall/paper-portfolio/research/ITW/2026-10-09-macro.md macro_weight=secondary words=235
+[14:20:35] $ claude -p Evaluate ITW for 2026-10-09: fact sheet research/ITW/factsheet-2026-10-09.md, note research/ITW/2026-10-09.md, state portfolio/state.json, macro overlay research/ITW/2026-10-09-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[14:21:22] research/ITW/2026-10-09-evaluation.md
+OK research/ITW/2026-10-09-evaluation.md Bear case=131 Bull case=127 decision=AVOID
+[14:21:22] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/ITW/2026-10-09-evaluation.md
+[14:21:22] OK /Users/oskaraspinall/paper-portfolio/research/ITW/2026-10-09-evaluation.md Bear case=131 Bull case=127 decision=AVOID
+[14:21:22] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py ITW --asof 2026-10-09 --eval /Users/oskaraspinall/paper-portfolio/research/ITW/2026-10-09-evaluation.md
+[14:21:22] {"out": "research/ITW/2026-10-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 122.96, "base": 167.26, "bull": 186.12}, "price": 264.71}
+[14:21:22] Monte Carlo skipped for ITW (AVOID: informational only, runs for BUY/ADD and holdings)
+[14:21:24] == done ITW
+[14:21:24] == initiate LOW
+[14:21:24] $ claude -p Ticker LOW, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:22:20] research/RDDT/2026-10-09-macro.md
+OK research/RDDT/2026-10-09-macro.md macro_weight=secondary words=250
+[14:22:20] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/RDDT/2026-10-09-macro.md
+[14:22:20] OK /Users/oskaraspinall/paper-portfolio/research/RDDT/2026-10-09-macro.md macro_weight=secondary words=250
+[14:22:20] $ claude -p Evaluate RDDT for 2026-10-09: fact sheet research/RDDT/factsheet-2026-10-09.md, note research/RDDT/2026-10-09.md, state portfolio/state.json, macro overlay research/RDDT/2026-10-09-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[14:23:04] research/RDDT/2026-10-09-evaluation.md
+OK research/RDDT/2026-10-09-evaluation.md Bear case=137 Bull case=115 decision=AVOID
+[14:23:04] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/RDDT/2026-10-09-evaluation.md
+[14:23:04] OK /Users/oskaraspinall/paper-portfolio/research/RDDT/2026-10-09-evaluation.md Bear case=137 Bull case=115 decision=AVOID
+[14:23:04] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py RDDT --asof 2026-10-09 --eval /Users/oskaraspinall/paper-portfolio/research/RDDT/2026-10-09-evaluation.md
+[14:23:04] {"out": "research/RDDT/2026-10-09-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 270.76, "base": 284.26, "bull": 297.75}, "price": 156.47}
+[14:23:04] Monte Carlo skipped for RDDT (AVOID: informational only, runs for BUY/ADD and holdings)
+[14:23:06] == done RDDT
+[14:23:06] == initiate ALGN
+[14:23:06] $ claude -p Ticker ALGN, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:24:04] Note path: research/YUM/2026-10-09.md
+Fact sheet path: research/YUM/factsheet-2026-10-09.md
+Check: `OK research/YUM/2026-10-09.md type=CORE 1=63 2=145 3=149 4=78 5=98 6=78 total=611`
+
+Data conflicts: none. Blocked URLs: none (one yum.com IR page fetch timed out and was not retried; dividend headline and KFC product headlines were cited as listed in the fact sheet, not fetched, since businesswire.com/prnewswire.com are not on the allowlist). Note: this research used 8 WebFetch calls, exceeding the CORE cap of 6 — flagging for awareness.
+[14:24:04] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/YUM/2026-10-09.md
+[14:24:04] OK /Users/oskaraspinall/paper-portfolio/research/YUM/2026-10-09.md type=CORE 1=63 2=145 3=149 4=78 5=98 6=78 total=611
+[14:24:04] $ claude -p Ticker YUM, date 2026-10-09. Research: research/YUM/factsheet-2026-10-09.md, research/YUM/2026-10-09.md. Macro snapshot: reports/macro/2026-10-09.md. Write research/YUM/2026-10-09-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:24:45] Note: research/LOW/2026-10-09.md
+Fact sheet: research/LOW/factsheet-2026-10-09.md
+OK research/LOW/2026-10-09.md type=CORE 1=48 2=144 3=133 4=88 5=89 6=157 total=659
+
+No data conflicts. All WebFetch URLs (sec.gov, stockanalysis.com, corporate.lowes.com) loaded successfully; the TipRanks headline URL was cited per the fact sheet's News & sentiment listing but not fetched (not allowlisted). Decision: AVOID.
+[14:24:45] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/LOW/2026-10-09.md
+[14:24:45] OK /Users/oskaraspinall/paper-portfolio/research/LOW/2026-10-09.md type=CORE 1=48 2=144 3=133 4=88 5=89 6=157 total=659
+[14:24:45] $ claude -p Ticker LOW, date 2026-10-09. Research: research/LOW/factsheet-2026-10-09.md, research/LOW/2026-10-09.md. Macro snapshot: reports/macro/2026-10-09.md. Write research/LOW/2026-10-09-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:25:26] research/YUM/2026-10-09-macro.md
+OK research/YUM/2026-10-09-macro.md macro_weight=secondary words=241
+[14:25:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/YUM/2026-10-09-macro.md
+[14:25:26] OK /Users/oskaraspinall/paper-portfolio/research/YUM/2026-10-09-macro.md macro_weight=secondary words=241
+[14:25:26] $ claude -p Evaluate YUM for 2026-10-09: fact sheet research/YUM/factsheet-2026-10-09.md, note research/YUM/2026-10-09.md, state portfolio/state.json, macro overlay research/YUM/2026-10-09-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[14:26:03] research/YUM/2026-10-09-evaluation.md
+OK research/YUM/2026-10-09-evaluation.md Bear case=123 Bull case=124 decision=AVOID
+[14:26:03] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/YUM/2026-10-09-evaluation.md
+[14:26:03] OK /Users/oskaraspinall/paper-portfolio/research/YUM/2026-10-09-evaluation.md Bear case=123 Bull case=124 decision=AVOID
+[14:26:03] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py YUM --asof 2026-10-09 --eval /Users/oskaraspinall/paper-portfolio/research/YUM/2026-10-09-evaluation.md
+[14:26:03] {"out": "research/YUM/2026-10-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 98.02, "base": 121.16, "bull": 152.21}, "price": 143}
+[14:26:03] Monte Carlo skipped for YUM (AVOID: informational only, runs for BUY/ADD and holdings)
+[14:26:06] == done YUM
+[14:26:06] == initiate UBER
+[14:26:06] $ claude -p Ticker UBER, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:26:58] research/LOW/2026-10-09-macro.md
+OK research/LOW/2026-10-09-macro.md macro_weight=secondary words=243
+[14:26:58] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/LOW/2026-10-09-macro.md
+[14:26:58] OK /Users/oskaraspinall/paper-portfolio/research/LOW/2026-10-09-macro.md macro_weight=secondary words=243
+[14:26:58] $ claude -p Evaluate LOW for 2026-10-09: fact sheet research/LOW/factsheet-2026-10-09.md, note research/LOW/2026-10-09.md, state portfolio/state.json, macro overlay research/LOW/2026-10-09-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[14:27:31] research/LOW/2026-10-09-evaluation.md
+OK research/LOW/2026-10-09-evaluation.md Bear case=137 Bull case=130 decision=AVOID
+[14:27:31] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/LOW/2026-10-09-evaluation.md
+[14:27:31] OK /Users/oskaraspinall/paper-portfolio/research/LOW/2026-10-09-evaluation.md Bear case=137 Bull case=130 decision=AVOID
+[14:27:31] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py LOW --asof 2026-10-09 --eval /Users/oskaraspinall/paper-portfolio/research/LOW/2026-10-09-evaluation.md
+[14:27:31] {"out": "research/LOW/2026-10-09-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 131.22, "base": 183.32, "bull": 210.3}, "price": 188.85}
+[14:27:31] Monte Carlo skipped for LOW (AVOID: informational only, runs for BUY/ADD and holdings)
+[14:27:34] == done LOW
+[14:27:34] == initiate DAL
+[14:27:34] $ claude -p Ticker DAL, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:28:14] research/ALGN/2026-10-09.md
+research/ALGN/factsheet-2026-10-09.md
+OK research/ALGN/2026-10-09.md type=CORE 1=37 2=149 3=142 4=86 5=80 6=82 total=576
+
+Data conflicts: none. Blocked/failed fetches: reuters.com article (fetch tool error, not retried); http://investor.aligntech.com/ (timed out, not retried).
+[14:28:14] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/ALGN/2026-10-09.md
+[14:28:14] OK /Users/oskaraspinall/paper-portfolio/research/ALGN/2026-10-09.md type=CORE 1=37 2=149 3=142 4=86 5=80 6=82 total=576
+[14:28:14] $ claude -p Ticker ALGN, date 2026-10-09. Research: research/ALGN/factsheet-2026-10-09.md, research/ALGN/2026-10-09.md. Macro snapshot: reports/macro/2026-10-09.md. Write research/ALGN/2026-10-09-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:28:19] You've hit your session limit · resets 5:10pm (Europe/London)
+[14:28:19] !! FAILED DAL: claude -p Ticker DAL, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[14:28:19] == initiate PPG
+[14:28:19] $ claude -p Ticker PPG, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:28:20] You've hit your session limit · resets 5:10pm (Europe/London)
+[14:28:20] !! MACRO OVERLAY UNAVAILABLE for ALGN: claude -p Ticker ALGN, date 2026-10-09. Research: research/ALGN/factsheet-2026-10-09.md, research/ALGN/2026-10-09.md. Macro snapshot: reports/macro/2026-10-09.md. Write research/ALGN/2026-10-09-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[14:28:20] $ claude -p Evaluate ALGN for 2026-10-09: fact sheet research/ALGN/factsheet-2026-10-09.md, note research/ALGN/2026-10-09.md, state portfolio/state.json. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[14:28:21] You've hit your session limit · resets 5:10pm (Europe/London)
+[14:28:21] !! FAILED PPG: claude -p Ticker PPG, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[14:28:21] == initiate KVUE
+[14:28:21] $ claude -p Ticker KVUE, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[14:28:23] You've hit your session limit · resets 5:10pm (Europe/London)
+[14:28:23] !! FAILED ALGN: claude -p Evaluate ALGN for 2026-10-09: fact sheet research/ALGN/factsheet-2026-10-09.md, note research/ALGN/2026-10-09.md, state portfolio/state.json. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text exited 
+[14:28:24] You've hit your session limit · resets 5:10pm (Europe/London)
+[14:28:24] !! FAILED KVUE: claude -p Ticker KVUE, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[14:28:30] You've hit your session limit · resets 5:10pm (Europe/London)
+[14:28:30] !! FAILED UBER: claude -p Ticker UBER, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
