@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 38.19707226481458,
+    "base": 42.278634258315265,
+    "bull": 48.02654476921116
+   },
+   "cost_of_equity": 0.10347,
+   "assumptions": {
+    "roe": {
+     "bear": 0.10202,
+     "base": 0.11025,
+     "bull": 0.12184
+    },
+    "justified_pb": {
+     "bear": 0.9815216006116987,
+     "base": 1.0864024467949531,
+     "bull": 1.2341022046642027
+    },
+    "bvps": 38.916181
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 42.80236921527748,
+    "base": 70.96137320299974,
+    "bull": 87.61037772668615
+   },
+   "implied_growth": -0.020137592549569615,
+   "discount_rate": 0.10347,
+   "cost_of_equity": 0.10347,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.005099641534252724,
+     "base": 0.033382880551866764,
+     "bull": 0.05873080527597252
+    },
+    "cash_flow_margin": {
+     "bear": 0.21093325044681016,
+     "base": 0.2989641667581714,
+     "bull": 0.3332635808152674
+    },
+    "cagr_3y": 0.05873080527597252,
+    "cagr_5y": 0.02480071693149455,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 24.781281790437436,
+    "base": 28.21460430737861,
+    "bull": 32.65079596903753
+   },
+   "cost_of_equity": 0.10347,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 2.16
+   }
+  }
+ ],
+ "price": 57.03,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 39.732171248302215,
+  "base": 51.83954723987676,
+  "bull": 61.22115575503616
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.30331104246357676,
+  "base": -0.09101267333198748,
+  "bull": 0.07349036919228746
+ },
+ "implied_growth": -0.020137592549569615,
+ "ticker": "USB",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/usb/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/usb/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/usb/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/usb/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/usb/statistics/"
+ }
+}
