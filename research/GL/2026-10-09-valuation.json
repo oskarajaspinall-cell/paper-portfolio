@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 110.0779902637168,
+    "base": 213.14501882684365,
+    "bull": 228.2274238297935
+   },
+   "cost_of_equity": 0.0928,
+   "assumptions": {
+    "roe": {
+     "bear": 0.11842,
+     "base": 0.20589,
+     "bull": 0.21869
+    },
+    "justified_pb": {
+     "bear": 1.3778761061946903,
+     "base": 2.6679941002949854,
+     "bull": 2.856784660766962
+    },
+    "bvps": 79.889614
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 131.835810659,
+    "base": 144.57757664399998,
+    "bull": 177.947432413
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.743,
+     "base": 9.588,
+     "bull": 11.801
+    },
+    "ttm_eps": 15.079013
+   }
+  }
+ ],
+ "price": 166.08,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 117.33059706214453,
+  "base": 190.28920476589576,
+  "bull": 211.46742669086234
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.29352964196685616,
+  "base": 0.1457683331279851,
+  "bull": 0.27328652872629045
+ },
+ "implied_growth": null,
+ "ticker": "GL",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/gl/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/gl/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/gl/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/gl/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/gl/statistics/"
+ }
+}

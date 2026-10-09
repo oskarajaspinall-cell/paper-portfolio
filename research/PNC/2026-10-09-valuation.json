@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 152.88082252144363,
+    "base": 176.35943074627255,
+    "bull": 183.9157644278267
+   },
+   "cost_of_equity": 0.10048850000000001,
+   "assumptions": {
+    "roe": {
+     "bear": 0.10431,
+     "base": 0.11649,
+     "bull": 0.12041
+    },
+    "justified_pb": {
+     "bear": 1.0506236049199544,
+     "base": 1.2119726845810948,
+     "bull": 1.2639011240122664
+    },
+    "bvps": 145.514361
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 197.27051423243472,
+    "base": 260.73414438882025,
+    "bull": 262.7267462899132
+   },
+   "implied_growth": -0.015583617465531371,
+   "discount_rate": 0.10048850000000001,
+   "cost_of_equity": 0.10048850000000001,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.0043112465407015126,
+     "base": 0.02608090519856703,
+     "bull": 0.02794611387567114
+    },
+    "cash_flow_margin": {
+     "bear": 0.26884518989782147,
+     "base": 0.3136642131666598,
+     "bull": 0.3136642131666598
+    },
+    "cagr_3y": 0.02637750691859697,
+    "cagr_5y": 0.02794611387567114,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 94.98353579721247,
+    "base": 108.62581717745084,
+    "bull": 126.43441214869785
+   },
+   "cost_of_equity": 0.10048850000000001,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 8.0
+   }
+  }
+ ],
+ "price": 219.68,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 167.67738642510733,
+  "base": 204.48433529378846,
+  "bull": 210.18609171518884
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.23671983601098268,
+  "base": -0.06917181676170592,
+  "bull": -0.04321698964316811
+ },
+ "implied_growth": -0.015583617465531371,
+ "ticker": "PNC",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/pnc/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/pnc/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/pnc/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/pnc/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/pnc/statistics/"
+ }
+}

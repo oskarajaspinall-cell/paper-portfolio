@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Reinsurance",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 230.87428425663714,
+    "base": 490.8577816327433,
+    "bull": 669.3942887654869
+   },
+   "cost_of_equity": 0.0928,
+   "assumptions": {
+    "roe": {
+     "bear": 0.06426,
+     "base": 0.10847,
+     "bull": 0.13883
+    },
+    "justified_pb": {
+     "bear": 0.57905604719764,
+     "base": 1.2311209439528021,
+     "bull": 1.6789085545722717
+    },
+    "bvps": 398.70801
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 289.53390848600003,
+    "base": 425.238254176,
+    "bull": 538.638252391
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.166,
+     "base": 9.056,
+     "bull": 11.471
+    },
+    "ttm_eps": 46.956521
+   }
+  }
+ ],
+ "price": 373.1,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 250.42749233309144,
+  "base": 468.98460581382886,
+  "bull": 625.8089433073246
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.3287925694637056,
+  "base": 0.25699438706467115,
+  "bull": 0.6773222817135476
+ },
+ "implied_growth": null,
+ "ticker": "EG",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/eg/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/eg/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/eg/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/eg/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/eg/statistics/"
+ }
+}
