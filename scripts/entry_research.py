@@ -1,7 +1,7 @@
 """Re-research stocks whose price reached the entry price we set (owner rule 2026-10-09), straight away: the
 intraday check (bin/entry-intraday) calls this for its hits. Full pipeline (researcher -> macro -> evaluator ->
 fair value), decision log (which replaces the stock's entry-watch row), then the portfolio-manager for any BUY
-(autonomous-buy rule; fills at the next open; the portfolio's rules still validate it). A hit is never a buy on
+(autonomous-buy rule; fills now at the live price if the market is open, else at the next open; the portfolio's rules still validate it). A hit is never a buy on
 price alone: the re-initiation decides. At most [entry].intraday_max_research a day; holdings and stocks
 already evaluated today are skipped.
 
@@ -75,8 +75,8 @@ def main(argv=None) -> int:
         try:
             wr.claude_agent("portfolio-manager",
                             f"Evaluation files: {' '.join(str(e.relative_to(ROOT)) for e in buys)}. Date {a.asof}. "
-                            f"Write the requests to runs/{a.asof}-entry/requests.json and submit with --at-next-open "
-                            f"--save runs/{a.asof}-entry/submit.json (decided trades fill at the next open). "
+                            f"Write the requests to runs/{a.asof}-entry/requests.json and submit with --at-market "
+                            f"--save runs/{a.asof}-entry/submit.json (decided trades fill now at the live price where the market is open, else at the next open). "
                             f"Cash strategy: the latest reports/regime/*.md (new buys can't take cash below the reserve).", log)
         except Exception as e:  # noqa: BLE001
             log(f"!! PORTFOLIO-MANAGER FAILED (research kept): {str(e)[:300]}")

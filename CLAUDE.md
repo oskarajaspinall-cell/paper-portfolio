@@ -168,6 +168,8 @@ default = 1.5                     # any other reporting currency
 # Next-open orders fill at the first OPEN after the decision time (never an earlier price). Local opening
 # time + timezone per exchange (daylight saving handled). Exchanges not listed: the first session after
 # the decision date.
+close_times = { US = "America/New_York 16:00", HKG = "Asia/Hong_Kong 16:00", LON = "Europe/London 16:30", TYO = "Asia/Tokyo 15:30", KRX = "Asia/Seoul 15:30", TPE = "Asia/Taipei 13:30", SHA = "Asia/Shanghai 15:00", SHE = "Asia/Shanghai 15:00", NSE = "Asia/Kolkata 15:30", TSX = "America/Toronto 16:00" }
+live_max_age_min = 15             # at-market fills (owner rule 2026-10-09) need a live trade this recent
 open_times = { US = "America/New_York 09:30", HKG = "Asia/Hong_Kong 09:30", LON = "Europe/London 08:00", TYO = "Asia/Tokyo 09:00", KRX = "Asia/Seoul 09:00", TPE = "Asia/Taipei 09:00", SHA = "Asia/Shanghai 09:30", SHE = "Asia/Shanghai 09:30", NSE = "Asia/Kolkata 09:15", TSX = "America/Toronto 09:30" }
 
 [costs]
@@ -282,9 +284,9 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/fetch_data.py` — stockanalysis.com scraper (pages → JSON with `source_url`; news feeds; robots, rate limit, cache).
 - `scripts/fact_sheet.py <TICKER> --peers A B C` — one-page `research/<SLUG>/factsheet-<date>.md` (quality, valuation, price, news & sentiment).
 - `scripts/portfolio.py` — validates trades against every rule, places next-open orders, fills them, marks to market, computes returns. All arithmetic lives here.
-- **Fills (owner rule):** trades decided by the agents are validated at once and queued as pending orders that fill at the first OPEN after the decision time (per exchange, `[fills]`) (`portfolio.py submit --at-next-open`, then `fill-pending`). Mechanical tactical exits still fill at the first close that crossed the stop/target.
+- **Fills (owner rule, updated 2026-10-09):** trades decided by the agents are validated at once; where the stock's market is OPEN at that moment they fill immediately at the live price (Yahoo 1-minute bar ≤ `[fills].live_max_age_min` old, every rule re-checked at that price; `portfolio.py submit --at-market`), otherwise they are queued and fill at the first OPEN after the decision time (per exchange, `[fills]`; `fill-pending`). `portfolio.py fill-now` fills any pending order whose market is open now. Mechanical tactical exits still fill at the first close that crossed the stop/target.
 - `scripts/valuation.py` + `valuation/industry_methods.csv` — industry-appropriate fair value (owner's 145-industry method table: best + 2nd-best method; DCF, through-cycle DCF, FCFE, P/E, P/B+ROE, EV/EBITDA, EV/Revenue, DDM, P/FFO proxy; NAV/rNPV/SOTP need data stockanalysis.com doesn't show → `[data unavailable]`, next method used). Bear/base/bull from the stock's own history + reverse DCF; CAPM discount (FRED 10y + beta × `[valuation].erp`). Inform-only: shown in the fact sheet, logged as `fair_value_base` in the decision log, never a buy rule.
-- `bin/entry-intraday` (weekdays ~10:30 New York) → `scripts/entry_watch.py intraday` (live Yahoo prices vs entry prices, US stocks) → `scripts/entry_research.py` re-researches hits at once (≤3/day; a BUY goes to the portfolio-manager, fills at the next open).
+- `bin/entry-intraday` (weekdays ~10:30 New York) → `scripts/entry_watch.py intraday` (live Yahoo prices vs entry prices, US stocks) → `scripts/entry_research.py` re-researches hits at once (≤3/day; a BUY goes to the portfolio-manager and fills at once at the live price while the US market is open).
 - `scripts/regime.py` → `reports/regime/<date>.json/.md` (+ `-view.md` from `.claude/agents/macro-strategist.md`) — macro regime score, cash reserve, dip release.
 - `scripts/setups.py` — tactical setups (drift signal, pullback filter, ATR, volatility stop, 2:1 target, risk-based size).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.

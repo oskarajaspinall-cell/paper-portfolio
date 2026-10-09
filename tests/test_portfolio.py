@@ -681,3 +681,81 @@ def test_baseline_earns_interest_too(cfg):
     s["baseline"] = {"start": "2026-10-06", "frozen_from": "2026-10-13", "cash_usd": 60000.0, "holdings": {}}
     row = accrue_interest(s, "2026-10-06", interest_cfg(cfg), [])
     assert row["baseline_interest_usd"] == pytest.approx(round(60000 * (1.038 ** (1 / 365) - 1), 2))
+
+
+# ------------------------------------------------------------------ at-market fills (owner rule 2026-10-09)
+NY_OPEN = dt.datetime(2026, 10, 9, 14, 31, tzinfo=dt.timezone.utc)   # Fri 10:31 New York
+
+
+class LiveMarket(OpenMarket):
+    """`live` gives {ticker: (price, iso time)} for live quotes."""
+
+    def __init__(self, cfg, live=None, **kw):
+        super().__init__(cfg, **kw)
+        self.live = live or {}
+
+    def live_quote(self, t):
+        if t not in self.live:
+            return None
+        p, ts = self.live[t]
+        q = self.price(t, p, ts[:10], PRICES[t][1], "u")
+        q.update(basis="live", source="yfinance live", time=ts)
+        return q
+
+
+def test_market_open_now(real_cfg):
+    from portfolio import market_open_now
+    assert market_open_now("AAPL", real_cfg, NY_OPEN)
+    assert not market_open_now("AAPL", real_cfg, dt.datetime(2026, 10, 9, 20, 5, tzinfo=dt.timezone.utc))  # 16:05 NY
+    assert not market_open_now("AAPL", real_cfg, dt.datetime(2026, 10, 10, 15, 0, tzinfo=dt.timezone.utc))  # Saturday
+    assert market_open_now("HKG:9999", real_cfg, dt.datetime(2026, 10, 9, 2, 0, tzinfo=dt.timezone.utc))   # 10:00 HKT
+    assert not market_open_now("HKG:9999", real_cfg, NY_OPEN)
+
+
+def _at_market(real_cfg, tmp_path, live, now, reqs=None):
+    from portfolio import fill_now, place_orders
+    sp = tmp_path / "state.json"
+    mkt = LiveMarket(real_cfg, live=live, asof="2026-10-09")
+    out = place_orders(reqs or [core_buy("AAPL", conv=4)], sp, mkt, real_cfg, WATCH, "2026-10-09",
+                       port_dir=tmp_path, now=now)
+    fn = fill_now(sp, mkt, real_cfg, WATCH, ids=[p["id"] for p in out["placed"]], now=now, port_dir=tmp_path)
+    return fn, json.loads(sp.read_text())
+
+
+def test_at_market_fills_at_live_price_when_open(real_cfg, tmp_path):
+    fn, s = _at_market(real_cfg, tmp_path, {"AAPL": (195.0, "2026-10-09T10:30:00-04:00")}, NY_OPEN)
+    row = fn["applied"][0]
+    assert (row["fill_price"], row["fill_close_date"]) == (195.0, "2026-10-09")
+    assert "filled at the live price 195.0 USD at 10:30" in row["reason"]
+    assert s["pending"] == [] and s["holdings"]["AAPL"]["entry_price"] == 195.0
+    assert "filled at the live price" in (tmp_path / "ledger.csv").read_text()
+
+
+@pytest.mark.parametrize("live,now", [
+    ({"AAPL": (195.0, "2026-10-09T15:59:00-04:00")}, dt.datetime(2026, 10, 9, 20, 30, tzinfo=dt.timezone.utc)),  # closed
+    ({"AAPL": (195.0, "2026-10-08T15:59:00-04:00")}, NY_OPEN),   # no trade today (holiday/halt)
+    ({"AAPL": (195.0, "2026-10-09T10:00:00-04:00")}, NY_OPEN),   # 31 minutes old
+    ({}, NY_OPEN),                                               # no live price
+])
+def test_at_market_falls_back_to_next_open(real_cfg, tmp_path, live, now):
+    fn, s = _at_market(real_cfg, tmp_path, live, now)
+    assert fn["applied"] == [] and [o["request"]["ticker"] for o in s["pending"]] == ["AAPL"]
+    assert s["holdings"] == {} and not (tmp_path / "ledger.csv").exists()
+
+
+def test_at_market_rechecks_rules_at_live_price(real_cfg, tmp_path):
+    # a tactical buy valid at the 100 close but whose live price has run up breaks reward:risk -> rejected now
+    fn, s = _at_market(real_cfg, tmp_path, {"NVDA": (104.0, "2026-10-09T10:30:00-04:00")}, NY_OPEN,
+                       reqs=[tac_buy("NVDA", target=125, conviction=4)])
+    assert fn["applied"] == [] and fn["rejected"][0]["rule"] == "TACTICAL_REWARD_RISK"
+    assert "at the live price" in fn["rejected"][0]["detail"] and s["pending"] == []
+
+
+def test_fill_now_leaves_orders_due_at_todays_open_to_fill_pending(real_cfg, tmp_path):
+    from portfolio import fill_now, place_orders
+    sp = tmp_path / "state.json"
+    mkt = LiveMarket(real_cfg, live={"AAPL": (195.0, "2026-10-09T10:30:00-04:00")}, asof="2026-10-09")
+    overnight = dt.datetime(2026, 10, 9, 0, 22, tzinfo=dt.timezone.utc)  # decided before today's open
+    place_orders([core_buy("AAPL", conv=4)], sp, mkt, real_cfg, WATCH, "2026-10-09", port_dir=tmp_path, now=overnight)
+    fn = fill_now(sp, mkt, real_cfg, WATCH, now=NY_OPEN, port_dir=tmp_path)
+    assert fn["applied"] == [] and len(json.loads(sp.read_text())["pending"]) == 1  # fills at today's OPEN instead

@@ -45,8 +45,8 @@ with ThreadPoolExecutor(max_workers=3) as pool:
 buys = [ev for _, d, ev in results if d and d["decision"] == "BUY"]
 if buys:
     wr.claude_agent("portfolio-manager", f"Evaluation files: {' '.join(str(e.relative_to(ROOT)) for e in buys)}. Date {asof}. "
-                    f"Write the requests to runs/{asof}-adhoc/requests.json and submit with --at-next-open "
-                    f"--save runs/{asof}-adhoc/submit.json (decided trades fill at the next open).", log)
+                    f"Write the requests to runs/{asof}-adhoc/requests.json and submit with --at-market "
+                    f"--save runs/{asof}-adhoc/submit.json (decided trades fill now at the live price where the market is open, else at the next open).", log)
 log("== finished")
 for t, d, _ in results:
     print(t, "FAILED" if not d else f"{d['decision']} {d['conviction']} | {d.get('rationale', '')}", flush=True)

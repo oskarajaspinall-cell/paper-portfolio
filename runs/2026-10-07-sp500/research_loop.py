@@ -220,8 +220,8 @@ def attempt(t):
                     log(f"== portfolio-manager {t} (BUY {d['conviction']})")
                     agent("portfolio-manager",
                                     f"Evaluation files: {ev.relative_to(ROOT)}. Date {asof}. Write the requests to "
-                                    f"runs/2026-10-07-sp500/requests-{Ticker(t).slug}.json and submit with --at-next-open "
-                                    f"--save runs/2026-10-07-sp500/submit-{Ticker(t).slug}.json (decided trades fill at the next open).", log)
+                                    f"runs/2026-10-07-sp500/requests-{Ticker(t).slug}.json and submit with --at-market "
+                                    f"--save runs/2026-10-07-sp500/submit-{Ticker(t).slug}.json (decided trades fill now at the live price where the market is open, else at the next open).", log)
             except Exception as e:  # noqa: BLE001  research stands; the order step is reported, not retried
                 log(f"!! PORTFOLIO-MANAGER FAILED for {t} (research kept): {str(e)[:300]}")
         log(f"== done {t}")

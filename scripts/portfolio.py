@@ -3,7 +3,8 @@
 Paper only: no broker, no broker API, no real orders.
 
 Commands:
-    python scripts/portfolio.py submit requests.json [--asof YYYY-MM-DD] [--dry-run] [--at-next-open]
+    python scripts/portfolio.py submit requests.json [--asof YYYY-MM-DD] [--dry-run] [--at-next-open | --at-market]
+    python scripts/portfolio.py fill-now [--dry-run]     fill pending orders whose market is open now, at the live price
     python scripts/portfolio.py fill-pending [--asof YYYY-MM-DD]   (fill queued orders at the next open)
     python scripts/portfolio.py mark [--asof YYYY-MM-DD]
     python scripts/portfolio.py returns [--asof YYYY-MM-DD]
@@ -148,6 +149,20 @@ class Market:
         last = rows[-1]
         q = self.price(ticker, last["close"], last["date"], h["currency"], h["url"])
         q["source"] = h.get("source", "stockanalysis")
+        return q
+
+    def live_quote(self, ticker: str) -> dict | None:
+        """The live price (Yahoo 1-minute bars, owner rule 2026-10-09) as a fill quote, or None (no fill now):
+        no price, or a currency that differs from the stock's own history currency."""
+        from prices import live_price
+        try:
+            lp = live_price(ticker)
+        except DataError:
+            return None
+        if lp["currency"] != self.history(ticker)["currency"]:
+            return None
+        q = self.price(ticker, round(lp["price"], 4), lp["date"], lp["currency"], lp["url"])
+        q.update(basis="live", source="yfinance live", time=lp["time"])
         return q
 
     def price(self, ticker, close, date, ccy, url) -> dict:
@@ -834,6 +849,93 @@ def first_eligible_open(order: dict, ticker: str, cfg: dict) -> str:
     return (at.date() if at < opens else at.date() + dt.timedelta(days=1)).isoformat()
 
 
+def _exchange_tz(ticker: str, cfg: dict, key: str):
+    from zoneinfo import ZoneInfo
+    spec = cfg.get("fills", {}).get(key, {}).get(Ticker(ticker).exchange or "US")
+    if not spec:
+        return None, None
+    tzname, hhmm = spec.split()
+    h, m = map(int, hhmm.split(":"))
+    return ZoneInfo(tzname), dt.time(h, m)
+
+
+def market_open_now(ticker: str, cfg: dict, now: dt.datetime) -> bool:
+    """Weekday and between the exchange's [fills].open_times and close_times (local time). Holidays are
+    caught by live-quote freshness (no bar today -> no fill)."""
+    tz, opens = _exchange_tz(ticker, cfg, "open_times")
+    tz2, closes = _exchange_tz(ticker, cfg, "close_times")
+    if not tz or not tz2:
+        return False
+    local = now.astimezone(tz)
+    return local.weekday() < 5 and opens <= local.time() < closes
+
+
+def live_fresh(q: dict | None, ticker: str, cfg: dict, now: dt.datetime) -> bool:
+    """A live quote traded today (exchange-local) within [fills].live_max_age_min of `now`."""
+    if not q or not q.get("time"):
+        return False
+    tz, _ = _exchange_tz(ticker, cfg, "open_times")
+    t = dt.datetime.fromisoformat(q["time"])
+    age = (now - t).total_seconds() / 60
+    return q["date"] == now.astimezone(tz).date().isoformat() and -1 <= age <= cfg["fills"].get("live_max_age_min", 15)
+
+
+def fill_now(state_path, mkt, cfg, watch, ids=None, now: dt.datetime | None = None, dry_run=False,
+             port_dir=PORT) -> dict:
+    """Owner rule 2026-10-09: a pending order whose market is open NOW fills at once at the live price
+    (re-checking every rule at that price, like fill_pending). Orders whose market is closed, or with no fresh
+    live price, stay pending for the next open. `ids` limits it to those orders (submit --at-market)."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    state = load_state(state_path, cfg)
+    pending = state.get("pending", [])
+    out = {"applied": [], "rejected": [], "still_pending": []}
+    if not pending:
+        return out
+    mark(state, mkt)
+    ledger, rejections, remaining = [], [], []
+    rank = {"SELL": 0, "TRIM": 1, "HOLD": 1, "ADD": 2, "BUY": 3}
+    for o in sorted(pending, key=lambda o: (o["placed"], rank.get(o["request"]["action"], 9))):
+        r = o["request"]
+        tickers = [r["ticker"]] + ([r["replaces"]] if r.get("replaces") else [])
+        quotes = {}
+        # an order whose first eligible open has already happened belongs to fill_pending (it fills at that open)
+        opened = any(first_eligible_open(o, t, cfg) <= now.astimezone(_exchange_tz(t, cfg, "open_times")[0]).date().isoformat()
+                     for t in tickers if _exchange_tz(t, cfg, "open_times")[0])
+        if (ids is None or o["id"] in ids) and not opened and all(market_open_now(t, cfg, now) for t in tickers):
+            quotes = {t: mkt.live_quote(t) for t in tickers}
+        if not quotes or not all(live_fresh(q, t, cfg, now) for t, q in quotes.items()):
+            remaining.append(o)
+            out["still_pending"].append(o["id"])
+            continue
+        fill_day = max(q["date"] for q in quotes.values())
+        eng = Engine(state, mkt, cfg, watch, fill_day)
+        eng.override = quotes
+        eng.process([r])
+        for row in eng.ledger:
+            q = quotes.get(row["ticker"], {})
+            row["reason"] = (f"{row['reason']} [order {o['id']} filled at the live price {q.get('close')} "
+                             f"{q.get('currency', '')} at {str(q.get('time', ''))[11:16]} exchange time; {q.get('source', '')}]")
+        for rej in eng.rejections:
+            rej["detail"] = f"at the live price on {fill_day}: {rej['detail']}"
+        eng.update_baseline()
+        ledger += eng.ledger
+        rejections += eng.rejections
+    state["pending"] = remaining
+    mark(state, mkt)
+    out["applied"] = [{k: r.get(k, "") for k in ("side", "ticker", "type", "shares", "fill_price", "currency",
+                                                 "fill_close_date", "gross_usd", "costs_usd", "cash_change_usd", "reason")}
+                      for r in ledger]
+    out["rejected"] = rejections
+    if not dry_run:
+        append_csv(port_dir / "rejections.csv", REJECT_COLS, rejections)
+        if ledger or rejections:
+            atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
+        if ledger:
+            append_csv(port_dir / "ledger.csv", LEDGER_COLS, ledger)
+            append_csv(port_dir / "valuations.csv", VAL_COLS, [valuation_row(state, mkt, "post")])
+    return out
+
+
 def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, port_dir=PORT,
                  now: dt.datetime | None = None) -> dict:
     """Owner rule: decided trades fill at the NEXT OPEN. Validate every rule now (on a copy, at the latest
@@ -946,7 +1048,10 @@ def fill_pending(state_path, mkt, cfg, watch, dry_run=False, port_dir=PORT, max_
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["submit", "fill-pending", "mark", "returns", "status", "stamp"])
+    ap.add_argument("cmd", choices=["submit", "fill-pending", "fill-now", "mark", "returns", "status", "stamp"])
+    ap.add_argument("--id", action="append", help="fill-now: only these pending order ids")
+    ap.add_argument("--at-market", action="store_true",
+                    help="submit: validate, then fill at once at the live price where the market is open (else next open)")
     ap.add_argument("--at-next-open", action="store_true",
                     help="submit: validate now, queue as pending orders filled at the next open (owner rule for decided trades)")
     ap.add_argument("--save", help="submit: also write the JSON summary to this path")
@@ -959,17 +1064,39 @@ def main(argv=None) -> int:
     from fetch_data import Fetcher
 
     # fills and re-pricing need today's prices, not a page cached before the market opened
-    mkt = Market(Fetcher(cfg, refresh=args.cmd in ("fill-pending", "mark")), args.asof, cfg, price_provider(cfg))
+    mkt = Market(Fetcher(cfg, refresh=args.cmd in ("fill-pending", "fill-now", "mark")), args.asof, cfg, price_provider(cfg))
     state_path = PORT / "state.json"
     try:
         if args.cmd == "submit":
             reqs = json.loads(Path(args.requests).read_text())
-            if args.at_next_open:  # the decision time decides which open is the first one after it
+            if args.at_market:  # owner rule 2026-10-09: fill now where the market is open, else at the next open
+                now = dt.datetime.now(dt.timezone.utc)
+                if args.dry_run:  # validate + fill on a scratch copy so nothing real changes
+                    import shutil
+                    import tempfile
+                    tmpd = Path(tempfile.mkdtemp())
+                    shutil.copy(state_path, tmpd / "state.json")
+                    sp, pd = tmpd / "state.json", tmpd
+                else:
+                    sp, pd = state_path, PORT
+                out = place_orders(reqs, sp, mkt, cfg, investable(), args.asof, False, port_dir=pd, now=now)
+                ids = [p["id"] for p in out["placed"]]
+                fn = fill_now(sp, mkt, cfg, investable(), ids=ids, now=now, port_dir=pd)
+                out.update(mode="at_market", applied=fn["applied"], rejected=out["rejected"] + fn["rejected"],
+                           filled_now=[a["ticker"] for a in fn["applied"]],
+                           queued_for_next_open=[p for p in out["placed"] if p["id"] in fn["still_pending"]])
+            elif args.at_next_open:  # the decision time decides which open is the first one after it
                 out = place_orders(reqs, state_path, mkt, cfg, investable(), args.asof, args.dry_run,
                                    now=dt.datetime.now(dt.timezone.utc))
             else:
                 out = run_submit(reqs, state_path, mkt, cfg, investable(), args.asof, args.dry_run)
             out["dry_run"] = args.dry_run
+            if args.save:
+                Path(args.save).parent.mkdir(parents=True, exist_ok=True)
+                Path(args.save).write_text(json.dumps(out, indent=1))
+            print(json.dumps(out, indent=1))
+        elif args.cmd == "fill-now":
+            out = fill_now(state_path, mkt, cfg, investable(), ids=args.id or None, dry_run=args.dry_run)
             if args.save:
                 Path(args.save).parent.mkdir(parents=True, exist_ok=True)
                 Path(args.save).write_text(json.dumps(out, indent=1))

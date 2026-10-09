@@ -306,7 +306,7 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             files = " ".join(str(e.relative_to(ROOT)) for _, e in evals)
             agent("portfolio-manager",
                   f"Evaluation files: {files}. Date {asof}. Write the requests to runs/{asof}/requests-decisions.json "
-                  f"and submit with --at-next-open --save runs/{asof}/submit.json (decided trades fill at the next open). "
+                  f"and submit with --at-market --save runs/{asof}/submit.json (decided trades fill now at the live price where the market is open, else at the next open). "
                   f"Cash strategy: reports/regime/{asof}.md (new buys can't take cash below the reserve; if one would, "
                   "it must name the holding it replaces and why)." + (" This is a DRY RUN." if dry_run else ""), log)
             if not (rundir / "submit.json").exists():
