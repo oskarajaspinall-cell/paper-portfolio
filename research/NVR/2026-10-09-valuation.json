@@ -1,0 +1,112 @@
+{
+ "industry": {
+  "industry": "Residential Construction",
+  "known": true,
+  "best": "NAV / DCF",
+  "second": "P/E",
+  "best_models": [
+   "nav",
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both*"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 3953.7464181902765,
+    "base": 4850.1577977188035,
+    "bull": 8525.248751160954
+   },
+   "implied_growth": 0.07318559544497677,
+   "discount_rate": 0.09572053091805281,
+   "cost_of_equity": 0.09951700000000002,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.019672002822170447,
+     "base": 0.02109608903980247,
+     "bull": 0.03872836180355077
+    },
+    "cash_flow_margin": {
+     "bear": 0.1004800295015235,
+     "base": 0.10402996738458375,
+     "bull": 0.17006435964852146
+    },
+    "cagr_3y": -0.004344005644340898,
+    "cagr_5y": 0.03872836180355077,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 3308.616616169,
+    "base": 5725.3048620889995,
+    "bull": 5985.563596265
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.543,
+     "base": 14.783,
+     "bull": 15.455
+    },
+    "ttm_eps": 387.289783
+   }
+  }
+ ],
+ "price": 6002.55,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 3738.703150849851,
+  "base": 5141.873485842202,
+  "bull": 7678.687032862304
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.37714752049548095,
+  "base": -0.143385147005489,
+  "bull": 0.279237496207829
+ },
+ "implied_growth": 0.07318559544497677,
+ "ticker": "NVR",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/nvr/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/nvr/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/nvr/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/nvr/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/nvr/statistics/"
+ }
+}

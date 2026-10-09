@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Airlines",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -0.20742310102889527,
+    "base": 59.17751777391633,
+    "bull": 206.39887007382825
+   },
+   "implied_growth": 0.1441068668178369,
+   "discount_rate": 0.09391622799574086,
+   "cost_of_equity": 0.11405600000000002,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.021495989421102493,
+     "base": 0.0836362979840272,
+     "bull": 0.20655321309390384
+    },
+    "cash_flow_margin": {
+     "bear": 0.015213148155470325,
+     "base": 0.040522989371552756,
+     "bull": 0.06869440786566505
+    },
+    "cagr_3y": 0.07799197884220499,
+    "cagr_5y": 0.20655321309390384,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 50.47164079147641,
+    "base": 61.267661339421615,
+    "bull": 62.485933028919334
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.684,
+     "base": 7.6455,
+     "bull": 7.754
+    },
+    "ttm_ebitda": 7377000000
+   }
+  }
+ ],
+ "price": 82.14,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 16.685598196472874,
+  "base": 59.874232295751426,
+  "bull": 158.4278910588586
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.796863912874691,
+  "base": -0.2710709484325369,
+  "bull": 0.9287544565237229
+ },
+ "implied_growth": 0.1441068668178369,
+ "ticker": "DAL",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/dal/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/dal/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/dal/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/dal/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/dal/statistics/"
+ }
+}
