@@ -73,5 +73,9 @@ class YahooPrices:
         rows = rows_from_frame(df) if df is not None else []
         if not rows:
             raise DataError(url, "yfinance", "no price rows returned")
+        if df is not None and len(df) and str(df.index[-1].date()) > rows[-1]["date"]:
+            # Yahoo sometimes serves the latest day with a blank close (an unfinished bar): dropping it would
+            # silently price the portfolio a day stale, so treat it as a failure and fall back
+            raise DataError(url, "yfinance", f"latest daily bar {df.index[-1].date()} is incomplete (no close)")
         self._cache[ticker] = {"url": url, "rows": rows, "currency": CCY.get(ccy, ccy), "symbol": sym}
         return self._cache[ticker]

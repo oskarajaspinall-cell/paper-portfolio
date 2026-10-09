@@ -85,3 +85,15 @@ def test_daily_mark_uses_the_yahoo_close(cfg):
     m = YMarket(cfg, yahoo({"AAPL": [("2026-10-08", 330.0), ("2026-10-09", 335.5)]}), asof="2026-10-10")
     q = m.quote("AAPL")
     assert (q["close"], q["date"], q["source"]) == (335.5, "2026-10-09", "yfinance")
+
+
+
+def test_incomplete_latest_bar_falls_back_instead_of_going_stale(cfg):
+    import math
+    df = frame([("2026-10-07", 81.15, 81.4, 79.1, 80.38), ("2026-10-08", 80.14, 83.0, 79.9, 82.56)])
+    df.loc[df.index[-1], "Close"] = math.nan  # what Yahoo served on 2026-10-09 at 01:30 UK
+    y = YahooPrices(loader=lambda sym, p: (df, "USD"))
+    with pytest.raises(P.DataError, match="incomplete"):
+        y.history("AAPL")
+    m = YMarket(cfg, y)
+    assert m.quote("AAPL")["source"] == "stockanalysis" and "incomplete" in m.fallbacks[0]

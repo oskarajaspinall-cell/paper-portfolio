@@ -79,6 +79,13 @@ pullback_min_sma50_over_sma200_pct = 5  # ...the 50-day at least this far above 
 pullback_min_rs_6m_pp = 0         # ...and beating SPY over rs_sessions (percentage points)
 rs_sessions = 120                 # ~6 months
 
+[cash]
+# Interest on uninvested cash (owner rule 2026-10-08): flat AER, credited daily (calendar days, compounding) by
+# the re-pricing step on each day's end-of-day cash; logged in portfolio/interest.csv. Counts as return for the
+# total portfolio (not a flow); the baseline earns it too. 0 = off.
+interest_aer_pct = 3.8
+interest_start = "2026-10-06"     # back-credited from the portfolio's first day
+
 [prices]
 # Portfolio prices (owner-approved 2026-10-08): fills use the OPEN and re-pricing uses the CLOSE from Yahoo
 # Finance via yfinance (unofficial, personal use), with stockanalysis.com as the automatic fallback. Used by
@@ -254,7 +261,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - Mac schedule: `bin/install-mac-schedule` (launchd) → `bin/weekly-local` (Fri 22:00) and `bin/fill-pending` (weekdays 22:30: fill orders + re-price holdings daily; no AI).
 - GitHub Actions: `.github/workflows/screen.yml` (Fri 21:00 UTC), `weekly-review.yml` (Sat 08:00 UTC), `fills.yml` (weekdays 21:30 UTC); one concurrency group; `bin/ci-paused` and `bin/ci-finish` handle PAUSED and commit-or-error-log.
 - `universe/` — `watchlist.txt` (always eligible and always screened, optional `ir=` domain), `ftse100.txt` (owner-maintained; `screen=no`), `custom.txt` (your own tickers), `ir_domains.txt` (auto-recorded company domains), `universe.csv` (built locally; not in the public repo).
-- `portfolio/` — `state.json` (cash, holdings, pending orders), `ledger.csv`, `rejections.csv`, `valuations.csv`, `decisions.csv`.
+- `portfolio/` — `state.json` (cash, holdings, pending orders, cash interest), `ledger.csv`, `rejections.csv`, `valuations.csv`, `decisions.csv`, `interest.csv` (daily interest on cash, `[cash]`).
 - `research/<SLUG>/` — fact sheets, notes, evaluations. `reports/weekly/` — weekly reports (and `-recap.md` summaries). `reports/screen/` — screens. `reports/sample/` — older simulated sample. `runs/<date>/` — each run's working files and log. `docs/index.html` — dashboard (GitHub Pages).
 - `.claude/agents/` — the subagents (researcher, evaluator, portfolio-manager, weekly-reviewer, mc-parameters). `tests/` — pytest suite (`tests/fixtures/*.html` saved site pages stay local, not in the public repo).
 - `data/cache/` — per-day page cache (git-ignored). `README.md` — plain-English setup guide.

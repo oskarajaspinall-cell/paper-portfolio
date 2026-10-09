@@ -124,7 +124,7 @@ def build_data() -> dict:
         "inception": state.get("inception_date"),
         "since": None if not last or last["portfolio"] is None else last["portfolio"] / 100 - 1,
         "since_spy": None if not last or last["spy"] is None else last["spy"] / 100 - 1,
-        "week": week, "series": ser, "holdings": hold,
+        "week": week, "series": ser, "holdings": hold, "interest": state.get("cash_interest"),
         "sectors": sorted(([k, v] for k, v in sectors.items()), key=lambda kv: -kv[1]),
         "ledger": [{k: r.get(k, "") for k in ("date", "ticker", "type", "side", "shares", "fill_price", "currency",
                                               "fill_close_date", "gross_usd", "costs_usd", "reason")} for r in ledger],
@@ -208,7 +208,7 @@ $('tiles').append(
  D.inception?tile('Vs S&P 500 since inception',rel==null?'n/a':(rel>=0?'+':'')+rel.toFixed(2)+'pp',rel==null?'':(rel>=0?'▲ ahead':'▼ behind'),cls(rel))
   :tile('Vs S&P 500 since inception','–','starts with the first trade'),
  tile('This week',D.week?pct(D.week.portfolio*100):'n/a',D.week&&D.week.spy!=null?'SPY '+pct(D.week.spy*100):'',''),
- tile('Cash',usd(D.cash),D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':''),
+ tile('Cash',usd(D.cash),(D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':'')+(D.interest?` · earns ${D.interest.aer_pct}% AER, ${usd(D.interest.total_usd)} so far`:'')),
  tile('Holdings',String(D.holdings.length),D.holdings.filter(h=>h.type==='CORE').length+' core · '+D.holdings.filter(h=>h.type==='TACTICAL').length+' tactical'),
  tile('Decisions logged',String(D.n_decisions),'')
 );

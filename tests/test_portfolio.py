@@ -584,6 +584,7 @@ def test_daily_valuation_rows(tmp_path):
     rows = read_csv(path)
     assert [(r["date"], r["phase"], r["total_usd"]) for r in rows] == [
         ("2026-10-09", "post", "100"), ("2026-10-12", "daily", "102")]
+    assert record_valuation(path, {**base, "date": "2026-10-09", "phase": "daily", "total_usd": 99}) == "skipped"
 
 
 def test_week_return_spans_seven_days_with_daily_rows():
@@ -641,3 +642,42 @@ def test_first_eligible_open_rules(cfg):
     # Hong Kong: 23:30 UK on the 12th is 06:30 on the 13th in HK, before its 09:30 open
     assert first_eligible_open(o("2026-10-12T22:30:00+00:00"), "HKG:9999", cfg) == "2026-10-13"
     assert first_eligible_open(o("2026-10-12T02:00:00+00:00"), "XYZ:ABC", cfg) == "2026-10-13"  # unknown exchange
+
+
+# ------------------------------------------------------------------ interest on cash (owner rule)
+def interest_cfg(cfg, aer=3.8, start="2026-10-06"):
+    c = copy.deepcopy(cfg)
+    c["cash"] = {"interest_aer_pct": aer, "interest_start": start}
+    return c
+
+
+def test_interest_compounds_to_the_aer_over_a_year(cfg):
+    from portfolio import accrue_interest
+    s = empty_state(cfg)
+    row = accrue_interest(s, "2027-10-05", interest_cfg(cfg), [])  # 365 days from 2026-10-06
+    assert row["days"] == 365 and s["cash_usd"] == pytest.approx(100000 * 1.038)
+    assert s["cash_interest"]["total_usd"] == pytest.approx(3800.0)
+
+
+def test_interest_uses_each_days_balance_and_never_double_credits(cfg):
+    from portfolio import accrue_interest
+    s = empty_state(cfg)
+    s["cash_usd"] = 100000.0  # after a 50,000 buy filled on 2026-10-08
+    ledger = [{"fill_close_date": "2026-10-08", "cash_change_usd": "-50000"}]
+    daily = 1.038 ** (1 / 365) - 1
+    row = accrue_interest(s, "2026-10-08", interest_cfg(cfg), ledger)
+    a = 150000 * daily                     # 10-06 on 150,000
+    b = (150000 + a) * daily               # 10-07 on 150,000 + interest so far
+    c = (100000 + a + b) * daily           # 10-08 after the fill
+    assert row["days"] == 3 and row["interest_usd"] == pytest.approx(round(a + b + c, 2))
+    assert accrue_interest(s, "2026-10-08", interest_cfg(cfg), ledger) is None   # same day again: nothing
+    assert accrue_interest(s, "2026-10-09", interest_cfg(cfg), ledger)["days"] == 1
+    assert accrue_interest(empty_state(cfg), "2026-10-08", interest_cfg(cfg, aer=0), []) is None
+
+
+def test_baseline_earns_interest_too(cfg):
+    from portfolio import accrue_interest
+    s = empty_state(cfg)
+    s["baseline"] = {"start": "2026-10-06", "frozen_from": "2026-10-13", "cash_usd": 60000.0, "holdings": {}}
+    row = accrue_interest(s, "2026-10-06", interest_cfg(cfg), [])
+    assert row["baseline_interest_usd"] == pytest.approx(round(60000 * (1.038 ** (1 / 365) - 1), 2))

@@ -230,6 +230,46 @@ def totals(state: dict) -> dict:
             "n": len(state["holdings"])}
 
 
+INTEREST_COLS = ["from", "through", "days", "aer_pct", "interest_usd", "cash_after_usd", "baseline_interest_usd"]
+
+
+def accrue_interest(state: dict, through: str, cfg: dict, ledger_rows: list[dict]) -> dict | None:
+    """Interest on uninvested cash at a flat AER (owner rule 2026-10-08, [cash]), credited for each calendar
+    day after the last credited day up to `through` (inclusive), on that day's END-of-day cash. Past days'
+    balances are rebuilt from the ledger (fills dated after day d are undone), so a multi-day gap is exact.
+    Daily rate = (1 + AER)^(1/365) - 1, compounding. The baseline earns the same rate on its own cash.
+    Returns the log row, or None when nothing is due. Idempotent: never credits a day twice."""
+    cc = cfg.get("cash") or {}
+    aer = float(cc.get("interest_aer_pct", 0.0))
+    if aer <= 0:
+        return None
+    ci = state.setdefault("cash_interest", {"start": cc.get("interest_start") or state.get("inception_date"),
+                                            "accrued_through": None, "total_usd": 0.0})
+    start = ci.get("accrued_through")
+    first = (dt.date.fromisoformat(start) + dt.timedelta(days=1)) if start else dt.date.fromisoformat(ci["start"])
+    last = dt.date.fromisoformat(through)
+    if first > last:
+        return None
+    daily = (1 + aer / 100) ** (1 / 365) - 1
+    later = lambda d: sum(float(r.get("cash_change_usd") or 0) for r in ledger_rows  # noqa: E731
+                          if (r.get("fill_close_date") or r.get("date") or "") > d)
+    total, d = 0.0, first
+    while d <= last:
+        bal = state["cash_usd"] - later(d.isoformat()) + total  # end-of-day cash on day d, incl. interest so far
+        total += max(bal, 0.0) * daily
+        d += dt.timedelta(days=1)
+    days = (last - first).days + 1
+    state["cash_usd"] += total
+    ci.update(accrued_through=through, total_usd=ci.get("total_usd", 0.0) + total, aer_pct=aer)
+    b_int = 0.0
+    if state.get("baseline"):
+        b_int = state["baseline"]["cash_usd"] * ((1 + daily) ** days - 1)
+        state["baseline"]["cash_usd"] += b_int
+    return {"from": first.isoformat(), "through": through, "days": days, "aer_pct": aer,
+            "interest_usd": round(total, 2), "cash_after_usd": round(state["cash_usd"], 2),
+            "baseline_interest_usd": round(b_int, 2)}
+
+
 def baseline_value(state: dict, mkt: Market) -> float | None:
     b = state.get("baseline")
     if not b:
@@ -254,6 +294,8 @@ def record_valuation(path: Path, row: dict) -> str:
     it replaces an earlier daily row of that date (same-day re-run) and is skipped when the weekly run
     already recorded that date."""
     vals = read_csv(path)
+    if vals and row["date"] < vals[-1]["date"]:
+        return "skipped"  # never dated before the latest valuation (a stale price source would do that)
     if row["phase"] == "daily" and vals and vals[-1]["date"] == row["date"]:
         if vals[-1]["phase"] != "daily":
             return "skipped"
@@ -921,7 +963,12 @@ def main(argv=None) -> int:
             if not read_csv(PORT / "valuations.csv"):
                 append_csv(PORT / "valuations.csv", VAL_COLS, [valuation_row(state, mkt, "inception")])
             mark(state, mkt)
+            # interest on cash through the last completed day (the day before asof), after that day's fills
+            through = (dt.date.fromisoformat(args.asof) - dt.timedelta(days=1)).isoformat()
+            irow = accrue_interest(state, through, cfg, read_csv(PORT / "ledger.csv"))
             atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
+            if irow:
+                append_csv(PORT / "interest.csv", INTEREST_COLS, [irow])
             record_valuation(PORT / "valuations.csv", valuation_row(state, mkt, args.phase))
             print(json.dumps({k: round(v, 2) if isinstance(v, float) else v for k, v in totals(state).items()}))
         elif args.cmd == "returns":

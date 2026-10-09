@@ -29,6 +29,8 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Trades fill at the next market open**: decisions become pending orders filled at the
 opening price of the next trading day; a tactical order that opens beyond its stop or target is cancelled.
+Uninvested **cash earns interest** at a flat 3.8% AER (set in `CLAUDE.md` `[cash]`), credited daily on each
+day's closing cash balance and logged in `portfolio/interest.csv`.
 Every fact sheet includes a **fair value**: the industry-appropriate method from
 `valuation/industry_methods.csv` (e.g. DCF for software, P/B + ROE for banks and insurers, EV/EBITDA when a
 mine or reserve NAV isn't available), with bear/base/bull assumptions taken from the stock's own five-year history,
