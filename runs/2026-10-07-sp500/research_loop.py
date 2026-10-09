@@ -29,7 +29,93 @@ def log(msg):
         fh.write(f"[{dt.datetime.now():%H:%M:%S}] {msg}\n")
 
 
+BATCH_SIZE = 6
+batch_lock = threading.Lock()
+batch = {"done": [], "n": 0}
+REPORTS = ROOT / "reports" / "research"
+
+
+def batch_report(tickers: list[str], n: int) -> tuple[str, str]:
+    """Plain-Python findings for a group of finished initiations (no model call). Returns (headline, markdown)."""
+    import csv
+    from decision_log import decision_from_eval
+    from portfolio import current_reserve, totals
+    rows, buys = [], []
+    for t in tickers:
+        slug = Ticker(t).slug
+        evs = sorted((ROOT / "research" / slug).glob("*-evaluation.md"))
+        if not evs:
+            continue
+        d = decision_from_eval(evs[-1].read_text())
+        fvp = evs[-1].with_name(evs[-1].name.replace("-evaluation.md", "-valuation.json"))
+        fv = json.loads(fvp.read_text()) if fvp.exists() else {}
+        base, price = (fv.get("fair_value") or {}).get("base"), fv.get("price")
+        fv_txt = f"{base:,.2f} vs {price:,.2f} ({(base / price - 1) * 100:+.0f}%)" if base and price else "n/m"
+        order = ""
+        if d["decision"] == "BUY":
+            sub = run / f"submit-{slug}.json"
+            if sub.exists():
+                so = json.loads(sub.read_text())
+                order = ("order placed: " + ", ".join(f"{p['est_shares']} sh ~{p['est_price']:.2f}" for p in so.get("placed", []))
+                         or "rejected: " + "; ".join(r["rule"] for r in so.get("rejected", [])))
+            else:
+                order = "order NOT placed (portfolio-manager failed; retry needed)"
+            buys.append(t)
+        why = (d.get("rationale") or "").replace("|", "/").replace("\n", " ")
+        rows.append(f"| {t} | {d['decision']} {d['conviction']} | {fv_txt} | {why} {('**' + order + '**') if order else ''} |")
+    with (ROOT / "portfolio" / "decisions.csv").open() as fh:
+        decided = {r["ticker"] for r in csv.DictReader(fh)}
+    uni = json.loads((run / "loop-queue.json").read_text())
+    with (ROOT / "universe" / "universe.csv").open() as fh:
+        sp = {r["ticker"] for r in csv.DictReader(fh) if "SP500" in r["indexes"].split(";")}
+    stt = json.loads((ROOT / "portfolio" / "state.json").read_text())
+    tt, res = totals(stt), current_reserve(cfg, dt.date.today().isoformat())
+    head = (f"Research batch {n:02d}: {len(rows)} researched, {len(buys)} BUY"
+            + (f" ({', '.join(buys)})" if buys else "") + f", {len(rows) - len(buys)} AVOID")
+    md = "\n".join([f"# {head} — {dt.datetime.now():%Y-%m-%d %H:%M}", "",
+                    "| Stock | Decision | Fair value (base) vs price | Why |", "|---|---|---|---|", *rows, "",
+                    f"S&P 500 researched: {len(decided & sp)} of {len(sp)} ({len(uni)} left in the queue). "
+                    f"Portfolio ${tt['total']:,.0f}, cash {tt['cash'] / tt['total'] * 100:.1f}% vs a {res['pct']:g}% "
+                    f"reserve ({res['regime']}); {tt['n']} holdings, {len(stt.get('pending', []))} order(s) pending."]) + "\n"
+    return head, md
+
+
+def publish(tickers: list[str], n: int) -> None:
+    """Write the batch report, commit + push (updates the Mac folder and GitHub), and show a Mac banner.
+    Failures are logged and never stop the research; an unpushed commit goes up with the next batch."""
+    try:
+        head, md = batch_report(tickers, n)
+        REPORTS.mkdir(parents=True, exist_ok=True)
+        path = REPORTS / f"{dt.date.today()}-batch-{n:02d}.md"
+        path.write_text(md)
+        paths = [str(path.relative_to(ROOT)), "portfolio", "universe/ir_domains.txt", "runs/2026-10-07-sp500"]
+        paths += [str((ROOT / "research" / Ticker(t).slug).relative_to(ROOT)) for t in tickers]
+        git = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True)  # noqa: E731
+        git("add", "--", *paths)
+        c = git("commit", "-q", "-m", head + "\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>")
+        p = git("pull", "-q", "--rebase", "--autostash")
+        u = git("push", "-q")
+        ok = u.returncode == 0 and p.returncode == 0
+        log(f"== {head} -> {path.relative_to(ROOT)}; " + ("uploaded to GitHub" if ok else f"!! upload failed: {(p.stderr + u.stderr)[-200:]}"))
+        subprocess.run(["osascript", "-e", f'display notification "{head.replace(chr(34), "")}" with title "Paper portfolio" '
+                        f'subtitle "{"uploaded to GitHub" if ok else "saved locally; upload failed"}"'], capture_output=True)
+    except Exception as e:  # noqa: BLE001
+        log(f"!! batch report/upload failed: {str(e)[:300]}")
+
+
+def batch_add(t: str | None, flush: bool = False) -> None:
+    with batch_lock:
+        if t:
+            batch["done"].append(t)
+        if batch["done"] and (flush or len(batch["done"]) >= BATCH_SIZE):
+            batch["n"] += 1
+            done, batch["done"] = batch["done"], []
+            publish(done, batch["n"])
+
+
 cfg = load_config()
+REPORTS.mkdir(parents=True, exist_ok=True)
+batch["n"] = len(list(REPORTS.glob(f"{dt.date.today()}-batch-*.md")))
 st = json.loads((ROOT / "portfolio" / "state.json").read_text())
 ranked = json.loads((run / "loop-queue.json").read_text())  # yesterday's S&P 500 core ranking, best first
 queue = [t for t in ranked if t not in SKIP and not (ROOT / "research" / Ticker(t).slug / f"{dt.date.today()}.md").exists()
@@ -75,6 +161,7 @@ def one(t):
             except Exception as e:  # noqa: BLE001  research stands; the order step is reported, not retried
                 log(f"!! PORTFOLIO-MANAGER FAILED for {t} (research kept): {str(e)[:300]}")
         log(f"== done {t}")
+        batch_add(t)
         return t, str(ev.relative_to(ROOT))
     except Exception as e:  # noqa: BLE001
         for f in (ROOT / "research" / Ticker(t).slug).glob(f"{asof}*"):  # no half-finished docs
@@ -104,4 +191,5 @@ with ThreadPoolExecutor(max_workers=3) as pool:
     for t, r in pool.map(one, queue):
         if r != "not started":
             print(t, r, flush=True)
+batch_add(None, flush=True)  # report and upload whatever finished since the last group
 log("== research loop stopped" + (" (repeated failures: usage limit?)" if state["stop"] else " (queue finished)"))

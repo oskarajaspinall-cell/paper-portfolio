@@ -92,7 +92,19 @@ def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, l
         sh(PY + ["scripts/valuation.py", ticker, "--asof", asof, "--eval", str(ev)], log)
     except StepFailed as e:
         log(f"!! FAIR VALUE NOT UPDATED for {ticker}: {e}")
-    run_montecarlo(ticker, slug, asof, agent, log, run)
+    # Monte Carlo is informational (never feeds the decision): only for BUY/ADD decisions and holdings, which
+    # saves an AI session on every AVOID (~90% of initiations)
+    from decision_log import decision_from_eval
+    try:
+        dec = decision_from_eval(ev.read_text()).get("decision")
+    except ValueError:
+        dec = None
+    held = ticker in json.loads((ROOT / "portfolio" / "state.json").read_text()).get("holdings", {}) \
+        if (ROOT / "portfolio" / "state.json").exists() else False
+    if dec in ("BUY", "ADD") or held:
+        run_montecarlo(ticker, slug, asof, agent, log, run)
+    else:
+        log(f"Monte Carlo skipped for {ticker} ({dec}: informational only, runs for BUY/ADD and holdings)")
     return ev
 
 

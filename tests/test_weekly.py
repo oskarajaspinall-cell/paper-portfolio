@@ -540,3 +540,27 @@ def test_dashboard_week_tile_spans_seven_days():
     w = dashboard.week_change(ser)
     assert w["from"] == "2026-10-05" and w["portfolio"] == pytest.approx(104 / 101 - 1)
     assert dashboard.week_change(ser[:1]) is None
+
+
+@pytest.mark.parametrize("decision,held,runs", [("AVOID", False, False), ("BUY", False, True), ("HOLD", True, True)])
+def test_monte_carlo_only_for_buys_and_holdings(tmp_path, monkeypatch, decision, held, runs):
+    (tmp_path / "research" / "XYZ").mkdir(parents=True)
+    (tmp_path / "portfolio").mkdir()
+    (tmp_path / "portfolio" / "state.json").write_text(json.dumps({"holdings": {"XYZ": {}} if held else {}}))
+    monkeypatch.setattr(wr, "ROOT", tmp_path)
+    monkeypatch.setattr(wr, "check_doc", lambda *a: None)
+    monkeypatch.setattr(wr, "sh", lambda *a, **k: "")
+    monkeypatch.setattr(wr, "run_macro", lambda *a: False)
+    ran = []
+    monkeypatch.setattr(wr, "run_montecarlo", lambda *a: ran.append(a[0]))
+
+    def agent(name, prompt, log):
+        d = tmp_path / "research" / "XYZ"
+        if name == "researcher":
+            (d / "2026-10-10.md").write_text("note")
+        if name == "evaluator":
+            (d / "2026-10-10-evaluation.md").write_text("# E\n```json\n" + json.dumps({"decision": decision}) + "\n```\n")
+    logs = []
+    wr.research_and_evaluate("XYZ", "CORE", "2026-10-10", "why", agent, logs.append, tmp_path)
+    assert (ran == ["XYZ"]) == runs
+    assert runs or any("Monte Carlo skipped" in m for m in logs)
