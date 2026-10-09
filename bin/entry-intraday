@@ -1,0 +1,21 @@
+#!/bin/bash
+# Weekdays ~10:30 New York (launchd: ~/Library/LaunchAgents/com.paperportfolio.entry-intraday.plist fires at
+# 14:30 and 15:30 UK time; the script acts only inside [entry].intraday_window_et). Live prices vs entry
+# prices for US watch stocks; any hit is re-researched at once (never bought on price alone). Commit, upload.
+set -u
+cd "$(dirname "$0")/.." || exit 1
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+mkdir -p logs
+LOG="logs/entry-intraday-$(date +%F).log"
+exec >>"$LOG" 2>&1
+echo "== start $(date)"
+if [ -e /tmp/paper-portfolio-review.lock ]; then echo "weekly review or fills running; skipping"; exit 0; fi
+out=$(bin/py scripts/entry_watch.py intraday) || { echo "!! intraday check failed"; echo "$out"; exit 1; }
+echo "$out"
+case "$out" in *'"hits": []'*|*'"skipped"'*) echo "== end $(date)"; exit 0;; esac
+caffeinate -i bin/py scripts/entry_research.py || echo "!! re-research failed"
+bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
+git add -A -- portfolio docs reports/entry-watch "runs/$(date +%F)-entry" "$LOG"
+for f in runs/"$(date +%F)"-entry/done-*; do [ -e "$f" ] && git add -A -- "research/${f##*/done-}"; done  # only re-researched stocks
+git commit -q -m "Intraday entry-price check $(date +%F): hits re-researched" && git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
+echo "== end $(date)"

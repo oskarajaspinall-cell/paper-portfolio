@@ -79,3 +79,29 @@ class YahooPrices:
             raise DataError(url, "yfinance", f"latest daily bar {df.index[-1].date()} is incomplete (no close)")
         self._cache[ticker] = {"url": url, "rows": rows, "currency": CCY.get(ccy, ccy), "symbol": sym}
         return self._cache[ticker]
+
+
+def live_price(ticker: str, loader=None) -> dict:
+    """The latest traded price today from 1-minute bars: {"price", "time" (exchange-local ISO), "date",
+    "currency", "url"}. Raises DataError when Yahoo has nothing usable (the caller skips the stock)."""
+    sym = yahoo_symbol(ticker)
+    url = f"https://finance.yahoo.com/quote/{sym}" if sym else "https://finance.yahoo.com/"
+    if not sym:
+        raise DataError(url, "symbol", f"no Yahoo symbol mapping for {ticker}")
+    try:
+        if loader:
+            df, ccy = loader(sym)
+        else:
+            import yfinance as yf
+            t = yf.Ticker(sym)
+            df, ccy = t.history(period="1d", interval="1m", auto_adjust=False, actions=False), t.fast_info["currency"]
+    except Exception as e:  # noqa: BLE001
+        raise DataError(url, "yfinance", f"{type(e).__name__}: {str(e)[:120]}") from e
+    if df is None or not len(df):
+        raise DataError(url, "yfinance", "no intraday bars returned")
+    df = df[df["Close"] == df["Close"]]  # drop NaN bars
+    if not len(df):
+        raise DataError(url, "yfinance", "no intraday bars with a price")
+    ts = df.index[-1]
+    return {"price": float(df["Close"].iloc[-1]), "time": ts.isoformat(), "date": str(ts.date()),
+            "currency": CCY.get(ccy, ccy), "url": url}

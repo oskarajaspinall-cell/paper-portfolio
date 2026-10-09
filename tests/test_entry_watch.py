@@ -62,3 +62,55 @@ def test_why_not_yet_reads_rationale(tmp_path, monkeypatch):
     w = EW.why_not_yet({"evaluation": "e.md"}, 60)
     assert w.startswith("Leverage is rising.") and w.endswith("…") and len(w) <= 60
     assert EW.why_not_yet({"evaluation": "missing.md"}) == ""
+
+
+def test_intraday_window(cfg):
+    import datetime as dt
+    assert EW.in_check_window(dt.datetime(2026, 10, 9, 10, 31), cfg)       # Friday 10:31 New York
+    assert not EW.in_check_window(dt.datetime(2026, 10, 9, 9, 31), cfg)    # the UK-time run an hour early
+    assert not EW.in_check_window(dt.datetime(2026, 10, 10, 10, 31), cfg)  # Saturday
+
+
+def test_intraday_hits_us_only_and_today_only():
+    from common import DataError
+    rows = [{"ticker": "HIT", "entry_price": "50"}, {"ticker": "ABOVE", "entry_price": "50"},
+            {"ticker": "STALE", "entry_price": "50"}, {"ticker": "NSE:TCS", "entry_price": "9999"},
+            {"ticker": "GONE", "entry_price": "50"}, {"ticker": "OLD", "entry_price": "50", "expires": "2026-01-01"}]
+    px = {"HIT": (49.5, "2026-10-09"), "ABOVE": (51.0, "2026-10-09"), "STALE": (10.0, "2026-10-08"),
+          "OLD": (1.0, "2026-10-09")}
+
+    def price(t):
+        if t not in px:
+            raise DataError("u", "f", "none")
+        p, d = px[t]
+        return {"price": p, "date": d, "time": f"{d}T10:31:00-04:00", "url": "u"}
+    hits, notes = EW.intraday_hits(rows, price, "2026-10-09")
+    assert [h["ticker"] for h in hits] == ["HIT"] and hits[0]["intraday"] and hits[0]["time"] == "10:31 ET"
+    assert any("STALE" in n for n in notes) and any("GONE" in n for n in notes)  # TCS (not US) never fetched
+
+
+def test_daily_check_keeps_unresearched_intraday_hits():
+    old = [{"ticker": "A", "intraday": True}, {"ticker": "B", "intraday": True}]
+    pending = {"A"}  # B's row was replaced by a re-research
+    kept = EW.merge_hits([{"ticker": "C"}], [h for h in old if h["ticker"] in pending])
+    assert [h["ticker"] for h in kept] == ["C", "A"]
+
+
+def test_entry_research_todo(tmp_path):
+    import entry_research as ER
+    (tmp_path / "research" / "DONE").mkdir(parents=True)
+    (tmp_path / "research" / "DONE" / "2026-10-09-evaluation.md").write_text("x")
+    st = {"holdings": {"HELD": {}}, "entry_hits": [
+        {"ticker": "A", "intraday": True}, {"ticker": "HELD", "intraday": True}, {"ticker": "DONE", "intraday": True},
+        {"ticker": "CLOSE"}, {"ticker": "B", "intraday": True}, {"ticker": "C", "intraday": True}]}
+    assert [h["ticker"] for h in ER.todo(st, "2026-10-09", 3, tmp_path)] == ["A", "B", "C"]
+    (tmp_path / "runs" / "2026-10-09-entry").mkdir(parents=True)
+    (tmp_path / "runs" / "2026-10-09-entry" / "done-X").write_text("")
+    assert [h["ticker"] for h in ER.todo(st, "2026-10-09", 3, tmp_path)] == ["A", "B"]  # daily cap
+
+
+def test_entry_hit_reason():
+    import weekly_run as wr
+    assert "traded at 49.5 at 10:31 ET" in wr.entry_hit_reason({"entry_price": 50, "close": 49.5, "intraday": True,
+                                                                 "time": "10:31 ET", "hit_date": "2026-10-09"})
+    assert "closed at 49.5 on 2026-10-09" in wr.entry_hit_reason({"entry_price": 50, "close": 49.5, "hit_date": "2026-10-09"})

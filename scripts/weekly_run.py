@@ -74,6 +74,13 @@ def check_doc(kind: str, path: Path, log) -> None:
     sh(PY + ["scripts/check_docs.py", kind, str(path)], log)
 
 
+def entry_hit_reason(h: dict) -> str:
+    """The re-research instruction for a stock that reached its entry price (daily close or intraday check)."""
+    how = f"traded at {h['close']} at {h['time']}" if h.get("intraday") else f"closed at {h['close']} on {h['hit_date']}"
+    return (f"Re-research: the price reached the entry price we set ({h['entry_price']}; it {how}). "
+            "Find out why it fell; decide BUY or AVOID.")
+
+
 def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, log, run: Path) -> Path:
     slug = Ticker(ticker).slug
     note, ev = ROOT / "research" / slug / f"{asof}.md", ROOT / "research" / slug / f"{asof}-evaluation.md"
@@ -273,10 +280,7 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             try:
                 step(f"initiate {p['ticker']}")
                 return research_and_evaluate(p["ticker"], p["type"], asof,
-                                             ("Re-research: the price reached the entry price we set "
-                                              f"({p['entry_hit']['entry_price']} vs close {p['entry_hit']['close']} on "
-                                              f"{p['entry_hit']['hit_date']}). Find out why it fell; decide BUY or AVOID."
-                                              if p.get("entry_hit") else "New initiation from this week's screen. Decide BUY or AVOID.")
+                                             (entry_hit_reason(p["entry_hit"]) if p.get("entry_hit") else "New initiation from this week's screen. Decide BUY or AVOID.")
                                              + (f" Screen setup: {p['setup_detail']}." if p.get("setup_detail") else ""),
                                              agent, log, rundir)
             except Exception as e:  # noqa: BLE001

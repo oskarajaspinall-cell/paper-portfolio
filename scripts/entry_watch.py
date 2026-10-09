@@ -3,6 +3,7 @@ No model calls.
 
     python scripts/entry_watch.py check [--asof D]    daily: latest close vs entry price -> hits
     python scripts/entry_watch.py backfill            seed names with no evaluator entry price (mechanical)
+    python scripts/entry_watch.py intraday [--force]  weekdays ~10:30 New York: live prices vs entry prices (US stocks)
     python scripts/entry_watch.py list [--near]       print the watchlist with % to entry (--near: close-to-entry only)
 
 `portfolio/entry_watch.csv`, one row per stock, written when a decision is logged (decision_log.py record):
@@ -12,6 +13,12 @@ with a reason means price isn't the obstacle (falling quality, an unresolved leg
 A close at/below the entry price is a HIT: listed in reports/entry-watch/<date>.md, a Mac notification, and
 `state["entry_hits"]`, so the next weekly run (and the research loop) re-researches it FIRST, bypassing the
 90-day rule. The price fell for a reason, so nothing is bought on price alone: the re-initiation decides.
+
+INTRADAY (owner request 2026-10-09): `bin/entry-intraday` (launchd, weekdays) runs `intraday` about an hour after
+the US open: live Yahoo prices (the owner-approved portfolio price source) for US-listed watch rows; a price
+at/below the entry price is a hit (Mac notification, `state["entry_hits"]` with `intraday: true`) and is
+re-researched at once by scripts/entry_research.py (at most [entry].intraday_max_research a day). Other markets
+are closed by then; the daily close check covers them.
 
 CLOSE TO ENTRY (owner request 2026-10-09): a stock whose close is within [entry].near_pct of its entry price (or
 at/below it) is on the close-to-entry watchlist. `near_since` records when it entered the band (cleared when it
@@ -150,6 +157,40 @@ def check(rows: list[dict], quote, asof: str, near_pct: float = 10) -> tuple[lis
     return live, hits, entered
 
 
+def in_check_window(now_ny: dt.datetime, cfg: dict) -> bool:
+    """Weekday, within [entry].intraday_window_et of New York time (launchd fires at two UK times a day so one
+    lands ~10:30 ET across the weeks when UK and US clocks change on different dates)."""
+    lo, hi = cfg["entry"].get("intraday_window_et", ["10:15", "11:15"])
+    return now_ny.weekday() < 5 and lo <= now_ny.strftime("%H:%M") <= hi
+
+
+def intraday_hits(rows: list[dict], price_fn, today: str) -> tuple[list[dict], list[str]]:
+    """US-listed rows whose live price today is at/below the entry price. Returns (hits, skipped notes).
+    A stale price (no trade today: a holiday or a halt) is never a hit."""
+    hits, notes = [], []
+    for r in rows:
+        if Ticker(r["ticker"]).exchange or r.get("expires", "9999") < today:
+            continue
+        try:
+            q = price_fn(r["ticker"])
+        except DataError as e:
+            notes.append(f"{r['ticker']}: no live price ({str(e)[:80]})")
+            continue
+        if q["date"] != today:
+            notes.append(f"{r['ticker']}: no trade today (last {q['date']})")
+            continue
+        if q["price"] <= float(r["entry_price"]):
+            hits.append({"ticker": r["ticker"], "hit_date": today, "close": round(q["price"], 4),
+                         "entry_price": float(r["entry_price"]), "intraday": True, "time": q["time"][11:16] + " ET",
+                         "source_url": q["url"]})
+    return hits, notes
+
+
+def merge_hits(existing: list[dict], new: list[dict]) -> list[dict]:
+    have = {h["ticker"] for h in existing}
+    return existing + [h for h in new if h["ticker"] not in have]
+
+
 def notify(title: str, msg: str) -> None:
     subprocess.run(["osascript", "-e", f'display notification "{msg.replace(chr(34), "")}" with title "{title}"'],
                    capture_output=True)
@@ -157,7 +198,8 @@ def notify(title: str, msg: str) -> None:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["check", "backfill", "list"])
+    ap.add_argument("cmd", choices=["check", "backfill", "list", "intraday"])
+    ap.add_argument("--force", action="store_true", help="intraday: run outside the New York time window")
     ap.add_argument("--asof", default=dt.date.today().isoformat())
     ap.add_argument("--near", action="store_true", help="list: close-to-entry stocks only")
     a = ap.parse_args(argv)
@@ -190,6 +232,39 @@ def main(argv=None) -> int:
         print(json.dumps({"added": added, "watching": len(rows)}))
         return 0
     rows = read()
+    if a.cmd == "intraday":
+        from zoneinfo import ZoneInfo
+        now_ny = dt.datetime.now(ZoneInfo("America/New_York"))
+        if not a.force and not in_check_window(now_ny, cfg):
+            print(json.dumps({"skipped": f"outside the check window ({now_ny:%a %H:%M} New York)"}))
+            return 0
+        from prices import live_price
+        today = now_ny.date().isoformat()
+        hits, notes = intraday_hits(rows, live_price, today)
+        stp = ROOT / "portfolio" / "state.json"
+        state = json.loads(stp.read_text())
+        held = set(state.get("holdings", {}))
+        hits = [h for h in hits if h["ticker"] not in held]
+        if hits:
+            state["entry_hits"] = merge_hits(state.get("entry_hits") or [], hits)
+            tmp = stp.with_suffix(".tmp")
+            tmp.write_text(json.dumps(state, indent=1, sort_keys=True))
+            tmp.replace(stp)
+            for r in rows:
+                if r["ticker"] in {h["ticker"] for h in hits}:
+                    r["hit_date"] = r.get("hit_date") or today
+            write(rows)
+            out = ROOT / "reports" / "entry-watch"
+            out.mkdir(parents=True, exist_ok=True)
+            L = [f"# Intraday entry check — {today} {now_ny:%H:%M} New York", "",
+                 f"{len(hits)} US stock(s) traded at or below their entry price; each is re-researched now "
+                 "(never bought on price alone).", "", "| Stock | Live price | Entry price | Time | Source |", "|---|---|---|---|---|"]
+            L += [f"| {h['ticker']} | {h['close']:,.2f} | {h['entry_price']:,.2f} | {h['time']} | {h['source_url']} |" for h in hits]
+            (out / f"{today}-intraday.md").write_text("\n".join(L + [""] + [f"- {n}" for n in notes]) + "\n")
+            notify("Paper portfolio: entry price hit (intraday)",
+                   ", ".join(h["ticker"] for h in hits) + " -> re-researching now")
+        print(json.dumps({"checked_at": f"{now_ny:%H:%M} New York", "hits": [h["ticker"] for h in hits], "notes": notes}))
+        return 0
     near_pct = float(cfg["entry"].get("near_pct", 10))
     if a.cmd == "check":
         from fetch_data import Fetcher
@@ -199,8 +274,11 @@ def main(argv=None) -> int:
         write(rows)
         stp = ROOT / "portfolio" / "state.json"
         state = json.loads(stp.read_text())
-        state["entry_hits"] = [{"ticker": h["ticker"], "hit_date": h["hit_date"], "close": h["last_close"],
-                                "entry_price": float(h["entry_price"])} for h in hits]
+        pending = {r["ticker"] for r in rows if r.get("hit_date")}  # a re-research replaces the row (clears it)
+        state["entry_hits"] = merge_hits(
+            [{"ticker": h["ticker"], "hit_date": h["hit_date"], "close": h["last_close"],
+              "entry_price": float(h["entry_price"])} for h in hits],
+            [h for h in state.get("entry_hits") or [] if h.get("intraday") and h["ticker"] in pending])
         tmp = stp.with_suffix(".tmp")
         tmp.write_text(json.dumps(state, indent=1, sort_keys=True))
         tmp.replace(stp)

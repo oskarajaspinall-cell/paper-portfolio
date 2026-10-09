@@ -116,6 +116,8 @@ min_conviction = 3
 margin_of_safety_pct = 20
 expiry_days = 90
 near_pct = 10                     # close-to-entry watchlist: within this % of the entry price (notify on entering; info only)
+intraday_window_et = ["10:15", "11:15"]  # bin/entry-intraday acts only in this New York window (weekdays)
+intraday_max_research = 3         # re-researches a day triggered by the intraday check
 
 [prices]
 # Portfolio prices (owner-approved 2026-10-08): fills use the OPEN and re-pricing uses the CLOSE from Yahoo
@@ -282,6 +284,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/portfolio.py` — validates trades against every rule, places next-open orders, fills them, marks to market, computes returns. All arithmetic lives here.
 - **Fills (owner rule):** trades decided by the agents are validated at once and queued as pending orders that fill at the first OPEN after the decision time (per exchange, `[fills]`) (`portfolio.py submit --at-next-open`, then `fill-pending`). Mechanical tactical exits still fill at the first close that crossed the stop/target.
 - `scripts/valuation.py` + `valuation/industry_methods.csv` — industry-appropriate fair value (owner's 145-industry method table: best + 2nd-best method; DCF, through-cycle DCF, FCFE, P/E, P/B+ROE, EV/EBITDA, EV/Revenue, DDM, P/FFO proxy; NAV/rNPV/SOTP need data stockanalysis.com doesn't show → `[data unavailable]`, next method used). Bear/base/bull from the stock's own history + reverse DCF; CAPM discount (FRED 10y + beta × `[valuation].erp`). Inform-only: shown in the fact sheet, logged as `fair_value_base` in the decision log, never a buy rule.
+- `bin/entry-intraday` (weekdays ~10:30 New York) → `scripts/entry_watch.py intraday` (live Yahoo prices vs entry prices, US stocks) → `scripts/entry_research.py` re-researches hits at once (≤3/day; a BUY goes to the portfolio-manager, fills at the next open).
 - `scripts/regime.py` → `reports/regime/<date>.json/.md` (+ `-view.md` from `.claude/agents/macro-strategist.md`) — macro regime score, cash reserve, dip release.
 - `scripts/setups.py` — tactical setups (drift signal, pullback filter, ATR, volatility stop, 2:1 target, risk-based size).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.
