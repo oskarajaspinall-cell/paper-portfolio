@@ -79,7 +79,27 @@ def week_change(ser: list[dict]) -> dict | None:
             "spy": (last["spy"] / prev["spy"] - 1) if last["spy"] and prev["spy"] else None}
 
 
-def build_data() -> dict:
+def live_snapshot(tickers: list[str], fetch=None) -> dict:
+    """Live prices at build time (owner request 2026-10-09: show how current every price is). Yahoo 1-minute
+    bars via prices.live_price; a stock with no price is left out. Display only: the portfolio's official
+    value stays on closing prices."""
+    from concurrent.futures import ThreadPoolExecutor
+    from zoneinfo import ZoneInfo
+    if fetch is None:
+        from prices import live_price as fetch
+
+    def one(t):
+        try:
+            q = fetch(t)
+        except Exception:  # noqa: BLE001
+            return t, None
+        uk = dt.datetime.fromisoformat(q["time"]).astimezone(ZoneInfo("Europe/London"))
+        return t, {"price": round(q["price"], 4), "date": q["date"], "uk": uk.strftime("%a %H:%M") + " UK"}
+    with ThreadPoolExecutor(8) as pool:
+        return {t: q for t, q in pool.map(one, dict.fromkeys(tickers)) if q}
+
+
+def build_data(live: bool = True) -> dict:
     cfg = load_config()
     port = ROOT / "portfolio"
     near_pct = float(cfg["entry"].get("near_pct", 10))
@@ -103,6 +123,16 @@ def build_data() -> dict:
                      "change_pct": (lp / ep - 1) * 100 if ep and lp else None,
                      "value": mv, "weight": mv / total * 100 if total else 0, "pl": mv - cb if cb else None,
                      "plan": plan, "thesis": h.get("thesis", "")})
+    watch_rows = sorted(_csv(port / "entry_watch.csv"), key=lambda r: -(_f(r.get("pct_to_entry")) or -999))[:40]
+    snap = live_snapshot([h["ticker"] for h in hold] + [r["ticker"] for r in watch_rows]) if live else {}
+    live_total = state.get("cash_usd", 0.0)
+    for h in hold:
+        q, lc = snap.get(h["ticker"]), h["last_price"]
+        h["live"] = q
+        if q and lc:
+            h["live_change_pct"] = (q["price"] / h["entry_price"] - 1) * 100 if h["entry_price"] else None
+            h["live_value"] = h["value"] * q["price"] / lc
+        live_total += h.get("live_value", h["value"])
     sectors: dict[str, float] = {}
     for h in hold:
         sectors[h["sector"] or "Unknown"] = sectors.get(h["sector"] or "Unknown", 0) + h["weight"]
@@ -123,6 +153,8 @@ def build_data() -> dict:
         "generated": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
         "repo": repo_url(),
         "total": total, "cash": state.get("cash_usd", 0.0), "start": start,
+        "close_date": max((h["last_date"] for h in hold), default=""),
+        "live_total": live_total if snap else None, "live_at": dt.datetime.now().strftime("%a %H:%M") + " UK" if snap else None,
         "inception": state.get("inception_date"),
         "since": None if not last or last["portfolio"] is None else last["portfolio"] / 100 - 1,
         "since_spy": None if not last or last["spy"] is None else last["spy"] / 100 - 1,
@@ -132,14 +164,16 @@ def build_data() -> dict:
         "ledger": [{k: r.get(k, "") for k in ("date", "ticker", "type", "side", "shares", "fill_price", "currency",
                                               "fill_close_date", "gross_usd", "costs_usd", "reason")} for r in ledger],
         "decisions": [{k: d.get(k, "") for k in ("date", "ticker", "type", "decision", "conviction", "price", "currency",
-                                                 "excess_1m", "excess_3m", "evaluation")} for d in decisions[::-1][:40]],
+                                                 "excess_1m", "excess_3m", "evaluation", "price_date")}
+                      | {"live": "price: live" in (d.get("note") or "")} for d in decisions[::-1][:60]],
         "hits": hits, "n_decisions": len(decisions),
         "watch": sorted(({"ticker": r["ticker"], "close": r.get("last_close"), "entry": r["entry_price"],
+                          "close_date": r.get("last_close_date", ""), "live": snap.get(r["ticker"]),
                           "ccy": r.get("currency", ""), "to_entry": _f(r.get("pct_to_entry")), "source": r["source"],
                           "conviction": r.get("conviction"), "hit": r.get("hit_date", ""),
                           "near_since": r.get("near_since", ""), "evaluation": r.get("evaluation", ""),
                           "why": entry_watch.why_not_yet(r) if entry_watch.is_near(r, near_pct) else ""}
-                         for r in _csv(port / "entry_watch.csv")),
+                         for r in watch_rows),
                         key=lambda r: -(r["to_entry"] if r["to_entry"] is not None else -999))[:40],
         "near_pct": near_pct,
         "pending": [{"id": o["id"], "placed": o["placed"], "action": o["request"]["action"],
@@ -214,7 +248,8 @@ $('theme').onclick=()=>{const dark=matchMedia('(prefers-color-scheme: dark)').ma
 const n=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}};
 $('start').textContent=D.start.toLocaleString('en-US');$('gen').textContent=D.generated;
 $('hero').textContent=usd(D.total);
-$('heroSub').textContent=D.inception?`Since ${D.inception}: ${pct(D.since==null?null:D.since*100)} vs SPY ${pct(D.since_spy==null?null:D.since_spy*100)}`:'No trades yet: the portfolio is all cash.';
+$('heroSub').textContent=(D.inception?`At the ${D.close_date} close. Since ${D.inception}: ${pct(D.since==null?null:D.since*100)} vs SPY ${pct(D.since_spy==null?null:D.since_spy*100)}`:'No trades yet: the portfolio is all cash.')
+ +(D.live_total!=null?` · Live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
 const tile=(l,v,d,c)=>el('div',{class:'tile'},el('div',{class:'l'},l),el('div',{class:'v'},v),d?el('div',{class:'d '+(c||'')},d):'');
 const rel=(D.since!=null&&D.since_spy!=null)?(D.since-D.since_spy)*100:null;
 $('tiles').append(
@@ -282,29 +317,35 @@ function table(id,cols,rows,empty){const t=$(id);t.append(el('tr',{},...cols.map
   if(v instanceof Node)td.append(v);else td.textContent=v;return td;}))));}
 const link=(path,txt)=>D.repo&&path?el('a',{href:`${D.repo}/blob/main/${path}`,target:'_blank',rel:'noopener'},txt):txt;
 table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>r.name},{h:'Type',f:r=>r.type.toLowerCase()},{h:'Conv.',n:1,f:r=>r.conviction??''},
- {h:'Entry',f:r=>r.entry_date},{h:'Entry price',n:1,f:r=>r.entry_price==null?'':r.entry_price+' '+r.currency},{h:'Last',n:1,f:r=>r.last_price==null?'':r.last_price+' '+r.currency},
- {h:'Change',n:1,f:r=>pct(r.change_pct,1),c:r=>cls(r.change_pct)},{h:'Value',n:1,f:r=>usd(r.value)},{h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},
+ {h:'Entry',f:r=>r.entry_date},{h:'Entry price',n:1,f:r=>r.entry_price==null?'':r.entry_price+' '+r.currency},{h:'Close',n:1,f:r=>r.last_price==null?'':`${r.last_price} ${r.currency} (${r.last_date})`},
+ {h:'Change',n:1,f:r=>pct(r.change_pct,1),c:r=>cls(r.change_pct)},
+ {h:'Live',n:1,f:r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–'},{h:'Live change',n:1,f:r=>r.live_change_pct==null?'–':pct(r.live_change_pct,1),c:r=>cls(r.live_change_pct)},{h:'Value',n:1,f:r=>usd(r.value)},{h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},
  {h:'P/L',n:1,f:r=>r.pl==null?'':usd(r.pl),c:r=>cls(r.pl)},{h:'Plan',w:1,f:r=>r.plan}],D.holdings,'No holdings yet: the portfolio is all cash.');
 table('pending',[{h:'Placed',f:r=>r.placed},{h:'Action',f:r=>r.action},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},
  {h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Est. shares',n:1,f:r=>r.est.shares??''},{h:'Latest close',n:1,f:r=>r.est.price==null?'':`${r.est.price} ${r.est.currency}`}],
  D.pending,'No pending orders.');
 {const np=D.near_pct??10,nr=(D.watch||[]).filter(r=>r.to_entry!=null&&r.to_entry>=-np);
 document.getElementById('nearSub').textContent=`Stocks within ${np}% of their entry price, closest first, with the evaluator's reason each isn't a buy yet. Information only: a close at or below the entry price triggers a re-research, never a purchase.`;
-table('near',[{h:'Ticker',f:r=>r.ticker},{h:'Last close',n:1,f:r=>r.close==null||r.close===''?'':`${(+r.close).toFixed(2)} ${r.ccy}`},
- {h:'Entry price',n:1,f:r=>`${(+r.entry).toFixed(2)} ${r.ccy}`},{h:'To entry',n:1,f:r=>pct(r.to_entry,1),c:r=>r.to_entry>=0?'up':''},
+const lv=r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–',lte=r=>r.live?(r.entry/r.live.price-1)*100:null;
+table('near',[{h:'Ticker',f:r=>r.ticker},{h:'Close',n:1,f:r=>r.close==null||r.close===''?'':`${(+r.close).toFixed(2)} ${r.ccy} (${r.close_date})`},
+ {h:'Live',n:1,f:lv},
+ {h:'Entry price',n:1,f:r=>`${(+r.entry).toFixed(2)} ${r.ccy}`},{h:'To entry (close)',n:1,f:r=>pct(r.to_entry,1),c:r=>r.to_entry>=0?'up':''},
+ {h:'To entry (live)',n:1,f:r=>{const x=lte(r);return x==null?'–':pct(x,1);},c:r=>lte(r)>=0?'up':''},
  {h:'Since',f:r=>r.hit?'HIT '+r.hit:(r.near_since||'')},
  {h:'Why not a buy yet',w:1,f:r=>{const t=r.why||'evaluation',a=link(r.evaluation,t.length>110?t.slice(0,109).replace(/\s\S*$/,'')+'…':t);if(a instanceof Node)a.title=t;return a;}}],nr,`No stock is within ${np}% of its entry price.`);}
-table('watch',[{h:'Ticker',f:r=>r.ticker},{h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Last close',n:1,f:r=>r.close==null||r.close===''?'':`${(+r.close).toFixed(2)} ${r.ccy}`},
- {h:'Entry price',n:1,f:r=>`${(+r.entry).toFixed(2)} ${r.ccy}`},{h:'To entry',n:1,f:r=>r.to_entry==null?'':pct(r.to_entry,1),c:r=>r.to_entry!=null&&r.to_entry>=0?'up':''},
+table('watch',[{h:'Ticker',f:r=>r.ticker},{h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Close',n:1,f:r=>r.close==null||r.close===''?'':`${(+r.close).toFixed(2)} ${r.ccy} (${r.close_date})`},
+ {h:'Live',n:1,f:r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–'},
+ {h:'To entry (live)',n:1,f:r=>{const x=r.live?(r.entry/r.live.price-1)*100:null;return x==null?'–':pct(x,1);},c:r=>r.live&&r.entry>=r.live.price?'up':''},
+ {h:'Entry price',n:1,f:r=>`${(+r.entry).toFixed(2)} ${r.ccy}`},{h:'To entry (close)',n:1,f:r=>r.to_entry==null?'':pct(r.to_entry,1),c:r=>r.to_entry!=null&&r.to_entry>=0?'up':''},
  {h:'Status',f:r=>r.hit?'HIT '+r.hit+': re-research next run':''},{h:'Set by',f:r=>r.source}],D.watch||[],'No entry prices yet.');
 table('trades',[{h:'Date',f:r=>r.date},{h:'Side',f:r=>r.side},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Shares',n:1,f:r=>r.shares},
  {h:'Fill',n:1,f:r=>`${r.fill_price} ${r.currency} (${r.fill_close_date})`},{h:'Gross',n:1,f:r=>usd(+r.gross_usd,2)},{h:'Costs',n:1,f:r=>usd(+r.costs_usd,2)},
  {h:'Reason',w:1,f:r=>{const sp=el('span',{title:r.reason||''});sp.textContent=(r.reason||'').length>140?r.reason.slice(0,139)+'…':(r.reason||'');return sp;}}],D.ledger,'No trades yet.');
 ['1m','3m','6m','12m'].forEach(h=>{const x=D.hits[h];$('hits').append(tile(h+' hit rate',x.n?Math.round(x.hits/x.n*100)+'%':'–',x.n?`${x.hits} of ${x.n} decisions`:'none matured yet'));});
 table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Decision',f:r=>r.decision},
- {h:'Conv.',n:1,f:r=>r.conviction},{h:'Price',n:1,f:r=>`${r.price} ${r.currency}`},{h:'1m vs SPY',n:1,f:r=>r.excess_1m===''?'–':pct(+r.excess_1m,1),c:r=>r.excess_1m===''?'':cls(+r.excess_1m)},
+ {h:'Conv.',n:1,f:r=>r.conviction},{h:'Price',n:1,f:r=>`${(+r.price).toFixed(2)} ${r.currency} (${r.live?'live, ':'close '}${r.price_date})`},{h:'1m vs SPY',n:1,f:r=>r.excess_1m===''?'–':pct(+r.excess_1m,1),c:r=>r.excess_1m===''?'':cls(+r.excess_1m)},
  {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.');
-$('screenSub').textContent=D.screen.asof?`${D.screen.asof}: ${D.screen.screened} stocks scored. This week's picks for research:`:'No screen yet.';
+$('screenSub').textContent=D.screen.asof?`${D.screen.asof}: ${D.screen.screened} stocks scored. The picks below were sent to research. The score ranks how well a stock fits the screen (core: quality and value; tactical: the strength of its setup). It is not a rating: research decides, and most picks come back AVOID.`:'No screen yet.';
 D.screen.picks.forEach(p=>$('picks').append(el('span',{class:'pill',style:'margin:0 6px 6px 0'},`${p.ticker} · ${p.type.toLowerCase()} · ${p.score}`)));
 if(D.repo)$('repo').append('Source and research notes: ',el('a',{href:D.repo},D.repo.replace('https://','')));
 </script></body></html>
@@ -319,10 +360,11 @@ def render(data: dict) -> str:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", default=str(OUT))
+    ap.add_argument("--no-live", action="store_true", help="skip the live-price snapshot (offline / tests)")
     a = ap.parse_args(argv)
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(render(build_data()))
+    out.write_text(render(build_data(live=not a.no_live)))
     print(out)
     return 0
 

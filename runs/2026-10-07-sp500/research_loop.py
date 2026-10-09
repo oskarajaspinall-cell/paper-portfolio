@@ -136,7 +136,8 @@ def publish(tickers: list[str], n: int) -> None:
         REPORTS.mkdir(parents=True, exist_ok=True)
         path = REPORTS / f"{dt.date.today()}-batch-{n:02d}.md"
         path.write_text(md)
-        paths = [str(path.relative_to(ROOT)), "portfolio", "universe/ir_domains.txt", "runs/2026-10-07-sp500"]
+        subprocess.run([str(ROOT / "bin" / "py"), "scripts/dashboard.py"], cwd=ROOT, capture_output=True)  # keep GitHub current
+        paths = [str(path.relative_to(ROOT)), "portfolio", "docs", "universe/ir_domains.txt", "runs/2026-10-07-sp500"]
         paths += [str((ROOT / "research" / Ticker(t).slug).relative_to(ROOT)) for t in tickers]
         git = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True)  # noqa: E731
         git("add", "--", *paths)
