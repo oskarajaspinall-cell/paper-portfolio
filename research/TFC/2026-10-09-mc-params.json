@@ -1,0 +1,113 @@
+{
+  "ticker": "TFC",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {
+        "value": 0.20,
+        "cite": "research/TFC/2026-10-09-evaluation.md Decision JSON, scenarios.bull.probability"
+      },
+      "probability_evidence": "The 2s10s curve has steepened to +0.51pp from ~+0.35pp 3m ago (macro overlay, computed from FRED DGS10/DGS2), a NIM tailwind if clean, and CEO Mike Lyons' $5.5bn non-core near-prime auto-loan exit is executing with guidance reaffirmed (Reuters 2026-09-15; Barclays conference transcript); if ROE closes the gap to peers, P/B could re-rate toward the 1.4x peer median from 0.9x, but the probability is trimmed below base/bear because the overlay's own net tilt is small-toward-bear.",
+      "target_price_12m": {
+        "value": 55.42,
+        "cite": "research/TFC/2026-10-09-evaluation.md Decision JSON, scenarios.bull.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.0884,
+        "cite": "Fact sheet fair-value table bull row: P/B+ROE (best method) 43.92 vs DDM (second method) 34.12 (research/TFC/factsheet-2026-10-09.md Fair value table); FCFE DCF (78.40) excluded as a valuation anchor here because the evaluation's bear-case commentary establishes that method 'is not meaningful for a bank's cash flows' (research/TFC/2026-10-09-evaluation.md Bear case), a structural issue with applying FCFE DCF to a bank, not specific to the bear sign. Half the 9.80 spread (4.90) relative to the 55.42 bull target = 8.84%."
+      }
+    },
+    "base": {
+      "probability": {
+        "value": 0.45,
+        "cite": "research/TFC/2026-10-09-evaluation.md Decision JSON, scenarios.base.probability"
+      },
+      "probability_evidence": "TTM ROE (9.1%) is already close to its normalized run-rate and the last close (46.18) sits only 1.9% below the base blended fair value (47.05) (fact sheet Fair value table), so a continuation of the current trajectory into the Oct 16 results, consistent with management's reaffirmed 'modest NIM improvement' guidance, is the single most likely outcome and is given the largest weight.",
+      "target_price_12m": {
+        "value": 47.05,
+        "cite": "research/TFC/2026-10-09-evaluation.md Decision JSON, scenarios.base.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.1372,
+        "cite": "Fact sheet fair-value table base row: P/B+ROE (best method) 42.08 vs DDM (second method) 29.17 (research/TFC/factsheet-2026-10-09.md Fair value table); FCFE DCF (56.98) excluded as a valuation anchor for the same structural reason cited in the bull target_band (bank FCFE DCF reliability, research/TFC/2026-10-09-evaluation.md Bear case). Half the 12.91 spread (6.455) relative to the 47.05 base target = 13.72%."
+      }
+    },
+    "bear": {
+      "probability": {
+        "value": 0.35,
+        "cite": "research/TFC/2026-10-09-evaluation.md Decision JSON, scenarios.bear.probability"
+      },
+      "probability_evidence": "TTM ROE (9.1%) sits below FY2021's 9.2% after negative ROE in FY2023/FY2024, and the 0.9x P/B discount to the 1.4x peer median simply matches that ROE gap rather than signalling mispricing (fact sheet Quality/Valuation); the macro overlay's real yields (+0.61pp/3m) and HY credit spreads (+0.39pp/3m) are a named, specific headwind to the reaffirmed 'modest NIM improvement' guidance ahead of the Oct 16 earnings catalyst, and the stock has no catalyst until then while trailing SPY by 20.8pp over 6 months (fact sheet Price section).",
+      "target_price_12m": {
+        "value": 37.69,
+        "cite": "research/TFC/2026-10-09-evaluation.md Decision JSON, scenarios.bear.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.1629,
+        "cite": "Fact sheet fair-value table bear row: P/B+ROE (best method, and the evaluator's chosen bear target) 37.69 vs DDM (second method) 25.41 (research/TFC/factsheet-2026-10-09.md Fair value table); FCFE DCF (-9.55) excluded per the evaluation's own statement that it 'is not meaningful for a bank's cash flows' (research/TFC/2026-10-09-evaluation.md Bear case basis). Half the 12.28 spread (6.14) relative to the 37.69 bear target = 16.29%."
+      }
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {
+        "value": 0.0,
+        "cite": "Factor news is mixed/offsetting: SPY hit a record high above 7,800 with combined SPY/SPYM assets crossing $1 trillion (ETF Trends, CNBC International TV, Bloomberg, 2026-10-06/07) while the same window shows 'two big bearish trades point to skepticism' (CNBC 2026-10-07) and rising yields/oil 'test buyers ahead of earnings' (FXEmpire 2026-10-08) -- research/TFC/2026-10-09-mc-inputs.json factor_news.SPY; no net directional view is supported by the news, so 0."
+      },
+      "uncertainty_12m": {
+        "value": 0.1431154014991791,
+        "cite": "research/TFC/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual"
+      }
+    },
+    "IEF": {
+      "expected_12m_move": {
+        "value": -0.05,
+        "cite": "Macro overlay: 10y Treasury (DGS10) 5.28%, +0.50pp/1m, +0.72pp/3m, and 10y real yield (DFII10) +0.61pp/3m to 2.92% (research/TFC/2026-10-09-macro.md Facts), consistent with factor_news.IEF headlines 'US 30-Year Yields Return to 2002 High' (Bloomberg 2026-10-07) and 'Global Bond Markets Sell Off on France's Fiscal Worries' (Barrons 2026-10-05) -- research/TFC/2026-10-09-mc-inputs.json factor_news.IEF. Kept modest (-5%) because the same window also shows a mixed/two-sided signal: 'Navigating Fixed Income Duration as Treasury Yields Retreat' after a cooler PCE print (ETF Trends 2026-10-02) and 'US bonds rally after weaker-than-expected jobs report' (The Guardian 2026-10-02)."
+      },
+      "uncertainty_12m": {
+        "value": 0.06460381100458489,
+        "cite": "research/TFC/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual"
+      }
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings reaction (Oct 16, 2026)",
+      "reason": "Next earnings date is Oct 16, 2026, before market open; the evaluation's bear case explicitly frames the rising real-yield/HY-spread environment as a threat to management's reaffirmed 'modest NIM improvement' guidance 'before Q3 results on Oct 16', making the print the near-term resolver of the thesis.",
+      "cite": "research/TFC/factsheet-2026-10-09.md Price section 'Next earnings date | Oct 16, 2026'; research/TFC/2026-10-09-evaluation.md Bear case 'threatens the reaffirmed \"modest NIM improvement\" guidance before Q3 results on Oct 16'.",
+      "annual_probability": {
+        "value": 0.20,
+        "cite": "Of 19 quarterly earnings-release weeks in the 5y history (research/TFC/2026-10-09-mc-inputs.json analogues.event_weeks, Q4 2021 through Q2 2026), only 1 (Q4 2021 results, week 2022-01-18, -8.81%) reached the magnitude of the chosen downside impact: 1/19=5.26% per quarter -> 1-(0.9474)^4=0.195, rounded to 0.20 annual probability of at least one such reaction."
+      },
+      "impact": {
+        "value": -0.0881,
+        "cite": "Largest downside earnings-week move in the 5y history: Q4 2021 results (event_date 2022-01-18), week 2022-01-18, move -0.0881 -- research/TFC/2026-10-09-mc-inputs.json analogues.event_weeks."
+      },
+      "analogue": {
+        "week": "2022-01-18",
+        "move": -0.0881
+      },
+      "assumption": null
+    },
+    {
+      "name": "Regional-bank deposit-funding-cost / credit-spread shock",
+      "reason": "The macro overlay names deposit funding costs catching up to the real-yield backup, combined with further HY credit-spread widening, as the specific risk that would make NIM/credit guidance miss into Q3 results -- a discrete, sector-wide funding/credit-stress shock (with a named refresh trigger if the HY spread exceeds 4.0%), distinct from the gradual NIM-compression path already priced into the bear scenario's 37.69 target.",
+      "cite": "research/TFC/2026-10-09-macro.md macro_bear 'Deposit funding costs catch up to the real-yield backup before asset repricing completes, and HY spreads widen further -> NIM guidance misses and credit costs rise into Q3 results'; refresh_triggers 'US HY credit spread (BAMLH0A0HYM2) widens above 4.0%'.",
+      "annual_probability": {
+        "value": 0.20,
+        "cite": "Only one episode of a >20% single-week decline in the 5y history (2023-03-13, -21.32%, coinciding with the March 2023 US regional-bank funding-stress episode) -- research/TFC/2026-10-09-mc-inputs.json analogues.largest_falls; ~1 event per 5 years of history = 20% annual probability."
+      },
+      "impact": {
+        "value": -0.2132,
+        "cite": "research/TFC/2026-10-09-mc-inputs.json analogues.largest_falls, week 2023-03-13, move -0.2132."
+      },
+      "analogue": {
+        "week": "2023-03-13",
+        "move": -0.2132
+      },
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

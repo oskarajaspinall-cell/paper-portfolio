@@ -1,0 +1,56 @@
+{
+ "ticker": "PAYX",
+ "date": "2026-10-09",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.25, "cite": "research/PAYX/2026-10-09-evaluation.md Decision JSON block, scenarios.bull.probability"},
+   "probability_evidence": "Paycor cross-sell optionality plus the macro overlay's small bull tilt on float income from a higher-for-longer fed-funds path (research/PAYX/2026-10-09-macro.md macro_tilt: 'moved 0.05 probability from bear to bull' per the evaluation's bull basis); P/E 20.7x and EV/EBITDA 13.3x sit at the 7th percentile of their own 5-year ranges and 25-29% below peer medians (fact sheet Valuation table), leaving room for a re-rating toward the 25.6x 5y median P/E if Paycor cross-selling lifts growth (note Section 3, evaluation Bull case).",
+   "target_price_12m": {"value": 129.24, "cite": "research/PAYX/2026-10-09-evaluation.md Decision JSON block, scenarios.bull.target_price_12m ('taking the price back to the 52-week high')"},
+   "target_band": {"value": 0.1383, "cite": "Fact sheet Fair value table (research/PAYX/factsheet-2026-10-09.md): the bull column's two valuation anchors are DCF 130.54 and EV/Revenue 166.29 (blending to the 142.46 fair-value bull, which the evaluation's bull basis says is NOT fully reached -- the 129.24 target is the 52-week high instead, 'below the 142.46 fair-value bull because guided growth limits the full re-rating'). Half the anchor spread (166.29-130.54)/2=17.875, relative to the 129.24 target actually used = 0.1383; within the mc-inputs blended residual volatility ceiling 0.2566 (research/PAYX/2026-10-09-mc-inputs.json regression.residual_vol.blended)."}
+  },
+  "base": {
+   "probability": {"value": 0.50, "cite": "research/PAYX/2026-10-09-evaluation.md Decision JSON block, scenarios.base.probability"},
+   "probability_evidence": "FY27 guidance of 5-6% revenue growth / 7-9% adjusted EPS growth (fact sheet News: GlobeNewsWire 'Paychex Reports First Quarter Fiscal 2027 Results', TheFly 'Paychex sees FY27 adjusted EPS earnings growth 7%-9%') with management flagging Management Solutions 'trending toward the low end of guidance' on the Q1 call (TheFly, 2026-09-23) makes growth-tracks-the-guide the modal outcome; the reverse DCF already implies 7.7% year-1 revenue growth, above the guided range (fact sheet Fair value section), consistent with the price converging on the blended DCF/EV-Revenue fair-value base rather than re-rating meaningfully either way (evaluation base basis).",
+   "target_price_12m": {"value": 109.72, "cite": "research/PAYX/2026-10-09-evaluation.md Decision JSON block, scenarios.base.target_price_12m ('converges on the blended DCF/EV-Revenue fair-value base')"},
+   "target_band": {"value": 0.1903, "cite": "Fact sheet Fair value table: the base column's two valuation anchors are DCF 95.80 and EV/Revenue 137.56, blending to the 109.72 base target used (fact sheet 'Fair value' table, blend DCF 67% / EV-Revenue 33%). Half the anchor spread (137.56-95.80)/2=20.88, relative to the 109.72 target = 0.1903 -- the wide spread reflects genuine disagreement between the two valuation anchors on PAYX's growth/cash-flow durability; within the mc-inputs blended residual volatility ceiling 0.2566 (research/PAYX/2026-10-09-mc-inputs.json regression.residual_vol.blended)."}
+  },
+  "bear": {
+   "probability": {"value": 0.25, "cite": "research/PAYX/2026-10-09-evaluation.md Decision JSON block, scenarios.bear.probability"},
+   "probability_evidence": "ROIC fell from 55.7% (FY2023) to 27.4% TTM and net debt/EBITDA moved from net cash through FY2024 to 1.20x TTM after the debt-funded Paycor deal (fact sheet Quality/RA); the stock already fell ~8% on the Sep 23 2026 Q1 FY27 print on the guidance-miss signal (TheFly 'Paychex sees management solutions trending toward low end of guidance') and short interest is 6.20% of float (fact sheet 'Other'/'News & sentiment'), consistent with further de-rating risk; probability trimmed by 0.05 from a symmetric default for the macro overlay's small bull tilt on float income (evaluation bear basis, research/PAYX/2026-10-09-macro.md macro_tilt).",
+   "target_price_12m": {"value": 82.87, "cite": "research/PAYX/2026-10-09-evaluation.md Decision JSON block, scenarios.bear.target_price_12m ('pushes the price to the fair-value bear case')"},
+   "target_band": {"value": 0.1286, "cite": "Fact sheet Fair value table: the bear column's two valuation anchors are DCF 75.77 and EV/Revenue 97.08, blending to the 82.87 bear target used (fact sheet 'Fair value' table). Half the anchor spread (97.08-75.77)/2=10.655, relative to the 82.87 target = 0.1286; within the mc-inputs blended residual volatility ceiling 0.2566 (research/PAYX/2026-10-09-mc-inputs.json regression.residual_vol.blended)."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines as of 2026-10-06/08 are mixed: record highs led by big tech and assets crossing $1tn ('S&P 500 Hits Record High as Big Tech Leads', 'Combined Assets in SPY, SPYM Cross $1 Trillion') alongside risk warnings ('AI bubble could burst in 2027, sending S&P 500 down to 5,000', 'Two big bearish trades point to skepticism', oil/Iran-driven retreat). The macro overlay (research/PAYX/2026-10-09-macro.md) addresses rates/float-income, not the broad equity factor directly. Per house rule, mixed/silent news on a factor -> 0."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/PAYX/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)."}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.03, "cite": "Macro overlay (research/PAYX/2026-10-09-macro.md): effective fed funds (DFF) 3.88% on 2026-10-07, up +0.25pp/1m and +0.26pp/3m -- 'resumed tightening, not cuts' -- and the 2y Treasury (4.77%) trading ~90bp above fed funds implies the market isn't pricing near-term cuts and may expect further tightening (dominant_chain/market_pricing). Corroborated by mc-inputs.json factor_news.IEF headlines showing yields pushing to multi-decade highs ('US 30-Year Yields Return to 2002 High', 'Bond Valuations Reflect Higher Hurdle for Capital', 'Global Bond Markets Sell Off on France's Fiscal Worries'), tempered by one countervailing headline ('US Treasury Rebound Pulls Yields Off Multi-Decade Highs' / cooler PCE print). Kept modest (-3%, within the +-15% bound) given the mixed signals and the overlay's own note that the 10y used in the DCF is unchanged (no large multiple effect)."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/PAYX/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)."}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Guidance-miss earnings reaction",
+   "reason": "Management flagged Management Solutions 'trending toward the low end of guidance' on the Q1 FY27 call and the stock fell ~8% on the Sep 23 2026 print, the clearest driver of PAYX's 12-month underperformance vs SPY (-33.4pp); a recurring quarterly risk that the core payroll franchise's deceleration is confirmed or extended at a future print, distinct from the gradual growth/leverage path already priced into the bear scenario's target.",
+   "cite": "Note Section 6 'Unusual items' and fact sheet News ('TheFly: Paychex sees management solutions trending toward low end of guidance', 2026-09-23); research/PAYX/2026-10-09-mc-inputs.json analogues.event_weeks (Q1 2027 earnings_release-tagged week 2026-09-21).",
+   "annual_probability": {"value": 0.606, "cite": "research/PAYX/2026-10-09-mc-inputs.json analogues.event_weeks: of 20 quarterly earnings_release-tagged weeks over the ~4.95-year history (history_from 2021-10-18 to history_to 2026-09-28), 3 produced a NEGATIVE move >=5% in magnitude (2023-12-18 -5.50%, 2024-06-24 -5.87%, 2026-09-21 -12.72%), implying roughly 3/4.95 = 0.606/yr chance of a downside guidance-driven earnings shock."},
+   "impact": {"value": -0.1272, "cite": "research/PAYX/2026-10-09-mc-inputs.json analogues.event_weeks and analogues.largest_falls: Q1 2027 earnings_release week 2026-09-21, move -0.1272, the largest weekly fall in the 5y history and the worst earnings-tagged move."},
+   "analogue": {"week": "2026-09-21", "move": -0.1272},
+   "assumption": null
+  },
+  {
+   "name": "Paycor integration / leverage breach",
+   "reason": "Net debt/EBITDA moved from net cash through FY2024 to 1.20x TTM after the debt-funded Paycor deal, and the evaluation's own invalidation trigger is net debt/EBITDA rising above 2.0x 'with no visible deleveraging path, showing the Paycor deal is consuming more balance-sheet capacity than planned' -- a discrete disclosure risk (e.g. a quarter showing integration costs or leverage overshooting plan) distinct from the gradual leverage drift already priced into the bear scenario's target.",
+   "cite": "research/PAYX/2026-10-09-evaluation.md Decision JSON triggers (net debt/EBITDA and ROIC triggers); note Section 2/5 ('Net debt/EBITDA moved from net cash through FY2024 to 1.2x TTM... the added debt leaves less margin for error on Paycor integration').",
+   "annual_probability": {"value": 0.25, "cite": "Assumption: net debt/EBITDA has moved from net cash to 1.2x over roughly two fiscal years since the Paycor deal closed (fact sheet RA trend FY2024->FY2026), i.e. a leverage-inflection disclosure newsworthy enough to re-rate the stock has occurred at most about once every ~4 years historically; no dedicated 'M&A/leverage shock' analogue exists in the mc-inputs event-week table distinct from routine quarterly earnings, so probability is set at roughly 1-in-4 years."},
+   "impact": {"value": -0.1, "cite": "No historical analogue in research/PAYX/2026-10-09-mc-inputs.json distinctly tags a Paycor-leverage/integration shock (the only 'M&A Announcement'-tagged week, 2025-01-06, moved just -0.44%, too small to represent a later integration-cost or leverage-breach disclosure). Assumption: impact set at -10%, well within the +-30% cap for an assumed (no-analogue) jump, scaled below the -12.72% confirmed guidance-miss earnings shock to reflect that this risk has not yet materialised as a market event."},
+   "analogue": null,
+   "assumption": "No historical weekly analogue distinctly tags a Paycor-leverage/integration disclosure shock (only a routine, small-moving M&A-announcement week exists); impact is a bounded assumption per the evaluation's own net-debt/EBITDA-above-2.0x invalidation trigger, capped well inside the +-30% bound for jumps without an analogue."
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}

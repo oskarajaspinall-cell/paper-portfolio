@@ -1,0 +1,56 @@
+{
+  "ticker": "BF.B",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "evaluation.json scenarios.bull.probability, research/BF.B/2026-10-09-evaluation.md"},
+      "probability_evidence": "Fact sheet news shows Q1 FY2027 sales missed estimates and the tequila slowdown/RTD JV unwind are still in progress (Reuters/WSJ 2026-09-02 headlines, factsheet News & sentiment); the evaluation's bull case itself tags the re-rating path 'if tequila and RTD stabilise' as [Guessing], i.e. a condition not yet confirmed in the data, which keeps this scenario's probability below base/bear.",
+      "target_price_12m": {"value": 33.95, "cite": "evaluation.json scenarios.bull.target_price_12m, research/BF.B/2026-10-09-evaluation.md"},
+      "target_band": {"value": 0.3567, "cite": "Fact sheet Fair value table bull row: DCF 33.95 vs EV/EBITDA 61.20 (spread 27.25, half-spread/target = 13.625/33.95 = 0.4012) exceeds the inputs file's blended residual vol (0.3567242991483644, research/BF.B/2026-10-09-mc-inputs.json regression.residual_vol.blended); capped at that residual-vol ceiling per the mc-params spec."}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "evaluation.json scenarios.base.probability, research/BF.B/2026-10-09-evaluation.md"},
+      "probability_evidence": "Evaluation rationale: 'Valuation is undemanding and FCF has recovered, but ROIC, ROE and operating margin are all falling, sales are declining and there is no visible catalyst' -- multiples holding near today's 17.1x P/E and 13.2x P/FCF (fact sheet Valuation table) is the modal outcome absent a catalyst in either direction, supporting the largest (0.5) weight.",
+      "target_price_12m": {"value": 27.5, "cite": "evaluation.json scenarios.base.target_price_12m, research/BF.B/2026-10-09-evaluation.md"},
+      "target_band": {"value": 0.2607, "cite": "Fact sheet Fair value table base row: DCF 33.95 vs EV/EBITDA 48.29 (spread 14.34, half-spread = 7.17); relative to the evaluation's base target of 27.50, band = 7.17/27.50 = 0.2607, below the inputs file's blended residual vol 0.3567242991483644 (research/BF.B/2026-10-09-mc-inputs.json)."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "evaluation.json scenarios.bear.probability, research/BF.B/2026-10-09-evaluation.md"},
+      "probability_evidence": "Evaluation bear case: ROIC fell from 22.3% (FY22) to 14.3% TTM and ROE from 31.1% to 18.1%, net debt/EBITDA rose 1.12x->1.80x TTM with a new $500m note priced at 5.375% against a 5.28% 10y yield, EV/EBITDA/EV/Sales/P/B sit 17%/13%/47% above peer medians, and short interest is 10.2% and rising (research/BF.B/2026-10-09-evaluation.md Bear case); the macro overlay's small bear tilt from elevated real yields (research/BF.B/2026-10-09-macro.md macro_tilt) adds to this weight.",
+      "target_price_12m": {"value": 21.0, "cite": "evaluation.json scenarios.bear.target_price_12m, research/BF.B/2026-10-09-evaluation.md"},
+      "target_band": {"value": 0.3567, "cite": "Fact sheet Fair value table bear row: DCF 10.90 vs EV/EBITDA 26.02 (spread 15.12, half-spread/target = 7.56/21.00 = 0.36) exceeds the inputs file's blended residual vol (0.3567242991483644, research/BF.B/2026-10-09-mc-inputs.json regression.residual_vol.blended); capped at that residual-vol ceiling per the mc-params spec."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs (ETF Trends, CNBC, Bloomberg 2026-10-06/07, 'SPY, SPYM cross $1 trillion', 'S&P closes at record high') alongside bearish positioning and bubble warnings (CNBC 'two big bearish trades point to skepticism' 2026-10-07, Invezz 'AI bubble could burst in 2027' 2026-10-08, FXEmpire 'rising yields and oil test buyers' 2026-10-08); no net direction the news supports, so 0 per house rule for mixed news."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "mc-inputs.json factor_news.IEF headlines are consistently bond-bearish: Bloomberg 'US 30-Year Yields Return to 2002 High' (2026-10-07), WSJ 'The Bond Rout Is Deepening' (2026-10-01), Barrons 'Global Bond Markets Sell Off on France's Fiscal Worries' (2026-10-05), ETF Trends 'Bond Valuations Reflect Higher Hurdle for Capital' (2026-10-08); consistent with the macro overlay's dominant_chain (rising real/nominal yields, DGS10 5.28% +0.72pp/3m, research/BF.B/2026-10-09-macro.md), supporting a modest negative 12m move for 7-10y Treasuries (IEF), kept within the +/-15% bound."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings miss / guidance disappointment",
+      "reason": "Q1 FY2027 net sales fell and missed estimates on a tequila slowdown (Reuters, WSJ 2026-09-02, fact sheet News & sentiment); note's bear case: 'Sales keep declining and ROIC keeps eroding' -- a further quarterly miss is the recurring discrete trigger for an acute repricing, distinct from the gradual multiple-compression already built into the bear scenario target.",
+      "cite": "research/BF.B/2026-10-09.md section 4 (What would prove this wrong) and factsheet-2026-10-09.md News & sentiment (2026-09-02 Reuters/WSJ headlines)",
+      "annual_probability": {"value": 1, "cite": "Brown-Forman reports quarterly earnings with certainty every year (4 reports/year, mc-inputs.json analogues.event_weeks lists one earnings_release-tagged week per quarter); annual_probability of an earnings-week event occurring is therefore 1, with the impact set from the single worst historical quarterly reaction."},
+      "impact": {"value": -0.1569, "cite": "mc-inputs.json analogues.event_weeks: week 2025-06-02 (Q4 2025 earnings release) move -0.1569, the largest fall among earnings-tagged weeks."},
+      "analogue": {"week": "2025-06-02", "move": -0.1569},
+      "assumption": null
+    },
+    {
+      "name": "US-Canada trade war / tariff escalation on spirits",
+      "reason": "Canadian provinces pulled US spirits, including Jack Daniel's, from shelves amid the tariff dispute, and the conflict escalated further with new 50% tariffs on Canadian alcohol (Business Insider, 2026-08-27); note section 2 names this as a live category headwind distinct from the gradual tequila/RTD decline already in the base/bear targets.",
+      "cite": "research/BF.B/2026-10-09.md section 2 (Quality) and factsheet-2026-10-09.md News & sentiment (Business Insider, 2026-08-27)",
+      "annual_probability": {"value": 1, "cite": "The dispute has already produced one material escalation (50% tariffs) in the trailing 12 months (Business Insider 2026-08-27); treated as roughly one discrete escalation event per year given the ongoing, unresolved nature of the conflict."},
+      "impact": {"value": -0.0429, "cite": "mc-inputs.json analogues.all_weekly_moves: week 2026-08-24 (containing the 2026-08-27 50% Canadian-tariff escalation) move -0.0429."},
+      "analogue": {"week": "2026-08-24", "move": -0.0429},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

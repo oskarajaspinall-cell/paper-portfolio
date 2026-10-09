@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 10.651699156020944,
+    "base": 14.634525160994764,
+    "bull": 15.619152199476439
+   },
+   "cost_of_equity": 0.10139999999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.08028,
+     "base": 0.10095,
+     "bull": 0.10606
+    },
+    "justified_pb": {
+     "bear": 0.7235602094240838,
+     "base": 0.994109947643979,
+     "bull": 1.0609947643979056
+    },
+    "bvps": 14.721234
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 13.766426247112983,
+    "base": 19.32678914989044,
+    "bull": 26.692723607733324
+   },
+   "implied_growth": -0.01839010399188673,
+   "discount_rate": 0.10139999999999999,
+   "cost_of_equity": 0.10139999999999999,
+   "assumptions": {
+    "cash_flow": "net income (financials: cash flow distorted by balance-sheet flows)",
+    "growth": {
+     "bear": -0.00045313993030652797,
+     "base": 0.03750961706228238,
+     "bull": 0.0659447481097426
+    },
+    "cash_flow_margin": {
+     "bear": 0.21735481705270224,
+     "base": 0.2613054375068105,
+     "bull": 0.32173663024726856
+    },
+    "cagr_3y": 0.03409372013938694,
+    "cagr_5y": 0.0659447481097426,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 7.283564814814815,
+    "base": 8.31806282722513,
+    "bull": 9.664156626506026
+   },
+   "cost_of_equity": 0.10139999999999999,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 0.62
+   }
+  }
+ ],
+ "price": 15.37,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 11.68994151971829,
+  "base": 16.198613157293323,
+  "bull": 19.3103426688954
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.2394312609161814,
+  "base": 0.05391107074127022,
+  "bull": 0.25636582100815897
+ },
+ "implied_growth": -0.01839010399188673,
+ "ticker": "HBAN",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/hban/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/hban/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/hban/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/hban/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/hban/statistics/"
+ }
+}

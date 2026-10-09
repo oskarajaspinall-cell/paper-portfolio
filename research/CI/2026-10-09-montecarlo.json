@@ -1,0 +1,229 @@
+{
+ "ticker": "CI",
+ "date": "2026-10-09",
+ "params_file": "2026-10-09-mc-params.json",
+ "inputs_file": "2026-10-09-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 281.03,
+  "close_date": "2026-10-08",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/ci/history/"
+ },
+ "target_returns": {
+  "bull": 0.3003593922357044,
+  "base": 0.062057431590933465,
+  "bear": -0.1477422339252037
+ },
+ "expected_12m": 0.0915880866811373,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.21921860153065062,
+   "IEF": 0.5220748139908349
+  },
+  "r2": 0.030668350312893833,
+  "residual_vol": {
+   "52w": 0.29211909484183174,
+   "156w": 0.2680243514153896,
+   "blended": 0.2800717231286107,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.3,
+    "target_price_12m": 365.44,
+    "target_band": 0.27
+   },
+   "base": {
+    "probability": 0.5,
+    "target_price_12m": 298.47,
+    "target_band": 0.27
+   },
+   "bear": {
+    "probability": 0.2,
+    "target_price_12m": 239.51,
+    "target_band": 0.27
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.21921860153065062,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.5220748139908349,
+    "move": 0.0,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Medical-cost-ratio / earnings shock",
+    "p": 0.4,
+    "impact": -0.1901,
+    "analogue": {
+     "week": "2025-10-27",
+     "move": -0.1901
+    },
+    "cited": true
+   },
+   {
+    "name": "PBM reform / regulatory shock",
+    "p": 0.4,
+    "impact": -0.1131,
+    "analogue": {
+     "week": "2024-12-09",
+     "move": -0.1131
+    },
+    "cited": true
+   }
+  ],
+  "tilt": 0.0
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.011911658031150145,
+   "median": 0.020650979045883776,
+   "p5": -0.22729592572901877,
+   "p25": -0.07550394825760989,
+   "p50": 0.020650979045883776,
+   "p75": 0.10244709491748333,
+   "p95": 0.22782327954311857,
+   "prob_loss": 0.4395,
+   "scenario_share": {
+    "bull": 0.3,
+    "base": 0.5,
+    "bear": 0.2
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.00016884799774154156,
+    "jumps": -0.04238383513391543,
+    "noise": 0.0003145240520089489,
+    "scenario": 0.044097453946585166
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.02954168312886896,
+   "median": 0.026165150202016926,
+   "p5": -0.33778239790652603,
+   "p25": -0.1272515832316133,
+   "p50": 0.026165150202016926,
+   "p75": 0.17842920396995882,
+   "p95": 0.4193101941580393,
+   "prob_loss": 0.4544,
+   "scenario_share": {
+    "bull": 0.3,
+    "base": 0.5,
+    "bear": 0.2
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.00018272181628397198,
+    "jumps": -0.08575799606080654,
+    "noise": 8.925315268231371e-05,
+    "scenario": 0.08819490789317033
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.09158808668113727,
+   "median": 0.04468624169168484,
+   "p5": -0.5148718254236405,
+   "p25": -0.20930762088082266,
+   "p50": 0.04468624169168484,
+   "p75": 0.3387920077970184,
+   "p95": 0.8596062077591223,
+   "prob_loss": 0.4577,
+   "scenario_share": {
+    "bull": 0.3,
+    "base": 0.5,
+    "bear": 0.2
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.00045385423829453586,
+    "jumps": -0.17059245803053727,
+    "noise": 0.0019419907479274908,
+    "scenario": 0.17638981578634066
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.3,
+    "base": 0.5,
+    "bear": 0.2
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.09158808668113727,
+   "prob_loss_12m": 0.4577
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.4,
+    "base": 0.5,
+    "bear": 0.1
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.13639824929722807,
+   "prob_loss_12m": 0.4123
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.19999999999999998,
+    "base": 0.5,
+    "bear": 0.30000000000000004
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.04677792406504658,
+   "prob_loss_12m": 0.5028
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.3,
+    "base": 0.5,
+    "bear": 0.2
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.09158808668113742,
+   "prob_loss_12m": 0.4491
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.3,
+    "base": 0.5,
+    "bear": 0.2
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.09158808668113731,
+   "prob_loss_12m": 0.4644
+  }
+ ]
+}

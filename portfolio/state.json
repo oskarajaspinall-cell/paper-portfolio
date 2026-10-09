@@ -385,6 +385,65 @@
      }
     ]
    }
+  },
+  {
+   "estimate": {
+    "close_date": "2026-10-08",
+    "currency": "USD",
+    "price": 281.03,
+    "shares": 25,
+    "side": "BUY"
+   },
+   "id": "2026-10-09-2",
+   "placed": "2026-10-09",
+   "placed_at": "2026-10-09T00:44:06+00:00",
+   "request": {
+    "action": "BUY",
+    "conviction": 4,
+    "position_type": "CORE",
+    "reason": "Every cash-flow multiple is below its 5-year floor, and returns, leverage and buybacks are all improving, so the downside is cushioned by cash yield. PBM-reform risk and a 2.3% net margin cap conviction at 4, not 5. A 7% position takes Healthcare to about 14% alongside ZTS, well within the 30% cap, and cash covers it.",
+    "research_note": "research/CI/2026-10-09.md",
+    "thesis": "A deleveraging managed-care and PBM franchise with ROIC rising to 13.4% and a 12.29% FCF yield trades below its own 5-year minimum P/E, EV/EBITDA and P/FCF, where the price implies a -16% revenue decline that reaffirmed guidance does not support.",
+    "ticker": "CI",
+    "triggers": [
+     {
+      "check": {
+       "field": "roic",
+       "op": "<",
+       "source": "statistics",
+       "value": 9
+      },
+      "text": "TTM ROIC falls below 9%, giving up the five-year improvement from 8.8% to 13.4%."
+     },
+     {
+      "check": {
+       "field": "operatingMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 3.5
+      },
+      "text": "TTM operating margin falls below 3.5%, under the FY2025 five-year low of 3.7%, showing PBM reform or medical-cost pressure is compressing profitability structurally."
+     },
+     {
+      "check": {
+       "field": "profitMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 1.5
+      },
+      "text": "TTM net margin falls below 1.5%, near the FY2024 trough of 1.4%, confirming margin compression is structural."
+     },
+     {
+      "check": {
+       "field": "fcfMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 2.5
+      },
+      "text": "TTM FCF margin falls below 2.5%, under the five-year low of 3.1%, signalling earnings quality and buyback capacity are deteriorating."
+     }
+    ]
+   }
   }
  ]
 }

@@ -1,0 +1,47 @@
+{
+  "ticker": "HCA",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "evaluation Decision JSON scenarios.bull.probability, research/HCA/2026-10-09-evaluation.md"},
+      "probability_evidence": "Weighted lowest of the three because the stock already trades at the 81st percentile of its own 5y P/E range and a 73% P/E premium to peers (factsheet Valuation table), leaving little room for the market to pay even more for a continuation of the ROCE/FCF-conversion improvement the bull case needs [Certain/Likely], research/HCA/factsheet-2026-10-09.md.",
+      "target_price_12m": {"value": 571.97, "cite": "evaluation Decision JSON scenarios.bull.target_price_12m (DCF bull fair value), research/HCA/2026-10-09-evaluation.md"},
+      "target_band": {"value": 0.2088, "cite": "Half the spread between the bull case's two valuation anchors in the factsheet fair-value table: DCF 651.59 vs EV/EBITDA(2nd) 412.73 -> half-spread 119.43, as a fraction of the 571.97 target; research/HCA/factsheet-2026-10-09.md Fair value table"}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "evaluation Decision JSON scenarios.base.probability, research/HCA/2026-10-09-evaluation.md"},
+      "probability_evidence": "Base case is given the majority weight because its driver (EV/EBITDA reverting to the 5y median 9.1x) requires no new information: the $400m ACA-exchange EBITDA headwind it assumes persists is already disclosed, not a forecast [Certain], Q2 2026 earnings call transcript cited in research/HCA/2026-10-09.md section 3.",
+      "target_price_12m": {"value": 404.48, "cite": "evaluation Decision JSON scenarios.base.target_price_12m (EV/EBITDA fair value), research/HCA/2026-10-09-evaluation.md"},
+      "target_band": {"value": 0.0151, "cite": "Half the spread between the base case's two valuation anchors in the factsheet fair-value table: DCF 392.29 vs EV/EBITDA(2nd) 404.48 -> half-spread 6.095, as a fraction of the 404.48 target; research/HCA/factsheet-2026-10-09.md Fair value table"}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "evaluation Decision JSON scenarios.bear.probability, research/HCA/2026-10-09-evaluation.md"},
+      "probability_evidence": "Evaluator explicitly raised this from a 0.25 symmetric default to 0.3 citing the macro overlay's moderate bear tilt: 10y real yield +0.49pt and HY credit spread +0.41pt over the prior month, which pressures a 3.20x-levered, premium-multiple balance sheet [Likely], research/HCA/2026-10-09-macro.md.",
+      "target_price_12m": {"value": 298.05, "cite": "evaluation Decision JSON scenarios.bear.target_price_12m (blended bear fair value), research/HCA/2026-10-09-evaluation.md"},
+      "target_band": {"value": 0.2053, "cite": "Half the spread between the bear case's two valuation anchors in the factsheet fair-value table: DCF 257.25 vs EV/EBITDA(2nd) 379.66 -> half-spread 61.205, as a fraction of the 298.05 target; research/HCA/factsheet-2026-10-09.md Fair value table"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are directionally mixed around the asof date: record highs (ETF Trends 2026-10-07, Bloomberg 2026-10-06) alongside a bearish put-spread trade (CNBC 2026-10-07), an AI-bubble warning (Invezz 2026-10-08) and rising-yields-pressure-buyers (FXEmpire 2026-10-08); no net directional signal, so held at 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly factor regression, 156 weeks to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "Macro overlay research/HCA/2026-10-09-macro.md macro_tilt ('moderate toward bear') and dominant_chain 'real yields & credit spreads -> WACC/refinancing cost', citing FRED facts (DFII10 +0.49pt/1m to 2.92%, DGS10 +0.50pt/1m to 5.28%, DFF +0.25pt/1m hike, BAMLH0A0HYM2 +0.41pt/1m to 3.09%, all 2026-10-07); consistent with mc-inputs.json factor_news.IEF showing the bond selloff/yields-to-2002-highs headlines (Bloomberg 2026-10-07, Barrons 2026-10-05, WSJ 2026-10-01) outweighing the earlier-week rally headlines (ETF Trends/Bloomberg 2026-10-02). Rising yields imply IEF price pressure; kept modest at -5%."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly factor regression, 156 weeks to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings reaction (ACA-exchange/payer-mix headwind)",
+      "reason": "HCA reports Q3 2026 earnings on Oct 27, 2026, 18 days after this valuation date; the bear case flags this as a near-term event risk if the Medicaid supplemental-payment offsets to the roughly $400m ACA-exchange-attrition EBITDA headwind (disclosed on the Q2 2026 call) fade.",
+      "cite": "research/HCA/2026-10-09-evaluation.md Bear case ('Q3 results on Oct 27 are a near-term event risk if the Medicaid supplemental-payment offsets fade'); factsheet 'Next earnings date Oct 27, 2026' (research/HCA/factsheet-2026-10-09.md Price table); Q2 2026 transcript disclosure of the $400m EBITDA headwind (research/HCA/2026-10-09.md section 2, https://stockanalysis.com/stocks/hca/transcripts/654467-q2-2026/)",
+      "annual_probability": {"value": 1.0, "cite": "Of the 20 quarterly earnings weeks in mc-inputs.json analogues.event_weeks (Q3 2021-Q2 2026), 5 produced a weekly move >=10% in magnitude (2022-04-18 -0.1928, 2022-07-18 +0.1773, 2024-07-22 +0.1013, 2024-10-21 -0.1251, 2026-04-20 -0.1138) = 25% of quarters, i.e. about one such large earnings-reaction week per year."},
+      "impact": {"value": -0.1138, "cite": "Matches analogue week 2026-04-20 (Q1 2026 earnings reaction, the most recent earnings-driven drop of this type), mc-inputs.json analogues.event_weeks / largest_falls"},
+      "analogue": {"week": "2026-04-20", "move": -0.1138},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

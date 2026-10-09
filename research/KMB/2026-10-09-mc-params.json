@@ -1,0 +1,56 @@
+{
+  "ticker": "KMB",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Standalone discount is real on trailing multiples: P/E 16.7x sits at the 1st percentile of its own 5y range and 38% below the peer median 26.9x, EV/EBITDA 10.9x is below its 5y minimum (factsheet-2026-10-09.md Valuation table); the bull case rests on a clean Kenvue close letting this discount narrow (evaluation bull basis).",
+      "target_price_12m": {"value": 127.37, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0675, "cite": "factsheet-2026-10-09.md Fair value table: bull DCF $121.64 vs bull P/E $138.83, spread $17.19; half-spread $8.595 / target $127.37 = 0.0675; within the mc-inputs.json blended residual vol (0.215, research/KMB/2026-10-09-mc-inputs.json regression.residual_vol.blended), no cap applied"}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "Base fair value of $97.75 already equals the last close of $97.74 (factsheet-2026-10-09.md Fair value table), and the reverse DCF implies only 2.8% revenue growth is priced in (factsheet-2026-10-09.md Fair value section), consistent with the market holding the multiple flat pending deal resolution (evaluation base basis).",
+      "target_price_12m": {"value": 97.75, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.2149, "cite": "factsheet-2026-10-09.md Fair value table: base DCF $78.42 vs base P/E $136.42, spread $58.00; half-spread $29.00 / target $97.75 = 0.297, which exceeds the mc-inputs.json blended residual vol of 0.21499 (research/KMB/2026-10-09-mc-inputs.json regression.residual_vol.blended), so capped just under that measured residual vol at 0.2149"}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "KMB ($32.5bn market cap) is funding a ~$40bn debt-funded Kenvue acquisition partly by assuming Kenvue's notes, with EU antitrust clearance still pending and remedies offered (research/KMB/2026-10-09.md Unusual items, Reuters 2026-09-23 cite); short interest is 15.85% of float and rising +4.8% month-over-month, and the stock has underperformed SPY by 35.8pp over 12 months (factsheet-2026-10-09.md Other/News & Price tables), consistent with the market pricing deal/leverage risk.",
+      "target_price_12m": {"value": 66.95, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.2149, "cite": "factsheet-2026-10-09.md Fair value table: bear DCF $51.88 vs bear P/E $97.09, spread $45.21; half-spread $22.605 / target $66.95 = 0.338, which exceeds the mc-inputs.json blended residual vol of 0.21499 (research/KMB/2026-10-09-mc-inputs.json regression.residual_vol.blended), so capped just under that measured residual vol at 0.2149"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs (Bloomberg 2026-10-06 'S&P 500 Hits Record High as Big Tech Leads') vs correction/bubble warnings (Invezz 2026-10-08 'AI bubble could burst in 2027, sending S&P 500 down to 5,000', FXEmpire 2026-10-08 'Rising Yields and Oil Test Buyers'); no clear direction supported, so 0 per house rule"},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/KMB/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.03, "cite": "mc-inputs.json factor_news.IEF headlines describe an ongoing bond rout and multi-decade-high yields (ETF Trends 2026-10-08 'Bond Valuations Reflect Higher Hurdle for Capital'; Bloomberg 2026-10-07 'US 30-Year Yields Return to 2002 High'; Barrons 2026-10-05 'Global Bond Markets Sell Off'), consistent with the macro overlay's facts that the US 10y real yield (DFII10) rose 61bp and the HY spread rose 39bp over 3 months (research/KMB/2026-10-09-macro.md market_pricing); a modest -3% drift reflects continued yield pressure on 7-10y Treasuries, kept within the ±15% modesty guidance"},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/KMB/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Kenvue deal EU antitrust decision / M&A completion shock",
+      "reason": "EU antitrust clearance for the ~$40bn debt-funded Kenvue acquisition (vs KMB's own $32.5bn market cap) is still pending, with remedies already offered; a block, adverse conditions, or renegotiation would be a discrete shock distinct from the gradual leverage/integration risk already built into the bear target.",
+      "cite": "research/KMB/2026-10-09.md section 6 Unusual items and section 1 Business (Reuters 2026-09-23 'Kimberly-Clark offers remedies in bid for EU approval of Kenvue deal'); evaluation 2026-10-09-evaluation.md bear case 'EU clearance is still pending, with remedies offered'",
+      "annual_probability": {"value": 0.2, "cite": "research/KMB/2026-10-09-mc-inputs.json analogues.event_weeks: exactly one 'M&A Announcement' event in ~5 years of weekly history (week 2025-11-03), giving a base rate of ~1/5 = 0.2/yr for a discrete deal-related shock of this kind"},
+      "impact": {"value": -0.1325, "cite": "research/KMB/2026-10-09-mc-inputs.json analogues.event_weeks 'M&A Announcement' week 2025-11-03, move -0.1325 (also the largest fall in analogues.largest_falls)"},
+      "analogue": {"week": "2025-11-03", "move": -0.1325},
+      "assumption": null
+    },
+    {
+      "name": "Quarterly earnings reaction",
+      "reason": "KMB reports quarterly earnings on a fixed cadence; the next report (Oct 29, 2026) is a recurring discrete catalyst that can move the stock sharply in either direction on results/guidance.",
+      "cite": "research/KMB/factsheet-2026-10-09.md Price table 'Next earnings date | Oct 29, 2026 (Est. Earnings)'",
+      "annual_probability": {"value": 1.0, "cite": "quarterly earnings occur 4x/year, so at least one earnings-driven move happens within any 12-month window with probability ~1 (research/KMB/factsheet-2026-10-09.md Price table, next earnings Oct 29, 2026); montecarlo.py requires annual_probability in (0,1], so this models 'at least one earnings jump per year' rather than a raw count"},
+      "impact": {"value": -0.0784, "cite": "research/KMB/2026-10-09-mc-inputs.json analogues.event_weeks 'Q1 2025' earnings_release week 2025-04-21, move -0.0784 (largest clean earnings-only fall in the analogue table)"},
+      "analogue": {"week": "2025-04-21", "move": -0.0784},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,236 @@
+{
+ "ticker": "BRO",
+ "date": "2026-10-09",
+ "params_file": "2026-10-09-mc-params.json",
+ "inputs_file": "2026-10-09-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 63.75,
+  "close_date": "2026-10-08",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/bro/history/"
+ },
+ "target_returns": {
+  "bull": 0.1741176470588235,
+  "base": 0.051764705882352935,
+  "bear": -0.15294117647058825
+ },
+ "expected_12m": 0.020941176470588223,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.38144407507794464,
+   "IEF": 0.4213720824937071
+  },
+  "r2": 0.061253527873556424,
+  "residual_vol": {
+   "52w": 0.3230702732913186,
+   "156w": 0.24551593687049406,
+   "blended": 0.2842931050809063,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 74.85,
+    "target_band": 0.2541
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 67.05,
+    "target_band": 0.2154
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 54.0,
+    "target_band": 0.1762
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.38144407507794464,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.4213720824937071,
+    "move": -0.04,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Q3 2026 earnings confirms organic decline",
+    "p": 0.35,
+    "impact": -0.1255,
+    "analogue": {
+     "week": "2026-04-27",
+     "move": -0.1255
+    },
+    "cited": true
+   },
+   {
+    "name": "Debt-funded M&A announcement reaction",
+    "p": 0.6,
+    "impact": -0.0833,
+    "analogue": {
+     "week": "2022-03-07",
+     "move": -0.0833
+    },
+    "cited": true
+   },
+   {
+    "name": "Captive-tax (IRS Section 831(b)) / Oxford litigation ruling",
+    "p": 0.1,
+    "impact": -0.12,
+    "analogue": null,
+    "cited": true
+   }
+  ],
+  "tilt": -0.015
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.0053298091581507325,
+   "median": -0.004260768813801521,
+   "p5": -0.2034111627786825,
+   "p25": -0.08467460998773263,
+   "p50": -0.004260768813801521,
+   "p75": 0.07511808717396926,
+   "p95": 0.19215883998098374,
+   "prob_loss": 0.514,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.004197891284820696,
+    "jumps": -0.03864290988662672,
+    "noise": 0.0004133124786526096,
+    "scenario": 0.02953227024205218
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": -0.0026946844106995977,
+   "median": -0.012084629757075,
+   "p5": -0.30526051644901686,
+   "p25": -0.13858971488429384,
+   "p50": -0.012084629757075,
+   "p75": 0.12189399693311082,
+   "p95": 0.32587740941428517,
+   "prob_loss": 0.5245,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.008573859445944885,
+    "jumps": -0.07784652429013936,
+    "noise": 0.00010134094799909565,
+    "scenario": 0.06406454048410437
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.020941176470588293,
+   "median": -0.021306079118447088,
+   "p5": -0.4586524431135096,
+   "p25": -0.2205468792248665,
+   "p50": -0.021306079118447088,
+   "p75": 0.2192648579449403,
+   "p95": 0.6391645314914924,
+   "prob_loss": 0.5266,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.016673425036555455,
+    "jumps": -0.1537110509832962,
+    "noise": 0.0020135178545554674,
+    "scenario": 0.13312908096820875
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.020941176470588293,
+   "prob_loss_12m": 0.5266
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.45,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.05364705882352942,
+   "prob_loss_12m": 0.4839
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.45,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.011764705882352898,
+   "prob_loss_12m": 0.5663
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.020941176470588206,
+   "prob_loss_12m": 0.5196
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.020941176470588303,
+   "prob_loss_12m": 0.5424
+  }
+ ]
+}

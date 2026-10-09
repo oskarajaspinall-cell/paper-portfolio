@@ -1,0 +1,56 @@
+{
+ "ticker": "LII",
+ "date": "2026-10-09",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.20, "cite": "research/LII/2026-10-09-evaluation.md Decision json scenarios.bull.probability = 0.20"},
+   "probability_evidence": "Operating margin is 19.8% TTM, near a five-year high, and commercial sales grew 24% YoY in Q2 2026 even as residential fell 7.3% (SEC 10-Q, 2026-06-30); the evaluation's bull basis requires residential deferrals to unwind in 2027 while margins hold near 19.8% (research/LII/2026-10-09-evaluation.md scenarios.bull.basis). Probability is capped at 20% because the macro overlay's moderate bear tilt (rising nominal/real 10y yields working against the residential-recovery timeline) argues against this outcome (research/LII/2026-10-09-macro.md macro_tilt).",
+   "target_price_12m": {"value": 392.66, "cite": "factsheet-2026-10-09.md Fair value table, Bull column = 392.66 (also research/LII/2026-10-09-evaluation.md scenarios.bull.target_price_12m)"},
+   "target_band": {"value": 0.33, "cite": "Bull-case valuation anchors disagree sharply: DCF (best method) implies 280.47 vs EV/EBITDA (second method) implies 617.04 (factsheet-2026-10-09.md Fair value table); half the spread (168.29) relative to the 392.66 blended target is 42.9%, but montecarlo.py requires target_band <= the blended residual volatility (34.17%, research/LII/2026-10-09-mc-inputs.json regression.residual_vol.blended), so the band is capped just below that ceiling at 33%."}
+  },
+  "base": {
+   "probability": {"value": 0.45, "cite": "research/LII/2026-10-09-evaluation.md Decision json scenarios.base.probability = 0.45"},
+   "probability_evidence": "Commercial (Building Climate Solutions) grew 24% YoY in Q2 2026, offsetting a 7.3% YoY residential decline (SEC 10-Q, 2026-06-30), consistent with the mechanical base fair value ($356.77) landing within 1.3% of the $361.54 close (factsheet-2026-10-09.md Fair value); with no decisive catalyst identified either way, this mix-offset outcome is given the plurality weight of 45% (research/LII/2026-10-09-evaluation.md scenarios.base.basis).",
+   "target_price_12m": {"value": 356.77, "cite": "factsheet-2026-10-09.md Fair value table, Base column = 356.77 (also research/LII/2026-10-09-evaluation.md scenarios.base.target_price_12m)"},
+   "target_band": {"value": 0.33, "cite": "Base-case valuation anchors disagree sharply: DCF (best method) implies 244.90 vs EV/EBITDA (second method) implies 580.50 (factsheet-2026-10-09.md Fair value table); half the spread (167.80) relative to the 356.77 blended target is 47.0%, but montecarlo.py requires target_band <= the blended residual volatility (34.17%, research/LII/2026-10-09-mc-inputs.json regression.residual_vol.blended), so the band is capped just below that ceiling at 33%."}
+  },
+  "bear": {
+   "probability": {"value": 0.35, "cite": "research/LII/2026-10-09-evaluation.md Decision json scenarios.bear.probability = 0.35"},
+   "probability_evidence": "ROIC has fallen from 44.7% (FY2024) to 26.4% TTM and ROCE to 33.8% (factsheet-2026-10-09.md ratios); residential sales fell 7.3% YoY in Q2 2026 and management has pushed the recovery to 2027 after cutting EPS guidance (2026-10-09.md §2, Deutsche Bank summit transcript). Probability is raised to 35% because the macro overlay's moderate bear tilt from rising 10y nominal (+0.72pp 3m) and real (+0.61pp 3m) yields works against the residential-financing recovery and erodes the already-thin base-case cushion (research/LII/2026-10-09-macro.md macro_tilt).",
+   "target_price_12m": {"value": 244.90, "cite": "factsheet-2026-10-09.md Fair value table, DCF (best method), Base column = 244.90, used per evaluation as the bear target (research/LII/2026-10-09-evaluation.md scenarios.bear.target_price_12m)"},
+   "target_band": {"value": 0.33, "cite": "Bear-case valuation anchors disagree extremely: DCF (best method) implies 25.05 vs EV/EBITDA (second method) implies 412.91 (factsheet-2026-10-09.md Fair value table); half the spread (193.93) relative to the 244.90 target is 125.6%, but montecarlo.py requires target_band <= the blended residual volatility (34.17%, research/LII/2026-10-09-mc-inputs.json regression.residual_vol.blended), so the band is capped just below that ceiling at 33%."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "research/LII/2026-10-09-mc-inputs.json factor_news.SPY headlines are mixed and directionally inconclusive: record closing highs (2026-10-06/07 Bloomberg/CNBC) alongside rising-yield/oil pressure and an AI-bubble-crash warning (2026-10-08 FXEmpire/Invezz) and a large bearish put-spread trade (2026-10-07 CNBC); per house rule, mixed news is set to 0."},
+   "uncertainty_12m": {"value": 0.1431, "cite": "research/LII/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431154"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.05, "cite": "research/LII/2026-10-09-mc-inputs.json factor_news.IEF headlines describe a deepening bond rout and 10y/30y Treasury yields at their highest since 2002 (2026-10-07 Bloomberg, 2026-10-01 WSJ/Bloomberg), consistent with the macro overlay's moderate bear tilt that yields 'hold or extend their 3-month rise' (research/LII/2026-10-09-macro.md macro_bear/macro_tilt); a modest -5% move (bond ETF price falls as yields rise) is kept within the +/-15% house bound given the news is directional but not extraordinary."},
+   "uncertainty_12m": {"value": 0.0646, "cite": "research/LII/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.0646038"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Antitrust/shareholder litigation shock",
+   "reason": "A Sherman Act Section 1 class action names Lennox and six other HVAC manufacturers with no estimable loss range, and a shareholder-rights firm announced on 2026-08-24 it is investigating potential fraud claims following the post-guidance-cut decline",
+   "cite": "research/LII/2026-10-09.md §6 Unusual items (SEC 10-Q https://www.sec.gov/Archives/edgar/data/1069202/000106920226000087/lii-20260630.htm; PRNewswire 2026-08-24 https://www.prnewswire.com/news-releases/lii-investors-have-opportunity-to-join-lennox-international-inc-fraud-investigation-with-sbs-law-302857922.html)",
+   "annual_probability": {"value": 0.20, "cite": "One comparable legal/litigation-driven decline week (2026-08-24, -2.35%) observed in the ~5-year regression history (research/LII/2026-10-09-mc-inputs.json analogues.all_weekly_moves), i.e. roughly 1 occurrence per 5 years -> ~20% annual probability"},
+   "impact": {"value": -0.0235, "cite": "Matches the observed weekly move for the week of the fraud-investigation announcement"},
+   "analogue": {"week": "2026-08-24", "move": -0.0235},
+   "assumption": null
+  },
+  {
+   "name": "Earnings/guidance-cut shock (Q3 2026, Oct 28)",
+   "reason": "The bear case and the decision rationale both flag the Q3 2026 results (Oct 28, 2026) as a near-term risk that could bring another guidance cut, as happened at Q2 2026 when the stock fell -20.2% in a single day after full-year EPS guidance was lowered",
+   "cite": "research/LII/2026-10-09-evaluation.md bear case ('Q3 results on Oct 28 could bring another cut') and Decision.rationale ('Q3 results on Oct 28 are a near-term risk'); factsheet-2026-10-09.md News & sentiment 2026-07-29 Barrons/TheFly (-20.2% reaction to the guidance cut)",
+   "annual_probability": {"value": 0.20, "cite": "One quarterly earnings reaction of this magnitude (-23.15% weekly, the Q2 2026 guidance cut) observed among 20 quarterly earnings events in the ~5-year regression history (research/LII/2026-10-09-mc-inputs.json analogues.event_weeks, types=earnings_release), i.e. ~1 per 5 years -> ~20% annual probability"},
+   "impact": {"value": -0.2315, "cite": "Matches the observed weekly move for the Q2 2026 earnings/guidance-cut week"},
+   "analogue": {"week": "2026-07-27", "move": -0.2315},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null
+}

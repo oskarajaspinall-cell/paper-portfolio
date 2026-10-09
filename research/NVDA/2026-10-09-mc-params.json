@@ -1,0 +1,65 @@
+{
+  "ticker": "NVDA",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/NVDA/2026-10-09-evaluation.md Decision JSON, scenarios.bull.probability"},
+      "probability_evidence": "Bull requires the P/E to re-rate from 30.0x to NVDA's own 5y minimum of 38.0x on TTM EPS (fact sheet RA) while the reverse-DCF-implied 54.4% year-1 revenue growth is actually delivered (fact sheet) -- a scenario the evaluator treats as the least likely of the three given concentration, hyperscaler in-house-silicon and China-foreclosure risks (research/NVDA/2026-10-09.md sections 2 and 6).",
+      "target_price_12m": {"value": 291.9, "cite": "research/NVDA/2026-10-09-evaluation.md Decision JSON, scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.27, "cite": "Fact sheet bull-row valuation anchors (through-cycle DCF 95.33 vs EV/EBITDA 415.49, factsheet-2026-10-09.md Fair value table) imply a half-spread of 160.08, i.e. 54.8% of the $291.9 target -- capped just under the mc-inputs.json blended residual volatility 0.27818 (research/NVDA/2026-10-09-mc-inputs.json regression.residual_vol.blended) per the band ceiling rule."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/NVDA/2026-10-09-evaluation.md Decision JSON, scenarios.base.probability"},
+      "probability_evidence": "Base case sets the target at the fact sheet's own bull fair value ($202.05, below the $230.48 close) because the macro overlay's moderate bear tilt -- the 10y real yield (DFII10) up 49bp in 1 month / 61bp in 3 months (research/NVDA/2026-10-09-macro.md) -- raises the CAPM discount rate on a 2.22-beta stock (fact sheet ST), while quality metrics (TTM ROIC 92.0%, operating margin 65.2%, net-cash balance sheet) remain intact (fact sheet RA, IS, BS).",
+      "target_price_12m": {"value": 202.05, "cite": "research/NVDA/2026-10-09-evaluation.md Decision JSON, scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0588, "cite": "Fact sheet base-row valuation anchors (through-cycle DCF 73.28 vs EV/EBITDA 97.04, factsheet-2026-10-09.md Fair value table) imply a half-spread of 11.88, i.e. 5.9% of the $202.05 target."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/NVDA/2026-10-09-evaluation.md Decision JSON, scenarios.bear.probability"},
+      "probability_evidence": "Bear case cites AI-capex digestion, tighter financing for debt-funded buyers (e.g. the reported SpaceX $40bn chip-purchase loan talks, fact sheet news 2026-10-08) and China data-center foreclosure costing a $4.5bn H20 charge (10-K, cited in research/NVDA/2026-10-09.md section 6) as the forces taking the price to the fact sheet's base-case EV/EBITDA value.",
+      "target_price_12m": {"value": 97.04, "cite": "research/NVDA/2026-10-09-evaluation.md Decision JSON, scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.27, "cite": "Fact sheet bear-row valuation anchors (through-cycle DCF 7.85 vs EV/EBITDA 75.72, factsheet-2026-10-09.md Fair value table) imply a half-spread of 33.935, i.e. 35.0% of the $97.04 target -- capped just under the mc-inputs.json blended residual volatility 0.27818 (research/NVDA/2026-10-09-mc-inputs.json regression.residual_vol.blended) per the band ceiling rule."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs (TipRanks/CNBC-TV 2026-10-07) and $1tn in combined SPY/SPYM assets (ETF Trends 2026-10-07) against a strategist's 'AI bubble could burst' warning, bearish put-spread trades, and a pullback on rising yields/oil (Invezz, CNBC, FXEmpire, Reuters, all 2026-10-07/08) -- no net directional signal, so set to 0 per the mixed-news rule."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "research/NVDA/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431154014991791"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "mc-inputs.json factor_news.IEF headlines skew consistently toward a bond sell-off / rising-yield trend ('Bond Rout Is Deepening' WSJ 2026-10-01, '10-Year Bond Yields Hit Highest Level Since 2002' Bloomberg 2026-10-01, 'Global Bond Markets Sell Off on France's Fiscal Worries' Barron's 2026-10-05, 'Bond Valuations Reflect Higher Hurdle for Capital' ETF Trends 2026-10-08), corroborated by the macro overlay's cited FRED facts (DFII10 10y real yield +49bp ~1m / +61bp ~3m, research/NVDA/2026-10-09-macro.md) -- kept modest at -5% given some countervailing relief headlines (cooler PCE print, Treasury rebound, both ETF Trends/Bloomberg 2026-10-02)."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "research/NVDA/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.06460381100458489"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "China data-center export-control foreclosure shock",
+      "reason": "NVIDIA is 'effectively foreclosed from competing in China's data center computing/compute market' and took a $4.5bn H20 inventory charge in FY2026",
+      "cite": "research/NVDA/2026-10-09.md sections 2 and 6, citing NVIDIA FY2026 Form 10-K (https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm)",
+      "annual_probability": {"value": 0.2, "cite": "Only one weekly fall of comparable magnitude in the 5y history attributable to a China/export-control shock (the week of 2026-08-29, initial US restrictions on advanced-chip exports to China) -- research/NVDA/2026-10-09-mc-inputs.json analogues.largest_falls -- implying a base rate of roughly 1 such shock per 5 years."},
+      "impact": {"value": -0.1607, "cite": "research/NVDA/2026-10-09-mc-inputs.json analogues.largest_falls, week 2022-08-29, move -0.1607"},
+      "analogue": {"week": "2022-08-29", "move": -0.1607},
+      "assumption": null
+    },
+    {
+      "name": "Quarterly earnings reaction",
+      "reason": "Next earnings date is Nov 18, 2026; NVDA's weekly history shows repeated large single-week reactions to its quarterly results",
+      "cite": "research/NVDA/factsheet-2026-10-09.md Price section ('Next earnings date'); research/NVDA/2026-10-09-mc-inputs.json analogues.event_weeks (quarterly earnings_release entries)",
+      "annual_probability": {"value": 0.77, "cite": "Of the 20 quarterly earnings_release weeks in research/NVDA/2026-10-09-mc-inputs.json analogues.event_weeks (2021-11-17 to 2026-08-26, ~4.8 years), 7 show a reaction at or beyond 7.73% in magnitude (0.0854, -0.089, 0.0887, 0.2457, 0.1513, -0.0773, -0.0707) -- a Poisson rate of 7/4.8=1.46/yr, giving a within-year probability of at least one such reaction of 1-exp(-1.46)=0.77."},
+      "impact": {"value": -0.0773, "cite": "research/NVDA/2026-10-09-mc-inputs.json analogues.event_weeks, Q2 2025 earnings_release, week 2024-08-26, move -0.0773 (one of the larger adverse quarterly earnings reactions in the history)"},
+      "analogue": {"week": "2024-08-26", "move": -0.0773},
+      "assumption": null
+    },
+    {
+      "name": "AI-capex digestion / debt-financed demand pullback",
+      "reason": "Bear case cites AI-capex digestion and tighter financing for debt-funded buyers; fact-sheet news shows AI stocks (incl. NVDA) selling off on OpenAI revenue disclosures and SpaceX reportedly in talks to borrow $40bn to buy NVDA chips",
+      "cite": "research/NVDA/2026-10-09-evaluation.md Decision JSON scenarios.bear.basis; research/NVDA/factsheet-2026-10-09.md News & sentiment (CNBC 'Nvidia, Oracle, CoreWeave and other AI stocks sink on OpenAI revenue report' and Bloomberg 'SpaceX in Talks to Borrow $40 Billion to Buy Nvidia Chips', both 2026-10-08); research/NVDA/2026-10-09-macro.md macro_bear",
+      "annual_probability": {"value": 0.25, "cite": "No realized precedent yet (financing talks and demand-doubt headlines are current, not historical), so set as a bounded assumption: roughly a one-in-four-year likelihood given the risk is live but unconfirmed, per [montecarlo].max_jump_impact_assumed policy for jumps without an analogue."},
+      "impact": {"value": -0.20, "cite": "Bounded assumption within the [montecarlo].max_jump_impact_assumed = 0.30 cap, sized moderately given the macro overlay's 'moderate' bear-tilt rating (research/NVDA/2026-10-09-macro.md macro_tilt)."},
+      "analogue": null,
+      "assumption": "No historical analogue exists for a debt-financed AI-capex buyer pulling back or a major customer revenue-doubt shock of this specific kind; impact and probability are bounded assumptions per policy, not derived from a measured analogue."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": 0.015, "cite": "research/NVDA/factsheet-2026-10-09.md Price section: price +4.1% above its 50-day MA and +14.1% above its 200-day MA (50d > 200d by +9.6%), +12.9% 3-month momentum, positive relative strength vs SPY over 3/6/12m, RSI 54.5 (neutral, not overbought) -- a confirmed but not extreme uptrend, set below the ±0.02 cap."}
+}

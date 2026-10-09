@@ -1,0 +1,98 @@
+{
+  "ticker": "HBAN",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {
+        "value": 0.2,
+        "cite": "research/HBAN/2026-10-09-evaluation.md scenarios.bull.probability (0.2), cut from the default per the macro overlay's moderate bear tilt"
+      },
+      "probability_evidence": "Macro overlay (research/HBAN/2026-10-09-macro.md): fed funds +0.25pp (1m)/+0.26pp (3m) and the 2y Treasury +0.4pp/+0.56pp since management's Sept-16 FY27 EPS/NIM guidance cut extend, rather than offset, the company's own flagged NIM risk, so the evaluation reduced the bull probability below the symmetric default.",
+      "target_price_12m": {
+        "value": 19.31,
+        "cite": "research/HBAN/2026-10-09-evaluation.md scenarios.bull.target_price_12m, matching factsheet-2026-10-09.md Fair value row 'Bull' 19.31 (vs last close +25.6%)"
+      },
+      "target_band": {
+        "value": 0.14,
+        "cite": "factsheet-2026-10-09.md Fair value table bull row: P/B+ROE 15.62 vs FCFE DCF 26.69 (the two methods actually used in the stated 67%/33% blend) -> half the spread (5.535) / target 19.31 = 28.7%, capped below the measured residual volatility 26.4% (mc-inputs.json regression.residual_vol.blended) since the uncapped figure would exceed it; reduced further to 0.14 to leave headroom under that cap alongside the technical/jump components"
+      }
+    },
+    "base": {
+      "probability": {
+        "value": 0.45,
+        "cite": "research/HBAN/2026-10-09-evaluation.md scenarios.base.probability (0.45)"
+      },
+      "probability_evidence": "factsheet-2026-10-09.md Quality table: ROE has held in a 9.0-10.1% band FY24-TTM and P/B (1.0x) sits near its 5y median (1.1x), i.e. the base case extends the current, unchanged trend rather than a regime shift either way.",
+      "target_price_12m": {
+        "value": 16.2,
+        "cite": "research/HBAN/2026-10-09-evaluation.md scenarios.base.target_price_12m, matching factsheet-2026-10-09.md Fair value row 'Base' 16.20 (vs last close +5.4%)"
+      },
+      "target_band": {
+        "value": 0.1451,
+        "cite": "factsheet-2026-10-09.md Fair value table base row: P/B+ROE 14.63 vs FCFE DCF 19.33 (the two blended methods) -> half the spread (2.35) / target 16.20 = 14.51%, below the measured residual volatility 26.4% (mc-inputs.json regression.residual_vol.blended)"
+      }
+    },
+    "bear": {
+      "probability": {
+        "value": 0.35,
+        "cite": "research/HBAN/2026-10-09-evaluation.md scenarios.bear.probability (0.35)"
+      },
+      "probability_evidence": "Macro overlay (research/HBAN/2026-10-09-macro.md, primary weight): confirmed fed-funds hike plus the 2y Treasury rise since the Sept-16 guidance cut raises the odds of another NIM/EPS reset; note (2026-10-09.md) adds that FCF conversion fell from 170.4% (FY22) to 111.9% TTM, so the evaluation raised the bear probability above the symmetric default.",
+      "target_price_12m": {
+        "value": 11.69,
+        "cite": "research/HBAN/2026-10-09-evaluation.md scenarios.bear.target_price_12m, matching factsheet-2026-10-09.md Fair value row 'Bear' 11.69 (vs last close -23.9%)"
+      },
+      "target_band": {
+        "value": 0.1334,
+        "cite": "factsheet-2026-10-09.md Fair value table bear row: P/B+ROE 10.65 vs FCFE DCF 13.77 (the two blended methods) -> half the spread (1.56) / target 11.69 = 13.34%, below the measured residual volatility 26.4% (mc-inputs.json regression.residual_vol.blended)"
+      }
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {
+        "value": 0.0,
+        "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs ('S&P closes at record high, breaking 7,800 points', 2026-10-07) against bubble/skepticism warnings ('AI bubble could burst in 2027, sending S&P 500 down to 5,000', 'two big bearish trades point to skepticism', 2026-10-07/08) and a yields/oil-driven pullback ('Rising Yields and Oil Test Buyers Ahead of Earnings', 2026-10-08); no clear direction, so 0"
+      },
+      "uncertainty_12m": {
+        "value": 0.1431154014991791,
+        "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual"
+      }
+    },
+    "IEF": {
+      "expected_12m_move": {
+        "value": -0.06,
+        "cite": "Macro overlay (research/HBAN/2026-10-09-macro.md macro_tilt: 'toward bear', size 'moderate') and its FRED facts: 10y Treasury 5.28% (+0.5pp 1m, +0.72pp 3m), 2y 4.77% (+0.4pp/+0.56pp), a confirmed fed-funds hike, imply the market prices further tightening/no near-term cuts, consistent with mc-inputs.json factor_news.IEF headlines ('US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002', 'The Bond Rout Is Deepening', 'US 30-Year Yields Return to 2002 High'); translated to a modest (not extraordinary) negative 12m move for the bond-price factor given the overlay is 'moderate', not extreme, in size"
+      },
+      "uncertainty_12m": {
+        "value": 0.06460381100458489,
+        "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"
+      }
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings guidance reset",
+      "reason": "Management already cut FY27 EPS guidance and FY26 NII/revenue growth outlook on Sept 16, 2026 citing NIM pressure and competition; Q3 2026 results (next earnings event) are the next catalyst that could repeat or deepen that reset",
+      "cite": "research/HBAN/2026-10-09.md: 'Q3 results on Oct 22 could bring another reset [Guessing]'; factsheet-2026-10-09.md Price section 'Next earnings date Oct 22, 2026'",
+      "annual_probability": {
+        "value": 0.185,
+        "cite": "mc-inputs.json analogues.event_weeks: 1 of 20 quarterly earnings weeks (Q3 2021 to Q2 2026) moved 13.9% or more in magnitude (Q4 2021, -13.90%), i.e. about 5% per report; with 4 reports per year, P(at least one such move in a year) = 1 - (1 - 0.05)^4 = 0.185"
+      },
+      "impact": {
+        "value": -0.139,
+        "cite": "mc-inputs.json analogues.event_weeks: Q4 2021 earnings week (event_date 2022-01-21, week 2022-01-18) move -13.90%, also the #3 largest weekly fall in analogues.largest_falls"
+      },
+      "analogue": {
+        "week": "2022-01-18",
+        "move": -0.139
+      },
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {
+    "value": -0.015,
+    "cite": "factsheet-2026-10-09.md Price section: price -7.4% vs 50dma, -8.9% vs 200dma, 3m momentum -12.0%, 6m momentum -6.0%, descending swing highs (18.58->18.16->17.16) and descending swing lows (16.81->16.40->14.82), RSI(14) 38.1 -- a confirmed near-term downtrend"
+  }
+}

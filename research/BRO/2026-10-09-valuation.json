@@ -1,0 +1,94 @@
+{
+ "industry": {
+  "industry": "Insurance Brokers",
+  "known": true,
+  "best": "P/E",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "pe"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 74.924506479,
+    "base": 82.87215201299999,
+    "bull": 94.46643906300001
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 23.587,
+     "base": 26.089,
+     "bull": 29.739
+    },
+    "ttm_eps": 3.176517
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 51.289325833333336,
+    "base": 51.64831928571427,
+    "bull": 152.2720119047619
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 17.181,
+     "base": 17.266,
+     "bull": 20.163
+    },
+    "ttm_ebitda": 2892000000,
+    "peak_earnings": "TTM EBITDA is 2.1x its 5y median: bear/base use the 5y average (1.419e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 63.75,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 67.04611293044445,
+  "base": 72.46420777057142,
+  "bull": 113.73496334358731
+ },
+ "used": [
+  "pe",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.05170373224226599,
+  "base": 0.1366934552246497,
+  "bull": 0.784077856369997
+ },
+ "implied_growth": null,
+ "ticker": "BRO",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/bro/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/bro/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/bro/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/bro/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/bro/statistics/"
+ }
+}

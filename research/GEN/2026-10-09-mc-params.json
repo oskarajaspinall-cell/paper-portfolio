@@ -1,0 +1,65 @@
+{
+  "ticker": "GEN",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Reverse DCF shows the price implying -2.6% year-1 revenue growth against actual 11% Q1 FY27 bookings growth and a raised 9-11% FY27 guide [fact sheet Fair value; Q1 FY27 transcript], the valuation re-rating case, but conviction was capped at 3/5 because of leverage (3.17x) and the unexplained September drop, so only 25% weight is put on a clean re-rate (evaluation Bear/Bull cases).",
+      "target_price_12m": {"value": 42.0, "cite": "evaluation Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0762, "cite": "Fact sheet Fair value table: DCF-base 44.28 vs EV/Revenue-base 37.89 (research/GEN/2026-10-09-valuation.md) are the two anchors underlying this scenario's own basis text, 'consistent with the mechanical base fair value of 42.15'; half the 6.40 spread (3.20) / target 42.0 = 7.6%."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation Decision JSON scenarios.base.probability"},
+      "probability_evidence": "Base case is the modal outcome: guided 9-11% growth holds (Q1 FY27 transcript) with only partial multiple recovery (P/FCF 8.8x toward 5y median 13.5x) because 3.17x leverage and Altman Z 1.42 [ST,RA] cap the re-rating within 12 months (evaluation Decision JSON scenarios.base.basis).",
+      "target_price_12m": {"value": 29.0, "cite": "evaluation Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.1103, "cite": "Fact sheet Fair value table: DCF-base 44.28 vs EV/Revenue-base 37.89 (research/GEN/2026-10-09-valuation.md); half the 6.40 spread (3.20) / target 29.0 = 11.0%."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "Bear case rests on the stock's unexplained fall from 31.65 (2026-09-03) to 20.34 (2026-09-29) proving fundamental rather than noise, on top of falling ROIC/ROCE, a 1.42 Altman Z and 3.17x net debt/EBITDA [fact sheet Price,RA,ST]; probability was raised 0.05 above a symmetric base split for the macro overlay's small toward-bear tilt from rising real yields on GEN's leverage (research/GEN/2026-10-09-macro.md).",
+      "target_price_12m": {"value": 18.0, "cite": "evaluation Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.2223, "cite": "Fact sheet Fair value table: DCF-bear 27.49 vs EV/Revenue-bear 19.49 (research/GEN/2026-10-09-valuation.md); half the 8.00 spread (4.00) / target 18.0 = 22.2%."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs factor_news.SPY is directionally mixed: record highs/'$1 trillion assets' (2026-10-07) alongside an AI-bubble-burst warning sending the S&P to 5,000 and a 100,000-lot bearish put spread (2026-10-07/08); no net directional view is supported, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs regression.factor_stats.SPY.vol_annual (3y weekly regression, research/GEN/2026-10-09-mc-inputs.json)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.02, "cite": "mc-inputs factor_news.IEF: 'bond rout deepening' and 30-year yields at a 2026-10-07 high since 2002, French fiscal-worry global bond selloff; macro overlay market_pricing: 10y real yield (DFII10) +0.61pp over 3m with the 2y yield above effective fed funds suggesting cuts are not yet priced (research/GEN/2026-10-09-macro.md) -- a modest further yield rise implies a modest IEF price decline."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs regression.factor_stats.IEF.vol_annual (3y weekly regression, research/GEN/2026-10-09-mc-inputs.json)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction miss",
+      "reason": "Next earnings is Nov 5, 2026; GEN's weekly history shows large reactions to quarterly reports in both directions (e.g. -10.69% the week of the Q3 2024 release), and the bear case explicitly ties the thesis to whether guided 9-11% growth is confirmed or missed at the next print.",
+      "cite": "fact sheet Price: 'Next earnings date Nov 5, 2026' [ST,OV]; note §3 Valuation ties the thesis to Q1 FY27 bookings/guidance; evaluation Bull case basis",
+      "annual_probability": {"value": 0.25, "cite": "Quarterly reporting cadence: mc-inputs event_weeks lists exactly 4 earnings-release weeks per year in GEN's history, so a given earnings-reaction week occurs with probability 1 (one jump per quarter modelled); the single-event probability per year used here is 4 occurrences/yr, expressed as an annual hazard of 1 (set at 0.25 per quarterly event to match the 4/yr cadence with this impact size)."},
+      "impact": {"value": -0.1069, "cite": "matches analogue"},
+      "analogue": {"week": "2024-01-29", "move": -0.1069},
+      "assumption": null
+    },
+    {
+      "name": "Leverage / credit-stress re-rating",
+      "reason": "Net debt/EBITDA is 3.17x TTM and Altman Z is 1.42, in the distress zone; the note flags that capital return (buybacks/dividends) is competing with deleveraging rather than being purely additive, a risk distinct from the gradual multiple compression already built into the bear scenario's target.",
+      "cite": "note §2 Quality and §6 Unusual items: 'Altman Z of 1.42 (distress zone) alongside 3.17x net leverage is a balance-sheet risk factor' (research/GEN/2026-10-09.md); fact sheet Other: Net debt/EBITDA 3.17x, Altman Z 1.42 [ST]",
+      "annual_probability": {"value": 0.10, "cite": "No company-specific credit/refinancing event appears in GEN's 5-year weekly history (0 analogues in mc-inputs event_weeks), so a low base rate is set given the distress-zone Altman Z of 1.42 [ST] but still-tight, not-yet-stressed credit backdrop (HY spread 3.09%, macro overlay)."},
+      "impact": {"value": -0.20, "cite": "assumed, within the ±30% bound for an unanalogued jump"},
+      "analogue": null,
+      "assumption": "No dated credit-stress analogue exists in GEN's own weekly history (event_weeks contains only earnings/proxy/M&A dates, no credit event); impact is assumed from the magnitude of the 'distress-zone' leverage risk the note and fact sheet flag, kept at |0.20| < the 0.30 cap for an unanalogued jump."
+    },
+    {
+      "name": "Repeat of an unexplained single-week price shock",
+      "reason": "The stock fell from a 31.65 high (2026-09-03) to a 20.34 low (2026-09-29) and 'neither the note nor the fact sheet explains why'; short interest is elevated at 7.80% of float and rising (+1.5% m/m). This models the risk of another such abrupt, uncatalysed single-week move -- distinct from the bear scenario's target, which instead assumes the de-rating becomes a sustained, fundamental P/FCF compression to 7.0x.",
+      "cite": "evaluation Bear case: 'The stock fell from its 31.65 high (2026-09-03) to a 20.34 low (2026-09-29), and neither the note nor the fact sheet explains why' [Certain] [HI]; fact sheet Other: short interest 7.80%, +1.5% m/m [ST]",
+      "annual_probability": {"value": 0.20, "cite": "mc-inputs analogues.largest_falls: only 1 week beyond -20% occurs in the ~5-year (260-week) weekly history (2026-09-21, -25.47%), i.e. roughly 1 occurrence per 5 years = 0.20/yr."},
+      "impact": {"value": -0.2547, "cite": "matches analogue"},
+      "analogue": {"week": "2026-09-21", "move": -0.2547},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

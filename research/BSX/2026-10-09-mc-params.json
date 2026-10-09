@@ -1,0 +1,56 @@
+{
+  "ticker": "BSX",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "evaluation.json scenarios.bull.probability, research/BSX/2026-10-09-evaluation.md"},
+      "probability_evidence": "Lowest-weighted scenario because management itself, at the Sept 10 2026 Wells Fargo conference, said WATCHMAN 'faces market headwinds and new competition' and EP growth 'moderates' -- the evaluation's bull case requires these two franchises to 're-accelerate', which is the opposite of management's own commentary (research/BSX/2026-10-09-evaluation.md bull basis; https://stockanalysis.com/stocks/bsx/transcripts/730622-wells-fargo-21st-annual-healthcare-conference/).",
+      "target_price_12m": {"value": 82.57, "cite": "evaluation.json scenarios.bull.target_price_12m (fact sheet DCF bull, research/BSX/factsheet-2026-10-09.md Fair value table)"},
+      "target_band": {"value": 0.334, "cite": "Half the spread between the fact sheet's DCF bull ($82.57) and P/E bull ($175.34) anchors = 0.562 of the target (factsheet-2026-10-09.md Fair value table); capped at the mc-inputs.json blended residual volatility (0.334029, regression.residual_vol.blended) per the instruction that target_band must not exceed residual vol."}
+    },
+    "base": {
+      "probability": {"value": 0.4, "cite": "evaluation.json scenarios.base.probability, research/BSX/2026-10-09-evaluation.md"},
+      "probability_evidence": "Tied-highest weight: the Sept 8 2026 8-K says operations had 'substantially recovered' and management 'sees no long-term financial impact' from the cyberattack, supporting disruption-is-transitory as the modal outcome (research/BSX/2026-10-09-evaluation.md base basis; SEC 8-K https://www.sec.gov/Archives/edgar/data/885725/000088572526000059/bsx-20260907.htm).",
+      "target_price_12m": {"value": 54.18, "cite": "evaluation.json scenarios.base.target_price_12m (fact sheet DCF base, research/BSX/factsheet-2026-10-09.md Fair value table)"},
+      "target_band": {"value": 0.1124, "cite": "Half the spread between the fact sheet's DCF base ($54.18) and P/E base ($66.36) anchors = $6.09, i.e. 0.1124 of the $54.18 target (factsheet-2026-10-09.md Fair value table); below the mc-inputs.json blended residual volatility (0.334029), so used unmodified."}
+    },
+    "bear": {
+      "probability": {"value": 0.4, "cite": "evaluation.json scenarios.bear.probability, research/BSX/2026-10-09-evaluation.md"},
+      "probability_evidence": "Tied-highest weight: management-confirmed WATCHMAN competition/EP moderation (Wells Fargo conference, Sept 10 2026) plus the 68.4% month-over-month rise in short interest and the 50-day average sitting 23.2% below the 200-day signal sellers are not yet done ahead of the Oct 28 guidance reset (research/BSX/2026-10-09-evaluation.md bear basis; https://stockanalysis.com/stocks/bsx/statistics/; factsheet-2026-10-09.md Price section).",
+      "target_price_12m": {"value": 31.04, "cite": "evaluation.json scenarios.bear.target_price_12m (fact sheet blended bear fair value, research/BSX/factsheet-2026-10-09.md Fair value table)"},
+      "target_band": {"value": 0.334, "cite": "Half the spread between the fact sheet's DCF bear ($20.22) and P/E bear ($52.67) anchors = 0.523 of the target (factsheet-2026-10-09.md Fair value table); capped at the mc-inputs.json blended residual volatility (0.334029, regression.residual_vol.blended) per the instruction that target_band must not exceed residual vol."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed over the same week (record highs 'S&P closes at record high, breaking 7,800 points' 2026-10-06/07 vs. 'SPY, QQQ Retreated as Oil Climbed' and rising-yields pressure 2026-10-08, plus an AI-bubble warning 2026-10-08); macro overlay (research/BSX/2026-10-09-macro.md) treats broad market/rate moves as generic, already-priced context, not a differentiated driver for BSX -- no directional view is supported, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines conflict within the same two weeks ('Bond Rout Is Deepening'/'30-Year Yields Return to 2002 High' 2026-10-01/07 vs. 'US Treasury Rebound Pulls Yields Off Multi-Decade Highs'/'US bonds rally after weaker-than-expected jobs report' 2026-10-02); macro overlay (research/BSX/2026-10-09-macro.md) notes BSX's low beta (0.58) and non-discretionary device demand mean rate moves are not a differentiated driver of its earnings -- no net directional view is supported, so 0."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings / guidance reset",
+      "reason": "The Sept 8 2026 8-K says BSX is 'unlikely to meet' Q3 and FY2026 guidance because of the cyberattack, and results land Oct 28, 2026, so the scale of the reset is still ahead of the market.",
+      "cite": "research/BSX/2026-10-09-evaluation.md bear case ('Q3 results land on Oct 28, 2026, so a guidance reset is still ahead'); SEC 8-K https://www.sec.gov/Archives/edgar/data/885725/000088572526000059/bsx-20260907.htm; factsheet-2026-10-09.md Price section 'Next earnings date'",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.event_weeks lists about 20 quarterly earnings_release weeks over the 5-year history; only 1 (Q4 2025, week 2026-02-02) produced a move of this magnitude (-18.45%), implying a base rate of about 1 such reaction per 5 years"},
+      "impact": {"value": -0.1845, "cite": "mc-inputs.json analogues.event_weeks Q4 2025 earnings (event_date 2026-02-04, week 2026-02-02), move -0.1845 -- the largest fall tied to an actual earnings_release event in the history"},
+      "analogue": {"week": "2026-02-02", "move": -0.1845},
+      "assumption": null
+    },
+    {
+      "name": "Cyberattack / operational disruption recurrence",
+      "reason": "The Aug 25 2026 cyberattack disrupted global manufacturing and order processing and is the main swing factor behind the guidance miss; a recurrence (or a second wave of the same incident) remains a discrete operational risk flagged in the fact sheet's News & sentiment section and note.",
+      "cite": "research/BSX/2026-10-09.md Unusual items ('The Aug 25 cyberattack ... is the main swing factor'); factsheet-2026-10-09.md News & sentiment (Reuters 2026-09-08 'Boston Scientific says cyberattack likely to hurt 2026 sales, profit'; WSJ 2026-08-26 'Boston Scientific Stock Price Drops After Cyberattack Triggers Global Outage')",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.all_weekly_moves / largest_falls shows exactly 1 cyberattack-type disruption in the ~5-year history (week of 2026-08-24, coinciding with the Aug 25 2026 cyberattack), implying a base rate of about 1 event per 5 years"},
+      "impact": {"value": -0.0701, "cite": "mc-inputs.json analogues.largest_falls week 2026-08-24, move -0.0701 -- the week containing the Aug 25 2026 cyberattack announcement"},
+      "analogue": {"week": "2026-08-24", "move": -0.0701},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}
