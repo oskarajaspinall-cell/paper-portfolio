@@ -18,6 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT, load_config  # noqa: E402
+import entry_watch  # noqa: E402
 
 OUT = ROOT / "docs" / "index.html"
 
@@ -81,6 +82,7 @@ def week_change(ser: list[dict]) -> dict | None:
 def build_data() -> dict:
     cfg = load_config()
     port = ROOT / "portfolio"
+    near_pct = float(cfg["entry"].get("near_pct", 10))
     state = json.loads((port / "state.json").read_text()) if (port / "state.json").exists() else {"holdings": {}, "cash_usd": 0}
     start = float(cfg["portfolio"]["starting_cash_usd"])
     names = {r["ticker"]: r["name"] for r in _csv(ROOT / "universe" / "universe.csv")}
@@ -134,9 +136,12 @@ def build_data() -> dict:
         "hits": hits, "n_decisions": len(decisions),
         "watch": sorted(({"ticker": r["ticker"], "close": r.get("last_close"), "entry": r["entry_price"],
                           "ccy": r.get("currency", ""), "to_entry": _f(r.get("pct_to_entry")), "source": r["source"],
-                          "conviction": r.get("conviction"), "hit": r.get("hit_date", "")}
+                          "conviction": r.get("conviction"), "hit": r.get("hit_date", ""),
+                          "near_since": r.get("near_since", ""), "evaluation": r.get("evaluation", ""),
+                          "why": entry_watch.why_not_yet(r) if entry_watch.is_near(r, near_pct) else ""}
                          for r in _csv(port / "entry_watch.csv")),
-                        key=lambda r: -(r["to_entry"] if r["to_entry"] is not None else -999))[:25],
+                        key=lambda r: -(r["to_entry"] if r["to_entry"] is not None else -999))[:40],
+        "near_pct": near_pct,
         "pending": [{"id": o["id"], "placed": o["placed"], "action": o["request"]["action"],
                      "ticker": o["request"]["ticker"], "type": o["request"]["position_type"],
                      "conviction": o["request"].get("conviction"), "est": o.get("estimate", {})}
@@ -188,6 +193,7 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 <section class="card"><h2>Sectors</h2><div class="sub">% of the portfolio (cash excluded)</div><div id="sectors"></div></section></div>
 <section class="card"><h2>Holdings</h2><div class="tw"><table id="holdings"></table></div></section>
 <section class="card"><h2>Pending orders</h2><div class="sub">Decided trades fill at the next market open.</div><div class="tw"><table id="pending"></table></div></section>
+<section class="card"><h2>Close to entry</h2><div class="sub" id="nearSub"></div><div class="tw"><table id="near"></table></div></section>
 <section class="card"><h2>Watchlist: entry prices</h2><div class="sub">Conviction-3 names and the price at which we'd consider buying. A close at or below it triggers a full re-research (never an automatic buy). Closest first.</div><div class="tw"><table id="watch"></table></div></section>
 <section class="card"><h2>Recent trades</h2><div class="tw"><table id="trades"></table></div></section>
 <section class="card"><h2>Decisions &amp; hit rates</h2><div class="sub">A decision is a hit when it was right about direction vs SPY: BUY/ADD/HOLD beat SPY, AVOID/SELL/TRIM lagged it.</div>
@@ -282,6 +288,12 @@ table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>r.name},{h:'Type',f:
 table('pending',[{h:'Placed',f:r=>r.placed},{h:'Action',f:r=>r.action},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},
  {h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Est. shares',n:1,f:r=>r.est.shares??''},{h:'Latest close',n:1,f:r=>r.est.price==null?'':`${r.est.price} ${r.est.currency}`}],
  D.pending,'No pending orders.');
+{const np=D.near_pct??10,nr=(D.watch||[]).filter(r=>r.to_entry!=null&&r.to_entry>=-np);
+document.getElementById('nearSub').textContent=`Stocks within ${np}% of their entry price, closest first, with the evaluator's reason each isn't a buy yet. Information only: a close at or below the entry price triggers a re-research, never a purchase.`;
+table('near',[{h:'Ticker',f:r=>r.ticker},{h:'Last close',n:1,f:r=>r.close==null||r.close===''?'':`${(+r.close).toFixed(2)} ${r.ccy}`},
+ {h:'Entry price',n:1,f:r=>`${(+r.entry).toFixed(2)} ${r.ccy}`},{h:'To entry',n:1,f:r=>pct(r.to_entry,1),c:r=>r.to_entry>=0?'up':''},
+ {h:'Since',f:r=>r.hit?'HIT '+r.hit:(r.near_since||'')},
+ {h:'Why not a buy yet',w:1,f:r=>{const t=r.why||'evaluation',a=link(r.evaluation,t.length>110?t.slice(0,109).replace(/\s\S*$/,'')+'…':t);if(a instanceof Node)a.title=t;return a;}}],nr,`No stock is within ${np}% of its entry price.`);}
 table('watch',[{h:'Ticker',f:r=>r.ticker},{h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Last close',n:1,f:r=>r.close==null||r.close===''?'':`${(+r.close).toFixed(2)} ${r.ccy}`},
  {h:'Entry price',n:1,f:r=>`${(+r.entry).toFixed(2)} ${r.ccy}`},{h:'To entry',n:1,f:r=>r.to_entry==null?'':pct(r.to_entry,1),c:r=>r.to_entry!=null&&r.to_entry>=0?'up':''},
  {h:'Status',f:r=>r.hit?'HIT '+r.hit+': re-research next run':''},{h:'Set by',f:r=>r.source}],D.watch||[],'No entry prices yet.');

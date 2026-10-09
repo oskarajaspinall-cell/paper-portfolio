@@ -3,7 +3,7 @@ No model calls.
 
     python scripts/entry_watch.py check [--asof D]    daily: latest close vs entry price -> hits
     python scripts/entry_watch.py backfill            seed names with no evaluator entry price (mechanical)
-    python scripts/entry_watch.py list                print the watchlist with % to entry
+    python scripts/entry_watch.py list [--near]       print the watchlist with % to entry (--near: close-to-entry only)
 
 `portfolio/entry_watch.csv`, one row per stock, written when a decision is logged (decision_log.py record):
 the evaluator's `entry_price` (the price at which the same evidence would justify conviction 4) or, when it
@@ -12,6 +12,11 @@ with a reason means price isn't the obstacle (falling quality, an unresolved leg
 A close at/below the entry price is a HIT: listed in reports/entry-watch/<date>.md, a Mac notification, and
 `state["entry_hits"]`, so the next weekly run (and the research loop) re-researches it FIRST, bypassing the
 90-day rule. The price fell for a reason, so nothing is bought on price alone: the re-initiation decides.
+
+CLOSE TO ENTRY (owner request 2026-10-09): a stock whose close is within [entry].near_pct of its entry price (or
+at/below it) is on the close-to-entry watchlist. `near_since` records when it entered the band (cleared when it
+leaves); entering it triggers one Mac notification, and the daily report and dashboard list every such stock with
+the evaluator's reason it isn't a buy yet. Information only: nothing is researched or bought because of it.
 """
 from __future__ import annotations
 
@@ -28,7 +33,7 @@ from common import ROOT, DataError, Ticker, load_config  # noqa: E402
 
 WATCH = ROOT / "portfolio" / "entry_watch.csv"
 COLS = ["ticker", "entry_price", "currency", "set_date", "expires", "conviction", "decision", "source", "basis",
-        "evaluation", "last_close", "last_close_date", "pct_to_entry", "hit_date"]
+        "evaluation", "last_close", "last_close_date", "pct_to_entry", "hit_date", "near_since"]
 
 
 def read(path: Path = WATCH) -> list[dict]:
@@ -94,9 +99,33 @@ def record_decision(d: dict, evaluation_path: Path, asof: str, cfg: dict, curren
     return new
 
 
-def check(rows: list[dict], quote, asof: str) -> tuple[list[dict], list[dict]]:
-    """Update each live row with its latest close; return (rows, hits). Expired rows are dropped."""
-    live, hits = [], []
+def is_near(r: dict, near_pct: float) -> bool:
+    """Close to entry: the latest close is within near_pct of the entry price, or at/below it."""
+    try:
+        return float(r.get("pct_to_entry")) >= -near_pct
+    except (TypeError, ValueError):
+        return False
+
+
+def near(rows: list[dict], near_pct: float) -> list[dict]:
+    """The close-to-entry watchlist, closest first."""
+    return sorted((r for r in rows if is_near(r, near_pct)), key=lambda r: -float(r["pct_to_entry"]))
+
+
+def why_not_yet(r: dict, n: int = 220) -> str:
+    """The evaluator's rationale for the conviction-3 decision (what keeps it from being a buy), shortened."""
+    try:
+        from decision_log import decision_from_eval
+        t = " ".join((decision_from_eval((ROOT / r["evaluation"]).read_text()).get("rationale") or "").split())
+    except Exception:  # noqa: BLE001 - missing/old evaluation: show nothing rather than fail the daily job
+        return ""
+    return t if len(t) <= n else t[:n - 1].rsplit(" ", 1)[0] + "…"
+
+
+def check(rows: list[dict], quote, asof: str, near_pct: float = 10) -> tuple[list[dict], list[dict], list[dict]]:
+    """Update each live row with its latest close; return (rows, hits, entered), where `entered` are stocks that
+    moved into the close-to-entry band this check. Expired rows are dropped."""
+    live, hits, entered = [], [], []
     for r in rows:
         if r.get("expires") and r["expires"] < asof:
             continue
@@ -106,12 +135,19 @@ def check(rows: list[dict], quote, asof: str) -> tuple[list[dict], list[dict]]:
             live.append(r)
             continue
         e = float(r["entry_price"])
-        r.update(last_close=q["close"], last_close_date=q["date"], pct_to_entry=round((e / q["close"] - 1) * 100, 2))
+        r.update(last_close=round(float(q["close"]), 4), last_close_date=q["date"],
+                 pct_to_entry=round((e / q["close"] - 1) * 100, 2))
         if q["close"] <= e:
             r["hit_date"] = r.get("hit_date") or q["date"]
             hits.append(r)
+        if is_near(r, near_pct):
+            if not r.get("near_since"):
+                r["near_since"] = q["date"]
+                entered.append(r)
+        else:
+            r["near_since"] = ""
         live.append(r)
-    return live, hits
+    return live, hits, entered
 
 
 def notify(title: str, msg: str) -> None:
@@ -123,6 +159,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cmd", choices=["check", "backfill", "list"])
     ap.add_argument("--asof", default=dt.date.today().isoformat())
+    ap.add_argument("--near", action="store_true", help="list: close-to-entry stocks only")
     a = ap.parse_args(argv)
     cfg = load_config()
     if a.cmd == "backfill":
@@ -153,11 +190,12 @@ def main(argv=None) -> int:
         print(json.dumps({"added": added, "watching": len(rows)}))
         return 0
     rows = read()
+    near_pct = float(cfg["entry"].get("near_pct", 10))
     if a.cmd == "check":
         from fetch_data import Fetcher
         from portfolio import Market, price_provider
         mkt = Market(Fetcher(cfg, refresh=True), a.asof, cfg, price_provider(cfg))
-        rows, hits = check(rows, mkt.quote, a.asof)
+        rows, hits, entered = check(rows, mkt.quote, a.asof, near_pct)
         write(rows)
         stp = ROOT / "portfolio" / "state.json"
         state = json.loads(stp.read_text())
@@ -168,19 +206,34 @@ def main(argv=None) -> int:
         tmp.replace(stp)
         out = ROOT / "reports" / "entry-watch"
         out.mkdir(parents=True, exist_ok=True)
-        near = sorted(rows, key=lambda r: -float(r.get("pct_to_entry") or -999))[:15]
+        close = near(rows, near_pct)
+        fmt = lambda x: "" if x in (None, "") else f"{float(x):,.2f}"  # noqa: E731
+        rest = [r for r in sorted(rows, key=lambda r: -float(r.get("pct_to_entry") or -999)) if r not in close][:15]
         L = [f"# Entry watch — {a.asof}", "",
              f"{len(rows)} stocks watched; {len(hits)} at or below their entry price"
-             + (": " + ", ".join(h["ticker"] for h in hits) + " (re-researched first next run)" if hits else "") + ".",
-             "", "| Stock | Last close | Entry price | To entry | Source | Set |", "|---|---|---|---|---|---|"]
-        L += [f"| {r['ticker']} | {r.get('last_close', '')} {r.get('currency', '')} | {r['entry_price']} | "
-              f"{r.get('pct_to_entry', '')}% | {r['source']} | {r['set_date']} |" for r in near]
+             + (": " + ", ".join(h["ticker"] for h in hits) + " (re-researched first next run)" if hits else "")
+             + f"; {len(close)} within {near_pct:g}% of it.", "",
+             f"## Close to entry (within {near_pct:g}%)", "",
+             "Information only: a stock is re-researched when it closes at or below its entry price, never bought on price.",
+             "", "| Stock | Last close | Entry price | To entry | In range since | Why not a buy yet |", "|---|---|---|---|---|---|"]
+        L += [f"| {r['ticker']}{' **HIT**' if r.get('hit_date') else ''} | {fmt(r.get('last_close'))} {r.get('currency', '')} | "
+              f"{fmt(r['entry_price'])} | {float(r['pct_to_entry']):+.1f}% | {r.get('near_since', '')} | "
+              f"{why_not_yet(r).replace('|', '/')} |" for r in close] or ["| none | | | | | |"]
+        L += ["", "## Next closest", "", "| Stock | Last close | Entry price | To entry | Source | Set |", "|---|---|---|---|---|---|"]
+        L += [f"| {r['ticker']} | {fmt(r.get('last_close'))} {r.get('currency', '')} | {fmt(r['entry_price'])} | "
+              f"{r.get('pct_to_entry', '')}% | {r['source']} | {r['set_date']} |" for r in rest]
         (out / f"{a.asof}.md").write_text("\n".join(L) + "\n")
         if hits:
             notify("Paper portfolio: entry price hit", ", ".join(h["ticker"] for h in hits) + " -> re-research next run")
-        print(json.dumps({"watching": len(rows), "hits": [h["ticker"] for h in hits]}))
+        new_near = [r for r in entered if r not in hits]
+        if new_near:
+            notify("Paper portfolio: close to entry price",
+                   ", ".join(f"{r['ticker']} ({float(r['pct_to_entry']):+.1f}%)" for r in new_near)
+                   + f" now within {near_pct:g}% of the entry price")
+        print(json.dumps({"watching": len(rows), "hits": [h["ticker"] for h in hits],
+                          "close_to_entry": [r["ticker"] for r in close], "entered": [r["ticker"] for r in new_near]}))
         return 0
-    for r in sorted(rows, key=lambda r: -float(r.get("pct_to_entry") or -999)):
+    for r in (near(rows, near_pct) if a.near else sorted(rows, key=lambda r: -float(r.get("pct_to_entry") or -999))):
         print(f"{r['ticker']:12} entry {r['entry_price']:>10} {r.get('currency', ''):4} close {r.get('last_close', '?'):>10} "
               f"to entry {r.get('pct_to_entry', '?')}%  ({r['source']})")
     return 0

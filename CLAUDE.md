@@ -111,6 +111,7 @@ dip_add_gap_pp = 2                # in a dip, flag holdings this far below their
 min_conviction = 3
 margin_of_safety_pct = 20
 expiry_days = 90
+near_pct = 10                     # close-to-entry watchlist: within this % of the entry price (notify on entering; info only)
 
 [prices]
 # Portfolio prices (owner-approved 2026-10-08): fills use the OPEN and re-pricing uses the CLOSE from Yahoo
