@@ -115,6 +115,7 @@ def inputs_from_sections(sec: dict, price: float, rf_pct: float, fx_fin_to_quote
         g[name] = _series(src, key)
     return {"g": g, "price": price, "rf": rf_pct / 100, "beta": sv("beta"), "dps": sv("dps"),
             "financial": (sec.get("overview", {}).get("data", {}).get("sector") or "") == "Financials",
+            "industry": sec.get("overview", {}).get("data", {}).get("industry"),
             "marketcap_quote": sv("marketcap"), "fx": fx_fin_to_quote,
             "fin_ccy": I.get("currency"), "sources": {k: sec[k]["source_url"] for k in
                                                      ("income", "balance", "cashflow", "ratios", "statistics")}}
@@ -137,9 +138,17 @@ def country_risk(fin_ccy: str | None, vc: dict) -> float:
     return float(crp.get(fin_ccy or "", crp.get("default", 0.0))) / 100
 
 
-def cost_of_equity(rf: float, beta: float | None, vc: dict, crp: float = 0.0) -> float:
+def adjusted_beta(beta: float | None, vc: dict) -> float:
+    """Blume-adjusted beta (0.67 x raw + 0.33, the adjustment Bloomberg reports: betas drift toward 1, and
+    low-beta stocks earn more than CAPM implies), then clamped to `beta_clamp`."""
+    raw = 1.0 if beta is None else beta
+    adj = 0.67 * raw + 0.33 if vc.get("blume_adjust", True) else raw
     lo, hi = vc["beta_clamp"]
-    return rf + clamp(beta if beta is not None else 1.0, lo, hi) * vc["erp"] / 100 + crp
+    return clamp(adj, lo, hi)
+
+
+def cost_of_equity(rf: float, beta: float | None, vc: dict, crp: float = 0.0) -> float:
+    return rf + adjusted_beta(beta, vc) * vc["erp"] / 100 + crp
 
 
 def wacc(inp: dict, ke: float, vc: dict) -> float:
@@ -213,6 +222,13 @@ def growth_scenarios(inp, vc, ov):
     return gs, {"cagr_3y": c3, "cagr_5y": c5}
 
 
+def earnings_basis(inp: dict, vc: dict) -> bool:
+    """Value the equity on net income at the cost of equity when cash flow is distorted by money that isn't
+    the owners': financials (deposits, policyholder and client cash) and the float businesses listed in
+    `earnings_basis_industries` (health insurers / PBMs and distributors collect before they pay)."""
+    return bool(inp.get("financial")) or (inp.get("industry") or "") in vc.get("earnings_basis_industries", [])
+
+
 def model_dcf(inp, vc, kind, ov):
     g = inp["g"]
     rev_t, shares, nc = g["revenue"][0], g["shares"][0], g["netcash"][0] or 0.0
@@ -225,7 +241,7 @@ def model_dcf(inp, vc, kind, ov):
 
     # financials: cash flow is distorted by balance-sheet flows (deposits, policyholder money, client
     # cash), so value the equity on net income at the cost of equity, with no net cash added
-    equity_basis = kind == "fcfe" or inp.get("financial")
+    equity_basis = kind == "fcfe" or earnings_basis(inp, vc)
 
     def cf_margin(i_fcf, i_sbc, i_int, i_inc, i_ni, i_rev):
         """FCFF = FCF - stock-based pay + after-tax interest paid - after-tax interest earned on cash (the
@@ -233,7 +249,7 @@ def model_dcf(inp, vc, kind, ov):
         stock-based pay. Financials: net income."""
         if not i_rev:
             return None
-        if inp.get("financial"):
+        if earnings_basis(inp, vc):
             return None if i_ni is None else i_ni / i_rev
         if i_fcf is None:
             return None
@@ -257,7 +273,7 @@ def model_dcf(inp, vc, kind, ov):
     vals = {s: dcf_per_share(rev_t, mg[s], gs[s], rate, vc, add_cash, shares) for s in SCEN}
     price_fin = inp["price"] / inp["fx"] if inp["fx"] else None
     imp = implied_growth(price_fin, rev_t, mg["base"], rate, vc, add_cash, shares) if price_fin else None
-    basis = ("net income (financials: cash flow distorted by balance-sheet flows)" if inp.get("financial")
+    basis = ("net income (cash flow distorted by float / balance-sheet flows)" if earnings_basis(inp, vc)
              else "levered FCF - stock-based pay" if kind == "fcfe" else "FCFF - stock-based pay")
     return {"status": "ok", "values": vals, "implied_growth": imp, "discount_rate": rate, "cost_of_equity": ke,
             "assumptions": {"cash_flow": basis, "growth": gs, "cash_flow_margin": mg, **hist,

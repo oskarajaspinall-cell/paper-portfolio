@@ -143,3 +143,15 @@ def test_one_bubble_year_does_not_set_the_bull_case():
     assert V.triple([2.0, 3.0, 2.5, 40.0, 2.2]) == (2.0, 2.5, 3.0)
     assert V.triple([2.0, 3.0, 40.0]) == (2.0, 3.0, 40.0)   # too short a history to drop one
     assert V.triple([5.0]) is None
+
+
+def test_blume_beta_with_floor(vc):
+    assert V.adjusted_beta(0.298, vc) == pytest.approx(0.8)              # 0.53 after Blume -> floor 0.8
+    assert V.adjusted_beta(1.4, vc) == pytest.approx(0.67 * 1.4 + 0.33)   # 1.268
+    assert V.adjusted_beta(None, vc) == pytest.approx(1.0)
+
+
+def test_float_businesses_are_valued_on_net_income(vc):
+    r = V.run_model("dcf", inputs(industry="Healthcare Plans"), vc, {})
+    assert "net income" in r["assumptions"]["cash_flow"] and r["discount_rate"] == pytest.approx(r["cost_of_equity"])
+    assert "net income" not in V.run_model("dcf", inputs(industry="Footwear & Accessories"), vc, {})["assumptions"]["cash_flow"]

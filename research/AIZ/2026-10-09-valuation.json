@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 68.51428974134949,
+    "base": 250.32177514792392,
+    "bull": 274.1426148927336
+   },
+   "cost_of_equity": 0.0828,
+   "assumptions": {
+    "roe": {
+     "bear": 0.05707,
+     "base": 0.14217,
+     "bull": 0.15332
+    },
+    "justified_pb": {
+     "bear": 0.5548442906574395,
+     "base": 2.0271626297577856,
+     "bull": 2.2200692041522494
+    },
+    "bvps": 123.483815
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 136.651893072,
+    "base": 291.199671285,
+    "bull": 303.457412916
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.544,
+     "base": 13.945,
+     "bull": 14.532
+    },
+    "ttm_eps": 20.882013
+   }
+  }
+ ],
+ "price": 272.86,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 91.22682418489967,
+  "base": 263.9477405269493,
+  "bull": 283.9142142338224
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6656643546694287,
+  "base": -0.03266238903852048,
+  "bull": 0.04051240282130908
+ },
+ "implied_growth": null,
+ "ticker": "AIZ",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/aiz/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/aiz/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/aiz/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/aiz/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/aiz/statistics/"
+ }
+}

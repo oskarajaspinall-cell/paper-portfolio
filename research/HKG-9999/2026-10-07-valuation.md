@@ -4,12 +4,12 @@ Inform-only (owner rule): assumptions from the stock's own 5-year history; never
 
 | | Bear | Base | Bull |
 |---|---|---|---|
-| Fair value (HKD) | 145.05 | 220.13 | 249.06 |
-| vs last close 185.60 | -21.8% | +18.6% | +34.2% |
+| Fair value (HKD) | 143.19 | 215.74 | 242.49 |
+| vs last close 185.60 | -22.9% | +16.2% | +30.7% |
 
-Blend: DCF 67% + EV/Revenue 33% · reverse DCF: the price implies -4.7% revenue growth in year 1, fading to 2.5% by year 10
+Blend: DCF 67% + EV/Revenue 33% · reverse DCF: the price implies -3.8% revenue growth in year 1, fading to 2.5% by year 10
 
 | Method | Slot | Status | Bear | Base | Bull | Key assumptions |
 |---|---|---|---|---|---|---|
-| DCF | best | ok | 136.92 | 238.05 | 254.57 | cash flow FCFF - stock-based pay; growth 0.9%/4.2%/6.5%; cash flow margin 19.0%/38.4%/38.4%; cagr 3y 5.3%; cagr 5y 6.5%; terminal growth 2.5%; discount rate 12.4% |
-| EV/Revenue | second | ok | 161.32 | 184.30 | 238.04 | multiple 2.42x/2.96x/4.23x; ttm revenue 1.166e+11 |
+| DCF | best | ok | 134.12 | 231.46 | 247.25 | cash flow FCFF - stock-based pay; growth 0.9%/4.2%/6.5%; cash flow margin 19.0%/38.4%/38.4%; cagr 3y 5.3%; cagr 5y 6.5%; terminal growth 2.5%; discount rate 12.8% |
+| EV/Revenue | second | ok | 161.32 | 184.30 | 232.96 | multiple 2.42x/2.96x/4.11x; ttm revenue 1.166e+11 |

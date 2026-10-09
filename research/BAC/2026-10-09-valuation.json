@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 29.837373116384175,
+    "base": 33.93601108022599,
+    "bull": 34.30497740451977
+   },
+   "cost_of_equity": 0.1135,
+   "assumptions": {
+    "roe": {
+     "bear": 0.09212,
+     "base": 0.10134,
+     "bull": 0.10217
+    },
+    "justified_pb": {
+     "bear": 0.7584180790960451,
+     "base": 0.8625988700564972,
+     "bull": 0.8719774011299434
+    },
+    "bvps": 39.34159
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 42.53695251711615,
+    "base": 53.82007616554423,
+    "bull": 66.64251372130451
+   },
+   "implied_growth": 0.033065032304885195,
+   "discount_rate": 0.1135,
+   "cost_of_equity": 0.1135,
+   "assumptions": {
+    "cash_flow": "net income (financials: cash flow distorted by balance-sheet flows)",
+    "growth": {
+     "bear": -0.00013111750156717325,
+     "base": 0.03405147809526525,
+     "bull": 0.05146814738419536
+    },
+    "cash_flow_margin": {
+     "bear": 0.2673951715374841,
+     "base": 0.29524010146492174,
+     "bull": 0.34125518904670943
+    },
+    "cagr_3y": 0.05146814738419536,
+    "cagr_5y": 0.03473776499686565,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 13.18984771573604,
+    "base": 14.824858757062145,
+    "bull": 16.876433121019108
+   },
+   "cost_of_equity": 0.1135,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 1.28
+   }
+  }
+ ],
+ "price": 53.61,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 34.0705662499615,
+  "base": 40.564032775332066,
+  "bull": 45.084156176781356
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.36447367562093824,
+  "base": -0.24334950988002113,
+  "bull": -0.15903457980262348
+ },
+ "implied_growth": 0.033065032304885195,
+ "ticker": "BAC",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/bac/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/bac/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/bac/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/bac/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/bac/statistics/"
+ }
+}

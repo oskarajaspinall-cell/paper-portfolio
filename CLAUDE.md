@@ -116,7 +116,9 @@ cross_check_pct = 1.0             # flag a fill whose Yahoo open differs from st
 # Fair value (scripts/valuation.py), inform-only. Method per industry: valuation/industry_methods.csv
 # (owner's table). Cost of equity = FRED 10y Treasury + beta (clamped) x equity risk premium.
 erp = 5.0                         # equity risk premium, %
-beta_clamp = [0.6, 2.0]
+blume_adjust = true               # beta = 0.67 x raw + 0.33 (Blume / Bloomberg adjusted beta), then clamped
+beta_clamp = [0.8, 2.0]           # floor 0.8: very low raw betas (e.g. CI 0.30) understate the return investors demand
+earnings_basis_industries = ["Healthcare Plans", "Medical Distribution"]  # float businesses: DCF on net income, not FCF
 terminal_growth = 2.5             # %, perpetual growth after the explicit years
 explicit_years = 10
 base_growth_cap = [-5, 20]        # % a year: base = halfway between the 3y/5y revenue CAGR and terminal growth

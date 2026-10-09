@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 201.9764588792485,
+    "base": 219.3840756835184,
+    "bull": 240.12890399948762
+   },
+   "cost_of_equity": 0.08355,
+   "assumptions": {
+    "roe": {
+     "bear": 0.09218,
+     "base": 0.09797,
+     "bull": 0.10487
+    },
+    "justified_pb": {
+     "bear": 1.147395388556789,
+     "base": 1.2462852263023059,
+     "bull": 1.364133219470538
+    },
+    "bvps": 176.030391
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 270.12309885320525,
+    "base": 397.670985079596,
+    "bull": 497.00173418688195
+   },
+   "implied_growth": -0.08473406663566613,
+   "discount_rate": 0.08355,
+   "cost_of_equity": 0.08355,
+   "assumptions": {
+    "cash_flow": "net income (financials: cash flow distorted by balance-sheet flows)",
+    "growth": {
+     "bear": 0.013648152659465132,
+     "base": 0.05538456752681363,
+     "bull": 0.10924196478832426
+    },
+    "cash_flow_margin": {
+     "bear": 0.25998433829287393,
+     "base": 0.32091842133107606,
+     "bull": 0.32091842133107606
+    },
+    "cagr_3y": 0.06229630531893027,
+    "cagr_5y": 0.10924196478832426,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 88.8402625820569,
+    "base": 105.03842869342442,
+    "bull": 127.90937178166837
+   },
+   "cost_of_equity": 0.08355,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 6.0
+   }
+  }
+ ],
+ "price": 217.56,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 224.69200553723408,
+  "base": 278.81304548221095,
+  "bull": 325.75318072861904
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.03278178680471622,
+  "base": 0.281545529886978,
+  "bull": 0.49730272443748413
+ },
+ "implied_growth": -0.08473406663566613,
+ "ticker": "MTB",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/mtb/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/mtb/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/mtb/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/mtb/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/mtb/statistics/"
+ }
+}

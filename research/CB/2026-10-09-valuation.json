@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 237.31226882837367,
+    "base": 400.2657916958477,
+    "bull": 409.05763978581314
+   },
+   "cost_of_equity": 0.0828,
+   "assumptions": {
+    "roe": {
+     "bear": 0.09518,
+     "base": 0.14337,
+     "bull": 0.14597
+    },
+    "justified_pb": {
+     "bear": 1.2141868512110725,
+     "base": 2.047923875432526,
+     "bull": 2.0929065743944637
+    },
+    "bvps": 195.449546
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 276.06075841399996,
+    "base": 336.744944788,
+    "bull": 339.514879704
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.767,
+     "base": 11.914,
+     "bull": 12.012
+    },
+    "ttm_eps": 28.264642
+   }
+  }
+ ],
+ "price": 343.78,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 250.22843202358243,
+  "base": 379.0921760598985,
+  "bull": 385.8767197585421
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.27212626672993645,
+  "base": 0.10271736593140535,
+  "bull": 0.12245249798866165
+ },
+ "implied_growth": null,
+ "ticker": "CB",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/cb/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/cb/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/cb/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/cb/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/cb/statistics/"
+ }
+}

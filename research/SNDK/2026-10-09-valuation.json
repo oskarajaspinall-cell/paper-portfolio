@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Computer Hardware",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -347.2501878289244,
+    "base": 1848.6950694349396,
+    "bull": 2347.254234570548
+   },
+   "implied_growth": 0.14906740687388814,
+   "discount_rate": 0.10279682411571657,
+   "cost_of_equity": 0.1028,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.08266387319148334,
+     "base": 0.18579491403471232,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.17880658889254025,
+     "base": 0.5563332146384828,
+     "bull": 0.5563332146384828
+    },
+    "cagr_3y": 0.49285190975588256,
+    "cagr_5y": 0.2003277463829667,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 403.17823655913975,
+    "base": 548.4812215053763,
+    "bull": 1685.3331225806453
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.21,
+     "base": 15.706000000000001,
+     "bull": 20.202
+    },
+    "ttm_ebitda": 12617000000,
+    "peak_earnings": "TTM EBITDA is 7.2x its 5y median: bear/base use the 5y average (5.009e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 1609.46,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -97.1073796995697,
+  "base": 1415.2904534584186,
+  "bull": 2126.613863907247
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.060335379381637,
+  "base": -0.12064266682090974,
+  "bull": 0.32132135244569415
+ },
+ "implied_growth": 0.14906740687388814,
+ "ticker": "SNDK",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/sndk/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/sndk/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/sndk/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/sndk/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/sndk/statistics/"
+ }
+}
