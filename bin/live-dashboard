@@ -1,0 +1,19 @@
+#!/bin/bash
+# Every 15 minutes (launchd: com.paperportfolio.live-dashboard, StartInterval 900): during market hours
+# (weekdays 08:00-21:15 UK: London open to just after the US close) rebuild the dashboard with a fresh
+# live-price snapshot and upload it if it changed. Display only: the portfolio's official value stays on
+# closing prices (bin/fill-pending, 22:30). No AI.
+set -u
+cd "$(dirname "$0")/.." || exit 1
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+dow=$(date +%u); hm=$(date +%H%M)
+[ "$dow" -le 5 ] && [ "$hm" -ge 0800 ] && [ "$hm" -le 2115 ] || exit 0
+[ -e /tmp/paper-portfolio-review.lock ] && exit 0   # weekly run / fills own the repo then
+mkdir -p logs
+LOG="logs/live-dashboard-$(date +%F).log"
+exec >>"$LOG" 2>&1
+bin/py scripts/dashboard.py >/dev/null || { echo "$(date +%T) !! dashboard build failed"; exit 1; }
+git diff --quiet -- docs && exit 0
+git add -- docs/index.html
+git commit -q -m "Dashboard: live prices $(date '+%a %H:%M') UK" && git pull -q --rebase --autostash && git push -q \
+  && echo "$(date +%T) uploaded" || echo "$(date +%T) !! upload failed (committed locally)"

@@ -4,6 +4,7 @@
 #   Weekdays 22:30 bin/fill-pending   fill pending orders at the next open, commit, upload
 #   Weekdays 14:30 + 15:30 bin/entry-intraday   ~10:30 New York: live prices vs entry prices (acts only in the
 #                  New York window, so exactly one of the two runs across the UK/US clock-change weeks)
+#   Every 15 min   bin/live-dashboard  weekdays 08:00-21:15 UK: dashboard with live prices, upload if changed
 # The Mac must be on (if asleep, launchd runs the job on wake). Usage:
 #   bin/install-mac-schedule            install / refresh all jobs
 #   bin/install-mac-schedule --remove   remove all jobs
@@ -30,7 +31,7 @@ $3
 XML
 }
 
-JOBS="com.paperportfolio.weekly com.paperportfolio.fills com.paperportfolio.entry-intraday"
+JOBS="com.paperportfolio.weekly com.paperportfolio.fills com.paperportfolio.entry-intraday com.paperportfolio.live-dashboard"
 for label in $JOBS; do
   launchctl bootout "gui/$UIDN/$label" 2>/dev/null || true
 done
@@ -56,8 +57,11 @@ for d in 1 2 3 4 5; do for h in 14 15; do days="$days    <dict><key>Weekday</key
 plist com.paperportfolio.entry-intraday entry-intraday "  <array>
 $days  </array>" > "$AGENTS/com.paperportfolio.entry-intraday.plist"
 
+plist com.paperportfolio.live-dashboard live-dashboard "  <integer>900</integer>" \
+  | sed 's|<key>StartCalendarInterval</key>|<key>StartInterval</key>|' > "$AGENTS/com.paperportfolio.live-dashboard.plist"
+
 for label in $JOBS; do
   plutil -lint -s "$AGENTS/$label.plist"
   launchctl bootstrap "gui/$UIDN" "$AGENTS/$label.plist"
 done
-echo "Scheduled: Friday 22:00 weekly run; weekdays 22:30 order fills; weekdays ~10:30 New York intraday entry check. Logs in $DIR/logs/."
+echo "Scheduled: Friday 22:00 weekly run; weekdays 22:30 order fills; weekdays ~10:30 New York intraday entry check; live dashboard every 15 min in market hours. Logs in $DIR/logs/."
