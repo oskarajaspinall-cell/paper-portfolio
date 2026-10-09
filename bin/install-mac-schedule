@@ -32,6 +32,13 @@ XML
 }
 
 JOBS="com.paperportfolio.weekly com.paperportfolio.fills com.paperportfolio.entry-intraday com.paperportfolio.live-dashboard"
+# Unloading a job kills its running processes: never reinstall while one is mid-run (e.g. the Friday weekly run).
+for label in $JOBS; do
+  pid=$(launchctl list | awk -v l="$label" '$3 == l {print $1}')
+  if [ -n "$pid" ] && [ "$pid" != "-" ]; then
+    echo "$label is running (pid $pid); not touching the schedule. Try again when it has finished."; exit 1
+  fi
+done
 for label in $JOBS; do
   launchctl bootout "gui/$UIDN/$label" 2>/dev/null || true
 done
