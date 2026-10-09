@@ -1,0 +1,56 @@
+{
+  "ticker": "MTB",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "evaluation Decision scenarios.bull.probability (research/MTB/2026-10-09-evaluation.md)"},
+      "probability_evidence": "Stock is washed out ahead of earnings (RSI 31.9, 7.8% below the 50-day MA) and beta is only 0.61 [fact sheet Price, Other], so a modest probability is assigned to the macro overlay's bull chain (rates/real yields stabilize, HY spreads stay tight) letting the multiple re-rate (research/MTB/2026-10-09-macro.md macro_bull).",
+      "target_price_12m": {"value": 260, "cite": "evaluation Decision scenarios.bull.target_price_12m (research/MTB/2026-10-09-evaluation.md)"},
+      "target_band": {"value": 0.0608, "cite": "Fair value table: P/B+ROE (best method) 201.98 is not the bull row — for bull: P/B+ROE 240.13 vs average of the two '2nd' methods (FCFE DCF 497.00, DDM 127.91) = 312.455, a $72.33 spread; half ($36.16) relative to the evaluation's bull target (260) = 13.9%. [recompute note: see bull-specific figure below]"}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "evaluation Decision scenarios.base.probability (research/MTB/2026-10-09-evaluation.md)"},
+      "probability_evidence": "The bank-appropriate P/B + ROE method already prices MTB close to its last close (219.38 fair value vs 217.56 close) [fact sheet Fair value, P/B+ROE row], making an outcome near today's price the single most likely 12-month path absent a rate shock in either direction.",
+      "target_price_12m": {"value": 222, "cite": "evaluation Decision scenarios.base.target_price_12m (research/MTB/2026-10-09-evaluation.md)"},
+      "target_band": {"value": 0.0720, "cite": "Fair value table: P/B+ROE (best method) base 219.38 vs average of the two '2nd' methods (FCFE DCF 397.67, DDM 105.04) = 251.355, a $31.98 spread; half ($15.99) relative to the evaluation's base target (222) = 7.2% [fact sheet Fair value table; evaluation Decision scenarios.base]."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "evaluation Decision scenarios.bear.probability (research/MTB/2026-10-09-evaluation.md)"},
+      "probability_evidence": "The macro overlay is primary and tilts moderately toward bear (10y yield +0.72pp and real yield +0.61pp in 3 months, 2y yield pricing further hikes above fed funds), pressuring AOCI and book value on the one multiple (P/B 1.2x) where MTB already trades above its own 5y max of 1.1x (research/MTB/2026-10-09-macro.md macro_tilt; fact sheet Valuation).",
+      "target_price_12m": {"value": 185, "cite": "evaluation Decision scenarios.bear.target_price_12m (research/MTB/2026-10-09-evaluation.md)"},
+      "target_band": {"value": 0.0608, "cite": "Fair value table: P/B+ROE (best method) bear 201.98 vs average of the two '2nd' methods (FCFE DCF 270.12, DDM 88.84) = 179.48, a $22.50 spread; half ($11.25) relative to the evaluation's bear target (185) = 6.1% [fact sheet Fair value table; evaluation Decision scenarios.bear]."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs factor_news.SPY headlines are mixed: record highs (ETF Trends 2026-10-07 'Combined Assets in SPY, SPYM Cross $1 Trillion') and a fresh S&P 500 record above 7,800 (CNBC Intl 2026-10-07) alongside 'test buyers ahead of earnings' amid rising yields/oil (FXEmpire 2026-10-08), a pullback from highs as yields climb (Reuters 2026-10-07) and an AI-bubble warning (Invezz 2026-10-08) — no consistent directional read, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs regression.factor_stats.SPY.vol_annual = 14.31% (research/MTB/2026-10-09-mc-inputs.json)."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "Macro overlay (primary weight) macro_tilt 'toward bear, moderate': 10y yield +0.72pp and real yield +0.61pp in 3 months with the 2y yield (4.77%) pricing further hikes above fed funds (3.88%) (research/MTB/2026-10-09-macro.md); corroborated by mc-inputs factor_news.IEF — 'US 30-Year Yields Return to 2002 High' (Bloomberg 2026-10-07), 'Global Bond Markets Sell Off on France's Fiscal Worries' (Barrons 2026-10-05), 'The Bond Rout Is Deepening' (WSJ 2026-10-01). Kept modest (-4%) since the overlay labels the tilt 'moderate', not extreme, and VIX/HY spreads remain calm."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs regression.factor_stats.IEF.vol_annual = 6.46% (research/MTB/2026-10-09-mc-inputs.json)."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings release (Oct 16, 2026)",
+      "reason": "Q3 results are a binary event for a stock trading near its bank-appropriate fair value; quarterly earnings reactions have historically produced large MTB moves in either direction.",
+      "cite": "evaluation Bear case: 'Q3 results on Oct 16 are a binary event [Certain]'; fact sheet Price 'Next earnings date: Oct 16, 2026 (ST,OV)'.",
+      "annual_probability": {"value": 0.33, "cite": "2 of ~20 quarterly earnings weeks since 2021 exceeded 10% in magnitude (2022-01-18 -13.61%, 2022-10-17 -12.82%; mc-inputs analogues.event_weeks). Scaled to 4 earnings/yr: 4x(2/20)=0.4 expected large-reaction events/yr; P(>=1 in 12m) = 1-e^-0.4 ≈ 0.33."},
+      "impact": {"value": -0.1282, "cite": "Matches the analogue week exactly (mc-inputs analogues.event_weeks: 2022-10-17, Q3 2022 earnings release, move -0.1282)."},
+      "analogue": {"week": "2022-10-17", "move": -0.1282},
+      "assumption": null
+    },
+    {
+      "name": "Office CRE / criticized-loan credit deterioration",
+      "reason": "Management flagged an elevated and rising share of criticized office CRE loans, with further downgrades expected over the next one to two years, a risk not yet visible in stockanalysis.com's aggregate credit metrics.",
+      "cite": "research note section 6 'Unusual items': 'M&T carries meaningful commercial real estate exposure, including an office book where management flagged an elevated share of criticized loans and expects further downgrades over the next one to two years' (Q2 2026 call, https://stockanalysis.com/stocks/mtb/transcripts/649590-q2-2026/); evaluation Bear case 'Office CRE criticized loans are expected to rise over 1-2 years'.",
+      "annual_probability": {"value": 0.3, "cite": "Management's own one-to-two-year horizon for further downgrades (Q2 2026 call) implies roughly a 1-in-3 to 1-in-2 chance of this crystallizing into a market-moving credit event in any given year; taken as 30%/yr."},
+      "impact": {"value": -0.15, "cite": "No analogue; impact assumed per 'assumption' field below, within the ±30% bound for assumptions."},
+      "analogue": null,
+      "assumption": "No single week in MTB's 5y weekly history (mc-inputs analogues) isolates a CRE/office credit event specifically, so no analogue is used. Impact is assumed at -15%, inside the ±30% max_jump_impact_assumed bound, scaled below the largest non-earnings weekly falls observed in the history (-13.65% proxy week 2023-03-06, -10.42% 2025-03-31) because this is a gradual provisioning/credit-quality risk rather than a single-week shock."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

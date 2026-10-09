@@ -1,0 +1,65 @@
+{
+  "ticker": "DXCM",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/DXCM/2026-10-09-evaluation.md Decision JSON, scenarios.bull.probability"},
+      "probability_evidence": "ROIC 44.5% (up from 18.5% in FY2021) and a 28.3% FCF margin show the compounding quality continuing, and Q2 2026 delivered a beat with raised full-year revenue guidance (Reuters, 2026-07-30, cited in the note sec.1); offset by the macro overlay's small bear tilt from the 3-month rise in real yields (DFII10 +0.61pp), which the evaluator used to cut this scenario's weight by 0.05 (research/DXCM/2026-10-09-macro.md, basis text in the Decision JSON).",
+      "target_price_12m": {"value": 109.30, "cite": "research/DXCM/2026-10-09-evaluation.md Decision JSON, scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.3048, "cite": "factsheet-2026-10-09.md Fair value table, base-row anchors: DCF $42.68 vs P/E $109.30 (the evaluation's bull basis explicitly re-rates to 'the P/E-method base fair value of 109.30', not the bull row's own $325.15 P/E anchor, which is driven by the stock's historical maximum 239.9x multiple and would imply an unreasonable >100% band). Half the spread ($66.62/2=$33.31) is 30.5% of the $109.30 target, below the 42.8% blended residual volatility (research/DXCM/2026-10-09-mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/DXCM/2026-10-09-evaluation.md Decision JSON, scenarios.base.probability"},
+      "probability_evidence": "This is the modal case: current multiples already sit near their own five-year lows (P/E 33.3x vs a 31.0x five-year minimum; P/FCF 22.7x is already below its 24.0x minimum; factsheet Valuation table) and the 2.61% YoY buyback-driven share-count decline continues (ST), so the evaluator weights 'growth plus buybacks roughly offset a mild de-rating toward the base fair value' as the single most likely path, ahead of either tail.",
+      "target_price_12m": {"value": 80.00, "cite": "research/DXCM/2026-10-09-evaluation.md Decision JSON, scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.4164, "cite": "factsheet-2026-10-09.md Fair value table, base-row anchors: DCF $42.68 vs P/E $109.30. Half the spread ($66.62/2=$33.31) is 41.6% of the $80.00 target, below the 42.8% blended residual volatility (research/DXCM/2026-10-09-mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "research/DXCM/2026-10-09-evaluation.md Decision JSON, scenarios.bear.probability"},
+      "probability_evidence": "The reverse DCF shows the $84.41 price implies 28.7% year-1 revenue growth, well above what the note says DexCom is actually delivering per its 10-Q (research/DXCM/2026-10-09.md sec.3); gross margin has fallen 8.5pp over five years to 62.5% TTM (IS); and the pending G6/G7 and securities class-action litigation remains an unquantified tail risk (10-Q, note sec.2/6). The evaluator raised this scenario's weight by 0.05 for the macro overlay's bear tilt from rising real yields (research/DXCM/2026-10-09-macro.md, basis text in the Decision JSON).",
+      "target_price_12m": {"value": 64.89, "cite": "research/DXCM/2026-10-09-evaluation.md Decision JSON, scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.3064, "cite": "factsheet-2026-10-09.md Fair value table, bear-row anchors: DCF -$1.56 vs P/E $38.21 (the bear scenario's own DCF-vs-P/E disagreement; the published bear target of $64.89 itself equals the base row's blended fair value per the evaluation's basis text, so the base-row DCF/P-E spread of $33.31 relative to $64.89 would be 51.3%, above the cap). Half the bear-row spread ($39.77/2=$19.885) is 30.6% of the $64.89 target, below the 42.8% blended residual volatility (research/DXCM/2026-10-09-mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "research/DXCM/2026-10-09-mc-inputs.json factor_news.SPY headlines are directionally mixed: record highs (CNBC 'S&P closes at record high, breaking 7,800 points'; Bloomberg 'S&P 500 Hits Record High as Big Tech Leads', both 2026-10-06/07) alongside pullback warnings (Reuters 'S&P 500, Nasdaq ease from record highs as Treasury yields climb'; FXEmpire 'Rising Yields and Oil Test Buyers Ahead of Earnings'; Invezz 'AI bubble could burst in 2027, sending S&P 500 down to 5,000') and bearish options positioning (CNBC 'two big bearish trades point to skepticism'); no net direction supported, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/DXCM/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "research/DXCM/2026-10-09-mc-inputs.json factor_news.IEF headlines report a persistent bond selloff ('The Bond Rout Is Deepening Even as Oil Tankers Return to the Strait of Hormuz', WSJ 2026-10-01; 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002', Bloomberg 2026-10-01; 'Global Bond Markets Sell Off on France's Fiscal Worries', Barron's 2026-10-05; 'Bond Valuations Reflect Higher Hurdle for Capital', ETF Trends 2026-10-08), consistent with the macro overlay's dominant_chain (10y Treasury/real yield rising -> cost of equity) and its small bear tilt (research/DXCM/2026-10-09-macro.md); moderated to -5% given one offsetting headline ('US Treasury Rebound Pulls Yields Off Multi-Decade Highs', Bloomberg 2026-10-02) and the overlay's own characterization of the tilt as 'small'."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/DXCM/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings reaction (Oct 29, 2026)",
+      "reason": "Bear case: 'Q3 earnings on Oct 29 add binary risk' [Certain]; fact sheet Price section lists the next earnings date as Oct 29, 2026.",
+      "cite": "research/DXCM/2026-10-09-evaluation.md Bear case; research/DXCM/factsheet-2026-10-09.md Price section (Next earnings date)",
+      "annual_probability": {"value": 0.34, "cite": "research/DXCM/2026-10-09-mc-inputs.json analogues.event_weeks: of the 20 quarterly earnings_release weeks in the 5-year history (2021 Q3 - 2026 Q2), 2 (2024-07-22 Q2 2024 -42.68%; 2025-10-27 Q3 2025 -17.22%) moved >=15% in magnitude, a ~10% per-quarter rate; the probability of at least one such print within a year of 4 releases = 1-(1-0.10)^4 ~= 0.34."},
+      "impact": {"value": -0.4268, "cite": "research/DXCM/2026-10-09-mc-inputs.json analogues.largest_falls / event_weeks: week of 2024-07-22 (Q2 2024 earnings release), the stock's largest weekly fall in the 5-year history (-42.68%)."},
+      "analogue": {"week": "2024-07-22", "move": -0.4268},
+      "assumption": null
+    },
+    {
+      "name": "Securities / G6-G7 product class-action litigation",
+      "reason": "DexCom's Q2 2026 10-Q discloses pending securities class-action, derivative-action and G6/G7 product class-action litigation for which it 'cannot reasonably estimate the ultimate outcome' [Certain]; the evaluation's Decision trigger #4 and note sec.2/6 flag this as an unquantified tail risk.",
+      "cite": "research/DXCM/2026-10-09.md sec.2 and sec.6 (10-Q https://www.sec.gov/Archives/edgar/data/1093557/000109355726000143/dxcm-20260630.htm); research/DXCM/2026-10-09-evaluation.md Bear case",
+      "annual_probability": {"value": 0.10, "cite": "No analogue exists in the stock's own history for a litigation-driven week (see assumption); a modest, bounded 10%/yr is assumed given the 10-Q's continuing, unresolved disclosure."},
+      "impact": {"value": -0.15, "cite": "No analogue exists; a modest, bounded -15% impact is assumed, within the ±30% [montecarlo].max_jump_impact_assumed cap for an assumed jump, given the 10-Q discloses the outcome cannot be reasonably estimated."},
+      "analogue": null,
+      "assumption": "No historical analogue exists: research/DXCM/2026-10-09-mc-inputs.json analogues.event_weeks/largest_falls contain no litigation-tagged week (only earnings, proxy, investor-day and conference events), and this is a continuing, unresolved overhang rather than a dated event. A modest, bounded probability (10%/yr) and impact (-15%, within the ±30% assumption cap) are assumed given the 10-Q's own 'cannot reasonably estimate' language, deliberately conservative relative to the ceiling."
+    },
+    {
+      "name": "CMS coverage decision broadening CGM reimbursement to non-insulin type 2 patients",
+      "reason": "Decision trigger: 'CMS issues a coverage decision broadening CGM reimbursement to non-insulin type 2 patients (expected by mid-2027 per the Wells Fargo conference transcript), materially lifting the growth runway.' Bull case: 'CONNECT trial data and wider coverage, with CMS decisions expected by mid-2027, could widen the type-2 market [Guessing]'.",
+      "cite": "research/DXCM/2026-10-09-evaluation.md Decision triggers and Bull case; research/DXCM/2026-10-09.md news item 2026-09-09 (Wells Fargo 21st Annual Healthcare Conference transcript)",
+      "annual_probability": {"value": 0.15, "cite": "No analogue exists (see assumption); timing ('expected by mid-2027') sits near the edge of the 12-month horizon and is tagged [Guessing] in the bull case, so a modest, bounded 15%/yr is assumed."},
+      "impact": {"value": 0.15, "cite": "No analogue exists; a modest, bounded +15% impact is assumed, within the ±30% [montecarlo].max_jump_impact_assumed cap, reflecting a 'materially lifting the growth runway' catalyst that is still [Guessing]-tagged, not yet delivered."},
+      "analogue": null,
+      "assumption": "No historical analogue exists: CMS has not yet made this decision, so no past price week reflects it. 'Expected by mid-2027' per the Wells Fargo transcript sits near the edge of the 12-month horizon and is tagged [Guessing] in the bull case, so a modest, bounded probability (15%/yr) and impact (+15%, within the ±30% cap) are assumed rather than derived from a count."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.01, "cite": "factsheet-2026-10-09.md Price section: price -3.3% below the 50-day MA (87.26), declining swing highs (92.59 on 2026-08-24 -> 92.33 on 2026-09-01 -> 90.39 on 2026-09-22), RSI 43.1 (below 50, not oversold); a modest rather than maximal negative tilt given the longer uptrend remains intact (+15.0% vs the 200-day MA, 50-day MA +18.8% above the 200-day)."}
+}

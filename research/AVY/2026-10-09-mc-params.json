@@ -1,0 +1,47 @@
+{
+  "ticker": "AVY",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/AVY/2026-10-09-evaluation.md Decision.scenarios.bull.probability"},
+      "probability_evidence": "Bull case: every multiple sits below its 5y minimum (EV/EBITDA 10.8x vs 12.2x floor, P/E 18.3x vs 19.4x floor); Q2 2026 delivered 8% organic growth and FY2026 guidance is 3%-4% organic/7% EPS growth vs the reverse-DCF-implied -3.3%; high-value categories ~45% of sales are lifting gross margin (+1.2pp to 29.0%); buybacks cut share count -3.08% YoY; beta 0.80 and Altman Z 3.54 argue for moderate downside (research/AVY/2026-10-09-evaluation.md Bull case).",
+      "target_price_12m": {"value": 230.07, "cite": "research/AVY/2026-10-09-evaluation.md Decision.scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0922, "cite": "Fact sheet fair-value table: DCF bull 215.92 vs EV/EBITDA bull 258.36 (spread 42.44); half-spread 21.22 / bull target 230.07 = 0.0922 (research/AVY/factsheet-2026-10-09.md Fair value table)"}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "research/AVY/2026-10-09-evaluation.md Decision.scenarios.base.probability"},
+      "probability_evidence": "Evaluator's rationale: the discount to AVY's own history is real but rests on a TTM FCF margin (11.5%) that is probably flattered by working-capital timing vs FY2025's 8.0%, and AVY still trades above packaging peers on P/E/EV-EBITDA/EV-Sales, so conviction is capped at 3 (below the buy threshold of 4); the modal outcome is a partial re-rating toward the EV/EBITDA 5y floor (191.60) rather than the full DCF-blended base (213.64) (research/AVY/2026-10-09-evaluation.md Decision.rationale and scenarios.base.basis).",
+      "target_price_12m": {"value": 191.6, "cite": "research/AVY/2026-10-09-evaluation.md Decision.scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.01785, "cite": "Fact sheet fair-value table: DCF base 215.92 vs EV/EBITDA base 209.08 (spread 6.84); half-spread 3.42 / base target 191.60 = 0.01785 (research/AVY/factsheet-2026-10-09.md Fair value table)"}
+    },
+    "bear": {
+      "probability": {"value": 0.25, "cite": "research/AVY/2026-10-09-evaluation.md Decision.scenarios.bear.probability"},
+      "probability_evidence": "Bear case: ROIC fell from 18.4% (FY2021) to 15.1% TTM and ROE fell 13.2pp while net debt/EBITDA rose to 2.61x at FY2025; on P/E, EV/EBITDA and EV/Sales AVY still trades 28-36% above packaging peers; shares trail SPY by 18.9pp over 6 months; management already guides to destocking; Q3 results on Oct 29 are flagged as a near-term event risk (research/AVY/2026-10-09-evaluation.md Bear case).",
+      "target_price_12m": {"value": 124.73, "cite": "research/AVY/2026-10-09-evaluation.md Decision.scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.1969285, "cite": "Fact sheet fair-value table: DCF bear 91.30 vs EV/EBITDA bear 191.60 (spread 100.30); half-spread 50.15 / bear target 124.73 = 0.402, capped at the blended residual volatility (research/AVY/2026-10-09-mc-inputs.json regression.residual_vol.blended = 0.19692850062889028)"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY is mixed: record-high headlines (ETF Trends 'Combined Assets in SPY, SPYM Cross $1 Trillion', 2026-10-07; Bloomberg 'S&P 500 Hits Record High as Big Tech Leads', 2026-10-06) alongside caution (Invezz 'AI bubble could burst in 2027, sending S&P 500 down to 5,000', 2026-10-08; FXEmpire 'Rising Yields and Oil Test Buyers', 2026-10-08; Reuters 'S&P 500, Nasdaq ease from record highs as Treasury yields climb', 2026-10-07) -- no clear directional read, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/AVY/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "mc-inputs.json factor_news.IEF is one-directional and bearish for bond prices: WSJ 'The Bond Rout Is Deepening Even as Oil Tankers Return to the Strait of Hormuz' (2026-10-01), Bloomberg 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002' (2026-10-01), Barrons 'Global Bond Markets Sell Off on France's Fiscal Worries' (2026-10-05), ETF Trends 'Bond Valuations Reflect Higher Hurdle for Capital' (2026-10-08); rising-yield headlines imply lower prices for the 7-10y Treasury ETF, kept modest per the cap."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/AVY/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings reaction",
+      "reason": "Q3 2026 results are due Oct 29, 2026, three weeks after this decision; the bear case names this as an imminent event risk while the TTM FCF margin/conversion numbers driving the cheap P/FCF read remain unconfirmed.",
+      "cite": "research/AVY/2026-10-09-evaluation.md Bear case: 'Q3 results on Oct 29 are an event risk [Certain]'; research/AVY/factsheet-2026-10-09.md Price table 'Next earnings date Oct 29, 2026'",
+      "annual_probability": {"value": 0.2, "cite": "research/AVY/2026-10-09-mc-inputs.json analogues.event_weeks: 20 quarterly earnings_release weeks in the 5y history (Q3 2021-Q2 2026); the worst downside reaction (-5.11%, 2022-01-31) occurred once -- ~1 per 5 years = 0.2/year"},
+      "impact": {"value": -0.0511, "cite": "research/AVY/2026-10-09-mc-inputs.json analogues.event_weeks: week 2022-01-31 (Q4 2021 earnings_release), move -0.0511 -- the worst downside reaction among AVY's own earnings_release weeks in the 5y history"},
+      "analogue": {"week": "2022-01-31", "move": -0.0511},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,47 @@
+{
+  "ticker": "PEP",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Q3 2026 organic growth accelerated to 3.1% with 8% international growth, and PEP trades 46% below peer P/E/EV-EBITDA and below its own 5y multiple minimums (factsheet-2026-10-09.md Valuation table; 2026-10-09.md §3), but the macro overlay's small bear tilt (rising real 10y yield to 2.92%, +0.61pp/3m; firming dollar, DTWEXBGS 121.4, +2.86pts/1m) trims the odds of a fast re-rating toward peers (research/PEP/2026-10-09-macro.md, macro_tilt).",
+      "target_price_12m": {"value": 165.21, "cite": "evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.1897, "cite": "Fact sheet base-row valuation anchors: DCF $144.31 vs P/E $207.00 (factsheet-2026-10-09.md Fair value table); half the $62.69 spread ($31.35) relative to the $165.21 target = 18.97%, within the inputs file's blended residual volatility cap of 19.8% (2026-10-09-mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "Organic revenue growth of 3.1% in Q3 2026 (stockanalysis.com/stocks/pep/transcripts/706870-q3-2026/) exceeds the 0.8% the reverse DCF implies, but management says it is 'not satisfied' with U.S. performance and cut EPS guidance despite the revenue beat (2026-10-09.md §2-3; evaluation.md Bear case), supporting a move toward the DCF base value without a full P/E re-rating.",
+      "target_price_12m": {"value": 144.31, "cite": "evaluation.md Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.19799724749622377, "cite": "Fact sheet base-row anchors DCF $144.31 vs P/E $207.00 (factsheet-2026-10-09.md Fair value table); half the $62.69 spread ($31.35) relative to the $144.31 target = 21.73%, capped at the inputs file's blended residual volatility of 19.8% (2026-10-09-mc-inputs.json regression.residual_vol.blended) since the uncapped figure exceeds it."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "Q3 2026 U.S. soda volumes declined and TTM margins (operating 16.8%, FCF 10.7%) sit above FY2025 levels (8.2% FCF margin), so a reversion toward FY2025 levels plus the macro overlay's small bear tilt (real yields above 3.25%, dollar strength muting the 8% international growth offset) could drag the stock toward the bear fair value (2026-10-09.md §2-3; evaluation.md Bear case; research/PEP/2026-10-09-macro.md macro_bear).",
+      "target_price_12m": {"value": 99.67, "cite": "evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.19799724749622377, "cite": "Fact sheet bear-row anchors DCF $61.45 vs P/E $176.12 (factsheet-2026-10-09.md Fair value table); half the $114.67 spread ($57.34) relative to the $99.67 target = 57.5%, capped at the inputs file's blended residual volatility of 19.8% (2026-10-09-mc-inputs.json regression.residual_vol.blended) since the uncapped figure far exceeds it."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed (S&P 500 at record highs on 2026-10-06/07 vs. a 2026-10-08 pullback on oil/Iran, rising yields, and an AI-bubble warning); no clear direction, so 0 is used."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.02, "cite": "Macro overlay small bear tilt: dominant_chain 'real yields -> discount rate', with DFII10 at 2.92% on 2026-10-07 (+0.49pp/1m, +0.61pp/3m) and macro_bear scenario describing real yields rising further above 3.25% (research/PEP/2026-10-09-macro.md macro_tilt/macro_bear); consistent with mc-inputs.json factor_news.IEF headlines on the 2026-10 bond rout (yields at highest since 2002). IEF (bond price) falls modestly as rates rise."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings / guidance surprise",
+      "reason": "Quarterly earnings releases are a recurring source of guidance surprises for PEP; the Q3 2026 report (2026-10-08) produced an EPS guidance cut despite a revenue beat, on declining U.S. soda volumes and margin pressure, which investors are still digesting.",
+      "cite": "2026-10-09.md §2 ('not satisfied with performance in the U.S.', EPS guidance cut); evaluation.md Bear case ('Q3 2026 brought an EPS guidance cut despite a revenue beat')",
+      "annual_probability": {"value": 0.42, "cite": "2026-10-09-mc-inputs.json analogues.event_weeks: of the 19 quarterly earnings_release weeks from 2022-02-07 to 2026-07-06, 2 produced a move of this magnitude or larger (2025-04-21 -6.62%; 2026-02-02 +10.97%); (2/19) x 4 quarters/year = 0.42/year probability of a jump-sized earnings reaction."},
+      "impact": {"value": -0.0662, "cite": "2026-10-09-mc-inputs.json analogues.event_weeks Q1 2025 earnings_release (week 2025-04-21, move -0.0662), which also appears among analogues.largest_falls, confirming it as a historically large post-earnings reaction"},
+      "analogue": {"week": "2025-04-21", "move": -0.0662},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

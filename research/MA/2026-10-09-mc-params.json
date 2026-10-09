@@ -1,0 +1,65 @@
+{
+  "ticker": "MA",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "research/MA/2026-10-09-evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Bull requires real yields and the dollar to ease so the P/E multiple re-rates toward its 5y median (evaluation scenarios.bull.basis), but the macro overlay's facts run the other way: US 10y real yield +0.61pp over 3m to 2.92% and broad dollar index +0.695 over 3m (research/MA/2026-10-09-macro.md), and the WSJ (2026-10-08) reports the interchange-fee bill 'has gained Trump as an ally' rather than losing momentum -- both work against the bull trigger, capping its probability at 0.2.",
+      "target_price_12m": {"value": 649.33, "cite": "research/MA/2026-10-09-evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.1663, "cite": "Fact sheet 2026-10-09 Fair value table, bull row: FCFE DCF/DCF 466.75 vs P/E method 682.62 (IS,BS,CF,RA,ST,HI); half the spread (682.62-466.75)/2=107.935, divided by the evaluation's bull target 649.33 = 16.63%."}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "research/MA/2026-10-09-evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "The fact sheet's own blend (DCF base 360.87) and the P/E method (base 437.45) disagree sharply, and the note's 'Unusual items' section finds neither the WSJ interchange-bill headline nor the 10-K litigation disclosure is new information -- both are already reflected in multiples below MA's own 5y range (research/MA/2026-10-09.md section 6) -- so 'price holds near current level absent a confirmed catalyst change' is the single most likely outcome, carrying the majority weight; the macro overlay is only 'secondary' weight (research/MA/2026-10-09-macro.md), so it shifts probability moderately toward bear rather than displacing the base case.",
+      "target_price_12m": {"value": 574.76, "cite": "research/MA/2026-10-09-evaluation.md Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0666, "cite": "Fact sheet 2026-10-09 Fair value table, base row: FCFE DCF/DCF 360.87 vs P/E method 437.45 (IS,BS,CF,RA,ST,HI); half the spread (437.45-360.87)/2=38.29, divided by the evaluation's base target 574.76 = 6.66%."}
+    },
+    "bear": {
+      "probability": {"value": 0.3, "cite": "research/MA/2026-10-09-evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "WSJ (2026-10-08): the US credit-card interchange bill 'has gained Trump as an ally,' and the 10-K names interchange regulation as Mastercard's top forward-looking risk (research/MA/2026-10-09.md section 2) -- a live, named catalyst. The macro overlay's macro_tilt is 'toward bear, moderate' based on the 3-month real-yield rise (+0.61pp) and dollar strength (+0.695) being 'large and fresh relative to the stock's recent highs' (research/MA/2026-10-09-macro.md), which the evaluator used to raise the bear weight above a symmetric default.",
+      "target_price_12m": {"value": 412.24, "cite": "research/MA/2026-10-09-evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.1312, "cite": "Fact sheet 2026-10-09 Fair value table, bear row: FCFE DCF/DCF 304.10 vs P/E method 412.24 (IS,BS,CF,RA,ST,HI); half the spread (412.24-304.10)/2=54.07, divided by the evaluation's bear target 412.24 = 13.12%."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs (CNBC/Bloomberg 2026-10-06/07, 'S&P closes at record high, breaking 7,800 points') against a pullback from yields/oil (Reuters, FXEmpire, TipRanks 2026-10-07/08) and a bubble-burst warning (Invezz 2026-10-08, 'AI bubble could burst in 2027, sending S&P 500 down to 5,000'); no directional view is supported, so 0."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431154014991791 (3y weekly regression, stockanalysis.com history)."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.05, "cite": "mc-inputs.json factor_news.IEF headlines skew bearish for bonds and are most recent/consistent with the macro overlay: Bloomberg 2026-10-07 'US 30-Year Yields Return to 2002 High', WSJ 2026-10-01 'The Bond Rout Is Deepening', Barrons 2026-10-05 'Global Bond Markets Sell Off on France's Fiscal Worries', ETF Trends 2026-10-08 'Bond Valuations Reflect Higher Hurdle for Capital'. Macro overlay (research/MA/2026-10-09-macro.md) sets the direction for this rates factor: DFII10 real yield +0.61pp over 3m to 2.92%, macro_bear 'real yields and the dollar keep rising', dominant_chain 'real yields -> discount rate'; -5% kept modest (within +-15%) as the overlay's weight is secondary."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.06460381100458489 (3y weekly regression, stockanalysis.com history)."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "US interchange-fee legislation",
+      "reason": "A federal bill restricting interchange fees/routing would directly cut network economics beyond what is already priced into the multiple.",
+      "cite": "WSJ 2026-10-08, 'The Credit-Card Bill That Banks Fear Most Has Gained Trump as an Ally' (research/MA/factsheet-2026-10-09.md News & sentiment; research/MA/2026-10-09.md sections 2 and 6); 10-K names interchange-fee regulation/surcharging as Mastercard's top forward-looking risk.",
+      "annual_probability": {"value": 0.12, "cite": "Assumption (no historical analogue): WSJ 2026-10-08 reports the bill has gained political momentum but names no scheduled vote; treated as a low-probability-per-year discrete legislative event given no base-rate data in the 5-year weekly history."},
+      "impact": {"value": -0.12, "cite": "Assumption, bounded well under the montecarlo.max_jump_impact_assumed 0.30 cap: no matching week exists in mc-inputs.json's event/analogue tables for a regulatory shock, so impact is set from the WSJ/10-K severity described (top named risk) rather than a historical move."},
+      "analogue": null,
+      "assumption": "No discrete regulatory-shock week appears in mc-inputs.json's largest_falls/largest_rises/event_weeks tables (none are tagged as regulatory), so both annual_probability and impact are stated assumptions, with impact kept at or below the 0.30 cap for an unanalogued jump."
+    },
+    {
+      "name": "Merchant-interchange litigation settlement/judgment",
+      "reason": "An adverse settlement or judgment in the long-running US/UK/Netherlands/Portugal merchant-interchange litigation could trigger a one-off charge and sentiment hit distinct from the legislative risk above.",
+      "cite": "Mastercard FY2025 10-K (research/MA/2026-10-09.md section 2 and Sources): 'active US, UK, Netherlands and Portugal merchant-interchange litigation dating to 2011'.",
+      "annual_probability": {"value": 0.07, "cite": "Assumption: the 10-K discloses this litigation has been open and unresolved since 2011 (research/MA/2026-10-09.md section 2), roughly 15 years with no settlement yet -- treated as a base rate of about 1-in-15 years for a discrete settlement/judgment event, no historical weekly analogue exists to measure this directly."},
+      "impact": {"value": -0.08, "cite": "Assumption, bounded well under the 0.30 cap: no matching week in mc-inputs.json's analogue tables, and smaller than the legislative-shock jump above because a litigation settlement typically resolves one jurisdiction's exposure rather than the whole US interchange model."},
+      "analogue": null,
+      "assumption": "No litigation-settlement week appears in mc-inputs.json's analogue tables (event_weeks only tags earnings/proxy/investor-update/M&A types), so annual_probability and impact are stated assumptions, with impact kept well below the 0.30 cap."
+    },
+    {
+      "name": "Q3 2026 earnings reaction (Oct 29, 2026)",
+      "reason": "The evaluator's bear case names the Oct 29 print as event risk, and Barron's flags elevated pre-earnings volatility; quarterly earnings reactions are the most frequent discrete catalyst in the stock's own history.",
+      "cite": "research/MA/2026-10-09-evaluation.md Bear case: 'Q3 results on Oct 29 add event risk [Certain]'; fact sheet Price table 'Next earnings date: Oct 29, 2026 (Earnings Date)'; Barrons 2026-10-07 'How to Monetize Mastercard's Weakness Before It Reports Earnings' (factsheet News & sentiment).",
+      "annual_probability": {"value": 0.34, "cite": "mc-inputs.json analogues.event_weeks: counting the 20 quarterly earnings-release weeks from Q3 2021 to Q2 2026, 2 of 20 (10%) produced a reaction of at least 6.45% magnitude (Q3 2021 -6.45%, Q3 2022 +8.96%); with 4 reports/year at that per-quarter rate, P(at least one such-sized reaction in a year) = 1-(1-0.10)^4 = 0.34."},
+      "impact": {"value": -0.0645, "cite": "mc-inputs.json analogues.event_weeks: Q3 2021 earnings release, week 2021-10-25, move -0.0645 -- the largest-magnitude negative earnings-week reaction among MA's quarterly report weeks in the 5-year history."},
+      "analogue": {"week": "2021-10-25", "move": -0.0645},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": 0.01, "cite": "Fact sheet 2026-10-09 Price table: price +0.5% vs its 50-day MA and +8.0% vs its 200-day MA, 50-day MA +7.5% above the 200-day MA, 3-month momentum +10.6%, RSI(14) 56.8 (not overbought), relative strength vs SPY +6.7pp over 3m -- a modest near-term uptrend, kept small given the stock's -16.5pp 12m relative-strength underperformance vs SPY."}
+}

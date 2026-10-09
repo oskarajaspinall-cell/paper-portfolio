@@ -1,0 +1,56 @@
+{
+  "ticker": "CB",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.30, "cite": "research/CB/2026-10-09-evaluation.md Decision json scenarios.bull.probability"},
+      "probability_evidence": "ROIC rose from 8.3% (FY2021) to 11.1% TTM and shares outstanding fell -2.49% y/y on buybacks (fact sheet RA/ST, cited in evaluation bull case); macro overlay gives a small tilt toward bull because real yields have risen 0.61pp/3m with HY spreads only 3.09% (no credit stress) and CB's low beta (0.37) limits multiple damage from further yield rises (research/CB/2026-10-09-macro.md macro_tilt).",
+      "target_price_12m": {"value": 385.88, "cite": "research/CB/2026-10-09-evaluation.md Decision json scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0901, "cite": "Fact sheet bull anchors: P/B+ROE $409.06 vs P/E $339.51 (factsheet-2026-10-09.md Fair value table); half the $69.55 spread ($34.775) / $385.88 target = 9.01%"}
+    },
+    "base": {
+      "probability": {"value": 0.50, "cite": "research/CB/2026-10-09-evaluation.md Decision json scenarios.base.probability"},
+      "probability_evidence": "P/B (1.8x) sits at the 87th percentile of its 5y range and the Q2 2026 earnings call cited softening market conditions and rising casualty loss costs (fact sheet RA; transcript cited in note and evaluation), making continuation of the current valuation with earnings-growth-only upside the central case rather than a rerating.",
+      "target_price_12m": {"value": 336.74, "cite": "research/CB/2026-10-09-evaluation.md Decision json scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0943, "cite": "Fact sheet base anchors: P/B+ROE $400.27 vs P/E $336.74 (factsheet-2026-10-09.md Fair value table); half the $63.53 spread ($31.765) / $336.74 target = 9.43%"}
+    },
+    "bear": {
+      "probability": {"value": 0.20, "cite": "research/CB/2026-10-09-evaluation.md Decision json scenarios.bear.probability"},
+      "probability_evidence": "Relative strength is weak (-7.0pp/-11.1pp vs SPY over 3m/6m, fact sheet HI) and the bear case notes margin/FCF data are [data unavailable] so reserve adequacy cannot be cross-checked, giving some but not majority weight to the downside case where soft pricing compresses P/B toward its 5y median.",
+      "target_price_12m": {"value": 250.23, "cite": "research/CB/2026-10-09-evaluation.md Decision json scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.0774, "cite": "Fact sheet bear anchors: P/B+ROE $237.31 vs P/E $276.06 (factsheet-2026-10-09.md Fair value table); half the $38.75 spread ($19.375) / $250.23 target = 7.74%"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed and offsetting: record closing highs (ETF Trends 2026-10-07, Bloomberg 2026-10-06) vs an AI-bubble-burst warning (Invezz 2026-10-08) and a large bearish put-spread trade (CNBC 2026-10-07) and rising-yields pressure (FXEmpire, Reuters 2026-10-07/08); no net directional edge, set to 0"},
+      "uncertainty_12m": {"value": 0.1431, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431154014991791 (156-week regression)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.03, "cite": "research/CB/2026-10-09-macro.md macro_tilt: 'toward bull, small' for CB because real yields have already risen (10y real yield +0.61pp/3m, DFII10) and are expected to stay elevated or rise modestly further with no credit stress; a further rise in yields implies modest bond-price (IEF) softness, consistent with mc-inputs.json factor_news.IEF headlines on the yield rise/'bond rout deepening' (WSJ, Bloomberg, Barrons, Oct 2026)"},
+      "uncertainty_12m": {"value": 0.0646, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.06460381100458489 (156-week regression)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings release (Oct 20-21, 2026)",
+      "reason": "Bear case: 'Q3 results on Oct 20 add near-term event risk with no edge'",
+      "cite": "research/CB/2026-10-09-evaluation.md Bear case; factsheet-2026-10-09.md Price section 'Next earnings date Oct 20, 2026 (Earnings Date)'",
+      "annual_probability": {"value": 0.4, "cite": "mc-inputs.json analogues.event_weeks: of ~20 quarterly earnings weeks from 2021-10-18 to 2026-09-28 (~4.95 years), 2 produced a move of this magnitude (2022-10-24 +8.45%, 2023-01-30 -7.69%, both also in analogues.largest_rises/largest_falls) -> 2/4.95 ~= 0.4/yr"},
+      "impact": {"value": -0.0769, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2023-01-30 (Q4 2022 earnings release) move -7.69%, the largest earnings-week fall in the regression history"},
+      "analogue": {"week": "2023-01-30", "move": -0.0769},
+      "assumption": null
+    },
+    {
+      "name": "Disorderly rate/credit shock hitting CB's bond float",
+      "reason": "Macro overlay bear case: 'A disorderly rate move (credit-spread blowout, e.g. HY spread >5%, or a fast Fed cut cycle) reverses NII or triggers bond mark-to-market losses on the float, denting book value and ROE.'",
+      "cite": "research/CB/2026-10-09-macro.md macro_bear",
+      "annual_probability": {"value": 0.2, "cite": "mc-inputs.json analogues.largest_falls: 1 clear banking/credit-stress analogue (week 2023-03-13, -5.43%, the March 2023 SVB-driven banking crisis) in the ~4.95-year regression history with no matching CB-specific event in analogues.event_weeks -> 1/4.95 ~= 0.2/yr"},
+      "impact": {"value": -0.0543, "cite": "mc-inputs.json analogues.largest_falls: week 2023-03-13 move -5.43%, the SVB/banking-crisis credit-stress week, with no CB-specific event listed in analogues.event_weeks"},
+      "analogue": {"week": "2023-03-13", "move": -0.0543},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

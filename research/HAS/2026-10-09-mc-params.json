@@ -1,0 +1,56 @@
+{
+  "ticker": "HAS",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.30, "cite": "evaluation.md Decision block scenarios.bull.probability"},
+      "probability_evidence": "Wizards of the Coast's margin expansion looks structural, not cyclical: ROIC rose from 10.4% (FY21) to 28.3% TTM, gross margin from 50.5% to 63.8%, and net debt/EBITDA fell from 5.72x to 1.92x (https://stockanalysis.com/stocks/has/financials/ratios/); tabletop/WizCo revenue grew 30%/27% YoY per the 10-Q (https://www.sec.gov/Archives/edgar/data/46080/000004608026000050/has-20260628.htm).",
+      "target_price_12m": {"value": 124.54, "cite": "evaluation.md Decision block scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0668, "cite": "The evaluation's bull target (124.54) is the fact sheet's base-case fair value; its two anchors disagree (DCF 130.08 vs EV/EBITDA 113.45, factsheet-2026-10-09.md Fair value table), half-spread 8.315 / 124.54 = 6.68%."}
+    },
+    "base": {
+      "probability": {"value": 0.40, "cite": "evaluation.md Decision block scenarios.base.probability"},
+      "probability_evidence": "EV/EBITDA (12.0x) sits just above its own 5-year minimum (11.7x) and P/FCF (10.8x) is near its 5-year minimum (10.4x) (factsheet-2026-10-09.md Valuation table) — the market is pricing 'prove it for more quarters,' consistent with a flat-price base case rather than a re-rating or de-rating.",
+      "target_price_12m": {"value": 92.50, "cite": "evaluation.md Decision block scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0899, "cite": "Base case cites the same fact-sheet base fair-value anchors (DCF 130.08 vs EV/EBITDA 113.45, factsheet-2026-10-09.md Fair value table), half-spread 8.315, relative to the 92.50 target = 8.99%."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation.md Decision block scenarios.bear.probability"},
+      "probability_evidence": "EV/Sales (3.1x) is already above its own 5-year maximum (3.0x, factsheet-2026-10-09.md Valuation table), and 58% of revenue depends on one hit-driven card franchise (Wizards of the Coast tabletop +30% YoY on Magic releases, 10-Q MD&A) — a real risk that the mix-shift/margin cycle normalises.",
+      "target_price_12m": {"value": 69.50, "cite": "evaluation.md Decision block scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.26, "cite": "Bear fair-value anchors disagree sharply (DCF-bear 7.84 vs EV/EBITDA-bear 89.29, factsheet-2026-10-09.md Fair value table), half-spread 40.73 / 69.50 = 58.6% — far above the measured residual volatility, so capped at the mc-inputs.json blended residual volatility (26.00%), the script's hard ceiling (montecarlo.py: target_band must not exceed residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed over 2026-10-06 to 2026-10-08: record highs ('S&P 500 Hits Record High as Big Tech Leads', 'S&P closes at record high, breaking 7,800 points') alongside same-week pullback/skepticism ('SPY, QQQ Retreated as Oil Climbed', 'Two big bearish trades point to skepticism', 'AI bubble could burst in 2027, sending S&P 500 down to 5,000') — no clear 12-month direction, so 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.04, "cite": "mc-inputs.json factor_news.IEF: 5 of 8 recent headlines (2026-10-01 to 2026-10-08) describe a rising-yield/bond sell-off trend ('The Bond Rout Is Deepening', 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002', 'US 30-Year Yields Return to 2002 High', 'Global Bond Markets Sell Off on France's Fiscal Worries', 'Bond Valuations Reflect Higher Hurdle for Capital'), against 2 headlines of a brief yield pullback (2026-10-02) — net modest negative price view for the 7-10y Treasury ETF (rising yields -> falling bond prices), kept within the ±15% bound."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings release (Oct 20, 2026)",
+      "reason": "A scheduled, imminent earnings print explicitly named as a risk catalyst: the bear case notes 'Q3 results land on Oct 20' as something that could reset the peak-margin narrative, and the next earnings date is confirmed.",
+      "cite": "research/HAS/2026-10-09-evaluation.md Bear case ('Q3 results land on Oct 20'); factsheet-2026-10-09.md Price section 'Next earnings date | Oct 20, 2026'; Business Wire 2026-09-29 headline in factsheet News & sentiment ('Hasbro to Announce Third Quarter 2026 Earnings on October 20, 2026').",
+      "annual_probability": {"value": 1.0, "cite": "5 of the last 20 quarterly earnings weeks in mc-inputs.json analogues.event_weeks moved >=10% in either direction (2023-04-24 +15.9%, 2023-10-23 -18.2%, 2024-04-22 +16.7%, 2025-02-18 +11.1%, 2025-04-21 +15.8%) = 25% of quarters x 4/yr = ~1/yr."},
+      "impact": {"value": -0.1823, "cite": "Largest post-earnings weekly fall in the 5-year history: week of 2023-10-23 (Q3 2023 earnings reaction), mc-inputs.json analogues.largest_falls / event_weeks."},
+      "analogue": {"week": "2023-10-23", "move": -0.1823},
+      "assumption": null
+    },
+    {
+      "name": "Cybersecurity incident recurrence",
+      "reason": "Research names a specific past discrete event — a March 2026 unauthorized network-access incident that disrupted order processing/shipping, cost $10.8M in Q2, and was significant enough for the WSJ to profile as a lessons-learned case — so recurrence of a similar incident is a named discrete operational risk.",
+      "cite": "research/HAS/2026-10-09.md 'Unusual items' section (10-Q: $10.8M Q2 cost; WSJ 'Something Was Wrong. Hasbro's Lessons From a Cyberattack.' 2026-08-03, https://www.wsj.com/cfo-journal/something-was-wrong-hasbros-lessons-from-a-cyberattack-3fd08584).",
+      "annual_probability": {"value": 0.2, "cite": "This is the first disclosed cyber incident in the ~5-year mc-inputs.json history (2021-10-18 to 2026-09-28) = about 1 event per 5 years."},
+      "impact": {"value": -0.08, "cite": "No historical weekly stock-move analogue is attributable to the March 2026 incident specifically (surrounding weekly moves in mc-inputs.json all_weekly_moves: 2026-03-02 -5.1%, 2026-03-09 -1.1%, 2026-03-16 -2.4%, 2026-03-23 -2.8%, 2026-03-30 +1.8% — none a clean outlier); impact is an assumption scaled modestly above the disclosed $10.8M operational cost (de minimis vs $13.0bn market cap per factsheet-2026-10-09.md) to allow for reputational/recurrence effects, kept well under the 0.30 no-analogue ceiling."},
+      "analogue": null,
+      "assumption": "No clean historical weekly-move analogue exists for this named risk; impact set at -8%, modest and below the 0.30 cap for jumps without an analogue (per [montecarlo].max_jump_impact_assumed)."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": 0.015, "cite": "factsheet-2026-10-09.md Price section: price above both 50-day (+0.6%) and 200-day (+2.1%) moving averages, 50-day above 200-day (+1.5%), strong 3-month momentum (+21.9%), RSI 57.9 (neutral, not overbought) — a modest positive near-term tilt, applied only to the 3-month horizon."}
+}

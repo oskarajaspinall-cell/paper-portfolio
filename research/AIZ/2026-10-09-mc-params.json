@@ -1,0 +1,47 @@
+{
+  "ticker": "AIZ",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "research/AIZ/2026-10-09-evaluation.md Decision json, scenarios.bull.probability"},
+      "probability_evidence": "Bull requires TTM ROE (18.3%, a 5y high) to hold and the guidance-raising trajectory (Q2 2026 adjusted EBITDA +18%, EPS +19% ex-cat, FY guidance raised) to continue uninterrupted; weighted below 50% because the price is already only 4.1% below this bull fair value, leaving little room before Q3 results due 2026-11-03 (research/AIZ/2026-10-09.md Quality section; evaluation Bull case; fact sheet Fair value, Price: Next earnings date).",
+      "target_price_12m": {"value": 303.46, "cite": "research/AIZ/2026-10-09-evaluation.md Decision json, scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.0483, "cite": "Fact sheet Fair value table bull anchors: P/B+ROE $274.14 vs P/E $303.46; half the spread ($14.66) / target $303.46 = 4.83% (research/AIZ/factsheet-2026-10-09.md Fair value)"}
+    },
+    "base": {
+      "probability": {"value": 0.5, "cite": "research/AIZ/2026-10-09-evaluation.md Decision json, scenarios.base.probability"},
+      "probability_evidence": "Base is the modal outcome because the price already trades within 3.3% of the blended base fair value ($263.95) with TTM ROE at a 5y peak (18.3%) that the stock's own history shows is cyclical (FY2022 ROE fell to 5.7%), making normalisation toward the base anchor the central case (research/AIZ/2026-10-09.md Valuation section; evaluation Base case; fact sheet RA, Fair value).",
+      "target_price_12m": {"value": 263.95, "cite": "research/AIZ/2026-10-09-evaluation.md Decision json, scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0774, "cite": "Fact sheet Fair value table base anchors: P/B+ROE $250.32 vs P/E $291.20; half the spread ($20.44) / target $263.95 = 7.74% (research/AIZ/factsheet-2026-10-09.md Fair value)"}
+    },
+    "bear": {
+      "probability": {"value": 0.25, "cite": "research/AIZ/2026-10-09-evaluation.md Decision json, scenarios.bear.probability"},
+      "probability_evidence": "Bear requires a catastrophe-heavy Housing quarter like FY2022 (when ROE fell to 5.7%) ahead of Q3 results due 2026-11-03, which the note flags as hurricane-season loss risk; weighted at only 25% because it is a single-quarter catastrophe risk, not the structural five-year improvement seen in ROIC (9.0%->14.4%) and FCF conversion (research/AIZ/2026-10-09.md 'What would prove this wrong' and Quality section; evaluation Bear case; fact sheet RA, CF).",
+      "target_price_12m": {"value": 218.04, "cite": "research/AIZ/2026-10-09-evaluation.md Decision json, scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.1563, "cite": "Fact sheet Fair value table bear anchors: P/B+ROE $68.51 vs P/E $136.65; half the spread ($34.07) / target $218.04 = 15.63%, below the 20.29% blended residual vol cap in the mc-inputs file (research/AIZ/factsheet-2026-10-09.md Fair value; research/AIZ/2026-10-09-mc-inputs.json regression.residual_vol.blended)"}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs factor_news.SPY headlines are mixed as of 2026-10-07/08: record closes above 7,800 and $1tn combined SPY/SPYM assets vs. same-week warnings of an AI-bubble reversal to 5,000, a 100,000-lot bearish put spread, and a pullback on rising yields/oil ahead of earnings; no net direction, so set to 0 (research/AIZ/2026-10-09-mc-inputs.json factor_news.SPY)"},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/AIZ/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs factor_news.IEF headlines are mixed over 2026-10-01 to 10-08: a deepening bond rout and 30-year yields at a 2002 high alongside a jobs-report-driven Treasury rally and yields pulling back from multi-decade highs on a cooler PCE print; no net direction, so set to 0 (research/AIZ/2026-10-09-mc-inputs.json factor_news.IEF)"},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/AIZ/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Catastrophe-driven Q3 earnings disappointment (Global Housing)",
+      "reason": "Global Housing carries catastrophe-weather exposure that can spike losses in a single quarter, and Q3 results (due 2026-11-03) fall in peak Atlantic hurricane season",
+      "cite": "research/AIZ/2026-10-09.md Quality section: 'Housing carries catastrophe-weather exposure that can spike losses in any single quarter'; research/AIZ/2026-10-09-evaluation.md Bear case: 'Q3 results on Nov 3 bring hurricane-season loss risk'",
+      "annual_probability": {"value": 0.8, "cite": "Of the 20 quarterly earnings-reaction weeks in the mc-inputs event_weeks table (2021-11 to 2026-08, ~4.9 years), 4 moved <=-5% (2022-08-01 Q2'22 -11.66%, 2022-10-31 Q3'22 -10.0%, 2025-02-10 Q4'24 -5.67%, 2026-02-09 Q4'25 -10.62%): 4 events / ~4.9 years ~ 0.8/year (research/AIZ/2026-10-09-mc-inputs.json analogues.event_weeks)"},
+      "impact": {"value": -0.10, "cite": "mc-inputs analogue: Q3 2022 earnings week (2022-10-31) move -0.10, the matching prior Q3/hurricane-season earnings reaction (research/AIZ/2026-10-09-mc-inputs.json analogues.event_weeks, event_date 2022-11-02 'Q3 2022')"},
+      "analogue": {"week": "2022-10-31", "move": -0.10},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,56 @@
+{
+  "ticker": "BAC",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "evaluation.scenarios.bull.probability, research/BAC/2026-10-09-evaluation.md"},
+      "probability_evidence": "Bull case: BAC trades 10% below the 13.7x peer P/E median and 30% below the 2.0x peer P/B median [factsheet Valuation]; ROE has recovered every year since the FY2024 trough of 9.2% to 11.2% TTM; shares down 3.72% YoY support buyback-driven EPS; stock is 11% below its 50-day MA with RSI 24.5, suggesting much of the rate scare is already priced in (evaluation.md Bull case).",
+      "target_price_12m": {"value": 59.66, "cite": "evaluation.scenarios.bull.target_price_12m, research/BAC/2026-10-09-evaluation.md"},
+      "target_band": {"value": 0.22, "cite": "Valuation-anchor disagreement (P/B+ROE $34.30 vs FCFE DCF $66.64, factsheet Fair value table) gives half-spread/target = 0.271, which exceeds the blended residual volatility (0.22446, mc-inputs.json regression.residual_vol.blended); capped just below that residual-vol ceiling per instructions."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation.scenarios.base.probability, research/BAC/2026-10-09-evaluation.md"},
+      "probability_evidence": "Base case: P/E reversion to its 5y median of 11.9x [factsheet Valuation RA] is above the $40.56 blended fair value because the FCFE DCF base of $53.82 [factsheet Fair value] supports today's level, while the P/B+ROE method is penalised by the 5.28% risk-free rate (evaluation.md Base case).",
+      "target_price_12m": {"value": 51.45, "cite": "evaluation.scenarios.base.target_price_12m, research/BAC/2026-10-09-evaluation.md"},
+      "target_band": {"value": 0.1932, "cite": "Valuation-anchor disagreement (P/B+ROE $33.94 vs FCFE DCF $53.82, factsheet Fair value table): half-spread $9.94 / target $51.45 = 0.1932 (below the 0.22446 blended residual-vol ceiling, mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.35, "cite": "evaluation.scenarios.bear.probability, research/BAC/2026-10-09-evaluation.md"},
+      "probability_evidence": "Bear case: price already exceeds every mechanical fair-value scenario (base $40.56 is 24.3% below the $53.61 close, even bull fair value $45.08 is 15.9% below it) [factsheet Fair value]; P/B 1.4x is above its own 5y max of 1.3x [factsheet Valuation]; macro overlay (primary weight) tilts toward bear on the 0.61pp/3m real-yield rise pressuring AOCI, 2023-style; Q3 earnings land Oct 14 adding binary risk (evaluation.md Bear case).",
+      "target_price_12m": {"value": 42.54, "cite": "evaluation.scenarios.bear.target_price_12m, research/BAC/2026-10-09-evaluation.md"},
+      "target_band": {"value": 0.1493, "cite": "Valuation-anchor disagreement (P/B+ROE $29.84 vs FCFE DCF $42.54, factsheet Fair value table): half-spread $6.35 / target $42.54 = 0.1493 (below the 0.22446 blended residual-vol ceiling, mc-inputs.json regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed/contradictory over the same week (record highs 2026-10-06/07 vs AI-bubble-burst warning and large bearish put-spread trade 2026-10-07/08, plus rising-yields/oil pressure 2026-10-08): no single directional view is supported, so 0 per the mixed-news rule."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression, stockanalysis.com chart-data history)."}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.03, "cite": "Macro overlay (primary weight) dominant_chain and macro_tilt (toward bear, small): 10y real yield (DFII10) +0.61pp/3m is a 'live, checkable risk'; mc-inputs.json factor_news.IEF headlines (2026-10-07/08: 'US 30-Year Yields Return to 2002 High', 'Bond Valuations Reflect Higher Hurdle for Capital', 2026-10-05 'Global Bond Markets Sell Off on France's Fiscal Worries') lean toward further yield rises (IEF price falls), tempered by two 2026-10-02 headlines showing a yield pullback after a weak jobs print, so the move is kept modest (-3%) rather than the full headline magnitude."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression, stockanalysis.com chart-data history)."}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Q3 2026 earnings reaction",
+      "reason": "Binary earnings-release risk landing immediately after this note",
+      "cite": "evaluation.md Bear case: 'Q3 results are due Oct 14, so binary risk lands immediately'; note research/BAC/2026-10-09.md section 6: 'Next earnings are due 2026-10-14, five days after this note'; factsheet Price section: 'Next earnings date: Oct 14, 2026'.",
+      "annual_probability": {"value": 0.4971, "cite": "mc-inputs.json analogues.event_weeks: 3 of the last 19 quarterly earnings_release weeks (Q4 2021, Q3 2022, Q2 2023) moved ≥6.24% in magnitude; per-quarter rate 3/19=0.158, so P(at least one such reaction across 4 reports/yr) = 1-(1-0.158)^4 = 0.497."},
+      "impact": {"value": -0.0624, "cite": "mc-inputs.json analogues.event_weeks: Q4 2021 earnings_release, week 2022-01-18, move -0.0624 (largest-magnitude downside weekly reaction among tagged earnings_release weeks)."},
+      "analogue": {"week": "2022-01-18", "move": -0.0624},
+      "assumption": null
+    },
+    {
+      "name": "Banking-sector contagion / AOCI stress echo (2023-style)",
+      "reason": "A sudden, discrete repricing of bank securities-book/AOCI risk (SVB-crisis-style), distinct from the gradual rate-driven multiple compression already built into the bear scenario's target",
+      "cite": "evaluation.md Bear case: 'in a 2023-style echo' following the +0.61pp/3m real-yield rise; factsheet News & sentiment headline 2026-10-05 WSJ 'Bank Stocks Are Haunted by the Ghosts of 2023' and 2026-10-01 MarketWatch 'Financial stocks are falling below a key chart level to warn the worst is yet to come'; macro overlay macro_bear: 'Fast real-yield back-up pressures securities AOCI (2023-style)...'.",
+      "annual_probability": {"value": 0.6, "cite": "mc-inputs.json analogues.largest_falls: 3 of the 10 largest weekly declines over the 5y history (2025-03-31 -16.63%, 2023-03-06 -11.39%, 2022-12-05 -10.25%) exceed -10% in a single week; 3 events / 5 years = 0.6/yr."},
+      "impact": {"value": -0.1139, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week 2023-03-06 (Proxy Filing week coinciding with the March 2023 regional-bank/SVB stress episode), move -0.1139."},
+      "analogue": {"week": "2023-03-06", "move": -0.1139},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

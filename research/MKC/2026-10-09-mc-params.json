@@ -1,0 +1,56 @@
+{
+  "ticker": "MKC",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Q3 2026 sales grew 17% and management reaffirmed the 2026 outlook even though the price implies a -3.3% revenue decline (note section 3 Valuation; reverse DCF in factsheet-2026-10-09.md); EV/EBITDA of 11.3x sits below its own 5y minimum of 17.2x (fact sheet Valuation table).",
+      "target_price_12m": {"value": 62.0, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.28, "cite": "Half the spread between the fact sheet's bull-case DCF ($78.31) and P/E ($168.07) anchors relative to the $62.00 target = 0.724 (factsheet-2026-10-09.md Fair value table); capped at the mc-inputs.json regression.residual_vol.blended value of 0.2844 because the uncapped anchor-disagreement band would exceed measured outcome volatility."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "MKC trades 34-53% above packaged-food peers (KHC, GIS, CAG, HRL) on EV/EBITDA, EV/Sales, P/FCF and P/B even as ROIC (9.8%->8.9%) and gross margin (39.7%->38.9%) erode (note sections 2-3; fact sheet Valuation/Quality tables), while the Unilever Foods deal outcome and financing remain unresolved (note section 2, Reuters CMA investigation 2026-09-16).",
+      "target_price_12m": {"value": 50.0, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.0916, "cite": "Half the spread between the fact sheet's base-case DCF ($63.85) and P/E ($73.01) anchors relative to the $50.00 target = 0.0916 (factsheet-2026-10-09.md Fair value table); within the mc-inputs.json regression.residual_vol.blended cap of 0.2844."}
+    },
+    "bear": {
+      "probability": {"value": 0.35, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "Net debt/EBITDA is already 3.12x ahead of a likely debt-funded, UK-CMA-scrutinised Unilever Foods acquisition (note sections 2 and 5); short interest rose +20.3% month-over-month to 6.0% of float (fact sheet Other/News & sentiment); macro overlay's small bear tilt (US 10y real yield +0.61pp in 3m, dollar index +2.86 in 1m) raises financing cost into the deal decision (research/MKC/2026-10-09-macro.md).",
+      "target_price_12m": {"value": 36.0, "cite": "evaluation 2026-10-09-evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.28, "cite": "Half the spread between the fact sheet's bear-case DCF ($19.06) and P/E ($62.80) anchors relative to the $36.00 target = 0.608 (factsheet-2026-10-09.md Fair value table); capped at the mc-inputs.json regression.residual_vol.blended value of 0.2844 because the uncapped anchor-disagreement band would exceed measured outcome volatility."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed (record high above 7,800; '$1 trillion' AUM milestone; vs. 'AI bubble could burst' warning, bearish 100,000-lot put spread, and 'rising yields...test buyers'); no net direction, and the macro overlay's dominant_chain (research/MKC/2026-10-09-macro.md) concerns real yields/dollar only, not the broad equity factor -> use 0."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.03, "cite": "Macro overlay research/MKC/2026-10-09-macro.md: US 10y real yield (DFII10) +0.61pp in 3m to 2.92%, 10y nominal +0.72pp in 3m to 5.28%, dollar index +2.86 in 1m, tilt 'toward bear, small'; mc-inputs.json factor_news.IEF headlines 'Bond Valuations Reflect Higher Hurdle for Capital' and '10-Year Bond Yields Hit Highest Level Since 2002' point to continued modest yield pressure (bond-price decline for IEF), tempered by a partial-rebound headline ('US Treasury Rebound Pulls Yields Off Multi-Decade Highs') -> modest -3% expected move, kept within the modest-move guidance."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Unilever Foods acquisition - UK CMA regulatory block/delay/remedies",
+      "reason": "A proposed, transformational acquisition of the majority of Unilever's foods business is under active UK competition-authority investigation opened 2026-09-16, outcome uncertain (clearance, remedies, or block) and likely debt-funded on an already-leveraged balance sheet (net debt/EBITDA 3.12x); the note's invalidation triggers include the CMA outcome and financing keeping net debt/EBITDA at or below 3.5x.",
+      "cite": "note research/MKC/2026-10-09.md section 2 (Quality) and section 6 (Unusual items); fact sheet News & sentiment Reuters headline 2026-09-16 'McCormick and Unilever food deal faces UK competition scrutiny'; evaluation Bear case.",
+      "annual_probability": {"value": 1.0, "cite": "The CMA investigation is already active since 2026-09-16 and typically produces a decision within about a year, so an outcome event is near-certain within the 12-month horizon; comparable M&A-scale events are rare in the 5y history (only 1 'M&A Announcement' event-week in mc-inputs.json event_weeks, 2025-08-18), i.e. this is a one-off live event rather than a recurring base-rate risk."},
+      "impact": {"value": -0.0507, "cite": "mc-inputs.json all_weekly_moves week '2026-09-14' = -0.0507, the trading week containing the 2026-09-16 Reuters report of the CMA investigation."},
+      "analogue": {"week": "2026-09-14", "move": -0.0507},
+      "assumption": null
+    },
+    {
+      "name": "Quarterly earnings reaction",
+      "reason": "MKC's quarterly results drive outsized weekly moves (largest 5-year weekly fall of -14.15% coincided with the Q3 2023 earnings week); Q3 2026 results released 2026-10-01 already showed GAAP profit falling to $97.6m from $225.5m a year earlier even as sales rose, a pattern of earnings-quality surprises that can recur and swing the stock sharply around results.",
+      "cite": "fact sheet News & sentiment WSJ headline 2026-10-01 'McCormick Posts Lower Profit on Higher Sales'; note research/MKC/2026-10-09.md section 3 (Valuation); mc-inputs.json event_weeks Q3 2023 entry.",
+      "annual_probability": {"value": 1.0, "cite": "Earnings are released on a certain quarterly cadence (4x/year; mc-inputs.json event_weeks lists one Q1-Q4 report each fiscal year), so at least one such reaction week occurring within the next 12 months is effectively certain; the impact value captures the magnitude of the largest observed single-quarter reaction."},
+      "impact": {"value": -0.1415, "cite": "mc-inputs.json analogues.largest_falls / event_weeks: week '2023-10-02' = -0.1415, the Q3 2023 earnings-release week, the single largest weekly fall in the 5-year history."},
+      "analogue": {"week": "2023-10-02", "move": -0.1415},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.015, "cite": "fact sheet Price section: price -10.3% below its 50-day MA and -16.5% below its 200-day MA, 50d MA -6.9% below 200d MA, 3-month momentum -10.9%, RSI(14) 35.5, relative strength -14.7pp vs SPY over 3m (research/MKC/factsheet-2026-10-09.md Price/News&sentiment tables)."}
+}

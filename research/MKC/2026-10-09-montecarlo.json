@@ -1,0 +1,229 @@
+{
+ "ticker": "MKC",
+ "date": "2026-10-09",
+ "params_file": "2026-10-09-mc-params.json",
+ "inputs_file": "2026-10-09-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 45.94,
+  "close_date": "2026-10-08",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/mkc/history/"
+ },
+ "target_returns": {
+  "bull": 0.3495864170657379,
+  "base": 0.0883761427949501,
+  "bear": -0.21636917718763604
+ },
+ "expected_12m": 0.03395733565520252,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.21214283739500236,
+   "IEF": 1.087685666700787
+  },
+  "r2": 0.09158999195363215,
+  "residual_vol": {
+   "52w": 0.3216244035473416,
+   "156w": 0.24725278875322237,
+   "blended": 0.284438596150282,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.2,
+    "target_price_12m": 62.0,
+    "target_band": 0.28
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 50.0,
+    "target_band": 0.0916
+   },
+   "bear": {
+    "probability": 0.35,
+    "target_price_12m": 36.0,
+    "target_band": 0.28
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.21214283739500236,
+    "move": 0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 1.087685666700787,
+    "move": -0.03,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Unilever Foods acquisition - UK CMA regulatory block/delay/remedies",
+    "p": 1.0,
+    "impact": -0.0507,
+    "analogue": {
+     "week": "2026-09-14",
+     "move": -0.0507
+    },
+    "cited": true
+   },
+   {
+    "name": "Quarterly earnings reaction",
+    "p": 1.0,
+    "impact": -0.1415,
+    "analogue": {
+     "week": "2023-10-02",
+     "move": -0.1415
+    },
+    "cited": true
+   }
+  ],
+  "tilt": -0.015
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.004262115346649017,
+   "median": -0.004944500488709352,
+   "p5": -0.18424822710429264,
+   "p25": -0.07581053871740633,
+   "p50": -0.004944500488709352,
+   "p75": 0.06565230630544365,
+   "p95": 0.1813503146759477,
+   "prob_loss": 0.5196,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.45,
+    "bear": 0.35
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.007890243503234449,
+    "jumps": -12.889737424556442,
+    "noise": 0.0003194281050923577,
+    "scenario": 12.886706031089751
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.001988324595783693,
+   "median": -0.0028659350167569188,
+   "p5": -0.3041078008562818,
+   "p25": -0.11853963759158914,
+   "p50": -0.0028659350167569188,
+   "p75": 0.11690302083701656,
+   "p95": 0.3210160221846487,
+   "prob_loss": 0.5071,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.45,
+    "bear": 0.35
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.016039981030947136,
+    "jumps": -25.779474849112884,
+    "noise": 9.064478615460327e-05,
+    "scenario": 25.778412062179502
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.03395733565520198,
+   "median": 0.009467806461955894,
+   "p5": -0.49019794082579266,
+   "p25": -0.19258409590990525,
+   "p50": 0.009467806461955894,
+   "p75": 0.21075480705063931,
+   "p95": 0.6670665313644641,
+   "prob_loss": 0.4877,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.45,
+    "bear": 0.35
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.032377642391670965,
+    "jumps": -51.55894969822577,
+    "noise": 0.001972270231021061,
+    "scenario": 51.561824124359006
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.45,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.03395733565520198,
+   "prob_loss_12m": 0.4877
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.30000000000000004,
+    "base": 0.45,
+    "bear": 0.24999999999999997
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.09055289508054118,
+   "prob_loss_12m": 0.4287
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.1,
+    "base": 0.45,
+    "bear": 0.44999999999999996
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.022638223770137286,
+   "prob_loss_12m": 0.5441
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.45,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.033957335655202876,
+   "prob_loss_12m": 0.4749
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.45,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.033957335655200885,
+   "prob_loss_12m": 0.5027
+  }
+ ]
+}

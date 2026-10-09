@@ -1,0 +1,95 @@
+{
+  "ticker": "ADP",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {
+        "value": 0.2,
+        "cite": "Evaluation decision block scenarios.bull.probability, research/ADP/2026-10-09-evaluation.md"
+      },
+      "probability_evidence": "Citi's 2026 Global TMT Conference transcript: 'Margins are expanding ahead of targets, and Lyric is driving enterprise bookings' (https://stockanalysis.com/stocks/adp/transcripts/740939-citi-s-2026-global-tmt-conference/, cited in note section 3 and evaluation bull case); FQ1 (Oct 28, 2026) is the near-term test of this margin/bookings trajectory.",
+      "target_price_12m": {
+        "value": 292.44,
+        "cite": "Evaluation decision block scenarios.bull.target_price_12m, research/ADP/2026-10-09-evaluation.md"
+      },
+      "target_band": {
+        "value": 0.1104,
+        "cite": "Fact sheet Fair value table bull row: DCF (best method) 227.87 vs EV/Revenue (2nd method, used as the evaluation's target) 292.44; half the spread (32.285) / target (292.44) = 0.1104."
+      }
+    },
+    "base": {
+      "probability": {
+        "value": 0.45,
+        "cite": "Evaluation decision block scenarios.base.probability, research/ADP/2026-10-09-evaluation.md"
+      },
+      "probability_evidence": "Fact sheet Valuation table: current EV/Sales 4.9x sits almost exactly at the 5-year median (5.1x), i.e. multiples holding near their historical norm after the stock's +34.8% 6-month re-rating is the modal (not extreme) outcome.",
+      "target_price_12m": {
+        "value": 276.22,
+        "cite": "Evaluation decision block scenarios.base.target_price_12m, research/ADP/2026-10-09-evaluation.md"
+      },
+      "target_band": {
+        "value": 0.1296,
+        "cite": "Fact sheet Fair value table base row: DCF (best method) 204.63 vs EV/Revenue (2nd method, used as the evaluation's target) 276.22; half the spread (35.795) / target (276.22) = 0.1296."
+      }
+    },
+    "bear": {
+      "probability": {
+        "value": 0.35,
+        "cite": "Evaluation decision block scenarios.bear.probability, research/ADP/2026-10-09-evaluation.md"
+      },
+      "probability_evidence": "Fact sheet News & sentiment: ADP's own weekly National Employment Report prints slowed through August-September (12,000 to 23,750 private jobs added per week across the four preliminary/final releases), a headwind for per-employee billings, reinforced by the macro overlay's tilt ('small, toward bear') from the 10y real yield rising to 2.92% (+0.61pp over 3m, research/ADP/2026-10-09-macro.md).",
+      "target_price_12m": {
+        "value": 222.02,
+        "cite": "Evaluation decision block scenarios.bear.target_price_12m, research/ADP/2026-10-09-evaluation.md"
+      },
+      "target_band": {
+        "value": 0.2099,
+        "cite": "Fact sheet Fair value table bear row: DCF (best method) 128.82 vs EV/Revenue (2nd method, used as the evaluation's target) 222.02; half the spread (46.60) / target (222.02) = 0.2099 (below the 0.2441 blended residual volatility in mc-inputs.json)."
+      }
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {
+        "value": 0.0,
+        "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs (CNBC 'S&P closes at record high, breaking 7,800 points', 2026-10-07; ETF Trends 'Combined Assets in SPY, SPYM Cross $1 Trillion', 2026-10-07) alongside a warned AI-bubble reversal (Invezz 'AI bubble could burst in 2027, sending S&P 500 down to 5,000', 2026-10-08), large bearish put-spread positioning (CNBC, 2026-10-07) and a pullback on rising yields/oil (TipRanks, FXEmpire, Reuters, 2026-10-07/08); mixed news -> 0 per house rule."
+      },
+      "uncertainty_12m": {
+        "value": 0.1431154014991791,
+        "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression)"
+      }
+    },
+    "IEF": {
+      "expected_12m_move": {
+        "value": -0.03,
+        "cite": "mc-inputs.json factor_news.IEF headlines describe a dominant bond sell-off: Bloomberg 'US 30-Year Yields Return to 2002 High' (2026-10-07), ETF Trends 'Bond Valuations Reflect Higher Hurdle for Capital' (2026-10-08), Barrons 'Global Bond Markets Sell Off on France's Fiscal Worries' (2026-10-05), WSJ 'The Bond Rout Is Deepening' (2026-10-01), tempered only by a brief early-October rebound (ETF Trends 'Navigating Fixed Income Duration as Treasury Yields Retreat', 2026-10-02); direction and small size corroborated by the macro overlay's tilt 'small, toward bear' from rising real yields (research/ADP/2026-10-09-macro.md), kept modest given the overlay explicitly sizes the tilt as small."
+      },
+      "uncertainty_12m": {
+        "value": 0.06460381100458489,
+        "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression)"
+      }
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings surprise",
+      "reason": "FQ1 FY2027 earnings (Oct 28, 2026) is the near-term event that confirms or refutes the growth needed to justify the price: the reverse DCF implies 11.6% year-1 revenue growth, which the note judges well above ADP's recent organic trajectory; ADP's largest single-week historical moves are earnings-release weeks.",
+      "cite": "Fact sheet Price section 'Next earnings date | Oct 28, 2026'; fact sheet Fair value section (reverse DCF 11.6% growth implied); note section 3 ('Valuation') and evaluation Bear case",
+      "annual_probability": {
+        "value": 0.2,
+        "cite": "mc-inputs.json analogues.event_weeks: of ADP's 20 quarterly earnings-release weeks from 2021-10 to 2026-07 (~4.75 years), only 1 produced a move of 10%+ in magnitude (2023-10-23, Q1 2024 earnings, -0.1111) -- about 1 per 4.75 years, i.e. ~0.2/year."
+      },
+      "impact": {
+        "value": -0.1111,
+        "cite": "Largest-fall analogue, week 2023-10-23, Q1 2024 earnings release, move -0.1111 (mc-inputs.json analogues.largest_falls and analogues.event_weeks, both confirm this week as the earnings-release reaction)."
+      },
+      "analogue": {
+        "week": "2023-10-23",
+        "move": -0.1111
+      },
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

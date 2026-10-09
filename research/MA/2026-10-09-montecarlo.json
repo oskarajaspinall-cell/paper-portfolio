@@ -1,0 +1,233 @@
+{
+ "ticker": "MA",
+ "date": "2026-10-09",
+ "params_file": "2026-10-09-mc-params.json",
+ "inputs_file": "2026-10-09-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 574.76,
+  "close_date": "2026-10-08",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/ma/history/"
+ },
+ "target_returns": {
+  "bull": 0.1297411093325911,
+  "base": 0.0,
+  "bear": -0.2827615004523627
+ },
+ "expected_12m": -0.058880228269190586,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.7767708720778584,
+   "IEF": 0.20372776691921912
+  },
+  "r2": 0.33747932554591054,
+  "residual_vol": {
+   "52w": 0.18930624795262585,
+   "156w": 0.1581484631206194,
+   "blended": 0.1737273555366226,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.2,
+    "target_price_12m": 649.33,
+    "target_band": 0.1663
+   },
+   "base": {
+    "probability": 0.5,
+    "target_price_12m": 574.76,
+    "target_band": 0.0666
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 412.24,
+    "target_band": 0.1312
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.7767708720778584,
+    "move": 0.0,
+    "unc": 0.1431
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.20372776691921912,
+    "move": -0.05,
+    "unc": 0.0646
+   }
+  ],
+  "jumps": [
+   {
+    "name": "US interchange-fee legislation",
+    "p": 0.12,
+    "impact": -0.12,
+    "analogue": null,
+    "cited": true
+   },
+   {
+    "name": "Merchant-interchange litigation settlement/judgment",
+    "p": 0.07,
+    "impact": -0.08,
+    "analogue": null,
+    "cited": true
+   },
+   {
+    "name": "Q3 2026 earnings reaction (Oct 29, 2026)",
+    "p": 0.34,
+    "impact": -0.0645,
+    "analogue": {
+     "week": "2021-10-25",
+     "move": -0.0645
+    },
+    "cited": true
+   }
+  ],
+  "tilt": 0.01
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.016972456080199993,
+   "median": -0.021340011415841825,
+   "p5": -0.1729831118656897,
+   "p25": -0.08771359042020277,
+   "p50": -0.021340011415841825,
+   "p75": 0.0498466021026448,
+   "p95": 0.15548731986451605,
+   "prob_loss": 0.5825,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.0026610059558378795,
+    "jumps": -0.012743022237835524,
+    "noise": 0.0003194006834025307,
+    "scenario": -0.007330777866253504
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": -0.03476458899234692,
+   "median": -0.04381390009385963,
+   "p5": -0.27850310830593106,
+   "p25": -0.14692657905820178,
+   "p50": -0.04381390009385963,
+   "p75": 0.06714372086846679,
+   "p95": 0.2387996250941688,
+   "prob_loss": 0.6125,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.005561583157666894,
+    "jumps": -0.025395397233077717,
+    "noise": 0.00017514383544782746,
+    "scenario": -0.01799488906584034
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": -0.05888022826919059,
+   "median": -0.08431218193958417,
+   "p5": -0.43148152251191674,
+   "p25": -0.24910300356629322,
+   "p50": -0.08431218193958417,
+   "p75": 0.10300996185445739,
+   "p95": 0.40026645391967786,
+   "prob_loss": 0.6235,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.009726935061132865,
+    "jumps": -0.05073399971099189,
+    "noise": 0.0018536474890068736,
+    "scenario": -0.039323111465014014
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.05888022826919059,
+   "prob_loss_12m": 0.6235
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.30000000000000004,
+    "base": 0.5,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.01762996729069519,
+   "prob_loss_12m": 0.561
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.1,
+    "base": 0.5,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.10013048924768599,
+   "prob_loss_12m": 0.6832
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": -0.058880228269190524,
+   "prob_loss_12m": 0.6182
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": -0.05888022826919059,
+   "prob_loss_12m": 0.6243
+  }
+ ]
+}

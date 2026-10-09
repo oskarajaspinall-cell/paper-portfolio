@@ -1,0 +1,56 @@
+{
+ "ticker": "HON",
+ "date": "2026-10-09",
+ "scenarios": {
+  "bull": {
+   "probability": {"value": 0.2, "cite": "research/HON/2026-10-09-evaluation.md Decision JSON scenarios.bull.probability"},
+   "probability_evidence": "Bull case: FCF margin could recover from 10.5% TTM toward the 14.5% FY2025 level (research/HON/2026-10-09-evaluation.md Bull case; factsheet-2026-10-09.md Quality/CF,IS); management has set growth and margin targets through 2029 and describes 'strong orders and backlog' (Deutsche Bank Chicago Industrials Summit transcript, 2026-08-11, factsheet News & sentiment); the Dangote refinery wins support the UOP/process-technology franchise (Business Wire/Reuters, 2026-09-30, factsheet News & sentiment); buybacks keep cutting the share count -1.87% YoY (factsheet Other, ST). Probability kept at 20% (below an even third) because the macro overlay applies a moderate tilt toward the bear case (research/HON/2026-10-09-macro.md macro_tilt).",
+   "target_price_12m": {"value": 284.73, "cite": "research/HON/2026-10-09-evaluation.md Decision JSON scenarios.bull.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Fact sheet fair-value table has only one computable valuation method: 'sum of the parts (best) | [data unavailable — needs segment-level profits, not on stockanalysis.com]'; 'DCF (second) | 164.78 | 199.75 | 284.73'; Blend: DCF 100% (factsheet-2026-10-09.md Fair value table). With no second anchor there is no measurable anchor disagreement; the current-multiples table (P/E, EV/EBITDA, EV/Sales, P/FCF, P/B) cannot substitute as an alternate anchor either, because the note explicitly flags TTM multiples as distorted by a one-off disposition gain and 'not like-for-like this year' (research/HON/2026-10-09.md §3 Valuation)."}
+  },
+  "base": {
+   "probability": {"value": 0.5, "cite": "research/HON/2026-10-09-evaluation.md Decision JSON scenarios.base.probability"},
+   "probability_evidence": "The DCF base fair value (199.75) is already only 3.3% below the 206.60 close (factsheet-2026-10-09.md Fair value table), so the modal outcome is convergence on an already-near-the-money value as the separation completes with operating margin near its 18.7% TTM level (factsheet Quality, IS) and the reverse-DCF-implied 2.8% year-1 revenue growth plays out (factsheet Fair value); assigned the largest weight (50%) as the no-major-surprise case (research/HON/2026-10-09-evaluation.md Decision JSON scenarios.base.basis).",
+   "target_price_12m": {"value": 199.75, "cite": "research/HON/2026-10-09-evaluation.md Decision JSON scenarios.base.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Fact sheet fair-value table has only one computable valuation method: 'sum of the parts (best) | [data unavailable — needs segment-level profits, not on stockanalysis.com]'; 'DCF (second) | 164.78 | 199.75 | 284.73'; Blend: DCF 100% (factsheet-2026-10-09.md Fair value table). With no second anchor there is no measurable anchor disagreement; the current-multiples table cannot substitute either, as the note flags TTM multiples as distorted by a one-off disposition gain and 'not like-for-like this year' (research/HON/2026-10-09.md §3 Valuation)."}
+  },
+  "bear": {
+   "probability": {"value": 0.3, "cite": "research/HON/2026-10-09-evaluation.md Decision JSON scenarios.bear.probability"},
+   "probability_evidence": "Bear case: ROIC has fallen every year from 21.4% (FY2021) to 13.5% TTM, operating margin from 21.7% to 18.7%, and net debt/EBITDA has risen from 1.05x to 3.03x (factsheet-2026-10-09.md Quality table, RA/IS), while the stock already trades 10.4% below its 200-day average and trails SPY by 29.7pp over 6 months (factsheet Price table); the macro overlay's moderate bear tilt — rising real yields and widening HY spreads raising both HON's DCF discount rate and its refinancing cost at 5-year-high leverage mid-separation (research/HON/2026-10-09-macro.md macro_tilt) — adds weight beyond an even third, to 30%.",
+   "target_price_12m": {"value": 164.78, "cite": "research/HON/2026-10-09-evaluation.md Decision JSON scenarios.bear.target_price_12m"},
+   "target_band": {"value": 0.0, "cite": "Fact sheet fair-value table has only one computable valuation method: 'sum of the parts (best) | [data unavailable — needs segment-level profits, not on stockanalysis.com]'; 'DCF (second) | 164.78 | 199.75 | 284.73'; Blend: DCF 100% (factsheet-2026-10-09.md Fair value table). With no second anchor there is no measurable anchor disagreement; the current-multiples table cannot substitute either, as the note flags TTM multiples as distorted by a one-off disposition gain and 'not like-for-like this year' (research/HON/2026-10-09.md §3 Valuation)."}
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {"value": 0.0, "cite": "research/HON/2026-10-09-mc-inputs.json factor_news.SPY headlines (2026-10-06 to 2026-10-08) are mixed: record-high/AI-rally headlines ('S&P 500 Hits Record High as Big Tech Leads', 'Combined Assets in SPY, SPYM Cross $1 Trillion') alongside same-week caution ('Stock Market Today: SPY, QQQ Retreated as Oil Climbed', 'Two big bearish trades point to skepticism', 'AI bubble could burst in 2027, sending S&P 500 down to 5,000') — no clear 12-month direction, so 0."},
+   "uncertainty_12m": {"value": 0.1431154014991791, "cite": "research/HON/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+  },
+  "IEF": {
+   "expected_12m_move": {"value": -0.05, "cite": "research/HON/2026-10-09-mc-inputs.json factor_news.IEF headlines (2026-10-01 to 2026-10-08) are predominantly bearish for bond prices ('The Bond Rout Is Deepening Even as Oil Tankers Return to the Strait of Hormuz', 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002', 'Global Bond Markets Sell Off on France's Fiscal Worries', 'Bond Valuations Reflect Higher Hurdle for Capital', 'US 30-Year Yields Return to 2002 High'), against one brief yield-pullback headline (2026-10-02); this is reinforced by the macro overlay's dominant chain (rising real yields/credit spreads, research/HON/2026-10-09-macro.md dominant_chain and macro_tilt 'toward bear' moderate) — net modest negative price view for the 7-10y Treasury ETF, kept within the ±15% bound."},
+   "uncertainty_12m": {"value": 0.06460381100458489, "cite": "research/HON/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual (156-week weekly regression, 2023-10-09 to 2026-09-28)"}
+  }
+ },
+ "jumps": [
+  {
+   "name": "Q3 2026 earnings release (Oct 22, 2026) during an active separation",
+   "reason": "A scheduled, imminent earnings print whose comparability is explicitly clouded by the ongoing corporate separation and the TTM one-off disposition gain; the evaluation's rationale names this directly as a risk to the earnings base.",
+   "cite": "research/HON/2026-10-09-evaluation.md Decision.rationale ('Separation noise and the Oct 22 results cloud the earnings base'); research/HON/factsheet-2026-10-09.md Price section 'Next earnings date | Oct 22, 2026'; Business Wire headline 2026-09-24 'Honeywell Technologies to Release Third Quarter Financial Results... October 22' (factsheet News & sentiment).",
+   "annual_probability": {"value": 0.2, "cite": "Of the 20 quarterly earnings_release weeks in research/HON/2026-10-09-mc-inputs.json analogues.event_weeks (Q3 2021 - Q2 2026), only one reached an -8.73% magnitude (week 2026-04-20, Q1 2026) = 1/20 quarters x 4/yr ≈ 0.2/year."},
+   "impact": {"value": -0.0873, "cite": "research/HON/2026-10-09-mc-inputs.json analogues.event_weeks week 2026-04-20 (Q1 2026 earnings_release), move -0.0873 — the worst downside earnings-week reaction in the 5-year history."},
+   "analogue": {"week": "2026-04-20", "move": -0.0873},
+   "assumption": null
+  },
+  {
+   "name": "Aerospace/corporate-separation catalyst (completion or update)",
+   "reason": "A material corporate separation is underway (Productivity Solutions and Services sold to Brady Corporation, disposition completed 2026-06-25; a Solstice Advanced Materials spin-off; an Aerospace separation that appears still in progress as of mid-September 2026 per Honeywell's own Aerospace CEO commentary) — a named, ongoing structural risk whose next catalyst (investor day, further disposition, or separation completion) could move the stock sharply either way.",
+   "cite": "research/HON/2026-10-09.md §1 Business, §6 Unusual items (sec.gov 8-K Item 2.01, filed 2026-06-29; honeywell.com/us/en/news; Reuters 2026-09-15 Aero CEO commentary on GE Aerospace-CPP deal).",
+   "annual_probability": {"value": 0.3, "cite": "research/HON/2026-10-09-mc-inputs.json analogues.event_weeks shows 4 separation/structure-related catalyst weeks in the active 2024-2026 period (Spin Off 2024-10-08 +5.99%; Investor Day 2025 2025-10-08 -3.89%; Honeywell Aerospace Investor Day 2026 2026-06-03 -10.04%; Investor Day 2026/Guidance 2026-06-08 +2.96%); 1 of these 4 reached the -10.04% magnitude used as impact, and the separation process remains active (Aerospace unit not yet separated per the research), so ≈0.3/year for a catalyst of this size."},
+   "impact": {"value": -0.1004, "cite": "research/HON/2026-10-09-mc-inputs.json analogues.largest_falls rank #1 / analogues.event_weeks week 2026-06-01 ('Honeywell Aerospace Investor Day 2026'), move -0.1004 — the single largest weekly fall in the entire 5-year history, directly tied to a separation-related catalyst."},
+   "analogue": {"week": "2026-06-01", "move": -0.1004},
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": {"value": -0.015, "cite": "research/HON/factsheet-2026-10-09.md Price section: price -5.6% vs 50-day MA and -10.4% vs 200-day MA, the 50-day MA itself -5.1% below the 200-day MA, 3-month momentum -6.2% and 6-month momentum -15.3%, relative strength vs SPY -10.1pp/3m and -29.7pp/6m, RSI (14-day) 38.9 (News & sentiment) — a persistent short-term downtrend; modest negative tilt applied only to the 3-month horizon per house rule (max ±0.02)."}
+}

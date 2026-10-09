@@ -1,0 +1,116 @@
+{
+  "ticker": "FIS",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {
+        "value": 0.2,
+        "cite": "evaluation.md Decision.scenarios.bull.probability"
+      },
+      "probability_evidence": "Bear case (evaluation.md) notes 'Integration risk is not yet visible in reported numbers [Guessing]' and the triggers require Debt/EBITDA to fall below 4.0x and FCF margin above 27% before this is confirmed -- none of those have fired yet, so a full re-rate to the mechanical bear fair value is a low-probability path.",
+      "target_price_12m": {
+        "value": 59.49,
+        "cite": "evaluation.md Decision.scenarios.bull.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.0297,
+        "cite": "Bull scenario targets the fact sheet's Bear-tier blended fair value (59.49); that tier's own anchors disagree -- DCF 58.31 vs EV/EBITDA 61.84 (factsheet-2026-10-09.md Fair value table) -- half the 3.53 spread (1.765) / 59.49 = 0.0297"
+      }
+    },
+    "base": {
+      "probability": {
+        "value": 0.45,
+        "cite": "evaluation.md Decision.scenarios.base.probability"
+      },
+      "probability_evidence": "Evaluation rationale: 'The valuation is compelling, but the equity is a leveraged stub on freshly debt-funded M&A... That is good but not compelling, so conviction is 3: AVOID' -- a partial re-rating without confirmed deleveraging is the modal outcome the AVOID verdict is built on.",
+      "target_price_12m": {
+        "value": 40.0,
+        "cite": "evaluation.md Decision.scenarios.base.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.2068,
+        "cite": "Base scenario's own fair-value tier disagrees between methods: DCF 104.86 vs EV/EBITDA 88.32 (factsheet-2026-10-09.md Fair value table) -- half the 16.54 spread (8.27) / 40.0 target = 0.2068"
+      }
+    },
+    "bear": {
+      "probability": {
+        "value": 0.35,
+        "cite": "evaluation.md Decision.scenarios.bear.probability"
+      },
+      "probability_evidence": "Macro overlay (2026-10-09-macro.md macro_tilt): 'moderate toward bear -- 3-month rise in real yields (+0.61pp) and HY spreads (+0.39pp) works directly against FIS's specific vulnerability (fresh M&A debt, Altman Z 0.35)... moved weight to this case' per the bear-case text in the evaluation.",
+      "target_price_12m": {
+        "value": 26.0,
+        "cite": "evaluation.md Decision.scenarios.bear.target_price_12m"
+      },
+      "target_band": {
+        "value": 0.0679,
+        "cite": "No fair-value tier matches 26.0 directly; using the Bear tier's own method disagreement as the closest available anchor spread -- DCF 58.31 vs EV/EBITDA 61.84 (factsheet-2026-10-09.md Fair value table) -- half the 3.53 spread (1.765) / 26.0 target = 0.0679"
+      }
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {
+        "value": 0.0,
+        "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs / $1T combined AUM (ETF Trends, Bloomberg 2026-10-06/07) vs an AI-bubble-burst warning (Invezz 2026-10-08) and bearish put-spread positioning (CNBC 2026-10-07); no clear direction, so 0."
+      },
+      "uncertainty_12m": {
+        "value": 0.1431154014991791,
+        "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual"
+      }
+    },
+    "IEF": {
+      "expected_12m_move": {
+        "value": -0.03,
+        "cite": "Macro overlay (2026-10-09-macro.md): DFII10 10y real yield +0.61pp/3m to 2.92%, DGS10 +0.72pp/3m to 5.28% (fred.stlouisfed.org, 2026-10-07), both rising; corroborated by mc-inputs.json factor_news.IEF headlines 'Bond Valuations Reflect Higher Hurdle for Capital' (ETF Trends 2026-10-08) and 'The Bond Rout Is Deepening' (WSJ 2026-10-01) -- modest negative move for the 7-10y Treasury proxy as yields stay elevated/rising."
+      },
+      "uncertainty_12m": {
+        "value": 0.06460381100458489,
+        "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"
+      }
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction (next: Q3 2026 results, Nov 4 2026)",
+      "reason": "The evaluation's own rationale names the next print as the live catalyst ('Revisit after Nov 4 results show leverage falling') and its triggers check debt/EBITDA, FCF margin and operating margin off that report; FIS's history includes a -29.1% single-week earnings-reaction crash.",
+      "cite": "2026-10-09-evaluation.md Decision.rationale and triggers; factsheet-2026-10-09.md Price section 'Next earnings date Nov 4, 2026'",
+      "annual_probability": {
+        "value": 0.4,
+        "cite": "mc-inputs.json analogues.event_weeks: of 20 quarterly earnings prints over the 5-year history, 2 moved more than 15% in the reaction week (2022-10-31 Q3 2022 -29.1%, 2025-02-10 Q4 2024 -17.3%) = 2 events / 5 years = 0.4/year"
+      },
+      "impact": {
+        "value": -0.2913,
+        "cite": "mc-inputs.json analogues.event_weeks: week 2022-10-31 (Q3 2022 earnings_release) move -0.2913, the worst earnings-week analogue in the 5-year history"
+      },
+      "analogue": {
+        "week": "2022-10-31",
+        "move": -0.2913
+      },
+      "assumption": null
+    },
+    {
+      "name": "Credit / refinancing stress shock",
+      "reason": "FIS re-levered to 5.82x net debt/EBITDA funding Issuer Solutions with ~$7.7bn of new debt and carries an Altman Z of 0.35 (distress zone); the macro overlay's dominant chain is real yields + HY spreads -> refinancing cost -> deleveraging speed, and the 3-month move in both (DFII10 +0.61pp, HY spread +0.39pp) already tilts the thesis toward bear.",
+      "cite": "2026-10-09.md note section 2 ('Altman Z is 0.35... distress band') and section 5 (~$7.7bn new debt); 2026-10-09-macro.md dominant_chain and macro_tilt",
+      "annual_probability": {
+        "value": 0.8,
+        "cite": "mc-inputs.json analogues.all_weekly_moves: 4 weeks with moves beyond -8% that are NOT tagged as earnings events in event_weeks (2021-10-25, 2026-01-26, 2026-02-09, 2026-09-28) over the 5-year history = ~0.8/year"
+      },
+      "impact": {
+        "value": -0.0988,
+        "cite": "mc-inputs.json analogues.largest_falls: week 2026-02-09 move -0.0988, not tied to an earnings date, coinciding with the rising-real-yield period the macro overlay flags"
+      },
+      "analogue": {
+        "week": "2026-02-09",
+        "move": -0.0988
+      },
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {
+    "value": -0.02,
+    "cite": "factsheet-2026-10-09.md Price section: -12.1% vs 50-day MA, -25.6% vs 200-day MA, 50d below 200d by -15.3%, 3m momentum -15.9%, 6m -27.0%, 12m -49.9%, RSI 39.6 (not yet oversold) -- persistent downtrend across every window supports the maximum allowed negative 3-month tilt."
+  }
+}

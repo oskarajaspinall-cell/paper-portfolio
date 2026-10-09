@@ -1,0 +1,229 @@
+{
+ "ticker": "HON",
+ "date": "2026-10-09",
+ "params_file": "2026-10-09-mc-params.json",
+ "inputs_file": "2026-10-09-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 206.6,
+  "close_date": "2026-10-08",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/hon/history/"
+ },
+ "target_returns": {
+  "bull": 0.37817037754114247,
+  "base": -0.03315585672797672,
+  "bear": -0.20242013552758953
+ },
+ "expected_12m": -0.0016698935140367216,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.751777393872488,
+   "IEF": 0.27390433243566337
+  },
+  "r2": 0.2238418306419646,
+  "residual_vol": {
+   "52w": 0.26253421681216776,
+   "156w": 0.2053432639703544,
+   "blended": 0.23393874039126109,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.2,
+    "target_price_12m": 284.73,
+    "target_band": 0.0
+   },
+   "base": {
+    "probability": 0.5,
+    "target_price_12m": 199.75,
+    "target_band": 0.0
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 164.78,
+    "target_band": 0.0
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.751777393872488,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.27390433243566337,
+    "move": -0.05,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Q3 2026 earnings release (Oct 22, 2026) during an active separation",
+    "p": 0.2,
+    "impact": -0.0873,
+    "analogue": {
+     "week": "2026-04-20",
+     "move": -0.0873
+    },
+    "cited": true
+   },
+   {
+    "name": "Aerospace/corporate-separation catalyst (completion or update)",
+    "p": 0.3,
+    "impact": -0.1004,
+    "analogue": {
+     "week": "2026-06-01",
+     "move": -0.1004
+    },
+    "cited": true
+   }
+  ],
+  "tilt": -0.015
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": -0.008440267956716055,
+   "median": -0.017281128100250218,
+   "p5": -0.2163328431709332,
+   "p25": -0.10185137422449224,
+   "p50": -0.017281128100250218,
+   "p75": 0.07674790671723272,
+   "p95": 0.22866053280012244,
+   "prob_loss": 0.5518,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.003529199263529681,
+    "jumps": -0.015132337883377239,
+    "noise": 0.0004965313125791433,
+    "scenario": 0.0003777909084957817
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": -0.01075692010103725,
+   "median": -0.03387704526745979,
+   "p5": -0.31274576341595867,
+   "p25": -0.15264765739382302,
+   "p50": -0.03387704526745979,
+   "p75": 0.10994213939018656,
+   "p95": 0.362952299767343,
+   "prob_loss": 0.5662,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.007304712536375674,
+    "jumps": -0.030474840182604657,
+    "noise": 0.00014090173635406193,
+    "scenario": 0.005755581816991568
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": -0.0016698935140366817,
+   "median": -0.06320480243532581,
+   "p5": -0.4314106734088302,
+   "p25": -0.23590789172217455,
+   "p50": -0.06320480243532581,
+   "p75": 0.17093995342847346,
+   "p95": 0.6320508569470885,
+   "prob_loss": 0.5799,
+   "scenario_share": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.013308453879458698,
+    "jumps": -0.059788383379134356,
+    "noise": 0.003065772582179359,
+    "scenario": 0.016511163633983132
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.0016698935140366817,
+   "prob_loss_12m": 0.5799
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.30000000000000004,
+    "base": 0.5,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.05638915779283657,
+   "prob_loss_12m": 0.5092
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.1,
+    "base": 0.5,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": -0.059728944820909985,
+   "prob_loss_12m": 0.65
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": -0.0016698935140367418,
+   "prob_loss_12m": 0.58
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.2,
+    "base": 0.5,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": -0.0016698935140367355,
+   "prob_loss_12m": 0.5846
+  }
+ ]
+}

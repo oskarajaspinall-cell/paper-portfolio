@@ -1,0 +1,56 @@
+{
+  "ticker": "VICI",
+  "date": "2026-10-09",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.2, "cite": "research/VICI/2026-10-09-evaluation.md Decision block scenarios.bull.probability"},
+      "probability_evidence": "Every current multiple sits below its 5y minimum (P/E 8.8x vs 10.8x floor; EV/EBITDA 11.7x vs 13.1x floor; P/B 0.9x vs 1.1x floor, factsheet-2026-10-09.md Valuation table RA) while ROIC (7.7%) and ROE (9.8%) are flat over five years (factsheet Quality table RA) -- the de-rating is rate-driven, not fundamental. The overlay's macro_bull path (real yields rolling over on a confirmed Fed easing path, research/VICI/2026-10-09-macro.md) is the trigger, but probability is held at 0.2 because the overlay carries primary weight with a moderate tilt toward bear: DFII10 is +0.49pp/1m and +0.61pp/3m with the trend still rising, not stabilizing (same macro.md), arguing against a full re-rating to the 48.02 fair-value bull case.",
+      "target_price_12m": {"value": 33.78, "cite": "research/VICI/2026-10-09-evaluation.md Decision block scenarios.bull.target_price_12m"},
+      "target_band": {"value": 0.165, "cite": "Fact sheet Valuation table (RA; peers P:GLPI,P:EPR,P:O,P:NNN): peer-median-implied prices from the current price $22.79 scaled by each multiple vs its peer median: P/E 8.8x->peer 18.6x implies $48.17; EV/EBITDA 11.7x->peer 14.1x implies $27.46; EV/Sales 10.4x->peer 12.6x implies $27.61; P/B 0.9x->peer 1.8x implies $45.58 (factsheet-2026-10-09.md Valuation table). Half-spread ($48.17-$27.46)/2=$10.36 / average implied price $37.21 = 27.8%, which exceeds the mc-inputs.json blended residual volatility of 16.56% (regression.residual_vol.blended); capped at 16.50% (just under that measured ceiling) per the montecarlo.py bound. The fact sheet's own fair-value table uses a single method (P/FFO proxy; NAV is [data unavailable]), so this cross-multiple disagreement is the only valuation-anchor spread available and is applied identically to all three scenarios."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "research/VICI/2026-10-09-evaluation.md Decision block scenarios.base.probability"},
+      "probability_evidence": "Net debt/EBITDA (site definition) has risen from 2.96x (FY21) to 4.82x TTM (factsheet Quality table RA) while the 10y real yield trend is still rising, not stabilizing (DFII10 +0.61pp/3m, research/VICI/2026-10-09-macro.md) -- a continued headwind, but ROIC (7.7%) and ROE (9.8%) are flat rather than deteriorating (factsheet Quality table RA), consistent with a partial re-rating (EV/EBITDA moving from 11.7x toward about 12.5x, still below the 13.1x 5y floor) rather than a full re-rating to fair value or a further breakdown. This modal path is weighted highest because it matches both the still-rising-but-not-extending macro tilt and flat (not falling) fundamentals.",
+      "target_price_12m": {"value": 25.5, "cite": "research/VICI/2026-10-09-evaluation.md Decision block scenarios.base.target_price_12m"},
+      "target_band": {"value": 0.165, "cite": "Same cross-multiple peer-median disagreement as the bull scenario (factsheet-2026-10-09.md Valuation table, RA, peers GLPI/EPR/O/NNN): half-spread $10.36 / average implied price $37.21 = 27.8%, capped at 16.50% (just under the mc-inputs.json blended residual volatility ceiling of 16.56%, regression.residual_vol.blended)."}
+    },
+    "bear": {
+      "probability": {"value": 0.35, "cite": "research/VICI/2026-10-09-evaluation.md Decision block scenarios.bear.probability"},
+      "probability_evidence": "Caesars and MGM together supply 74% of annualized rent (research/VICI/2026-10-09.md note Sec.2/Sec.6, 10-K) and VICI's EV/EBITDA already trades 17% below its peer median with the note unable to explain the discount beyond tenant-credit worry (evaluation.md bear case) -- a stock-specific risk layered on the macro overlay's primary-weight, moderate toward-bear tilt (10y real yield +0.49pp/1m and +0.61pp/3m, DFII10, research/VICI/2026-10-09-macro.md, trend still rising). Q3 2026 results land Oct 28, 2026, inside the 12m horizon as a concrete near-term catalyst for either confirmation or relief (factsheet Price section).",
+      "target_price_12m": {"value": 19.4, "cite": "research/VICI/2026-10-09-evaluation.md Decision block scenarios.bear.target_price_12m"},
+      "target_band": {"value": 0.165, "cite": "Same cross-multiple peer-median disagreement as the bull scenario (factsheet-2026-10-09.md Valuation table, RA, peers GLPI/EPR/O/NNN): half-spread $10.36 / average implied price $37.21 = 27.8%, capped at 16.50% (just under the mc-inputs.json blended residual volatility ceiling of 16.56%, regression.residual_vol.blended)."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are mixed: record highs ('S&P closes at record high, breaking 7,800 points', CNBC 2026-10-07; 'S&P 500 Hits Record High as Big Tech Leads', Bloomberg 2026-10-06) alongside warnings of a narrow rally masking weakness ('Stocks made a record high. Two big bearish trades point to skepticism', CNBC 2026-10-07) and a pullback on yields/oil ('S&P 500, Nasdaq ease from record highs as Treasury yields climb', Reuters 2026-10-07; 'Stock Market Today: SPY, QQQ Retreated as Oil Climbed; Trump Issued Statement on Iran', TipRanks 2026-10-08); research/VICI/2026-10-09-macro.md addresses real yields/cost of capital, not the broad equity factor, so it gives no direction here -- set to 0 per house rule for mixed news."},
+      "uncertainty_12m": {"value": 0.1431, "cite": "research/VICI/2026-10-09-mc-inputs.json regression.factor_stats.SPY.vol_annual = 0.1431154014991791"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": -0.06, "cite": "mc-inputs.json factor_news.IEF headlines are dominated by a bond rout ('US 30-Year Yields Return to 2002 High', Bloomberg 2026-10-07; 'Global Bond Markets Sell Off on France's Fiscal Worries... highest since 2002', Barrons 2026-10-05; 'The Bond Rout Is Deepening', WSJ 2026-10-01; 'US Benchmark 10-Year Bond Yields Hit Highest Level Since 2002', Bloomberg 2026-10-01), with only two relief headlines (cooler PCE, ETF Trends 2026-10-02; weaker jobs report, Guardian 2026-10-02). Directly corroborated by research/VICI/2026-10-09-macro.md's primary-weight, moderate toward-bear macro_tilt citing DFII10 +0.49pp/1m and +0.61pp/3m with the trend still rising, not stabilizing: rising real/nominal yields imply a falling IEF (bond price). Sized at -6%, slightly larger than a 'small' tilt given the overlay's explicit 'moderate' sizing, and within the +/-15% bound."},
+      "uncertainty_12m": {"value": 0.0646, "cite": "research/VICI/2026-10-09-mc-inputs.json regression.factor_stats.IEF.vol_annual = 0.06460381100458489"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings reaction (Q3 2026, reports Oct 28, 2026)",
+      "reason": "VICI's next earnings date (Oct 28, 2026) falls inside the 12-month horizon; the note's invalidation triggers are checked at the ROIC/ROE/leverage statistics released with quarterly results, and the fact sheet lists the date as confirmed.",
+      "cite": "research/VICI/factsheet-2026-10-09.md Price section 'Next earnings date | Oct 28, 2026 (Earnings Date)' [ST,OV]; research/VICI/2026-10-09-evaluation.md Decision.triggers #4 ('Q3 2026 results...or a 10-Q disclose rent deferral...')",
+      "annual_probability": {"value": 0.19, "cite": "research/VICI/2026-10-09-mc-inputs.json analogues.event_weeks: of VICI's last 20 quarterly earnings-release weeks (2021-2026), only 1 produced an adverse move as large as -3.85% (Q3 2025, week 2025-10-27); per-quarter rate 1/20=5%, P(>=1 in 4 reports/yr)=1-(0.95)^4~=0.19."},
+      "impact": {"value": -0.0385, "cite": "research/VICI/2026-10-09-mc-inputs.json analogues.event_weeks, 'Q3 2025' earnings_release week 2025-10-27, move -0.0385 -- the largest adverse quarterly-earnings-week reaction in the regression history."},
+      "analogue": {"week": "2025-10-27", "move": -0.0385},
+      "assumption": null
+    },
+    {
+      "name": "Caesars/MGM tenant-concentration credit or rent-coverage shock",
+      "reason": "Caesars (39%) and MGM (35%) together supply 74% of annualized rent; the 10-K flags this concentration as a risk factor and the note calls it 'the single largest risk to the thesis'.",
+      "cite": "research/VICI/2026-10-09.md note Sec.2 ('Caesars (39%) and MGM (35%) supply 74% of annualized rent') and Sec.6 ('the single largest risk to the thesis'), 10-K; research/VICI/2026-10-09-evaluation.md bear case: 'tenant-credit worry is the obvious candidate' for the unexplained 17% peer discount.",
+      "annual_probability": {"value": 0.05, "cite": "No tenant-default or rent-deferral event appears anywhere in VICI's 5-year weekly price history or event_weeks (research/VICI/2026-10-09-mc-inputs.json); investment-grade triple-net structuring and 15-32yr lease terms make an abrupt rent-coverage shock historically rare -- estimated at roughly once per 20 years (0.05/yr), reflecting the note's framing of this as the single largest named risk despite no realized precedent in the data."},
+      "impact": {"value": -0.18, "cite": "No historical analogue for a Caesars/MGM-specific credit or rent-deferral shock exists in mc-inputs.json largest_falls/event_weeks; impact assumed at -18%, within the [montecarlo].max_jump_impact_assumed 0.30 cap, reflecting that even a severe tenant-credit scare would be a partial (not existential) impact given triple-net lease seniority and two-tenant diversification (74% combined, not a single-tenant dependency)."},
+      "analogue": null,
+      "assumption": "No historical analogue for a Caesars/MGM tenant-credit or rent-deferral shock in VICI's 5-year price/event history; impact is assumed and kept well within the 0.30 cap."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": {"value": -0.02, "cite": "research/VICI/factsheet-2026-10-09.md Price section: -9.0% vs 50-day MA, -16.6% vs 200-day MA, -12.6% 3-month momentum, -17.8% 6-month momentum, -28.8% 12-month change, relative strength vs SPY -16.5pp/-32.3pp/-44.4pp over 3m/6m/12m (ST,HI); set at the maximum allowed magnitude given the consistent negative trend across every horizon shown."}
+}
