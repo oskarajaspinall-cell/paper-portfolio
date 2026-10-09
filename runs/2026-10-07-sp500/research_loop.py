@@ -38,8 +38,20 @@ queue = [t for t in ranked if t not in SKIP and not (ROOT / "research" / Ticker(
 log(f"== research loop: {len(queue)} names queued, best first: {queue[:10]}")
 
 
+WEEKLY_LOCK = Path("/tmp/paper-portfolio-review.lock")
+
+
+def weekly_run_near() -> bool:
+    """Leave the machine to the Friday 22:00 weekly run: stop from 21:15 on Fridays or while its lock exists."""
+    now = dt.datetime.now()
+    return WEEKLY_LOCK.exists() or (now.weekday() == 4 and (now.hour, now.minute) >= (21, 15))
+
+
 def one(t):
-    if state["stop"]:
+    if state["stop"] or weekly_run_near():
+        if not state["stop"]:
+            state["stop"] = True
+            log("== research loop pausing for the weekly run")
         return t, "not started"
     asof = dt.date.today().isoformat()
     try:

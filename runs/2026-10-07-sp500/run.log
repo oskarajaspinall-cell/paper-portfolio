@@ -2473,3 +2473,25 @@ OK research/HAS/2026-10-09.md type=CORE 1=49 2=122 3=140 4=52 5=75 6=81 total=51
 
 No data conflicts. No blocked URLs (corporate.hasbro.com redirect to newsroom.hasbro.com was not followed, as newsroom.hasbro.com is off-allowlist).
 [02:07:19] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HAS/2026-10-09.md
+[02:07:20] OK /Users/oskaraspinall/paper-portfolio/research/HAS/2026-10-09.md type=CORE 1=49 2=122 3=140 4=52 5=75 6=81 total=519
+[02:07:20] $ claude -p Ticker HAS, date 2026-10-09. Research: research/HAS/factsheet-2026-10-09.md, research/HAS/2026-10-09.md. Macro snapshot: reports/macro/2026-10-09.md. Write research/HAS/2026-10-09-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:08:30] research/HAS/2026-10-09-macro.md
+OK research/HAS/2026-10-09-macro.md macro_weight=context words=59
+[02:08:30] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HAS/2026-10-09-macro.md
+[02:08:30] OK /Users/oskaraspinall/paper-portfolio/research/HAS/2026-10-09-macro.md macro_weight=context words=59
+[02:08:30] $ claude -p Evaluate HAS for 2026-10-09: fact sheet research/HAS/factsheet-2026-10-09.md, note research/HAS/2026-10-09.md, state portfolio/state.json, macro overlay research/HAS/2026-10-09-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[02:08:36] You've hit your session limit · resets 6:20am (Europe/London)
+[02:08:36] !! FAILED BAC: claude -p Ticker BAC, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[02:08:36] == initiate VICI
+[02:08:36] $ claude -p Ticker VICI, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:08:37] You've hit your session limit · resets 6:20am (Europe/London)
+[02:08:37] !! FAILED PEP: claude -p Ticker PEP, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[02:08:37] == initiate ADP
+[02:08:37] $ claude -p Ticker ADP, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:08:38] You've hit your session limit · resets 6:20am (Europe/London)
+[02:08:38] !! FAILED VICI: claude -p Ticker VICI, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[02:08:39] You've hit your session limit · resets 6:20am (Europe/London)
+[02:08:39] !! FAILED ADP: claude -p Ticker ADP, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[02:09:13] You've hit your session limit · resets 6:20am (Europe/London)
+[02:09:13] !! FAILED HAS: claude -p Evaluate HAS for 2026-10-09: fact sheet research/HAS/factsheet-2026-10-09.md, note research/HAS/2026-10-09.md, state portfolio/state.json, macro overlay research/HAS/2026-10-09-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Writ
+[02:09:13] == research loop stopped (repeated failures: usage limit?)
