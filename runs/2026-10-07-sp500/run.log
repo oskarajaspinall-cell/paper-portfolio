@@ -3971,3 +3971,60 @@ OK research/SYK/2026-10-09-evaluation.md Bear case=128 Bull case=125 decision=AV
 [17:55:44] {"out": "research/SYK/2026-10-09-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 179.78, "base": 271.0, "bull": 316.25}, "price": 276.97}
 [17:55:44] Monte Carlo skipped for SYK (AVOID: informational only, runs for BUY/ADD and holdings)
 [17:55:47] == done SYK
+[17:55:49] == Research batch 07: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-09-batch-07.md; uploaded to GitHub
+[17:55:50] == initiate DVA
+[17:55:50] $ claude -p Ticker DVA, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[17:56:17] research/NXPI/2026-10-09.md
+research/NXPI/factsheet-2026-10-09.md
+OK research/NXPI/2026-10-09.md type=CORE 1=50 2=149 3=127 4=71 5=73 6=83 total=553
+
+No data conflicts. No blocked URLs (6/6 WebFetch calls succeeded, within the CORE cap of 6).
+[17:56:17] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/NXPI/2026-10-09.md
+[17:56:17] OK /Users/oskaraspinall/paper-portfolio/research/NXPI/2026-10-09.md type=CORE 1=50 2=149 3=127 4=71 5=73 6=83 total=553
+[17:56:17] $ claude -p Ticker NXPI, date 2026-10-09. Research: research/NXPI/factsheet-2026-10-09.md, research/NXPI/2026-10-09.md. Macro snapshot: reports/macro/2026-10-09.md. Write research/NXPI/2026-10-09-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[17:57:06] Note passes checks.
+
+- Note: `research/OXY/2026-10-09.md`
+- Fact sheet: `research/OXY/factsheet-2026-10-09.md`
+- `check_docs.py`: `OK research/OXY/2026-10-09.md type=CORE 1=57 2=148 3=142 4=80 5=62 6=53 total=542`
+- Blocked: `www.reuters.com` (Reuters article on 2027 guidance/debt focus) — Claude Code's fetcher refused the domain; substituted the allowlisted stockanalysis.com Q2 2026 transcript for the same facts (debt reduction, capital allocation).
+- No data conflicts between qualitative sources and the fact sheet.
+
+Decision input for the evaluator: valuation signals conflict (cheap vs peers on EV/EBITDA, rich vs own history on P/FCF) and quality is weak — ROIC has sat at/below the ~9.3% estimated cost of capital in 4 of the last 5 fiscal years, with no clear moat identified for OxyChem and 1PointFive still pre-commercial. Leans AVOID on conviction grounds despite genuine deleveraging progress.
+[17:57:06] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/OXY/2026-10-09.md
+[17:57:06] OK /Users/oskaraspinall/paper-portfolio/research/OXY/2026-10-09.md type=CORE 1=57 2=148 3=142 4=80 5=62 6=53 total=542
+[17:57:06] $ claude -p Ticker OXY, date 2026-10-09. Research: research/OXY/factsheet-2026-10-09.md, research/OXY/2026-10-09.md. Macro snapshot: reports/macro/2026-10-09.md. Write research/OXY/2026-10-09-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[17:57:58] research/NXPI/2026-10-09-macro.md
+OK research/NXPI/2026-10-09-macro.md macro_weight=secondary words=241
+[17:57:58] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/NXPI/2026-10-09-macro.md
+[17:57:58] OK /Users/oskaraspinall/paper-portfolio/research/NXPI/2026-10-09-macro.md macro_weight=secondary words=241
+[17:57:58] $ claude -p Evaluate NXPI for 2026-10-09: fact sheet research/NXPI/factsheet-2026-10-09.md, note research/NXPI/2026-10-09.md, state portfolio/state.json, macro overlay research/NXPI/2026-10-09-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[17:58:41] research/NXPI/2026-10-09-evaluation.md
+OK research/NXPI/2026-10-09-evaluation.md Bear case=137 Bull case=123 decision=AVOID
+[17:58:41] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/NXPI/2026-10-09-evaluation.md
+[17:58:41] OK /Users/oskaraspinall/paper-portfolio/research/NXPI/2026-10-09-evaluation.md Bear case=137 Bull case=123 decision=AVOID
+[17:58:41] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py NXPI --asof 2026-10-09 --eval /Users/oskaraspinall/paper-portfolio/research/NXPI/2026-10-09-evaluation.md
+[17:58:41] {"out": "research/NXPI/2026-10-09-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 78.42, "base": 133.26, "bull": 155.28}, "price": 231.07}
+[17:58:41] Monte Carlo skipped for NXPI (AVOID: informational only, runs for BUY/ADD and holdings)
+[17:58:44] == done NXPI
+[17:58:44] == initiate GD
+[17:58:44] $ claude -p Ticker GD, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[17:59:38] research/OXY/2026-10-09-macro.md
+OK research/OXY/2026-10-09-macro.md macro_weight=secondary words=248
+[17:59:38] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/OXY/2026-10-09-macro.md
+[17:59:39] OK /Users/oskaraspinall/paper-portfolio/research/OXY/2026-10-09-macro.md macro_weight=secondary words=248
+[17:59:39] $ claude -p Evaluate OXY for 2026-10-09: fact sheet research/OXY/factsheet-2026-10-09.md, note research/OXY/2026-10-09.md, state portfolio/state.json, macro overlay research/OXY/2026-10-09-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[17:59:40] You've hit your session limit · resets 10:10pm (Europe/London)
+[17:59:41] !! FAILED OXY: claude -p Evaluate OXY for 2026-10-09: fact sheet research/OXY/factsheet-2026-10-09.md, note research/OXY/2026-10-09.md, state portfolio/state.json, macro overlay research/OXY/2026-10-09-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Writ
+[17:59:41] == initiate TJX
+[17:59:41] $ claude -p Ticker TJX, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[17:59:43] You've hit your session limit · resets 10:10pm (Europe/London)
+[17:59:43] !! FAILED TJX: claude -p Ticker TJX, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[17:59:43] == initiate LMT
+[17:59:43] $ claude -p Ticker LMT, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[17:59:45] You've hit your session limit · resets 10:10pm (Europe/London)
+[17:59:45] !! FAILED LMT: claude -p Ticker LMT, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[17:59:50] You've hit your session limit · resets 10:10pm (Europe/London)
+[17:59:50] !! FAILED GD: claude -p Ticker GD, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[17:59:51] You've hit your session limit · resets 10:10pm (Europe/London)
+[17:59:51] !! FAILED DVA: claude -p Ticker DVA, note type CORE, date 2026-10-09. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 

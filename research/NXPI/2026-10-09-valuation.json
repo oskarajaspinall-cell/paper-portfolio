@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Semiconductors",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 36.18590900704199,
+    "base": 77.58823590017509,
+    "bull": 92.4036941867948
+   },
+   "implied_growth": 0.24381674800262415,
+   "discount_rate": 0.11580838426222474,
+   "cost_of_equity": 0.12996850000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.029604374026474794,
+     "base": 0.012999025871659676,
+     "bull": 0.026204851539588292
+    },
+    "cash_flow_margin": {
+     "bear": 0.1415309243697479,
+     "base": 0.19349208764815617,
+     "bull": 0.20879512003029155
+    },
+    "cagr_3y": -0.02420874805294959,
+    "cagr_5y": 0.026204851539588292,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 162.89329908574695,
+    "base": 244.60933148317636,
+    "bull": 281.0384025666007
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.694,
+     "base": 13.79,
+     "bull": 15.616
+    },
+    "ttm_ebitda": 5068000000
+   }
+  }
+ ],
+ "price": 231.07,
+ "risk_free": 0.0528,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 78.42170569994364,
+  "base": 133.2619344278422,
+  "bull": 155.28193031339677
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6606149404944663,
+  "base": -0.4232832716153452,
+  "bull": -0.327987491611214
+ },
+ "implied_growth": 0.24381674800262415,
+ "ticker": "NXPI",
+ "asof": "2026-10-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-08",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/nxpi/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/nxpi/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/nxpi/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/nxpi/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/nxpi/statistics/"
+ }
+}
