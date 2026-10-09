@@ -1,9 +1,12 @@
 """Keep researching the S&P 500 screen's core ranking (best first), 3 at a time, until the usage limit
-(or anything else) makes `stop_after` initiations in a row fail. The portfolio-manager runs only for BUYs (owner rule 2026-10-08: buys happen autonomously; the portfolio's rules still validate
+(or anything else) makes `stop_after` initiations in a row fail. A network outage is not a failure: the loop
+waits until api.anthropic.com is reachable again and retries the step (owner request 2026-10-09). The portfolio-manager runs only for BUYs (owner rule 2026-10-08: buys happen autonomously; the portfolio's rules still validate
 them). Each finished evaluation is recorded in the decision log. Usage: research_loop.py"""
 import datetime as dt
 import json
+import socket
 import subprocess
+import time
 import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -27,6 +30,47 @@ state = {"fails_in_row": 0, "stop": False}
 def log(msg):
     with lk, (run / "run.log").open("a") as fh:
         fh.write(f"[{dt.datetime.now():%H:%M:%S}] {msg}\n")
+
+
+NET_HOST, NET_POLL_S, NET_MAX_WAIT_S, NET_RETRIES = "api.anthropic.com", 60, 6 * 3600, 3
+net_lock = threading.Lock()
+
+
+def online() -> bool:
+    try:
+        socket.create_connection((NET_HOST, 443), timeout=10).close()
+        return True
+    except OSError:
+        return False
+
+
+def wait_online() -> bool:
+    """Block until the API host is reachable (one waiter logs; the others share it). False if it never came
+    back within NET_MAX_WAIT_S or the weekly run needs the machine."""
+    with net_lock:
+        if online():
+            return True
+        log(f"== network down ({NET_HOST} unreachable): waiting, checking every {NET_POLL_S}s")
+        t0 = time.monotonic()
+        while time.monotonic() - t0 < NET_MAX_WAIT_S:
+            if weekly_run_near():
+                return False
+            time.sleep(NET_POLL_S)
+            if online():
+                log(f"== network back after {int(time.monotonic() - t0) // 60} min; retrying")
+                return True
+        log("!! network still down after the maximum wait")
+        return False
+
+
+def agent(name, prompt, log_):
+    """wr.claude_agent, but a failure while the network is down waits for it and retries the same step."""
+    for i in range(NET_RETRIES + 1):
+        try:
+            return wr.claude_agent(name, prompt, log_)
+        except Exception:  # noqa: BLE001
+            if i == NET_RETRIES or online() or not wait_online():
+                raise
 
 
 BATCH_SIZE = 6
@@ -140,6 +184,20 @@ def weekly_run_near() -> bool:
 
 
 def one(t):
+    for _ in range(NET_RETRIES):
+        t, r = attempt(t)
+        if r != "NETWORK":
+            return t, r
+        if not wait_online():
+            break
+    with lk:  # gave up waiting for the network: count it like any other failure
+        state["fails_in_row"] += 1
+        if state["fails_in_row"] >= stop_after:
+            state["stop"] = True
+    return t, "FAILED"
+
+
+def attempt(t):
     if state["stop"] or weekly_run_near():
         if not state["stop"]:
             state["stop"] = True
@@ -149,7 +207,7 @@ def one(t):
     try:
         log(f"== initiate {t}")
         ev = wr.research_and_evaluate(t, "CORE", asof, "New initiation from the S&P 500 screen. Decide BUY or AVOID.",
-                                      wr.claude_agent, log, run)
+                                      agent, log, run)
         subprocess.run([str(ROOT / "bin" / "py"), "scripts/decision_log.py", "record", str(ev.relative_to(ROOT)),
                         "--asof", asof], cwd=ROOT, capture_output=True)
         with lk:
@@ -160,7 +218,7 @@ def one(t):
             try:
                 with pm_lock:
                     log(f"== portfolio-manager {t} (BUY {d['conviction']})")
-                    wr.claude_agent("portfolio-manager",
+                    agent("portfolio-manager",
                                     f"Evaluation files: {ev.relative_to(ROOT)}. Date {asof}. Write the requests to "
                                     f"runs/2026-10-07-sp500/requests-{Ticker(t).slug}.json and submit with --at-next-open "
                                     f"--save runs/2026-10-07-sp500/submit-{Ticker(t).slug}.json (decided trades fill at the next open).", log)
@@ -172,6 +230,9 @@ def one(t):
     except Exception as e:  # noqa: BLE001
         for f in (ROOT / "research" / Ticker(t).slug).glob(f"{asof}*"):  # no half-finished docs
             f.unlink()
+        if not online():  # an outage (e.g. a data fetch failed offline), not the stock: retried, not counted
+            log(f"!! {t} interrupted by a network outage: {str(e)[:200]}")
+            return t, "NETWORK"
         with lk:
             state["fails_in_row"] += 1
             if state["fails_in_row"] >= stop_after:
@@ -187,7 +248,7 @@ def mc_retry(t):  # evaluations that finished but whose Monte Carlo stalled (Mac
         if not (ROOT / "research" / slug / f"{asof}-montecarlo.json").exists() and \
                 not (ROOT / "research" / slug / f"{asof}-mc-needs-review.md").exists():
             log(f"== Monte Carlo retry {t} {asof}")
-            wr.run_montecarlo(t, slug, asof, wr.claude_agent, log, run)
+            wr.run_montecarlo(t, slug, asof, agent, log, run)
 
 
 with ThreadPoolExecutor(max_workers=3) as pool:
