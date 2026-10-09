@@ -598,3 +598,46 @@ def test_scan_fair_value_reinitiates_and_records(cfg, monkeypatch, tmp_path):
     WS.record_fv_reviews(res["fair_value_reached"], "2026-09-20")
     again = scan(s, ScanMarket({"FV": flat, "LOW": flat}, cfg), ScanFetcher(events={}, stats={}), cfg, "2026-09-27")
     assert again["reinitiate"] == []  # the crossing was reviewed
+
+
+def test_decision_log_records_live_price_during_market_hours(cfg, tmp_path, monkeypatch):
+    monkeypatch.setattr(dl, "ROOT", tmp_path)
+    (tmp_path / "e1.md").write_text(EVAL % ("AVOID", 3))
+    (tmp_path / "e2.md").write_text(EVAL % ("AVOID", 2))
+    table = {"AAA": {"2026-01-05": 100, "2026-02-05": 110}, "SPY": {"2026-01-05": 500, "2026-02-05": 510}}
+    m = DLMarket(cfg, table)
+
+    def live(t):
+        p = {"AAA": 88.0, "SPY": 498.0}[t]
+        return {"ticker": t, "close": p, "date": "2026-01-06", "currency": "USD", "url": "u", "price_usd": p,
+                "fx": None, "time": "2026-01-06T12:39:00-05:00"}
+    r = dl.record([str(tmp_path / "e1.md")], m, "2026-01-06", [], live=live)[0]
+    assert (r["price"], r["price_date"], r["price_usd"], r["spy_close"]) == (88.0, "2026-01-06", 88.0, 498.0)
+    assert "price: live 88 USD at 12:39" in r["note"] and "the research used the" in r["note"]
+    dl.update([r], m, "2026-03-10")
+    assert r["ret_1m"] == 25.0  # 88 -> 110: measured from the live price, not the stale close
+    r2 = dl.record([str(tmp_path / "e2.md")], m, "2026-01-06", [], live=lambda t: None)[0]  # market closed
+    assert "price: live" not in r2["note"] and r2["spy_close"] == 500
+
+
+def test_decision_log_reprice_intraday_rows(real_cfg):
+    import datetime as dt
+    rows = [{"date": "2026-10-09", "ticker": "AAA", "price": "171.31", "price_date": "2026-10-08", "currency": "USD",
+             "price_usd": "171.31", "spy_close": "773.93", "note": "", "evaluation": "x", "ret_1m": ""},
+            {"date": "2026-10-09", "ticker": "PRE", "price": "50", "price_date": "2026-10-08", "currency": "USD",
+             "price_usd": "50", "spy_close": "773.93", "note": "", "evaluation": "y", "ret_1m": ""}]
+
+    class M:
+        cfg = real_cfg
+
+        def price(self, t, p, d, c, u):
+            return {"close": p, "date": d, "currency": c, "url": u, "price_usd": p}
+    when = {"AAA": dt.datetime(2026, 10, 9, 16, 39, tzinfo=dt.timezone.utc),   # 12:39 New York: open
+            "PRE": dt.datetime(2026, 10, 9, 13, 20, tzinfo=dt.timezone.utc)}   # 09:20: before the open
+    bars = {"AAA": 149.93, "SPY": 771.5}
+    out = dl.reprice(rows, "2026-10-09", M(), lambda r: when[r["ticker"]],
+                     lambda t, w: {"price": bars[t], "date": "2026-10-09", "time": "2026-10-09T12:39:00-04:00",
+                                   "currency": "USD", "url": "u"})
+    assert out == ["AAA: 171.31 -> 149.93 at 12:39"]
+    assert (rows[0]["price"], rows[0]["spy_close"], rows[0]["price_date"]) == (149.93, 771.5, "2026-10-09")
+    assert "re-priced afterwards" in rows[0]["note"] and rows[1]["price"] == "50"

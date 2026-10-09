@@ -5,8 +5,12 @@
     python scripts/decision_log.py table                                    print the hit-rate table
 
 Every evaluator decision is one row in portfolio/decisions.csv. Outcomes are the stock's USD return
-minus SPY's return from the decision close to the close on/before 1, 3, 6 and 12 months later (all
-prices from stockanalysis.com). A decision is a HIT when it was right about direction vs SPY:
+minus SPY's return from the decision price to the close on/before 1, 3, 6 and 12 months later (closes
+from stockanalysis.com). The decision price is the research's previous close, EXCEPT a decision made while
+the stock's market is open (owner rule 2026-10-09): then the stock AND SPY are recorded at their live prices
+at that moment (Yahoo 1-minute bars, the portfolio price source), noted in the row.
+
+    python scripts/decision_log.py reprice --asof D    re-price D's rows decided during market hours (one-off fix) A decision is a HIT when it was right about direction vs SPY:
 BUY/ADD/HOLD -> beat SPY; AVOID/SELL/TRIM -> lagged SPY.
 """
 from __future__ import annotations
@@ -66,8 +70,9 @@ def decision_from_eval(md: str) -> dict:
     return json.loads(m.group(1))
 
 
-def record(eval_paths: list[str], mkt, asof: str, rows: list[dict]) -> list[dict]:
-    """Append one row per evaluation (idempotent per evaluation path)."""
+def record(eval_paths: list[str], mkt, asof: str, rows: list[dict], live=None) -> list[dict]:
+    """Append one row per evaluation (idempotent per evaluation path). `live(ticker)` -> a fresh live quote
+    while that market is open, else None."""
     seen = {r["evaluation"] for r in rows}
     spy = mkt.cfg["portfolio"]["benchmark"]
     for p in eval_paths:
@@ -77,6 +82,12 @@ def record(eval_paths: list[str], mkt, asof: str, rows: list[dict]) -> list[dict
         d = decision_from_eval(Path(p if Path(p).is_absolute() else ROOT / p).read_text())
         q = mkt.quote(d["ticker"], d["price_date"])
         s = mkt.quote(spy, d["price_date"])
+        price, price_date, live_note = d["price_at_decision"], d["price_date"], ""
+        lq = live(d["ticker"]) if live else None
+        ls = live(spy) if lq else None
+        if lq and ls:
+            q, s, price, price_date = lq, ls, lq["close"], lq["date"]
+            live_note = live_price_note(lq, ls, d)
         m = int(mkt.cfg["core"].get("min_buy_conviction", 1))
         note = ""
         if d["decision"] in ("BUY", "ADD") and int(d["conviction"]) < m:  # owner rule: never bought
@@ -95,11 +106,48 @@ def record(eval_paths: list[str], mkt, asof: str, rows: list[dict]) -> list[dict
                                         asof, mkt.cfg, q["currency"])
         except Exception as e:  # noqa: BLE001  never blocks the decision log
             note = (note + "; " if note else "") + f"entry watch not updated: {str(e)[:80]}"
+        if live_note:
+            note = (note + "; " if note else "") + live_note
         rows.append({"note": note, "fair_value_base": fv_base, "date": asof, "ticker": d["ticker"], "type": d["position_type"], "decision": d["decision"],
-                     "conviction": d["conviction"], "price": d["price_at_decision"], "currency": q["currency"],
-                     "price_date": d["price_date"], "price_usd": round(q["price_usd"], 6),
+                     "conviction": d["conviction"], "price": price, "currency": q["currency"],
+                     "price_date": price_date, "price_usd": round(q["price_usd"], 6),
                      "spy_close": s["close"], "evaluation": rel})
     return rows
+
+
+def live_price_note(q: dict, s: dict, d: dict) -> str:
+    return (f"price: live {q['close']:g} {q['currency']} at {str(q.get('time', ''))[11:16]} exchange time, SPY live "
+            f"{s['close']:g} (decided during market hours; the research used the {d['price_date']} close "
+            f"{d['price_at_decision']:g})")
+
+
+def reprice(rows: list[dict], asof: str, mkt, decided_at, bar_at) -> list[str]:
+    """One-off fix: rows dated `asof` (not already live) whose decision time `decided_at(row)` fell inside the
+    stock's market hours are re-priced from the 1-minute bars `bar_at(ticker, when)` for the stock and SPY."""
+    from portfolio import market_open_now
+    spy, out = mkt.cfg["portfolio"]["benchmark"], []
+    for r in rows:
+        if r["date"] != asof or "price: live" in (r.get("note") or "") or r.get("ret_1m") not in ("", None):
+            continue
+        when = decided_at(r)
+        if not when or not market_open_now(r["ticker"], mkt.cfg, when) or not market_open_now(spy, mkt.cfg, when):
+            continue
+        try:
+            b, sb = bar_at(r["ticker"], when), bar_at(spy, when)
+        except DataError as e:
+            out.append(f"{r['ticker']}: not re-priced ({str(e)[:80]})")
+            continue
+        q = mkt.price(r["ticker"], round(b["price"], 4), b["date"], b["currency"], b["url"])
+        if b["currency"] != r["currency"]:
+            out.append(f"{r['ticker']}: not re-priced (currency {b['currency']} vs {r['currency']})")
+            continue
+        old = {"price_date": r["price_date"], "price_at_decision": float(r["price"])}
+        r.update(price=q["close"], price_date=b["date"], price_usd=round(q["price_usd"], 6),
+                 spy_close=round(sb["price"], 4))
+        r["note"] = ((r["note"] + "; ") if r.get("note") else "") + live_price_note(
+            dict(q, time=b["time"]), {"close": round(sb["price"], 4)}, old) + " [re-priced afterwards]"
+        out.append(f"{r['ticker']}: {old['price_at_decision']:g} -> {q['close']:g} at {b['time'][11:16]}")
+    return out
 
 
 def update(rows: list[dict], mkt, asof: str) -> list[str]:
@@ -147,7 +195,7 @@ def hit_table(rows: list[dict]) -> str:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["record", "update", "table"])
+    ap.add_argument("cmd", choices=["record", "update", "table", "reprice"])
     ap.add_argument("evaluations", nargs="*")
     ap.add_argument("--asof", default=dt.date.today().isoformat())
     a = ap.parse_args(argv)
@@ -161,9 +209,25 @@ def main(argv=None) -> int:
     try:
         if a.cmd == "record":
             n0 = len(rows)
-            record(a.evaluations, mkt, a.asof, rows)
+            from portfolio import live_fresh, market_open_now
+            now = dt.datetime.now(dt.timezone.utc)
+
+            def live(t):  # a fresh live price only while that market is open
+                if not market_open_now(t, cfg, now):
+                    return None
+                lq = mkt.live_quote(t)
+                return lq if live_fresh(lq, t, cfg, now) else None
+            record(a.evaluations, mkt, a.asof, rows, live=live)
             write(rows)
             print(f"recorded {len(rows) - n0} decision(s); {len(rows)} total")
+        elif a.cmd == "reprice":
+            from prices import price_at
+
+            def decided_at(r):  # the evaluation file's last write = when the decision was made
+                f = ROOT / r["evaluation"]
+                return dt.datetime.fromtimestamp(f.stat().st_mtime, dt.timezone.utc) if f.exists() else None
+            print(json.dumps(reprice(rows, a.asof, mkt, decided_at, price_at), indent=1))
+            write(rows)
         else:
             notes = update(rows, mkt, a.asof)
             write(rows)

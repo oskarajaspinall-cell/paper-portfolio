@@ -105,3 +105,30 @@ def live_price(ticker: str, loader=None) -> dict:
     ts = df.index[-1]
     return {"price": float(df["Close"].iloc[-1]), "time": ts.isoformat(), "date": str(ts.date()),
             "currency": CCY.get(ccy, ccy), "url": url}
+
+
+def price_at(ticker: str, when, max_age_min: int = 15, loader=None) -> dict:
+    """The 1-minute bar at/before `when` (an aware datetime, today or the last few days) as live_price's shape.
+    Used to re-price a decision made earlier in the session. Raises DataError if there is no bar within
+    `max_age_min` before `when`."""
+    sym = yahoo_symbol(ticker)
+    url = f"https://finance.yahoo.com/quote/{sym}" if sym else "https://finance.yahoo.com/"
+    if not sym:
+        raise DataError(url, "symbol", f"no Yahoo symbol mapping for {ticker}")
+    try:
+        if loader:
+            df, ccy = loader(sym)
+        else:
+            import yfinance as yf
+            t = yf.Ticker(sym)
+            df, ccy = t.history(period="5d", interval="1m", auto_adjust=False, actions=False), t.fast_info["currency"]
+    except Exception as e:  # noqa: BLE001
+        raise DataError(url, "yfinance", f"{type(e).__name__}: {str(e)[:120]}") from e
+    df = df[(df["Close"] == df["Close"]) & (df.index <= when)] if df is not None and len(df) else df
+    if df is None or not len(df):
+        raise DataError(url, "yfinance", f"no 1-minute bar at/before {when}")
+    ts = df.index[-1]
+    if (when - ts).total_seconds() > max_age_min * 60:
+        raise DataError(url, "yfinance", f"latest bar {ts} is more than {max_age_min} min before {when}")
+    return {"price": float(df["Close"].iloc[-1]), "time": ts.isoformat(), "date": str(ts.date()),
+            "currency": CCY.get(ccy, ccy), "url": url}
