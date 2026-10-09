@@ -400,9 +400,24 @@ class Reject(Exception):
         super().__init__(f"{rule}: {detail}")
 
 
+def current_reserve(cfg: dict, asof: str) -> dict:
+    """Cash reserve (owner rule 2026-10-09: cash is a holding) from the latest regime file on/before asof
+    (scripts/regime.py): {pct, regime, dip_multiplier}. No regime file yet -> the neutral reserve."""
+    cs = cfg.get("cash_strategy")
+    if not cs:
+        return {"pct": 0.0, "regime": None, "dip_multiplier": 1.0}
+    import regime
+    doc = regime.latest(asof)
+    if not doc:
+        return {"pct": float(cs["reserve_pct"]["neutral"]), "regime": "neutral (no regime file yet)", "dip_multiplier": 1.0}
+    return {"pct": float(doc["reserve_pct"]), "regime": doc["final_regime"], "dip_multiplier": doc["dip"]["multiplier"],
+            "asof": doc["asof"]}
+
+
 class Engine:
     def __init__(self, state: dict, mkt: Market, cfg: dict, watchlist: dict, today: str):
         self.s, self.mkt, self.cfg, self.watch, self.today = state, mkt, cfg, watchlist, today
+        self.reserve = current_reserve(cfg, today)
         self.ledger: list[dict] = []
         self.rejections: list[dict] = []
         self.applied: list[dict] = []
@@ -662,6 +677,10 @@ class Engine:
         out = []
         if tt["cash"] / pv * 100 < p["min_cash_pct"] - 1e-9:
             out.append(("CASH_MIN", f"cash would be {tt['cash'] / pv * 100:.2f}% (< {p['min_cash_pct']}%)"))
+        res = self.reserve["pct"]
+        if r["action"] in ("BUY", "ADD") and res > 0 and tt["cash"] / pv * 100 < res - 1e-9:
+            out.append(("CASH_RESERVE", f"cash would be {tt['cash'] / pv * 100:.2f}%, below the {res:g}% reserve "
+                                        f"({self.reserve['regime']} regime)"))
         if tt["n"] > p["max_holdings"]:
             out.append(("MAX_HOLDINGS", f"{tt['n']} holdings (> {p['max_holdings']})"))
         if tt["tactical"] / pv * 100 > tc["max_sleeve_pct"] + 1e-9:
@@ -703,7 +722,8 @@ class Engine:
                 breaches = self.limit_breaches(work, r)
                 if breaches:
                     if r["action"] == "BUY" and not r.get("replaces") and any(
-                            b[0] in ("CASH_MIN", "MAX_HOLDINGS", "TACTICAL_SLEEVE_MAX", "SECTOR_MAX") for b in breaches):
+                            b[0] in ("CASH_MIN", "CASH_RESERVE", "MAX_HOLDINGS", "TACTICAL_SLEEVE_MAX", "SECTOR_MAX")
+                            for b in breaches):
                         raise Reject("REPLACEMENT_REQUIRED", "BUY would breach " + "; ".join(d for _, d in breaches)
                                      + " -- name the holding it replaces and why the new idea is better")
                     raise Reject(breaches[0][0], "; ".join(d for _, d in breaches))
@@ -753,8 +773,10 @@ def target_warnings(state: dict, cfg: dict) -> list[str]:
     out = []
     if tt["n"] < p["min_holdings"]:
         out.append(f"holdings {tt['n']} below target minimum {p['min_holdings']}")
-    if tt["total"] and tt["cash"] / tt["total"] * 100 > p["max_cash_pct"]:
-        out.append(f"cash {tt['cash'] / tt['total'] * 100:.1f}% above target maximum {p['max_cash_pct']}%")
+    if tt["total"]:
+        res = current_reserve(cfg, dt.date.today().isoformat())
+        out.append(f"cash {tt['cash'] / tt['total'] * 100:.1f}% vs a {res['pct']:g}% reserve ({res['regime']} regime"
+                   + (f", dip release x{res['dip_multiplier']:g}" if res["dip_multiplier"] < 1 else "") + ")")
     for t, h in state["holdings"].items():
         w = h["market_value_usd"] / tt["total"] * 100
         if h["type"] == "CORE" and w > cfg["core"]["trim_above_pct"]:
@@ -820,10 +842,15 @@ def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, po
     mark(state, mkt)
     work = copy.deepcopy(state)
     eng = Engine(work, mkt, cfg, watch, today)
+    # orders already waiting for their open have claimed their cash: apply them to the working copy first,
+    # so the new requests are checked against what will really be left (cash floor, reserve, sector caps)
+    eng.process([copy.deepcopy(o["request"]) for o in state.get("pending", [])])
+    k_rows, k_rej = len(eng.applied_rows), len(eng.rejections)
     eng.process(requests)
+    eng.rejections = eng.rejections[k_rej:]
     n0 = len(state.get("pending", []))
     orders = []
-    for i, (r, rows) in enumerate(eng.applied_rows):
+    for i, (r, rows) in enumerate(eng.applied_rows[k_rows:]):
         main_rows = [x for x in rows if x["ticker"] == r["ticker"]] or rows or [{}]
         last = main_rows[-1]
         orders.append({"id": f"{today}-{n0 + i + 1}", "placed": today, "request": r,

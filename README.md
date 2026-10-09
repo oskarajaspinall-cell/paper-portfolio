@@ -29,6 +29,11 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Trades fill at the next market open**: decisions become pending orders filled at the
 opening price of the next trading day; a tactical order that opens beyond its stop or target is cancelled.
+**Cash is managed as a position**: each week a score of official indicators (credit spreads, VIX, the yield curve,
+real yields, the S&P 500's trend) sets a macro regime — risk-on, neutral or defensive — and an AI macro step may
+move it one notch with cited official sources. The regime sets a cash reserve (10% / 20% / 35%) that new buys can't
+spend; nothing is sold to reach it. When the S&P 500 drops 10% (20%) below its 52-week high, half (all) of the
+reserve is released to buy the dip.
 Uninvested **cash earns interest** at a flat 3.8% AER (set in `CLAUDE.md` `[cash]`), credited daily on each
 day's closing cash balance and logged in `portfolio/interest.csv`.
 Every fact sheet includes a **fair value**: the industry-appropriate method from

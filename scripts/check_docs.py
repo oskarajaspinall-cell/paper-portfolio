@@ -306,9 +306,42 @@ def check_macro(md: str, cfg: dict) -> tuple[list[str], dict]:
     return errs, counts
 
 
+def check_regime_view(md: str, score_doc: dict, cfg: dict) -> tuple[list[str], dict]:
+    """The macro-strategist's view: valid regime, at most `notch_override` from the score, and any move
+    backed by >= 2 reasons cited to official sources ([macro].official_sources)."""
+    import regime as R
+    errs = []
+    try:
+        v = R.view_from_md(md)
+    except (ValueError, json.JSONDecodeError) as e:
+        return [f"view: {e}"], {}
+    fr = v.get("final_regime")
+    if fr not in R.REGIMES:
+        return [f"final_regime must be one of {R.REGIMES}"], {}
+    i, j = R.REGIMES.index(score_doc["score_regime"]), R.REGIMES.index(fr)
+    if abs(i - j) > cfg["cash_strategy"]["notch_override"]:
+        errs.append(f"final_regime {fr} is {abs(i - j)} notches from the score's {score_doc['score_regime']} "
+                    f"(max {cfg['cash_strategy']['notch_override']})")
+    reasons = v.get("reasons") or []
+    if not isinstance(reasons, list) or not all(isinstance(r, dict) and r.get("text") for r in reasons):
+        errs.append("reasons must be a list of {text, source}")
+        reasons = []
+    if fr != score_doc["score_regime"]:
+        official = {d.lower() for d in cfg.get("macro", {}).get("official_sources", [])}
+        cited = [r for r in reasons if any(d in (r.get("source") or "").lower() for d in official)]
+        if len(cited) < 2:
+            errs.append(f"moving the regime needs >= 2 reasons cited to official sources ({', '.join(sorted(official))})")
+    if bool(v.get("keep_score")) != (fr == score_doc["score_regime"]):
+        errs.append("keep_score must be true exactly when final_regime equals the score's regime")
+    words = len(re.sub(r"```json.*```", "", md, flags=re.S).split())
+    if words > 220:
+        errs.append(f"view text has {words} words (max ~150 + heading)")
+    return errs, {"final_regime": fr, "score_regime": score_doc["score_regime"], "reasons": len(reasons)}
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("kind", choices=["note", "eval", "macro"])
+    ap.add_argument("kind", choices=["note", "eval", "macro", "regime"])
     ap.add_argument("path")
     ap.add_argument("--state", default=str(ROOT / "portfolio" / "state.json"))
     a = ap.parse_args(argv)
@@ -320,6 +353,10 @@ def main(argv=None) -> int:
         errs, counts = check_note(md, {u.rstrip(".,;") for u in sheet_urls})
     elif a.kind == "macro":
         errs, counts = check_macro(md, load_config())
+    elif a.kind == "regime":  # reports/regime/<date>-view.md, checked against reports/regime/<date>.json
+        p = Path(a.path)
+        score = json.loads(p.with_name(p.name.replace("-view.md", ".json")).read_text())
+        errs, counts = check_regime_view(md, score, load_config())
     else:
         errs, counts = check_eval(md, json.loads(Path(a.state).read_text()), load_config())
     if errs:

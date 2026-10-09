@@ -29,6 +29,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - **TACTICAL**: weeks to ~3 months, two setups only (owner rule 2026-10-08): **post-earnings drift** (a real results beat the price is still digesting) and **pullback in an uptrend** (a dip to around the 50-day average). MUST have target, stop and time limit at entry; these execute mechanically. The stop comes from the stock's own volatility (ATR), the target must be ≥2× the stop distance (checked at the decision and again at the fill-day open), and the size is set so a stop-out costs ~1% of the portfolio (max 5%).
 - The label is fixed at entry. A tactical position can NEVER be relabelled core; it can only become core by passing a full core initiation, which records a new entry decision.
 - When a core invalidation trigger fires, the holding gets a full core re-initiation (researcher + evaluator), not a quick review.
+- **Cash is a holding** (owner rule 2026-10-09): `scripts/regime.py` scores official macro indicators into a regime (risk-on / neutral / defensive); the weekly `macro-strategist` may move it one notch with cited official sources. The regime sets a cash reserve (`[cash_strategy]`, 10/20/35%) that new buys can't spend (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0, and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
 - When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve or sector limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
 
 ## Config (edit values here; scripts read this block)
@@ -43,7 +44,7 @@ benchmark = "SPY"                 # priced from https://stockanalysis.com/etf/sp
 min_holdings = 8                  # target; reported as a warning, not used to reject trades
 max_holdings = 15
 min_cash_pct = 0                  # hard: cash can never go below this
-max_cash_pct = 20                 # target; reported, not used to reject trades
+max_cash_pct = 20                 # (superseded by [cash_strategy]: the regime's reserve; kept for reference)
 max_sector_pct = 30               # stockanalysis.com sector classification
 
 [core]
@@ -85,6 +86,23 @@ rs_sessions = 120                 # ~6 months
 # total portfolio (not a flow); the baseline earns it too. 0 = off.
 interest_aer_pct = 3.8
 interest_start = "2026-10-06"     # back-credited from the portfolio's first day
+
+[cash_strategy]
+# Cash is a holding (owner rule 2026-10-09, design by Claude). scripts/regime.py scores official indicators into a
+# regime; the weekly macro-strategist may move it one notch with cited reasons. The regime's reserve is the cash
+# new buys can't spend (a BUY/ADD below it must name a holding to replace); nothing is ever sold to reach it.
+# When the S&P 500 falls below its 52-week high, the reserve is released in steps (buy the dip).
+reserve_pct = { risk_on = 10, neutral = 20, defensive = 35 }
+neutral_from = 2                  # risk points: 0-1 risk-on, 2-3 neutral, 4+ defensive
+defensive_from = 4
+hy_spread_high = 5.0              # %: high-yield credit spread above this (+1)
+hy_widening_3m = 1.0              # pp: ...or widened this much in 3 months (+1)
+vix_high = 25                     # +1 (above vix_extreme: +2)
+vix_extreme = 35
+real_yield_rise_3m = 0.5          # pp: 10y real yield rose this much in 3 months (+1)
+dip_steps = [[10, 0.5], [20, 0.0]]  # S&P 500 % below its 52-week high -> reserve multiplier
+notch_override = 1                # the macro view may move the regime at most this many steps
+dip_add_gap_pp = 2                # in a dip, flag holdings this far below their conviction size (ADD eligible)
 
 [prices]
 # Portfolio prices (owner-approved 2026-10-08): fills use the OPEN and re-pricing uses the CLOSE from Yahoo
@@ -249,6 +267,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/portfolio.py` — validates trades against every rule, places next-open orders, fills them, marks to market, computes returns. All arithmetic lives here.
 - **Fills (owner rule):** trades decided by the agents are validated at once and queued as pending orders that fill at the first OPEN after the decision time (per exchange, `[fills]`) (`portfolio.py submit --at-next-open`, then `fill-pending`). Mechanical tactical exits still fill at the first close that crossed the stop/target.
 - `scripts/valuation.py` + `valuation/industry_methods.csv` — industry-appropriate fair value (owner's 145-industry method table: best + 2nd-best method; DCF, through-cycle DCF, FCFE, P/E, P/B+ROE, EV/EBITDA, EV/Revenue, DDM, P/FFO proxy; NAV/rNPV/SOTP need data stockanalysis.com doesn't show → `[data unavailable]`, next method used). Bear/base/bull from the stock's own history + reverse DCF; CAPM discount (FRED 10y + beta × `[valuation].erp`). Inform-only: shown in the fact sheet, logged as `fair_value_base` in the decision log, never a buy rule.
+- `scripts/regime.py` → `reports/regime/<date>.json/.md` (+ `-view.md` from `.claude/agents/macro-strategist.md`) — macro regime score, cash reserve, dip release.
 - `scripts/setups.py` — tactical setups (drift signal, pullback filter, ATR, volatility stop, 2:1 target, risk-based size).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.

@@ -131,6 +131,24 @@ def macro_check(ticker: str, last_run: str | None, asof: str, fred) -> dict:
     return {"weight": ov["macro_weight"], "fired": hits, "text_triggers": text, "line": line}
 
 
+def dip_candidates(work: dict, pv: float, cfg: dict, res: dict, skip: set) -> list[dict]:
+    """While a market dip releases the cash reserve, core holdings at least `dip_add_gap_pp` below their
+    conviction size (so an ADD would top them up)."""
+    if res.get("dip_multiplier", 1.0) >= 1 or "cash_strategy" not in cfg:
+        return []
+    gap, out = cfg["cash_strategy"]["dip_add_gap_pp"], []
+    for t, h in work["holdings"].items():
+        target = float(cfg["core"]["conviction_size_pct"].get(str(h.get("conviction")), 0))
+        w = h["market_value_usd"] / pv * 100
+        if h["type"] != "CORE" or t in skip or target - w < gap:
+            continue
+        out.append({"ticker": t, "weight_pct": round(w, 2), "target_pct": target,
+                    "why": (f"DIP: market dip releases the cash reserve (x{res['dip_multiplier']:g}); weight {w:.1f}% is "
+                            f"{target - w:.1f}pp below its conviction-{h.get('conviction')} size {target:g}% -- "
+                            "thesis check, ADD eligible")})
+    return out
+
+
 def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> dict:
     last_run = state.get("last_scan")
     if fred is None and "macro" in cfg:
@@ -216,6 +234,24 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> 
                 "target_weight_pct": cap, "reason": f"mechanical trim: core weight {w:.2f}% above {cap}%"})
     trimmed = {x["ticker"] for x in out["trims"]}
     out["unflagged"] = [u for u in out["unflagged"] if u["ticker"] not in trimmed]  # reported as trims instead
+    # buy the dip (owner rule 2026-10-09): while the reserve is released, core holdings that have fallen well
+    # below their conviction size go to the weekly review; it escalates to a re-initiation (which may ADD)
+    # only if the thesis is intact
+    from portfolio import current_reserve
+    res = current_reserve(cfg, asof)
+    out["cash_reserve"] = res
+    out["dips"] = []
+    for d in dip_candidates(work, pv, cfg, res, trimmed):
+        t, why = d["ticker"], d.pop("why")
+        out["dips"].append(d)
+        hit = next((f for f in out["flagged"] if f["ticker"] == t), None)
+        if hit:
+            hit["reasons"].append(why)
+        else:
+            out["flagged"].append({"ticker": t, "type": "CORE", "reasons": [why], "figures": {}})
+            out["unflagged"] = [u for u in out["unflagged"] if u["ticker"] != t]
+        if t not in out["reinitiate"] and t not in out["review"]:
+            out["review"].append(t)
     return out
 
 

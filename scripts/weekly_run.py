@@ -41,7 +41,8 @@ from common import ROOT, Ticker, load_config  # noqa: E402
 PY = [str(ROOT / "bin" / "py")]
 TOOLS = {"researcher": "Read,Write,WebFetch,Bash(bin/py:*)", "evaluator": "Read,Write,Bash(bin/py:*)",
          "portfolio-manager": "Read,Write,Bash(bin/py:*)", "weekly-reviewer": "Read,Write,WebFetch",
-         "mc-parameters": "Read,Write,Bash(bin/py:*)", "macro-overlay": "Read,Write,WebFetch,Bash(bin/py:*)"}
+         "mc-parameters": "Read,Write,Bash(bin/py:*)", "macro-overlay": "Read,Write,WebFetch,Bash(bin/py:*)",
+         "macro-strategist": "Read,Write,WebFetch,Bash(bin/py:*)"}
 
 
 class StepFailed(Exception):
@@ -134,6 +135,29 @@ def run_montecarlo(ticker: str, slug: str, asof: str, agent, log, run: Path) -> 
             fh.write(f"{ticker}\t{str(e)[:400]}\n")
 
 
+def run_cash_strategy(asof: str, agent, log) -> None:
+    """Score the regime (no LLM), then the macro-strategist may move it one notch with cited reasons. If the
+    view step fails, the mechanical score stands (logged); if scoring itself fails the run continues and the
+    rules use the latest earlier regime file (or the neutral reserve)."""
+    try:
+        if not (ROOT / "reports" / "macro" / f"{asof}.json").exists():
+            sh(PY + ["scripts/macro_data.py", "--asof", asof], log)
+        sh(PY + ["scripts/regime.py", "--asof", asof], log)
+    except StepFailed as e:
+        log(f"!! CASH STRATEGY SCORE FAILED (earlier regime / neutral reserve applies): {e}")
+        return
+    view = ROOT / "reports" / "regime" / f"{asof}-view.md"
+    try:
+        agent("macro-strategist", f"Date {asof}. Regime score: reports/regime/{asof}.md. Macro snapshot: "
+                                  f"reports/macro/{asof}.md. Write reports/regime/{asof}-view.md.", log)
+        if not view.exists():
+            raise StepFailed("macro-strategist wrote no view")
+        sh(PY + ["scripts/check_docs.py", "regime", str(view)], log)
+        sh(PY + ["scripts/regime.py", "--apply-view", "--asof", asof], log)
+    except Exception as e:  # noqa: BLE001  the view is optional: never cancels the week
+        log(f"!! MACRO VIEW UNAVAILABLE (the mechanical score stands): {e}")
+
+
 def screen_picks(asof: str, max_age_days: int = 7) -> list[dict]:
     d = ROOT / "reports" / "screen"
     files = sorted(p for p in d.glob("20??-??-??.json")
@@ -172,6 +196,9 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
            + (["--dry-run"] if dry_run else []), log)
         step("mark")
         sh(PY + ["scripts/portfolio.py", "mark", "--asof", asof], log)
+
+        step("cash strategy")  # cash is a holding (owner rule 2026-10-09): macro regime -> cash reserve
+        run_cash_strategy(asof, agent, log)
 
         step("scan")
         sh(PY + ["scripts/weekly_scan.py", "--asof", asof, "--out", str(rundir)], log)
@@ -242,7 +269,9 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             files = " ".join(str(e.relative_to(ROOT)) for _, e in evals)
             agent("portfolio-manager",
                   f"Evaluation files: {files}. Date {asof}. Write the requests to runs/{asof}/requests-decisions.json "
-                  f"and submit with --at-next-open --save runs/{asof}/submit.json (decided trades fill at the next open)." + (" This is a DRY RUN." if dry_run else ""), log)
+                  f"and submit with --at-next-open --save runs/{asof}/submit.json (decided trades fill at the next open). "
+                  f"Cash strategy: reports/regime/{asof}.md (new buys can't take cash below the reserve; if one would, "
+                  "it must name the holding it replaces and why)." + (" This is a DRY RUN." if dry_run else ""), log)
             if not (rundir / "submit.json").exists():
                 raise StepFailed("portfolio-manager did not produce submit.json")
         else:

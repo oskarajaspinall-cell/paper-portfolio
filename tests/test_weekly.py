@@ -238,7 +238,7 @@ def test_run_makes_no_model_calls_for_unflagged_or_exits(fake_repo, monkeypatch)
     calls, agents = [], []
     monkeypatch.setattr(wr, "sh", make_sh(fake_repo, SCAN_QUIET, calls))
     assert wr.run("2026-10-10", False, 0, agent=lambda *a: agents.append(a)) == 0
-    assert agents == []  # unflagged holding + mechanical exit: zero agent sessions
+    assert [a[0] for a in agents] == ["macro-strategist"]  # quiet week: only the weekly cash-strategy view
     assert any("portfolio.py submit" in c and "requests-mechanical.json" in c for c in calls)
 
 
@@ -261,9 +261,9 @@ def test_run_reinitiates_fired_core_trigger(fake_repo, monkeypatch):
             (fake_repo / "runs" / "2026-10-10" / "submit.json").write_text("{}")
 
     assert wr.run("2026-10-10", False, 0, agent=agent) == 0
-    assert seen == ["researcher", "macro-overlay", "evaluator", "mc-parameters", "portfolio-manager"]
-    assert "full re-initiation of an existing CORE holding (scan: core or macro trigger fired)" in prompts[0]
-    assert "Decide ADD, HOLD, TRIM or SELL" in prompts[2]
+    assert seen == ["macro-strategist", "researcher", "macro-overlay", "evaluator", "mc-parameters", "portfolio-manager"]
+    assert "full re-initiation of an existing CORE holding (scan: core or macro trigger fired)" in prompts[1]
+    assert "Decide ADD, HOLD, TRIM or SELL" in prompts[3]
 
 
 def test_failed_run_applies_no_trades_and_logs_error(fake_repo, monkeypatch):
