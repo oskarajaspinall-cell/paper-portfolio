@@ -39,7 +39,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT, Ticker, load_config  # noqa: E402
 
 PY = [str(ROOT / "bin" / "py")]
-TOOLS = {"researcher": "Read,Write,WebFetch,Bash(bin/py:*)", "evaluator": "Read,Write,Bash(bin/py:*)",
+TOOLS = {"researcher": "Read,Write,WebFetch,Bash(bin/py:*)", "gatherer": "Read,Write,WebFetch,Bash(bin/py:*)", "evaluator": "Read,Write,Bash(bin/py:*)",
          "portfolio-manager": "Read,Write,Bash(bin/py:*)", "weekly-reviewer": "Read,Write,WebFetch",
          "mc-parameters": "Read,Write,Bash(bin/py:*)", "macro-overlay": "Read,Write,WebFetch,Bash(bin/py:*)",
          "macro-strategist": "Read,Write,WebFetch,Bash(bin/py:*)"}
@@ -64,12 +64,14 @@ def sh(args: list[str], log, timeout: int | None = None, env: dict | None = None
     return p.stdout
 
 
-# Optional split routing (owner 2026-10-10, bin/run-bridge sets PAPER_MODEL_BRIDGE=1): the researcher runs as
-# `portfolio-researcher` through the local LiteLLM proxy (Gemini); the evaluator runs on Claude Opus 5.5 and every
-# other agent on Claude Code's default, all talking DIRECTLY to Anthropic with the subscription login (Claude Code
-# sends no credentials to a non-Anthropic base URL). Without PAPER_MODEL_BRIDGE nothing changes.
+# Optional split routing (owner 2026-10-10, bin/run-bridge sets PAPER_MODEL_BRIDGE=1). Gemini does the grunt work,
+# Claude all the thinking: the `gatherer` (fact sheet, news, fetches -> a facts-only evidence file) runs as
+# `portfolio-researcher` through the local LiteLLM proxy (Gemini); the researcher writes the analysis note from it
+# and the evaluator decides on Claude Opus 5.5; every other agent stays on Claude Code's default. All Claude
+# sessions talk DIRECTLY to Anthropic with the subscription login (Claude Code sends no credentials to a
+# non-Anthropic base URL). Without PAPER_MODEL_BRIDGE nothing changes (the researcher gathers and writes).
 BRIDGE_URL = "http://localhost:4000"
-BRIDGE_MODELS = {"researcher": "portfolio-researcher", "evaluator": "claude-opus-5-5"}
+BRIDGE_MODELS = {"gatherer": "portfolio-researcher", "evaluator": "claude-opus-5-5"}
 VIA_BRIDGE = {"portfolio-researcher"}
 
 
@@ -113,6 +115,16 @@ def entry_hit_reason(h: dict) -> str:
 def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, log, run: Path) -> Path:
     slug = Ticker(ticker).slug
     note, ev = ROOT / "research" / slug / f"{asof}.md", ROOT / "research" / slug / f"{asof}-evaluation.md"
+    if os.environ.get("PAPER_MODEL_BRIDGE") == "1":  # grunt work on Gemini, analysis on Claude
+        evidence = ROOT / "research" / slug / f"{asof}-evidence.md"
+        agent("gatherer", f"Ticker {ticker}, note type {ptype}, date {asof}. {why}", log)
+        if not evidence.exists():
+            raise StepFailed(f"gatherer wrote no evidence file at {evidence}")
+        check_doc("evidence", evidence, log)
+        why = (f"{why} The fact sheet research/{slug}/factsheet-{asof}.md and the evidence file "
+               f"research/{slug}/{asof}-evidence.md (facts gathered for you, no analysis) already exist: do NOT re-run "
+               "fact_sheet.py. Do all the analysis yourself from them; make at most 2 WebFetch calls, and only if "
+               "something that could change the decision is missing. Cite the evidence items' URLs.")
     agent("researcher", f"Ticker {ticker}, note type {ptype}, date {asof}. {why}", log)
     if not note.exists():
         raise StepFailed(f"researcher wrote no note at {note}")

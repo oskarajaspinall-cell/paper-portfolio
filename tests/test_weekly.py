@@ -647,8 +647,9 @@ def test_bridge_models_only_when_opted_in(monkeypatch):
     monkeypatch.delenv("PAPER_MODEL_BRIDGE", raising=False)
     assert "--model" not in wr.agent_cmd("researcher", "p")
     monkeypatch.setenv("PAPER_MODEL_BRIDGE", "1")
-    r, e, m = wr.agent_cmd("researcher", "p"), wr.agent_cmd("evaluator", "p"), wr.agent_cmd("portfolio-manager", "p")
+    r, e, m = wr.agent_cmd("gatherer", "p"), wr.agent_cmd("evaluator", "p"), wr.agent_cmd("portfolio-manager", "p")
     assert r[r.index("--model") + 1] == "portfolio-researcher" and r.index("--model") < r.index("--agent")
+    assert "--model" not in wr.agent_cmd("researcher", "p")  # the analysis note is Claude's
     assert e[e.index("--model") + 1] == "claude-opus-5-5"
     assert "--model" not in m  # other agents keep Claude Code's default
 
@@ -656,8 +657,56 @@ def test_bridge_models_only_when_opted_in(monkeypatch):
 def test_split_routing_env(monkeypatch):
     monkeypatch.setenv("PAPER_MODEL_BRIDGE", "1")
     monkeypatch.setenv("ANTHROPIC_BASE_URL", "http://stale:1")  # e.g. left over in the parent shell
-    r = wr.agent_env(wr.agent_cmd("researcher", "p"))
+    r = wr.agent_env(wr.agent_cmd("gatherer", "p"))
     assert r["ANTHROPIC_BASE_URL"] == "http://localhost:4000" and r["ANTHROPIC_DEFAULT_HAIKU_MODEL"] == "portfolio-researcher"
-    for name in ("evaluator", "portfolio-manager", "macro-overlay"):
+    for name in ("researcher", "evaluator", "portfolio-manager", "macro-overlay"):
         e = wr.agent_env(wr.agent_cmd(name, "p"))
         assert "ANTHROPIC_BASE_URL" not in e and "ANTHROPIC_DEFAULT_HAIKU_MODEL" not in e  # direct to Anthropic
+
+
+
+def test_bridge_runs_gatherer_then_researcher(fake_repo, monkeypatch):
+    monkeypatch.setenv("PAPER_MODEL_BRIDGE", "1")
+    calls = []
+
+    def agent(name, prompt, log):
+        calls.append((name, prompt))
+        slug = "AAA"
+        d = fake_repo / "research" / slug
+        d.mkdir(parents=True, exist_ok=True)
+        if name == "gatherer":
+            (d / "2026-10-10-evidence.md").write_text("x")
+        if name == "researcher":
+            raise wr.StepFailed("stop after the researcher")  # enough for this test
+    monkeypatch.setattr(wr, "check_doc", lambda kind, path, log: calls.append(("check", kind)))
+    with pytest.raises(wr.StepFailed, match="stop after the researcher"):
+        wr.research_and_evaluate("AAA", "CORE", "2026-10-10", "why", agent, lambda m: None, fake_repo)
+    assert [c[0] for c in calls] == ["gatherer", "check", "researcher"] and calls[1][1] == "evidence"
+    assert "do NOT re-run fact_sheet.py" in calls[2][1] and "AAA/2026-10-10-evidence.md" in calls[2][1]
+
+
+def test_evidence_check():
+    import check_docs as cd
+    good = """# Microsoft (MSFT) — Evidence — 2026-10-10
+## Peers
+- GOOGL: cloud and productivity software
+- AMZN: cloud infrastructure
+- ORCL: databases and cloud
+## Company events and news
+- 2026-09-30: announced a cloud partnership [company release] (source: https://www.sec.gov/x)
+## Primary-source findings
+- None
+## Upcoming dated events
+- 2026-10-28: Q1 results (source: https://stockanalysis.com/stocks/msft/)
+## Blocked or unproductive URLs
+- None
+## Data conflicts
+- None
+"""
+    errs, _ = cd.check_evidence(good)
+    assert errs == [], errs
+    bad = good.replace("cloud partnership", "attractive cloud partnership that makes it cheap").replace(
+        " (source: https://www.sec.gov/x)", "")
+    errs, _ = cd.check_evidence(bad)
+    assert any("without '(source" in e for e in errs)
+    assert any("'attractive'" in e for e in errs) and any("'cheap'" in e for e in errs)

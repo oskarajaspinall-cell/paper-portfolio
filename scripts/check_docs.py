@@ -369,18 +369,58 @@ def check_regime_view(md: str, score_doc: dict, cfg: dict) -> tuple[list[str], d
     return errs, {"final_regime": fr, "score_regime": score_doc["score_regime"], "reasons": len(reasons)}
 
 
+# Evidence file (owner 2026-10-10, model bridge): the gatherer (Gemini) collects facts only; Claude does the thinking.
+EVIDENCE_SECTIONS = ["Peers", "Company events and news", "Primary-source findings", "Upcoming dated events",
+                     "Blocked or unproductive URLs", "Data conflicts"]
+EVIDENCE_CITED = ("Company events and news", "Primary-source findings", "Upcoming dated events")
+# words that mean the gatherer judged instead of reporting: that is Claude's job
+JUDGEMENT_WORDS = ["buy", "avoid", "sell", "hold", "conviction", "undervalued", "overvalued", "cheap", "expensive",
+                   "attractive", "recommend", "thesis", "we believe", "i believe", "compelling", "bullish", "bearish",
+                   "moat", "high-quality", "high quality", "fair value", "upside", "downside", "should"]
+
+
+def check_evidence(md: str, sheet_urls: set[str] | None = None) -> tuple[list[str], dict]:
+    errs, counts = [], {}
+    title = md.splitlines()[0] if md.strip() else ""
+    if not re.match(r"^# .+ — Evidence — \d{4}-\d{2}-\d{2}$", title):
+        errs.append("title must be '# <Company> (<TICKER>) — Evidence — <YYYY-MM-DD>'")
+    secs = sections(md)
+    got = [h for h, _ in secs]
+    if got != EVIDENCE_SECTIONS:
+        errs.append(f"sections must be exactly {EVIDENCE_SECTIONS} in order (got {got})")
+    body = dict(secs)
+    for h in EVIDENCE_CITED:
+        items = re.findall(r"^\s*[-*]\s+(.+)$", body.get(h, ""), re.M)
+        counts[h.split()[0].lower()] = len(items)
+        for it in items:
+            if it.strip().lower().rstrip(".") == "none":
+                continue
+            if "(source: http" not in it:
+                errs.append(f"'{h}' item without '(source: <url>)': {it[:80]}")
+    peers = re.findall(r"^\s*[-*]\s+\S", body.get("Peers", ""), re.M)
+    if not 3 <= len(peers) <= 5:
+        errs.append(f"'Peers' needs 3-5 list items (got {len(peers)})")
+    low = re.sub(r"https?://\S+", "", md.lower())
+    hits = sorted({w for w in JUDGEMENT_WORDS if re.search(r"(?<![a-z])" + re.escape(w) + r"(?![a-z])", low)})
+    errs += [f"judgement word '{w}': report facts only (Claude does the analysis)" for w in hits]
+    errs += [f"URL not on allowlist: {u}" for u in bad_urls(md, sheet_urls)]
+    counts["words"] = words(md)
+    return errs, counts
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("kind", choices=["note", "eval", "macro", "regime"])
+    ap.add_argument("kind", choices=["note", "eval", "macro", "regime", "evidence"])
     ap.add_argument("path")
     ap.add_argument("--state", default=str(ROOT / "portfolio" / "state.json"))
     a = ap.parse_args(argv)
     md = Path(a.path).read_text()
-    if a.kind == "note":
+    if a.kind in ("note", "evidence"):
         path = Path(a.path)
         sheets = sorted(path.parent.glob("factsheet-*.md"))
         sheet_urls = set(re.findall(r"https?://[^\s)\]>|]+", sheets[-1].read_text())) if sheets else set()
-        errs, counts = check_note(md, {u.rstrip(".,;") for u in sheet_urls})
+        check = check_note if a.kind == "note" else check_evidence
+        errs, counts = check(md, {u.rstrip(".,;") for u in sheet_urls})
     elif a.kind == "macro":
         errs, counts = check_macro(md, load_config())
     elif a.kind == "regime":  # reports/regime/<date>-view.md, checked against reports/regime/<date>.json
