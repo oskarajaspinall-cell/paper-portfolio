@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Refining & Marketing",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 180.74797251872118,
+    "base": 333.6614697494152,
+    "bull": 542.3275208014279
+   },
+   "implied_growth": 0.046782241453233064,
+   "discount_rate": 0.08788100513204138,
+   "cost_of_equity": 0.0922,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.07840896574791338,
+     "base": -0.013676823001645643,
+     "bull": 0.017110639489244184
+    },
+    "cash_flow_margin": {
+     "bear": 0.04167573523981834,
+     "base": 0.05659554216342158,
+     "bull": 0.0797041995771351
+    },
+    "cagr_3y": -0.12181793149582676,
+    "cagr_5y": 0.017110639489244184,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 98.58503161397671,
+    "base": 233.56323460898503,
+    "bull": 330.94724459234607
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.203,
+     "base": 7.128,
+     "bull": 7.693
+    },
+    "ttm_ebitda": 13379000000,
+    "peak_earnings": "TTM EBITDA is 1.8x its 5y median: bear/base use the 5y average (1.033e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 433.75,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 153.36032555047302,
+  "base": 300.2953913692718,
+  "bull": 471.867428731734
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6464315261084195,
+  "base": -0.30767633113712556,
+  "bull": 0.08787879822878142
+ },
+ "implied_growth": 0.046782241453233064,
+ "ticker": "VLO",
+ "asof": "2026-10-10",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/vlo/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/vlo/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/vlo/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/vlo/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/vlo/statistics/"
+ }
+}
