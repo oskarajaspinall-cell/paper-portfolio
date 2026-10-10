@@ -1,0 +1,232 @@
+{
+ "ticker": "GDDY",
+ "date": "2026-10-07",
+ "params_file": "2026-10-07-mc-params.json",
+ "inputs_file": "2026-10-07-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 98.18,
+  "close_date": "2026-10-06",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/gddy/history/"
+ },
+ "target_returns": {
+  "bull": 0.4463230800570379,
+  "base": 0.17131798737013648,
+  "bear": -0.25646771236504384
+ },
+ "expected_12m": 0.13312283560806676,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.9232917811204522,
+   "IEF": 0.14121952122601317
+  },
+  "r2": 0.15497211314424675,
+  "residual_vol": {
+   "52w": 0.35380501753734733,
+   "156w": 0.3108028580029145,
+   "blended": 0.3323039377701309,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 142,
+    "target_band": 0.1147
+   },
+   "base": {
+    "probability": 0.5,
+    "target_price_12m": 115,
+    "target_band": 0.0
+   },
+   "bear": {
+    "probability": 0.25,
+    "target_price_12m": 73,
+    "target_band": 0.0
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.9232917811204522,
+    "move": 0.0,
+    "unc": 0.1431
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.14121952122601317,
+    "move": 0.0,
+    "unc": 0.0646
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Securities-fraud class actions / promotional-discount disclosure allegations",
+    "p": 0.33,
+    "impact": -0.1355,
+    "analogue": {
+     "week": "2026-03-09",
+     "move": -0.1355
+    },
+    "cited": true
+   },
+   {
+    "name": "Quarterly earnings print (next: Oct 29, 2026)",
+    "p": 0.68,
+    "impact": -0.1119,
+    "analogue": {
+     "week": "2026-07-27",
+     "move": -0.1119
+    },
+    "cited": true
+   }
+  ],
+  "tilt": 0.0
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": {
+  "approved": true,
+  "note": "Approved by Claude under the owner's delegation (2026-10-10): Bull (bookings still +6%, buybacks, deleveraging) and bear (short interest +44% m/m, near-zero book, Altman Z 1.63) rest on specific, comparable evidence, and the Oct 29 Q3 results are a two-sided binary for the bookings allegations; nothing justifies tilting the split. Informational only; revisited at the next results re-research."
+ },
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.024982327214106523,
+   "median": 0.013707954083284644,
+   "p5": -0.26743839310897394,
+   "p25": -0.10613781171670354,
+   "p50": 0.013707954083284644,
+   "p75": 0.14464079247259665,
+   "p95": 0.3546803179380861,
+   "prob_loss": 0.4695,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": -9.735396779573082e-05,
+    "jumps": -0.04937524930684852,
+    "noise": 0.0006896296276281522,
+    "scenario": 0.05615482778196367
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.052744963596869254,
+   "median": 0.021010668772338165,
+   "p5": -0.3686836050745834,
+   "p25": -0.15381306053073437,
+   "p50": 0.021010668772338165,
+   "p75": 0.2300719421762197,
+   "p95": 0.5700378149974659,
+   "prob_loss": 0.4705,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.0004604907188241687,
+    "jumps": -0.09888087110088971,
+    "noise": 0.00019828453663836915,
+    "scenario": 0.11230965556392734
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.13312283560806676,
+   "median": 0.04759672998918923,
+   "p5": -0.5046158213726255,
+   "p25": -0.22228484726224013,
+   "p50": 0.04759672998918923,
+   "p75": 0.40197118332517706,
+   "p95": 1.06136185456911,
+   "prob_loss": 0.4576,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.0008050271675438628,
+    "jumps": -0.19572834210559098,
+    "noise": 0.003963704574569303,
+    "scenario": 0.2246193111278547
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.13312283560806676,
+   "prob_loss_12m": 0.4576
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.5,
+    "bear": 0.15
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.2034019148502751,
+   "prob_loss_12m": 0.3923
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.5,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.06284375636585851,
+   "prob_loss_12m": 0.5196
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.1331228356080667,
+   "prob_loss_12m": 0.4144
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.1331228356080666,
+   "prob_loss_12m": 0.4911
+  }
+ ]
+}

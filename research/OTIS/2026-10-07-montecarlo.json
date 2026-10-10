@@ -1,0 +1,229 @@
+{
+ "ticker": "OTIS",
+ "date": "2026-10-07",
+ "params_file": "2026-10-07-mc-params.json",
+ "inputs_file": "2026-10-07-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 66.45,
+  "close_date": "2026-10-06",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/otis/history/"
+ },
+ "target_returns": {
+  "bull": 0.30925507900677185,
+  "base": 0.09857035364936029,
+  "bear": -0.15726109857035364
+ },
+ "expected_12m": 0.0872836719337847,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.5782274545444799,
+   "IEF": 0.5059296555921015
+  },
+  "r2": 0.22169975454415147,
+  "residual_vol": {
+   "52w": 0.15959845195556166,
+   "156w": 0.1707217455191651,
+   "blended": 0.16516009873736337,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 87.0,
+    "target_band": 0.0861
+   },
+   "base": {
+    "probability": 0.5,
+    "target_price_12m": 73.0,
+    "target_band": 0.0
+   },
+   "bear": {
+    "probability": 0.25,
+    "target_price_12m": 56.0,
+    "target_band": 0.0
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.5782274545444799,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.5059296555921015,
+    "move": -0.03,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Q3 2026 earnings / service-margin confirmation (Oct 28, 2026)",
+    "p": 0.25,
+    "impact": -0.097,
+    "analogue": {
+     "week": "2025-07-21",
+     "move": -0.097
+    },
+    "cited": true
+   },
+   {
+    "name": "CEO succession outcome (successor named, expected H1 2027)",
+    "p": 0.5,
+    "impact": -0.08,
+    "analogue": null,
+    "cited": true
+   }
+  ],
+  "tilt": -0.015
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": {
+  "approved": true,
+  "note": "Approved by Claude under the owner's delegation (2026-10-10): Bull (rising ROIC, modernization backlog +26%, multiples below 5y minimums) and bear (service-margin squeeze, guidance cut, rising leverage, CEO succession) are specific and comparable, and the Oct 28 Q3 results can resolve either way; nothing justifies tilting the split. Informational only; revisited at the next results re-research."
+ },
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.014285382761506957,
+   "median": 0.013483222866742538,
+   "p5": -0.1498173718179097,
+   "p25": -0.05373986433104284,
+   "p50": 0.013483222866742538,
+   "p75": 0.08150644110879582,
+   "p95": 0.1788753777207603,
+   "prob_loss": 0.4477,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.0037494863974528343,
+    "jumps": -0.022468817909977342,
+    "noise": 0.00035327884078979694,
+    "scenario": 0.035102812414406555
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.0345645081223087,
+   "median": 0.027342867782754562,
+   "p5": -0.21119294033714053,
+   "p25": -0.07377581174755385,
+   "p50": 0.027342867782754562,
+   "p75": 0.1373045093702987,
+   "p95": 0.29625398636008077,
+   "prob_loss": 0.4296,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.007743942514264063,
+    "jumps": -0.04508706436815287,
+    "noise": 0.00010354130328358902,
+    "scenario": 0.07520562482881311
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.0872836719337846,
+   "median": 0.061958242675536825,
+   "p5": -0.3013781976946823,
+   "p25": -0.10526772644302178,
+   "p50": 0.061958242675536825,
+   "p75": 0.252020158679243,
+   "p95": 0.5605986907724586,
+   "prob_loss": 0.4008,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "attribution_mean_log_return": {
+    "factor": -0.014681514266122988,
+    "jumps": -0.08855806158502373,
+    "noise": 0.0018068775021340918,
+    "scenario": 0.15541124965762623
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.0872836719337846,
+   "prob_loss_12m": 0.4008
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.5,
+    "bear": 0.15
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.13393528969149723,
+   "prob_loss_12m": 0.3281
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.5,
+    "bear": 0.35
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.040632054176072054,
+   "prob_loss_12m": 0.477
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.08728367193378476,
+   "prob_loss_12m": 0.381
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.5,
+    "bear": 0.25
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.08728367193378463,
+   "prob_loss_12m": 0.4247
+  }
+ ]
+}

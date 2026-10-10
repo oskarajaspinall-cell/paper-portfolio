@@ -1,47 +1,99 @@
 {
-  "ticker": "JKHY",
-  "date": "2026-10-08",
-  "scenarios": {
-    "bull": {
-      "probability": {"value": 0.25, "cite": "evaluation.json scenarios.bull.probability (research/JKHY/2026-10-08-evaluation.md)"},
-      "probability_evidence": "Bull case rests on growth holding near FY2026's 7.3% non-GAAP growth and management's 7%-8% FY2029 target reiterated at the September 2026 Investor Day, while every valuation multiple (P/E, EV/EBITDA, EV/Sales, P/FCF, P/B) sits in the bottom 3-8% of its own 5-year range (fact sheet Valuation table) — a re-rating case contingent on growth proof not yet delivered, tagged [Likely] in the note sec.3 and evaluation bull case.",
-      "target_price_12m": {"value": 203.00, "cite": "evaluation.json scenarios.bull.target_price_12m = fact sheet blended bull fair value 203.00 (research/JKHY/2026-10-08-evaluation.md; factsheet-2026-10-08.md Fair value table)"},
-      "target_band": {"value": 0.0736, "cite": "Half the spread between the bull case's DCF (193.04) and EV/EBITDA (222.90) anchors, relative to the 203.00 blended target: (222.90-193.04)/2 / 203.00 = 0.0736 (factsheet-2026-10-08.md Fair value table)"}
-    },
-    "base": {
-      "probability": {"value": 0.50, "cite": "evaluation.json scenarios.base.probability (research/JKHY/2026-10-08-evaluation.md)"},
-      "probability_evidence": "Base case is the central scenario: the reverse DCF shows the price implies just 0.4% year-1 revenue growth against 7.3% delivered in FY2026 (note sec.3), so the market is modelled to partly, not fully, close that gap to the DCF-only base fair value of 175.62 because the stock's +13% EV/EBITDA and +31% P/E premium to peers FI/FIS/ACIW/QTWO (fact sheet Valuation table) caps further re-rating toward the full 189.78 blend; evaluation tags this [Likely].",
-      "target_price_12m": {"value": 175.62, "cite": "evaluation.json scenarios.base.target_price_12m = fact sheet base DCF (not full blend) 175.62 (research/JKHY/2026-10-08-evaluation.md; factsheet-2026-10-08.md Fair value table)"},
-      "target_band": {"value": 0.1209, "cite": "Half the spread between the base case's DCF (175.62) and EV/EBITDA (218.09) anchors, relative to the 175.62 target: (218.09-175.62)/2 / 175.62 = 0.1209 (factsheet-2026-10-08.md Fair value table)"}
-    },
-    "bear": {
-      "probability": {"value": 0.25, "cite": "evaluation.json scenarios.bear.probability (research/JKHY/2026-10-08-evaluation.md)"},
-      "probability_evidence": "Bear case is grounded in the 10-K's disclosed 'price compression between the former and renegotiated contracts' and its warning that fintech point-solutions 'may reduce demand for broader integrated offerings' (10-K, cited in note sec.2 and evaluation bear case, tagged [Likely]), plus the stock already trailing SPY by -22.8pp over 6 months and sitting ~7% below both moving averages with no catalyst evidence yet (evaluation bear case, fact sheet Price table, [Certain]).",
-      "target_price_12m": {"value": 107.21, "cite": "evaluation.json scenarios.bear.target_price_12m = fact sheet blended bear fair value 107.21 (research/JKHY/2026-10-08-evaluation.md; factsheet-2026-10-08.md Fair value table)"},
-      "target_band": {"value": 0.2052, "cite": "Half the spread between the bear case's DCF (92.54) and EV/EBITDA (136.54) anchors, relative to the 107.21 target: (136.54-92.54)/2 / 107.21 = 0.2052 (factsheet-2026-10-08.md Fair value table); below the 0.2654 blended residual volatility in the inputs file"}
-    }
+ "ticker": "JKHY",
+ "date": "2026-10-08",
+ "scenarios": {
+  "bull": {
+   "probability": {
+    "value": 0.25,
+    "cite": "evaluation.json scenarios.bull.probability (research/JKHY/2026-10-08-evaluation.md)"
+   },
+   "probability_evidence": "Bull case rests on growth holding near FY2026's 7.3% non-GAAP growth and management's 7%-8% FY2029 target reiterated at the September 2026 Investor Day, while every valuation multiple (P/E, EV/EBITDA, EV/Sales, P/FCF, P/B) sits in the bottom 3-8% of its own 5-year range (fact sheet Valuation table) \u2014 a re-rating case contingent on growth proof not yet delivered, tagged [Likely] in the note sec.3 and evaluation bull case.",
+   "target_price_12m": {
+    "value": 203.0,
+    "cite": "evaluation.json scenarios.bull.target_price_12m = fact sheet blended bull fair value 203.00 (research/JKHY/2026-10-08-evaluation.md; factsheet-2026-10-08.md Fair value table)"
+   },
+   "target_band": {
+    "value": 0.0736,
+    "cite": "Half the spread between the bull case's DCF (193.04) and EV/EBITDA (222.90) anchors, relative to the 203.00 blended target: (222.90-193.04)/2 / 203.00 = 0.0736 (factsheet-2026-10-08.md Fair value table)"
+   }
   },
-  "factors": {
-    "SPY": {
-      "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news in mc-inputs.json factor_news.SPY: bullish (ETF Trends 2026-10-07 'Combined Assets in SPY, SPYM Cross $1 Trillion', TipRanks 2026-10-09 'SPY, QQQ Bounced Back') vs bearish (Invezz 2026-10-08 'AI bubble could burst in 2027, sending S&P 500 down to 5,000', CNBC 2026-10-07 100,000-lot bearish put spread) signals cancel out; macro overlay (research/JKHY/2026-10-08-macro.md) gives no SPY-specific directional tilt ('context' weight only); set to 0."},
-      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression, research/JKHY/2026-10-08-mc-inputs.json)"}
-    },
-    "IEF": {
-      "expected_12m_move": {"value": 0.0, "cite": "Mixed factor news in mc-inputs.json factor_news.IEF: yields rising to multi-decade highs (Bloomberg 2026-10-07 'US 30-Year Yields Return to 2002 High', WSJ 2026-10-01 'Bond Rout Is Deepening') vs yields retreating (ETF Trends 2026-10-02 'Navigating Fixed Income Duration as Treasury Yields Retreat', Bloomberg 2026-10-02 'US Treasury Rebound Pulls Yields Off Multi-Decade Highs') give no net direction; macro overlay (research/JKHY/2026-10-08-macro.md) states JKHY's low beta (0.56) and no FX/rate-sensitive earnings make it no more macro-sensitive than the market, with no IEF-specific tilt; set to 0."},
-      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression, research/JKHY/2026-10-08-mc-inputs.json)"}
-    }
+  "base": {
+   "probability": {
+    "value": 0.5,
+    "cite": "evaluation.json scenarios.base.probability (research/JKHY/2026-10-08-evaluation.md)"
+   },
+   "probability_evidence": "Base case is the central scenario: the reverse DCF shows the price implies just 0.4% year-1 revenue growth against 7.3% delivered in FY2026 (note sec.3), so the market is modelled to partly, not fully, close that gap to the DCF-only base fair value of 175.62 because the stock's +13% EV/EBITDA and +31% P/E premium to peers FI/FIS/ACIW/QTWO (fact sheet Valuation table) caps further re-rating toward the full 189.78 blend; evaluation tags this [Likely].",
+   "target_price_12m": {
+    "value": 175.62,
+    "cite": "evaluation.json scenarios.base.target_price_12m = fact sheet base DCF (not full blend) 175.62 (research/JKHY/2026-10-08-evaluation.md; factsheet-2026-10-08.md Fair value table)"
+   },
+   "target_band": {
+    "value": 0.1209,
+    "cite": "Half the spread between the base case's DCF (175.62) and EV/EBITDA (218.09) anchors, relative to the 175.62 target: (218.09-175.62)/2 / 175.62 = 0.1209 (factsheet-2026-10-08.md Fair value table)"
+   }
   },
-  "jumps": [
-    {
-      "name": "Earnings-day reaction",
-      "reason": "Next earnings date is Nov 3, 2026 (fact sheet Price table); JKHY's weekly history shows earnings_release event weeks produce outsized moves, including the -9.71% reaction to the Q4 2023 (FY2023 annual) report.",
-      "cite": "factsheet-2026-10-08.md Price table 'Next earnings date: Nov 3, 2026'; mc-inputs.json analogues.event_weeks (earnings_release entries) and analogues.largest_falls",
-      "annual_probability": {"value": 0.20, "cite": "mc-inputs.json analogues.event_weeks: of 20 quarterly earnings_release weeks from 2021-10-18 to 2026-09-28, exactly 1 (Q4 2023, week 2023-08-14, -9.71%) matched or exceeded this magnitude -> ~1-in-5-years, so 0.20 annual probability of a reaction this large within 12 months."},
-      "impact": {"value": -0.0971, "cite": "mc-inputs.json analogues.event_weeks, week 2023-08-14 (Q4 2023 earnings release), move -0.0971; also listed in analogues.largest_falls"},
-      "analogue": {"week": "2023-08-14", "move": -0.0971},
-      "assumption": null
-    }
-  ],
-  "no_discrete_risks_reason": null,
-  "technical_tilt": null
+  "bear": {
+   "probability": {
+    "value": 0.25,
+    "cite": "evaluation.json scenarios.bear.probability (research/JKHY/2026-10-08-evaluation.md)"
+   },
+   "probability_evidence": "Bear case is grounded in the 10-K's disclosed 'price compression between the former and renegotiated contracts' and its warning that fintech point-solutions 'may reduce demand for broader integrated offerings' (10-K, cited in note sec.2 and evaluation bear case, tagged [Likely]), plus the stock already trailing SPY by -22.8pp over 6 months and sitting ~7% below both moving averages with no catalyst evidence yet (evaluation bear case, fact sheet Price table, [Certain]).",
+   "target_price_12m": {
+    "value": 107.21,
+    "cite": "evaluation.json scenarios.bear.target_price_12m = fact sheet blended bear fair value 107.21 (research/JKHY/2026-10-08-evaluation.md; factsheet-2026-10-08.md Fair value table)"
+   },
+   "target_band": {
+    "value": 0.2052,
+    "cite": "Half the spread between the bear case's DCF (92.54) and EV/EBITDA (136.54) anchors, relative to the 107.21 target: (136.54-92.54)/2 / 107.21 = 0.2052 (factsheet-2026-10-08.md Fair value table); below the 0.2654 blended residual volatility in the inputs file"
+   }
+  }
+ },
+ "factors": {
+  "SPY": {
+   "expected_12m_move": {
+    "value": 0.0,
+    "cite": "Mixed factor news in mc-inputs.json factor_news.SPY: bullish (ETF Trends 2026-10-07 'Combined Assets in SPY, SPYM Cross $1 Trillion', TipRanks 2026-10-09 'SPY, QQQ Bounced Back') vs bearish (Invezz 2026-10-08 'AI bubble could burst in 2027, sending S&P 500 down to 5,000', CNBC 2026-10-07 100,000-lot bearish put spread) signals cancel out; macro overlay (research/JKHY/2026-10-08-macro.md) gives no SPY-specific directional tilt ('context' weight only); set to 0."
+   },
+   "uncertainty_12m": {
+    "value": 0.1431154014991791,
+    "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression, research/JKHY/2026-10-08-mc-inputs.json)"
+   }
+  },
+  "IEF": {
+   "expected_12m_move": {
+    "value": 0.0,
+    "cite": "Mixed factor news in mc-inputs.json factor_news.IEF: yields rising to multi-decade highs (Bloomberg 2026-10-07 'US 30-Year Yields Return to 2002 High', WSJ 2026-10-01 'Bond Rout Is Deepening') vs yields retreating (ETF Trends 2026-10-02 'Navigating Fixed Income Duration as Treasury Yields Retreat', Bloomberg 2026-10-02 'US Treasury Rebound Pulls Yields Off Multi-Decade Highs') give no net direction; macro overlay (research/JKHY/2026-10-08-macro.md) states JKHY's low beta (0.56) and no FX/rate-sensitive earnings make it no more macro-sensitive than the market, with no IEF-specific tilt; set to 0."
+   },
+   "uncertainty_12m": {
+    "value": 0.06460381100458489,
+    "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression, research/JKHY/2026-10-08-mc-inputs.json)"
+   }
+  }
+ },
+ "jumps": [
+  {
+   "name": "Earnings-day reaction",
+   "reason": "Next earnings date is Nov 3, 2026 (fact sheet Price table); JKHY's weekly history shows earnings_release event weeks produce outsized moves, including the -9.71% reaction to the Q4 2023 (FY2023 annual) report.",
+   "cite": "factsheet-2026-10-08.md Price table 'Next earnings date: Nov 3, 2026'; mc-inputs.json analogues.event_weeks (earnings_release entries) and analogues.largest_falls",
+   "annual_probability": {
+    "value": 0.2,
+    "cite": "mc-inputs.json analogues.event_weeks: of 20 quarterly earnings_release weeks from 2021-10-18 to 2026-09-28, exactly 1 (Q4 2023, week 2023-08-14, -9.71%) matched or exceeded this magnitude -> ~1-in-5-years, so 0.20 annual probability of a reaction this large within 12 months."
+   },
+   "impact": {
+    "value": -0.0971,
+    "cite": "mc-inputs.json analogues.event_weeks, week 2023-08-14 (Q4 2023 earnings release), move -0.0971; also listed in analogues.largest_falls"
+   },
+   "analogue": {
+    "week": "2023-08-14",
+    "move": -0.0971
+   },
+   "assumption": null
+  }
+ ],
+ "no_discrete_risks_reason": null,
+ "technical_tilt": null,
+ "owner_review": {
+  "approved": true,
+  "note": "Approved by Claude under the owner's delegation (2026-10-10): Bull (7-8% growth target reiterated, multiples in the bottom of the 5y range) and bear (renewal price compression, fintech point-solution competition, weak momentum) are specific and comparable, with no dated catalyst favouring either; nothing justifies tilting the split. Informational only; revisited at the next results re-research."
+ }
 }
