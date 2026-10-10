@@ -4612,3 +4612,63 @@ OK research/CMG/2026-10-10-evaluation.md Bear case=139 Bull case=105 decision=AV
 [23:21:16] {"out": "research/CMG/2026-10-10-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 17.62, "base": 29.31, "bull": 34.09}, "price": 31.59}
 [23:21:16] Monte Carlo skipped for CMG (AVOID: informational only, runs for BUY/ADD and holdings)
 [23:21:17] == done CMG
+[23:21:21] == Research batch 04: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-10-batch-04.md; uploaded to GitHub
+[23:21:21] == initiate WFC
+[23:21:21] $ claude -p Ticker WFC, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:21:57] research/UPS/2026-10-10.md
+research/UPS/factsheet-2026-10-10.md
+OK research/UPS/2026-10-10.md type=CORE 1=58 2=143 3=147 4=75 5=94 6=72 total=589
+
+Blocked/failed fetches (not used as data, noted in note's Sources): https://www.ups.com/us/en/about-us/investor-relations.page (access denied), https://www.reuters.com/business/ups-signs-exclusive-deal-with-tiktok-shop-label-free-returns-2026-09-29/ (fetch failed), https://about.ups.com/us/en/newsroom.html (HTTP 403). No data conflicts.
+[23:21:57] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-10.md
+[23:21:57] OK /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-10.md type=CORE 1=58 2=143 3=147 4=75 5=94 6=72 total=589
+[23:21:57] $ claude -p Ticker UPS, date 2026-10-10. Research: research/UPS/factsheet-2026-10-10.md, research/UPS/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/UPS/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:23:24] research/UPS/2026-10-10-macro.md
+OK research/UPS/2026-10-10-macro.md macro_weight=secondary words=248
+[23:23:24] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-10-macro.md
+[23:23:24] OK /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-10-macro.md macro_weight=secondary words=248
+[23:23:24] $ claude -p Evaluate UPS for 2026-10-10: fact sheet research/UPS/factsheet-2026-10-10.md, note research/UPS/2026-10-10.md, state portfolio/state.json, macro overlay research/UPS/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:23:27] You've hit your session limit · resets 1:50am (Europe/London)
+[23:23:27] !! FAILED UPS: claude -p Evaluate UPS for 2026-10-10: fact sheet research/UPS/factsheet-2026-10-10.md, note research/UPS/2026-10-10.md, state portfolio/state.json, macro overlay research/UPS/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Writ
+[23:23:27] == initiate AMGN
+[23:23:27] $ claude -p Ticker AMGN, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:23:29] You've hit your session limit · resets 1:50am (Europe/London)
+[23:23:29] !! FAILED AMGN: claude -p Ticker AMGN, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[23:23:29] == initiate JPM
+[23:23:29] $ claude -p Ticker JPM, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:23:31] You've hit your session limit · resets 1:50am (Europe/London)
+[23:23:31] !! FAILED JPM: claude -p Ticker JPM, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[23:24:07] Note path: `research/ULTA/2026-10-10.md`
+Fact sheet path: `research/ULTA/factsheet-2026-10-10.md`
+
+check_docs: `OK research/ULTA/2026-10-10.md type=CORE 1=62 2=139 3=150 4=65 5=82 6=113 total=611`
+
+Conflicts/blocked URLs: Reuters article fetch failed ("unable to fetch"); `ulta.com/company/investor-relations` returned a maintenance page; `investor.ulta.com` failed DNS resolution — none of these produced usable content, so no qualitative claims were sourced from them. No data conflicts found.
+
+**Note on usage limit:** I reached my usage limit while finishing this task, but the deliverable above (note + fact sheet + passing check_docs) was completed in full before the cutoff — nothing further is needed from this request.
+[23:24:07] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/ULTA/2026-10-10.md
+[23:24:07] OK /Users/oskaraspinall/paper-portfolio/research/ULTA/2026-10-10.md type=CORE 1=62 2=139 3=150 4=65 5=82 6=113 total=611
+[23:24:07] $ claude -p Ticker ULTA, date 2026-10-10. Research: research/ULTA/factsheet-2026-10-10.md, research/ULTA/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/ULTA/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:24:09] You've hit your session limit · resets 1:50am (Europe/London)
+[23:24:09] !! MACRO OVERLAY UNAVAILABLE for ULTA: claude -p Ticker ULTA, date 2026-10-10. Research: research/ULTA/factsheet-2026-10-10.md, research/ULTA/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/ULTA/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[23:24:09] $ claude -p Evaluate ULTA for 2026-10-10: fact sheet research/ULTA/factsheet-2026-10-10.md, note research/ULTA/2026-10-10.md, state portfolio/state.json. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:24:11] You've hit your session limit · resets 1:50am (Europe/London)
+[23:24:11] !! FAILED ULTA: claude -p Evaluate ULTA for 2026-10-10: fact sheet research/ULTA/factsheet-2026-10-10.md, note research/ULTA/2026-10-10.md, state portfolio/state.json. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text exited 
+[23:25:25] Note: research/WFC/2026-10-10.md
+Fact sheet: research/WFC/factsheet-2026-10-10.md
+Check: OK research/WFC/2026-10-10.md type=CORE 1=41 2=145 3=149 4=76 5=68 6=71 total=550
+
+Data/process notes:
+- Blocked/failed fetches (moved on, not retried): https://www.reuters.com/business/finance/wells-fargo-faces-regulator-probe-over-efforts-boost-black-homeownership-wsj-2026-10-07/ (fetch failed, cited anyway per fact sheet's listed headline URL, not refetched for body text); https://www.wellsfargo.com/press-release/ (404); https://newsroom.wf.com/... (blocked, off-allowlist domain); SEC EDGAR 8-K browse page returned low-confidence/ambiguous item codes, not used as a cited claim.
+- No fact-sheet/qualitative data conflicts found.
+
+My turn's usage limit was reached while finishing this task. The WFC core note is complete and passes check_docs — nothing outstanding from this request. I did not produce a separate BUY/AVOID verdict since that decision belongs to the evaluator step in this pipeline (not the researcher role I was given); the note itself lays out the evidence (valuation above even the model's bull case, flat ROE/margin trend, weak Piotroski score, fresh HUD regulatory probe) a reviewer would need for that call.
+[23:25:25] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/WFC/2026-10-10.md
+[23:25:26] OK /Users/oskaraspinall/paper-portfolio/research/WFC/2026-10-10.md type=CORE 1=41 2=145 3=149 4=76 5=68 6=71 total=550
+[23:25:26] $ claude -p Ticker WFC, date 2026-10-10. Research: research/WFC/factsheet-2026-10-10.md, research/WFC/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/WFC/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:25:29] You've hit your session limit · resets 1:50am (Europe/London)
+[23:25:29] !! MACRO OVERLAY UNAVAILABLE for WFC: claude -p Ticker WFC, date 2026-10-10. Research: research/WFC/factsheet-2026-10-10.md, research/WFC/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/WFC/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[23:25:29] $ claude -p Evaluate WFC for 2026-10-10: fact sheet research/WFC/factsheet-2026-10-10.md, note research/WFC/2026-10-10.md, state portfolio/state.json. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:25:32] You've hit your session limit · resets 1:50am (Europe/London)
+[23:25:32] !! FAILED WFC: claude -p Evaluate WFC for 2026-10-10: fact sheet research/WFC/factsheet-2026-10-10.md, note research/WFC/2026-10-10.md, state portfolio/state.json. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text exited 1: 
+[23:25:32] == research loop stopped (repeated failures: usage limit?)

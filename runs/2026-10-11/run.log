@@ -1,0 +1,82 @@
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py fill-pending --asof 2026-10-11 --save /Users/oskaraspinall/paper-portfolio/runs/2026-10-11/fills.json
+{
+ "applied": [],
+ "rejected": [],
+ "still_pending": [],
+ "expired": []
+}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py mark --asof 2026-10-11
+{"total": 101456.11, "cash": 44243.45, "core": 57212.66, "tactical": 0, "sectors": {"Healthcare": 14392.130000000001, "Consumer Discretionary": 7211.43, "Technology": 21344.71, "Communication Services": 7273.69, "Industrials": 6990.7}, "n": 8}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/macro_data.py --asof 2026-10-11
+{"out": "reports/macro/2026-10-11.md", "series": 11, "unavailable": []}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/regime.py --asof 2026-10-11
+{"asof": "2026-10-11", "points": 1, "score_regime": "risk_on", "final_regime": "risk_on", "reserve_pct": 10.0, "drawdown_pct": 0.0}
+$ claude -p Date 2026-10-11. Regime score: reports/regime/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write reports/regime/2026-10-11-view.md. --agent macro-strategist --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+!! MACRO VIEW UNAVAILABLE (the mechanical score stands): claude -p Date 2026-10-11. Regime score: reports/regime/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write reports/regime/2026-10-11-view.md. --agent macro-strategist --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_scan.py --asof 2026-10-11 --out /Users/oskaraspinall/paper-portfolio/runs/2026-10-11
+{"flagged_for_review": [], "reinitiate": [], "mechanical_exits": [], "trims": [], "unflagged": 8, "scan": "/Users/oskaraspinall/paper-portfolio/runs/2026-10-11/scan.json"}
+$ claude -p Ticker HKG:1530, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+$ claude -p Ticker DFM:EMAARDEV, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+$ claude -p Ticker ASX:GGP, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation HKG:1530: claude -p Ticker HKG:1530, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker JSE:GFI, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation DFM:EMAARDEV: claude -p Ticker DFM:EMAARDEV, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker TSX:OGC, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation ASX:GGP: claude -p Ticker ASX:GGP, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker TSX:K, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation JSE:GFI: claude -p Ticker JSE:GFI, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker DFM:EMAAR, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation TSX:K: claude -p Ticker TSX:K, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker HKG:2076, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation TSX:OGC: claude -p Ticker TSX:OGC, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker HRB, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation DFM:EMAAR: claude -p Ticker DFM:EMAAR, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker MOEX:MTSS, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation HKG:2076: claude -p Ticker HKG:2076, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker TYO:6323, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-09 closed +15.8% on 5.2x average volume, 0 session(s) ago, still holding 100% of the jump; stop below that day's low (4610); last close 5134 (2026-10-09), ATR(14) 209.571 (4.1%), suggested stop 4557.61 (-11.2%), minimum 2:1 target 6286.79, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation HRB: claude -p Ticker HRB, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker KRX:402340, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 1.05e+06 (2026-10-08), ATR(14) 58357.1 (5.6%), suggested stop 904107 (-13.9%), minimum 2:1 target 1.34179e+06, risk-based size 5.0%; 3-month peak (resistance) 1.502e+06 (2026-07-07), 3.1x the stop distance. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation MOEX:MTSS: claude -p Ticker MOEX:MTSS, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker EPA:CAP, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-01 closed +7.4% on 2.9x average volume, 6 session(s) ago, still holding 138% of the jump; stop below that day's low (100.95); last close 115.05 (2026-10-09), ATR(14) 4.3929 (3.8%), suggested stop 99.8518 (-13.2%), minimum 2:1 target 145.446, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation KRX:402340: claude -p Ticker KRX:402340, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 1.05e+06 (2026-10-08), ATR(14) 58357.1 (5.6%), suggested stop 904107 (-13.9%), minimum 2:1 target 1.34179e+06, risk-based size 5.0%; 3-month peak (resistance) 1.502e+06 (2026-07-07), 3.1x the stop distance. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker ETR:DHER, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 36.6 (2026-10-09), ATR(14) 0.2664 (0.7%), suggested stop 35.9339 (-1.8%), minimum 2:1 target 37.9321, risk-based size 5.0%; 3-month peak (resistance) 38.96 (2026-07-17), 3.5x the stop distance. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation TYO:6323: claude -p Ticker TYO:6323, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-09 closed +15.8% on 5.2x average volume, 0 session(s) ago, still holding 100% of the jump; stop below that day's low (4610); last close 5134 (2026-10-09), ATR(14) 209.571 (4.1%), suggested stop 4557.61 (-11.2%), minimum 2:1 target 6286.79, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ claude -p Ticker HKG:0659, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-09-25 closed +6.5% on 11.5x average volume, 9 session(s) ago, still holding 201% of the jump; stop below that day's low (8.17); last close 8.92 (2026-10-09), ATR(14) 0.1857 (2.1%), suggested stop 8.1236 (-8.9%), minimum 2:1 target 10.5129, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation EPA:CAP: claude -p Ticker EPA:CAP, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-01 closed +7.4% on 2.9x average volume, 6 session(s) ago, still holding 138% of the jump; stop below that day's low (100.95); last close 115.05 (2026-10-09), ATR(14) 4.3929 (3.8%), suggested stop 99.8518 (-13.2%), minimum 2:1 target 145.446, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation ETR:DHER: claude -p Ticker ETR:DHER, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 36.6 (2026-10-09), ATR(14) 0.2664 (0.7%), suggested stop 35.9339 (-1.8%), minimum 2:1 target 37.9321, risk-based size 5.0%; 3-month peak (resistance) 38.96 (2026-07-17), 3.5x the stop distance. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+You've hit your session limit · resets 1:50am (Europe/London)
+SKIPPED initiation HKG:0659: claude -p Ticker HKG:0659, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-09-25 closed +6.5% on 11.5x average volume, 9 session(s) ago, still holding 201% of the jump; stop below that day's low (8.17); last close 8.92 (2026-10-09), ATR(14) 0.1857 (2.1%), suggested stop 8.1236 (-8.9%), minimum 2:1 target 10.5129, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py submit /Users/oskaraspinall/paper-portfolio/runs/2026-10-11/requests-mechanical.json --asof 2026-10-11 --save /Users/oskaraspinall/paper-portfolio/runs/2026-10-11/submit-mechanical.json
+{
+ "cash_before_usd": 44243.450688315985,
+ "cash_after_usd": 44243.450688315985,
+ "applied": [],
+ "rejected": [],
+ "warnings": [
+  "cash 43.6% vs a 10% reserve (risk_on regime)"
+ ],
+ "dry_run": false
+}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/decision_log.py update --asof 2026-10-11
+{"rows": 178, "notes": []}
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py stamp --asof 2026-10-11
+last_scan = 2026-10-11
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_report.py --asof 2026-10-11 --run /Users/oskaraspinall/paper-portfolio/runs/2026-10-11
+/Users/oskaraspinall/paper-portfolio/reports/weekly/2026-10-11.md
+$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/dashboard.py
+/Users/oskaraspinall/paper-portfolio/docs/index.html
