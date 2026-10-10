@@ -1,0 +1,36 @@
+#!/bin/bash
+# Optional LiteLLM bridge (owner 2026-10-10): the researcher agent runs on Gemini, the evaluator on Claude,
+# every other agent passes through to Claude. Opt-in only: scheduled jobs never use it.
+#   bin/run-bridge [weekly_run.py args...]    e.g. bin/run-bridge --asof 2026-10-10 --dry-run
+# Setup: cp .env.example .env (add GEMINI_API_KEY); cp config.example.yaml config.yaml;
+#        uv pip install --python .venv/bin/python -r requirements-bridge.txt
+set -e
+cd "$(dirname "$0")/.."
+
+# Load local environment variables if .env exists, handling quotes safely
+if [ -f .env ]; then
+  set -a
+  source .env
+  set +a
+fi
+
+if [ -z "${GEMINI_API_KEY:-}" ]; then
+  echo "Error: GEMINI_API_KEY is not set. Please create a .env file from .env.example."
+  exit 1
+fi
+[ -f config.yaml ] || { echo "Error: config.yaml missing. Copy config.example.yaml to config.yaml."; exit 1; }
+
+echo "Starting LiteLLM subscription bridge on port 4000..."
+.venv/bin/litellm --config config.yaml --port 4000 > logs/litellm-bridge.log 2>&1 &
+BRIDGE_PID=$!
+trap "kill $BRIDGE_PID 2>/dev/null || true" EXIT
+for _ in $(seq 1 60); do  # wait until the proxy answers (up to 30 s)
+  curl -s -o /dev/null http://localhost:4000/health/liveliness && break
+  kill -0 $BRIDGE_PID 2>/dev/null || { echo "Error: the bridge exited; see logs/litellm-bridge.log"; exit 1; }
+  sleep 0.5
+done
+
+export ANTHROPIC_BASE_URL="http://localhost:4000"
+export PAPER_MODEL_BRIDGE=1   # weekly_run.claude_agent adds --model for the researcher and evaluator
+
+bin/py scripts/weekly_run.py --local "$@"

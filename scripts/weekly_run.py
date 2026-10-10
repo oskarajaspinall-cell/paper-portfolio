@@ -64,10 +64,20 @@ def sh(args: list[str], log, timeout: int | None = None) -> str:
     return p.stdout
 
 
+# Optional LiteLLM bridge (owner 2026-10-10, bin/run-bridge): these agents get a bridge model name; all others keep
+# Claude Code's default. Only when PAPER_MODEL_BRIDGE=1, so scheduled jobs (no bridge running) are unaffected.
+BRIDGE_MODELS = {"researcher": "portfolio-researcher", "evaluator": "portfolio-evaluator"}
+
+
+def agent_cmd(name: str, prompt: str) -> list[str]:
+    model = (["--model", BRIDGE_MODELS[name]]
+             if os.environ.get("PAPER_MODEL_BRIDGE") == "1" and name in BRIDGE_MODELS else [])
+    return ["claude", "-p", prompt, *model, "--agent", name, "--allowedTools", TOOLS[name], "--output-format", "text"]
+
+
 def claude_agent(name: str, prompt: str, log) -> str:
     """Run one subagent as its own headless session. Replaced in tests."""
-    return sh(["claude", "-p", prompt, "--agent", name, "--allowedTools", TOOLS[name], "--output-format", "text"],
-              log, timeout=AGENT_TIMEOUT)
+    return sh(agent_cmd(name, prompt), log, timeout=AGENT_TIMEOUT)
 
 
 def check_doc(kind: str, path: Path, log) -> None:

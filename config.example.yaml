@@ -1,0 +1,20 @@
+# LiteLLM bridge (owner 2026-10-10; optional, started only by bin/run-bridge). Copy to config.yaml.
+# portfolio-researcher -> Gemini, portfolio-evaluator -> Claude; every other Claude model name the agents use
+# (macro-overlay, portfolio-manager, mc-parameters, weekly-reviewer) passes straight through to Anthropic.
+model_list:
+  - model_name: portfolio-researcher
+    litellm_params:
+      model: gemini/gemini-3.1-pro-preview
+      api_key: os.environ/GEMINI_API_KEY
+  - model_name: portfolio-evaluator
+    litellm_params:
+      model: anthropic/claude-opus-5-5
+  - model_name: claude-*
+    litellm_params:
+      model: anthropic/claude-*
+litellm_settings:
+  forward_client_headers_to_llm_api: true
+  pass_through_headers:
+    - "anthropic-beta"
+    - "authorization"
+    - "x-api-key"

@@ -41,7 +41,7 @@ if [ $review = 0 ]; then
 else
   err="runs/$ASOF/error.log"; tmp=$(mktemp); [ -f "$err" ] && cp "$err" "$tmp"
   git checkout -q -- portfolio research reports 2>/dev/null
-  git clean -q -fd -- research reports "runs/$ASOF"
+  git clean -q -fd -e "reports/screen/*" -- research reports "runs/$ASOF"   # keep the screen (logged below)
   mkdir -p "runs/$ASOF"; [ -s "$tmp" ] && mv "$tmp" "$err"
   git add -- "$err" "$LOG" reports/screen 2>/dev/null
   git commit -q -m "Weekly run $ASOF FAILED (error log only)" || true
