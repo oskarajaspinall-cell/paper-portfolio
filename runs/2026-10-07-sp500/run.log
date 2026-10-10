@@ -4468,3 +4468,147 @@ OK research/AFL/2026-10-10-evaluation.md Bear case=126 Bull case=100 decision=AV
 [23:07:12] {"out": "research/AFL/2026-10-10-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 89.38, "base": 116.44, "bull": 150.45}, "price": 114.54}
 [23:07:12] Monte Carlo skipped for AFL (AVOID: informational only, runs for BUY/ADD and holdings)
 [23:07:13] == done AFL
+[23:07:17] == Research batch 03: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-10-batch-03.md; uploaded to GitHub
+[23:07:17] == initiate RL
+[23:07:17] $ claude -p Ticker RL, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:08:55] Note: `research/WYNN/2026-10-10.md`
+Fact sheet: `research/WYNN/factsheet-2026-10-10.md`
+`OK research/WYNN/2026-10-10.md type=CORE 1=50 2=142 3=144 4=75 5=82 6=67 total=560`
+
+Blocked URLs: `https://www.wynnresorts.com/investors` (404), `https://www.reuters.com/business/wynn-resorts` (fetch blocked, not retried). No data conflicts found between fact sheet and qualitative sources.
+[23:08:55] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/WYNN/2026-10-10.md
+[23:08:55] OK /Users/oskaraspinall/paper-portfolio/research/WYNN/2026-10-10.md type=CORE 1=50 2=142 3=144 4=75 5=82 6=67 total=560
+[23:08:55] $ claude -p Ticker WYNN, date 2026-10-10. Research: research/WYNN/factsheet-2026-10-10.md, research/WYNN/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/WYNN/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:11:07] research/WYNN/2026-10-10-macro.md
+OK research/WYNN/2026-10-10-macro.md macro_weight=secondary words=243
+[23:11:07] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/WYNN/2026-10-10-macro.md
+[23:11:07] OK /Users/oskaraspinall/paper-portfolio/research/WYNN/2026-10-10-macro.md macro_weight=secondary words=243
+[23:11:07] $ claude -p Evaluate WYNN for 2026-10-10: fact sheet research/WYNN/factsheet-2026-10-10.md, note research/WYNN/2026-10-10.md, state portfolio/state.json, macro overlay research/WYNN/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:11:35] Note: research/VLTO/2026-10-10.md
+Fact sheet: research/VLTO/factsheet-2026-10-10.md
+check_docs: OK research/VLTO/2026-10-10.md type=CORE 1=54 2=137 3=148 4=89 5=93 6=43 total=564
+
+No data conflicts beyond the noted P/B-vs-peers divergence (flagged as [Guessing] in Valuation). One blocked/failed fetch: https://www.veralto.com/about/ (404; substituted with https://www.veralto.com).
+
+Decision note (my assessment, outside the template): quality is good but the fact sheet's own base and bull fair values ($76.92 / $82.12) sit 15-21% below the last close ($96.93), with even peer-relative multiples not offsetting this — this points to AVOID on valuation grounds, pending the evaluator's formal Bear/Bull/Decision workup.
+[23:11:35] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/VLTO/2026-10-10.md
+[23:11:35] OK /Users/oskaraspinall/paper-portfolio/research/VLTO/2026-10-10.md type=CORE 1=54 2=137 3=148 4=89 5=93 6=43 total=564
+[23:11:35] $ claude -p Ticker VLTO, date 2026-10-10. Research: research/VLTO/factsheet-2026-10-10.md, research/VLTO/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/VLTO/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:11:44] Note path: `research/RL/2026-10-10.md`
+Fact sheet path: `research/RL/factsheet-2026-10-10.md`
+Check: `OK research/RL/2026-10-10.md type=CORE 1=63 2=143 3=148 4=74 5=96 6=73 total=597`
+
+Blocked/failed URLs (not used as sources): `https://investor.ralphlauren.com/` (403), `https://www.ralphlauren.com/about-us` (307 redirect, not retried). No data conflicts found.
+[23:11:44] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/RL/2026-10-10.md
+[23:11:44] OK /Users/oskaraspinall/paper-portfolio/research/RL/2026-10-10.md type=CORE 1=63 2=143 3=148 4=74 5=96 6=73 total=597
+[23:11:44] $ claude -p Ticker RL, date 2026-10-10. Research: research/RL/factsheet-2026-10-10.md, research/RL/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/RL/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:12:09] research/WYNN/2026-10-10-evaluation.md
+OK research/WYNN/2026-10-10-evaluation.md Bear case=144 Bull case=122 decision=AVOID
+[23:12:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/WYNN/2026-10-10-evaluation.md
+[23:12:09] OK /Users/oskaraspinall/paper-portfolio/research/WYNN/2026-10-10-evaluation.md Bear case=144 Bull case=122 decision=AVOID
+[23:12:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py WYNN --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/WYNN/2026-10-10-evaluation.md
+[23:12:09] {"out": "research/WYNN/2026-10-10-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -74.93, "base": 256.98, "bull": 734.08}, "price": 75.15}
+[23:12:09] Monte Carlo skipped for WYNN (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:12:10] == done WYNN
+[23:12:10] == initiate WTW
+[23:12:10] $ claude -p Ticker WTW, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:13:41] research/VLTO/2026-10-10-macro.md
+OK research/VLTO/2026-10-10-macro.md macro_weight=context words=76
+[23:13:41] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/VLTO/2026-10-10-macro.md
+[23:13:41] OK /Users/oskaraspinall/paper-portfolio/research/VLTO/2026-10-10-macro.md macro_weight=context words=76
+[23:13:41] $ claude -p Evaluate VLTO for 2026-10-10: fact sheet research/VLTO/factsheet-2026-10-10.md, note research/VLTO/2026-10-10.md, state portfolio/state.json, macro overlay research/VLTO/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:14:17] research/RL/2026-10-10-macro.md
+OK research/RL/2026-10-10-macro.md macro_weight=secondary words=237
+[23:14:17] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/RL/2026-10-10-macro.md
+[23:14:17] OK /Users/oskaraspinall/paper-portfolio/research/RL/2026-10-10-macro.md macro_weight=secondary words=237
+[23:14:17] $ claude -p Evaluate RL for 2026-10-10: fact sheet research/RL/factsheet-2026-10-10.md, note research/RL/2026-10-10.md, state portfolio/state.json, macro overlay research/RL/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:14:20] research/VLTO/2026-10-10-evaluation.md
+OK research/VLTO/2026-10-10-evaluation.md Bear case=149 Bull case=132 decision=AVOID
+[23:14:20] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/VLTO/2026-10-10-evaluation.md
+[23:14:20] OK /Users/oskaraspinall/paper-portfolio/research/VLTO/2026-10-10-evaluation.md Bear case=149 Bull case=132 decision=AVOID
+[23:14:20] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py VLTO --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/VLTO/2026-10-10-evaluation.md
+[23:14:21] {"out": "research/VLTO/2026-10-10-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 64.92, "base": 76.92, "bull": 82.12}, "price": 96.93}
+[23:14:21] Monte Carlo skipped for VLTO (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:14:23] == done VLTO
+[23:14:23] == initiate IBM
+[23:14:23] $ claude -p Ticker IBM, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:15:00] research/RL/2026-10-10-evaluation.md
+OK research/RL/2026-10-10-evaluation.md Bear case=148 Bull case=121 decision=AVOID
+[23:15:00] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/RL/2026-10-10-evaluation.md
+[23:15:00] OK /Users/oskaraspinall/paper-portfolio/research/RL/2026-10-10-evaluation.md Bear case=148 Bull case=121 decision=AVOID
+[23:15:00] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py RL --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/RL/2026-10-10-evaluation.md
+[23:15:00] {"out": "research/RL/2026-10-10-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 59.0, "base": 194.98, "bull": 267.39}, "price": 371.28}
+[23:15:00] Monte Carlo skipped for RL (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:15:01] == done RL
+[23:15:01] == initiate CMG
+[23:15:01] $ claude -p Ticker CMG, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:15:40] Note: `research/WTW/2026-10-10.md`
+Fact sheet: `research/WTW/factsheet-2026-10-10.md`
+
+`OK research/WTW/2026-10-10.md type=CORE 1=48 2=138 3=136 4=43 5=75 6=97 total=537`
+
+Data conflicts: none.
+
+Blocked/skipped URLs: `wtwco.com` (two attempts, HTTP 429 — not retried further); SEC EDGAR 10-K narrative document could not be located (index/browse pages only, no segment/strategy detail obtained — not used as a source for any claim). GlobeNewsWire headline cited per fact sheet listing only, not fetched (not on allowlist).
+[23:15:40] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/WTW/2026-10-10.md
+[23:15:40] OK /Users/oskaraspinall/paper-portfolio/research/WTW/2026-10-10.md type=CORE 1=48 2=138 3=136 4=43 5=75 6=97 total=537
+[23:15:40] $ claude -p Ticker WTW, date 2026-10-10. Research: research/WTW/factsheet-2026-10-10.md, research/WTW/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/WTW/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:16:57] research/WTW/2026-10-10-macro.md
+OK research/WTW/2026-10-10-macro.md macro_weight=context words=73
+[23:16:57] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/WTW/2026-10-10-macro.md
+[23:16:58] OK /Users/oskaraspinall/paper-portfolio/research/WTW/2026-10-10-macro.md macro_weight=context words=73
+[23:16:58] $ claude -p Evaluate WTW for 2026-10-10: fact sheet research/WTW/factsheet-2026-10-10.md, note research/WTW/2026-10-10.md, state portfolio/state.json, macro overlay research/WTW/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:17:28] research/IBM/2026-10-10.md
+research/IBM/factsheet-2026-10-10.md
+OK research/IBM/2026-10-10.md type=CORE 1=53 2=134 3=144 4=55 5=80 6=85 total=551
+
+No data conflicts; no blocked URLs (all WebFetch calls succeeded, within the 6-call CORE cap: 5 used).
+[23:17:28] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/IBM/2026-10-10.md
+[23:17:28] OK /Users/oskaraspinall/paper-portfolio/research/IBM/2026-10-10.md type=CORE 1=53 2=134 3=144 4=55 5=80 6=85 total=551
+[23:17:28] $ claude -p Ticker IBM, date 2026-10-10. Research: research/IBM/factsheet-2026-10-10.md, research/IBM/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/IBM/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:17:50] research/WTW/2026-10-10-evaluation.md
+OK research/WTW/2026-10-10-evaluation.md Bear case=135 Bull case=97 decision=AVOID
+[23:17:50] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/WTW/2026-10-10-evaluation.md
+[23:17:50] OK /Users/oskaraspinall/paper-portfolio/research/WTW/2026-10-10-evaluation.md Bear case=135 Bull case=97 decision=AVOID
+[23:17:50] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py WTW --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/WTW/2026-10-10-evaluation.md
+[23:17:50] {"out": "research/WTW/2026-10-10-valuation.md", "used": ["pe", "ev_ebitda"], "fair_value": {"bear": 175.8, "base": 347.25, "bull": 370.14}, "price": 296.26}
+[23:17:50] Monte Carlo skipped for WTW (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:17:51] == done WTW
+[23:17:51] == initiate UPS
+[23:17:51] $ claude -p Ticker UPS, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:18:22] research/CMG/2026-10-10.md
+research/CMG/factsheet-2026-10-10.md
+OK research/CMG/2026-10-10.md type=CORE 1=53 2=135 3=133 4=32 5=57 6=72 total=482
+
+No data conflicts. One blocked/unreachable fetch: https://www.reuters.com/business/retail-consumer/starbucks-chipotle-takeover-report-2026-10-08/ (unable to fetch; not allowlist-blocked, just inaccessible) — substituted with SEC 10-Q and CNBC headline (as listed in the fact sheet) instead.
+[23:18:22] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/CMG/2026-10-10.md
+[23:18:22] OK /Users/oskaraspinall/paper-portfolio/research/CMG/2026-10-10.md type=CORE 1=53 2=135 3=133 4=32 5=57 6=72 total=482
+[23:18:22] $ claude -p Ticker CMG, date 2026-10-10. Research: research/CMG/factsheet-2026-10-10.md, research/CMG/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/CMG/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:19:20] research/IBM/2026-10-10-macro.md
+OK research/IBM/2026-10-10-macro.md macro_weight=secondary words=246
+[23:19:20] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/IBM/2026-10-10-macro.md
+[23:19:20] OK /Users/oskaraspinall/paper-portfolio/research/IBM/2026-10-10-macro.md macro_weight=secondary words=246
+[23:19:20] $ claude -p Evaluate IBM for 2026-10-10: fact sheet research/IBM/factsheet-2026-10-10.md, note research/IBM/2026-10-10.md, state portfolio/state.json, macro overlay research/IBM/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:19:54] research/CMG/2026-10-10-macro.md
+OK research/CMG/2026-10-10-macro.md macro_weight=secondary words=222
+[23:19:54] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/CMG/2026-10-10-macro.md
+[23:19:54] OK /Users/oskaraspinall/paper-portfolio/research/CMG/2026-10-10-macro.md macro_weight=secondary words=222
+[23:19:54] $ claude -p Evaluate CMG for 2026-10-10: fact sheet research/CMG/factsheet-2026-10-10.md, note research/CMG/2026-10-10.md, state portfolio/state.json, macro overlay research/CMG/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:20:12] research/IBM/2026-10-10-evaluation.md
+OK research/IBM/2026-10-10-evaluation.md Bear case=145 Bull case=99 decision=AVOID
+[23:20:12] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/IBM/2026-10-10-evaluation.md
+[23:20:12] OK /Users/oskaraspinall/paper-portfolio/research/IBM/2026-10-10-evaluation.md Bear case=145 Bull case=99 decision=AVOID
+[23:20:12] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py IBM --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/IBM/2026-10-10-evaluation.md
+[23:20:12] {"out": "research/IBM/2026-10-10-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 145.43, "base": 205.24, "bull": 241.17}, "price": 227.13}
+[23:20:12] Monte Carlo skipped for IBM (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:20:13] == done IBM
+[23:20:13] == initiate ULTA
+[23:20:13] $ claude -p Ticker ULTA, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:21:16] research/CMG/2026-10-10-evaluation.md
+OK research/CMG/2026-10-10-evaluation.md Bear case=139 Bull case=105 decision=AVOID
+[23:21:16] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/CMG/2026-10-10-evaluation.md
+[23:21:16] OK /Users/oskaraspinall/paper-portfolio/research/CMG/2026-10-10-evaluation.md Bear case=139 Bull case=105 decision=AVOID
+[23:21:16] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py CMG --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/CMG/2026-10-10-evaluation.md
+[23:21:16] {"out": "research/CMG/2026-10-10-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 17.62, "base": 29.31, "bull": 34.09}, "price": 31.59}
+[23:21:16] Monte Carlo skipped for CMG (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:21:17] == done CMG
