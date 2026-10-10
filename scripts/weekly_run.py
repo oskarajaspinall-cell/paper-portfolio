@@ -52,10 +52,10 @@ class StepFailed(Exception):
 AGENT_TIMEOUT = 30 * 60  # seconds; a stuck session can't hang the night
 
 
-def sh(args: list[str], log, timeout: int | None = None) -> str:
+def sh(args: list[str], log, timeout: int | None = None, env: dict | None = None) -> str:
     log(f"$ {' '.join(args)}")
     try:
-        p = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+        p = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout, env=env)
     except subprocess.TimeoutExpired as e:
         raise StepFailed(f"{args[0]} timed out after {timeout}s") from e
     log(p.stdout.strip()[-4000:])
@@ -64,9 +64,13 @@ def sh(args: list[str], log, timeout: int | None = None) -> str:
     return p.stdout
 
 
-# Optional LiteLLM bridge (owner 2026-10-10, bin/run-bridge): these agents get a bridge model name; all others keep
-# Claude Code's default. Only when PAPER_MODEL_BRIDGE=1, so scheduled jobs (no bridge running) are unaffected.
-BRIDGE_MODELS = {"researcher": "portfolio-researcher", "evaluator": "portfolio-evaluator"}
+# Optional split routing (owner 2026-10-10, bin/run-bridge sets PAPER_MODEL_BRIDGE=1): the researcher runs as
+# `portfolio-researcher` through the local LiteLLM proxy (Gemini); the evaluator runs on Claude Opus 5.5 and every
+# other agent on Claude Code's default, all talking DIRECTLY to Anthropic with the subscription login (Claude Code
+# sends no credentials to a non-Anthropic base URL). Without PAPER_MODEL_BRIDGE nothing changes.
+BRIDGE_URL = "http://localhost:4000"
+BRIDGE_MODELS = {"researcher": "portfolio-researcher", "evaluator": "claude-opus-5-5"}
+VIA_BRIDGE = {"portfolio-researcher"}
 
 
 def agent_cmd(name: str, prompt: str) -> list[str]:
@@ -75,9 +79,24 @@ def agent_cmd(name: str, prompt: str) -> list[str]:
     return ["claude", "-p", prompt, *model, "--agent", name, "--allowedTools", TOOLS[name], "--output-format", "text"]
 
 
+def agent_env(cmd: list[str]) -> dict:
+    """The session's environment: only a `portfolio-researcher` session points at the proxy. Claude Code's
+    background model (e.g. WebFetch's page summaries) is pointed at the same name, or it would ask the proxy
+    for a Claude model it doesn't serve."""
+    env = os.environ.copy()
+    model = cmd[cmd.index("--model") + 1] if "--model" in cmd else None
+    if model in VIA_BRIDGE:
+        env.update(ANTHROPIC_BASE_URL=BRIDGE_URL, ANTHROPIC_DEFAULT_HAIKU_MODEL=model, ANTHROPIC_SMALL_FAST_MODEL=model)
+    else:
+        for k in ("ANTHROPIC_BASE_URL", "ANTHROPIC_DEFAULT_HAIKU_MODEL", "ANTHROPIC_SMALL_FAST_MODEL"):
+            env.pop(k, None)
+    return env
+
+
 def claude_agent(name: str, prompt: str, log) -> str:
     """Run one subagent as its own headless session. Replaced in tests."""
-    return sh(agent_cmd(name, prompt), log, timeout=AGENT_TIMEOUT)
+    cmd = agent_cmd(name, prompt)
+    return sh(cmd, log, timeout=AGENT_TIMEOUT, env=agent_env(cmd))
 
 
 def check_doc(kind: str, path: Path, log) -> None:
