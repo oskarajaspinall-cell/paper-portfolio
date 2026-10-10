@@ -39,7 +39,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT, Ticker, load_config  # noqa: E402
 
 PY = [str(ROOT / "bin" / "py")]
-TOOLS = {"researcher": "Read,Write,WebFetch,Bash(bin/py:*)", "gatherer": "Read,Write,WebFetch,Bash(bin/py:*)", "evaluator": "Read,Write,Bash(bin/py:*)",
+TOOLS = {"researcher": "Read,Write,WebFetch,Bash(bin/py:*)", "evaluator": "Read,Write,Bash(bin/py:*)",
          "portfolio-manager": "Read,Write,Bash(bin/py:*)", "weekly-reviewer": "Read,Write,WebFetch",
          "mc-parameters": "Read,Write,Bash(bin/py:*)", "macro-overlay": "Read,Write,WebFetch,Bash(bin/py:*)",
          "macro-strategist": "Read,Write,WebFetch,Bash(bin/py:*)"}
@@ -52,10 +52,10 @@ class StepFailed(Exception):
 AGENT_TIMEOUT = 30 * 60  # seconds; a stuck session can't hang the night
 
 
-def sh(args: list[str], log, timeout: int | None = None, env: dict | None = None) -> str:
+def sh(args: list[str], log, timeout: int | None = None) -> str:
     log(f"$ {' '.join(args)}")
     try:
-        p = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout, env=env)
+        p = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
     except subprocess.TimeoutExpired as e:
         raise StepFailed(f"{args[0]} timed out after {timeout}s") from e
     log(p.stdout.strip()[-4000:])
@@ -64,41 +64,10 @@ def sh(args: list[str], log, timeout: int | None = None, env: dict | None = None
     return p.stdout
 
 
-# Optional split routing (owner 2026-10-10, bin/run-bridge sets PAPER_MODEL_BRIDGE=1). Gemini does the grunt work,
-# Claude all the thinking: the `gatherer` (fact sheet, news, fetches -> a facts-only evidence file) runs as
-# `portfolio-researcher` through the local LiteLLM proxy (Gemini); the researcher writes the analysis note from it
-# and the evaluator decides on Claude Opus 5.5; every other agent stays on Claude Code's default. All Claude
-# sessions talk DIRECTLY to Anthropic with the subscription login (Claude Code sends no credentials to a
-# non-Anthropic base URL). Without PAPER_MODEL_BRIDGE nothing changes (the researcher gathers and writes).
-BRIDGE_URL = "http://localhost:4000"
-BRIDGE_MODELS = {"gatherer": "portfolio-researcher", "evaluator": "claude-opus-5-5"}
-VIA_BRIDGE = {"portfolio-researcher"}
-
-
-def agent_cmd(name: str, prompt: str) -> list[str]:
-    model = (["--model", BRIDGE_MODELS[name]]
-             if os.environ.get("PAPER_MODEL_BRIDGE") == "1" and name in BRIDGE_MODELS else [])
-    return ["claude", "-p", prompt, *model, "--agent", name, "--allowedTools", TOOLS[name], "--output-format", "text"]
-
-
-def agent_env(cmd: list[str]) -> dict:
-    """The session's environment: only a `portfolio-researcher` session points at the proxy. Claude Code's
-    background model (e.g. WebFetch's page summaries) is pointed at the same name, or it would ask the proxy
-    for a Claude model it doesn't serve."""
-    env = os.environ.copy()
-    model = cmd[cmd.index("--model") + 1] if "--model" in cmd else None
-    if model in VIA_BRIDGE:
-        env.update(ANTHROPIC_BASE_URL=BRIDGE_URL, ANTHROPIC_DEFAULT_HAIKU_MODEL=model, ANTHROPIC_SMALL_FAST_MODEL=model)
-    else:
-        for k in ("ANTHROPIC_BASE_URL", "ANTHROPIC_DEFAULT_HAIKU_MODEL", "ANTHROPIC_SMALL_FAST_MODEL"):
-            env.pop(k, None)
-    return env
-
-
 def claude_agent(name: str, prompt: str, log) -> str:
     """Run one subagent as its own headless session. Replaced in tests."""
-    cmd = agent_cmd(name, prompt)
-    return sh(cmd, log, timeout=AGENT_TIMEOUT, env=agent_env(cmd))
+    return sh(["claude", "-p", prompt, "--agent", name, "--allowedTools", TOOLS[name], "--output-format", "text"],
+              log, timeout=AGENT_TIMEOUT)
 
 
 def check_doc(kind: str, path: Path, log) -> None:
@@ -115,16 +84,6 @@ def entry_hit_reason(h: dict) -> str:
 def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, log, run: Path) -> Path:
     slug = Ticker(ticker).slug
     note, ev = ROOT / "research" / slug / f"{asof}.md", ROOT / "research" / slug / f"{asof}-evaluation.md"
-    if os.environ.get("PAPER_MODEL_BRIDGE") == "1":  # grunt work on Gemini, analysis on Claude
-        evidence = ROOT / "research" / slug / f"{asof}-evidence.md"
-        agent("gatherer", f"Ticker {ticker}, note type {ptype}, date {asof}. {why}", log)
-        if not evidence.exists():
-            raise StepFailed(f"gatherer wrote no evidence file at {evidence}")
-        check_doc("evidence", evidence, log)
-        why = (f"{why} The fact sheet research/{slug}/factsheet-{asof}.md and the evidence file "
-               f"research/{slug}/{asof}-evidence.md (facts gathered for you, no analysis) already exist: do NOT re-run "
-               "fact_sheet.py. Do all the analysis yourself from them; make at most 2 WebFetch calls, and only if "
-               "something that could change the decision is missing. Cite the evidence items' URLs.")
     agent("researcher", f"Ticker {ticker}, note type {ptype}, date {asof}. {why}", log)
     if not note.exists():
         raise StepFailed(f"researcher wrote no note at {note}")
