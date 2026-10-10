@@ -18,3 +18,7 @@ litellm_settings:
     - "anthropic-beta"
     - "authorization"
     - "x-api-key"
+general_settings:
+  # No master key, so Claude Code's own subscription credentials can pass through (owner 2026-10-10, $0-cost
+  # design). Safe only because bin/run-bridge binds the proxy to 127.0.0.1 (this Mac only).
+  dangerously_permit_weak_or_unset_master_key: true

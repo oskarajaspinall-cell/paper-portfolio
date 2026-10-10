@@ -21,12 +21,14 @@ fi
 [ -f config.yaml ] || { echo "Error: config.yaml missing. Copy config.example.yaml to config.yaml."; exit 1; }
 
 echo "Starting LiteLLM subscription bridge on port 4000..."
-.venv/bin/litellm --config config.yaml --port 4000 > logs/litellm-bridge.log 2>&1 &
+export PATH="$PWD/.venv/bin:$PATH"   # litellm lives in the project environment
+# Bound to 127.0.0.1 only: no master key is set, so it must not be reachable from the network (owner 2026-10-10)
+litellm --config config.yaml --host 127.0.0.1 --port 4000 > /dev/null 2>&1 &
 BRIDGE_PID=$!
 trap "kill $BRIDGE_PID 2>/dev/null || true" EXIT
 for _ in $(seq 1 60); do  # wait until the proxy answers (up to 30 s)
   curl -s -o /dev/null http://localhost:4000/health/liveliness && break
-  kill -0 $BRIDGE_PID 2>/dev/null || { echo "Error: the bridge exited; see logs/litellm-bridge.log"; exit 1; }
+  kill -0 $BRIDGE_PID 2>/dev/null || { echo "Error: the bridge exited (run it by hand without > /dev/null to see why)"; exit 1; }
   sleep 0.5
 done
 
