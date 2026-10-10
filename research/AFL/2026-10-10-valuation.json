@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 91.29073353869047,
+    "base": 126.17250521249998,
+    "bull": 176.20503610714283
+   },
+   "cost_of_equity": 0.0922,
+   "assumptions": {
+    "roe": {
+     "bear": 0.12665,
+     "base": 0.16549,
+     "bull": 0.2212
+    },
+    "justified_pb": {
+     "bear": 1.5126488095238095,
+     "base": 2.0906249999999997,
+     "bull": 2.9196428571428568
+    },
+    "bvps": 60.351572
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 85.54606971599999,
+    "base": 96.969079792,
+    "bull": 98.927577828
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.129,
+     "base": 10.348,
+     "bull": 10.557
+    },
+    "ttm_eps": 9.370804
+   }
+  }
+ ],
+ "price": 114.54,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 89.37584559779366,
+  "base": 116.43803007233332,
+  "bull": 150.44588334742855
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.21969752402834253,
+  "base": 0.01657089289622249,
+  "bull": 0.31347898854049716
+ },
+ "implied_growth": null,
+ "ticker": "AFL",
+ "asof": "2026-10-10",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/afl/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/afl/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/afl/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/afl/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/afl/statistics/"
+ }
+}

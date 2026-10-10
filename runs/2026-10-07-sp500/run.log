@@ -4323,3 +4323,148 @@ OK research/STE/2026-10-10-evaluation.md Bear case=134 Bull case=110 decision=AV
 [22:55:45] {"out": "research/STE/2026-10-10-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 87.08, "base": 176.9, "bull": 388.11}, "price": 214.4}
 [22:55:45] Monte Carlo skipped for STE (AVOID: informational only, runs for BUY/ADD and holdings)
 [22:55:46] == done STE
+[22:55:50] == Research batch 02: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-10-batch-02.md; uploaded to GitHub
+[22:55:50] == initiate V
+[22:55:50] $ claude -p Ticker V, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:55:53] research/PODD/2026-10-10.md
+research/PODD/factsheet-2026-10-10.md
+OK research/PODD/2026-10-10.md type=CORE 1=49 2=145 3=142 4=54 5=60 6=54 total=504
+
+Data conflicts: none. Blocked/unproductive fetches: businesswire.com headline URL not fetched (not allowlisted, per rule); SEC EDGAR filing index and 10-Q document did not expose narrative text content, so no incremental detail was obtained beyond the fact sheet's headlines (not a block, just no usable content within the 6-fetch cap).
+[22:55:53] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/PODD/2026-10-10.md
+[22:55:53] OK /Users/oskaraspinall/paper-portfolio/research/PODD/2026-10-10.md type=CORE 1=49 2=145 3=142 4=54 5=60 6=54 total=504
+[22:55:53] $ claude -p Ticker PODD, date 2026-10-10. Research: research/PODD/factsheet-2026-10-10.md, research/PODD/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/PODD/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:57:15] research/PODD/2026-10-10-macro.md
+OK research/PODD/2026-10-10-macro.md macro_weight=secondary words=242
+[22:57:15] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/PODD/2026-10-10-macro.md
+[22:57:15] OK /Users/oskaraspinall/paper-portfolio/research/PODD/2026-10-10-macro.md macro_weight=secondary words=242
+[22:57:15] $ claude -p Evaluate PODD for 2026-10-10: fact sheet research/PODD/factsheet-2026-10-10.md, note research/PODD/2026-10-10.md, state portfolio/state.json, macro overlay research/PODD/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[22:57:56] research/PODD/2026-10-10-evaluation.md
+OK research/PODD/2026-10-10-evaluation.md Bear case=145 Bull case=128 decision=AVOID
+[22:57:56] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/PODD/2026-10-10-evaluation.md
+[22:57:56] OK /Users/oskaraspinall/paper-portfolio/research/PODD/2026-10-10-evaluation.md Bear case=145 Bull case=128 decision=AVOID
+[22:57:56] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py PODD --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/PODD/2026-10-10-evaluation.md
+[22:57:56] {"out": "research/PODD/2026-10-10-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": -50.52, "base": 113.48, "bull": 2040.32}, "price": 135.28}
+[22:57:56] Monte Carlo skipped for PODD (AVOID: informational only, runs for BUY/ADD and holdings)
+[22:57:57] == done PODD
+[22:57:57] == initiate NOC
+[22:57:57] $ claude -p Ticker NOC, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:58:12] research/HPQ/2026-10-10.md
+research/HPQ/factsheet-2026-10-10.md
+OK research/HPQ/2026-10-10.md type=CORE 1=51 2=124 3=143 4=89 5=87 6=103 total=597
+
+No data conflicts. No blocked URLs (all WebFetch calls were to sec.gov and hp.com, both allowlisted; 6 fetches used, within the CORE cap of 6). Peer set used was DELL, XRX, HKG:0992 (Canon/CAJ was tried but its stockanalysis.com statistics page returned a 404, so it was dropped).
+[22:58:12] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HPQ/2026-10-10.md
+[22:58:12] OK /Users/oskaraspinall/paper-portfolio/research/HPQ/2026-10-10.md type=CORE 1=51 2=124 3=143 4=89 5=87 6=103 total=597
+[22:58:12] $ claude -p Ticker HPQ, date 2026-10-10. Research: research/HPQ/factsheet-2026-10-10.md, research/HPQ/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/HPQ/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:58:59] check_docs.py passes.
+
+- Note: `research/V/2026-10-10.md`
+- Fact sheet: `research/V/factsheet-2026-10-10.md`
+- `OK research/V/2026-10-10.md type=CORE 1=54 2=134 3=140 4=70 5=52 6=34 total=484`
+- No data conflicts. Blocked/failed fetches (not used, skipped per instructions): `https://investor.visa.com/overview/default.aspx` (404), `https://www.reuters.com/legal/government/visa-joins-growing-alarm-over-ai-powered-risks-2026-09-29/` (fetch blocked), `https://www.visa.com/en_us/about-visa/` (404).
+[22:58:59] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/V/2026-10-10.md
+[22:58:59] OK /Users/oskaraspinall/paper-portfolio/research/V/2026-10-10.md type=CORE 1=54 2=134 3=140 4=70 5=52 6=34 total=484
+[22:58:59] $ claude -p Ticker V, date 2026-10-10. Research: research/V/factsheet-2026-10-10.md, research/V/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/V/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:00:17] research/HPQ/2026-10-10-macro.md
+OK research/HPQ/2026-10-10-macro.md macro_weight=secondary words=207
+[23:00:17] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HPQ/2026-10-10-macro.md
+[23:00:17] OK /Users/oskaraspinall/paper-portfolio/research/HPQ/2026-10-10-macro.md macro_weight=secondary words=207
+[23:00:17] $ claude -p Evaluate HPQ for 2026-10-10: fact sheet research/HPQ/factsheet-2026-10-10.md, note research/HPQ/2026-10-10.md, state portfolio/state.json, macro overlay research/HPQ/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:01:09] research/V/2026-10-10-macro.md
+OK research/V/2026-10-10-macro.md macro_weight=secondary words=250
+[23:01:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/V/2026-10-10-macro.md
+[23:01:09] OK /Users/oskaraspinall/paper-portfolio/research/V/2026-10-10-macro.md macro_weight=secondary words=250
+[23:01:09] $ claude -p Evaluate V for 2026-10-10: fact sheet research/V/factsheet-2026-10-10.md, note research/V/2026-10-10.md, state portfolio/state.json, macro overlay research/V/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:01:13] research/HPQ/2026-10-10-evaluation.md
+OK research/HPQ/2026-10-10-evaluation.md Bear case=138 Bull case=105 decision=AVOID
+[23:01:13] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HPQ/2026-10-10-evaluation.md
+[23:01:14] OK /Users/oskaraspinall/paper-portfolio/research/HPQ/2026-10-10-evaluation.md Bear case=138 Bull case=105 decision=AVOID
+[23:01:14] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py HPQ --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/HPQ/2026-10-10-evaluation.md
+[23:01:14] {"out": "research/HPQ/2026-10-10-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 26.91, "base": 40.22, "bull": 57.34}, "price": 30.2}
+[23:01:14] Monte Carlo skipped for HPQ (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:01:15] == done HPQ
+[23:01:15] == initiate AFL
+[23:01:15] $ claude -p Ticker AFL, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:01:49] research/V/2026-10-10-evaluation.md
+OK research/V/2026-10-10-evaluation.md Bear case=132 Bull case=117 decision=AVOID
+[23:01:49] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/V/2026-10-10-evaluation.md
+[23:01:49] OK /Users/oskaraspinall/paper-portfolio/research/V/2026-10-10-evaluation.md Bear case=132 Bull case=117 decision=AVOID
+[23:01:49] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py V --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/V/2026-10-10-evaluation.md
+[23:01:50] {"out": "research/V/2026-10-10-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 179.85, "base": 211.42, "bull": 292.83}, "price": 385.45}
+[23:01:50] Monte Carlo skipped for V (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:01:51] == done V
+[23:01:51] == initiate ALLE
+[23:01:51] $ claude -p Ticker ALLE, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:02:21] research/NOC/2026-10-10.md
+research/NOC/factsheet-2026-10-10.md
+OK research/NOC/2026-10-10.md type=CORE 1=43 2=150 3=141 4=52 5=92 6=101 total=579
+
+No data conflicts or blocked URLs.
+[23:02:21] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/NOC/2026-10-10.md
+[23:02:21] OK /Users/oskaraspinall/paper-portfolio/research/NOC/2026-10-10.md type=CORE 1=43 2=150 3=141 4=52 5=92 6=101 total=579
+[23:02:21] $ claude -p Ticker NOC, date 2026-10-10. Research: research/NOC/factsheet-2026-10-10.md, research/NOC/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/NOC/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:04:14] Note: research/AFL/2026-10-10.md
+Fact sheet: research/AFL/factsheet-2026-10-10.md
+Check: OK research/AFL/2026-10-10.md type=CORE 1=52 2=129 3=149 4=87 5=54 6=61 total=532
+
+Data/source notes:
+- No conflicts between qualitative sources and fact-sheet figures.
+- One blocked/dead URL: https://investors.aflac.com/news/news-details/2026/Aflac-Incorporated-to-Release-Third-Quarter-Results-and-CFO-Video-Update-on-November-4-2026-and-Host-Webcast-on-November-5-2026/default.aspx (404, not used).
+- Flagged a ticker/name collision: several "AFL"-tagged news items on the fact sheet (Fujikura 100S Splicer, AFL Integria, Alcyon Photonics) refer to AFL Global, an unrelated fiber-optic manufacturer, not Aflac Incorporated — excluded from the note.
+[23:04:14] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/AFL/2026-10-10.md
+[23:04:14] OK /Users/oskaraspinall/paper-portfolio/research/AFL/2026-10-10.md type=CORE 1=52 2=129 3=149 4=87 5=54 6=61 total=532
+[23:04:14] $ claude -p Ticker AFL, date 2026-10-10. Research: research/AFL/factsheet-2026-10-10.md, research/AFL/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/AFL/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:04:22] research/NOC/2026-10-10-macro.md
+OK research/NOC/2026-10-10-macro.md macro_weight=secondary words=247
+[23:04:22] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/NOC/2026-10-10-macro.md
+[23:04:22] OK /Users/oskaraspinall/paper-portfolio/research/NOC/2026-10-10-macro.md macro_weight=secondary words=247
+[23:04:22] $ claude -p Evaluate NOC for 2026-10-10: fact sheet research/NOC/factsheet-2026-10-10.md, note research/NOC/2026-10-10.md, state portfolio/state.json, macro overlay research/NOC/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:04:55] I've written the NOC evaluation; the decision is **AVOID** at conviction 3. The price of $480.72 is already slightly above the $465.24 base fair value, and the bull case is only 6.1% above it. The re-research entry price is $372.19, which is the base fair value less a 20% margin of safety.
+
+research/NOC/2026-10-10-evaluation.md
+OK research/NOC/2026-10-10-evaluation.md Bear case=132 Bull case=127 decision=AVOID
+[23:04:55] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/NOC/2026-10-10-evaluation.md
+[23:04:55] OK /Users/oskaraspinall/paper-portfolio/research/NOC/2026-10-10-evaluation.md Bear case=132 Bull case=127 decision=AVOID
+[23:04:55] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py NOC --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/NOC/2026-10-10-evaluation.md
+[23:04:55] {"out": "research/NOC/2026-10-10-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 196.96, "base": 465.24, "bull": 510.08}, "price": 480.72}
+[23:04:55] Monte Carlo skipped for NOC (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:04:56] == done NOC
+[23:04:56] == initiate WYNN
+[23:04:56] $ claude -p Ticker WYNN, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:05:20] research/ALLE/2026-10-10.md
+research/ALLE/factsheet-2026-10-10.md
+OK research/ALLE/2026-10-10.md type=CORE 1=37 2=136 3=149 4=90 5=97 6=88 total=597
+
+No data conflicts. One blocked/unusable fetch: https://www.allegion.com/corp/en/about-us/who-we-are.html returned 404 (not fetched; superseded by the allegion.com root page, which succeeded).
+[23:05:20] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/ALLE/2026-10-10.md
+[23:05:20] OK /Users/oskaraspinall/paper-portfolio/research/ALLE/2026-10-10.md type=CORE 1=37 2=136 3=149 4=90 5=97 6=88 total=597
+[23:05:20] $ claude -p Ticker ALLE, date 2026-10-10. Research: research/ALLE/factsheet-2026-10-10.md, research/ALLE/2026-10-10.md. Macro snapshot: reports/macro/2026-10-10.md. Write research/ALLE/2026-10-10-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:06:23] research/ALLE/2026-10-10-macro.md
+OK research/ALLE/2026-10-10-macro.md macro_weight=context words=67
+[23:06:23] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/ALLE/2026-10-10-macro.md
+[23:06:23] OK /Users/oskaraspinall/paper-portfolio/research/ALLE/2026-10-10-macro.md macro_weight=context words=67
+[23:06:23] $ claude -p Evaluate ALLE for 2026-10-10: fact sheet research/ALLE/factsheet-2026-10-10.md, note research/ALLE/2026-10-10.md, state portfolio/state.json, macro overlay research/ALLE/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:06:43] research/AFL/2026-10-10-macro.md
+OK research/AFL/2026-10-10-macro.md macro_weight=secondary words=241
+[23:06:43] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/AFL/2026-10-10-macro.md
+[23:06:43] OK /Users/oskaraspinall/paper-portfolio/research/AFL/2026-10-10-macro.md macro_weight=secondary words=241
+[23:06:43] $ claude -p Evaluate AFL for 2026-10-10: fact sheet research/AFL/factsheet-2026-10-10.md, note research/AFL/2026-10-10.md, state portfolio/state.json, macro overlay research/AFL/2026-10-10-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[23:07:10] research/ALLE/2026-10-10-evaluation.md
+OK research/ALLE/2026-10-10-evaluation.md Bear case=127 Bull case=109 decision=AVOID
+[23:07:10] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/ALLE/2026-10-10-evaluation.md
+[23:07:10] OK /Users/oskaraspinall/paper-portfolio/research/ALLE/2026-10-10-evaluation.md Bear case=127 Bull case=109 decision=AVOID
+[23:07:10] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py ALLE --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/ALLE/2026-10-10-evaluation.md
+[23:07:10] {"out": "research/ALLE/2026-10-10-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 105.17, "base": 142.1, "bull": 168.36}, "price": 150.48}
+[23:07:10] Monte Carlo skipped for ALLE (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:07:11] == done ALLE
+[23:07:11] == initiate VLTO
+[23:07:11] $ claude -p Ticker VLTO, note type CORE, date 2026-10-10. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[23:07:12] research/AFL/2026-10-10-evaluation.md
+OK research/AFL/2026-10-10-evaluation.md Bear case=126 Bull case=100 decision=AVOID
+[23:07:12] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/AFL/2026-10-10-evaluation.md
+[23:07:12] OK /Users/oskaraspinall/paper-portfolio/research/AFL/2026-10-10-evaluation.md Bear case=126 Bull case=100 decision=AVOID
+[23:07:12] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py AFL --asof 2026-10-10 --eval /Users/oskaraspinall/paper-portfolio/research/AFL/2026-10-10-evaluation.md
+[23:07:12] {"out": "research/AFL/2026-10-10-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 89.38, "base": 116.44, "bull": 150.45}, "price": 114.54}
+[23:07:12] Monte Carlo skipped for AFL (AVOID: informational only, runs for BUY/ADD and holdings)
+[23:07:13] == done AFL
