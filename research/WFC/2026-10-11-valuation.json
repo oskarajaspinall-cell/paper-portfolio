@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 33.74151225261932,
+    "base": 60.02331330299503,
+    "bull": 66.47495542385437
+   },
+   "cost_of_equity": 0.10059199999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.07186,
+     "base": 0.10836,
+     "bull": 0.11732
+    },
+    "justified_pb": {
+     "bear": 0.619906868451688,
+     "base": 1.1027621970578898,
+     "bull": 1.2212932585458778
+    },
+    "bvps": 54.42997
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 55.31359282135608,
+    "base": 94.78293112543581,
+    "bull": 100.34390230151489
+   },
+   "implied_growth": -0.012665726452359003,
+   "discount_rate": 0.10059199999999999,
+   "cost_of_equity": 0.10059199999999999,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.02249508356584416,
+     "base": 0.017990429081427856,
+     "bull": 0.03195188345739974
+    },
+    "cash_flow_margin": {
+     "bear": 0.18778317818601203,
+     "base": 0.272324332136921,
+     "bull": 0.272324332136921
+    },
+    "cagr_3y": 0.03195188345739974,
+    "cagr_5y": -0.009990167131688321,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 23.717169828955978,
+    "base": 27.11927188062229,
+    "bull": 31.558726673984637
+   },
+   "cost_of_equity": 0.10059199999999999,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 2.0
+   }
+  }
+ ],
+ "price": 83.55,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 40.93220577553158,
+  "base": 71.60985257714195,
+  "bull": 77.76460438307454
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5100873037039907,
+  "base": -0.14291020254767262,
+  "bull": -0.0692447111541048
+ },
+ "implied_growth": -0.012665726452359003,
+ "ticker": "WFC",
+ "asof": "2026-10-11",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/wfc/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/wfc/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/wfc/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/wfc/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/wfc/statistics/"
+ }
+}

@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 177.14898302680098,
+    "base": 233.3799627584699,
+    "bull": 245.73879605109238
+   },
+   "cost_of_equity": 0.10270249999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.12849,
+     "base": 0.16134,
+     "bull": 0.16856
+    },
+    "justified_pb": {
+     "bear": 1.331874778803771,
+     "base": 1.7546410990637373,
+     "bull": 1.8475596023293979
+    },
+    "bvps": 133.007236
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 266.08159720402665,
+    "base": 357.3501019858502,
+    "bull": 471.171752120245
+   },
+   "implied_growth": 0.039216125610256225,
+   "discount_rate": 0.10270249999999999,
+   "cost_of_equity": 0.10270249999999999,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.01487277710734465,
+     "base": 0.0567192985513416,
+     "bull": 0.1121316399906771
+    },
+    "cash_flow_margin": {
+     "bear": 0.3080470295815414,
+     "base": 0.3492067751491993,
+     "bull": 0.369249339180125
+    },
+    "cagr_3y": 0.1121316399906771,
+    "cagr_5y": 0.0647455542146893,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 76.3832273880448,
+    "base": 87.06283581609344,
+    "bull": 100.8973080757727
+   },
+   "cost_of_equity": 0.10270249999999999,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 6.6
+   }
+  }
+ ],
+ "price": 332.99,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 206.79318775254288,
+  "base": 274.70334250093,
+  "bull": 320.88311474080996
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.3789807869529329,
+  "base": -0.17504026396909822,
+  "bull": -0.03635810462533429
+ },
+ "implied_growth": 0.039216125610256225,
+ "ticker": "JPM",
+ "asof": "2026-10-11",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/jpm/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/jpm/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/jpm/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/jpm/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/jpm/statistics/"
+ }
+}

@@ -4672,3 +4672,170 @@ My turn's usage limit was reached while finishing this task. The WFC core note i
 [23:25:32] You've hit your session limit · resets 1:50am (Europe/London)
 [23:25:32] !! FAILED WFC: claude -p Evaluate WFC for 2026-10-10: fact sheet research/WFC/factsheet-2026-10-10.md, note research/WFC/2026-10-10.md, state portfolio/state.json. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text exited 1: 
 [23:25:32] == research loop stopped (repeated failures: usage limit?)
+[03:00:22] == research loop: 342 names queued, best first: ['UPS', 'ULTA', 'WFC', 'AMGN', 'JPM', 'CPAY', 'CFG', 'NCLH', 'PHM', 'WM']
+[03:00:22] == initiate UPS
+[03:00:22] == initiate ULTA
+[03:00:22] == initiate WFC
+[03:00:22] $ claude -p Ticker UPS, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[03:00:22] $ claude -p Ticker ULTA, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[03:00:22] $ claude -p Ticker WFC, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[03:00:25] You've hit your session limit · resets 7am (Europe/London)
+[03:00:25] !! FAILED ULTA: claude -p Ticker ULTA, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[03:00:25] == initiate AMGN
+[03:00:25] $ claude -p Ticker AMGN, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[03:00:25] You've hit your session limit · resets 7am (Europe/London)
+[03:00:25] You've hit your session limit · resets 7am (Europe/London)
+[03:00:25] !! FAILED WFC: claude -p Ticker WFC, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[03:00:25] == initiate JPM
+[03:00:25] $ claude -p Ticker JPM, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[03:00:25] !! FAILED UPS: claude -p Ticker UPS, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[03:00:26] You've hit your session limit · resets 7am (Europe/London)
+[03:00:26] !! FAILED JPM: claude -p Ticker JPM, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[03:00:27] You've hit your session limit · resets 7am (Europe/London)
+[03:00:27] !! FAILED AMGN: claude -p Ticker AMGN, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[03:00:27] == research loop stopped (repeated failures: usage limit?)
+[15:56:58] == research loop: 342 names queued, best first: ['UPS', 'ULTA', 'WFC', 'AMGN', 'JPM', 'CPAY', 'CFG', 'NCLH', 'PHM', 'WM']
+[15:56:58] == initiate UPS
+[15:56:58] == initiate ULTA
+[15:56:58] == initiate WFC
+[15:56:58] $ claude -p Ticker UPS, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[15:56:58] $ claude -p Ticker ULTA, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[15:56:58] $ claude -p Ticker WFC, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:01:26] Note path: `research/UPS/2026-10-11.md`
+Fact sheet path: `research/UPS/factsheet-2026-10-11.md`
+
+check_docs: `OK research/UPS/2026-10-11.md type=CORE 1=45 2=132 3=133 4=78 5=67 6=105 total=560`
+
+Blocked/skipped URLs: `https://www.reuters.com/business/ups-signs-exclusive-deal-with-tiktok-shop-label-free-returns-2026-09-29/` (fetch tool could not reach reuters.com — not used as a source); `https://about.ups.com/us/en/newsroom.html` (returned 403, not used as a source).
+
+No data conflicts between qualitative sources and the fact sheet.
+[16:01:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-11.md
+[16:01:26] OK /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-11.md type=CORE 1=45 2=132 3=133 4=78 5=67 6=105 total=560
+[16:01:26] $ claude -p Ticker UPS, date 2026-10-11. Research: research/UPS/factsheet-2026-10-11.md, research/UPS/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/UPS/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:01:46] Note: research/ULTA/2026-10-11.md
+Fact sheet: research/ULTA/factsheet-2026-10-11.md
+
+OK research/ULTA/2026-10-11.md type=CORE 1=58 2=141 3=146 4=46 5=81 6=46 total=518
+
+No data conflicts. One blocked/failed URL (not used, not retried): https://investor.ulta.com (DNS error, not fetched).
+[16:01:46] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/ULTA/2026-10-11.md
+[16:01:46] OK /Users/oskaraspinall/paper-portfolio/research/ULTA/2026-10-11.md type=CORE 1=58 2=141 3=146 4=46 5=81 6=46 total=518
+[16:01:46] $ claude -p Ticker ULTA, date 2026-10-11. Research: research/ULTA/factsheet-2026-10-11.md, research/ULTA/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/ULTA/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:02:23] research/WFC/2026-10-11.md
+research/WFC/factsheet-2026-10-11.md
+OK research/WFC/2026-10-11.md type=CORE 1=54 2=146 3=142 4=82 5=79 6=89 total=592
+
+Data conflicts: none. Blocked URL: reuters.com article (www.reuters.com/business/finance/wells-fargo-faces-regulator-probe-over-efforts-boost-black-homeownership-wsj-2026-10-07/) — fetch unavailable, not retried per instructions.
+[16:02:23] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/WFC/2026-10-11.md
+[16:02:23] OK /Users/oskaraspinall/paper-portfolio/research/WFC/2026-10-11.md type=CORE 1=54 2=146 3=142 4=82 5=79 6=89 total=592
+[16:02:23] $ claude -p Ticker WFC, date 2026-10-11. Research: research/WFC/factsheet-2026-10-11.md, research/WFC/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/WFC/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:03:07] research/ULTA/2026-10-11-macro.md
+OK research/ULTA/2026-10-11-macro.md macro_weight=secondary words=250
+[16:03:07] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/ULTA/2026-10-11-macro.md
+[16:03:07] OK /Users/oskaraspinall/paper-portfolio/research/ULTA/2026-10-11-macro.md macro_weight=secondary words=250
+[16:03:07] $ claude -p Evaluate ULTA for 2026-10-11: fact sheet research/ULTA/factsheet-2026-10-11.md, note research/ULTA/2026-10-11.md, state portfolio/state.json, macro overlay research/ULTA/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[16:03:15] research/UPS/2026-10-11-macro.md
+OK research/UPS/2026-10-11-macro.md macro_weight=secondary words=239
+[16:03:15] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-11-macro.md
+[16:03:15] OK /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-11-macro.md macro_weight=secondary words=239
+[16:03:15] $ claude -p Evaluate UPS for 2026-10-11: fact sheet research/UPS/factsheet-2026-10-11.md, note research/UPS/2026-10-11.md, state portfolio/state.json, macro overlay research/UPS/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[16:03:51] research/UPS/2026-10-11-evaluation.md
+OK research/UPS/2026-10-11-evaluation.md Bear case=145 Bull case=120 decision=AVOID
+[16:03:51] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-11-evaluation.md
+[16:03:51] OK /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-11-evaluation.md Bear case=145 Bull case=120 decision=AVOID
+[16:03:51] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py UPS --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/UPS/2026-10-11-evaluation.md
+[16:03:51] {"out": "research/UPS/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 63.46, "base": 90.22, "bull": 127.02}, "price": 94.57}
+[16:03:52] == done UPS
+[16:03:52] == initiate AMGN
+[16:03:52] $ claude -p Ticker AMGN, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:03:55] research/WFC/2026-10-11-macro.md
+OK research/WFC/2026-10-11-macro.md macro_weight=secondary words=249
+[16:03:55] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/WFC/2026-10-11-macro.md
+[16:03:55] OK /Users/oskaraspinall/paper-portfolio/research/WFC/2026-10-11-macro.md macro_weight=secondary words=249
+[16:03:55] $ claude -p Evaluate WFC for 2026-10-11: fact sheet research/WFC/factsheet-2026-10-11.md, note research/WFC/2026-10-11.md, state portfolio/state.json, macro overlay research/WFC/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[16:03:56] research/ULTA/2026-10-11-evaluation.md
+OK research/ULTA/2026-10-11-evaluation.md Bear case=113 Bull case=115 decision=AVOID
+[16:03:56] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/ULTA/2026-10-11-evaluation.md
+[16:03:56] OK /Users/oskaraspinall/paper-portfolio/research/ULTA/2026-10-11-evaluation.md Bear case=113 Bull case=115 decision=AVOID
+[16:03:56] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py ULTA --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/ULTA/2026-10-11-evaluation.md
+[16:03:56] {"out": "research/ULTA/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 350.28, "base": 442.43, "bull": 603.46}, "price": 570.37}
+[16:03:57] == done ULTA
+[16:03:57] == initiate JPM
+[16:03:57] $ claude -p Ticker JPM, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:04:36] I passed on WFC (AVOID, conviction 2), and the evaluation passes the checker. The price of 83.55 is already above even the 77.76 bull fair value. On top of that, ROE has been flat over five years, the HUD probe is new and unquantified, and the macro overlay tilts toward bear.
+
+research/WFC/2026-10-11-evaluation.md
+OK research/WFC/2026-10-11-evaluation.md Bear case=146 Bull case=110 decision=AVOID
+[16:04:36] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/WFC/2026-10-11-evaluation.md
+[16:04:37] OK /Users/oskaraspinall/paper-portfolio/research/WFC/2026-10-11-evaluation.md Bear case=146 Bull case=110 decision=AVOID
+[16:04:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py WFC --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/WFC/2026-10-11-evaluation.md
+[16:04:37] {"out": "research/WFC/2026-10-11-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 40.93, "base": 71.61, "bull": 77.76}, "price": 83.55}
+[16:04:38] == done WFC
+[16:04:38] == initiate CPAY
+[16:04:38] $ claude -p Ticker CPAY, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:07:52] Note: research/JPM/2026-10-11.md
+Fact sheet: research/JPM/factsheet-2026-10-11.md
+OK research/JPM/2026-10-11.md type=CORE 1=34 2=135 3=124 4=88 5=57 6=91 total=529
+
+Data conflicts: none. Blocked/unusable fetches: jpmorganchase.com/ir/quarterly-earnings and jpmorganchase.com/ir/news (no substantive content found, not blocked by allowlist); reuters.com article fetch failed (tool error, not allowlist); SEC 10-Q main document (jpm-20260630.htm) exceeded fetch size limit — none of these yielded citable claims, so none appear in the note's Sources.
+[16:07:52] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/JPM/2026-10-11.md
+[16:07:52] OK /Users/oskaraspinall/paper-portfolio/research/JPM/2026-10-11.md type=CORE 1=34 2=135 3=124 4=88 5=57 6=91 total=529
+[16:07:52] $ claude -p Ticker JPM, date 2026-10-11. Research: research/JPM/factsheet-2026-10-11.md, research/JPM/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/JPM/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:08:26] research/CPAY/2026-10-11.md
+research/CPAY/factsheet-2026-10-11.md
+OK research/CPAY/2026-10-11.md type=CORE 1=52 2=119 3=131 4=53 5=71 6=95 total=521
+
+Blocked/skipped URLs: reuters.com (www.reuters.com/business/finance/ — fetch blocked, not retried); https://www.corpay.com/newsroom (404, not retried). No data conflicts between qualitative sources and the fact sheet.
+[16:08:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/CPAY/2026-10-11.md
+[16:08:26] OK /Users/oskaraspinall/paper-portfolio/research/CPAY/2026-10-11.md type=CORE 1=52 2=119 3=131 4=53 5=71 6=95 total=521
+[16:08:26] $ claude -p Ticker CPAY, date 2026-10-11. Research: research/CPAY/factsheet-2026-10-11.md, research/CPAY/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/CPAY/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:08:59] research/AMGN/2026-10-11.md
+research/AMGN/factsheet-2026-10-11.md
+OK research/AMGN/2026-10-11.md type=CORE 1=72 2=147 3=147 4=52 5=92 6=75 total=585
+
+Blocked/unusable URLs: https://www.reuters.com/business/healthcare-pharmaceuticals/amgens-autoimmune-drug-succeeds-late-stage-trial-2026-09-22/ (fetch blocked), https://www.amgen.com/about/our-strategy (404), https://www.amgen.com/investors → http://investors.amgen.com/ (redirect not followed, to stay within the WebFetch cap).
+
+Note: a stray temp file `research/AMGN/_tmp_quality.txt` (used to word-count a draft paragraph) could not be removed — shell `rm` inside the repo requires your approval. Please delete it, or approve removal, at your convenience; it is not referenced by the note.
+[16:08:59] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/AMGN/2026-10-11.md
+[16:08:59] OK /Users/oskaraspinall/paper-portfolio/research/AMGN/2026-10-11.md type=CORE 1=72 2=147 3=147 4=52 5=92 6=75 total=585
+[16:08:59] $ claude -p Ticker AMGN, date 2026-10-11. Research: research/AMGN/factsheet-2026-10-11.md, research/AMGN/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/AMGN/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:09:39] research/CPAY/2026-10-11-macro.md
+OK research/CPAY/2026-10-11-macro.md macro_weight=secondary words=240
+[16:09:39] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/CPAY/2026-10-11-macro.md
+[16:09:39] OK /Users/oskaraspinall/paper-portfolio/research/CPAY/2026-10-11-macro.md macro_weight=secondary words=240
+[16:09:39] $ claude -p Evaluate CPAY for 2026-10-11: fact sheet research/CPAY/factsheet-2026-10-11.md, note research/CPAY/2026-10-11.md, state portfolio/state.json, macro overlay research/CPAY/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[16:10:18] research/JPM/2026-10-11-macro.md
+OK research/JPM/2026-10-11-macro.md macro_weight=primary words=240
+[16:10:18] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/JPM/2026-10-11-macro.md
+[16:10:19] OK /Users/oskaraspinall/paper-portfolio/research/JPM/2026-10-11-macro.md macro_weight=primary words=240
+[16:10:19] $ claude -p Evaluate JPM for 2026-10-11: fact sheet research/JPM/factsheet-2026-10-11.md, note research/JPM/2026-10-11.md, state portfolio/state.json, macro overlay research/JPM/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[16:10:19] research/CPAY/2026-10-11-evaluation.md
+OK research/CPAY/2026-10-11-evaluation.md Bear case=131 Bull case=94 decision=AVOID
+[16:10:19] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/CPAY/2026-10-11-evaluation.md
+[16:10:19] OK /Users/oskaraspinall/paper-portfolio/research/CPAY/2026-10-11-evaluation.md Bear case=131 Bull case=94 decision=AVOID
+[16:10:19] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py CPAY --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/CPAY/2026-10-11-evaluation.md
+[16:10:19] {"out": "research/CPAY/2026-10-11-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 188.13, "base": 451.17, "bull": 824.33}, "price": 397.92}
+[16:10:20] == done CPAY
+[16:10:20] == initiate CFG
+[16:10:20] $ claude -p Ticker CFG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:10:35] research/AMGN/2026-10-11-macro.md
+OK research/AMGN/2026-10-11-macro.md macro_weight=context words=65
+[16:10:35] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/AMGN/2026-10-11-macro.md
+[16:10:35] OK /Users/oskaraspinall/paper-portfolio/research/AMGN/2026-10-11-macro.md macro_weight=context words=65
+[16:10:35] $ claude -p Evaluate AMGN for 2026-10-11: fact sheet research/AMGN/factsheet-2026-10-11.md, note research/AMGN/2026-10-11.md, state portfolio/state.json, macro overlay research/AMGN/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[16:10:51] research/JPM/2026-10-11-evaluation.md
+OK research/JPM/2026-10-11-evaluation.md Bear case=144 Bull case=114 decision=AVOID
+[16:10:51] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/JPM/2026-10-11-evaluation.md
+[16:10:51] OK /Users/oskaraspinall/paper-portfolio/research/JPM/2026-10-11-evaluation.md Bear case=144 Bull case=114 decision=AVOID
+[16:10:51] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py JPM --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/JPM/2026-10-11-evaluation.md
+[16:10:51] {"out": "research/JPM/2026-10-11-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 206.79, "base": 274.7, "bull": 320.88}, "price": 332.99}
+[16:10:53] == done JPM
+[16:10:53] == initiate NCLH
+[16:10:53] $ claude -p Ticker NCLH, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:11:09] research/AMGN/2026-10-11-evaluation.md
+OK research/AMGN/2026-10-11-evaluation.md Bear case=127 Bull case=135 decision=AVOID
+[16:11:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/AMGN/2026-10-11-evaluation.md
+[16:11:09] OK /Users/oskaraspinall/paper-portfolio/research/AMGN/2026-10-11-evaluation.md Bear case=127 Bull case=135 decision=AVOID
+[16:11:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py AMGN --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/AMGN/2026-10-11-evaluation.md
+[16:11:09] {"out": "research/AMGN/2026-10-11-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 288.9, "base": 376.99, "bull": 528.16}, "price": 414.87}
+[16:11:10] == done AMGN
