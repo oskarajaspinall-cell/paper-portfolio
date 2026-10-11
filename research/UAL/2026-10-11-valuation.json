@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Airlines",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -17.618544153873653,
+    "base": 199.1348150028608,
+    "bull": 657.4868975990498
+   },
+   "implied_growth": -0.009064697826191008,
+   "discount_rate": 0.07720955317321151,
+   "cost_of_equity": 0.11238400000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.030145673005184073,
+     "base": 0.09742140813956711,
+     "bull": 0.2443942865479003
+    },
+    "cash_flow_margin": {
+     "bear": 0.008929284025541263,
+     "base": 0.04893737744060432,
+     "bull": 0.07637155074216218
+    },
+    "cagr_3y": 0.09529134601036815,
+    "cagr_5y": 0.2443942865479003,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 41.40517135862912,
+    "base": 89.46687576499389,
+    "bull": 90.87726438188494
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.31,
+     "base": 6.525,
+     "bull": 6.59
+    },
+    "ttm_ebitda": 7091000000
+   }
+  }
+ ],
+ "price": 107.455,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 2.0560276836272706,
+  "base": 162.57883525690514,
+  "bull": 468.61701985999485
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.9808661515645873,
+  "base": 0.5129946047825149,
+  "bull": 3.3610536490623506
+ },
+ "implied_growth": -0.009064697826191008,
+ "ticker": "UAL",
+ "asof": "2026-10-11",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/ual/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/ual/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/ual/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/ual/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/ual/statistics/"
+ }
+}

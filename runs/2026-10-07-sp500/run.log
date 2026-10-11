@@ -5386,3 +5386,59 @@ OK research/ZBH/2026-10-11-evaluation.md Bear case=135 Bull case=107 decision=AV
 [22:22:03] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py ZBH --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/ZBH/2026-10-11-evaluation.md
 [22:22:03] {"out": "research/ZBH/2026-10-11-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 73.21, "base": 105.35, "bull": 179.17}, "price": 89.14}
 [22:22:05] == done ZBH
+[22:22:12] == Research batch 05: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-11-batch-05.md; uploaded to GitHub
+[22:22:12] == initiate EFX
+[22:22:12] $ claude -p Ticker EFX, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:22:40] research/VZ/2026-10-11-macro.md
+OK research/VZ/2026-10-11-macro.md macro_weight=secondary words=227
+[22:22:40] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/VZ/2026-10-11-macro.md
+[22:22:40] OK /Users/oskaraspinall/paper-portfolio/research/VZ/2026-10-11-macro.md macro_weight=secondary words=227
+[22:22:40] $ claude -p Evaluate VZ for 2026-10-11: fact sheet research/VZ/factsheet-2026-10-11.md, note research/VZ/2026-10-11.md, state portfolio/state.json, macro overlay research/VZ/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[22:23:42] research/VZ/2026-10-11-evaluation.md
+OK research/VZ/2026-10-11-evaluation.md Bear case=146 Bull case=128 decision=AVOID
+[22:23:42] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/VZ/2026-10-11-evaluation.md
+[22:23:42] OK /Users/oskaraspinall/paper-portfolio/research/VZ/2026-10-11-evaluation.md Bear case=146 Bull case=128 decision=AVOID
+[22:23:42] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py VZ --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/VZ/2026-10-11-evaluation.md
+[22:23:43] {"out": "research/VZ/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 39.92, "base": 88.25, "bull": 88.81}, "price": 41.65}
+[22:23:44] == done VZ
+[22:23:44] == initiate SYY
+[22:23:44] $ claude -p Ticker SYY, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:24:06] research/UAL/2026-10-11-macro.md
+OK research/UAL/2026-10-11-macro.md macro_weight=secondary words=248
+[22:24:06] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/UAL/2026-10-11-macro.md
+[22:24:06] OK /Users/oskaraspinall/paper-portfolio/research/UAL/2026-10-11-macro.md macro_weight=secondary words=248
+[22:24:06] $ claude -p Evaluate UAL for 2026-10-11: fact sheet research/UAL/factsheet-2026-10-11.md, note research/UAL/2026-10-11.md, state portfolio/state.json, macro overlay research/UAL/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[22:24:48] research/UAL/2026-10-11-evaluation.md
+OK research/UAL/2026-10-11-evaluation.md Bear case=137 Bull case=89 decision=AVOID
+[22:24:48] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/UAL/2026-10-11-evaluation.md
+[22:24:48] OK /Users/oskaraspinall/paper-portfolio/research/UAL/2026-10-11-evaluation.md Bear case=137 Bull case=89 decision=AVOID
+[22:24:48] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py UAL --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/UAL/2026-10-11-evaluation.md
+[22:24:48] {"out": "research/UAL/2026-10-11-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 2.06, "base": 162.58, "bull": 468.62}, "price": 107.455}
+[22:24:50] == done UAL
+[22:24:50] == initiate AIG
+[22:24:50] $ claude -p Ticker AIG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:25:27] Note: research/EFX/2026-10-11.md
+Fact sheet: research/EFX/factsheet-2026-10-11.md
+Check: OK research/EFX/2026-10-11.md type=CORE 1=53 2=140 3=147 4=86 5=90 6=105 total=621
+
+No data conflicts. One qualitative source (equifax.com "about" page) returned a 2022 revenue figure in prose, which was not used as a factsheet number. No blocked URLs; tipranks.com headline cited by URL only (not fetched), per house rules on third-party headline sites.
+[22:25:27] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/EFX/2026-10-11.md
+[22:25:27] OK /Users/oskaraspinall/paper-portfolio/research/EFX/2026-10-11.md type=CORE 1=53 2=140 3=147 4=86 5=90 6=105 total=621
+[22:25:27] $ claude -p Ticker EFX, date 2026-10-11. Research: research/EFX/factsheet-2026-10-11.md, research/EFX/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/EFX/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:26:06] You've hit your session limit · resets 2:10am (Europe/London)
+[22:26:06] !! FAILED AIG: claude -p Ticker AIG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[22:26:06] == initiate PFG
+[22:26:06] $ claude -p Ticker PFG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:26:09] You've hit your session limit · resets 2:10am (Europe/London)
+[22:26:09] !! FAILED PFG: claude -p Ticker PFG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[22:26:09] == initiate CRH
+[22:26:09] $ claude -p Ticker CRH, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:26:12] You've hit your session limit · resets 2:10am (Europe/London)
+[22:26:12] !! FAILED CRH: claude -p Ticker CRH, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[22:26:45] You've hit your session limit · resets 2:10am (Europe/London)
+[22:26:45] !! MACRO OVERLAY UNAVAILABLE for EFX: claude -p Ticker EFX, date 2026-10-11. Research: research/EFX/factsheet-2026-10-11.md, research/EFX/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/EFX/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[22:26:45] $ claude -p Evaluate EFX for 2026-10-11: fact sheet research/EFX/factsheet-2026-10-11.md, note research/EFX/2026-10-11.md, state portfolio/state.json. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[22:26:48] You've hit your session limit · resets 2:10am (Europe/London)
+[22:26:48] !! FAILED EFX: claude -p Evaluate EFX for 2026-10-11: fact sheet research/EFX/factsheet-2026-10-11.md, note research/EFX/2026-10-11.md, state portfolio/state.json. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text exited 1: 
+[22:26:55] You've hit your session limit · resets 2:10am (Europe/London)
+[22:26:55] !! FAILED SYY: claude -p Ticker SYY, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
