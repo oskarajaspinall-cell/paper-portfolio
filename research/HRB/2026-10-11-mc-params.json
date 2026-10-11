@@ -1,0 +1,56 @@
+{
+  "ticker": "HRB",
+  "date": "2026-10-11",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation.md Decision JSON scenarios.bull.probability"},
+      "probability_evidence": "Bull case rests on a full EV/EBITDA rerate to the stock's 5y range top (9.3x, vs 7.9x median [factsheet Valuation]), which requires the market to validate FY2027 guided growth (+3.9-5.1%) actually delivering on top of the FY2026 EPS beat ($2.38 vs $2.21 consensus, factsheet News & sentiment) — a specific, unconfirmed catalyst, the lowest-weighted of the three scenarios in the evaluation's Bull case.",
+      "target_price_12m": {"value": 63.00, "cite": "evaluation.md Decision JSON scenarios.bull.target_price_12m (EV/EBITDA bull fair value, factsheet Fair value row)"},
+      "target_band": {"value": 0.37, "cite": "Fact sheet Fair value: DCF (bull) 134.22 vs EV/EBITDA (bull) 63.00 -> half-spread/target = (134.22-63.00)/2/63.00 = 56.5%; capped at the mc-inputs blended residual volatility ceiling of 38.1% (research/HRB/2026-10-11-mc-inputs.json regression.residual_vol.blended) per house rule that target_band must not exceed measured residual volatility."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation.md Decision JSON scenarios.base.probability"},
+      "probability_evidence": "Base case needs only a return toward the 5y median EV/EBITDA (7.9x [factsheet Valuation]) with fundamentals continuing their current trend (operating margin 23.0%, FCF conversion 103.1% [factsheet Quality], no invalidation trigger yet breached) — the mechanical no-surprise path, the modal (highest-probability) outcome in the evaluation.",
+      "target_price_12m": {"value": 54.02, "cite": "evaluation.md Decision JSON scenarios.base.target_price_12m (EV/EBITDA base fair value, factsheet Fair value row)"},
+      "target_band": {"value": 0.37, "cite": "Fact sheet Fair value: DCF (base) 111.56 vs EV/EBITDA (base) 54.02 -> half-spread/target = (111.56-54.02)/2/54.02 = 53.3%; capped at the mc-inputs blended residual volatility ceiling of 38.1% (research/HRB/2026-10-11-mc-inputs.json regression.residual_vol.blended) per house rule that target_band must not exceed measured residual volatility."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation.md Decision JSON scenarios.bear.probability"},
+      "probability_evidence": "Bear case is grounded in live, sizeable short interest (15.49% of float [factsheet Other]) and a stock already -12.7% over 12 months, lagging SPY by 28.4pp [factsheet Price], even as HRB's own 10-K names free government filing and AI DIY tools as share-loss risks (research/HRB/2026-10-11.md §2) — an active, well-populated thesis the evaluation weights second-highest of the three scenarios.",
+      "target_price_12m": {"value": 37.58, "cite": "evaluation.md Decision JSON scenarios.bear.target_price_12m (EV/EBITDA bear fair value, factsheet Fair value row)"},
+      "target_band": {"value": 0.37, "cite": "Fact sheet Fair value: DCF (bear) 78.65 vs EV/EBITDA (bear) 37.58 -> half-spread/target = (78.65-37.58)/2/37.58 = 54.7%; capped at the mc-inputs blended residual volatility ceiling of 38.1% (research/HRB/2026-10-11-mc-inputs.json regression.residual_vol.blended) per house rule that target_band must not exceed measured residual volatility."}
+    }
+  },
+  "factors": {
+    "SPY": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.SPY headlines are directionally mixed over 2026-10-07 to 2026-10-10 (bounce back on falling oil/tech recovery vs retreat on oil rally/Iran statement; AI-bubble-burst warning vs record $1tn combined SPY/SPYM assets) — no net directional signal, so 0 per house rule."},
+      "uncertainty_12m": {"value": 0.1431154014991791, "cite": "mc-inputs.json regression.factor_stats.SPY.vol_annual (3y weekly regression, 2023-10-09 to 2026-09-28)"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are directionally mixed over 2026-10-01 to 2026-10-08 (yields at 24-year highs/bond rout deepening/France sell-off vs Treasury rebound after weak jobs report and cooling PCE pulling yields off highs) — no net directional signal, so 0 per house rule; macro overlay (research/HRB/2026-10-11-macro.md) also finds no material rate channel into HRB's thesis given its low beta (0.39) and USD-only, unlevered balance sheet."},
+      "uncertainty_12m": {"value": 0.06460381100458489, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual (3y weekly regression, 2023-10-09 to 2026-09-28)"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Quarterly earnings miss / negative reaction",
+      "reason": "HRB's stock reacts sharply to quarterly results in both directions; the next report (Nov 5, 2026) falls inside the 12-month horizon and the worst historical reaction in the regression history was a -16.65% week.",
+      "cite": "mc-inputs.json analogues.event_weeks (Q2 2026 earnings, event_date 2026-02-03, week 2026-02-02, move -16.65%); factsheet Price 'Next earnings date Nov 5, 2026 (Est. Earnings)'",
+      "annual_probability": {"value": 0.1855, "cite": "Of 20 quarterly earnings-release weeks in mc-inputs.json analogues.event_weeks (Q1 FY2022 through Q4 FY2026), only 1 (Q2 FY2026, week 2026-02-02) fell -10% or worse; per-quarter rate 1/20=5%, so the probability of at least one such drop across the ~4 quarterly reports in the next 12 months = 1-(1-0.05)^4 = 18.55%."},
+      "impact": {"value": -0.1665, "cite": "mc-inputs.json analogues.event_weeks / all_weekly_moves, week 2026-02-02, move -0.1665 (must equal the analogue exactly)"},
+      "analogue": {"week": "2026-02-02", "move": -0.1665},
+      "assumption": null
+    },
+    {
+      "name": "Free government filing / AI DIY disruption shock",
+      "reason": "HRB's 10-K names free government filing (IRS Direct File/Free File, authorized through Oct 2029) and AI-enabled DIY tools as risks that could 'reduce the need for third-party tax preparation services'; short interest of 15.49% of float shows a live, informed bear thesis around exactly this risk.",
+      "cite": "research/HRB/2026-10-11.md §2 Quality (10-K, https://www.sec.gov/Archives/edgar/data/12659/000001265926000026/hrb-20260630.htm); factsheet Other 'Short interest (% float) 15.49%'",
+      "annual_probability": {"value": 0.15, "cite": "Stated assumption (no historical analogue): Direct File's current authorization runs through Oct 2029, so no imminent expansion/contraction legislative decision is expected inside this specific 12-month window; a modest, bounded probability is assumed per the house no-analogue rule."},
+      "impact": {"value": -0.15, "cite": "Stated assumption (no historical analogue), bounded within the ±30% cap for jumps without an analogue per [montecarlo].max_jump_impact_assumed."},
+      "analogue": null,
+      "assumption": "No week in mc-inputs.json analogues.all_weekly_moves is attributable to a distinct free-filing-policy or AI-DIY-disruption shock (this is a gradual structural risk, not a single historical jump week); probability and magnitude are therefore a stated assumption, kept within the ±30% no-analogue bound."
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}

@@ -1,0 +1,80 @@
+{
+ "industry": {
+  "industry": "Gold",
+  "known": true,
+  "best": "Mine NAV",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 15.64056331439475,
+    "base": 17.75558948171908,
+    "bull": 46.78403968645901
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.57,
+     "base": 4.206,
+     "bull": 4.805
+    },
+    "ttm_ebitda": 1436500000,
+    "peak_earnings": "TTM EBITDA is 3.5x its 5y median: bear/base use the 5y average (5.336e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 39.36,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 15.64056331439475,
+  "base": 17.75558948171908,
+  "bull": 46.78403968645901
+ },
+ "used": [
+  "ev_ebitda"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.6026279645733041,
+  "base": -0.5488925436555112,
+  "bull": 0.18861889447304403
+ },
+ "implied_growth": null,
+ "ticker": "TSX:OGC",
+ "asof": "2026-10-11",
+ "quote_currency": "CAD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.4255669999999998,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tsx/OGC/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tsx/OGC/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tsx/OGC/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tsx/OGC/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tsx/OGC/statistics/"
+ }
+}

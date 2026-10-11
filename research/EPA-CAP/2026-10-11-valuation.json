@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Information Technology Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 150.60677239974024,
+    "base": 189.6493189579954,
+    "bull": 336.7276974194853
+   },
+   "implied_growth": -0.05928538670732582,
+   "discount_rate": 0.07648837502217519,
+   "cost_of_equity": 0.09720000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.013963654965325738,
+     "base": 0.02792416909992772,
+     "bull": 0.05462398633036236
+    },
+    "cash_flow_margin": {
+     "bear": 0.0867730366894198,
+     "base": 0.0867730366894198,
+     "bull": 0.12587137885462554
+    },
+    "cagr_3y": 0.0070726900693485195,
+    "cagr_5y": 0.05462398633036236,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 125.18771969632314,
+    "base": 147.65910778164476,
+    "bull": 173.5930682448933
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.651,
+     "base": 10.923,
+     "bull": 12.391
+    },
+    "ttm_ebitda": 3083000000
+   }
+  }
+ ],
+ "price": 115.05,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 142.13375483193454,
+  "base": 175.65258189921187,
+  "bull": 282.3494876946213
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.23540856003419863,
+  "base": 0.5267499513186604,
+  "bull": 1.4541459165112673
+ },
+ "implied_growth": -0.05928538670732582,
+ "ticker": "EPA:CAP",
+ "asof": "2026-10-11",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/epa/CAP/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/epa/CAP/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/epa/CAP/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/epa/CAP/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/epa/CAP/statistics/"
+ }
+}

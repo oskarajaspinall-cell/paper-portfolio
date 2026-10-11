@@ -1,0 +1,80 @@
+{
+ "industry": {
+  "industry": "Gold",
+  "known": true,
+  "best": "Mine NAV",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 23382.364052319874,
+    "base": 26410.402011052858,
+    "bull": 86577.82719761485
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.545,
+     "base": 5.114,
+     "bull": 6.662
+    },
+    "ttm_ebitda": 7129700000,
+    "peak_earnings": "TTM EBITDA is 3.1x its 5y median: bear/base use the 5y average (2.893e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 61028,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 23382.364052319874,
+  "base": 26410.402011052858,
+  "bull": 86577.82719761485
+ },
+ "used": [
+  "ev_ebitda"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.6168584247833802,
+  "base": -0.5672412333510379,
+  "bull": 0.4186574555550706
+ },
+ "implied_growth": null,
+ "ticker": "JSE:GFI",
+ "asof": "2026-10-11",
+ "quote_currency": "ZAc",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1651.3367999999998,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/jse/GFI/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/jse/GFI/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/jse/GFI/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/jse/GFI/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/jse/GFI/statistics/"
+ }
+}

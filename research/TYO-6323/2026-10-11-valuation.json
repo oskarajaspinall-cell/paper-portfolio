@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Semiconductors",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -288.46983712154736,
+    "base": 1951.2108853026402,
+    "bull": 4527.564348124713
+   },
+   "implied_growth": 0.3801399854735965,
+   "discount_rate": 0.12427034511703605,
+   "cost_of_equity": 0.127367,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.03682403167485067,
+     "base": 0.08402875299426237,
+     "bull": 0.17746694862734813
+    },
+    "cash_flow_margin": {
+     "bear": -0.06786488563025032,
+     "base": 0.15304384848842323,
+     "bull": 0.2771485695223703
+    },
+    "cagr_3y": 0.10864806334970134,
+    "cagr_5y": 0.17746694862734813,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 1449.8241224054138,
+    "base": 2131.4156704101833,
+    "bull": 3904.573523167461
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.705,
+     "base": 10.736,
+     "bull": 14.035
+    },
+    "ttm_ebitda": 44346000000,
+    "peak_earnings": "TTM EBITDA is 1.6x its 5y median: bear/base use the 5y average (2.933e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 5134,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "JPY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 290.96148272077306,
+  "base": 2011.2791470051545,
+  "bull": 4319.900739805629
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.9433265518658408,
+  "base": -0.6082432514598453,
+  "bull": -0.1585701714441704
+ },
+ "implied_growth": 0.3801399854735965,
+ "ticker": "TYO:6323",
+ "asof": "2026-10-11",
+ "quote_currency": "JPY",
+ "financials_currency": "JPY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tyo/6323/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tyo/6323/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tyo/6323/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tyo/6323/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tyo/6323/statistics/"
+ }
+}

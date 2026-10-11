@@ -1,0 +1,226 @@
+{
+ "ticker": "HRB",
+ "date": "2026-10-11",
+ "params_file": "2026-10-11-mc-params.json",
+ "inputs_file": "2026-10-11-mc-inputs.json",
+ "settings": {
+  "paths": 10000,
+  "seed": 20261007,
+  "student_t_df": 4.5,
+  "horizons_days": {
+   "3m": 63,
+   "6m": 126,
+   "12m": 252
+  }
+ },
+ "market": {
+  "last_close": 44.05,
+  "close_date": "2026-10-09",
+  "currency": "USD",
+  "source_url": "https://stockanalysis.com/stocks/hrb/history/"
+ },
+ "target_returns": {
+  "bull": 0.43019296254256534,
+  "base": 0.22633371169126004,
+  "bear": -0.1468785471055618
+ },
+ "expected_12m": 0.16533484676503982,
+ "inputs": {
+  "weeks": 156,
+  "from": "2023-10-09",
+  "to": "2026-09-28",
+  "betas": {
+   "SPY": 0.3354233960625994,
+   "IEF": 0.4017147796508738
+  },
+  "r2": 0.029128338334888704,
+  "residual_vol": {
+   "52w": 0.43722539018235124,
+   "156w": 0.32431519558274885,
+   "blended": 0.38077029288255004,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  }
+ },
+ "parameters": {
+  "scenarios": {
+   "bull": {
+    "probability": 0.25,
+    "target_price_12m": 63.0,
+    "target_band": 0.37
+   },
+   "base": {
+    "probability": 0.45,
+    "target_price_12m": 54.02,
+    "target_band": 0.37
+   },
+   "bear": {
+    "probability": 0.3,
+    "target_price_12m": 37.58,
+    "target_band": 0.37
+   }
+  },
+  "factors": [
+   {
+    "ticker": "SPY",
+    "beta": 0.3354233960625994,
+    "move": 0.0,
+    "unc": 0.1431154014991791
+   },
+   {
+    "ticker": "IEF",
+    "beta": 0.4017147796508738,
+    "move": 0.0,
+    "unc": 0.06460381100458489
+   }
+  ],
+  "jumps": [
+   {
+    "name": "Quarterly earnings miss / negative reaction",
+    "p": 0.1855,
+    "impact": -0.1665,
+    "analogue": {
+     "week": "2026-02-02",
+     "move": -0.1665
+    },
+    "cited": true
+   },
+   {
+    "name": "Free government filing / AI DIY disruption shock",
+    "p": 0.15,
+    "impact": -0.15,
+    "analogue": null,
+    "cited": true
+   }
+  ],
+  "tilt": 0.0
+ },
+ "no_discrete_risks_reason": null,
+ "owner_review": null,
+ "separation": "targets are total expected returns; per-scenario calibration removes the expected factor and jump terms from the scenario drift, so factor + scenario + jumps = target (no double count)",
+ "results": {
+  "3m": {
+   "trading_days": 63,
+   "mean": 0.01746944338357544,
+   "median": 0.021077844190253242,
+   "p5": -0.2559257888243584,
+   "p25": -0.08815121820940326,
+   "p50": 0.021077844190253242,
+   "p75": 0.12331764929141056,
+   "p95": 0.28718800976728615,
+   "prob_loss": 0.4464,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.0001023159288136447,
+    "jumps": -0.016924060062906813,
+    "noise": 0.00042760980674603317,
+    "scenario": 0.01925963688117674
+   }
+  },
+  "6m": {
+   "trading_days": 126,
+   "mean": 0.050403982941470006,
+   "median": 0.0410065616324826,
+   "p5": -0.4072160667949475,
+   "p25": -0.1436596499568681,
+   "p50": 0.0410065616324826,
+   "p75": 0.23638180435369135,
+   "p95": 0.5399398341367111,
+   "prob_loss": 0.4417,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 4.217671733862924e-05,
+    "jumps": -0.033338430650182466,
+    "noise": 0.00012134373548281947,
+    "scenario": 0.03851927376235348
+   }
+  },
+  "12m": {
+   "trading_days": 252,
+   "mean": 0.16533484676503973,
+   "median": 0.08807844512310888,
+   "p5": -0.6182200170131734,
+   "p25": -0.23547839064309198,
+   "p50": 0.08807844512310888,
+   "p75": 0.4905137820135119,
+   "p95": 1.1945574877317824,
+   "prob_loss": 0.4312,
+   "scenario_share": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "attribution_mean_log_return": {
+    "factor": 0.00048090877668385633,
+    "jumps": -0.06540814199639843,
+    "noise": 0.002640225073789374,
+    "scenario": 0.07703854752470696
+   }
+  }
+ },
+ "sensitivity": [
+  {
+   "case": "probabilities as researched",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.16533484676503973,
+   "prob_loss_12m": 0.4312
+  },
+  {
+   "case": "bull +10pp / bear -10pp",
+   "probabilities": {
+    "bull": 0.35,
+    "base": 0.45,
+    "bear": 0.19999999999999998
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.2230419977298524,
+   "prob_loss_12m": 0.3895
+  },
+  {
+   "case": "bull -10pp / bear +10pp",
+   "probabilities": {
+    "bull": 0.15,
+    "base": 0.45,
+    "bear": 0.4
+   },
+   "resid_vol_scale": 1.0,
+   "mean_12m": 0.10762769580022702,
+   "prob_loss_12m": 0.4746
+  },
+  {
+   "case": "residual vol -25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 0.75,
+   "mean_12m": 0.16533484676503987,
+   "prob_loss_12m": 0.4219
+  },
+  {
+   "case": "residual vol +25%",
+   "probabilities": {
+    "bull": 0.25,
+    "base": 0.45,
+    "bear": 0.3
+   },
+   "resid_vol_scale": 1.25,
+   "mean_12m": 0.16533484676503982,
+   "prob_loss_12m": 0.458
+  }
+ ]
+}

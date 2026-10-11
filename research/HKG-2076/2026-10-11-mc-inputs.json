@@ -1,0 +1,666 @@
+{
+ "ticker": "HKG:2076",
+ "asof": "2026-10-11",
+ "market": "HKG",
+ "factors": [
+  {
+   "ticker": "HKG:2800",
+   "name": "Hang Seng (Tracker Fund)",
+   "source_url": "https://stockanalysis.com/api/symbol/a/HKG-2800/history?range=5Y&period=Weekly"
+  },
+  {
+   "ticker": "KWEB",
+   "etf": true,
+   "name": "China internet sector",
+   "source_url": "https://stockanalysis.com/api/symbol/e/kweb/history?range=5Y&period=Weekly"
+  },
+  {
+   "ticker": "IEF",
+   "etf": true,
+   "name": "US 7-10y Treasuries (rates)",
+   "source_url": "https://stockanalysis.com/api/symbol/e/ief/history?range=5Y&period=Weekly"
+  }
+ ],
+ "stock_source_url": "https://stockanalysis.com/api/symbol/a/HKG-2076/history?range=5Y&period=Weekly",
+ "events_source_url": "https://stockanalysis.com/quote/hkg/2076/filings/",
+ "regression": {
+  "weeks": 156,
+  "from": "2023-04-03",
+  "to": "2026-09-28",
+  "alpha_weekly": -0.0011346489668697315,
+  "betas": {
+   "HKG:2800": 0.8053705163850332,
+   "KWEB": 0.30961422716148645,
+   "IEF": 0.017874630242330644
+  },
+  "r2": 0.3186433164116511,
+  "residual_vol": {
+   "52w": 0.3714660220641627,
+   "156w": 0.386589551169344,
+   "blended": 0.37902778661675335,
+   "method": "50/50 blend of 52w/156w weekly residual vol, annualised x sqrt(52)",
+   "why": "about 156 weekly points are too few for a stable GARCH(1,1) fit without an optimiser library; a 1y/3y blend tracks the current level without overfitting"
+  },
+  "stock_vol": 0.46834172526869045,
+  "factor_stats": {
+   "HKG:2800": {
+    "mean_annual": 0.0851896672117221,
+    "vol_annual": 0.21297083492544905
+   },
+   "KWEB": {
+    "mean_annual": -0.012835012697381892,
+    "vol_annual": 0.33893351155209517
+   },
+   "IEF": {
+    "mean_annual": 0.0057844896683464375,
+    "vol_annual": 0.06593661014800657
+   }
+  },
+  "correlation": {
+   "factors": [
+    "HKG:2800",
+    "KWEB",
+    "IEF"
+   ],
+   "matrix": [
+    [
+     1.0,
+     0.817023,
+     0.1241
+    ],
+    [
+     0.817023,
+     1.0,
+     -0.007407
+    ],
+    [
+     0.1241,
+     -0.007407,
+     1.0
+    ]
+   ],
+   "psd": true
+  }
+ },
+ "analogues": {
+  "largest_falls": [
+   {
+    "week": "2025-04-07",
+    "move": -0.1924
+   },
+   {
+    "week": "2024-07-15",
+    "move": -0.1677
+   },
+   {
+    "week": "2024-08-26",
+    "move": -0.1418
+   },
+   {
+    "week": "2023-03-06",
+    "move": -0.1294
+   },
+   {
+    "week": "2024-10-07",
+    "move": -0.1261
+   },
+   {
+    "week": "2024-07-22",
+    "move": -0.1223
+   },
+   {
+    "week": "2026-03-09",
+    "move": -0.1136
+   },
+   {
+    "week": "2025-10-13",
+    "move": -0.1022
+   },
+   {
+    "week": "2023-02-27",
+    "move": -0.0955
+   },
+   {
+    "week": "2023-06-19",
+    "move": -0.0952
+   }
+  ],
+  "largest_rises": [
+   {
+    "week": "2024-09-23",
+    "move": 0.2542
+   },
+   {
+    "week": "2024-03-11",
+    "move": 0.2277
+   },
+   {
+    "week": "2024-09-30",
+    "move": 0.1661
+   },
+   {
+    "week": "2023-01-03",
+    "move": 0.1431
+   },
+   {
+    "week": "2026-08-24",
+    "move": 0.1424
+   },
+   {
+    "week": "2025-05-12",
+    "move": 0.132
+   },
+   {
+    "week": "2025-12-15",
+    "move": 0.1219
+   },
+   {
+    "week": "2025-01-13",
+    "move": 0.1186
+   },
+   {
+    "week": "2025-08-18",
+    "move": 0.1105
+   },
+   {
+    "week": "2025-03-03",
+    "move": 0.1092
+   }
+  ],
+  "event_weeks": [
+   {
+    "event_date": "2023-03-20",
+    "event": "Q4 2022",
+    "types": [
+     "annual_report",
+     "earnings_release"
+    ],
+    "week": "2023-03-20",
+    "move": 0.023
+   },
+   {
+    "event_date": "2023-05-24",
+    "event": "Q1 2023",
+    "types": [
+     "earnings_release"
+    ],
+    "week": "2023-05-22",
+    "move": 0.0
+   },
+   {
+    "event_date": "2023-08-29",
+    "event": "Q2 2023",
+    "types": [
+     "earnings_release"
+    ],
+    "week": "2023-08-28",
+    "move": -0.0442
+   },
+   {
+    "event_date": "2023-11-14",
+    "event": "Q3 2023",
+    "types": [
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2023-11-13",
+    "move": 0.0017
+   },
+   {
+    "event_date": "2024-03-12",
+    "event": "Q4 2023",
+    "types": [
+     "annual_report",
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2024-03-11",
+    "move": 0.2277
+   },
+   {
+    "event_date": "2024-05-21",
+    "event": "Q1 2024",
+    "types": [
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2024-05-20",
+    "move": -0.0527
+   },
+   {
+    "event_date": "2024-08-28",
+    "event": "Q2 2024",
+    "types": [
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2024-08-26",
+    "move": -0.1418
+   },
+   {
+    "event_date": "2024-12-11",
+    "event": "Q3 2024",
+    "types": [
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2024-12-09",
+    "move": 0.0194
+   },
+   {
+    "event_date": "2025-03-11",
+    "event": "Q4 2024",
+    "types": [
+     "annual_report",
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2025-03-10",
+    "move": 0.0962
+   },
+   {
+    "event_date": "2025-05-22",
+    "event": "Q1 2025",
+    "types": [
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2025-05-19",
+    "move": -0.0597
+   },
+   {
+    "event_date": "2025-08-20",
+    "event": "Q2 2025",
+    "types": [
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2025-08-18",
+    "move": 0.1105
+   },
+   {
+    "event_date": "2025-11-18",
+    "event": "Q3 2025",
+    "types": [
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2025-11-17",
+    "move": -0.0145
+   },
+   {
+    "event_date": "2026-03-18",
+    "event": "Q4 2025",
+    "types": [
+     "annual_report",
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2026-03-16",
+    "move": -0.0464
+   },
+   {
+    "event_date": "2026-05-20",
+    "event": "Q1 2026",
+    "types": [
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2026-05-18",
+    "move": -0.0494
+   },
+   {
+    "event_date": "2026-08-25",
+    "event": "Q2 2026",
+    "types": [
+     "earnings_release",
+     "slides"
+    ],
+    "week": "2026-08-24",
+    "move": 0.1424
+   }
+  ],
+  "all_weekly_moves": {
+   "2023-01-03": 0.1431,
+   "2023-01-09": 0.0453,
+   "2023-01-16": -0.016,
+   "2023-01-26": 0.0755,
+   "2023-01-30": -0.0495,
+   "2023-02-06": -0.0399,
+   "2023-02-13": 0.0078,
+   "2023-02-20": 0.0187,
+   "2023-02-27": -0.0955,
+   "2023-03-06": -0.1294,
+   "2023-03-13": -0.076,
+   "2023-03-20": 0.023,
+   "2023-03-27": 0.0797,
+   "2023-04-03": 0.0,
+   "2023-04-11": 0.0,
+   "2023-04-17": 0.0,
+   "2023-04-24": 0.0,
+   "2023-05-02": 0.0,
+   "2023-05-08": -0.0067,
+   "2023-05-15": -0.0554,
+   "2023-05-22": 0.0,
+   "2023-05-29": 0.0,
+   "2023-06-05": -0.0701,
+   "2023-06-12": -0.0308,
+   "2023-06-19": -0.0952,
+   "2023-06-26": 0.0018,
+   "2023-07-03": 0.0,
+   "2023-07-10": 0.0193,
+   "2023-07-18": 0.0,
+   "2023-07-24": 0.0,
+   "2023-07-31": 0.0309,
+   "2023-08-07": 0.0,
+   "2023-08-14": 0.0,
+   "2023-08-21": 0.0,
+   "2023-08-28": -0.0442,
+   "2023-09-04": 0.0026,
+   "2023-09-11": 0.0,
+   "2023-09-18": 0.0087,
+   "2023-09-25": 0.0,
+   "2023-10-03": 0.0,
+   "2023-10-09": -0.0009,
+   "2023-10-16": 0.0,
+   "2023-10-24": 0.0,
+   "2023-10-30": 0.0,
+   "2023-11-06": 0.0,
+   "2023-11-13": 0.0017,
+   "2023-11-20": 0.0,
+   "2023-11-27": 0.0009,
+   "2023-12-04": 0.0123,
+   "2023-12-11": -0.0043,
+   "2023-12-18": 0.0,
+   "2023-12-27": 0.0,
+   "2024-01-02": 0.0061,
+   "2024-01-08": -0.0026,
+   "2024-01-15": -0.0698,
+   "2024-01-22": -0.062,
+   "2024-01-29": 0.0178,
+   "2024-02-05": 0.0931,
+   "2024-02-14": 0.0,
+   "2024-02-19": 0.0,
+   "2024-02-26": 0.0,
+   "2024-03-04": 0.0559,
+   "2024-03-11": 0.2277,
+   "2024-03-18": -0.0418,
+   "2024-03-25": 0.0164,
+   "2024-04-02": -0.0021,
+   "2024-04-08": 0.0563,
+   "2024-04-15": -0.08,
+   "2024-04-22": 0.0652,
+   "2024-04-29": 0.0442,
+   "2024-05-06": 0.0163,
+   "2024-05-13": 0.0833,
+   "2024-05-20": -0.0527,
+   "2024-05-27": 0.0044,
+   "2024-06-03": 0.0498,
+   "2024-06-11": -0.0895,
+   "2024-06-17": 0.0332,
+   "2024-06-24": -0.0806,
+   "2024-07-02": -0.0007,
+   "2024-07-08": 0.0096,
+   "2024-07-15": -0.1677,
+   "2024-07-22": -0.1223,
+   "2024-07-29": -0.0409,
+   "2024-08-05": -0.0019,
+   "2024-08-12": 0.0291,
+   "2024-08-19": 0.0642,
+   "2024-08-26": -0.1418,
+   "2024-09-02": -0.0486,
+   "2024-09-09": 0.013,
+   "2024-09-16": 0.075,
+   "2024-09-23": 0.2542,
+   "2024-09-30": 0.1661,
+   "2024-10-07": -0.1261,
+   "2024-10-14": -0.0647,
+   "2024-10-21": -0.0601,
+   "2024-10-28": -0.0062,
+   "2024-11-04": 0.0375,
+   "2024-11-11": -0.0723,
+   "2024-11-18": -0.0353,
+   "2024-11-25": -0.0577,
+   "2024-12-02": 0.102,
+   "2024-12-09": 0.0194,
+   "2024-12-16": -0.0118,
+   "2024-12-23": -0.0221,
+   "2024-12-30": -0.0047,
+   "2025-01-06": -0.0925,
+   "2025-01-13": 0.1186,
+   "2025-01-20": 0.0223,
+   "2025-01-27": 0.0337,
+   "2025-02-03": 0.0387,
+   "2025-02-10": 0.0822,
+   "2025-02-17": -0.047,
+   "2025-02-24": -0.014,
+   "2025-03-03": 0.1092,
+   "2025-03-10": 0.0962,
+   "2025-03-17": 0.0761,
+   "2025-03-24": -0.0146,
+   "2025-03-31": -0.0692,
+   "2025-04-07": -0.1924,
+   "2025-04-14": -0.0662,
+   "2025-04-22": 0.0479,
+   "2025-04-28": 0.051,
+   "2025-05-06": 0.0385,
+   "2025-05-12": 0.132,
+   "2025-05-19": -0.0597,
+   "2025-05-26": 0.0651,
+   "2025-06-02": -0.0007,
+   "2025-06-09": 0.0128,
+   "2025-06-16": -0.0407,
+   "2025-06-23": 0.0219,
+   "2025-06-30": -0.048,
+   "2025-07-07": 0.106,
+   "2025-07-14": 0.0007,
+   "2025-07-21": 0.0605,
+   "2025-07-28": -0.0647,
+   "2025-08-04": 0.0904,
+   "2025-08-11": 0.0459,
+   "2025-08-18": 0.1105,
+   "2025-08-25": -0.0206,
+   "2025-09-01": 0.0271,
+   "2025-09-08": 0.0177,
+   "2025-09-15": 0.0,
+   "2025-09-22": -0.0491,
+   "2025-09-29": 0.005,
+   "2025-10-06": 0.0023,
+   "2025-10-13": -0.1022,
+   "2025-10-20": 0.0625,
+   "2025-10-27": -0.0023,
+   "2025-11-03": -0.042,
+   "2025-11-10": -0.0335,
+   "2025-11-17": -0.0145,
+   "2025-11-24": 0.0857,
+   "2025-12-01": -0.0165,
+   "2025-12-08": -0.0707,
+   "2025-12-15": 0.1219,
+   "2025-12-22": -0.0822,
+   "2025-12-29": -0.0056,
+   "2026-01-05": -0.0422,
+   "2026-01-12": -0.0309,
+   "2026-01-19": 0.002,
+   "2026-01-26": -0.0108,
+   "2026-02-02": -0.0684,
+   "2026-02-09": -0.0154,
+   "2026-02-16": -0.0149,
+   "2026-02-23": -0.0303,
+   "2026-03-02": -0.0305,
+   "2026-03-09": -0.1136,
+   "2026-03-16": -0.0464,
+   "2026-03-23": 0.0238,
+   "2026-03-30": -0.0335,
+   "2026-04-08": -0.0019,
+   "2026-04-13": 0.0627,
+   "2026-04-20": -0.0545,
+   "2026-04-27": 0.0038,
+   "2026-05-04": 0.0651,
+   "2026-05-11": 0.0009,
+   "2026-05-18": -0.0494,
+   "2026-05-26": -0.0123,
+   "2026-06-01": 0.0382,
+   "2026-06-08": -0.0157,
+   "2026-06-15": -0.0168,
+   "2026-06-22": -0.0691,
+   "2026-06-29": 0.0609,
+   "2026-07-06": 0.0684,
+   "2026-07-13": 0.0261,
+   "2026-07-20": 0.0448,
+   "2026-07-27": 0.0597,
+   "2026-08-03": -0.0056,
+   "2026-08-10": -0.0279,
+   "2026-08-17": 0.0205,
+   "2026-08-24": 0.1424,
+   "2026-08-31": -0.0613,
+   "2026-09-07": -0.0413,
+   "2026-09-14": -0.0939,
+   "2026-09-21": -0.0482,
+   "2026-09-28": 0.0818
+  },
+  "history_from": "2023-01-03",
+  "history_to": "2026-09-28"
+ },
+ "factor_news": {
+  "HKG:2800": {
+   "pages": [
+    "https://stockanalysis.com/quote/hkg/2800/history/"
+   ],
+   "removed_sell_side": 0,
+   "headlines": []
+  },
+  "KWEB": {
+   "pages": [
+    "https://stockanalysis.com/etf/kweb/",
+    "https://stockanalysis.com/etf/kweb/history/"
+   ],
+   "removed_sell_side": 1,
+   "headlines": [
+    {
+     "date": "2026-09-29",
+     "source": "CNBC",
+     "title": "China factory activity expands for first time in three months in September",
+     "summary": "China's factory activity returned to growth in September as a deepening economic malaise prompts policymakers to ramp up stimulus steps and bolster growth.",
+     "url": "https://www.cnbc.com/2026/09/30/china-manufacturing-exports-capacity-economy-.html"
+    },
+    {
+     "date": "2026-09-29",
+     "source": "Barrons",
+     "title": "China Unveils Stimulus as Its Economy Sputters. Investors Are Still Wary.",
+     "summary": "China unveiled another tranche of \u201cmini-stimulus\u201d Tuesday as the world's second largest economy continues to see broad-based weakness.",
+     "url": "https://www.barrons.com/articles/china-economy-stimulus-growth-stocks-079e3fc2"
+    },
+    {
+     "date": "2026-09-27",
+     "source": "CNBC",
+     "title": "China posts weakest industrial profit growth this year, expanding 4.2% in August",
+     "summary": "Economists expect Beijing to lean harder on stimulus to stabilize corporate profitability, as consolidation accelerates in sectors facing sluggish demand and fierce competition.",
+     "url": "https://www.cnbc.com/2026/09/28/china-posts-weakest-industrial-profit-growth-this-year-expanding-4point2percent-in-august-.html"
+    },
+    {
+     "date": "2026-09-24",
+     "source": "Reuters",
+     "title": "China's fuel inventories hit over decade lows, raising concerns over comeback of export curbs",
+     "summary": "China's gasoline and diesel inventories have fallen to their lowest levels in more than a decade as exports surge and domestic demand recovers seasonally, according to GL Consulting.",
+     "url": "https://www.reuters.com/business/energy/chinas-fuel-inventories-hit-over-decade-lows-raising-concerns-over-comeback-2026-09-24/"
+    },
+    {
+     "date": "2026-09-19",
+     "source": "Reuters",
+     "title": "China keeps benchmark lending rates unchanged for 16th month in September",
+     "summary": "China kept its benchmark lending rates unchanged for the 16th straight month on Sunday, in line with market expectations.",
+     "url": "https://www.reuters.com/business/finance/china-keeps-benchmark-lending-rates-unchanged-16th-month-september-2026-09-20/"
+    },
+    {
+     "date": "2026-09-15",
+     "source": "Bloomberg Markets and Finance",
+     "title": "How AI is Transforming China's Economy",
+     "summary": "CICC Chief Economist and former China State Administration of Foreign Exchange (SAFE) official Yanliang Miao reacts to the August economic activity data released by Beijing. He also discusses AI's imp...",
+     "url": "lQO7vAj1BEg"
+    },
+    {
+     "date": "2026-09-14",
+     "source": "Reuters",
+     "title": "Companies left China to dodge tariffs. Now some are heading back",
+     "summary": "A year after shifting production and sourcing out of China to avoid higher U.S. tariffs, some companies are learning that replicating the country's factory ecosystem is not so easy and are bringing ma...",
+     "url": "https://www.reuters.com/business/retail-consumer/companies-left-china-dodge-tariffs-now-some-are-heading-back-2026-09-14/"
+    },
+    {
+     "date": "2026-09-09",
+     "source": "ETF Trends",
+     "title": "World Markets Watchlist: September 8, 2026",
+     "summary": "Our global markets watchlist tracks nine prominent indexes from economies around the world.",
+     "url": "https://www.etftrends.com/china-insights-content-hub/world-markets-watchlist-september-8-2026/"
+    }
+   ]
+  },
+  "IEF": {
+   "pages": [
+    "https://stockanalysis.com/etf/ief/",
+    "https://stockanalysis.com/etf/ief/history/"
+   ],
+   "removed_sell_side": 1,
+   "headlines": [
+    {
+     "date": "2026-10-08",
+     "source": "Forbes",
+     "title": "Bond Yields Just Hit A 24-Year High. Is It Finally Time To Buy Long-Term Treasuries?",
+     "summary": "The 10-year Treasury yield touched roughly 5.35% on Monday, its highest level since April 2002. The 30-year bond briefly pushed above 5.7%.",
+     "url": "https://www.forbes.com/sites/jasonkirsch/2026/10/09/bond-yields-just-hit-a-24-year-high-is-it-finally-time-to-buy-long-term-treasuries/"
+    },
+    {
+     "date": "2026-10-08",
+     "source": "ETF Trends",
+     "title": "Bond Valuations Reflect Higher Hurdle for Capital",
+     "summary": "The global competition for capital remains the key dynamic keeping yields elevated. Notably, all of the September increase in 10-year Treasury yields came from real yields, as implied by the TIPS mark...",
+     "url": "https://www.etftrends.com/etf-strategist-content-hub/bond-valuations-reflect-higher-hurdle-for-capital/"
+    },
+    {
+     "date": "2026-10-07",
+     "source": "Bloomberg Markets and Finance",
+     "title": "US 30-YearYieldsReturn to 2002 High",
+     "summary": "US Treasuries resumed their retreat, lifting the30-year yieldback to its highest since 2002 as climbing oil prices raised concern about faster inflation and more central bank interest-rate increases...",
+     "url": "XGgow8qC25c"
+    },
+    {
+     "date": "2026-10-05",
+     "source": "Barrons",
+     "title": "Global Bond Markets Sell Off on France's Fiscal Worries",
+     "summary": "Japan, Europe, and the U.S. were feeling the fallout from France, where yields on its benchmark 10-year note climbed closer to 5%, the highest since 2002.",
+     "url": "https://www.barrons.com/articles/u-s-bonds-10-year-yield-france-japan-253db64d"
+    },
+    {
+     "date": "2026-10-02",
+     "source": "ETF Trends",
+     "title": "Navigating Fixed Income Duration as Treasury Yields Retreat",
+     "summary": "Yesterday's cooler-than-expected PCE print finally gave the bond market a breather, pulling Treasury yields down from their brief 5.3% peak. For financial advisors, this recent whiplash brings fixed i...",
+     "url": "https://www.etftrends.com/fixed-income-content-hub/navigating-fixed-income-duration-as-treasury-yields-retreat/"
+    },
+    {
+     "date": "2026-10-02",
+     "source": "The Guardian",
+     "title": "US bonds rally after weaker-than-expected jobs report shows hiring slowdown \u2013 business live",
+     "summary": "Rolling coverage of the latest economic and financial news",
+     "url": "https://www.theguardian.com/business/live/2026/oct/02/french-bond-sell-off-euro-crisis-cuts-tax-rises-eurozone-inflation-us-jobs-report-latest-news-updates"
+    },
+    {
+     "date": "2026-10-02",
+     "source": "Bloomberg Markets and Finance",
+     "title": "US Treasury Rebound Pulls Yields Off Multi-Decade Highs",
+     "summary": "\"Bloomberg: The Asia Trade\" brings you everything you need to know to get ahead as the trading day begins in Asia. Bloomberg TV is live from Tokyo and Sydney with Shery Ahn and Haidi Stroud-Watts, get...",
+     "url": "-l67iosF8DA"
+    },
+    {
+     "date": "2026-10-01",
+     "source": "WSJ",
+     "title": "The Bond Rout Is Deepening Even as Oil Tankers Return to the Strait of Hormuz",
+     "summary": "Supply chains that transform crude into fuel are still under siege, and that is keeping prices high\u2014helping drive a brutal bond selloff.",
+     "url": "https://www.wsj.com/finance/commodities-futures/the-bond-rout-is-deepening-even-as-oil-tankers-return-to-the-strait-of-hormuz-30d8189d"
+    }
+   ]
+  }
+ },
+ "notes": [
+  "No FX factor for HKG: the HKD is pegged to the USD."
+ ]
+}

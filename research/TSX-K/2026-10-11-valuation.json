@@ -1,0 +1,80 @@
+{
+ "industry": {
+  "industry": "Gold",
+  "known": true,
+  "best": "Mine NAV",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 14.502339477815173,
+    "base": 18.043268099733595,
+    "bull": 53.017710400779286
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.954,
+     "base": 6.385,
+     "bull": 7.988
+    },
+    "ttm_ebitda": 5385100000,
+    "peak_earnings": "TTM EBITDA is 3.0x its 5y median: bear/base use the 5y average (2.096e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 33.85,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 14.502339477815173,
+  "base": 18.043268099733595,
+  "bull": 53.017710400779286
+ },
+ "used": [
+  "ev_ebitda"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.5715704733289462,
+  "base": -0.4669640147789189,
+  "bull": 0.5662543692992403
+ },
+ "implied_growth": null,
+ "ticker": "TSX:K",
+ "asof": "2026-10-11",
+ "quote_currency": "CAD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.4255669999999998,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tsx/K/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tsx/K/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tsx/K/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tsx/K/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tsx/K/statistics/"
+ }
+}

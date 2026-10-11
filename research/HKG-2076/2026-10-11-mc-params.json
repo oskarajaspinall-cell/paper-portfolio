@@ -1,0 +1,60 @@
+{
+  "ticker": "HKG:2076",
+  "date": "2026-10-11",
+  "scenarios": {
+    "bull": {
+      "probability": {"value": 0.25, "cite": "evaluation Decision json scenarios.bull.probability, research/HKG-2076/2026-10-11-evaluation.md"},
+      "probability_evidence": "Q2 2026 revenue growth accelerated to +14.1% YoY and S&M fell from 33.5% of revenue (2023) to 20.5% (2025), evidence the network effect is reducing the need to buy growth (note §2; GlobeNewsWire 2026-09-21 release); the net-cash balance sheet funds an annual dividend (adopted Aug 2025) and repeated buyback authorizations that could support a re-rating (note §5, 20-F).",
+      "target_price_12m": {"value": 131.83, "cite": "evaluation Decision json scenarios.bull.target_price_12m, research/HKG-2076/2026-10-11-evaluation.md"},
+      "target_band": {"value": 0.2393, "cite": "Half the spread between fact sheet Fair value bull-case anchors: DCF 216.20 vs EV/Revenue 279.28 HKD (factsheet Fair value table) = 31.54 HKD; /131.83 target = 0.2393, below the 0.379 residual-vol cap (mc-inputs.json regression.residual_vol.blended)."}
+    },
+    "base": {
+      "probability": {"value": 0.45, "cite": "evaluation Decision json scenarios.base.probability, research/HKG-2076/2026-10-11-evaluation.md"},
+      "probability_evidence": "The stock already trades below its own 5-year minimum on every multiple (P/FCF 10.8x vs 5y min 15.0x; EV/EBITDA 7.2x vs 5y min 15.0x; factsheet Valuation table) while the -36.2% 12-month decline despite improving ROCE/margins (factsheet Price and Quality tables) signals a VIE/HFCAA risk discount (note §6, 20-F) that the base case assumes only partly closes (re-rate to the 5y P/FCF minimum, not to the mechanical 131.83 base fair value).",
+      "target_price_12m": {"value": 83.30, "cite": "evaluation Decision json scenarios.base.target_price_12m, research/HKG-2076/2026-10-11-evaluation.md"},
+      "target_band": {"value": 0.379, "cite": "Half the spread between fact sheet Fair value base-case anchors: DCF 100.58 vs EV/Revenue 194.35 HKD (factsheet Fair value table) = 46.885 HKD; /83.30 target = 0.5629, capped at the 0.379 residual-vol ceiling (mc-inputs.json regression.residual_vol.blended) per the band rule."}
+    },
+    "bear": {
+      "probability": {"value": 0.30, "cite": "evaluation Decision json scenarios.bear.probability, research/HKG-2076/2026-10-11-evaluation.md"},
+      "probability_evidence": "Shares outstanding rose 4.74% YoY even with buybacks (factsheet Other table), the 2026-09-01 change of directors' executive positions is unexplained (GlobeNewsWire), and the portfolio already holds HKG:9999, adding correlated China-VIE exposure that could fall on one regulatory headline (evaluation Bear case); the 20-F names HFCAA/PCAOB inspection and VIE-enforceability as risks that could keep the price near the 52-week low of 48.36 (factsheet Price table).",
+      "target_price_12m": {"value": 48.36, "cite": "evaluation Decision json scenarios.bear.target_price_12m, research/HKG-2076/2026-10-11-evaluation.md"},
+      "target_band": {"value": 0.379, "cite": "Half the spread between fact sheet Fair value bear-case anchors: DCF 39.48 vs EV/Revenue 136.28 HKD (factsheet Fair value table) = 48.40 HKD; /48.36 target = 1.0008, capped at the 0.379 residual-vol ceiling (mc-inputs.json regression.residual_vol.blended) per the band rule."}
+    }
+  },
+  "factors": {
+    "HKG:2800": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.HKG:2800.headlines = [] (no recent headlines shown for this proxy); the macro overlay rates macro as context-only, secondary to the stock-specific VIE/regulatory discount (research/HKG-2076/2026-10-11-macro.md)."},
+      "uncertainty_12m": {"value": 0.21297083492544905, "cite": "mc-inputs.json regression.factor_stats.HKG:2800.vol_annual"}
+    },
+    "KWEB": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.KWEB headlines are mixed: China factory activity returned to growth and stimulus was unveiled (CNBC, Barrons, 2026-09-29) but industrial profit growth was the weakest this year (CNBC, 2026-09-27) and 'investors are still wary' (Barrons); no clear directional signal, so 0."},
+      "uncertainty_12m": {"value": 0.33893351155209517, "cite": "mc-inputs.json regression.factor_stats.KWEB.vol_annual"}
+    },
+    "IEF": {
+      "expected_12m_move": {"value": 0.0, "cite": "mc-inputs.json factor_news.IEF headlines are mixed: 10y yields hit a 24-year high and a 'bond rout deepened' (Forbes, WSJ, Barrons, early Oct 2026) but then retreated on a cooler PCE print and a weak jobs report (ETF Trends, Guardian, Bloomberg, Oct 2026); the macro overlay also finds no direct transmission of US rates into this CNY-earning, net-cash company (research/HKG-2076/2026-10-11-macro.md), so 0."},
+      "uncertainty_12m": {"value": 0.06593661014800657, "cite": "mc-inputs.json regression.factor_stats.IEF.vol_annual"}
+    }
+  },
+  "jumps": [
+    {
+      "name": "Large negative earnings reaction",
+      "reason": "Kanzhun's quarterly results have produced outsized share-price reactions (e.g. the Q2 2024 report), and the note's invalidation triggers are all tied to quarterly margin/growth figures that could disappoint (note §4).",
+      "cite": "note §4 'What would prove this wrong' (margin/growth triggers checked each quarter); mc-inputs.json analogues.event_weeks",
+      "annual_probability": {"value": 0.24, "cite": "1 of 15 quarterly earnings weeks in mc-inputs.json analogues.event_weeks moved <=-10% (2024-08-26, Q2 2024 earnings_release, -14.18%); probability of >=1 such reaction in 4 quarters = 1-(1-1/15)^4 = 0.24."},
+      "impact": {"value": -0.1418, "cite": "mc-inputs.json analogues.event_weeks week 2024-08-26 (Q2 2024 earnings_release), move -0.1418, matching largest_falls entry for the same week."},
+      "analogue": {"week": "2024-08-26", "move": -0.1418},
+      "assumption": null
+    },
+    {
+      "name": "China VIE-enforceability / HFCAA regulatory shock",
+      "reason": "The 20-F names the VIE contractual structure and HFCAA/PCAOB inspection risk as a key durability risk for the Nasdaq ADR line, which also weighs on sentiment for these HK-listed shares (note §2, §6); the evaluation's bear case assumes this risk premium may not close inside 12 months and overlaps with the portfolio's existing HKG:9999 China exposure.",
+      "cite": "note §2 and §6 (20-F, sec.gov); evaluation Bear case, research/HKG-2076/2026-10-11-evaluation.md",
+      "annual_probability": {"value": 0.41, "cite": "2 of ~195 non-earnings weekly moves since 2023-01-03 in mc-inputs.json analogues.largest_falls fell >=15% (2025-04-07 -19.24%, 2024-07-15 -16.77%; neither matches an event_weeks earnings date); probability of >=1 such week in 52 weeks = 1-(1-2/195)^52 = 0.41."},
+      "impact": {"value": -0.1924, "cite": "mc-inputs.json analogues.largest_falls week 2025-04-07, move -0.1924 (non-earnings week, broad China/regulatory-type shock)."},
+      "analogue": {"week": "2025-04-07", "move": -0.1924},
+      "assumption": null
+    }
+  ],
+  "no_discrete_risks_reason": null,
+  "technical_tilt": null
+}
