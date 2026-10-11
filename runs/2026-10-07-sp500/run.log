@@ -5091,3 +5091,161 @@ OK research/TDG/2026-10-11-evaluation.md Bear case=132 Bull case=119 decision=AV
 [21:54:06] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py TDG --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/TDG/2026-10-11-evaluation.md
 [21:54:07] {"out": "research/TDG/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 494.55, "base": 803.2, "bull": 1547.89}, "price": 1107.99}
 [21:54:09] == done TDG
+[21:54:15] == Research batch 03: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-11-batch-03.md; uploaded to GitHub
+[21:54:16] == initiate KO
+[21:54:16] $ claude -p Ticker KO, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:54:49] Note: research/GEHC/2026-10-11.md
+Fact sheet: research/GEHC/factsheet-2026-10-11.md
+OK research/GEHC/2026-10-11.md type=CORE 1=53 2=149 3=139 4=41 5=89 6=89 total=560
+
+Conflicts/blocked URLs: Reuters article on the Sofie Biosciences deal could not be fetched (blocked); no retry per policy — used the Business Wire headlines already listed in the fact sheet's News & sentiment section instead. gehealthcare.com/about/businesses returned 404; used gehealthcare.com/about instead. No data conflicts found between qualitative sources and the fact sheet.
+[21:54:49] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/GEHC/2026-10-11.md
+[21:54:49] OK /Users/oskaraspinall/paper-portfolio/research/GEHC/2026-10-11.md type=CORE 1=53 2=149 3=139 4=41 5=89 6=89 total=560
+[21:54:49] $ claude -p Ticker GEHC, date 2026-10-11. Research: research/GEHC/factsheet-2026-10-11.md, research/GEHC/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/GEHC/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:55:34] Note: research/MDT/2026-10-11.md
+Fact sheet: research/MDT/factsheet-2026-10-11.md
+OK research/MDT/2026-10-11.md type=CORE 1=51 2=123 3=141 4=64 5=92 6=105 total=576
+
+Blocked/failed fetches (no usable content, moved on): medtronic.com/en-us/about/news/minimed-split-off.html (404), medtronic.com/en-us/investors.html (404), sec.gov EDGAR 8-K browse page and the 2026-09-17 8-K filing (no substantive MiniMed detail), news.medtronic.com (no revenue/rationale detail), medtronic.com/en-us/about.html (404). No data conflicts found.
+[21:55:34] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/MDT/2026-10-11.md
+[21:55:34] OK /Users/oskaraspinall/paper-portfolio/research/MDT/2026-10-11.md type=CORE 1=51 2=123 3=141 4=64 5=92 6=105 total=576
+[21:55:34] $ claude -p Ticker MDT, date 2026-10-11. Research: research/MDT/factsheet-2026-10-11.md, research/MDT/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/MDT/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:56:26] research/GEHC/2026-10-11-macro.md
+OK research/GEHC/2026-10-11-macro.md macro_weight=secondary words=249
+[21:56:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/GEHC/2026-10-11-macro.md
+[21:56:26] OK /Users/oskaraspinall/paper-portfolio/research/GEHC/2026-10-11-macro.md macro_weight=secondary words=249
+[21:56:26] $ claude -p Evaluate GEHC for 2026-10-11: fact sheet research/GEHC/factsheet-2026-10-11.md, note research/GEHC/2026-10-11.md, state portfolio/state.json, macro overlay research/GEHC/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[21:56:33] research/KO/2026-10-11.md
+research/KO/factsheet-2026-10-11.md
+OK research/KO/2026-10-11.md type=CORE 1=48 2=141 3=131 4=80 5=86 6=66 total=552
+
+Data conflicts: none. Blocked/failed fetches (not retried, per instructions): reuters.com article (fetch error, used headline only), coca-colacompany.com/about-us/history/the-coca-cola-system (404), coca-colacompany.com/investors (redirected, not followed).
+[21:56:33] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/KO/2026-10-11.md
+[21:56:34] OK /Users/oskaraspinall/paper-portfolio/research/KO/2026-10-11.md type=CORE 1=48 2=141 3=131 4=80 5=86 6=66 total=552
+[21:56:34] $ claude -p Ticker KO, date 2026-10-11. Research: research/KO/factsheet-2026-10-11.md, research/KO/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/KO/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:57:01] research/GEHC/2026-10-11-evaluation.md
+OK research/GEHC/2026-10-11-evaluation.md Bear case=142 Bull case=105 decision=AVOID
+[21:57:01] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/GEHC/2026-10-11-evaluation.md
+[21:57:01] OK /Users/oskaraspinall/paper-portfolio/research/GEHC/2026-10-11-evaluation.md Bear case=142 Bull case=105 decision=AVOID
+[21:57:01] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py GEHC --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/GEHC/2026-10-11-evaluation.md
+[21:57:01] {"out": "research/GEHC/2026-10-11-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 44.68, "base": 59.13, "bull": 74.31}, "price": 65.74}
+[21:57:03] == done GEHC
+[21:57:03] == initiate COP
+[21:57:03] $ claude -p Ticker COP, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:57:12] research/MDT/2026-10-11-macro.md
+OK research/MDT/2026-10-11-macro.md macro_weight=context words=79
+[21:57:12] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/MDT/2026-10-11-macro.md
+[21:57:13] OK /Users/oskaraspinall/paper-portfolio/research/MDT/2026-10-11-macro.md macro_weight=context words=79
+[21:57:13] $ claude -p Evaluate MDT for 2026-10-11: fact sheet research/MDT/factsheet-2026-10-11.md, note research/MDT/2026-10-11.md, state portfolio/state.json, macro overlay research/MDT/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[21:58:02] research/MDT/2026-10-11-evaluation.md
+OK research/MDT/2026-10-11-evaluation.md Bear case=133 Bull case=119 decision=AVOID
+[21:58:02] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/MDT/2026-10-11-evaluation.md
+[21:58:02] OK /Users/oskaraspinall/paper-portfolio/research/MDT/2026-10-11-evaluation.md Bear case=133 Bull case=119 decision=AVOID
+[21:58:02] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py MDT --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/MDT/2026-10-11-evaluation.md
+[21:58:03] {"out": "research/MDT/2026-10-11-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 64.21, "base": 84.9, "bull": 102.0}, "price": 88.48}
+[21:58:05] == done MDT
+[21:58:05] == initiate SPGI
+[21:58:05] $ claude -p Ticker SPGI, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:58:56] research/KO/2026-10-11-macro.md
+OK research/KO/2026-10-11-macro.md macro_weight=secondary words=236
+[21:58:56] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/KO/2026-10-11-macro.md
+[21:58:56] OK /Users/oskaraspinall/paper-portfolio/research/KO/2026-10-11-macro.md macro_weight=secondary words=236
+[21:58:56] $ claude -p Evaluate KO for 2026-10-11: fact sheet research/KO/factsheet-2026-10-11.md, note research/KO/2026-10-11.md, state portfolio/state.json, macro overlay research/KO/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[21:59:04] research/COP/2026-10-11.md
+research/COP/factsheet-2026-10-11.md
+OK research/COP/2026-10-11.md type=CORE 1=51 2=123 3=124 4=87 5=92 6=122 total=599
+
+Data conflicts: none.
+
+Blocked/failed fetches: both Reuters article URLs (Norway/Teesside sale, oil-price-floor comments) returned "unable to fetch from www.reuters.com" — cited only via the fact sheet's listed headline URLs, not independently verified. conocophillips.com/sustainability/managing-risk/ returned 404.
+[21:59:04] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/COP/2026-10-11.md
+[21:59:04] OK /Users/oskaraspinall/paper-portfolio/research/COP/2026-10-11.md type=CORE 1=51 2=123 3=124 4=87 5=92 6=122 total=599
+[21:59:04] $ claude -p Ticker COP, date 2026-10-11. Research: research/COP/factsheet-2026-10-11.md, research/COP/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/COP/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:59:35] research/KO/2026-10-11-evaluation.md
+OK research/KO/2026-10-11-evaluation.md Bear case=126 Bull case=127 decision=AVOID
+[21:59:35] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/KO/2026-10-11-evaluation.md
+[21:59:35] OK /Users/oskaraspinall/paper-portfolio/research/KO/2026-10-11-evaluation.md Bear case=126 Bull case=127 decision=AVOID
+[21:59:35] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py KO --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/KO/2026-10-11-evaluation.md
+[21:59:35] {"out": "research/KO/2026-10-11-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 33.02, "base": 62.39, "bull": 69.87}, "price": 88.05}
+[21:59:38] == done KO
+[21:59:38] == initiate GILD
+[21:59:38] $ claude -p Ticker GILD, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:00:54] research/COP/2026-10-11-macro.md
+OK research/COP/2026-10-11-macro.md macro_weight=secondary words=247
+[22:00:54] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/COP/2026-10-11-macro.md
+[22:00:54] OK /Users/oskaraspinall/paper-portfolio/research/COP/2026-10-11-macro.md macro_weight=secondary words=247
+[22:00:54] $ claude -p Evaluate COP for 2026-10-11: fact sheet research/COP/factsheet-2026-10-11.md, note research/COP/2026-10-11.md, state portfolio/state.json, macro overlay research/COP/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[22:01:34] research/COP/2026-10-11-evaluation.md
+OK research/COP/2026-10-11-evaluation.md Bear case=133 Bull case=115 decision=AVOID
+[22:01:34] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/COP/2026-10-11-evaluation.md
+[22:01:35] OK /Users/oskaraspinall/paper-portfolio/research/COP/2026-10-11-evaluation.md Bear case=133 Bull case=115 decision=AVOID
+[22:01:35] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py COP --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/COP/2026-10-11-evaluation.md
+[22:01:35] {"out": "research/COP/2026-10-11-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 83.09, "base": 107.11, "bull": 112.55}, "price": 134.1}
+[22:01:37] == done COP
+[22:01:37] == initiate SNA
+[22:01:37] $ claude -p Ticker SNA, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:02:37] Note: research/GILD/2026-10-11.md
+Fact sheet: research/GILD/factsheet-2026-10-11.md
+OK research/GILD/2026-10-11.md type=CORE 1=47 2=139 3=148 4=56 5=73 6=67 total=530
+
+No data conflicts; no blocked URLs (all WebFetches succeeded).
+
+**Decision: AVOID (conviction 3).** Business quality is genuine (ROIC 34.4% TTM, rising; durable HIV franchise being extended via lenacapavir), but there is no margin of safety: the DCF base fair value (151.99) is essentially equal to the last close (151.17, +0.5%), EV/EBITDA and EV/Sales sit at the top of or above GILD's own 5-year range and above peers, and the bear case implies -49.3% downside. Below the min_buy_conviction threshold of 4 — this fails the "attractive valuation" leg of the core thesis even though the business leg is solid.
+[22:02:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/GILD/2026-10-11.md
+[22:02:37] OK /Users/oskaraspinall/paper-portfolio/research/GILD/2026-10-11.md type=CORE 1=47 2=139 3=148 4=56 5=73 6=67 total=530
+[22:02:37] $ claude -p Ticker GILD, date 2026-10-11. Research: research/GILD/factsheet-2026-10-11.md, research/GILD/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/GILD/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:03:51] research/GILD/2026-10-11-macro.md
+OK research/GILD/2026-10-11-macro.md macro_weight=context words=70
+[22:03:51] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/GILD/2026-10-11-macro.md
+[22:03:51] OK /Users/oskaraspinall/paper-portfolio/research/GILD/2026-10-11-macro.md macro_weight=context words=70
+[22:03:51] $ claude -p Evaluate GILD for 2026-10-11: fact sheet research/GILD/factsheet-2026-10-11.md, note research/GILD/2026-10-11.md, state portfolio/state.json, macro overlay research/GILD/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[22:04:25] research/GILD/2026-10-11-evaluation.md
+OK research/GILD/2026-10-11-evaluation.md Bear case=133 Bull case=118 decision=AVOID
+[22:04:25] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/GILD/2026-10-11-evaluation.md
+[22:04:26] OK /Users/oskaraspinall/paper-portfolio/research/GILD/2026-10-11-evaluation.md Bear case=133 Bull case=118 decision=AVOID
+[22:04:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py GILD --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/GILD/2026-10-11-evaluation.md
+[22:04:26] {"out": "research/GILD/2026-10-11-valuation.md", "used": ["dcf"], "fair_value": {"bear": 76.71, "base": 151.99, "bull": 153.46}, "price": 151.17}
+[22:04:28] == done GILD
+[22:04:28] == initiate SPG
+[22:04:28] $ claude -p Ticker SPG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:04:29] - Note: `research/SPGI/2026-10-11.md`
+- Fact sheet: `research/SPGI/factsheet-2026-10-11.md`
+- `OK research/SPGI/2026-10-11.md type=CORE 1=50 2=150 3=142 4=64 5=81 6=82 total=569`
+- Blocked URLs (403, not retried): `https://www.spglobal.com/en/investor-relations`, `https://www.spglobal.com/en/`
+- Data conflict (disclosed in note, not resolved): fact sheet's DCF/FCFE fair value (base $262.59, −35.6% vs last close) conflicts with its own P/E-based fair value ($551.67–$658.06, implying undervaluation); both are stockanalysis.com-derived and neither is picked.
+[22:04:29] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/SPGI/2026-10-11.md
+[22:04:29] OK /Users/oskaraspinall/paper-portfolio/research/SPGI/2026-10-11.md type=CORE 1=50 2=150 3=142 4=64 5=81 6=82 total=569
+[22:04:29] $ claude -p Ticker SPGI, date 2026-10-11. Research: research/SPGI/factsheet-2026-10-11.md, research/SPGI/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/SPGI/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:04:36] Note: research/SNA/2026-10-11.md
+Fact sheet: research/SNA/factsheet-2026-10-11.md
+Check: OK research/SNA/2026-10-11.md type=CORE 1=52 2=130 3=134 4=96 5=80 6=67 total=559
+
+Blocked/failed fetches (moved on, not retried): https://www.snapon.com/en-us/investors (404), https://www.sec.gov/Archives/edgar/data/91440/000009144026000045/0000091440-26-000045-index.htm (404). No data conflicts found between qualitative sources and the fact sheet.
+[22:04:36] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/SNA/2026-10-11.md
+[22:04:36] OK /Users/oskaraspinall/paper-portfolio/research/SNA/2026-10-11.md type=CORE 1=52 2=130 3=134 4=96 5=80 6=67 total=559
+[22:04:36] $ claude -p Ticker SNA, date 2026-10-11. Research: research/SNA/factsheet-2026-10-11.md, research/SNA/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/SNA/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:06:24] research/SPGI/2026-10-11-macro.md
+OK research/SPGI/2026-10-11-macro.md macro_weight=secondary words=246
+[22:06:24] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/SPGI/2026-10-11-macro.md
+[22:06:24] OK /Users/oskaraspinall/paper-portfolio/research/SPGI/2026-10-11-macro.md macro_weight=secondary words=246
+[22:06:24] $ claude -p Evaluate SPGI for 2026-10-11: fact sheet research/SPGI/factsheet-2026-10-11.md, note research/SPGI/2026-10-11.md, state portfolio/state.json, macro overlay research/SPGI/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[22:07:19] research/SNA/2026-10-11-macro.md
+OK research/SNA/2026-10-11-macro.md macro_weight=secondary words=248
+[22:07:19] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/SNA/2026-10-11-macro.md
+[22:07:19] OK /Users/oskaraspinall/paper-portfolio/research/SNA/2026-10-11-macro.md macro_weight=secondary words=248
+[22:07:19] $ claude -p Evaluate SNA for 2026-10-11: fact sheet research/SNA/factsheet-2026-10-11.md, note research/SNA/2026-10-11.md, state portfolio/state.json, macro overlay research/SNA/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[22:07:30] research/SPGI/2026-10-11-evaluation.md
+OK research/SPGI/2026-10-11-evaluation.md Bear case=126 Bull case=89 decision=AVOID
+[22:07:30] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/SPGI/2026-10-11-evaluation.md
+[22:07:30] OK /Users/oskaraspinall/paper-portfolio/research/SPGI/2026-10-11-evaluation.md Bear case=126 Bull case=89 decision=AVOID
+[22:07:30] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py SPGI --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/SPGI/2026-10-11-evaluation.md
+[22:07:30] {"out": "research/SPGI/2026-10-11-valuation.md", "used": ["dcf", "fcfe"], "fair_value": {"bear": 151.73, "base": 262.59, "bull": 435.59}, "price": 407.82}
+[22:07:31] research/SPG/2026-10-11.md
+research/SPG/factsheet-2026-10-11.md
+OK research/SPG/2026-10-11.md type=CORE 1=47 2=121 3=144 4=60 5=77 6=46 total=495
+
+No data conflicts. Blocked URLs: https://www.simon.com/about (HTTP 307) and https://investors.simon.com (HTTP 403); not retried per instructions.
+[22:07:31] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/SPG/2026-10-11.md
+[22:07:31] OK /Users/oskaraspinall/paper-portfolio/research/SPG/2026-10-11.md type=CORE 1=47 2=121 3=144 4=60 5=77 6=46 total=495
+[22:07:31] $ claude -p Ticker SPG, date 2026-10-11. Research: research/SPG/factsheet-2026-10-11.md, research/SPG/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/SPG/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[22:07:33] == done SPGI
