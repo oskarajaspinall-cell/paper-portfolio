@@ -1,0 +1,135 @@
+{
+ "industry": {
+  "industry": "Financial Data & Stock Exchanges",
+  "known": true,
+  "best": "DCF / FCFE",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "fcfe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 153.0472985273971,
+    "base": 206.09639529079962,
+    "bull": 236.7331924165894
+   },
+   "implied_growth": 0.13258116178792229,
+   "discount_rate": 0.0922,
+   "cost_of_equity": 0.0922,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.025157242187857934,
+     "base": 0.05641985942200371,
+     "bull": 0.09036495331229899
+    },
+    "cash_flow_margin": {
+     "bear": 0.5361198549627445,
+     "base": 0.6344343811045995,
+     "bull": 0.6344343811045995
+    },
+    "cagr_3y": 0.09036495331229899,
+    "cagr_5y": 0.08531448437571587,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 153.0472985273971,
+    "base": 206.09639529079962,
+    "bull": 236.7331924165894
+   },
+   "implied_growth": 0.13258116178792229,
+   "discount_rate": 0.0922,
+   "cost_of_equity": 0.0922,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.025157242187857934,
+     "base": 0.05641985942200371,
+     "bull": 0.09036495331229899
+    },
+    "cash_flow_margin": {
+     "bear": 0.5361198549627445,
+     "base": 0.6344343811045995,
+     "bull": 0.6344343811045995
+    },
+    "cagr_3y": 0.09036495331229899,
+    "cagr_5y": 0.08531448437571587,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 268.4799381,
+    "base": 283.49311452,
+    "bull": 288.8237946
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 22.765,
+     "base": 24.038,
+     "bull": 24.49
+    },
+    "ttm_eps": 11.79354
+   }
+  }
+ ],
+ "price": 280.56,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 153.0472985273971,
+  "base": 206.09639529079962,
+  "bull": 236.7331924165894
+ },
+ "used": [
+  "dcf",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.45449351822285045,
+  "base": -0.2654106241417179,
+  "bull": -0.1562118890198554
+ },
+ "implied_growth": 0.13258116178792229,
+ "ticker": "CME",
+ "asof": "2026-10-11",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/cme/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/cme/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/cme/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/cme/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/cme/statistics/"
+ }
+}
