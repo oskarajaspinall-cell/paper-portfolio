@@ -1,0 +1,112 @@
+{
+ "industry": {
+  "industry": "Residential Construction",
+  "known": true,
+  "best": "NAV / DCF",
+  "second": "P/E",
+  "best_models": [
+   "nav",
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both*"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 26.57911753986757,
+    "base": 96.78288640156117,
+    "bull": 158.94299983302483
+   },
+   "implied_growth": 0.06842407406790382,
+   "discount_rate": 0.10053491124537042,
+   "cost_of_equity": 0.107694,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.004223066851877826,
+     "base": 0.034021163590060896,
+     "bull": 0.05953078806399925
+    },
+    "cash_flow_margin": {
+     "bear": 0.03196447854802534,
+     "base": 0.08642693092602241,
+     "bull": 0.1251246262602591
+    },
+    "cagr_3y": 0.026553866296244344,
+    "cagr_5y": 0.05953078806399925,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 39.101259252,
+    "base": 73.525662771,
+    "bull": 84.153989007
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.988,
+     "base": 7.499,
+     "bull": 8.583
+    },
+    "ttm_eps": 9.804729
+   }
+  }
+ ],
+ "price": 112.12,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 30.753164777245047,
+  "base": 89.03047852470745,
+  "bull": 134.01332955768322
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7257120515764801,
+  "base": -0.20593579624770386,
+  "bull": 0.1952669421841171
+ },
+ "implied_growth": 0.06842407406790382,
+ "ticker": "PHM",
+ "asof": "2026-10-11",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/phm/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/phm/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/phm/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/phm/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/phm/statistics/"
+ }
+}

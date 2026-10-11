@@ -4839,3 +4839,90 @@ OK research/AMGN/2026-10-11-evaluation.md Bear case=127 Bull case=135 decision=A
 [16:11:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py AMGN --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/AMGN/2026-10-11-evaluation.md
 [16:11:09] {"out": "research/AMGN/2026-10-11-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 288.9, "base": 376.99, "bull": 528.16}, "price": 414.87}
 [16:11:10] == done AMGN
+[16:11:14] == Research batch 01: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-11-batch-01.md; uploaded to GitHub
+[16:11:14] == initiate PHM
+[16:11:14] $ claude -p Ticker PHM, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:13:50] Note: research/CFG/2026-10-11.md
+Fact sheet: research/CFG/factsheet-2026-10-11.md
+OK research/CFG/2026-10-11.md type=CORE 1=39 2=103 3=141 4=71 5=69 6=68 total=491
+
+Data conflicts: none. Blocked/skipped URLs: none; one WebFetch of the SEC 10-Q main document (cfg-20260630.htm) returned only XBRL taxonomy fragments with no usable figures, so CET1, net charge-offs and dividend-per-share remain [data unavailable] per the fact sheet. Flagged a name collision: a 2026-07-20 headline about "Citizens Financial Corp." (Elkins, WV) is a different company and was excluded.
+[16:13:50] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/CFG/2026-10-11.md
+[16:13:50] OK /Users/oskaraspinall/paper-portfolio/research/CFG/2026-10-11.md type=CORE 1=39 2=103 3=141 4=71 5=69 6=68 total=491
+[16:13:50] $ claude -p Ticker CFG, date 2026-10-11. Research: research/CFG/factsheet-2026-10-11.md, research/CFG/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/CFG/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:15:28] research/NCLH/2026-10-11.md
+research/NCLH/factsheet-2026-10-11.md
+OK research/NCLH/2026-10-11.md type=CORE 1=50 2=145 3=135 4=69 5=71 6=62 total=532
+
+No data conflicts. One blocked/not-fetched item: the GlobeNewswire note-issuance URL was cited only as the headline listed on the fact sheet (per house rules, not independently fetched, since globenewswire.com is not allowlisted).
+[16:15:28] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/NCLH/2026-10-11.md
+[16:15:28] OK /Users/oskaraspinall/paper-portfolio/research/NCLH/2026-10-11.md type=CORE 1=50 2=145 3=135 4=69 5=71 6=62 total=532
+[16:15:28] $ claude -p Ticker NCLH, date 2026-10-11. Research: research/NCLH/factsheet-2026-10-11.md, research/NCLH/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/NCLH/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:15:40] research/PHM/2026-10-11.md
+research/PHM/factsheet-2026-10-11.md
+OK research/PHM/2026-10-11.md type=CORE 1=77 2=144 3=142 4=79 5=98 6=59 total=599
+
+No data conflicts. One blocked/failed fetch: https://pultegroupinc.com/investors/news-events/default.aspx (404, not allowlist-blocked); used as a secondary IR source attempt only, superseded by the sec.gov 10-K and businesswire citations actually used.
+[16:15:40] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/PHM/2026-10-11.md
+[16:15:40] OK /Users/oskaraspinall/paper-portfolio/research/PHM/2026-10-11.md type=CORE 1=77 2=144 3=142 4=79 5=98 6=59 total=599
+[16:15:40] $ claude -p Ticker PHM, date 2026-10-11. Research: research/PHM/factsheet-2026-10-11.md, research/PHM/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/PHM/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:16:39] research/CFG/2026-10-11-macro.md
+OK research/CFG/2026-10-11-macro.md macro_weight=primary words=247
+[16:16:39] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/CFG/2026-10-11-macro.md
+[16:16:39] OK /Users/oskaraspinall/paper-portfolio/research/CFG/2026-10-11-macro.md macro_weight=primary words=247
+[16:16:39] $ claude -p Evaluate CFG for 2026-10-11: fact sheet research/CFG/factsheet-2026-10-11.md, note research/CFG/2026-10-11.md, state portfolio/state.json, macro overlay research/CFG/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[16:17:11] Decision: AVOID, CORE, conviction 2.
+
+research/CFG/2026-10-11-evaluation.md
+OK research/CFG/2026-10-11-evaluation.md Bear case=147 Bull case=109 decision=AVOID
+[16:17:11] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/CFG/2026-10-11-evaluation.md
+[16:17:12] OK /Users/oskaraspinall/paper-portfolio/research/CFG/2026-10-11-evaluation.md Bear case=147 Bull case=109 decision=AVOID
+[16:17:12] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py CFG --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/CFG/2026-10-11-evaluation.md
+[16:17:12] {"out": "research/CFG/2026-10-11-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 32.4, "base": 43.38, "bull": 56.4}, "price": 63.57}
+[16:17:13] == done CFG
+[16:17:13] == initiate WM
+[16:17:13] $ claude -p Ticker WM, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:17:36] research/PHM/2026-10-11-macro.md
+OK research/PHM/2026-10-11-macro.md macro_weight=primary words=240
+[16:17:36] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/PHM/2026-10-11-macro.md
+[16:17:36] research/NCLH/2026-10-11-macro.md
+OK research/NCLH/2026-10-11-macro.md macro_weight=secondary words=245
+[16:17:36] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/NCLH/2026-10-11-macro.md
+[16:17:36] OK /Users/oskaraspinall/paper-portfolio/research/PHM/2026-10-11-macro.md macro_weight=primary words=240
+[16:17:36] $ claude -p Evaluate PHM for 2026-10-11: fact sheet research/PHM/factsheet-2026-10-11.md, note research/PHM/2026-10-11.md, state portfolio/state.json, macro overlay research/PHM/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[16:17:36] OK /Users/oskaraspinall/paper-portfolio/research/NCLH/2026-10-11-macro.md macro_weight=secondary words=245
+[16:17:36] $ claude -p Evaluate NCLH for 2026-10-11: fact sheet research/NCLH/factsheet-2026-10-11.md, note research/NCLH/2026-10-11.md, state portfolio/state.json, macro overlay research/NCLH/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[16:18:18] research/NCLH/2026-10-11-evaluation.md
+OK research/NCLH/2026-10-11-evaluation.md Bear case=142 Bull case=120 decision=AVOID
+[16:18:18] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/NCLH/2026-10-11-evaluation.md
+[16:18:18] OK /Users/oskaraspinall/paper-portfolio/research/NCLH/2026-10-11-evaluation.md Bear case=142 Bull case=120 decision=AVOID
+[16:18:18] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py NCLH --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/NCLH/2026-10-11-evaluation.md
+[16:18:18] {"out": "research/NCLH/2026-10-11-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 20.59, "base": 24.2, "bull": 35.9}, "price": 15.57}
+[16:18:19] == done NCLH
+[16:18:19] == initiate HSY
+[16:18:19] $ claude -p Ticker HSY, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:18:27] research/PHM/2026-10-11-evaluation.md
+OK research/PHM/2026-10-11-evaluation.md Bear case=137 Bull case=124 decision=AVOID
+
+Note: the claude.ai Google Calendar, Google Drive and Notion connectors are unavailable until you authorize them in your claude.ai connector settings.
+[16:18:27] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/PHM/2026-10-11-evaluation.md
+[16:18:27] OK /Users/oskaraspinall/paper-portfolio/research/PHM/2026-10-11-evaluation.md Bear case=137 Bull case=124 decision=AVOID
+[16:18:27] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py PHM --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/PHM/2026-10-11-evaluation.md
+[16:18:27] {"out": "research/PHM/2026-10-11-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 30.75, "base": 89.03, "bull": 134.01}, "price": 112.12}
+[16:18:29] == done PHM
+[16:18:29] == initiate PCG
+[16:18:29] $ claude -p Ticker PCG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:21:06] You've hit your session limit · resets 8:40pm (Europe/London)
+[16:21:07] !! FAILED HSY: claude -p Ticker HSY, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[16:21:07] == initiate TEL
+[16:21:07] $ claude -p Ticker TEL, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:21:07] You've hit your session limit · resets 8:40pm (Europe/London)
+[16:21:07] !! FAILED PCG: claude -p Ticker PCG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[16:21:07] == initiate NKE
+[16:21:07] $ claude -p Ticker NKE, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[16:21:08] You've hit your session limit · resets 8:40pm (Europe/London)
+[16:21:08] !! FAILED TEL: claude -p Ticker TEL, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[16:21:10] You've hit your session limit · resets 8:40pm (Europe/London)
+[16:21:10] !! FAILED NKE: claude -p Ticker NKE, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[16:21:25] You've hit your session limit · resets 8:40pm (Europe/London)
+[16:21:25] !! FAILED WM: claude -p Ticker WM, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
