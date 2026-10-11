@@ -242,19 +242,6 @@ def attempt(t):
         return t, "FAILED"
 
 
-def mc_retry(t):  # evaluations that finished but whose Monte Carlo stalled (Mac slept overnight)
-    slug = Ticker(t).slug
-    for ev in sorted((ROOT / "research" / slug).glob("*-evaluation.md")):
-        asof = ev.name[:10]
-        if not (ROOT / "research" / slug / f"{asof}-montecarlo.json").exists() and \
-                not (ROOT / "research" / slug / f"{asof}-mc-needs-review.md").exists():
-            log(f"== Monte Carlo retry {t} {asof}")
-            wr.run_montecarlo(t, slug, asof, agent, log, run)
-
-
-with ThreadPoolExecutor(max_workers=3) as pool:
-    list(pool.map(mc_retry, ["TPR", "EOG", "PNR"]))
-
 with ThreadPoolExecutor(max_workers=3) as pool:
     for t, r in pool.map(one, queue):
         if r != "not started":

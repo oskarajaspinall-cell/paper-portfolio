@@ -41,7 +41,7 @@ from common import ROOT, Ticker, load_config  # noqa: E402
 PY = [str(ROOT / "bin" / "py")]
 TOOLS = {"researcher": "Read,Write,WebFetch,Bash(bin/py:*)", "evaluator": "Read,Write,Bash(bin/py:*)",
          "portfolio-manager": "Read,Write,Bash(bin/py:*)", "weekly-reviewer": "Read,Write,WebFetch",
-         "mc-parameters": "Read,Write,Bash(bin/py:*)", "macro-overlay": "Read,Write,WebFetch,Bash(bin/py:*)",
+         "macro-overlay": "Read,Write,WebFetch,Bash(bin/py:*)",
          "macro-strategist": "Read,Write,WebFetch,Bash(bin/py:*)"}
 
 
@@ -99,19 +99,6 @@ def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, l
         sh(PY + ["scripts/valuation.py", ticker, "--asof", asof, "--eval", str(ev)], log)
     except StepFailed as e:
         log(f"!! FAIR VALUE NOT UPDATED for {ticker}: {e}")
-    # Monte Carlo is informational (never feeds the decision): only for BUY/ADD decisions and holdings, which
-    # saves an AI session on every AVOID (~90% of initiations)
-    from decision_log import decision_from_eval
-    try:
-        dec = decision_from_eval(ev.read_text()).get("decision")
-    except ValueError:
-        dec = None
-    held = ticker in json.loads((ROOT / "portfolio" / "state.json").read_text()).get("holdings", {}) \
-        if (ROOT / "portfolio" / "state.json").exists() else False
-    if dec in ("BUY", "ADD") or held:
-        run_montecarlo(ticker, slug, asof, agent, log, run)
-    else:
-        log(f"Monte Carlo skipped for {ticker} ({dec}: informational only, runs for BUY/ADD and holdings)")
     return ev
 
 
@@ -131,27 +118,6 @@ def run_macro(ticker: str, slug: str, asof: str, agent, log) -> bool:
     except StepFailed as e:
         log(f"!! MACRO OVERLAY UNAVAILABLE for {ticker}: {e}")
         return False
-
-
-def run_montecarlo(ticker: str, slug: str, asof: str, agent, log, run: Path) -> None:
-    """After research: the mc-parameters agent writes cited parameters, then numpy simulates. A failure is
-    logged loudly and listed in the report, but never cancels the decision or trades (it is not a signal)."""
-    params = ROOT / "research" / slug / f"{asof}-mc-params.json"
-    try:
-        sh(PY + ["scripts/mc_inputs.py", ticker, "--asof", asof], log)  # regression, vol, analogues (no LLM)
-        agent("mc-parameters", f"Ticker {ticker}, date {asof}. Research: research/{slug}/factsheet-{asof}.md, "
-                               f"research/{slug}/{asof}.md, research/{slug}/{asof}-evaluation.md, inputs research/{slug}/{asof}-mc-inputs.json"
-                               + (f", macro overlay research/{slug}/{asof}-macro.md" if (ROOT / "research" / slug / f"{asof}-macro.md").exists() else "")
-                               + ". "
-                               f"Write research/{slug}/{asof}-mc-params.json and run the simulation.", log)
-        if not params.exists():
-            raise StepFailed("mc-parameters wrote no parameters file")
-        sh(PY + ["scripts/montecarlo.py", str(params)], log)  # idempotent re-run: confirms the written output
-        sh(PY + ["scripts/mc_backtest.py", ticker, "--asof", asof], log)  # calibration coverage (no LLM)
-    except StepFailed as e:
-        log(f"!! MONTE CARLO FAILED for {ticker}: {e}")
-        with (run / "montecarlo-failures.log").open("a") as fh:
-            fh.write(f"{ticker}\t{str(e)[:400]}\n")
 
 
 def run_cash_strategy(asof: str, agent, log) -> None:

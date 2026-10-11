@@ -41,9 +41,7 @@ Every fact sheet includes a **fair value**: the industry-appropriate method from
 mine or reserve NAV isn't available), with bear/base/bull assumptions taken from the stock's own five-year history,
 a discount rate of the 10-year Treasury yield + beta × 5%, and a reverse DCF showing the growth the price implies.
 It informs the research only (no buy rule) and is logged with each decision so its accuracy can be checked later.
-After each evaluation, a **Monte Carlo simulation** (numpy, 10,000 paths, fixed seed) turns the researched
-bull/base/bear scenarios into return distributions for 3, 6 and 12 months (`research/<TICKER>/<date>-montecarlo.md`);
-the AI only extracts cited parameters, never results. Each research note includes the stock's recent **news headlines** (analyst price targets and ratings are
+Each research note includes the stock's recent **news headlines** (analyst price targets and ratings are
 filtered out by rule) and sentiment figures such as short interest.
 
 Results are committed to the `main` branch ("Weekly run 2026-10-10", "Daily update 2026-10-12"). If anything goes wrong, **no trades

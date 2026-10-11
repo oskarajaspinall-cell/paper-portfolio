@@ -261,7 +261,7 @@ def test_run_reinitiates_fired_core_trigger(fake_repo, monkeypatch):
             (fake_repo / "runs" / "2026-10-10" / "submit.json").write_text("{}")
 
     assert wr.run("2026-10-10", False, 0, agent=agent) == 0
-    assert seen == ["macro-strategist", "researcher", "macro-overlay", "evaluator", "mc-parameters", "portfolio-manager"]
+    assert seen == ["macro-strategist", "researcher", "macro-overlay", "evaluator", "portfolio-manager"]  # no Monte Carlo (owner 2026-10-11)
     assert "full re-initiation of an existing CORE holding (scan: core or macro trigger fired)" in prompts[1]
     assert "Decide ADD, HOLD, TRIM or SELL" in prompts[3]
 
@@ -420,47 +420,6 @@ def test_decision_log_relabels_low_conviction_buys(real_cfg, tmp_path, monkeypat
     assert dl.read(out)[0]["note"].startswith("relabelled BUY->AVOID")
 
 
-def test_montecarlo_failure_is_reported_but_never_blocks(fake_repo, monkeypatch):
-    import weekly_report
-    picks = [{"ticker": "N0", "type": "CORE", "score": 90}]
-    (fake_repo / "reports" / "screen" / "2026-10-10.json").write_text(json.dumps({"picks": picks}))
-    monkeypatch.setattr(wr, "sh", make_sh(fake_repo, dict(SCAN_QUIET, exits=[], mechanical_requests=[]), []))
-    pm = []
-
-    def agent(name, prompt, log):
-        d = fake_repo / "research" / "N0"
-        d.mkdir(exist_ok=True)
-        if name == "researcher":
-            (d / "2026-10-10.md").write_text("note")
-        elif name == "evaluator":
-            (d / "2026-10-10-evaluation.md").write_text(EVAL.replace("AAA", "N0") % ("BUY", 4))
-        elif name == "mc-parameters":
-            raise wr.StepFailed("12m median outside the researched bear-to-bull range")
-        elif name == "portfolio-manager":
-            pm.append(prompt)
-            (fake_repo / "runs" / "2026-10-10" / "submit.json").write_text("{}")
-
-    assert wr.run("2026-10-10", False, None, agent=agent) == 0       # the week is not cancelled
-    assert pm and "N0" in pm[0]                                         # the decision still goes to the PM
-    log = (fake_repo / "runs" / "2026-10-10" / "montecarlo-failures.log").read_text()
-    assert log.startswith("N0\t") and "bear-to-bull" in log
-    (fake_repo / "runs" / "2026-10-10" / "submit-mechanical.json").unlink()  # fake-shell artefact, not real output
-    monkeypatch.setattr(weekly_report, "ROOT", fake_repo)
-    md = weekly_report.build(fake_repo / "runs" / "2026-10-10", "2026-10-10", fake_repo / "portfolio")
-    assert "**N0** Monte Carlo FAILED (nothing written; decision unaffected)" in md
-
-
-# ------------------------------------------------------------------ macro overlay
-MACRO_OK = """# Macro overlay: X (X) — 2026-10-07
-## Assessment
-Real yields rose 0.7pp in 3 months [Certain] (https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10, 2026-10-05).
-## Overlay
-```json
-%s
-```
-"""
-
-
 def macro_md(**over):
     d = {"macro_weight": "secondary", "macro_basis": "long-duration growth multiple is sensitive to real yields",
          "dominant_chain": "real yields -> discount rate -> multiple", "market_pricing": "breakevens 2.36%",
@@ -471,6 +430,16 @@ def macro_md(**over):
          "sources": ["https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10 (2026-10-05)"]}
     d.update(over)
     return MACRO_OK % json.dumps(d)
+
+
+MACRO_OK = """# Macro overlay: X (X) — 2026-10-07
+## Assessment
+Real yields rose 0.7pp in 3 months [Certain] (https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10, 2026-10-05).
+## Overlay
+```json
+%s
+```
+"""
 
 
 def test_check_macro_valid_and_invalid(real_cfg):
@@ -542,8 +511,9 @@ def test_dashboard_week_tile_spans_seven_days():
     assert dashboard.week_change(ser[:1]) is None
 
 
-@pytest.mark.parametrize("decision,held,runs", [("AVOID", False, False), ("BUY", False, True), ("HOLD", True, True)])
-def test_monte_carlo_only_for_buys_and_holdings(tmp_path, monkeypatch, decision, held, runs):
+@pytest.mark.parametrize("decision,held", [("AVOID", False), ("BUY", False), ("HOLD", True)])
+def test_no_monte_carlo_step(tmp_path, monkeypatch, decision, held):
+    """Owner 2026-10-11: the Monte Carlo step is removed (usage). Research runs researcher -> evaluator only."""
     (tmp_path / "research" / "XYZ").mkdir(parents=True)
     (tmp_path / "portfolio").mkdir()
     (tmp_path / "portfolio" / "state.json").write_text(json.dumps({"holdings": {"XYZ": {}} if held else {}}))
@@ -551,19 +521,17 @@ def test_monte_carlo_only_for_buys_and_holdings(tmp_path, monkeypatch, decision,
     monkeypatch.setattr(wr, "check_doc", lambda *a: None)
     monkeypatch.setattr(wr, "sh", lambda *a, **k: "")
     monkeypatch.setattr(wr, "run_macro", lambda *a: False)
-    ran = []
-    monkeypatch.setattr(wr, "run_montecarlo", lambda *a: ran.append(a[0]))
+    names = []
 
     def agent(name, prompt, log):
+        names.append(name)
         d = tmp_path / "research" / "XYZ"
         if name == "researcher":
             (d / "2026-10-10.md").write_text("note")
         if name == "evaluator":
             (d / "2026-10-10-evaluation.md").write_text("# E\n```json\n" + json.dumps({"decision": decision}) + "\n```\n")
-    logs = []
-    wr.research_and_evaluate("XYZ", "CORE", "2026-10-10", "why", agent, logs.append, tmp_path)
-    assert (ran == ["XYZ"]) == runs
-    assert runs or any("Monte Carlo skipped" in m for m in logs)
+    wr.research_and_evaluate("XYZ", "CORE", "2026-10-10", "why", agent, lambda m: None, tmp_path)
+    assert names == ["researcher", "evaluator"] and not hasattr(wr, "run_montecarlo")
 
 
 def test_fair_value_reached_fires_once_per_crossing(cfg):
