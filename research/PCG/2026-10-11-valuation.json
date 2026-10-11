@@ -1,0 +1,103 @@
+{
+ "industry": {
+  "industry": "Utilities - Regulated Electric",
+  "known": true,
+  "best": "DCF / DDM",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "ddm"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "n/m",
+   "why": "free cash flow negative or too short a history"
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "best",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 2.6295336787564763,
+    "base": 3.0505952380952377,
+    "bull": 3.6188811188811187
+   },
+   "cost_of_equity": 0.0922,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 0.2
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 18.911232948,
+    "base": 24.284988702000003,
+    "bull": 24.748016099999997
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 13.621,
+     "base": 17.491500000000002,
+     "bull": 17.825
+    },
+    "ttm_eps": 1.388388
+   }
+  }
+ ],
+ "price": 13.13,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 8.056766768504318,
+  "base": 10.12872639273016,
+  "bull": 10.66192611258741
+ },
+ "used": [
+  "ddm",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.386384861500052,
+  "base": -0.22858138669229555,
+  "bull": -0.18797211632997635
+ },
+ "implied_growth": null,
+ "ticker": "PCG",
+ "asof": "2026-10-11",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/pcg/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/pcg/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/pcg/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/pcg/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/pcg/statistics/"
+ }
+}

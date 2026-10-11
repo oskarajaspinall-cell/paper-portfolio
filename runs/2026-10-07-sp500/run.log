@@ -4926,3 +4926,168 @@ Note: the claude.ai Google Calendar, Google Drive and Notion connectors are unav
 [16:21:10] !! FAILED NKE: claude -p Ticker NKE, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
 [16:21:25] You've hit your session limit · resets 8:40pm (Europe/London)
 [16:21:25] !! FAILED WM: claude -p Ticker WM, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
+[16:21:29] == Research batch 02: 3 researched, 0 BUY, 3 AVOID -> reports/research/2026-10-11-batch-02.md; uploaded to GitHub
+[16:21:29] == research loop stopped (repeated failures: usage limit?)
+[21:41:10] == research loop: 333 names queued, best first: ['WM', 'HSY', 'PCG', 'TEL', 'NKE', 'TDG', 'GEHC', 'MDT', 'KO', 'COP']
+[21:41:10] == initiate WM
+[21:41:10] $ claude -p Ticker WM, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:41:10] == initiate PCG
+[21:41:10] == initiate HSY
+[21:41:10] $ claude -p Ticker PCG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:41:10] $ claude -p Ticker HSY, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:43:57] research/HSY/2026-10-11.md
+research/HSY/factsheet-2026-10-11.md
+OK research/HSY/2026-10-11.md type=CORE 1=50 2=149 3=123 4=85 5=62 6=74 total=543
+
+No data conflicts. Blocked URL: https://www.reuters.com/business/retail-consumer/hershey-names-insider-dave-hulays-cfo-2026-09-02/ (fetch failed; CFO-change facts sourced from the PRNewswire release instead).
+[21:43:57] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HSY/2026-10-11.md
+[21:43:57] OK /Users/oskaraspinall/paper-portfolio/research/HSY/2026-10-11.md type=CORE 1=50 2=149 3=123 4=85 5=62 6=74 total=543
+[21:43:57] $ claude -p Ticker HSY, date 2026-10-11. Research: research/HSY/factsheet-2026-10-11.md, research/HSY/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/HSY/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:44:35] research/PCG/2026-10-11.md
+research/PCG/factsheet-2026-10-11.md
+OK research/PCG/2026-10-11.md type=CORE 1=61 2=138 3=145 4=74 5=92 6=99 total=609
+
+Blocked/failed fetches (not used in note): https://www.pgecorp.com/en/investors.html (404), https://investor.pgecorp.com and https://investor.pgecorp.com/news-events/press-releases/default.aspx (no usable content returned). No data conflicts found.
+[21:44:35] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/PCG/2026-10-11.md
+[21:44:35] OK /Users/oskaraspinall/paper-portfolio/research/PCG/2026-10-11.md type=CORE 1=61 2=138 3=145 4=74 5=92 6=99 total=609
+[21:44:35] $ claude -p Ticker PCG, date 2026-10-11. Research: research/PCG/factsheet-2026-10-11.md, research/PCG/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/PCG/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:44:37] research/WM/2026-10-11.md
+research/WM/factsheet-2026-10-11.md
+OK research/WM/2026-10-11.md type=CORE 1=61 2=146 3=139 4=89 5=86 6=60 total=581
+
+No data conflicts. Blocked/skipped URLs: businesswire.com (not allowlisted, logged by hook), https://www.wm.com/us/en/about/newsroom (404), https://www.wm.com/us/en/about/newsroom/press-releases (404), https://www.wm.com/us/en/inside-wm/our-business (404), https://investors.wm.com (403, not fetched).
+[21:44:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/WM/2026-10-11.md
+[21:44:38] OK /Users/oskaraspinall/paper-portfolio/research/WM/2026-10-11.md type=CORE 1=61 2=146 3=139 4=89 5=86 6=60 total=581
+[21:44:38] $ claude -p Ticker WM, date 2026-10-11. Research: research/WM/factsheet-2026-10-11.md, research/WM/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/WM/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:44:40] research/HSY/2026-10-11-macro.md
+OK research/HSY/2026-10-11-macro.md macro_weight=context words=72
+[21:44:40] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HSY/2026-10-11-macro.md
+[21:44:40] OK /Users/oskaraspinall/paper-portfolio/research/HSY/2026-10-11-macro.md macro_weight=context words=72
+[21:44:40] $ claude -p Evaluate HSY for 2026-10-11: fact sheet research/HSY/factsheet-2026-10-11.md, note research/HSY/2026-10-11.md, state portfolio/state.json, macro overlay research/HSY/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[21:45:37] research/HSY/2026-10-11-evaluation.md
+OK research/HSY/2026-10-11-evaluation.md Bear case=137 Bull case=110 decision=AVOID
+[21:45:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HSY/2026-10-11-evaluation.md
+[21:45:37] OK /Users/oskaraspinall/paper-portfolio/research/HSY/2026-10-11-evaluation.md Bear case=137 Bull case=110 decision=AVOID
+[21:45:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py HSY --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/HSY/2026-10-11-evaluation.md
+[21:45:38] {"out": "research/HSY/2026-10-11-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 109.82, "base": 188.32, "bull": 210.96}, "price": 162.74}
+[21:45:40] == done HSY
+[21:45:40] == initiate TEL
+[21:45:40] $ claude -p Ticker TEL, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:45:51] research/WM/2026-10-11-macro.md
+OK research/WM/2026-10-11-macro.md macro_weight=secondary words=238
+[21:45:51] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/WM/2026-10-11-macro.md
+[21:45:52] OK /Users/oskaraspinall/paper-portfolio/research/WM/2026-10-11-macro.md macro_weight=secondary words=238
+[21:45:52] $ claude -p Evaluate WM for 2026-10-11: fact sheet research/WM/factsheet-2026-10-11.md, note research/WM/2026-10-11.md, state portfolio/state.json, macro overlay research/WM/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[21:46:44] research/WM/2026-10-11-evaluation.md
+OK research/WM/2026-10-11-evaluation.md Bear case=126 Bull case=106 decision=AVOID
+[21:46:44] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/WM/2026-10-11-evaluation.md
+[21:46:44] OK /Users/oskaraspinall/paper-portfolio/research/WM/2026-10-11-evaluation.md Bear case=126 Bull case=106 decision=AVOID
+[21:46:44] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py WM --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/WM/2026-10-11-evaluation.md
+[21:46:45] {"out": "research/WM/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 116.23, "base": 180.01, "bull": 201.13}, "price": 208.83}
+[21:46:45] research/PCG/2026-10-11-macro.md
+OK research/PCG/2026-10-11-macro.md macro_weight=secondary words=234
+[21:46:45] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/PCG/2026-10-11-macro.md
+[21:46:45] OK /Users/oskaraspinall/paper-portfolio/research/PCG/2026-10-11-macro.md macro_weight=secondary words=234
+[21:46:45] $ claude -p Evaluate PCG for 2026-10-11: fact sheet research/PCG/factsheet-2026-10-11.md, note research/PCG/2026-10-11.md, state portfolio/state.json, macro overlay research/PCG/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[21:46:46] == done WM
+[21:46:46] == initiate NKE
+[21:46:46] $ claude -p Ticker NKE, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:47:26] I evaluated PG&E (PCG) as a core idea and the decision is **AVOID**, with conviction 2. The checker passed:
+
+`research/PCG/2026-10-11-evaluation.md`
+`OK research/PCG/2026-10-11-evaluation.md Bear case=133 Bull case=118 decision=AVOID`
+
+- **Cheap, but for a reason:** at $13.13 the stock is below its 5-year low on P/E, EV/EBITDA and price/book, and its P/E is 51% under the peer median. Any re-rating depends on California passing wildfire-liability reform. The last reform bill was shelved and nobody can time a revival.
+- **Weak fundamentals in the meantime:** the business burns cash (free cash flow margin −16.5%), carries 6.19x net debt to EBITDA and grew its share count 3.06% last year.
+- **Fair value is below the price:** the mechanical fair value is $10.13 base and $10.66 bull.
+- **Macro overlay:** rising rates and credit spreads tilt it moderately toward the bear case. I moved 0.05 of probability from the base scenario to the bear scenario to reflect that.
+- **Scenarios over 12 months:**
+
+| Scenario | Probability | Target |
+|---|---|---|
+| Bull | 20% | $18.80 |
+| Base | 45% | $13.13 |
+| Bear | 35% | $10.13 |
+
+  The weighted outcome is roughly flat, with a big downside tail.
+- **Triggers that would change my mind:** California enacts wildfire reform, free cash flow margin improves above −5%, share growth falls below 1% a year, or ROE rises above 10.5%.
+
+No entry price is set, because the rules only require one at conviction 3 or higher. The main obstacle is the regulatory risk, not the price.
+[21:47:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/PCG/2026-10-11-evaluation.md
+[21:47:26] OK /Users/oskaraspinall/paper-portfolio/research/PCG/2026-10-11-evaluation.md Bear case=133 Bull case=118 decision=AVOID
+[21:47:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py PCG --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/PCG/2026-10-11-evaluation.md
+[21:47:27] {"out": "research/PCG/2026-10-11-valuation.md", "used": ["ddm", "pe"], "fair_value": {"bear": 8.06, "base": 10.13, "bull": 10.66}, "price": 13.13}
+[21:47:28] == done PCG
+[21:47:28] == initiate TDG
+[21:47:28] $ claude -p Ticker TDG, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:48:37] research/TEL/2026-10-11.md
+research/TEL/factsheet-2026-10-11.md
+OK research/TEL/2026-10-11.md type=CORE 1=54 2=126 3=132 4=65 5=65 6=45 total=487
+
+Note: I exceeded the CORE WebFetch cap (6) by one call (te.com homepage, investors.te.com, SEC EDGAR browse, SEC filing index, and the 10-Q itself — two of the te.com/investors.te.com and sec.gov fetches returned no usable content: `https://www.te.com/en/about-te/news-center/news-releases.html` and `https://www.te.com/en/about-te/investors.html` were 404; the final SEC 10-Q fetch returned no extractable content). No numeric data was taken from any fetched source — all figures are from the fact sheet.
+[21:48:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TEL/2026-10-11.md
+[21:48:38] OK /Users/oskaraspinall/paper-portfolio/research/TEL/2026-10-11.md type=CORE 1=54 2=126 3=132 4=65 5=65 6=45 total=487
+[21:48:38] $ claude -p Ticker TEL, date 2026-10-11. Research: research/TEL/factsheet-2026-10-11.md, research/TEL/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/TEL/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:49:49] research/TEL/2026-10-11-macro.md
+OK research/TEL/2026-10-11-macro.md macro_weight=context words=70
+[21:49:49] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/TEL/2026-10-11-macro.md
+[21:49:49] OK /Users/oskaraspinall/paper-portfolio/research/TEL/2026-10-11-macro.md macro_weight=context words=70
+[21:49:49] $ claude -p Evaluate TEL for 2026-10-11: fact sheet research/TEL/factsheet-2026-10-11.md, note research/TEL/2026-10-11.md, state portfolio/state.json, macro overlay research/TEL/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[21:50:14] research/NKE/2026-10-11.md
+research/NKE/factsheet-2026-10-11.md
+OK research/NKE/2026-10-11.md type=CORE 1=45 2=143 3=145 4=70 5=86 6=45 total=534
+
+No conflicts or blocked URLs; all 6 WebFetch calls stayed within the allowlist (sec.gov).
+[21:50:14] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/NKE/2026-10-11.md
+[21:50:14] OK /Users/oskaraspinall/paper-portfolio/research/NKE/2026-10-11.md type=CORE 1=45 2=143 3=145 4=70 5=86 6=45 total=534
+[21:50:14] $ claude -p Ticker NKE, date 2026-10-11. Research: research/NKE/factsheet-2026-10-11.md, research/NKE/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/NKE/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:50:32] I wrote `research/TEL/2026-10-11-evaluation.md`. The decision is AVOID, CORE, conviction 3, at a price of $218.29 (2026-10-09 close).
+
+OK research/TEL/2026-10-11-evaluation.md Bear case=128 Bull case=101 decision=AVOID
+[21:50:32] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TEL/2026-10-11-evaluation.md
+[21:50:32] OK /Users/oskaraspinall/paper-portfolio/research/TEL/2026-10-11-evaluation.md Bear case=128 Bull case=101 decision=AVOID
+[21:50:32] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py TEL --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/TEL/2026-10-11-evaluation.md
+[21:50:32] {"out": "research/TEL/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 93.28, "base": 153.69, "bull": 173.74}, "price": 218.29}
+[21:50:33] == done TEL
+[21:50:33] == initiate GEHC
+[21:50:33] $ claude -p Ticker GEHC, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:51:12] Note: research/TDG/2026-10-11.md
+Fact sheet: research/TDG/factsheet-2026-10-11.md
+OK research/TDG/2026-10-11.md type=CORE 1=58 2=140 3=142 4=65 5=86 6=82 total=573
+
+Data conflict flagged in the note: TDG's valuation multiples screen cheap vs its own 5-year range and vs peers (HEI, HWM, RTX, GE), but the fact sheet's DCF-based base fair value (803.20) is 27.5% below the last close (1,107.99) — relative and absolute valuation disagree, and I did not pick one.
+
+Blocked URLs (403, not retried): `https://www.transdigm.com/news/transdigm-group-reports-fiscal-2026-third-quarter-results/`, `https://www.transdigm.com/investor-relations/`. `https://www.reuters.com/markets/companies/TDG.N/` was also unfetchable. Also note: one 2026-06-17 headline on the fact sheet ("TDG Announces Positive Results...") refers to TDG Gold Corp (TSXV:TDG), an unrelated company, and was excluded from the note.
+
+This researcher note does not include a BUY/AVOID decision — that is the evaluator's step (separate file, `<date>-evaluation.md`), which I have not run here.
+[21:51:12] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TDG/2026-10-11.md
+[21:51:12] OK /Users/oskaraspinall/paper-portfolio/research/TDG/2026-10-11.md type=CORE 1=58 2=140 3=142 4=65 5=86 6=82 total=573
+[21:51:12] $ claude -p Ticker TDG, date 2026-10-11. Research: research/TDG/factsheet-2026-10-11.md, research/TDG/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/TDG/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:51:18] research/NKE/2026-10-11-macro.md
+OK research/NKE/2026-10-11-macro.md macro_weight=secondary words=233
+[21:51:18] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/NKE/2026-10-11-macro.md
+[21:51:18] OK /Users/oskaraspinall/paper-portfolio/research/NKE/2026-10-11-macro.md macro_weight=secondary words=233
+[21:51:18] $ claude -p Evaluate NKE for 2026-10-11: fact sheet research/NKE/factsheet-2026-10-11.md, note research/NKE/2026-10-11.md, state portfolio/state.json, macro overlay research/NKE/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[21:51:52] Decision: **AVOID** NKE at conviction 2, so no position is taken.
+
+research/NKE/2026-10-11-evaluation.md
+OK research/NKE/2026-10-11-evaluation.md Bear case=128 Bull case=111 decision=AVOID
+[21:51:52] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/NKE/2026-10-11-evaluation.md
+[21:51:53] OK /Users/oskaraspinall/paper-portfolio/research/NKE/2026-10-11-evaluation.md Bear case=128 Bull case=111 decision=AVOID
+[21:51:53] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py NKE --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/NKE/2026-10-11-evaluation.md
+[21:51:53] {"out": "research/NKE/2026-10-11-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 21.29, "base": 26.52, "bull": 51.31}, "price": 34.71}
+[21:51:54] == done NKE
+[21:51:54] == initiate MDT
+[21:51:54] $ claude -p Ticker MDT, note type CORE, date 2026-10-11. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[21:53:05] research/TDG/2026-10-11-macro.md
+OK research/TDG/2026-10-11-macro.md macro_weight=secondary words=236
+[21:53:05] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/TDG/2026-10-11-macro.md
+[21:53:05] OK /Users/oskaraspinall/paper-portfolio/research/TDG/2026-10-11-macro.md macro_weight=secondary words=236
+[21:53:05] $ claude -p Evaluate TDG for 2026-10-11: fact sheet research/TDG/factsheet-2026-10-11.md, note research/TDG/2026-10-11.md, state portfolio/state.json, macro overlay research/TDG/2026-10-11-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[21:54:06] research/TDG/2026-10-11-evaluation.md
+OK research/TDG/2026-10-11-evaluation.md Bear case=132 Bull case=119 decision=AVOID
+[21:54:06] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TDG/2026-10-11-evaluation.md
+[21:54:06] OK /Users/oskaraspinall/paper-portfolio/research/TDG/2026-10-11-evaluation.md Bear case=132 Bull case=119 decision=AVOID
+[21:54:06] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py TDG --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/TDG/2026-10-11-evaluation.md
+[21:54:07] {"out": "research/TDG/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 494.55, "base": 803.2, "bull": 1547.89}, "price": 1107.99}
+[21:54:09] == done TDG
