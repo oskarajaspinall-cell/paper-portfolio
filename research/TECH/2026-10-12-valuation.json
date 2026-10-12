@@ -1,0 +1,87 @@
+{
+ "industry": {
+  "industry": "Biotechnology",
+  "known": true,
+  "best": "rNPV / probability-adjusted DCF",
+  "second": "EV/Revenue / pipeline value",
+  "best_models": [
+   "rnpv"
+  ],
+  "second_models": [
+   "ev_revenue",
+   "pipeline"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 52.820755211484695,
+    "base": 77.56898443401333,
+    "bull": 89.50199552254968
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.845,
+     "base": 10.043,
+     "bull": 11.585
+    },
+    "ttm_revenue": 1215039000
+   }
+  },
+  {
+   "model": "pipeline",
+   "label": "pipeline value",
+   "slot": "second",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline asset values, not on stockanalysis.com]"
+  }
+ ],
+ "price": 72.46,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 52.820755211484695,
+  "base": 77.56898443401333,
+  "bull": 89.50199552254968
+ },
+ "used": [
+  "ev_revenue"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.27103567193645184,
+  "base": 0.07050765158726668,
+  "bull": 0.23519176818313126
+ },
+ "implied_growth": null,
+ "ticker": "TECH",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/tech/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/tech/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/tech/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/tech/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/tech/statistics/"
+ }
+}

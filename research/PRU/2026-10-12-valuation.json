@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 71.51912960495545,
+    "base": 100.88055258324052,
+    "bull": 112.81101803452115
+   },
+   "cost_of_equity": 0.09684000000000001,
+   "assumptions": {
+    "roe": {
+     "bear": 0.08117,
+     "base": 0.10423,
+     "bull": 0.1136
+    },
+    "justified_pb": {
+     "bear": 0.7818763919821825,
+     "base": 1.1028674832962135,
+     "bull": 1.233296213808463
+    },
+    "bvps": 91.471146
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 51.77120188799999,
+    "base": 145.988598448,
+    "bull": 168.458162368
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.683,
+     "base": 13.2055,
+     "bull": 15.238
+    },
+    "ttm_eps": 11.055136
+   }
+  }
+ ],
+ "price": 113.09,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 64.93648703263698,
+  "base": 115.91656787149368,
+  "bull": 131.36006614568078
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.4257981516258116,
+  "base": 0.024993968268579803,
+  "bull": 0.16155333049501075
+ },
+ "implied_growth": null,
+ "ticker": "PRU",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/pru/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/pru/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/pru/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/pru/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/pru/statistics/"
+ }
+}
