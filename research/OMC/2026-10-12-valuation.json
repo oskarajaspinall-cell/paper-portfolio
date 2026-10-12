@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Advertising Agencies",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 72.92471364033983,
+    "base": 193.59432951286553,
+    "bull": 338.8978413892476
+   },
+   "implied_growth": -0.1223505696071818,
+   "discount_rate": 0.07172753799389041,
+   "cost_of_equity": 0.092284,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.006765808260834241,
+     "base": 0.040941440935623616,
+     "bull": 0.06523414722082599
+    },
+    "cash_flow_margin": {
+     "bear": 0.058293734384950766,
+     "base": 0.10794634196492828,
+     "bull": 0.15985039283460417
+    },
+    "cagr_3y": 0.06523414722082599,
+    "cagr_5y": 0.048531616521668486,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 44.792031968190855,
+    "base": 54.46225049701789,
+    "bull": 101.47458051689861
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.817,
+     "base": 8.8,
+     "bull": 9.138
+    },
+    "ttm_ebitda": 3676500000,
+    "peak_earnings": "TTM EBITDA is 1.5x its 5y median: bear/base use the 5y average (2.474e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 76.48,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 63.54715308295684,
+  "base": 147.21696984091633,
+  "bull": 259.75675443179796
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.16910103186510417,
+  "base": 0.9249080784638641,
+  "bull": 2.396401077821626
+ },
+ "implied_growth": -0.1223505696071818,
+ "ticker": "OMC",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/omc/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/omc/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/omc/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/omc/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/omc/statistics/"
+ }
+}
