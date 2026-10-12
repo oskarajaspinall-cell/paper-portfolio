@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 145.66044024663447,
+    "base": 179.2314673952221,
+    "bull": 220.2296063922373
+   },
+   "implied_growth": 0.027794051129348872,
+   "discount_rate": 0.10039100000000001,
+   "cost_of_equity": 0.10039100000000001,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.027418634225300956,
+     "base": 0.05825818613845961,
+     "bull": 0.09319547610323653
+    },
+    "cash_flow_margin": {
+     "bear": 0.13937378775284012,
+     "base": 0.15131233595800525,
+     "bull": 0.16160037508791122
+    },
+    "cagr_3y": 0.08983726845060191,
+    "cagr_5y": 0.09319547610323653,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 139.33628961,
+    "base": 155.602521475,
+    "bull": 163.006699
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 12.138,
+     "base": 13.555,
+     "bull": 14.2
+    },
+    "ttm_eps": 11.479345
+   }
+  }
+ ],
+ "price": 158.38,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 143.55239003442298,
+  "base": 171.35515208848142,
+  "bull": 201.1553039281582
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.0936204695389381,
+  "base": 0.08192418290492132,
+  "bull": 0.27008021169439456
+ },
+ "implied_growth": 0.027794051129348872,
+ "ticker": "RJF",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/rjf/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/rjf/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/rjf/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/rjf/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/rjf/statistics/"
+ }
+}

@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 567998.3780633487,
+    "base": 1092400.2189679153,
+    "bull": 1240364.2238704488
+   },
+   "cost_of_equity": 0.0922,
+   "assumptions": {
+    "roe": {
+     "bear": 0.09809,
+     "base": 0.16557,
+     "bull": 0.18461
+    },
+    "justified_pb": {
+     "bear": 1.0876488095238093,
+     "base": 2.091815476190476,
+     "bull": 2.375148809523809
+    },
+    "bvps": 522225.899656
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 295.88522630016,
+    "base": 379.06317667741604,
+    "bull": 437.027251587696
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.44,
+     "base": 9.531500000000001,
+     "bull": 10.989
+    },
+    "ttm_eps": 39.769519664
+   }
+  }
+ ],
+ "price": 515.62,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 378764.21378433256,
+  "base": 728393.1670375027,
+  "bull": 827055.1583308284
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 733.5801438740401,
+  "base": 1411.654992121141,
+  "bull": 1603.0013155634545
+ },
+ "implied_growth": null,
+ "ticker": "BRK.B",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/brk.b/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/brk.b/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/brk.b/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/brk.b/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/brk.b/statistics/"
+ }
+}

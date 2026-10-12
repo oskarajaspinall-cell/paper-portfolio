@@ -5698,3 +5698,166 @@ OK research/SLB/2026-10-12-evaluation.md Bear case=123 Bull case=114 decision=AV
 [02:41:48] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py SLB --asof 2026-10-12 --eval /Users/oskaraspinall/paper-portfolio/research/SLB/2026-10-12-evaluation.md
 [02:41:49] {"out": "research/SLB/2026-10-12-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 20.84, "base": 49.5, "bull": 65.85}, "price": 48.95}
 [02:41:50] == done SLB
+[02:41:53] == Research batch 01: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-12-batch-01.md; uploaded to GitHub
+[02:42:03] research/RJF/2026-10-12-macro.md
+OK research/RJF/2026-10-12-macro.md macro_weight=secondary words=241
+[02:42:03] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/RJF/2026-10-12-macro.md
+[02:42:03] OK /Users/oskaraspinall/paper-portfolio/research/RJF/2026-10-12-macro.md macro_weight=secondary words=241
+[02:42:03] $ claude -p Evaluate RJF for 2026-10-12: fact sheet research/RJF/factsheet-2026-10-12.md, note research/RJF/2026-10-12.md, state portfolio/state.json, macro overlay research/RJF/2026-10-12-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[02:42:14] == screened out GRMN: price above base fair value (-45.6%; floor +0%) (no AI research)
+[02:42:36] research/RJF/2026-10-12-evaluation.md
+OK research/RJF/2026-10-12-evaluation.md Bear case=139 Bull case=136 decision=AVOID
+[02:42:36] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/RJF/2026-10-12-evaluation.md
+[02:42:36] OK /Users/oskaraspinall/paper-portfolio/research/RJF/2026-10-12-evaluation.md Bear case=139 Bull case=136 decision=AVOID
+[02:42:36] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py RJF --asof 2026-10-12 --eval /Users/oskaraspinall/paper-portfolio/research/RJF/2026-10-12-evaluation.md
+[02:42:36] {"out": "research/RJF/2026-10-12-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 143.55, "base": 171.36, "bull": 201.16}, "price": 158.38}
+[02:42:37] == done RJF
+[02:42:38] == screened out NDAQ: price above base fair value (-40.5%; floor +0%) (no AI research)
+[02:43:15] Note path: research/AMCR/2026-10-12.md
+Fact sheet path: research/AMCR/factsheet-2026-10-12.md
+Check: OK research/AMCR/2026-10-12.md type=CORE 1=47 2=147 3=147 4=75 5=97 6=21 total=534
+
+No data conflicts. Two WebFetches returned no useful content (amcor.com/investors generic landing page; amcor.com/newsroom 404) — not blocked by allowlist, just lacked the detail sought.
+[02:43:15] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/AMCR/2026-10-12.md
+[02:43:15] OK /Users/oskaraspinall/paper-portfolio/research/AMCR/2026-10-12.md type=CORE 1=47 2=147 3=147 4=75 5=97 6=21 total=534
+[02:43:15] $ claude -p Ticker AMCR, date 2026-10-12. Research: research/AMCR/factsheet-2026-10-12.md, research/AMCR/2026-10-12.md. Macro snapshot: reports/macro/2026-10-12.md. Write research/AMCR/2026-10-12-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:43:22] == screened out ODFL: price above base fair value (-46.5%; floor +0%) (no AI research)
+[02:43:26] == screened out ABBV: price above base fair value (-40.8%; floor +0%) (no AI research)
+[02:44:10] == screened out CLX: price above base fair value (-7.9%; floor +0%) (no AI research)
+[02:44:13] == screened out AZO: price above base fair value (-18.2%; floor +0%) (no AI research)
+[02:44:30] research/AMCR/2026-10-12-macro.md
+OK research/AMCR/2026-10-12-macro.md macro_weight=secondary words=242
+[02:44:30] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/AMCR/2026-10-12-macro.md
+[02:44:30] OK /Users/oskaraspinall/paper-portfolio/research/AMCR/2026-10-12-macro.md macro_weight=secondary words=242
+[02:44:30] $ claude -p Evaluate AMCR for 2026-10-12: fact sheet research/AMCR/factsheet-2026-10-12.md, note research/AMCR/2026-10-12.md, state portfolio/state.json, macro overlay research/AMCR/2026-10-12-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[02:44:57] == screened out HLT: price above base fair value (-41.7%; floor +0%) (no AI research)
+[02:45:01] == screened out VMC: price above base fair value (-33.4%; floor +0%) (no AI research)
+[02:45:28] research/AMCR/2026-10-12-evaluation.md
+OK research/AMCR/2026-10-12-evaluation.md Bear case=132 Bull case=109 decision=AVOID
+[02:45:28] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/AMCR/2026-10-12-evaluation.md
+[02:45:28] OK /Users/oskaraspinall/paper-portfolio/research/AMCR/2026-10-12-evaluation.md Bear case=132 Bull case=109 decision=AVOID
+[02:45:28] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py AMCR --asof 2026-10-12 --eval /Users/oskaraspinall/paper-portfolio/research/AMCR/2026-10-12-evaluation.md
+[02:45:28] {"out": "research/AMCR/2026-10-12-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 35.88, "base": 58.05, "bull": 108.88}, "price": 41.72}
+[02:45:29] == done AMCR
+[02:45:52] == screened out DRI: price above base fair value (-19.5%; floor +0%) (no AI research)
+[02:45:55] == screened out VEEV: price above base fair value (-35.6%; floor +0%) (no AI research)
+[02:46:40] == screened out XYL: price above base fair value (-19.4%; floor +0%) (no AI research)
+[02:47:04] == screened out FIX: price above base fair value (-50.7%; floor +0%) (no AI research)
+[02:47:07] == screened out CVX: price above base fair value (-6.7%; floor +0%) (no AI research)
+[02:47:51] == initiate BRK.B
+[02:47:51] $ claude -p Ticker BRK.B, note type CORE, date 2026-10-12. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:48:12] == initiate UNH
+[02:48:12] $ claude -p Ticker UNH, note type CORE, date 2026-10-12. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:48:15] == screened out BDX: price above base fair value (-29.2%; floor +0%) (no AI research)
+[02:48:56] == screened out AMZN: price above base fair value (-8.4%; floor +0%) (no AI research)
+[02:49:20] == screened out JNJ: price above base fair value (-42.1%; floor +0%) (no AI research)
+[02:49:44] == screened out CAH: price above base fair value (-43.1%; floor +0%) (no AI research)
+[02:50:08] == initiate AMT
+[02:50:08] $ claude -p Ticker AMT, note type CORE, date 2026-10-12. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:51:22] research/UNH/2026-10-12.md
+research/UNH/factsheet-2026-10-12.md
+OK research/UNH/2026-10-12.md type=CORE 1=49 2=135 3=142 4=74 5=73 6=67 total=540
+
+Data conflicts: none. Blocked/unusable fetches: unitedhealthgroup.com/about/businesses.html and /about.html (404s, no content), two SEC EDGAR browse pages and the 10-K index (listings only, no substantive Item 1 text retrieved), and reuters.com (fetch tool could not access it — claim sourced from fact-sheet headline only, not the article).
+[02:51:22] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/UNH/2026-10-12.md
+[02:51:22] OK /Users/oskaraspinall/paper-portfolio/research/UNH/2026-10-12.md type=CORE 1=49 2=135 3=142 4=74 5=73 6=67 total=540
+[02:51:22] $ claude -p Ticker UNH, date 2026-10-12. Research: research/UNH/factsheet-2026-10-12.md, research/UNH/2026-10-12.md. Macro snapshot: reports/macro/2026-10-12.md. Write research/UNH/2026-10-12-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:51:37] research/BRK.B/2026-10-12.md
+research/BRK.B/factsheet-2026-10-12.md
+OK research/BRK.B/2026-10-12.md type=CORE 1=53 2=149 3=143 4=67 5=87 6=68 total=567
+
+Data conflicts: none. Blocked/unusable sources: the fact sheet's modelled fair value (bear/base/bull) is internally inconsistent (~1,500x the implied gap vs last close), consistent with a Class A/Class B share-count mismatch — flagged in the note and not used. The 2025 shareholder-letter PDF (berkshirehathaway.com/letters/2025ltr.pdf) could not be parsed as text by WebFetch; not used as a source.
+[02:51:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/BRK.B/2026-10-12.md
+[02:51:37] OK /Users/oskaraspinall/paper-portfolio/research/BRK.B/2026-10-12.md type=CORE 1=53 2=149 3=143 4=67 5=87 6=68 total=567
+[02:51:37] $ claude -p Ticker BRK.B, date 2026-10-12. Research: research/BRK.B/factsheet-2026-10-12.md, research/BRK.B/2026-10-12.md. Macro snapshot: reports/macro/2026-10-12.md. Write research/BRK.B/2026-10-12-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:52:50] research/BRK.B/2026-10-12-macro.md
+OK research/BRK.B/2026-10-12-macro.md macro_weight=secondary words=239
+[02:52:50] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/BRK.B/2026-10-12-macro.md
+[02:52:50] OK /Users/oskaraspinall/paper-portfolio/research/BRK.B/2026-10-12-macro.md macro_weight=secondary words=239
+[02:52:50] $ claude -p Evaluate BRK.B for 2026-10-12: fact sheet research/BRK.B/factsheet-2026-10-12.md, note research/BRK.B/2026-10-12.md, state portfolio/state.json, macro overlay research/BRK.B/2026-10-12-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[02:53:21] research/UNH/2026-10-12-macro.md
+OK research/UNH/2026-10-12-macro.md macro_weight=context words=66
+[02:53:21] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/UNH/2026-10-12-macro.md
+[02:53:21] OK /Users/oskaraspinall/paper-portfolio/research/UNH/2026-10-12-macro.md macro_weight=context words=66
+[02:53:21] $ claude -p Evaluate UNH for 2026-10-12: fact sheet research/UNH/factsheet-2026-10-12.md, note research/UNH/2026-10-12.md, state portfolio/state.json, macro overlay research/UNH/2026-10-12-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[02:53:27] research/BRK.B/2026-10-12-evaluation.md
+OK research/BRK.B/2026-10-12-evaluation.md Bear case=144 Bull case=114 decision=AVOID
+[02:53:27] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/BRK.B/2026-10-12-evaluation.md
+[02:53:27] OK /Users/oskaraspinall/paper-portfolio/research/BRK.B/2026-10-12-evaluation.md Bear case=144 Bull case=114 decision=AVOID
+[02:53:27] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py BRK.B --asof 2026-10-12 --eval /Users/oskaraspinall/paper-portfolio/research/BRK.B/2026-10-12-evaluation.md
+[02:53:27] {"out": "research/BRK.B/2026-10-12-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 378764.21, "base": 728393.17, "bull": 827055.16}, "price": 515.62}
+[02:53:28] == done BRK.B
+[02:53:49] == initiate SWK
+[02:53:49] $ claude -p Ticker SWK, note type CORE, date 2026-10-12. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:54:13] research/UNH/2026-10-12-evaluation.md
+OK research/UNH/2026-10-12-evaluation.md Bear case=120 Bull case=97 decision=AVOID
+[02:54:13] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/UNH/2026-10-12-evaluation.md
+[02:54:13] OK /Users/oskaraspinall/paper-portfolio/research/UNH/2026-10-12-evaluation.md Bear case=120 Bull case=97 decision=AVOID
+[02:54:13] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py UNH --asof 2026-10-12 --eval /Users/oskaraspinall/paper-portfolio/research/UNH/2026-10-12-evaluation.md
+[02:54:13] {"out": "research/UNH/2026-10-12-valuation.md", "used": ["pe"], "fair_value": {"bear": 337.96, "base": 385.28, "bull": 425.01}, "price": 379.3}
+[02:54:14] == done UNH
+[02:54:22] research/AMT/2026-10-12.md
+research/AMT/factsheet-2026-10-12.md
+OK research/AMT/2026-10-12.md type=CORE 1=38 2=130 3=150 4=58 5=74 6=85 total=535
+
+Blocked URLs (allowlisted domain, site returned 403 — not retried per instructions):
+- https://www.americantower.com/about-us/global-reach
+- https://www.americantower.com/investor-relations
+
+No data conflicts found between fact sheet and qualitative sources.
+[02:54:22] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/AMT/2026-10-12.md
+[02:54:22] OK /Users/oskaraspinall/paper-portfolio/research/AMT/2026-10-12.md type=CORE 1=38 2=130 3=150 4=58 5=74 6=85 total=535
+[02:54:22] $ claude -p Ticker AMT, date 2026-10-12. Research: research/AMT/factsheet-2026-10-12.md, research/AMT/2026-10-12.md. Macro snapshot: reports/macro/2026-10-12.md. Write research/AMT/2026-10-12-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:54:35] == screened out JBL: price above base fair value (-52.7%; floor +0%) (no AI research)
+[02:54:59] == initiate OKE
+[02:54:59] $ claude -p Ticker OKE, note type CORE, date 2026-10-12. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:56:32] Note path: `research/SWK/2026-10-12.md`
+Fact sheet: `research/SWK/factsheet-2026-10-12.md`
+Check: `OK research/SWK/2026-10-12.md type=CORE 1=25 2=134 3=147 4=78 5=95 6=106 total=585`
+
+No data conflicts or blocked URLs.
+[02:56:32] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/SWK/2026-10-12.md
+[02:56:32] OK /Users/oskaraspinall/paper-portfolio/research/SWK/2026-10-12.md type=CORE 1=25 2=134 3=147 4=78 5=95 6=106 total=585
+[02:56:32] $ claude -p Ticker SWK, date 2026-10-12. Research: research/SWK/factsheet-2026-10-12.md, research/SWK/2026-10-12.md. Macro snapshot: reports/macro/2026-10-12.md. Write research/SWK/2026-10-12-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:56:58] research/AMT/2026-10-12-macro.md
+OK research/AMT/2026-10-12-macro.md macro_weight=secondary words=247
+[02:56:58] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/AMT/2026-10-12-macro.md
+[02:56:58] OK /Users/oskaraspinall/paper-portfolio/research/AMT/2026-10-12-macro.md macro_weight=secondary words=247
+[02:56:58] $ claude -p Evaluate AMT for 2026-10-12: fact sheet research/AMT/factsheet-2026-10-12.md, note research/AMT/2026-10-12.md, state portfolio/state.json, macro overlay research/AMT/2026-10-12-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[02:57:25] research/OKE/2026-10-12.md
+research/OKE/factsheet-2026-10-12.md
+OK research/OKE/2026-10-12.md type=CORE 1=48 2=147 3=130 4=77 5=84 6=74 total=560
+
+No data conflicts. All WebFetch calls succeeded (stockanalysis.com transcript page, oneok.com/about-us, oneok.com/newsroom); no blocked URLs.
+[02:57:25] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/OKE/2026-10-12.md
+[02:57:25] OK /Users/oskaraspinall/paper-portfolio/research/OKE/2026-10-12.md type=CORE 1=48 2=147 3=130 4=77 5=84 6=74 total=560
+[02:57:25] $ claude -p Ticker OKE, date 2026-10-12. Research: research/OKE/factsheet-2026-10-12.md, research/OKE/2026-10-12.md. Macro snapshot: reports/macro/2026-10-12.md. Write research/OKE/2026-10-12-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
+[02:58:09] research/AMT/2026-10-12-evaluation.md
+OK research/AMT/2026-10-12-evaluation.md Bear case=142 Bull case=122 decision=AVOID
+[02:58:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/AMT/2026-10-12-evaluation.md
+[02:58:09] OK /Users/oskaraspinall/paper-portfolio/research/AMT/2026-10-12-evaluation.md Bear case=142 Bull case=122 decision=AVOID
+[02:58:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py AMT --asof 2026-10-12 --eval /Users/oskaraspinall/paper-portfolio/research/AMT/2026-10-12-evaluation.md
+[02:58:10] {"out": "research/AMT/2026-10-12-valuation.md", "used": ["p_ffo"], "fair_value": {"bear": 210.4, "base": 234.1, "bull": 266.91}, "price": 182.24}
+[02:58:11] == done AMT
+[02:58:31] research/SWK/2026-10-12-macro.md
+OK research/SWK/2026-10-12-macro.md macro_weight=secondary words=231
+[02:58:31] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/SWK/2026-10-12-macro.md
+[02:58:31] OK /Users/oskaraspinall/paper-portfolio/research/SWK/2026-10-12-macro.md macro_weight=secondary words=231
+[02:58:31] $ claude -p Evaluate SWK for 2026-10-12: fact sheet research/SWK/factsheet-2026-10-12.md, note research/SWK/2026-10-12.md, state portfolio/state.json, macro overlay research/SWK/2026-10-12-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[02:58:31] == screened out PFE: price above base fair value (-35.9%; floor +0%) (no AI research)
+[02:58:55] == screened out CHD: price above base fair value (-19.2%; floor +0%) (no AI research)
+[02:59:01] research/OKE/2026-10-12-macro.md
+OK research/OKE/2026-10-12-macro.md macro_weight=secondary words=240
+[02:59:02] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/OKE/2026-10-12-macro.md
+[02:59:02] OK /Users/oskaraspinall/paper-portfolio/research/OKE/2026-10-12-macro.md macro_weight=secondary words=240
+[02:59:02] $ claude -p Evaluate OKE for 2026-10-12: fact sheet research/OKE/factsheet-2026-10-12.md, note research/OKE/2026-10-12.md, state portfolio/state.json, macro overlay research/OKE/2026-10-12-macro.md. New initiation from the S&P 500 screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
+[02:59:19] == screened out IBKR: price above base fair value (-50.4%; floor +0%) (no AI research)
+[02:59:26] Decision: AVOID, conviction 3, entry price $83.08 (base fair value 103.85 × 0.8).
+
+research/SWK/2026-10-12-evaluation.md
+OK research/SWK/2026-10-12-evaluation.md Bear case=148 Bull case=117 decision=AVOID
+[02:59:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/SWK/2026-10-12-evaluation.md
+[02:59:26] OK /Users/oskaraspinall/paper-portfolio/research/SWK/2026-10-12-evaluation.md Bear case=148 Bull case=117 decision=AVOID
+[02:59:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py SWK --asof 2026-10-12 --eval /Users/oskaraspinall/paper-portfolio/research/SWK/2026-10-12-evaluation.md
+[02:59:26] {"out": "research/SWK/2026-10-12-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -69.63, "base": 103.85, "bull": 110.26}, "price": 88.57}
+[02:59:27] == done SWK
