@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Packaged Foods",
+  "known": true,
+  "best": "DCF",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 86.43833735051946,
+    "base": 176.3655972330396,
+    "bull": 314.7888547936929
+   },
+   "implied_growth": -0.03529723027900099,
+   "discount_rate": 0.07174789118652658,
+   "cost_of_equity": 0.0922,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.007506672809506048,
+     "base": 0.025339686108552074,
+     "bull": 0.03137209005322039
+    },
+    "cash_flow_margin": {
+     "bear": 0.09264643811846363,
+     "base": 0.128,
+     "bull": 0.19632681365964463
+    },
+    "cagr_3y": 0.0199866543809879,
+    "cagr_5y": 0.03137209005322039,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 35.223952515,
+    "base": 42.939061602,
+    "bull": 50.654170689000004
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 16.395,
+     "base": 19.986,
+     "bull": 23.577
+    },
+    "ttm_eps": 2.148457
+   }
+  }
+ ],
+ "price": 119.83,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [
+  {
+   "method": "dcf",
+   "scenario": "base",
+   "field": "margin",
+   "value": 0.128
+  }
+ ],
+ "fair_value": {
+  "bear": 69.36687573867964,
+  "base": 131.8900853560264,
+  "bull": 226.74396009212862
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.42112262589769145,
+  "base": 0.10064328929338551,
+  "bull": 0.8922136367531388
+ },
+ "implied_growth": -0.03529723027900099,
+ "ticker": "SJM",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/sjm/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/sjm/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/sjm/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/sjm/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/sjm/statistics/"
+ }
+}

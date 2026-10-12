@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Midstream",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 90.95925478297589,
+    "base": 134.57206414857023,
+    "bull": 452.96379764609566
+   },
+   "implied_growth": 0.03264876859429759,
+   "discount_rate": 0.07546246961557283,
+   "cost_of_equity": 0.09543299999999999,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.0551325387254807,
+     "base": 0.09734395954262985,
+     "bull": 0.19411076071955802
+    },
+    "cash_flow_margin": {
+     "bear": 0.0992621181935945,
+     "base": 0.10840255652085556,
+     "bull": 0.19742171409175766
+    },
+    "cagr_3y": 0.1452650774509614,
+    "cagr_5y": 0.19411076071955802,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 30.258156890683132,
+    "base": 44.15940473363413,
+    "bull": 123.36654793002454
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.749,
+     "base": 12.565,
+     "bull": 14.444
+    },
+    "ttm_ebitda": 7670000000,
+    "peak_earnings": "TTM EBITDA is 1.8x its 5y median: bear/base use the 5y average (4.835e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 89.8,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 70.72555548554497,
+  "base": 104.43451101025819,
+  "bull": 343.0980477407386
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.21241029526119182,
+  "base": 0.16296782862202885,
+  "bull": 2.820690954796644
+ },
+ "implied_growth": 0.03264876859429759,
+ "ticker": "OKE",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/oke/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/oke/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/oke/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/oke/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/oke/statistics/"
+ }
+}
