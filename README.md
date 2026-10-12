@@ -41,6 +41,10 @@ Every fact sheet includes a **fair value**: the industry-appropriate method from
 mine or reserve NAV isn't available), with bear/base/bull assumptions taken from the stock's own five-year history,
 a discount rate of the 10-year Treasury yield + beta × 5%, and a reverse DCF showing the growth the price implies.
 It informs the research only (no buy rule) and is logged with each decision so its accuracy can be checked later.
+The one exception is the bulk S&P 500 research loop. A stock priced above its base fair value is **pre-screened
+out** there before any AI research (`scripts/prescreen.py`, no model calls; verdicts in `reports/prescreen/`).
+Every buy so far had a base fair value well above the price. Your own requests, entry-price hits and holdings
+are never pre-screened.
 Each research note includes the stock's recent **news headlines** (analyst price targets and ratings are
 filtered out by rule) and sentiment figures such as short interest.
 

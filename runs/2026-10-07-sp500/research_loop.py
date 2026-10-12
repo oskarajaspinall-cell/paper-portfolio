@@ -18,13 +18,14 @@ import screen  # noqa: E402
 import weekly_run as wr  # noqa: E402
 from common import Ticker, load_config  # noqa: E402
 from fetch_data import Fetcher  # noqa: E402
+import prescreen  # noqa: E402
 
 SKIP = {"APA", "UHS", "LDOS"}  # failed when the usage limit hit; retried at the end of the queue
 stop_after = 3
 run = ROOT / "runs" / "2026-10-07-sp500"
 lk = threading.Lock()
 pm_lock = threading.Lock()  # one portfolio-manager session at a time: they share portfolio/state.json
-state = {"fails_in_row": 0, "stop": False}
+state = {"fails_in_row": 0, "stop": False, "screened": 0}
 
 
 def log(msg):
@@ -122,7 +123,9 @@ def batch_report(tickers: list[str], n: int) -> tuple[str, str]:
             + (f" ({', '.join(buys)})" if buys else "") + f", {len(rows) - len(buys)} AVOID")
     md = "\n".join([f"# {head} — {dt.datetime.now():%Y-%m-%d %H:%M}", "",
                     "| Stock | Decision | Fair value (base) vs price | Entry price | Why |", "|---|---|---|---|---|", *rows, "",
-                    f"S&P 500 researched: {len(decided & sp)} of {len(sp)} ({len(uni)} left in the queue). "
+                    f"S&P 500 researched: {len(decided & sp)} of {len(sp)} ({len(uni)} left in the queue); "
+                    f"{state['screened']} skipped by the pre-screen this session (price above base fair value; "
+                    f"reports/prescreen/). "
                     f"Portfolio ${tt['total']:,.0f}, cash {tt['cash'] / tt['total'] * 100:.1f}% vs a {res['pct']:g}% "
                     f"reserve ({res['regime']}); {tt['n']} holdings, {len(stt.get('pending', []))} order(s) pending."]) + "\n"
     return head, md
@@ -137,7 +140,7 @@ def publish(tickers: list[str], n: int) -> None:
         path = REPORTS / f"{dt.date.today()}-batch-{n:02d}.md"
         path.write_text(md)
         subprocess.run([str(ROOT / "bin" / "py"), "scripts/dashboard.py"], cwd=ROOT, capture_output=True)  # keep GitHub current
-        paths = [str(path.relative_to(ROOT)), "portfolio", "docs", "universe/ir_domains.txt", "runs/2026-10-07-sp500"]
+        paths = [str(path.relative_to(ROOT)), "portfolio", "docs", "universe/ir_domains.txt", "runs/2026-10-07-sp500", "reports/prescreen"]
         paths += [str((ROOT / "research" / Ticker(t).slug).relative_to(ROOT)) for t in tickers]
         git = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True)  # noqa: E731
         git("add", "--", *paths)
@@ -179,9 +182,18 @@ WEEKLY_LOCK = Path("/tmp/paper-portfolio-review.lock")
 
 
 def weekly_run_near() -> bool:
-    """Leave the machine to the Friday 22:00 weekly run: stop from 21:15 on Fridays or while its lock exists."""
+    """Leave the machine to the Friday 22:00 weekly run: stop from 21:15 on Fridays, or while its lock exists
+    over the weekend. On other days the lock is the weekday 22:30 fills job (about a minute): wait it out
+    rather than stop (it stopped the loop every weekday night before 2026-10-12)."""
     now = dt.datetime.now()
-    return WEEKLY_LOCK.exists() or (now.weekday() == 4 and (now.hour, now.minute) >= (21, 15))
+    if (now.weekday() == 4 and (now.hour, now.minute) >= (21, 15)) or (WEEKLY_LOCK.exists() and now.weekday() >= 5):
+        return True
+    t0 = time.monotonic()
+    while WEEKLY_LOCK.exists():
+        if time.monotonic() - t0 > 30 * 60:
+            return True  # held far longer than a fills run: something else owns the repo
+        time.sleep(15)
+    return False
 
 
 def one(t):
@@ -205,6 +217,17 @@ def attempt(t):
             log("== research loop pausing for the weekly run")
         return t, "not started"
     asof = dt.date.today().isoformat()
+    if t not in hits:  # owner 2026-10-12: a free mechanical gate first; entry-price hits are never gated
+        try:
+            row = prescreen.check(t, asof, Fetcher(), cfg)
+            prescreen.record(row)
+        except Exception as e:  # noqa: BLE001  the gate can only skip work, never block it
+            row = {"verdict": "PASS", "reason": f"pre-screen error ({str(e)[:120]}): researched"}
+        if row["verdict"] == "SKIP":
+            log(f"== screened out {t}: {row['reason']} (no AI research)")
+            with lk:
+                state["screened"] += 1
+            return t, "SCREENED"
     try:
         log(f"== initiate {t}")
         ev = wr.research_and_evaluate(t, "CORE", asof, "New initiation from the S&P 500 screen. Decide BUY or AVOID.",
@@ -247,4 +270,5 @@ with ThreadPoolExecutor(max_workers=3) as pool:
         if r != "not started":
             print(t, r, flush=True)
 batch_add(None, flush=True)  # report and upload whatever finished since the last group
+log(f"== pre-screen: {state['screened']} names skipped without AI research (reports/prescreen/)")
 log("== research loop stopped" + (" (repeated failures: usage limit?)" if state["stop"] else " (queue finished)"))

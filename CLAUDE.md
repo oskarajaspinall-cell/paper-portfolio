@@ -212,6 +212,9 @@ momentum = ["ch1y", "price_vs_sma200", "price_vs_sma50"]
 deep_dive_top = 500               # stage 2: also read the ratios page (5y history) for the top N core candidates (~3 s each)
 history = ["cheap_evebitda", "cheap_pfcf", "cheap_pe", "cheap_pb", "roic_trend", "roce_trend", "roic_min",
            "roe_trend", "roe_min"]   # P/B and ROE give banks/insurers a history score too
+prescreen_min_base_upside_pct = 0  # owner 2026-10-12 (efficiency): bulk initiations (S&P 500 loop) skip the AI steps when
+                                   # the mechanical base fair value is this % or more BELOW the price (scripts/prescreen.py;
+                                   # no fair value = researched). Every BUY so far had base upside +30% or more.
 
 [macro]
 # Macro overlay (owner-approved exception to the stockanalysis.com-only rule, for MACRO variables only).
@@ -269,6 +272,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.
 - `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions (3 new initiations at a time); any failure (other than a skipped new initiation) restores `portfolio/` and writes `runs/<date>/error.log`.
 - Monte Carlo removed (owner 2026-10-11, to save usage; it was informational only). Past `*-montecarlo.*` / `*-mc-*` files in `research/` are kept as history.
+- `scripts/prescreen.py` — mechanical gate before a bulk initiation (no model calls): price above the base fair value by more than `[screen].prescreen_min_base_upside_pct` → no AI research that day; verdicts in `reports/prescreen/<date>.csv`. Owner requests, entry-price hits, holdings and the weekly picks are never gated.
 - `scripts/check_docs.py` — template, word-limit, tag, allowlist, conviction and Decision-block checks for notes and evaluations.
 - `scripts/allowlist_hook.py` — WebFetch guard (wired in `.claude/settings.json`); blocked URLs go to `logs/skipped-urls.log`. WebSearch, curl and wget are denied.
 - `scripts/common.py` — config reader, ticker/URL mapping, allowlist, thesis-only trigger rule.
