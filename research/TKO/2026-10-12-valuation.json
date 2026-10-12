@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Entertainment",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 56.637330741153015,
+    "base": 283.62077240601184,
+    "bull": 558.3344797984558
+   },
+   "implied_growth": 0.09444912103355299,
+   "discount_rate": 0.08611570203501491,
+   "cost_of_equity": 0.0922,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.17,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.09585218713059677,
+     "base": 0.3299229808239104,
+     "bull": 0.5156192570870247
+    },
+    "cagr_3y": 0.6074013472470561,
+    "cagr_5y": 0.4635899735094502,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 54.26700513817829,
+    "base": 61.491165571927034,
+    "bull": 146.1996228335458
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 18.392,
+     "base": 20.127,
+     "bull": 20.329
+    },
+    "ttm_ebitda": 1620128000,
+    "peak_earnings": "TTM EBITDA is 2.3x its 5y median: bear/base use the 5y average (8.138e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 178.01,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 55.8472222068281,
+  "base": 209.57757012798356,
+  "bull": 420.95619414348585
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6862691859624285,
+  "base": 0.17733593690232885,
+  "bull": 1.3647895856608385
+ },
+ "implied_growth": 0.09444912103355299,
+ "ticker": "TKO",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/tko/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/tko/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/tko/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/tko/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/tko/statistics/"
+ }
+}

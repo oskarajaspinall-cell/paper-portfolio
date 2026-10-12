@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Auto Manufacturers",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 93.24542926858896,
+    "base": 213.1329601860884,
+    "bull": 500.64239815309895
+   },
+   "implied_growth": -0.06419560019042245,
+   "discount_rate": 0.06801024747293405,
+   "cost_of_equity": 0.1156,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.010929171774575377,
+     "base": 0.05137099717037284,
+     "bull": 0.09862564513234062
+    },
+    "cash_flow_margin": {
+     "bear": 0.04607349985644559,
+     "base": 0.06125686471153262,
+     "bull": 0.09438852225987601
+    },
+    "cagr_3y": 0.05685834354915076,
+    "cagr_5y": 0.09862564513234062,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 28.432298666666668,
+    "base": 49.9602048,
+    "bull": 78.301184
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.94,
+     "base": 9.166,
+     "bull": 10.78
+    },
+    "ttm_ebitda": 16462000000
+   }
+  }
+ ],
+ "price": 82.73,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 71.64105240128153,
+  "base": 158.74204172405894,
+  "bull": 359.86199343539926
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.1340378048920401,
+  "base": 0.9187965879857238,
+  "bull": 3.3498367392167196
+ },
+ "implied_growth": -0.06419560019042245,
+ "ticker": "GM",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/gm/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/gm/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/gm/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/gm/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/gm/statistics/"
+ }
+}
