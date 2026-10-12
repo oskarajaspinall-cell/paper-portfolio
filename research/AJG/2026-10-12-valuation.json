@@ -1,0 +1,94 @@
+{
+ "industry": {
+  "industry": "Insurance Brokers",
+  "known": true,
+  "best": "P/E",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "pe"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 215.009402735,
+    "base": 268.08527262,
+    "bull": 292.08301463000004
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 35.677,
+     "base": 44.484,
+     "bull": 48.466
+    },
+    "ttm_eps": 6.026555
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 147.61567205542724,
+    "base": 172.42476859122402,
+    "bull": 362.2284218629715
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 20.11,
+     "base": 22.648,
+     "bull": 24.913
+    },
+    "ttm_ebitda": 4288000000,
+    "peak_earnings": "TTM EBITDA is 2.0x its 5y median: bear/base use the 5y average (2.54e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 232.7,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 192.54482584180906,
+  "base": 236.19843794374137,
+  "bull": 315.4648170409905
+ },
+ "used": [
+  "pe",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.1725619860687191,
+  "base": 0.015034112349554762,
+  "bull": 0.3556717535066203
+ },
+ "implied_growth": null,
+ "ticker": "AJG",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/ajg/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/ajg/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/ajg/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/ajg/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/ajg/statistics/"
+ }
+}
