@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 30.447795266071427,
+    "base": 37.82942793080356,
+    "bull": 56.41594137991071
+   },
+   "cost_of_equity": 0.0922,
+   "assumptions": {
+    "roe": {
+     "bear": 0.05144,
+     "base": 0.05785,
+     "bull": 0.07399
+    },
+    "justified_pb": {
+     "bear": 0.3934523809523809,
+     "base": 0.4888392857142856,
+     "bull": 0.729017857142857
+    },
+    "bvps": 77.386227
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 24.847886982,
+    "base": 48.335587464,
+    "bull": 71.60565810599999
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.567,
+     "base": 8.884,
+     "bull": 13.161
+    },
+    "ttm_eps": 5.440746
+   }
+  }
+ ],
+ "price": 77.04,
+ "risk_free": 0.052199999999999996,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 28.58115917138095,
+  "base": 41.331481108535705,
+  "bull": 61.47918028860713
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6290088373392919,
+  "base": -0.46350621614050236,
+  "bull": -0.20198364111361466
+ },
+ "implied_growth": null,
+ "ticker": "AIG",
+ "asof": "2026-10-12",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-09",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/aig/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/aig/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/aig/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/aig/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/aig/statistics/"
+ }
+}
