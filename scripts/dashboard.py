@@ -19,6 +19,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT, load_config  # noqa: E402
 import entry_watch  # noqa: E402
+import portfolio  # noqa: E402
 
 OUT = ROOT / "docs" / "index.html"
 
@@ -56,13 +57,16 @@ def series(vals: list[dict], start_cash: float) -> list[dict]:
     if not pts:
         return []
     spy0 = _f(pts[0]["spy_close"])
+    inv = {p["date"]: p for p in portfolio.invested_series(vals)}
     out = []
     for v in pts:
-        tot, spy, base = _f(v["total_usd"]), _f(v["spy_close"]), _f(v.get("baseline_usd"))
+        tot, spy, base, i = _f(v["total_usd"]), _f(v["spy_close"]), _f(v.get("baseline_usd")), inv.get(v["date"])
         out.append({"date": v["date"], "value": tot,
                     "portfolio": None if tot is None else tot / start_cash * 100,
                     "spy": None if not (spy and spy0) else spy / spy0 * 100,
-                    "baseline": None if base is None else base / start_cash * 100})
+                    "baseline": None if base is None else base / start_cash * 100,
+                    "invested": None if not i else 100 + i["pct"] * 100,
+                    "spy_same": None if not i or i["spy_pct"] is None else 100 + i["spy_pct"] * 100})
     return out
 
 
@@ -158,6 +162,7 @@ def build_data(live: bool = True) -> dict:
         "inception": state.get("inception_date"),
         "since": None if not last or last["portfolio"] is None else last["portfolio"] / 100 - 1,
         "since_spy": None if not last or last["spy"] is None else last["spy"] / 100 - 1,
+        "invested": portfolio.invested_return(vals),
         "week": week, "series": ser, "holdings": hold, "interest": state.get("cash_interest"),
         "regime": __import__("regime").latest(dt.date.today().isoformat()),
         "sectors": sorted(([k, v] for k, v in sectors.items()), key=lambda kv: -kv[1]),
@@ -219,7 +224,7 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 <button class="toggle" id="theme" type="button">Toggle dark mode</button></header>
 <section class="card" aria-label="Summary"><div class="sub">Portfolio value</div><div class="hero" id="hero"></div><div class="sub" id="heroSub"></div>
 <div class="tiles" id="tiles"></div></section>
-<section class="card"><h2>Return vs the S&amp;P 500</h2><div class="sub">Rate of return since inception (%), in US dollars. Baseline = the first week's picks held unchanged.</div>
+<section class="card"><h2>Return vs the S&amp;P 500</h2><div class="sub">Rate of return (%), in US dollars. Invested money = gain on the money put into stocks, cash excluded; compared with the same money put into the S&amp;P 500 on the same days. Whole portfolio = all $100k, cash and its interest included.</div>
 <div class="legend" id="lineLegend"></div><div id="line"></div>
 <details><summary>Show as a table</summary><div class="tw"><table id="lineTable"></table></div></details></section>
 <div class="grid2"><section class="card"><h2>Holdings by weight</h2><div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Core</span>
@@ -248,12 +253,15 @@ $('theme').onclick=()=>{const dark=matchMedia('(prefers-color-scheme: dark)').ma
 const n=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}};
 $('start').textContent=D.start.toLocaleString('en-US');$('gen').textContent=D.generated;
 $('hero').textContent=usd(D.total);
-$('heroSub').textContent=(D.inception?`At the ${D.close_date} close. Since ${D.inception}: ${pct(D.since==null?null:D.since*100)} vs SPY ${pct(D.since_spy==null?null:D.since_spy*100)}`:'No trades yet: the portfolio is all cash.')
+const I=D.invested;
+$('heroSub').textContent=(D.inception?`At the ${D.close_date} close. `+(I?`Invested money ${pct(I.pct*100)} vs the same money in the S&P 500 ${pct(I.spy_pct==null?null:I.spy_pct*100)}; whole portfolio incl. cash ${pct(D.since==null?null:D.since*100)} since ${D.inception}`:`Since ${D.inception}: ${pct(D.since==null?null:D.since*100)} vs SPY ${pct(D.since_spy==null?null:D.since_spy*100)}`):'No trades yet: the portfolio is all cash.')
  +(D.live_total!=null?` · Live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
 const tile=(l,v,d,c)=>el('div',{class:'tile'},el('div',{class:'l'},l),el('div',{class:'v'},v),d?el('div',{class:'d '+(c||'')},d):'');
 $('tiles').append(
- D.inception?tile('Return since inception',D.since==null?'n/a':pct(D.since*100),D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
-  :tile('Return since inception','–','starts with the first trade'),
+ I?tile('Return on invested money',pct(I.pct*100),`${usd(I.gain)} gain on ${usd(I.invested)} invested`+(I.spy_pct==null?'':` · same money in S&P 500 ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
+  :tile('Return on invested money','–','starts with the first trade'),
+ D.inception?tile('Whole portfolio (incl. cash)',D.since==null?'n/a':pct(D.since*100),D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
+  :tile('Whole portfolio (incl. cash)','–','starts with the first trade'),
  tile('This week',D.week?pct(D.week.portfolio*100):'n/a',D.week&&D.week.spy!=null?'SPY '+pct(D.week.spy*100):'',''),
  tile('Cash',usd(D.cash),(D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':'')+(D.interest?` · earns ${D.interest.aer_pct}% AER, ${usd(D.interest.total_usd)} so far`:'')),
  tile('Cash strategy',D.regime?({risk_on:'Risk-on',neutral:'Neutral',defensive:'Defensive'})[D.regime.final_regime]:'n/a',D.regime?`reserve ${D.regime.reserve_pct}% · S&P ${D.regime.dip.drawdown_pct}% off its high`+(D.regime.dip.multiplier<1?' · buying the dip':''):''),
@@ -263,8 +271,8 @@ $('tiles').append(
 const tip=$('tip');function showTip(ev,nodes){tip.replaceChildren(...nodes);tip.style.display='block';const x=Math.min(ev.clientX+14,innerWidth-tip.offsetWidth-8);
 tip.style.left=x+'px';tip.style.top=Math.max(8,ev.clientY-tip.offsetHeight-12)+'px';}function hideTip(){tip.style.display='none'}
 // ---- line chart
-const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['portfolio','spy','baseline'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
-const defs=[['portfolio','Portfolio','--s1'],['spy','S&P 500 (SPY)','--s2'],['baseline','Baseline','--s3']].filter(([k])=>S.some(p=>p[k]!=null));
+const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['invested','spy_same','portfolio'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
+const defs=[['invested','Invested money','--s1'],['spy_same','Same money in S&P 500','--s2'],['portfolio','Whole portfolio (incl. cash)','--s3']].filter(([k])=>S.some(p=>p[k]!=null));
 defs.forEach(([k,n,c])=>$('lineLegend').append(el('span',{},el('span',{class:'key',style:`background:var(${c})`}),n)));
 $('lineTable').append(el('tr',{},el('th',{},'Date'),...defs.map(([,n])=>el('th',{class:'n'},n)),el('th',{class:'n'},'Value')));
 S.forEach(p=>$('lineTable').append(el('tr',{},el('td',{},p.date),...defs.map(([k])=>el('td',{class:'n'},p[k]==null?'n/a':pct(p[k]))),el('td',{class:'n'},usd(p.value)))));
@@ -272,14 +280,14 @@ function drawLine(){const box=$('line');box.replaceChildren();
  if(S.length<2){box.append(el('div',{class:'empty'},'The chart appears after the second weekly run.'));return;}
  const W=Math.max(300,Math.round(box.getBoundingClientRect().width)),H=W<560?220:300,L=40,R=W<560?92:120,T=12,B=28,xs=S.map(p=>Date.parse(p.date)),x0=Math.min(...xs),x1=Math.max(...xs);
  const all=S.flatMap(p=>defs.map(([k])=>p[k]).filter(v=>v!=null));let lo=Math.min(0,...all),hi=Math.max(0,...all);const pad=Math.max((hi-lo)*.1,1);lo-=pad;hi+=pad;
- const X=t=>L+(t-x0)/(x1-x0||1)*(W-L-R),Y=v=>T+(hi-v)/(hi-lo)*(H-T-B);const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Portfolio vs S&P 500, rate of return since inception (%)'});
+ const X=t=>L+(t-x0)/(x1-x0||1)*(W-L-R),Y=v=>T+(hi-v)/(hi-lo)*(H-T-B);const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Return on invested money vs the same money in the S&P 500, and the whole portfolio (%)'});
  const step=(hi-lo)/4;for(let i=0;i<=4;i++){const v=lo+step*i;svg.append(sv('line',{x1:L,x2:W-R,y1:Y(v),y2:Y(v),stroke:'var(--grid)','stroke-width':1}));
   const t=sv('text',{x:L-6,y:Y(v)+4,'text-anchor':'end'});t.textContent=v.toFixed(Math.abs(hi-lo)<4?1:0)+'%';svg.append(t);}
  const ticks=S.length<=6?S:S.filter((_,i)=>i%Math.ceil(S.length/6)===0);ticks.forEach(p=>{const t=sv('text',{x:X(Date.parse(p.date)),y:H-8,'text-anchor':'middle'});t.textContent=p.date.slice(5);svg.append(t);});
  svg.append(sv('line',{x1:L,x2:W-R,y1:Y(0),y2:Y(0),stroke:'var(--axis)','stroke-width':1}));
  const ends=[];defs.forEach(([k,n,c])=>{const P=S.filter(p=>p[k]!=null);if(P.length<2)return;
   svg.append(sv('path',{d:P.map((p,i)=>(i?'L':'M')+X(Date.parse(p.date)).toFixed(1)+','+Y(p[k]).toFixed(1)).join(''),fill:'none',stroke:`var(${c})`,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
-  const e=P[P.length-1];ends.push({y:Y(e[k]),x:X(Date.parse(e.date)),c,label:(W<560?n.replace(' (SPY)',''):n)+' '+pct(e[k],1)});});
+  const e=P[P.length-1];ends.push({y:Y(e[k]),x:X(Date.parse(e.date)),c,label:({invested:'Invested',spy_same:'S&P 500',portfolio:'Whole'}[k]||n)+' '+pct(e[k],1)});});
  ends.sort((a,b)=>a.y-b.y);let prev=-1e9;ends.forEach(e=>{e.ly=Math.max(e.y,prev+16);prev=e.ly;});
  ends.forEach(e=>{svg.append(sv('circle',{cx:e.x,cy:e.y,r:4,fill:`var(${e.c})`,stroke:'var(--surface)','stroke-width':2}));
   if(Math.abs(e.ly-e.y)>2)svg.append(sv('line',{x1:e.x+6,y1:e.y,x2:e.x+12,y2:e.ly,stroke:'var(--axis)','stroke-width':1}));

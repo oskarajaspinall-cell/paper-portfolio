@@ -389,6 +389,39 @@ def returns_table(vals: list[dict], asof: str) -> dict:
     return out
 
 
+def invested_series(vals: list[dict]) -> list[dict]:
+    """Return on the money put into stocks, cash excluded (owner request 2026-10-14), one point per valuation
+    date (the last row of each date). gain = holdings value + sale proceeds - money in (buys incl. costs);
+    pct = gain / money in. spy_pct is the same money in SPY on the same dates: every buy buys SPY at that row's
+    close and every sale sells the same dollars of it. Dates before the first buy are left out."""
+    out: dict[str, dict] = {}
+    units = proceeds = prev_in = prev_out = 0.0
+    spy = None
+    for v in vals:
+        def f(k):
+            return float(v.get(k) or 0)
+        cin, cout = f("core_in") + f("tactical_in"), f("core_out") + f("tactical_out")
+        spy = float(v["spy_close"]) if v.get("spy_close") not in ("", None) else spy
+        if spy:
+            units += (cin - prev_in - (cout - prev_out)) / spy
+            proceeds += cout - prev_out
+        prev_in, prev_out = cin, cout
+        if cin <= 0:
+            continue
+        value = f("core_usd") + f("tactical_usd")
+        gain = value + cout - cin
+        out[v["date"]] = {"date": v["date"], "invested": round(cin, 2), "value": round(value, 2),
+                          "proceeds": round(cout, 2), "gain": round(gain, 2), "pct": gain / cin,
+                          "spy_pct": None if not spy else (units * spy + proceeds - cin) / cin}
+    return [out[d] for d in sorted(out)]
+
+
+def invested_return(vals: list[dict]) -> dict | None:
+    """The latest invested_series point, or None when nothing has been invested yet."""
+    ser = invested_series(vals)
+    return ser[-1] if ser else None
+
+
 def format_returns(rt: dict) -> str:
     def p(x):
         return "n/a" if x is None else f"{x * 100:+.2f}%"

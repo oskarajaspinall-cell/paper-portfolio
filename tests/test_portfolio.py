@@ -7,7 +7,7 @@ import pytest
 
 from conftest import FakeMarket, FixtureFetcher
 from common import DataError
-from portfolio import (Engine, Market, chain, empty_state, interval_return, mark, read_csv, returns_table, run_submit,
+from portfolio import (Engine, Market, chain, empty_state, interval_return, invested_return, invested_series, mark, read_csv, returns_table, run_submit,
                        totals, trade_costs)
 
 TODAY = "2026-10-06"
@@ -759,3 +759,38 @@ def test_fill_now_leaves_orders_due_at_todays_open_to_fill_pending(real_cfg, tmp
     place_orders([core_buy("AAPL", conv=4)], sp, mkt, real_cfg, WATCH, "2026-10-09", port_dir=tmp_path, now=overnight)
     fn = fill_now(sp, mkt, real_cfg, WATCH, now=NY_OPEN, port_dir=tmp_path)
     assert fn["applied"] == [] and len(json.loads(sp.read_text())["pending"]) == 1  # fills at today's OPEN instead
+
+
+# ------------------------------------------------------------------ return on invested money (cash excluded)
+def test_invested_series_none_before_first_buy():
+    assert invested_return([val("2026-10-06", "inception", 100000, spy=100)]) is None
+
+
+def test_invested_return_single_buy():
+    vals = [val("2026-10-06", "inception", 100000, spy=100),
+            val("2026-10-06", "post", 99990, core=10000, cin=10010, spy=100),
+            val("2026-10-07", "daily", 101000, core=11000, cin=10010, spy=105)]
+    r = invested_return(vals)
+    assert r["gain"] == pytest.approx(990) and r["pct"] == pytest.approx(990 / 10010)
+    assert r["spy_pct"] == pytest.approx(0.05)
+
+
+def test_invested_series_two_buys_same_money_spy():
+    vals = [val("2026-10-06", "post", 100000, core=10000, cin=10000, spy=100),
+            val("2026-10-08", "post", 100000, core=21000, cin=20000, spy=110),
+            val("2026-10-09", "daily", 100000, core=22000, cin=20000, spy=121)]
+    ser = invested_series(vals)
+    assert [p["date"] for p in ser] == ["2026-10-06", "2026-10-08", "2026-10-09"]
+    assert ser[-1]["pct"] == pytest.approx(0.10)
+    # 100 SPY units at 100 + 90.909 at 110, worth 121 each, against 20000 in
+    assert ser[-1]["spy_pct"] == pytest.approx((100 + 10000 / 110) * 121 / 20000 - 1)
+
+
+def test_invested_return_partial_sale():
+    vals = [val("2026-10-06", "post", 100000, core=10000, cin=10000, spy=100),
+            val("2026-10-07", "post", 100000, core=6000, cin=10000, cout=6000, spy=120),
+            val("2026-10-08", "daily", 100000, core=6600, cin=10000, cout=6000, spy=120)]
+    r = invested_return(vals)
+    assert r["gain"] == pytest.approx(2600) and r["pct"] == pytest.approx(0.26)
+    # SPY: 100 units, 50 sold at 120 for 6000, 50 left at 120
+    assert r["spy_pct"] == pytest.approx(0.20)

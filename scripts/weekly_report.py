@@ -16,7 +16,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT  # noqa: E402
 from decision_log import hit_table, read as read_decisions  # noqa: E402
-from portfolio import format_returns, read_csv, returns_table  # noqa: E402
+from portfolio import format_returns, invested_return, read_csv, returns_table  # noqa: E402
 
 
 def _load(path: Path, default):
@@ -50,7 +50,11 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
 
     out = [f"# Weekly report — {asof}{dry}", "", "## 1. Summary"]
     out.append(f"- Portfolio ${total:,.0f}; week {pct(wk.get('total'))} vs SPY {pct(wk.get('spy'))}; since inception "
-               f"{pct(inc.get('total'))} vs SPY {pct(inc.get('spy'))}." if total is not None else "- No valuations yet.")
+               f"{pct(inc.get('total'))} vs SPY {pct(inc.get('spy'))} (whole portfolio, cash included)." if total is not None else "- No valuations yet.")
+    inv = invested_return(vals) if vals else None
+    if inv:
+        out.append(f"- Return on invested money (cash excluded): {pct(inv['pct'])} (${inv['gain']:,.0f} on ${inv['invested']:,.0f} "
+                   f"invested) vs the same money in SPY {pct(inv['spy_pct'])}.")
     out.append(f"- Trades: {len(applied)} executed ({mech} mechanical), {len(placed)} order(s) placed for the next open, "
                f"{len(rejected)} rejected; "
                f"{len(state.get('holdings', {}))} holdings, cash "
