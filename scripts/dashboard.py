@@ -218,13 +218,18 @@ th{color:var(--ink2);font-weight:600}td.n,th.n{text-align:right;font-variant-num
 box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;z-index:10}.tip b{font-weight:600}.tip .r{display:flex;align-items:center;gap:6px}
 .empty{color:var(--ink2);padding:24px 0;text-align:center}details summary{cursor:pointer;color:var(--ink2);font-size:13px;margin-top:8px}
 a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px;border:1px solid var(--ring);font-size:12px;color:var(--ink2)}
+.tabs{display:flex;gap:4px;margin:8px 0;border-bottom:1px solid var(--grid)}
+.tab{background:none;border:0;border-bottom:2px solid transparent;color:var(--ink2);padding:6px 10px;margin-bottom:-1px;cursor:pointer;font:inherit;font-size:14px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--s1);font-weight:600}
 .toggle{background:none;border:1px solid var(--ring);border-radius:8px;color:var(--ink2);padding:4px 10px;cursor:pointer;font:inherit;font-size:13px}
 </style></head><body><main>
 <header><div><h1>Paper Portfolio</h1><div class="sub">Simulated $<span id="start"></span> portfolio · paper trading only, not investment advice · updated <span id="gen"></span></div></div>
 <button class="toggle" id="theme" type="button">Toggle dark mode</button></header>
 <section class="card" aria-label="Summary"><div class="sub">Portfolio value</div><div class="hero" id="hero"></div><div class="sub" id="heroSub"></div>
 <div class="tiles" id="tiles"></div></section>
-<section class="card"><h2>Return vs the S&amp;P 500</h2><div class="sub">Rate of return (%), in US dollars. Invested money = gain on the money put into stocks, cash excluded; compared with the same money put into the S&amp;P 500 on the same days. Whole portfolio = all $100k, cash and its interest included.</div>
+<section class="card"><h2>Return vs the S&amp;P 500</h2>
+<div class="tabs" role="tablist"><button type="button" role="tab" class="tab" data-tab="invested">Invested money</button><button type="button" role="tab" class="tab" data-tab="whole">Whole portfolio</button></div>
+<div class="sub" id="lineSub"></div>
 <div class="legend" id="lineLegend"></div><div id="line"></div>
 <details><summary>Show as a table</summary><div class="tw"><table id="lineTable"></table></div></details></section>
 <div class="grid2"><section class="card"><h2>Holdings by weight</h2><div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Core</span>
@@ -271,11 +276,19 @@ $('tiles').append(
 const tip=$('tip');function showTip(ev,nodes){tip.replaceChildren(...nodes);tip.style.display='block';const x=Math.min(ev.clientX+14,innerWidth-tip.offsetWidth-8);
 tip.style.left=x+'px';tip.style.top=Math.max(8,ev.clientY-tip.offsetHeight-12)+'px';}function hideTip(){tip.style.display='none'}
 // ---- line chart
-const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['invested','spy_same','portfolio'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
-const defs=[['invested','Invested money','--s1'],['spy_same','Same money in S&P 500','--s2'],['portfolio','Whole portfolio (incl. cash)','--s3']].filter(([k])=>S.some(p=>p[k]!=null));
-defs.forEach(([k,n,c])=>$('lineLegend').append(el('span',{},el('span',{class:'key',style:`background:var(${c})`}),n)));
-$('lineTable').append(el('tr',{},el('th',{},'Date'),...defs.map(([,n])=>el('th',{class:'n'},n)),el('th',{class:'n'},'Value')));
-S.forEach(p=>$('lineTable').append(el('tr',{},el('td',{},p.date),...defs.map(([k])=>el('td',{class:'n'},p[k]==null?'n/a':pct(p[k]))),el('td',{class:'n'},usd(p.value)))));
+const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['invested','spy_same','portfolio','spy','baseline'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
+const TABS={invested:{sub:'Gain on the money put into stocks, cash excluded, vs the same money put into the S&P 500 on the same days (%, US dollars).',
+  defs:[['invested','Invested money','--s1','Invested'],['spy_same','Same money in S&P 500','--s2','S&P 500']]},
+ whole:{sub:'All $100k, cash and its interest included, vs the S&P 500 since inception (%, US dollars). Baseline = the first week\'s picks held unchanged.',
+  defs:[['portfolio','Whole portfolio (incl. cash)','--s1','Portfolio'],['spy','S&P 500 (SPY)','--s2','S&P 500'],['baseline','Baseline','--s3','Baseline']]}};
+let defs=[];
+function setTab(name){const t=TABS[name]||TABS.invested;defs=t.defs.filter(([k])=>S.some(p=>p[k]!=null));
+ document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===name)));
+ $('lineSub').textContent=t.sub;$('lineLegend').replaceChildren(...defs.map(([k,n,c])=>el('span',{},el('span',{class:'key',style:`background:var(${c})`}),n)));
+ $('lineTable').replaceChildren(el('tr',{},el('th',{},'Date'),...defs.map(([,n])=>el('th',{class:'n'},n)),el('th',{class:'n'},'Value')),
+  ...S.map(p=>el('tr',{},el('td',{},p.date),...defs.map(([k])=>el('td',{class:'n'},p[k]==null?'n/a':pct(p[k]))),el('td',{class:'n'},usd(p.value)))));
+ try{localStorage.setItem('chartTab',name)}catch(e){}drawLine();}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 function drawLine(){const box=$('line');box.replaceChildren();
  if(S.length<2){box.append(el('div',{class:'empty'},'The chart appears after the second weekly run.'));return;}
  const W=Math.max(300,Math.round(box.getBoundingClientRect().width)),H=W<560?220:300,L=40,R=W<560?92:120,T=12,B=28,xs=S.map(p=>Date.parse(p.date)),x0=Math.min(...xs),x1=Math.max(...xs);
@@ -285,9 +298,9 @@ function drawLine(){const box=$('line');box.replaceChildren();
   const t=sv('text',{x:L-6,y:Y(v)+4,'text-anchor':'end'});t.textContent=v.toFixed(Math.abs(hi-lo)<4?1:0)+'%';svg.append(t);}
  const ticks=S.length<=6?S:S.filter((_,i)=>i%Math.ceil(S.length/6)===0);ticks.forEach(p=>{const t=sv('text',{x:X(Date.parse(p.date)),y:H-8,'text-anchor':'middle'});t.textContent=p.date.slice(5);svg.append(t);});
  svg.append(sv('line',{x1:L,x2:W-R,y1:Y(0),y2:Y(0),stroke:'var(--axis)','stroke-width':1}));
- const ends=[];defs.forEach(([k,n,c])=>{const P=S.filter(p=>p[k]!=null);if(P.length<2)return;
+ const ends=[];defs.forEach(([k,n,c,short])=>{const P=S.filter(p=>p[k]!=null);if(P.length<2)return;
   svg.append(sv('path',{d:P.map((p,i)=>(i?'L':'M')+X(Date.parse(p.date)).toFixed(1)+','+Y(p[k]).toFixed(1)).join(''),fill:'none',stroke:`var(${c})`,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
-  const e=P[P.length-1];ends.push({y:Y(e[k]),x:X(Date.parse(e.date)),c,label:({invested:'Invested',spy_same:'S&P 500',portfolio:'Whole'}[k]||n)+' '+pct(e[k],1)});});
+  const e=P[P.length-1];ends.push({y:Y(e[k]),x:X(Date.parse(e.date)),c,label:(short||n)+' '+pct(e[k],1)});});
  ends.sort((a,b)=>a.y-b.y);let prev=-1e9;ends.forEach(e=>{e.ly=Math.max(e.y,prev+16);prev=e.ly;});
  ends.forEach(e=>{svg.append(sv('circle',{cx:e.x,cy:e.y,r:4,fill:`var(${e.c})`,stroke:'var(--surface)','stroke-width':2}));
   if(Math.abs(e.ly-e.y)>2)svg.append(sv('line',{x1:e.x+6,y1:e.y,x2:e.x+12,y2:e.ly,stroke:'var(--axis)','stroke-width':1}));
@@ -316,6 +329,7 @@ function hbars(box,items,emptyMsg){box.replaceChildren();if(!items.length){box.a
 function drawAll(){drawLine();
  hbars($('bars'),D.holdings.map(h=>({label:h.ticker,v:h.weight,c:h.type==='CORE'?'--s1':'--s2',tip:`${h.ticker} ${h.name} · ${h.type.toLowerCase()} · ${usd(h.value)}`})),'No holdings yet.');
  hbars($('sectors'),D.sectors.map(([s,v])=>({label:s,v})),'No holdings yet.');}
+{let t0='invested';try{t0=localStorage.getItem('chartTab')||t0}catch(e){}setTab(TABS[t0]?t0:'invested');}
 drawAll();let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(drawAll,150);});
 // ---- tables
 function table(id,cols,rows,empty){const t=$(id);t.append(el('tr',{},...cols.map(c=>el('th',{class:c.n?'n':''},c.h))));
