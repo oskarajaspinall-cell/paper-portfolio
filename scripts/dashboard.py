@@ -259,7 +259,7 @@ const n=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try
 $('start').textContent=D.start.toLocaleString('en-US');$('gen').textContent=D.generated;
 $('hero').textContent=usd(D.total);
 const I=D.invested;
-$('heroSub').textContent=(D.inception?`At the ${D.close_date} close. `+(I?`Invested money ${pct(I.pct*100)} vs the same money in the S&P 500 ${pct(I.spy_pct==null?null:I.spy_pct*100)}; whole portfolio incl. cash ${pct(D.since==null?null:D.since*100)} since ${D.inception}`:`Since ${D.inception}: ${pct(D.since==null?null:D.since*100)} vs SPY ${pct(D.since_spy==null?null:D.since_spy*100)}`):'No trades yet: the portfolio is all cash.')
+$('heroSub').textContent=(D.inception?`At the ${D.close_date} close. `+(I?`Invested money ${pct(I.pct*100)} vs the same money in the S&P 500 ${pct(I.spy_pct==null?null:I.spy_pct*100)}; whole portfolio incl. cash ${pct(D.since==null?null:D.since*100)} since ${D.series.length?D.series[0].date:D.inception}`:`Since ${D.inception}: ${pct(D.since==null?null:D.since*100)} vs SPY ${pct(D.since_spy==null?null:D.since_spy*100)}`):'No trades yet: the portfolio is all cash.')
  +(D.live_total!=null?` · Live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
 const tile=(l,v,d,c)=>el('div',{class:'tile'},el('div',{class:'l'},l),el('div',{class:'v'},v),d?el('div',{class:'d '+(c||'')},d):'');
 $('tiles').append(
@@ -267,7 +267,7 @@ $('tiles').append(
   :tile('Return on invested money','–','starts with the first trade'),
  D.inception?tile('Whole portfolio (incl. cash)',D.since==null?'n/a':pct(D.since*100),D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
   :tile('Whole portfolio (incl. cash)','–','starts with the first trade'),
- tile('This week',D.week?pct(D.week.portfolio*100):'n/a',D.week&&D.week.spy!=null?'SPY '+pct(D.week.spy*100):'',''),
+ tile('This week (whole portfolio)',D.week?pct(D.week.portfolio*100):'n/a',D.week&&D.week.spy!=null?'SPY '+pct(D.week.spy*100):'',''),
  tile('Cash',usd(D.cash),(D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':'')+(D.interest?` · earns ${D.interest.aer_pct}% AER, ${usd(D.interest.total_usd)} so far`:'')),
  tile('Cash strategy',D.regime?({risk_on:'Risk-on',neutral:'Neutral',defensive:'Defensive'})[D.regime.final_regime]:'n/a',D.regime?`reserve ${D.regime.reserve_pct}% · S&P ${D.regime.dip.drawdown_pct}% off its high`+(D.regime.dip.multiplier<1?' · buying the dip':''):''),
  tile('Holdings',String(D.holdings.length),D.holdings.filter(h=>h.type==='CORE').length+' core · '+D.holdings.filter(h=>h.type==='TACTICAL').length+' tactical'),
