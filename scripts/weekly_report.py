@@ -128,7 +128,11 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     for n in scan.get("notes", []):
         out.append(f"- Note: {n}")
 
-    out += ["", "## 5. Hit rates", "", "Decision direction vs SPY (USD) at each horizon; a horizon counts once it has matured.",
+    risk_md = ROOT / "reports" / "risk" / f"{asof}.md"
+    if risk_md.exists():  # scripts/risk.py (informational)
+        body = "\n".join(l for l in risk_md.read_text().splitlines() if not l.startswith("# "))
+        out += ["", "## 5. Risk", "", body.strip()]
+    out += ["", f"## {6 if risk_md.exists() else 5}. Hit rates", "", "Decision direction vs SPY (USD) at each horizon; a horizon counts once it has matured.",
             "", hit_table(read_decisions(port / "decisions.csv"))]
     return "\n".join(out) + "\n"
 

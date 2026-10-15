@@ -306,6 +306,11 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             sh(PY + ["scripts/decision_log.py", "update", "--asof", asof], log)
             sh(PY + ["scripts/portfolio.py", "stamp", "--asof", asof], log)
         (rundir / "run.json").write_text(json.dumps(manifest, indent=1))
+        step("risk")
+        try:  # informational (scripts/risk.py): a problem is logged, never cancels the week
+            sh(PY + ["scripts/risk.py", "report", "--asof", asof], log)
+        except StepFailed as e:
+            log(f"risk report not written: {e}")
         step("report")
         sh(PY + ["scripts/weekly_report.py", "--asof", asof, "--run", str(rundir)], log)
         if not dry_run:

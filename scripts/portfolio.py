@@ -511,6 +511,8 @@ class Engine:
         self.applied: list[dict] = []
         self.applied_rows: list[tuple[dict, list[dict]]] = []
         self.override: dict[str, dict] = {}  # ticker -> quote (fills at the next open)
+        from risk import Sizer
+        self.sizer = Sizer(mkt, cfg)
 
     def quote(self, ticker: str, on_or_before: str | None = None) -> dict:
         return self.override.get(ticker) or self.mkt.quote(ticker, on_or_before)
@@ -533,8 +535,9 @@ class Engine:
         t = target_pct / 100
         return math.floor((t * pv - current_mv) / (q["price_usd"] * (1 + t * self.cost_rate(q["currency"]))))
 
-    def core_size(self, conviction: int) -> float:
-        return float(self.cfg["core"]["conviction_size_pct"][str(conviction)])
+    def core_size(self, conviction: int, ticker: str, s: dict) -> float:
+        """Conviction size scaled by the stock's volatility (scripts/risk.py; design by Claude 2026-10-16)."""
+        return self.sizer.target(conviction, ticker, s)[0]
 
     # ---- the trade primitive (no rule checks; callers validate)
     def _execute(self, s, ticker, ptype, side, shares, q, reason):
@@ -600,12 +603,13 @@ class Engine:
             pv = self.pv(s)
             if ptype == "CORE":
                 self._core_entry_fields(r)
-                target_pct = self.core_size(r["conviction"])
+                target_pct = self.core_size(r["conviction"], t, s)
             else:
                 target_pct = self._tactical_entry_fields(r, q)
             if conversion:
                 rows.append(self._convert(s, t, r, q))
                 held = s["holdings"][t]
+                held["target_pct"] = target_pct
                 delta = math.floor((target_pct / 100 * pv - held["market_value_usd"]) / q["price_usd"])
                 if delta > 0:
                     rows.append(self._execute(s, t, "CORE", "ADD", delta, q, r["reason"]))
@@ -617,6 +621,8 @@ class Engine:
                 if shares < 1:
                     raise Reject("MIN_SHARES", f"{target_pct}% of ${pv:,.0f} buys <1 share at ${q['price_usd']:,.2f}")
                 s["holdings"][t] = self._new_holding(t, ptype, r, q)
+                if ptype == "CORE":
+                    s["holdings"][t]["target_pct"] = target_pct
                 rows.append(self._execute(s, t, ptype, "BUY", shares, q, r["reason"]))
         elif act == "HOLD":  # re-initiation outcome: no trade, but a new decision record for the holding
             if not held:
@@ -643,7 +649,7 @@ class Engine:
                     self._min_conviction(r)
                 if ptype == "CORE":
                     target_pct = r.get("target_weight_pct") if act == "TRIM" and r.get("target_weight_pct") is not None \
-                        else self.core_size(r["conviction"])
+                        else self.core_size(r["conviction"], t, s)
                 else:
                     target_pct = r.get("target_weight_pct")
                     if target_pct is None:
@@ -657,6 +663,8 @@ class Engine:
                     rows.append(self._execute(s, t, ptype, "ADD", n, q, r["reason"]))
                     held = s["holdings"][t]
                     held["conviction"] = r["conviction"]
+                    if ptype == "CORE":
+                        held["target_pct"] = target_pct
                 else:
                     n = round(-delta)  # nearest share to the target weight
                     if n < 1:
@@ -666,6 +674,8 @@ class Engine:
                         raise Reject("SCHEMA", "TRIM would close the position; use SELL")
                     rows.append(self._execute(s, t, ptype, "TRIM", n, q, r["reason"]))
                     s["holdings"][t]["conviction"] = r["conviction"]
+                    if ptype == "CORE":
+                        s["holdings"][t]["target_pct"] = target_pct
                 if t in s["holdings"]:
                     self._refresh_decision(s["holdings"][t], r)
         return rows

@@ -191,13 +191,13 @@ def dip_candidates(work: dict, pv: float, cfg: dict, res: dict, skip: set) -> li
         return []
     gap, out = cfg["cash_strategy"]["dip_add_gap_pp"], []
     for t, h in work["holdings"].items():
-        target = float(cfg["core"]["conviction_size_pct"].get(str(h.get("conviction")), 0))
+        target = float(h.get("target_pct") or cfg["core"]["conviction_size_pct"].get(str(h.get("conviction")), 0))
         w = h["market_value_usd"] / pv * 100
         if h["type"] != "CORE" or t in skip or target - w < gap:
             continue
         out.append({"ticker": t, "weight_pct": round(w, 2), "target_pct": target,
                     "why": (f"DIP: market dip releases the cash reserve (x{res['dip_multiplier']:g}); weight {w:.1f}% is "
-                            f"{target - w:.1f}pp below its conviction-{h.get('conviction')} size {target:g}% -- "
+                            f"{target - w:.1f}pp below its conviction-{h.get('conviction')} target {target:g}% -- "
                             "thesis check, ADD eligible")})
     return out
 

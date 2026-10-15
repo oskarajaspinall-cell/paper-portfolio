@@ -24,6 +24,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - Include only what could change the decision or the position size. Omit background that couldn't.
 
 ## Investment approach
+- **Position size** (design by Claude 2026-10-16): a core position's target is its conviction size scaled by its own volatility (x0.6–1.4 against the core holdings' median, `[core].vol_*`), set at entry and stored as `target_pct`; existing positions keep their size until an ADD/TRIM.
 - **Only high conviction is bought**: a BUY or ADD (core or tactical) needs conviction >= `min_buy_conviction` (4). Anything less is AVOID (new names) or HOLD (holdings).
 - **CORE**: good business + attractive valuation, ~12-month horizon. Judged purely against thesis (invalidation) triggers on business fundamentals. No price stops, price levels, moving averages or valuation multiples as triggers.
 - **TACTICAL**: weeks to ~3 months, two setups only (owner rule 2026-10-08): **post-earnings drift** (a real results beat the price is still digesting) and **pullback in an uptrend** (a dip to around the 50-day average). MUST have target, stop and time limit at entry; these execute mechanically. The stop comes from the stock's own volatility (ATR), the target must be ≥2× the stop distance (checked at the decision and again at the fill-day open), and the size is set so a stop-out costs ~1% of the portfolio (max 5%).
@@ -54,6 +55,10 @@ max_sector_pct = 30               # stockanalysis.com sector classification
 # conviction -> target position size (% of portfolio). 1 = no position.
 conviction_size_pct = { "1" = 0, "2" = 3, "3" = 5, "4" = 7, "5" = 10 }
 trim_above_pct = 15
+vol_scaling = true                # design by Claude 2026-10-16 (scripts/risk.py): core target = conviction size x
+vol_scale_clamp = [0.6, 1.4]      # ...clamp(reference vol / the stock's vol), capped at trim_above_pct. Reference =
+ref_vol_pct = 30                  # ...median vol of the core holdings (this % while fewer than 5 have a vol)
+vol_lookback_sessions = 126       # daily closes for the stock's annualised volatility (~6 months)
 fv_review_rearm_pct = 10          # fair value reached (owner rule 2026-10-09): one re-initiation per crossing; re-arms
 fv_review_days = 90               # ...after a further 10% rise or 90 days. Fair value is a prompt, never a sell signal.
 min_buy_conviction = 4            # owner rule: only buy/add with high conviction (core AND tactical); below -> AVOID/HOLD
@@ -278,6 +283,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `bin/live-dashboard` (launchd every 15 min; acts weekdays 08:00–21:15 UK) → `scripts/dashboard.py` with a live-price snapshot, uploaded if changed. Display only; the official value stays on closes.
 - `scripts/corporate_actions.py check` — dividends (stockanalysis.com dividend pages) and splits (Yahoo split column, confirmed on stockanalysis.com); log in `portfolio/corporate_actions.csv`, DIVIDEND/SPLIT rows in the ledger, receivables in `state.json`.
 - `scripts/regime.py` → `reports/regime/<date>.json/.md` (+ `-view.md` from `.claude/agents/macro-strategist.md`) — macro regime score, cash reserve, dip release.
+- `scripts/risk.py` — volatility-scaled core sizing (`[core].vol_*`, used by `portfolio.py`) and `risk.py report` → `reports/risk/<date>.md/.json` (weekly: each holding's vol, marginal contribution to risk and share of portfolio variance; informational, never trades).
 - `scripts/setups.py` — tactical setups (drift signal, pullback filter, ATR, volatility stop, 2:1 target, risk-based size).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`; a liquidity gate (`[screen].min_addv_usd`, `min_float_pct`) drops untradable names before ranking.
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.

@@ -30,7 +30,7 @@ The file must END with the json block. Then run `bin/py scripts/check_docs.py ev
 ## Decision block fields
 - `ticker`, `decision`: BUY or AVOID for a name not held; ADD, HOLD, TRIM or SELL for a holding. "No consensus", "needs more research" or anything else is NOT allowed. If evidence is thin, that lowers conviction; it does not defer the decision.
 - `position_type`: CORE or TACTICAL. A held position's label is fixed. A TACTICAL holding becomes CORE only via a full core initiation: then set `"core_initiation": true` with decision BUY.
-- `conviction`: integer 1-5. Core sizes: 4 = 7%, 5 = 10% of the portfolio.
+- `conviction`: integer 1-5. Core sizes: 4 = 7%, 5 = 10% of the portfolio, scaled by the stock's volatility (x0.6 to x1.4 against the core holdings' median; `scripts/risk.py`), so a volatile name gets less. Python sizes it; don't set `target_weight_pct` for a core BUY/ADD.
 - **Only high conviction is bought (owner rule):** BUY or ADD requires conviction 4 or 5, for CORE and TACTICAL alike. If your honest conviction is 1-3, the decision is AVOID for a new name; for a holding it is HOLD, TRIM (to the smaller size its conviction implies) or SELL (conviction 1 or a broken thesis) — never ADD. Never inflate conviction to get a position; "good but not compelling" is an AVOID. Do not rush: cash is an acceptable outcome.
 - `thesis`: one sentence.
 - `rationale`: ≤60 words. Why this decision and this size.
