@@ -54,14 +54,21 @@ def test_pick_filings_10k_vs_previous_10k_and_10q_vs_year_ago_quarter():
 
 
 def test_off_without_contact_and_non_us_skipped(cfg):
-    cfg.setdefault("sec", {})["contact"] = ""
-    assert S.run("AAPL", "2026-10-16", cfg)[0].startswith("SKIP sec step off")
-    cfg["sec"]["contact"] = "owner@example.com"
-    assert "not a US listing" in S.run("LON:SHEL", "2026-10-16", cfg, fetcher=object())[0]
+    assert S.run("AAPL", "2026-10-16", cfg, who="")[0].startswith("SKIP sec step off")
+    assert "not a US listing" in S.run("LON:SHEL", "2026-10-16", cfg, fetcher=object(), who="owner@example.com")[0]
+
+
+def test_contact_from_environment_or_env_file(tmp_path, monkeypatch):
+    f = tmp_path / ".env"
+    f.write_text("OTHER=1\nSEC_CONTACT='owner@example.com'\n")
+    monkeypatch.delenv("SEC_CONTACT", raising=False)
+    assert S.contact(f) == "owner@example.com"
+    monkeypatch.setenv("SEC_CONTACT", "env@example.com")
+    assert S.contact(f) == "env@example.com"
 
 
 def test_run_writes_delta_with_urls_and_word_cap(cfg, tmp_path, monkeypatch):
-    cfg["sec"] = {"contact": "owner@example.com", "max_words": 2000}
+    cfg["sec"] = {"max_words": 2000}
     sub = {"filings": {"recent": {"form": ["10-K", "10-K"], "filingDate": ["2026-02-01", "2025-02-01"],
                                   "reportDate": ["2025-12-31", "2024-12-31"], "accessionNumber": ["0001-26-1", "0001-25-1"],
                                   "primaryDocument": ["new.htm", "old.htm"]}}}
@@ -75,20 +82,19 @@ def test_run_writes_delta_with_urls_and_word_cap(cfg, tmp_path, monkeypatch):
         def get(self, url):
             return pages[url]
     monkeypatch.setattr(S, "ROOT", tmp_path)
-    msg, path = S.run("AAPL", "2026-10-16", cfg, F())
+    msg, path = S.run("AAPL", "2026-10-16", cfg, F(), who="owner@example.com")
     md = path.read_text()
     assert msg.startswith("OK") and "European Commission" in md and "WAS:" in md
     assert "new.htm" in md and "old.htm" in md and "## MD&A\nNo substantive change." in md
     assert "fiscal 2026" not in md                      # figure-only edit left out
     cfg["sec"]["max_words"] = 20
-    md = S.run("AAPL", "2026-10-16", cfg, F())[1].read_text()
+    md = S.run("AAPL", "2026-10-16", cfg, F(), who="owner@example.com")[1].read_text()
     assert "not shown (word cap 20)" in md
 
 
 def test_fetcher_refuses_without_contact(cfg):
-    cfg["sec"] = {"contact": " "}
     with pytest.raises(S.DataError):
-        S.SecFetcher(cfg)
+        S.SecFetcher(cfg, who=" ")
 
 
 def test_item_label_and_title_on_separate_lines():

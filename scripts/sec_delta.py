@@ -10,8 +10,9 @@ removed and reworded paragraphs, Risk Factors first -- goes to research/<SLUG>/s
 [sec].max_words, each block citing its filing URL. The researcher reads it before any web fetch.
 Numbers inside filings are context, never data (the stockanalysis.com-only rule is unchanged).
 
-sec.gov asks automated clients to name a contact in the User-Agent (its fair-access policy). The step is
-OFF until the owner sets [sec].contact in CLAUDE.md. Requests: sec.gov's robots.txt, >= [data]
+sec.gov asks automated clients to name a contact in the User-Agent (its fair-access policy). The contact is
+SEC_CONTACT in the environment or in the git-ignored .env file (never in CLAUDE.md, which is public); the step
+is OFF while it is unset. Requests: sec.gov's robots.txt, >= [data]
 request_interval_seconds apart, cached per day in data/cache/<date>/sec/.
 
 Usage:
@@ -24,6 +25,7 @@ import argparse
 import datetime as dt
 import difflib
 import json
+import os
 import re
 import sys
 import time
@@ -47,12 +49,25 @@ MIN_PARA_CHARS = 60
 
 
 # --------------------------------------------------------------------------- fetching
+def contact(env_file: Path | None = None) -> str:
+    """SEC_CONTACT from the environment, else from the git-ignored .env file."""
+    if os.environ.get("SEC_CONTACT", "").strip():
+        return os.environ["SEC_CONTACT"].strip()
+    f = env_file or ROOT / ".env"
+    if f.exists():
+        for ln in f.read_text().splitlines():
+            k, _, v = ln.partition("=")
+            if k.strip() == "SEC_CONTACT":
+                return v.strip().strip("'\"")
+    return ""
+
+
 class SecFetcher:
-    def __init__(self, cfg: dict, today: str | None = None):
-        contact = (cfg.get("sec") or {}).get("contact", "").strip()
-        if not contact:
-            raise DataError("https://www.sec.gov/", "contact", "[sec].contact is not set")
-        self.ua = f"{cfg['data']['user_agent']} contact: {contact}"
+    def __init__(self, cfg: dict, today: str | None = None, who: str | None = None):
+        who = (who if who is not None else contact()).strip()
+        if not who:
+            raise DataError("https://www.sec.gov/", "contact", "SEC_CONTACT is not set")
+        self.ua = f"{cfg['data']['user_agent']} contact: {who}"
         self.interval = float(cfg["data"]["request_interval_seconds"])
         self.dir = CACHE / (today or dt.date.today().isoformat()) / "sec"
         self._robots, self._last = None, 0.0
@@ -239,13 +254,14 @@ def render(ticker: str, asof: str, latest: dict, comp: dict, urls: tuple[str, st
     return "\n".join(out).rstrip() + "\n"
 
 
-def run(ticker: str, asof: str, cfg: dict, fetcher=None) -> tuple[str, Path | None]:
+def run(ticker: str, asof: str, cfg: dict, fetcher=None, who: str | None = None) -> tuple[str, Path | None]:
     sc = cfg.get("sec") or {}
-    if not sc.get("contact", "").strip():
-        return "SKIP sec step off: set [sec].contact in CLAUDE.md", None
+    who = contact() if who is None else who
+    if not who.strip():
+        return "SKIP sec step off: set SEC_CONTACT in .env", None
     if Ticker(ticker).exchange:
         return f"SKIP {ticker}: not a US listing (SEC filers only)", None
-    f = fetcher or SecFetcher(cfg, asof)
+    f = fetcher or SecFetcher(cfg, asof, who)
     cik = cik_for(f, ticker)
     if cik is None:
         return f"SKIP {ticker}: not an SEC filer", None
