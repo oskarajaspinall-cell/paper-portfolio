@@ -5,7 +5,7 @@ import pytest
 
 from conftest import FakeMarket
 import portfolio as P
-from prices import YahooPrices, rows_from_frame, yahoo_symbol
+from prices import YahooPrices, _currency, rows_from_frame, yahoo_symbol
 
 
 def frame(rows):
@@ -97,3 +97,30 @@ def test_incomplete_latest_bar_falls_back_instead_of_going_stale(cfg):
         y.history("AAPL")
     m = YMarket(cfg, y)
     assert m.quote("AAPL")["source"] == "stockanalysis" and "incomplete" in m.fallbacks[0]
+
+
+# ------------------------------------------------------------------ currency (Yahoo fast_info fails intermittently)
+class _FakeTicker:
+    def __init__(self, meta, fast):
+        self.history_metadata = meta
+        self._fast = fast
+
+    @property
+    def fast_info(self):
+        if isinstance(self._fast, Exception):
+            raise self._fast
+        return self._fast
+
+
+def test_currency_prefers_history_metadata():
+    assert _currency(_FakeTicker({"currency": "HKD"}, KeyError("currency"))) == "HKD"  # fast_info never needed
+
+
+def test_currency_falls_back_to_fast_info():
+    assert _currency(_FakeTicker({}, {"currency": "USD"})) == "USD"
+    assert _currency(_FakeTicker(None, {"currency": "INR"})) == "INR"
+
+
+def test_currency_raises_when_both_fail():
+    with pytest.raises(KeyError):
+        _currency(_FakeTicker({}, KeyError("currency")))

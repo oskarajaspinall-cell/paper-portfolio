@@ -44,6 +44,17 @@ def rows_from_frame(df) -> list[dict]:
     return sorted(out, key=lambda x: x["date"])
 
 
+def _currency(t) -> str:
+    """The quote currency of a yfinance Ticker whose history() was just loaded. history_metadata comes back
+    with the price bars (no extra request); fast_info makes a separate quote request that fails
+    intermittently (KeyError 'currency', 2026-10-14/15), so it is only the fallback. Raises if neither works."""
+    try:
+        ccy = (t.history_metadata or {}).get("currency")
+    except Exception:  # noqa: BLE001
+        ccy = None
+    return ccy or t.fast_info["currency"]
+
+
 class YahooPrices:
     """history(ticker) -> {"url", "rows", "currency"}; raises DataError on anything unusable."""
 
@@ -57,7 +68,7 @@ class YahooPrices:
         import yfinance as yf
         t = yf.Ticker(sym)
         df = t.history(period=period, interval="1d", auto_adjust=False, actions=False)
-        return df, t.fast_info["currency"]
+        return df, _currency(t)
 
     def history(self, ticker: str) -> dict:
         if ticker in self._cache:
@@ -94,7 +105,8 @@ def live_price(ticker: str, loader=None) -> dict:
         else:
             import yfinance as yf
             t = yf.Ticker(sym)
-            df, ccy = t.history(period="1d", interval="1m", auto_adjust=False, actions=False), t.fast_info["currency"]
+            df = t.history(period="1d", interval="1m", auto_adjust=False, actions=False)
+            ccy = _currency(t)
     except Exception as e:  # noqa: BLE001
         raise DataError(url, "yfinance", f"{type(e).__name__}: {str(e)[:120]}") from e
     if df is None or not len(df):
@@ -121,7 +133,8 @@ def price_at(ticker: str, when, max_age_min: int = 15, loader=None) -> dict:
         else:
             import yfinance as yf
             t = yf.Ticker(sym)
-            df, ccy = t.history(period="5d", interval="1m", auto_adjust=False, actions=False), t.fast_info["currency"]
+            df = t.history(period="5d", interval="1m", auto_adjust=False, actions=False)
+            ccy = _currency(t)
     except Exception as e:  # noqa: BLE001
         raise DataError(url, "yfinance", f"{type(e).__name__}: {str(e)[:120]}") from e
     df = df[(df["Close"] == df["Close"]) & (df.index <= when)] if df is not None and len(df) else df
