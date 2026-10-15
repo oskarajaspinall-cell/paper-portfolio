@@ -216,3 +216,21 @@ def test_entry_price_rules(cfgd):
     assert check_eval(null_ok, STATE, cfgd)[0] == []
     low = evaluation({"decision": "AVOID", "conviction": 2, "entry_price": None, "entry_basis": ""})
     assert check_eval(low, STATE, cfgd)[0] == []  # below conviction 3: not required
+
+
+def test_unsourced_numbers_allows_sheet_figures_rounding_and_counts():
+    from check_docs import unsourced_numbers
+    sheet = "ROIC 23.47% | EV/EBITDA 14.21x | Revenue 1,234.5M | Margin 0.183"
+    text = ("ROIC 23.5% [RA] and EV/EBITDA 14.2x; revenue 1,234.5M; margin 18.3%; 3 segments; "
+            "over 5 years; since 2019; dated 2026-10-01; 10y median.")
+    assert unsourced_numbers(text, [sheet]) == []
+    assert len(unsourced_numbers("Gross margin reached 47.9% [Likely]", [sheet])) == 1
+
+
+def test_eval_numbers_must_come_from_sources_or_the_decision_block():
+    from check_docs import eval_number_problems
+    md = ("# Evaluation\n## Bear case\nROIC 23.5% falls [Likely].\n## Bull case\nUpside to 250 [Guessing].\n"
+          "## Decision\n```json\n{\"rationale\": \"FCF yield 4.4% is fair\", \"scenarios\": {\"bull\": "
+          "{\"target_price_12m\": 250, \"basis\": \"multiple re-rates to 31.7x\"}}}\n```\n")
+    errs = eval_number_problems(md, ["ROIC 23.47% | FCF yield 4.4%"])
+    assert len(errs) == 1 and "31.7" in errs[0]          # 250 is in the Decision block; 31.7x is invented

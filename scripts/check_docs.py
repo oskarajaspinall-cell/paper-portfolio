@@ -4,6 +4,11 @@ Usage:
     python scripts/check_docs.py note research/AAPL/2026-10-06.md
     python scripts/check_docs.py eval research/AAPL/2026-10-06-evaluation.md [--state portfolio/state.json]
 
+Number provenance (design by Claude 2026-10-16): every number in an evaluation's prose (Bear/Bull cases,
+thesis, rationale, scenario bases) must appear in the fact sheet, the research note, the macro overlay, the CLAUDE.md config
+block or the evaluation's own Decision block (rounding, sign, x100 and thousand-scale allowed; small counts, years and
+dates exempt). An unsourced number fails the evaluation; in a note it is only a warning.
+
 Word counts exclude URLs, markdown link targets, confidence tags and the Sources section.
 Exit 0 = pass (prints word counts), exit 1 = fail (prints every problem).
 """
@@ -32,6 +37,73 @@ TACTICAL = {"total": 400, "sections": [
 
 NEW_DECISIONS = {"BUY", "AVOID"}
 HELD_DECISIONS = {"ADD", "HOLD", "TRIM", "SELL"}
+
+
+_NUM = re.compile(r"(?<![\w.])[-−+]?[$£€]?(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d+))?")
+_UNIT_AFTER = re.compile(r"\s*(?:-|\s)?(?:y|yr|yrs|years?|quarters?|months?|weeks?|days?|sessions?)\b")
+
+
+def _numbers(text: str) -> list[tuple[float, int, int]]:
+    """(value, decimal places, end position) for each number in the text."""
+    return [(float(m.group(1).replace(",", "") + ("." + m.group(2) if m.group(2) else "")), len(m.group(2) or ""),
+             m.end()) for m in _NUM.finditer(text)]
+
+
+def _strip_refs(text: str) -> str:
+    t = re.sub(r"https?://\S+", "", text)
+    t = re.sub(r"\b\d{4}-\d{2}-\d{2}\b", "", t)
+    t = re.sub(r"\b[A-Z]{2,7}:[\w.]+", "", t)                    # tickers such as HKG:9999
+    t = re.sub(r"\b(?:FY|H|Q)\d{1,4}(?:[-/]\d{1,4})?\b", "", t)  # periods such as FY2023-24, Q2-26
+    return re.sub(r"\[(?:[A-Z]{2,3}\d*|Certain|Likely|Guessing)\]", "", t)
+
+
+def unsourced_numbers(text: str, sources: list[str]) -> list[str]:
+    """Numbers in `text` that appear in none of `sources` (see the module docstring for what is allowed)."""
+    pool = {v for s in sources for v, _, _ in _numbers(_strip_refs(s))}
+    t, out = _strip_refs(text), []
+    for v, dp, end in _numbers(t):
+        if (dp == 0 and (v <= 12 or 1990 <= v <= 2040 or _UNIT_AFTER.match(t, end))) or (dp >= 2 and v < 1):
+            continue  # small counts, years, durations, probabilities
+        tol = 0.5 * 10 ** -dp + 1e-9
+        if any(abs(p - v) < tol or abs(p * 100 - v) < tol or abs(p / 1000 - v) < tol or abs(p * 1000 - v) < tol
+               for p in pool):
+            continue
+        out.append(f"{t[max(0, end - 40):end].strip()!r}")
+    return out
+
+
+def eval_number_problems(md: str, sources: list[str]) -> list[str]:
+    """Unsourced numbers in an evaluation's prose. The Decision block's own numbers count as sources."""
+    d, _ = decision_block(md)
+    m = re.search(r"```json(.*)```", md, re.S)
+    prose = [re.sub(r"^# .*$", "", md[:m.start()] if m else md, flags=re.M)]
+    own: list[str] = []  # the block's numeric fields and its other text (trigger thresholds, entry basis)
+
+    def walk(x, key=None):
+        if isinstance(x, dict):
+            for k, v in x.items():
+                walk(v, k)
+        elif isinstance(x, list):
+            for v in x:
+                walk(v, key)
+        elif isinstance(x, str):
+            (prose if key in ("thesis", "rationale", "basis") else own).append(x)
+        elif isinstance(x, (int, float)) and not isinstance(x, bool):
+            own.append(repr(x))
+    walk(d or {})
+    return [f"number not in the fact sheet, note or macro overlay (never introduce new numbers): ...{x}"
+            for x in unsourced_numbers("\n".join(prose), sources + [" ".join(own)])]
+
+
+def _sources_for(path: Path, include_note: bool) -> list[str]:
+    """The newest fact sheet on/before the document's date, plus (for evaluations) that day's note and overlay."""
+    date = path.name[:10]
+    sheets = sorted(path.parent.glob("factsheet-*.md"))
+    sheets = [f for f in sheets if f.name[10:20] <= date] or sheets
+    out = [sheets[-1].read_text()] if sheets else []
+    if include_note:
+        out += [x.read_text() for x in (path.parent / f"{date}.md", path.parent / f"{date}-macro.md") if x.exists()]
+    return out
 
 
 def words(text: str) -> int:
@@ -381,6 +453,11 @@ def main(argv=None) -> int:
         sheets = sorted(path.parent.glob("factsheet-*.md"))
         sheet_urls = set(re.findall(r"https?://[^\s)\]>|]+", sheets[-1].read_text())) if sheets else set()
         errs, counts = check_note(md, {u.rstrip(".,;") for u in sheet_urls})
+        if sheets:
+            warn = unsourced_numbers(re.split(r"^## +Sources", md, flags=re.M)[0], _sources_for(path, False))
+            counts["unsourced_numbers"] = len(warn)
+            for w in warn:
+                print(f"WARNING number not in the fact sheet: ...{w}")
     elif a.kind == "macro":
         errs, counts = check_macro(md, load_config())
     elif a.kind == "regime":  # reports/regime/<date>-view.md, checked against reports/regime/<date>.json
@@ -389,6 +466,10 @@ def main(argv=None) -> int:
         errs, counts = check_regime_view(md, score, load_config())
     else:
         errs, counts = check_eval(md, json.loads(Path(a.state).read_text()), load_config())
+        src = _sources_for(Path(a.path), True)
+        if src:  # the evaluator also reads the config block (limits, sizes, cash rate)
+            cfg_block = re.search(r"<!-- CONFIG:START -->(.*?)<!-- CONFIG:END -->", (ROOT / "CLAUDE.md").read_text(), re.S)
+            errs += eval_number_problems(md, src + [cfg_block.group(1) if cfg_block else ""])
     if errs:
         print(f"FAIL {a.path}\n" + "\n".join(f"- {e}" for e in errs))
         return 1
