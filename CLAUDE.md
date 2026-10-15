@@ -32,6 +32,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - **Fair value reached** (owner rule 2026-10-09): when a core holding's close reaches its latest base fair value, the weekly scan sends it to a full re-initiation (once per crossing; `[core].fv_review_*`). Fair value is one model estimate, NEVER a sell signal on its own: the re-initiation decides on the whole evidence whether the thesis has played out.
 - **Text-only triggers** (owner rule 2026-10-09): triggers no script can check (bookings, share, guidance, regulation) are tested by the weekly reviewer against every new release/filing of the holding; one that is met escalates to a re-initiation.
 - **Cash is a holding** (owner rule 2026-10-09): `scripts/regime.py` scores official macro indicators into a regime (risk-on / neutral / defensive); the weekly `macro-strategist` may move it one notch with cited official sources. The regime sets a cash reserve (`[cash_strategy]`, 10/20/35%) that new buys can't spend (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0, and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
+- **Dividends and splits** (owner request 2026-10-16): credited / applied mechanically by `scripts/corporate_actions.py` before every re-pricing (`[corporate_actions]`). A split never reads as a price move: shares, entry prices, tactical levels, watchlist entry prices and decision scoring are all adjusted.
 - When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve or sector limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
 
 ## Config (edit values here; scripts read this block)
@@ -90,6 +91,13 @@ rs_sessions = 120                 # ~6 months
 # total portfolio (not a flow); the baseline earns it too. 0 = off.
 interest_aer_pct = 3.8
 interest_start = "2026-10-06"     # back-credited from the portfolio's first day
+
+[corporate_actions]
+# Dividends and splits (owner request 2026-10-16; scripts/corporate_actions.py, no AI). Dividends: due on shares
+# held before the ex-date, a receivable (in the value) from the ex-date, cash on the pay date, net of withholding
+# tax by the dividend's currency (%). Splits: shares x ratio, per-share prices / ratio; Yahoo's split confirmed
+# against stockanalysis.com, else the run stops.
+withholding_pct = { USD = 15, default = 0 }   # US 15% = treaty rate for a UK resident (W-8BEN)
 
 [cash_strategy]
 # Cash is a holding (owner rule 2026-10-09, design by Claude). scripts/regime.py scores official indicators into a
@@ -266,6 +274,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/valuation.py` + `valuation/industry_methods.csv` — industry-appropriate fair value (owner's 145-industry method table: best + 2nd-best method; DCF, through-cycle DCF, FCFE, P/E, P/B+ROE, EV/EBITDA, EV/Revenue, DDM, P/FFO proxy; NAV/rNPV/SOTP need data stockanalysis.com doesn't show → `[data unavailable]`, next method used). Bear/base/bull from the stock's own history + reverse DCF; CAPM discount (FRED 10y + beta × `[valuation].erp`). Inform-only: shown in the fact sheet, logged as `fair_value_base` in the decision log, never a buy rule.
 - `bin/entry-intraday` (weekdays ~10:30 New York) → `scripts/entry_watch.py intraday` (live Yahoo prices vs entry prices, US stocks) → `scripts/entry_research.py` re-researches hits at once (≤3/day; a BUY goes to the portfolio-manager and fills at once at the live price while the US market is open).
 - `bin/live-dashboard` (launchd every 15 min; acts weekdays 08:00–21:15 UK) → `scripts/dashboard.py` with a live-price snapshot, uploaded if changed. Display only; the official value stays on closes.
+- `scripts/corporate_actions.py check` — dividends (stockanalysis.com dividend pages) and splits (Yahoo split column, confirmed on stockanalysis.com); log in `portfolio/corporate_actions.csv`, DIVIDEND/SPLIT rows in the ledger, receivables in `state.json`.
 - `scripts/regime.py` → `reports/regime/<date>.json/.md` (+ `-view.md` from `.claude/agents/macro-strategist.md`) — macro regime score, cash reserve, dip release.
 - `scripts/setups.py` — tactical setups (drift signal, pullback filter, ATR, volatility stop, 2:1 target, risk-based size).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.

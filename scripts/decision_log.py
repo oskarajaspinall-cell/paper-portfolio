@@ -19,6 +19,7 @@ import argparse
 import csv
 import datetime as dt
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -167,13 +168,23 @@ def update(rows: list[dict], mkt, asof: str) -> list[str]:
                 r[f"ret_{h}m"] = "n/a"
                 notes.append(f"{r['ticker']} {r['price_date']} {h}m: [data unavailable] ({e.field})")
                 continue
-            ret = q["price_usd"] / float(r["price_usd"]) - 1
+            factor = split_factor(mkt, r["ticker"], r["price_date"], end)
+            ret = q["price_usd"] * factor / float(r["price_usd"]) - 1
             sr = s["close"] / float(r["spy_close"]) - 1
             ex = ret - sr
             hit = ex > 0 if r["decision"] in POSITIVE else ex < 0
             r.update({f"ret_{h}m": round(ret * 100, 2), f"spy_{h}m": round(sr * 100, 2),
                       f"excess_{h}m": round(ex * 100, 2), f"hit_{h}m": int(hit)})
     return notes
+
+
+def split_factor(mkt, ticker: str, after: str, through: str) -> float:
+    """New shares per old share from splits dated after `after` up to `through` (Yahoo history's split
+    column), so a split between the decision and the horizon never reads as a fall (2026-10-16)."""
+    if not hasattr(mkt, "history"):
+        return 1.0
+    h = mkt.history(ticker)
+    return math.prod(x["split"] for x in h.get("all_rows", h["rows"]) if x.get("split") and after < x["date"] <= through)
 
 
 def hit_table(rows: list[dict]) -> str:

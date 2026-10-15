@@ -190,6 +190,7 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
         sh(PY + ["scripts/portfolio.py", "fill-pending", "--asof", asof, "--save", str(rundir / "fills.json")]
            + (["--dry-run"] if dry_run else []), log)
         step("mark")
+        sh(PY + ["scripts/corporate_actions.py", "check", "--asof", asof], log)  # dividends/splits first (2026-10-16)
         sh(PY + ["scripts/portfolio.py", "mark", "--asof", asof], log)
 
         step("cash strategy")  # cash is a holding (owner rule 2026-10-09): macro regime -> cash reserve

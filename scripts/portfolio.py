@@ -46,7 +46,8 @@ LEDGER_COLS = ["date", "ticker", "type", "side", "shares", "fill_price", "curren
                "cash_change_usd", "source_url", "fx_source_url", "reason"]
 REJECT_COLS = ["date", "ticker", "action", "type", "rule", "detail"]
 VAL_COLS = ["date", "phase", "total_usd", "cash_usd", "core_usd", "tactical_usd",
-            "core_in", "core_out", "tactical_in", "tactical_out", "baseline_usd", "spy_close"]
+            "core_in", "core_out", "tactical_in", "tactical_out", "baseline_usd", "spy_close",
+            "core_income", "tactical_income", "spy_div_cum"]  # dividends (net, from the ex-date); SPY's per share
 ACTIONS = {"BUY", "ADD", "TRIM", "SELL", "HOLD"}
 TYPES = {"CORE", "TACTICAL"}
 BASE_CCY = "USD"
@@ -188,7 +189,8 @@ def trade_costs(gross_usd: float, currency: str, cfg: dict) -> dict:
 # --------------------------------------------------------------------------- state io
 def empty_state(cfg: dict) -> dict:
     return {"base_currency": BASE_CCY, "inception_date": None, "cash_usd": float(cfg["portfolio"]["starting_cash_usd"]),
-            "holdings": {}, "flows": {"CORE": {"in": 0.0, "out": 0.0}, "TACTICAL": {"in": 0.0, "out": 0.0}},
+            "holdings": {}, "flows": {"CORE": {"in": 0.0, "out": 0.0, "income": 0.0},
+                                      "TACTICAL": {"in": 0.0, "out": 0.0, "income": 0.0}},
             "baseline": None, "last_marked": None}
 
 
@@ -206,6 +208,15 @@ def atomic_write(path: Path, text: str):
 def append_csv(path: Path, cols: list[str], rows: list[dict]):
     if not rows:
         return
+    if path.exists():  # a column added to the schema later: rewrite the file once under the new header
+        with path.open() as fh:
+            header = next(csv.reader(fh), [])
+        if header and header != cols and set(header) <= set(cols):
+            old = read_csv(path)
+            tmp = path.with_suffix(path.suffix + ".migrate.tmp")
+            tmp.unlink(missing_ok=True)
+            append_csv(tmp, cols, old)
+            os.replace(tmp, path)
     new = not path.exists()
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", newline="") as fh:
@@ -237,12 +248,13 @@ def mark(state: dict, mkt: Market) -> dict:
 def totals(state: dict) -> dict:
     core = sum(h["market_value_usd"] for h in state["holdings"].values() if h["type"] == "CORE")
     tac = sum(h["market_value_usd"] for h in state["holdings"].values() if h["type"] == "TACTICAL")
-    total = state["cash_usd"] + core + tac
+    recv = sum(r["net_usd"] for r in state.get("receivables", []))  # dividends past their ex-date, not yet paid
+    total = state["cash_usd"] + core + tac + recv
     sectors: dict[str, float] = {}
     for h in state["holdings"].values():
         sectors[h["sector"]] = sectors.get(h["sector"], 0.0) + h["market_value_usd"]
-    return {"total": total, "cash": state["cash_usd"], "core": core, "tactical": tac, "sectors": sectors,
-            "n": len(state["holdings"])}
+    return {"total": total, "cash": state["cash_usd"], "core": core, "tactical": tac, "receivable": recv,
+            "sectors": sectors, "n": len(state["holdings"])}
 
 
 INTEREST_COLS = ["from", "through", "days", "aer_pct", "interest_usd", "cash_after_usd", "baseline_interest_usd"]
@@ -292,7 +304,7 @@ def baseline_value(state: dict, mkt: Market) -> float | None:
     return b["cash_usd"] + sum(v["shares"] * mkt.quote(t)["price_usd"] for t, v in b["holdings"].items())
 
 
-def valuation_row(state: dict, mkt: Market, phase: str) -> dict:
+def valuation_row(state: dict, mkt: Market, phase: str, spy_div_cum: float | None = None) -> dict:
     tt = totals(state)
     spy = mkt.quote(mkt.cfg["portfolio"]["benchmark"])
     fl = state["flows"]
@@ -301,7 +313,23 @@ def valuation_row(state: dict, mkt: Market, phase: str) -> dict:
             "core_usd": round(tt["core"], 2), "tactical_usd": round(tt["tactical"], 2),
             "core_in": round(fl["CORE"]["in"], 2), "core_out": round(fl["CORE"]["out"], 2),
             "tactical_in": round(fl["TACTICAL"]["in"], 2), "tactical_out": round(fl["TACTICAL"]["out"], 2),
-            "baseline_usd": "" if bv is None else round(bv, 2), "spy_close": spy["close"]}
+            "baseline_usd": "" if bv is None else round(bv, 2), "spy_close": spy["close"],
+            "core_income": round(fl["CORE"].get("income", 0.0), 2),
+            "tactical_income": round(fl["TACTICAL"].get("income", 0.0), 2),
+            "spy_div_cum": "" if spy_div_cum is None else round(spy_div_cum, 4)}
+
+
+def spy_div_cum(mkt: Market, vals: list[dict], through: str) -> float | None:
+    """SPY's dividends per share with an ex-date after the first valuation and on/before `through`
+    (stockanalysis.com dividend page), for the same-money comparison. If the page can't be read, the last
+    recorded figure is kept (the next successful read recomputes the whole sum, so nothing is lost)."""
+    first = vals[0]["date"] if vals else through
+    try:
+        rows = mkt.f.section(mkt.cfg["portfolio"]["benchmark"], "dividend")["data"]["rows"]
+    except DataError:
+        last = next((v["spy_div_cum"] for v in reversed(vals) if v.get("spy_div_cum") not in ("", None)), None)
+        return None if last is None else float(last)
+    return sum(r["amount"] for r in rows if first < r["ex_date"] <= through)
 
 
 def record_valuation(path: Path, row: dict) -> str:
@@ -333,10 +361,16 @@ def interval_return(mv0, mv1, fin, fout) -> float | None:
     return (mv1 - mv0 - fin + fout) / denom
 
 
+def _num(row: dict, key: str | None) -> float:
+    """A valuation-row number; blank (a column added after the row was written) = 0."""
+    v = row.get(key) if key else None
+    return float(v) if v not in ("", None) else 0.0
+
+
 def chain(rows: list[dict], key_mv: str | None = None, key_in: str | None = None, key_out: str | None = None,
-          key_level: str | None = None) -> float | None:
+          key_level: str | None = None, key_income: str | None = None) -> float | None:
     """Chain-link returns across consecutive valuation rows. With key_level, a simple
-    level ratio (no flows) is used: last/first - 1."""
+    level ratio (no flows) is used: last/first - 1. Dividends (key_income) count like money taken out."""
     if len(rows) < 2:
         return None
     if key_level:
@@ -347,7 +381,7 @@ def chain(rows: list[dict], key_mv: str | None = None, key_in: str | None = None
     growth, seen = 1.0, False
     for r0, r1 in zip(rows, rows[1:]):
         fin = float(r1[key_in]) - float(r0[key_in])
-        fout = float(r1[key_out]) - float(r0[key_out])
+        fout = float(r1[key_out]) - float(r0[key_out]) + _num(r1, key_income) - _num(r0, key_income)
         r = interval_return(float(r0[key_mv]), float(r1[key_mv]), fin, fout)
         if r is not None:
             growth *= 1 + r
@@ -381,8 +415,8 @@ def returns_table(vals: list[dict], asof: str) -> dict:
         out[label] = {
             "from": w[0]["date"], "to": w[-1]["date"],
             "total": chain(w, key_level="total_usd"),
-            "core": chain(w, "core_usd", "core_in", "core_out"),
-            "tactical": chain(w, "tactical_usd", "tactical_in", "tactical_out"),
+            "core": chain(w, "core_usd", "core_in", "core_out", key_income="core_income"),
+            "tactical": chain(w, "tactical_usd", "tactical_in", "tactical_out", key_income="tactical_income"),
             "baseline": chain(bl, key_level="baseline_usd") if len(bl) > 1 else None,
             "spy": chain(w, key_level="spy_close"),
         }
@@ -391,28 +425,34 @@ def returns_table(vals: list[dict], asof: str) -> dict:
 
 def invested_series(vals: list[dict]) -> list[dict]:
     """Return on the money put into stocks, cash excluded (owner request 2026-10-14), one point per valuation
-    date (the last row of each date). gain = holdings value + sale proceeds - money in (buys incl. costs);
-    pct = gain / money in. spy_pct is the same money in SPY on the same dates: every buy buys SPY at that row's
-    close and every sale sells the same dollars of it. Dates before the first buy are left out."""
+    date (the last row of each date). gain = holdings value + sale proceeds + dividends - money in (buys incl.
+    costs); pct = gain / money in. spy_pct is the same money in SPY on the same dates: every buy buys SPY at that
+    row's close, every sale sells the same dollars of it, and the SPY units held earn SPY's dividends (owner
+    request 2026-10-16). Dates before the first buy are left out."""
     out: dict[str, dict] = {}
     units = proceeds = prev_in = prev_out = 0.0
-    spy = None
+    spy = prev_div = None
     for v in vals:
-        def f(k):
-            return float(v.get(k) or 0)
-        cin, cout = f("core_in") + f("tactical_in"), f("core_out") + f("tactical_out")
+        cin = _num(v, "core_in") + _num(v, "tactical_in")
+        cout = _num(v, "core_out") + _num(v, "tactical_out")
+        income = _num(v, "core_income") + _num(v, "tactical_income")
         spy = float(v["spy_close"]) if v.get("spy_close") not in ("", None) else spy
+        if v.get("spy_div_cum") not in ("", None):  # SPY dividends since the last row, on the units held before
+            div = float(v["spy_div_cum"])
+            if prev_div is not None and div > prev_div:
+                proceeds += units * (div - prev_div)
+            prev_div = div
         if spy:
             units += (cin - prev_in - (cout - prev_out)) / spy
             proceeds += cout - prev_out
         prev_in, prev_out = cin, cout
         if cin <= 0:
             continue
-        value = f("core_usd") + f("tactical_usd")
-        gain = value + cout - cin
+        value = _num(v, "core_usd") + _num(v, "tactical_usd")
+        gain = value + cout + income - cin
         out[v["date"]] = {"date": v["date"], "invested": round(cin, 2), "value": round(value, 2),
-                          "proceeds": round(cout, 2), "gain": round(gain, 2), "pct": gain / cin,
-                          "spy_pct": None if not spy else (units * spy + proceeds - cin) / cin}
+                          "proceeds": round(cout, 2), "dividends": round(income, 2), "gain": round(gain, 2),
+                          "pct": gain / cin, "spy_pct": None if not spy else (units * spy + proceeds - cin) / cin}
     return [out[d] for d in sorted(out)]
 
 
@@ -1156,7 +1196,9 @@ def main(argv=None) -> int:
             atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
             if irow:
                 append_csv(PORT / "interest.csv", INTEREST_COLS, [irow])
-            record_valuation(PORT / "valuations.csv", valuation_row(state, mkt, args.phase))
+            vals = read_csv(PORT / "valuations.csv")
+            sdc = spy_div_cum(mkt, vals, mkt.quote(cfg["portfolio"]["benchmark"])["date"])
+            record_valuation(PORT / "valuations.csv", valuation_row(state, mkt, args.phase, sdc))
             print(json.dumps({k: round(v, 2) if isinstance(v, float) else v for k, v in totals(state).items()}))
         elif args.cmd == "returns":
             print(format_returns(returns_table(read_csv(PORT / "valuations.csv"), args.asof)))

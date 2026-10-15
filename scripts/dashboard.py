@@ -111,7 +111,8 @@ def build_data(live: bool = True) -> dict:
     start = float(cfg["portfolio"]["starting_cash_usd"])
     names = {r["ticker"]: r["name"] for r in _csv(ROOT / "universe" / "universe.csv")}
     hold = []
-    total = state.get("cash_usd", 0.0) + sum(h.get("market_value_usd", 0.0) for h in state["holdings"].values())
+    recv = sum(r["net_usd"] for r in state.get("receivables", []))  # dividends past the ex-date, not yet paid
+    total = state.get("cash_usd", 0.0) + recv + sum(h.get("market_value_usd", 0.0) for h in state["holdings"].values())
     for t, h in sorted(state["holdings"].items(), key=lambda kv: -kv[1].get("market_value_usd", 0)):
         mv, cb = h.get("market_value_usd", 0.0), h.get("cost_basis_usd", 0.0)
         ep, lp = _f(h.get("entry_price")), _f(h.get("last_close"))
@@ -129,7 +130,7 @@ def build_data(live: bool = True) -> dict:
                      "plan": plan, "thesis": h.get("thesis", "")})
     watch_rows = sorted(_csv(port / "entry_watch.csv"), key=lambda r: -(_f(r.get("pct_to_entry")) or -999))[:40]
     snap = live_snapshot([h["ticker"] for h in hold] + [r["ticker"] for r in watch_rows]) if live else {}
-    live_total = state.get("cash_usd", 0.0)
+    live_total = state.get("cash_usd", 0.0) + recv
     for h in hold:
         q, lc = snap.get(h["ticker"]), h["last_price"]
         h["live"] = q
@@ -156,7 +157,7 @@ def build_data(live: bool = True) -> dict:
     return {
         "generated": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
         "repo": repo_url(),
-        "total": total, "cash": state.get("cash_usd", 0.0), "start": start,
+        "total": total, "cash": state.get("cash_usd", 0.0), "start": start, "receivable": recv,
         "close_date": max((h["last_date"] for h in hold), default=""),
         "live_total": live_total if snap else None, "live_at": dt.datetime.now().strftime("%a %H:%M") + " UK" if snap else None,
         "inception": state.get("inception_date"),
@@ -263,12 +264,12 @@ $('heroSub').textContent=(D.inception?`At the ${D.close_date} close. `+(I?`Inves
  +(D.live_total!=null?` · Live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
 const tile=(l,v,d,c)=>el('div',{class:'tile'},el('div',{class:'l'},l),el('div',{class:'v'},v),d?el('div',{class:'d '+(c||'')},d):'');
 $('tiles').append(
- I?tile('Return on invested money',pct(I.pct*100),`${usd(I.gain)} gain on ${usd(I.invested)} invested`+(I.spy_pct==null?'':` · same money in S&P 500 ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
+ I?tile('Return on invested money',pct(I.pct*100),`${usd(I.gain)} gain on ${usd(I.invested)} invested`+(I.dividends?` incl. ${usd(I.dividends)} dividends`:'')+(I.spy_pct==null?'':` · same money in S&P 500 ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
   :tile('Return on invested money','–','starts with the first trade'),
  D.inception?tile('Whole portfolio (incl. cash)',D.since==null?'n/a':pct(D.since*100),D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
   :tile('Whole portfolio (incl. cash)','–','starts with the first trade'),
  tile('This week (whole portfolio)',D.week?pct(D.week.portfolio*100):'n/a',D.week&&D.week.spy!=null?'SPY '+pct(D.week.spy*100):'',''),
- tile('Cash',usd(D.cash),(D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':'')+(D.interest?` · earns ${D.interest.aer_pct}% AER, ${usd(D.interest.total_usd)} so far`:'')),
+ tile('Cash',usd(D.cash),(D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':'')+(D.interest?` · earns ${D.interest.aer_pct}% AER, ${usd(D.interest.total_usd)} so far`:'')+(D.receivable?` · ${usd(D.receivable,2)} dividends due`:'')),
  tile('Cash strategy',D.regime?({risk_on:'Risk-on',neutral:'Neutral',defensive:'Defensive'})[D.regime.final_regime]:'n/a',D.regime?`reserve ${D.regime.reserve_pct}% · S&P ${D.regime.dip.drawdown_pct}% off its high`+(D.regime.dip.multiplier<1?' · buying the dip':''):''),
  tile('Holdings',String(D.holdings.length),D.holdings.filter(h=>h.type==='CORE').length+' core · '+D.holdings.filter(h=>h.type==='TACTICAL').length+' tactical'),
  tile('Decisions logged',String(D.n_decisions),'')

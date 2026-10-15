@@ -38,6 +38,7 @@ PAGES = {
     "statistics": "statistics/",
     "history": "history/",
     "filings": "filings/",
+    "dividend": "dividend/",
 }
 
 # Sell-side analyst outputs are never an input (house rule). Parsers drop these keys.
@@ -364,9 +365,39 @@ def completed_closes(history: dict, asof: str) -> list[dict]:
     return [r for r in history["rows"] if r["date"] < asof]
 
 
+_AMT = re.compile(r"^\s*(\$)?\s*([0-9][0-9,]*(?:\.[0-9]+)?)\s*([A-Za-z]{3})?\s*$")
+
+
+def parse_amount(text, url) -> tuple[float, str]:
+    """A dividend amount as the page prints it: '$1.560' -> (1.56, 'USD'); '0.75272 HKD' -> (0.75272, 'HKD')."""
+    m = _AMT.match(str(text or ""))
+    if not m or not (m.group(1) or m.group(3)):
+        raise DataError(url, "dividend.amt", f"unreadable amount {text!r}")
+    ccy = "USD" if m.group(1) else m.group(3)
+    return float(m.group(2).replace(",", "")), {"GBp": "GBX"}.get(ccy, ccy.upper())
+
+
+def parse_dividends(nodes, url) -> dict:
+    """Dividend history (owner request 2026-10-16), newest first: ex-date, amount + currency, record and pay
+    dates. A page with no `history` list is a format change (DataError); an empty list = no dividends."""
+    page = nodes[-1] if nodes else None
+    if not isinstance(page, dict) or not isinstance(page.get("history"), list):
+        raise DataError(url, "dividend.history", "no dividend history list on the page (format changed?)")
+    rows = []
+    for r in page["history"]:
+        if not isinstance(r, dict) or not r.get("dt"):
+            raise DataError(url, "dividend.dt", f"row without an ex-date: {r!r}"[:200])
+        amt, ccy = parse_amount(r.get("amt"), url)
+        pay = r.get("pay") if str(r.get("pay") or "")[:2] == "20" else None
+        rows.append({"ex_date": r["dt"], "amount": amt, "currency": ccy, "pay_date": pay,
+                     "record_date": r.get("record") if str(r.get("record") or "")[:2] == "20" else None})
+    return {"rows": rows}
+
+
 PARSERS = {"overview": parse_overview, "income": parse_statement, "balance": parse_statement,
            "cashflow": parse_statement, "ratios": parse_statement,
-           "statistics": parse_statistics, "history": parse_history, "filings": parse_filings}
+           "statistics": parse_statistics, "history": parse_history, "filings": parse_filings,
+           "dividend": parse_dividends}
 
 
 # --------------------------------------------------------------------------- fetching

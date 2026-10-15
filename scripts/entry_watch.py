@@ -40,7 +40,7 @@ from common import ROOT, DataError, Ticker, load_config  # noqa: E402
 
 WATCH = ROOT / "portfolio" / "entry_watch.csv"
 COLS = ["ticker", "entry_price", "currency", "set_date", "expires", "conviction", "decision", "source", "basis",
-        "evaluation", "last_close", "last_close_date", "pct_to_entry", "hit_date", "near_since"]
+        "evaluation", "last_close", "last_close_date", "pct_to_entry", "hit_date", "near_since", "split_checked"]
 
 
 def read(path: Path = WATCH) -> list[dict]:
@@ -127,6 +127,27 @@ def why_not_yet(r: dict, n: int = 220) -> str:
     except Exception:  # noqa: BLE001 - missing/old evaluation: show nothing rather than fail the daily job
         return ""
     return t if len(t) <= n else t[:n - 1].rsplit(" ", 1)[0] + "…"
+
+
+def adjust_splits(rows: list[dict], history, asof: str) -> list[str]:
+    """Split-adjust entry prices (owner request 2026-10-16): a split dated after the row was set (or last checked)
+    and before asof divides the entry price, so a 2-for-1 split is never a false entry hit. `history(ticker)` =
+    Market.history (Yahoo rows carry `split`). Returns one note per adjustment."""
+    notes = []
+    for r in rows:
+        try:
+            h = history(r["ticker"])
+        except DataError:
+            continue  # check() skips it too; the next run catches up
+        since = r.get("split_checked") or r.get("set_date") or ""
+        for x in h.get("all_rows", h["rows"]):
+            if x.get("split") and since < x["date"] < asof:
+                old = float(r["entry_price"])
+                r["entry_price"] = round(old / x["split"], 4)
+                r["split_checked"] = x["date"]
+                notes.append(f"{r['ticker']}: {x['split']:g}-for-1 split on {x['date']}, entry price "
+                             f"{old:g} -> {r['entry_price']:g}")
+    return notes
 
 
 def check(rows: list[dict], quote, asof: str, near_pct: float = 10) -> tuple[list[dict], list[dict], list[dict]]:
@@ -270,6 +291,7 @@ def main(argv=None) -> int:
         from fetch_data import Fetcher
         from portfolio import Market, price_provider
         mkt = Market(Fetcher(cfg, refresh=True), a.asof, cfg, price_provider(cfg))
+        split_notes = adjust_splits(rows, mkt.history, a.asof)
         rows, hits, entered = check(rows, mkt.quote, a.asof, near_pct)
         write(rows)
         stp = ROOT / "portfolio" / "state.json"
@@ -309,7 +331,8 @@ def main(argv=None) -> int:
                    ", ".join(f"{r['ticker']} ({float(r['pct_to_entry']):+.1f}%)" for r in new_near)
                    + f" now within {near_pct:g}% of the entry price")
         print(json.dumps({"watching": len(rows), "hits": [h["ticker"] for h in hits],
-                          "close_to_entry": [r["ticker"] for r in close], "entered": [r["ticker"] for r in new_near]}))
+                          "close_to_entry": [r["ticker"] for r in close], "entered": [r["ticker"] for r in new_near],
+                          **({"splits": split_notes} if split_notes else {})}))
         return 0
     for r in (near(rows, near_pct) if a.near else sorted(rows, key=lambda r: -float(r.get("pct_to_entry") or -999))):
         print(f"{r['ticker']:12} entry {r['entry_price']:>10} {r.get('currency', ''):4} close {r.get('last_close', '?'):>10} "

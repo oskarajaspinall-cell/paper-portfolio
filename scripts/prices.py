@@ -39,8 +39,11 @@ def rows_from_frame(df) -> list[dict]:
         if c is None or c != c:  # NaN: an incomplete row
             continue
         num = lambda k: None if r.get(k) is None or r.get(k) != r.get(k) else float(r.get(k))  # noqa: E731
-        out.append({"date": idx.date().isoformat(), "open": num("Open"), "high": num("High"), "low": num("Low"),
-                    "close": float(c), "adj_close": num("Adj Close"), "volume": num("Volume")})
+        row = {"date": idx.date().isoformat(), "open": num("Open"), "high": num("High"), "low": num("Low"),
+               "close": float(c), "adj_close": num("Adj Close"), "volume": num("Volume")}
+        if num("Stock Splits"):  # new shares per old share on that date (2 = 2-for-1, 0.1 = 1-for-10)
+            row["split"] = num("Stock Splits")
+        out.append(row)
     return sorted(out, key=lambda x: x["date"])
 
 
@@ -67,7 +70,7 @@ class YahooPrices:
     def _yf(sym: str, period: str):
         import yfinance as yf
         t = yf.Ticker(sym)
-        df = t.history(period=period, interval="1d", auto_adjust=False, actions=False)
+        df = t.history(period=period, interval="1d", auto_adjust=False, actions=True)  # actions: the split column
         return df, _currency(t)
 
     def history(self, ticker: str) -> dict:
