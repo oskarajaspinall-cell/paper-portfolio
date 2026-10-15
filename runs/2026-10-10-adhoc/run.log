@@ -1,5 +1,5 @@
 [22:03:51] == Monte Carlo re-run JKHY 2026-10-08 (parameters rejected: annual_probability 4)
-[22:03:51] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py JKHY --asof 2026-10-08
+[22:03:51] $ bin/py scripts/mc_inputs.py JKHY --asof 2026-10-08
 [22:03:51] {"out": "research/JKHY/2026-10-08-mc-inputs.json", "betas": {"SPY": 0.195, "IEF": 0.059}, "r2": 0.015, "residual_vol": 0.2654}
 [22:03:51] $ claude -p Ticker JKHY, date 2026-10-08. Research: research/JKHY/factsheet-2026-10-08.md, research/JKHY/2026-10-08.md, research/JKHY/2026-10-08-evaluation.md, inputs research/JKHY/2026-10-08-mc-inputs.json, macro overlay research/JKHY/2026-10-08-macro.md. Write research/JKHY/2026-10-08-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [22:06:09] The script flagged the evaluation's probabilities (0.25/0.50/0.25) as a symmetric default, which per instructions must not be altered to force a pass.
@@ -10,8 +10,8 @@
 MONTE CARLO FAILED — nothing written:
 - NEEDS REVIEW: symmetric default probabilities {'bull': 0.25, 'base': 0.5, 'bear': 0.25} (see 2026-10-08-mc-needs-review.md)
 ```
-[22:06:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/JKHY/2026-10-08-mc-params.json
+[22:06:09] $ bin/py scripts/montecarlo.py research/JKHY/2026-10-08-mc-params.json
 [22:06:09] 
-[22:06:09] !! MONTE CARLO FAILED for JKHY: /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/JKHY/2026-10-08-mc-params.json exited 2: MONTE CARLO FAILED — nothing written:
+[22:06:09] !! MONTE CARLO FAILED for JKHY: bin/py scripts/montecarlo.py research/JKHY/2026-10-08-mc-params.json exited 2: MONTE CARLO FAILED — nothing written:
 - NEEDS REVIEW: symmetric default probabilities {'bull': 0.25, 'base': 0.5, 'bear': 0.25} (see 2026-10-08-mc-needs-review.md)
 [22:06:09] == finished JKHY Monte Carlo

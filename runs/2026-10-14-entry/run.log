@@ -7,20 +7,20 @@ OK research/CCI/2026-10-14.md type=CORE 1=39 2=130 3=144 4=76 5=54 6=107 total=5
 Conflicts: net debt/EBITDA (site definition) 8.31x TTM vs management's previously cited ~6.3x — unreconciled, neither used as fact.
 
 Blocked/unavailable URLs: https://www.crowncastle.com/investors (301 → http://investor.crowncastle.com/, 403 Forbidden); https://www.crowncastle.com/newsroom (404 Not Found).
-[16:18:38] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/CCI/2026-10-14.md
-[16:18:38] OK /Users/oskaraspinall/paper-portfolio/research/CCI/2026-10-14.md type=CORE 1=39 2=130 3=144 4=76 5=54 6=107 total=550
-[16:18:38] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/macro_data.py --asof 2026-10-14
+[16:18:38] $ bin/py scripts/check_docs.py note research/CCI/2026-10-14.md
+[16:18:38] OK research/CCI/2026-10-14.md type=CORE 1=39 2=130 3=144 4=76 5=54 6=107 total=550
+[16:18:38] $ bin/py scripts/macro_data.py --asof 2026-10-14
 [16:19:02] {"out": "reports/macro/2026-10-14.md", "series": 11, "unavailable": []}
 [16:19:02] $ claude -p Ticker CCI, date 2026-10-14. Research: research/CCI/factsheet-2026-10-14.md, research/CCI/2026-10-14.md. Macro snapshot: reports/macro/2026-10-14.md. Write research/CCI/2026-10-14-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [16:20:37] research/CCI/2026-10-14-macro.md
 OK research/CCI/2026-10-14-macro.md macro_weight=secondary words=223
-[16:20:37] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/CCI/2026-10-14-macro.md
-[16:20:37] OK /Users/oskaraspinall/paper-portfolio/research/CCI/2026-10-14-macro.md macro_weight=secondary words=223
+[16:20:37] $ bin/py scripts/check_docs.py macro research/CCI/2026-10-14-macro.md
+[16:20:37] OK research/CCI/2026-10-14-macro.md macro_weight=secondary words=223
 [16:20:37] $ claude -p Evaluate CCI for 2026-10-14: fact sheet research/CCI/factsheet-2026-10-14.md, note research/CCI/2026-10-14.md, state portfolio/state.json, macro overlay research/CCI/2026-10-14-macro.md. Re-research: the price reached the entry price we set (78.26; it traded at 77.85 at 10:30 ET). Find out why it fell; decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [16:21:20] research/CCI/2026-10-14-evaluation.md
 OK research/CCI/2026-10-14-evaluation.md Bear case=136 Bull case=84 decision=AVOID
-[16:21:20] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/CCI/2026-10-14-evaluation.md
-[16:21:20] OK /Users/oskaraspinall/paper-portfolio/research/CCI/2026-10-14-evaluation.md Bear case=136 Bull case=84 decision=AVOID
-[16:21:20] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py CCI --asof 2026-10-14 --eval /Users/oskaraspinall/paper-portfolio/research/CCI/2026-10-14-evaluation.md
+[16:21:20] $ bin/py scripts/check_docs.py eval research/CCI/2026-10-14-evaluation.md
+[16:21:20] OK research/CCI/2026-10-14-evaluation.md Bear case=136 Bull case=84 decision=AVOID
+[16:21:20] $ bin/py scripts/valuation.py CCI --asof 2026-10-14 --eval research/CCI/2026-10-14-evaluation.md
 [16:21:20] {"out": "research/CCI/2026-10-14-valuation.md", "used": ["p_ffo"], "fair_value": {"bear": 62.23, "base": 97.83, "bull": 118.6}, "price": 79.56}
 [16:21:22] == CCI: AVOID 3

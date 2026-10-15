@@ -39,10 +39,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT, Ticker, load_config  # noqa: E402
 
 PY = [str(ROOT / "bin" / "py")]
-TOOLS = {"researcher": "Read,Write,WebFetch,Bash(bin/py:*)", "evaluator": "Read,Write,Bash(bin/py:*)",
-         "portfolio-manager": "Read,Write,Bash(bin/py:*)", "weekly-reviewer": "Read,Write,WebFetch",
-         "macro-overlay": "Read,Write,WebFetch,Bash(bin/py:*)",
-         "macro-strategist": "Read,Write,WebFetch,Bash(bin/py:*)"}
+# Least privilege (security review 2026-10-15): agents read untrusted web pages, so each may run only the
+# scripts it needs (never bare `bin/py`, which would allow `bin/py -c ...`) and write only to its output
+# folders (Edit path rules also cover Write; a bare "Write" would allow any path), so it can't replace a
+# script and then run it.
+_CHECK = "Bash(bin/py scripts/check_docs.py:*)"
+_OUT = "Edit(research/**),Edit(reports/**),Edit(runs/**)"
+TOOLS = {"researcher": f"Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),{_CHECK},{_OUT}",
+         "evaluator": f"Read,{_CHECK},{_OUT}",
+         "portfolio-manager": f"Read,Bash(bin/py scripts/portfolio.py:*),{_CHECK},Edit(runs/**),"
+                              "Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json)",
+         "weekly-reviewer": f"Read,WebFetch,{_OUT}",
+         "macro-overlay": f"Read,WebFetch,{_CHECK},{_OUT}",
+         "macro-strategist": f"Read,WebFetch,{_CHECK},{_OUT}"}
 
 
 class StepFailed(Exception):
@@ -53,12 +62,12 @@ AGENT_TIMEOUT = 30 * 60  # seconds; a stuck session can't hang the night
 
 
 def sh(args: list[str], log, timeout: int | None = None) -> str:
-    log(f"$ {' '.join(args)}")
+    log(f"$ {' '.join(args)}".replace(f"{ROOT}/", ""))  # no absolute home paths in the public logs
     try:
         p = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
     except subprocess.TimeoutExpired as e:
         raise StepFailed(f"{args[0]} timed out after {timeout}s") from e
-    log(p.stdout.strip()[-4000:])
+    log(p.stdout.strip()[-4000:].replace(f"{ROOT}/", ""))
     if p.returncode != 0:
         raise StepFailed(f"{' '.join(args)} exited {p.returncode}: {p.stderr.strip()[-2000:]}")
     return p.stdout
@@ -66,7 +75,8 @@ def sh(args: list[str], log, timeout: int | None = None) -> str:
 
 def claude_agent(name: str, prompt: str, log) -> str:
     """Run one subagent as its own headless session. Replaced in tests."""
-    return sh(["claude", "-p", prompt, "--agent", name, "--allowedTools", TOOLS[name], "--output-format", "text"],
+    return sh(["claude", "-p", prompt, "--agent", name, "--permission-mode", "dontAsk", "--allowedTools", TOOLS[name],
+               "--output-format", "text"],
               log, timeout=AGENT_TIMEOUT)
 
 

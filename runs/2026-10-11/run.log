@@ -1,21 +1,21 @@
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py fill-pending --asof 2026-10-11 --save /Users/oskaraspinall/paper-portfolio/runs/2026-10-11/fills.json
+$ bin/py scripts/portfolio.py fill-pending --asof 2026-10-11 --save runs/2026-10-11/fills.json
 {
  "applied": [],
  "rejected": [],
  "still_pending": [],
  "expired": []
 }
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py mark --asof 2026-10-11
+$ bin/py scripts/portfolio.py mark --asof 2026-10-11
 {"total": 101456.11, "cash": 44243.45, "core": 57212.66, "tactical": 0, "sectors": {"Healthcare": 14392.130000000001, "Consumer Discretionary": 7211.43, "Technology": 21344.71, "Communication Services": 7273.69, "Industrials": 6990.7}, "n": 8}
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/macro_data.py --asof 2026-10-11
+$ bin/py scripts/macro_data.py --asof 2026-10-11
 {"out": "reports/macro/2026-10-11.md", "series": 11, "unavailable": []}
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/regime.py --asof 2026-10-11
+$ bin/py scripts/regime.py --asof 2026-10-11
 {"asof": "2026-10-11", "points": 1, "score_regime": "risk_on", "final_regime": "risk_on", "reserve_pct": 10.0, "drawdown_pct": 0.0}
 $ claude -p Date 2026-10-11. Regime score: reports/regime/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write reports/regime/2026-10-11-view.md. --agent macro-strategist --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 You've hit your session limit · resets 1:50am (Europe/London)
 !! MACRO VIEW UNAVAILABLE (the mechanical score stands): claude -p Date 2026-10-11. Regime score: reports/regime/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write reports/regime/2026-10-11-view.md. --agent macro-strategist --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_scan.py --asof 2026-10-11 --out /Users/oskaraspinall/paper-portfolio/runs/2026-10-11
-{"flagged_for_review": [], "reinitiate": [], "mechanical_exits": [], "trims": [], "unflagged": 8, "scan": "/Users/oskaraspinall/paper-portfolio/runs/2026-10-11/scan.json"}
+$ bin/py scripts/weekly_scan.py --asof 2026-10-11 --out runs/2026-10-11
+{"flagged_for_review": [], "reinitiate": [], "mechanical_exits": [], "trims": [], "unflagged": 8, "scan": "runs/2026-10-11/scan.json"}
 $ claude -p Ticker HKG:1530, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 $ claude -p Ticker DFM:EMAARDEV, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 $ claude -p Ticker ASX:GGP, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
@@ -61,7 +61,7 @@ You've hit your session limit · resets 1:50am (Europe/London)
 SKIPPED initiation ETR:DHER: claude -p Ticker ETR:DHER, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 36.6 (2026-10-09), ATR(14) 0.2664 (0.7%), suggested stop 35.9339 (-1.8%), minimum 2:1 target 37.9321, risk-based size 5.0%; 3-month peak (resistance) 38.96 (2026-07-17), 3.5x the stop distance. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
 You've hit your session limit · resets 1:50am (Europe/London)
 SKIPPED initiation HKG:0659: claude -p Ticker HKG:0659, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-09-25 closed +6.5% on 11.5x average volume, 9 session(s) ago, still holding 201% of the jump; stop below that day's low (8.17); last close 8.92 (2026-10-09), ATR(14) 0.1857 (2.1%), suggested stop 8.1236 (-8.9%), minimum 2:1 target 10.5129, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text exited 1: 
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py submit /Users/oskaraspinall/paper-portfolio/runs/2026-10-11/requests-mechanical.json --asof 2026-10-11 --save /Users/oskaraspinall/paper-portfolio/runs/2026-10-11/submit-mechanical.json
+$ bin/py scripts/portfolio.py submit runs/2026-10-11/requests-mechanical.json --asof 2026-10-11 --save runs/2026-10-11/submit-mechanical.json
 {
  "cash_before_usd": 44243.450688315985,
  "cash_after_usd": 44243.450688315985,
@@ -72,14 +72,14 @@ $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py submit /Users
  ],
  "dry_run": false
 }
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/decision_log.py update --asof 2026-10-11
+$ bin/py scripts/decision_log.py update --asof 2026-10-11
 {"rows": 178, "notes": []}
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/portfolio.py stamp --asof 2026-10-11
+$ bin/py scripts/portfolio.py stamp --asof 2026-10-11
 last_scan = 2026-10-11
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_report.py --asof 2026-10-11 --run /Users/oskaraspinall/paper-portfolio/runs/2026-10-11
-/Users/oskaraspinall/paper-portfolio/reports/weekly/2026-10-11.md
-$ /Users/oskaraspinall/paper-portfolio/bin/py scripts/dashboard.py
-/Users/oskaraspinall/paper-portfolio/docs/index.html
+$ bin/py scripts/weekly_report.py --asof 2026-10-11 --run runs/2026-10-11
+reports/weekly/2026-10-11.md
+$ bin/py scripts/dashboard.py
+docs/index.html
 [02:03:45] == MAKE-UP after the usage limit: 15 initiations ['HKG:1530', 'DFM:EMAARDEV', 'ASX:GGP', 'JSE:GFI', 'TSX:OGC', 'TSX:K', 'DFM:EMAAR', 'HKG:2076', 'HRB', 'MOEX:MTSS', 'TYO:6323', 'KRX:402340', 'EPA:CAP', 'ETR:DHER', 'HKG:0659']
 [02:03:45] $ claude -p Ticker HKG:1530, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:03:45] $ claude -p Ticker DFM:EMAARDEV, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
@@ -92,61 +92,61 @@ Data/blocked-URL notes:
 - londonstockexchange.com GGP company page and reuters.com company page returned no usable content (JS-rendered / blocked); not used.
 - No company IR website was listed on the stockanalysis.com overview page, so qualitative research was limited to stockanalysis.com transcripts plus the two blocked attempts above.
 - No conflicts between qualitative sources and fact-sheet figures.
-[02:08:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/ASX-GGP/2026-10-11.md
-[02:08:26] OK /Users/oskaraspinall/paper-portfolio/research/ASX-GGP/2026-10-11.md type=CORE 1=44 2=139 3=121 4=70 5=75 6=50 total=499
+[02:08:26] $ bin/py scripts/check_docs.py note research/ASX-GGP/2026-10-11.md
+[02:08:26] OK research/ASX-GGP/2026-10-11.md type=CORE 1=44 2=139 3=121 4=70 5=75 6=50 total=499
 [02:08:26] $ claude -p Ticker ASX:GGP, date 2026-10-11. Research: research/ASX-GGP/factsheet-2026-10-11.md, research/ASX-GGP/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/ASX-GGP/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:09:22] Note: research/DFM-EMAARDEV/2026-10-11.md
 Fact sheet: research/DFM-EMAARDEV/factsheet-2026-10-11.md
 OK research/DFM-EMAARDEV/2026-10-11.md type=CORE 1=50 2=139 3=145 4=59 5=84 6=82 total=559
 
 Data conflicts: none. Blocked/skipped URLs: `https://stockanalysis.com/quote/dfm/DAMAC/statistics/` (404 — Damac Properties no longer listed on DFM, excluded from peer set) and `https://www.reuters.com/markets/companies/EMAARDEV.DU/` (fetch blocked, not retried).
-[02:09:22] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/DFM-EMAARDEV/2026-10-11.md
-[02:09:22] OK /Users/oskaraspinall/paper-portfolio/research/DFM-EMAARDEV/2026-10-11.md type=CORE 1=50 2=139 3=145 4=59 5=84 6=82 total=559
+[02:09:22] $ bin/py scripts/check_docs.py note research/DFM-EMAARDEV/2026-10-11.md
+[02:09:22] OK research/DFM-EMAARDEV/2026-10-11.md type=CORE 1=50 2=139 3=145 4=59 5=84 6=82 total=559
 [02:09:22] $ claude -p Ticker DFM:EMAARDEV, date 2026-10-11. Research: research/DFM-EMAARDEV/factsheet-2026-10-11.md, research/DFM-EMAARDEV/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/DFM-EMAARDEV/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:09:45] research/ASX-GGP/2026-10-11-macro.md
 OK research/ASX-GGP/2026-10-11-macro.md macro_weight=primary words=247
-[02:09:45] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/ASX-GGP/2026-10-11-macro.md
-[02:09:45] OK /Users/oskaraspinall/paper-portfolio/research/ASX-GGP/2026-10-11-macro.md macro_weight=primary words=247
+[02:09:45] $ bin/py scripts/check_docs.py macro research/ASX-GGP/2026-10-11-macro.md
+[02:09:45] OK research/ASX-GGP/2026-10-11-macro.md macro_weight=primary words=247
 [02:09:45] $ claude -p Evaluate ASX:GGP for 2026-10-11: fact sheet research/ASX-GGP/factsheet-2026-10-11.md, note research/ASX-GGP/2026-10-11.md, state portfolio/state.json, macro overlay research/ASX-GGP/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:10:24] research/HKG-1530/2026-10-11.md
 research/HKG-1530/factsheet-2026-10-11.md
 OK research/HKG-1530/2026-10-11.md type=CORE 1=58 2=129 3=145 4=79 5=65 6=104 total=580
 
 Data note: the FY2025/TTM step-change in margins and ROIC (gross margin 86.0%→92.4%, ROIC 14.0%→63.0%) could not be explained by any allowlisted source consulted (company overview, ratios page, stockanalysis.com's HKG:1530 filing index) — flagged in the note as an unconfirmed [Guessing] item, not used to pick a number. One WebFetch response (on the filings list page) claimed an "M&A announcement - Slides" dated Oct 1, 2026, but this was contradicted by the actual filings JSON (no such 2026 entry; the only M&A announcement on record is from 2017-09-04) — treated as a fetch hallucination and excluded from the note. No blocked URLs.
-[02:10:24] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HKG-1530/2026-10-11.md
-[02:10:24] OK /Users/oskaraspinall/paper-portfolio/research/HKG-1530/2026-10-11.md type=CORE 1=58 2=129 3=145 4=79 5=65 6=104 total=580
+[02:10:24] $ bin/py scripts/check_docs.py note research/HKG-1530/2026-10-11.md
+[02:10:24] OK research/HKG-1530/2026-10-11.md type=CORE 1=58 2=129 3=145 4=79 5=65 6=104 total=580
 [02:10:24] $ claude -p Ticker HKG:1530, date 2026-10-11. Research: research/HKG-1530/factsheet-2026-10-11.md, research/HKG-1530/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/HKG-1530/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:10:47] research/DFM-EMAARDEV/2026-10-11-macro.md
 OK research/DFM-EMAARDEV/2026-10-11-macro.md macro_weight=secondary words=242
-[02:10:47] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/DFM-EMAARDEV/2026-10-11-macro.md
-[02:10:47] OK /Users/oskaraspinall/paper-portfolio/research/DFM-EMAARDEV/2026-10-11-macro.md macro_weight=secondary words=242
+[02:10:47] $ bin/py scripts/check_docs.py macro research/DFM-EMAARDEV/2026-10-11-macro.md
+[02:10:47] OK research/DFM-EMAARDEV/2026-10-11-macro.md macro_weight=secondary words=242
 [02:10:47] $ claude -p Evaluate DFM:EMAARDEV for 2026-10-11: fact sheet research/DFM-EMAARDEV/factsheet-2026-10-11.md, note research/DFM-EMAARDEV/2026-10-11.md, state portfolio/state.json, macro overlay research/DFM-EMAARDEV/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:10:48] research/ASX-GGP/2026-10-11-evaluation.md
 OK research/ASX-GGP/2026-10-11-evaluation.md Bear case=136 Bull case=129 decision=AVOID
-[02:10:48] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/ASX-GGP/2026-10-11-evaluation.md
-[02:10:48] OK /Users/oskaraspinall/paper-portfolio/research/ASX-GGP/2026-10-11-evaluation.md Bear case=136 Bull case=129 decision=AVOID
-[02:10:48] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py ASX:GGP --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/ASX-GGP/2026-10-11-evaluation.md
+[02:10:48] $ bin/py scripts/check_docs.py eval research/ASX-GGP/2026-10-11-evaluation.md
+[02:10:48] OK research/ASX-GGP/2026-10-11-evaluation.md Bear case=136 Bull case=129 decision=AVOID
+[02:10:48] $ bin/py scripts/valuation.py ASX:GGP --asof 2026-10-11 --eval research/ASX-GGP/2026-10-11-evaluation.md
 [02:10:48] {"out": "research/ASX-GGP/2026-10-11-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 11.71, "base": 16.51, "bull": 21.31}, "price": 10.11}
 [02:10:48] Monte Carlo skipped for ASX:GGP (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:10:48] $ claude -p Ticker JSE:GFI, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:11:26] research/HKG-1530/2026-10-11-macro.md
 OK research/HKG-1530/2026-10-11-macro.md macro_weight=context words=75
-[02:11:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HKG-1530/2026-10-11-macro.md
-[02:11:26] OK /Users/oskaraspinall/paper-portfolio/research/HKG-1530/2026-10-11-macro.md macro_weight=context words=75
+[02:11:26] $ bin/py scripts/check_docs.py macro research/HKG-1530/2026-10-11-macro.md
+[02:11:26] OK research/HKG-1530/2026-10-11-macro.md macro_weight=context words=75
 [02:11:26] $ claude -p Evaluate HKG:1530 for 2026-10-11: fact sheet research/HKG-1530/factsheet-2026-10-11.md, note research/HKG-1530/2026-10-11.md, state portfolio/state.json, macro overlay research/HKG-1530/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:11:48] research/DFM-EMAARDEV/2026-10-11-evaluation.md
 OK research/DFM-EMAARDEV/2026-10-11-evaluation.md Bear case=149 Bull case=123 decision=AVOID
-[02:11:48] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/DFM-EMAARDEV/2026-10-11-evaluation.md
-[02:11:48] OK /Users/oskaraspinall/paper-portfolio/research/DFM-EMAARDEV/2026-10-11-evaluation.md Bear case=149 Bull case=123 decision=AVOID
-[02:11:48] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py DFM:EMAARDEV --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/DFM-EMAARDEV/2026-10-11-evaluation.md
+[02:11:48] $ bin/py scripts/check_docs.py eval research/DFM-EMAARDEV/2026-10-11-evaluation.md
+[02:11:48] OK research/DFM-EMAARDEV/2026-10-11-evaluation.md Bear case=149 Bull case=123 decision=AVOID
+[02:11:48] $ bin/py scripts/valuation.py DFM:EMAARDEV --asof 2026-10-11 --eval research/DFM-EMAARDEV/2026-10-11-evaluation.md
 [02:11:48] {"out": "research/DFM-EMAARDEV/2026-10-11-valuation.md", "used": ["dcf"], "fair_value": {"bear": 41.6, "base": 86.98, "bull": 190.48}, "price": 12.82}
 [02:11:48] Monte Carlo skipped for DFM:EMAARDEV (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:11:48] $ claude -p Ticker TSX:OGC, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:12:09] research/HKG-1530/2026-10-11-evaluation.md
 OK research/HKG-1530/2026-10-11-evaluation.md Bear case=125 Bull case=97 decision=AVOID
-[02:12:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HKG-1530/2026-10-11-evaluation.md
-[02:12:09] OK /Users/oskaraspinall/paper-portfolio/research/HKG-1530/2026-10-11-evaluation.md Bear case=125 Bull case=97 decision=AVOID
-[02:12:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py HKG:1530 --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/HKG-1530/2026-10-11-evaluation.md
+[02:12:09] $ bin/py scripts/check_docs.py eval research/HKG-1530/2026-10-11-evaluation.md
+[02:12:09] OK research/HKG-1530/2026-10-11-evaluation.md Bear case=125 Bull case=97 decision=AVOID
+[02:12:09] $ bin/py scripts/valuation.py HKG:1530 --asof 2026-10-11 --eval research/HKG-1530/2026-10-11-evaluation.md
 [02:12:09] {"out": "research/HKG-1530/2026-10-11-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 20.5, "base": 25.52, "bull": 28.98}, "price": 15.07}
 [02:12:09] Monte Carlo skipped for HKG:1530 (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:12:09] $ claude -p Ticker TSX:K, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
@@ -155,61 +155,61 @@ research/JSE-GFI/factsheet-2026-10-11.md
 OK research/JSE-GFI/2026-10-11.md type=CORE 1=63 2=111 3=142 4=84 5=80 6=59 total=539
 
 Blocked/failed fetches: www.reuters.com (both articles — "unable to fetch"), cited only as headline URLs per fact-sheet news rules, not as fetched sources. No data conflicts found.
-[02:14:47] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/JSE-GFI/2026-10-11.md
-[02:14:47] OK /Users/oskaraspinall/paper-portfolio/research/JSE-GFI/2026-10-11.md type=CORE 1=63 2=111 3=142 4=84 5=80 6=59 total=539
+[02:14:47] $ bin/py scripts/check_docs.py note research/JSE-GFI/2026-10-11.md
+[02:14:47] OK research/JSE-GFI/2026-10-11.md type=CORE 1=63 2=111 3=142 4=84 5=80 6=59 total=539
 [02:14:47] $ claude -p Ticker JSE:GFI, date 2026-10-11. Research: research/JSE-GFI/factsheet-2026-10-11.md, research/JSE-GFI/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/JSE-GFI/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:16:34] research/TSX-K/2026-10-11.md
 research/TSX-K/factsheet-2026-10-11.md
 OK research/TSX-K/2026-10-11.md type=CORE 1=74 2=129 3=143 4=95 5=97 6=85 total=623
 
 Blocked/unusable: WebFetch to reuters.com (company litigation search) failed — "unable to fetch from www.reuters.com"; no company IR domain was recorded for TSX:K in universe/ir_domains.txt or watchlist.txt, so qualitative research was limited to sec.gov filings. No data conflicts found between fact sheet and qualitative sources.
-[02:16:34] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TSX-K/2026-10-11.md
-[02:16:34] OK /Users/oskaraspinall/paper-portfolio/research/TSX-K/2026-10-11.md type=CORE 1=74 2=129 3=143 4=95 5=97 6=85 total=623
+[02:16:34] $ bin/py scripts/check_docs.py note research/TSX-K/2026-10-11.md
+[02:16:34] OK research/TSX-K/2026-10-11.md type=CORE 1=74 2=129 3=143 4=95 5=97 6=85 total=623
 [02:16:34] $ claude -p Ticker TSX:K, date 2026-10-11. Research: research/TSX-K/factsheet-2026-10-11.md, research/TSX-K/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/TSX-K/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:16:43] research/JSE-GFI/2026-10-11-macro.md
 OK research/JSE-GFI/2026-10-11-macro.md macro_weight=primary words=235
-[02:16:43] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/JSE-GFI/2026-10-11-macro.md
-[02:16:43] OK /Users/oskaraspinall/paper-portfolio/research/JSE-GFI/2026-10-11-macro.md macro_weight=primary words=235
+[02:16:43] $ bin/py scripts/check_docs.py macro research/JSE-GFI/2026-10-11-macro.md
+[02:16:43] OK research/JSE-GFI/2026-10-11-macro.md macro_weight=primary words=235
 [02:16:43] $ claude -p Evaluate JSE:GFI for 2026-10-11: fact sheet research/JSE-GFI/factsheet-2026-10-11.md, note research/JSE-GFI/2026-10-11.md, state portfolio/state.json, macro overlay research/JSE-GFI/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:16:49] research/TSX-OGC/2026-10-11.md
 research/TSX-OGC/factsheet-2026-10-11.md
 OK research/TSX-OGC/2026-10-11.md type=CORE 1=52 2=138 3=145 4=71 5=60 6=69 total=535
 
 No data conflicts. Blocked/non-fetched URLs: none blocked — marketbeat.com and prnewswire.com URLs are cited only as headline/document references (per house rules), not fetched; actual qualitative fetches were restricted to sec.gov (allowlisted).
-[02:16:49] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TSX-OGC/2026-10-11.md
-[02:16:49] OK /Users/oskaraspinall/paper-portfolio/research/TSX-OGC/2026-10-11.md type=CORE 1=52 2=138 3=145 4=71 5=60 6=69 total=535
+[02:16:49] $ bin/py scripts/check_docs.py note research/TSX-OGC/2026-10-11.md
+[02:16:49] OK research/TSX-OGC/2026-10-11.md type=CORE 1=52 2=138 3=145 4=71 5=60 6=69 total=535
 [02:16:49] $ claude -p Ticker TSX:OGC, date 2026-10-11. Research: research/TSX-OGC/factsheet-2026-10-11.md, research/TSX-OGC/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/TSX-OGC/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:17:41] research/JSE-GFI/2026-10-11-evaluation.md
 OK research/JSE-GFI/2026-10-11-evaluation.md Bear case=138 Bull case=109 decision=AVOID
-[02:17:41] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/JSE-GFI/2026-10-11-evaluation.md
-[02:17:41] OK /Users/oskaraspinall/paper-portfolio/research/JSE-GFI/2026-10-11-evaluation.md Bear case=138 Bull case=109 decision=AVOID
-[02:17:41] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py JSE:GFI --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/JSE-GFI/2026-10-11-evaluation.md
+[02:17:41] $ bin/py scripts/check_docs.py eval research/JSE-GFI/2026-10-11-evaluation.md
+[02:17:41] OK research/JSE-GFI/2026-10-11-evaluation.md Bear case=138 Bull case=109 decision=AVOID
+[02:17:41] $ bin/py scripts/valuation.py JSE:GFI --asof 2026-10-11 --eval research/JSE-GFI/2026-10-11-evaluation.md
 [02:17:42] {"out": "research/JSE-GFI/2026-10-11-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 23382.36, "base": 26410.4, "bull": 86577.83}, "price": 61028}
 [02:17:42] Monte Carlo skipped for JSE:GFI (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:17:42] $ claude -p Ticker DFM:EMAAR, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:18:48] research/TSX-K/2026-10-11-macro.md
 OK research/TSX-K/2026-10-11-macro.md macro_weight=primary words=247
-[02:18:48] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/TSX-K/2026-10-11-macro.md
-[02:18:48] OK /Users/oskaraspinall/paper-portfolio/research/TSX-K/2026-10-11-macro.md macro_weight=primary words=247
+[02:18:48] $ bin/py scripts/check_docs.py macro research/TSX-K/2026-10-11-macro.md
+[02:18:48] OK research/TSX-K/2026-10-11-macro.md macro_weight=primary words=247
 [02:18:48] $ claude -p Evaluate TSX:K for 2026-10-11: fact sheet research/TSX-K/factsheet-2026-10-11.md, note research/TSX-K/2026-10-11.md, state portfolio/state.json, macro overlay research/TSX-K/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:19:21] research/TSX-OGC/2026-10-11-macro.md
 OK research/TSX-OGC/2026-10-11-macro.md macro_weight=primary words=244
-[02:19:21] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/TSX-OGC/2026-10-11-macro.md
-[02:19:21] OK /Users/oskaraspinall/paper-portfolio/research/TSX-OGC/2026-10-11-macro.md macro_weight=primary words=244
+[02:19:21] $ bin/py scripts/check_docs.py macro research/TSX-OGC/2026-10-11-macro.md
+[02:19:21] OK research/TSX-OGC/2026-10-11-macro.md macro_weight=primary words=244
 [02:19:21] $ claude -p Evaluate TSX:OGC for 2026-10-11: fact sheet research/TSX-OGC/factsheet-2026-10-11.md, note research/TSX-OGC/2026-10-11.md, state portfolio/state.json, macro overlay research/TSX-OGC/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:19:53] research/TSX-K/2026-10-11-evaluation.md
 OK research/TSX-K/2026-10-11-evaluation.md Bear case=137 Bull case=91 decision=AVOID
-[02:19:53] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TSX-K/2026-10-11-evaluation.md
-[02:19:53] OK /Users/oskaraspinall/paper-portfolio/research/TSX-K/2026-10-11-evaluation.md Bear case=137 Bull case=91 decision=AVOID
-[02:19:53] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py TSX:K --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/TSX-K/2026-10-11-evaluation.md
+[02:19:53] $ bin/py scripts/check_docs.py eval research/TSX-K/2026-10-11-evaluation.md
+[02:19:53] OK research/TSX-K/2026-10-11-evaluation.md Bear case=137 Bull case=91 decision=AVOID
+[02:19:53] $ bin/py scripts/valuation.py TSX:K --asof 2026-10-11 --eval research/TSX-K/2026-10-11-evaluation.md
 [02:19:53] {"out": "research/TSX-K/2026-10-11-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 14.5, "base": 18.04, "bull": 53.02}, "price": 33.85}
 [02:19:53] Monte Carlo skipped for TSX:K (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:19:53] $ claude -p Ticker HKG:2076, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:20:21] research/TSX-OGC/2026-10-11-evaluation.md
 OK research/TSX-OGC/2026-10-11-evaluation.md Bear case=138 Bull case=132 decision=AVOID
-[02:20:21] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TSX-OGC/2026-10-11-evaluation.md
-[02:20:21] OK /Users/oskaraspinall/paper-portfolio/research/TSX-OGC/2026-10-11-evaluation.md Bear case=138 Bull case=132 decision=AVOID
-[02:20:21] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py TSX:OGC --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/TSX-OGC/2026-10-11-evaluation.md
+[02:20:21] $ bin/py scripts/check_docs.py eval research/TSX-OGC/2026-10-11-evaluation.md
+[02:20:21] OK research/TSX-OGC/2026-10-11-evaluation.md Bear case=138 Bull case=132 decision=AVOID
+[02:20:21] $ bin/py scripts/valuation.py TSX:OGC --asof 2026-10-11 --eval research/TSX-OGC/2026-10-11-evaluation.md
 [02:20:21] {"out": "research/TSX-OGC/2026-10-11-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 15.64, "base": 17.76, "bull": 46.78}, "price": 39.36}
 [02:20:21] Monte Carlo skipped for TSX:OGC (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:20:21] $ claude -p Ticker HRB, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
@@ -218,45 +218,45 @@ Fact sheet path: `research/HKG-2076/factsheet-2026-10-11.md`
 Check: `OK research/HKG-2076/2026-10-11.md type=CORE 1=48 2=150 3=104 4=70 5=60 6=70 total=502`
 
 No data conflicts found. No blocked URLs (all WebFetch calls to sec.gov succeeded; no company IR domain was listed on the stockanalysis.com overview page, so none was attempted beyond the allowlist).
-[02:22:47] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11.md
-[02:22:47] OK /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11.md type=CORE 1=48 2=150 3=104 4=70 5=60 6=70 total=502
+[02:22:47] $ bin/py scripts/check_docs.py note research/HKG-2076/2026-10-11.md
+[02:22:47] OK research/HKG-2076/2026-10-11.md type=CORE 1=48 2=150 3=104 4=70 5=60 6=70 total=502
 [02:22:47] $ claude -p Ticker HKG:2076, date 2026-10-11. Research: research/HKG-2076/factsheet-2026-10-11.md, research/HKG-2076/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/HKG-2076/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:23:11] research/DFM-EMAAR/2026-10-11.md
 research/DFM-EMAAR/factsheet-2026-10-11.md
 OK research/DFM-EMAAR/2026-10-11.md type=CORE 1=46 2=146 3=148 4=67 5=94 6=74 total=575
 
 Data conflicts: none. Blocked URLs: reuters.com/markets/companies/EMAR.DU/ (not fetchable by this client — no retry attempted). Peer set limited to 3 (DFM:DEYAAR, DFM:UPP, DFM:DIC); ADX:ALDAR and DFM:TECOM were excluded because stockanalysis.com's infoTable lacks a Sector field for those pages (fact_sheet.py requires it).
-[02:23:11] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/DFM-EMAAR/2026-10-11.md
-[02:23:12] OK /Users/oskaraspinall/paper-portfolio/research/DFM-EMAAR/2026-10-11.md type=CORE 1=46 2=146 3=148 4=67 5=94 6=74 total=575
+[02:23:11] $ bin/py scripts/check_docs.py note research/DFM-EMAAR/2026-10-11.md
+[02:23:12] OK research/DFM-EMAAR/2026-10-11.md type=CORE 1=46 2=146 3=148 4=67 5=94 6=74 total=575
 [02:23:12] $ claude -p Ticker DFM:EMAAR, date 2026-10-11. Research: research/DFM-EMAAR/factsheet-2026-10-11.md, research/DFM-EMAAR/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/DFM-EMAAR/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:24:11] research/HRB/2026-10-11.md
 research/HRB/factsheet-2026-10-11.md
 OK research/HRB/2026-10-11.md type=CORE 1=51 2=128 3=146 4=76 5=87 6=65 total=553
 
 No data conflicts. Blocked URLs: https://www.hrblock.com/ir/ and https://www.hrblock.com/newsroom/ (403 Forbidden; not retried).
-[02:24:11] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HRB/2026-10-11.md
+[02:24:11] $ bin/py scripts/check_docs.py note research/HRB/2026-10-11.md
 [02:25:25] research/DFM-EMAAR/2026-10-11-macro.md
 OK research/DFM-EMAAR/2026-10-11-macro.md macro_weight=secondary words=241
-[02:25:25] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/DFM-EMAAR/2026-10-11-macro.md
-[02:25:25] OK /Users/oskaraspinall/paper-portfolio/research/DFM-EMAAR/2026-10-11-macro.md macro_weight=secondary words=241
+[02:25:25] $ bin/py scripts/check_docs.py macro research/DFM-EMAAR/2026-10-11-macro.md
+[02:25:25] OK research/DFM-EMAAR/2026-10-11-macro.md macro_weight=secondary words=241
 [02:25:25] $ claude -p Evaluate DFM:EMAAR for 2026-10-11: fact sheet research/DFM-EMAAR/factsheet-2026-10-11.md, note research/DFM-EMAAR/2026-10-11.md, state portfolio/state.json, macro overlay research/DFM-EMAAR/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:26:17] research/DFM-EMAAR/2026-10-11-evaluation.md
 OK research/DFM-EMAAR/2026-10-11-evaluation.md Bear case=141 Bull case=121 decision=AVOID
-[02:26:17] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/DFM-EMAAR/2026-10-11-evaluation.md
-[02:26:17] OK /Users/oskaraspinall/paper-portfolio/research/DFM-EMAAR/2026-10-11-evaluation.md Bear case=141 Bull case=121 decision=AVOID
-[02:26:17] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py DFM:EMAAR --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/DFM-EMAAR/2026-10-11-evaluation.md
+[02:26:17] $ bin/py scripts/check_docs.py eval research/DFM-EMAAR/2026-10-11-evaluation.md
+[02:26:17] OK research/DFM-EMAAR/2026-10-11-evaluation.md Bear case=141 Bull case=121 decision=AVOID
+[02:26:17] $ bin/py scripts/valuation.py DFM:EMAAR --asof 2026-10-11 --eval research/DFM-EMAAR/2026-10-11-evaluation.md
 [02:26:17] {"out": "research/DFM-EMAAR/2026-10-11-valuation.md", "used": ["dcf"], "fair_value": {"bear": 34.55, "base": 52.82, "bull": 145.79}, "price": 11.38}
 [02:26:17] Monte Carlo skipped for DFM:EMAAR (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:26:17] $ claude -p Ticker MOEX:MTSS, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:26:33] The fact sheet generation failed. Returning the error verbatim.
 
 ERROR: https://stockanalysis.com/quote/moex/MTSS/ :: field 'infoTable.Sector' :: sector missing
-[02:26:33] SKIPPED initiation MOEX:MTSS (make-up): researcher wrote no note at /Users/oskaraspinall/paper-portfolio/research/MOEX-MTSS/2026-10-11.md
+[02:26:33] SKIPPED initiation MOEX:MTSS (make-up): researcher wrote no note at research/MOEX-MTSS/2026-10-11.md
 [02:26:33] $ claude -p Ticker TYO:6323, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-09 closed +15.8% on 5.2x average volume, 0 session(s) ago, still holding 100% of the jump; stop below that day's low (4610); last close 5134 (2026-10-09), ATR(14) 209.571 (4.1%), suggested stop 4557.61 (-11.2%), minimum 2:1 target 6286.79, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:27:31] research/HKG-2076/2026-10-11-macro.md
 OK research/HKG-2076/2026-10-11-macro.md macro_weight=secondary words=250
-[02:27:31] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11-macro.md
-[02:27:31] OK /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11-macro.md macro_weight=secondary words=250
+[02:27:31] $ bin/py scripts/check_docs.py macro research/HKG-2076/2026-10-11-macro.md
+[02:27:31] OK research/HKG-2076/2026-10-11-macro.md macro_weight=secondary words=250
 [02:27:31] $ claude -p Evaluate HKG:2076 for 2026-10-11: fact sheet research/HKG-2076/factsheet-2026-10-11.md, note research/HKG-2076/2026-10-11.md, state portfolio/state.json, macro overlay research/HKG-2076/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:40:31] == MAKE-UP resumed: 7 already evaluated, 7 to go ['HKG:2076', 'HRB', 'TYO:6323', 'KRX:402340', 'EPA:CAP', 'ETR:DHER', 'HKG:0659']
 [02:40:31] $ claude -p Ticker HRB, note type CORE, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
@@ -267,16 +267,16 @@ research/TYO-6323/factsheet-2026-10-11.md
 OK research/TYO-6323/2026-10-11.md type=TACTICAL 1=118 2=89 3=72 4=76 5=42 total=397
 
 Data note: the Q2 FY2027 filing and slides (filings/3712290, filings/3712299) were fetched but returned only index/navigation content, not the underlying financial text — no specific revenue/margin figures could be sourced from them, so the catalyst section relies on the fact sheet's price/volume reaction row only.
-[02:43:17] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/TYO-6323/2026-10-11.md
-[02:43:17] OK /Users/oskaraspinall/paper-portfolio/research/TYO-6323/2026-10-11.md type=TACTICAL 1=118 2=89 3=72 4=76 5=42 total=397
+[02:43:17] $ bin/py scripts/check_docs.py note research/TYO-6323/2026-10-11.md
+[02:43:17] OK research/TYO-6323/2026-10-11.md type=TACTICAL 1=118 2=89 3=72 4=76 5=42 total=397
 [02:43:17] $ claude -p Ticker TYO:6323, date 2026-10-11. Research: research/TYO-6323/factsheet-2026-10-11.md, research/TYO-6323/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/TYO-6323/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:43:48] research/HKG-2076/2026-10-11.md
 research/HKG-2076/factsheet-2026-10-11.md
 OK research/HKG-2076/2026-10-11.md type=CORE 1=61 2=147 3=122 4=73 5=78 6=66 total=547
 
 No data conflicts. No blocked URLs (all WebFetch calls were to sec.gov and stockanalysis.com, both allowlisted).
-[02:43:48] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11.md
-[02:43:48] OK /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11.md type=CORE 1=61 2=147 3=122 4=73 5=78 6=66 total=547
+[02:43:48] $ bin/py scripts/check_docs.py note research/HKG-2076/2026-10-11.md
+[02:43:48] OK research/HKG-2076/2026-10-11.md type=CORE 1=61 2=147 3=122 4=73 5=78 6=66 total=547
 [02:43:48] $ claude -p Ticker HKG:2076, date 2026-10-11. Research: research/HKG-2076/factsheet-2026-10-11.md, research/HKG-2076/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/HKG-2076/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:44:18] Note path: `research/HRB/2026-10-11.md`
 Fact sheet path: `research/HRB/factsheet-2026-10-11.md`
@@ -284,46 +284,46 @@ Fact sheet path: `research/HRB/factsheet-2026-10-11.md`
 check_docs.py: `OK research/HRB/2026-10-11.md type=CORE 1=50 2=148 3=143 4=70 5=81 6=52 total=544`
 
 Data conflicts: none. Blocked/failed URLs: `https://www.hrblock.com/` returned HTTP 403 (not an allowlist block — genuine fetch failure); not retried, no data taken from it.
-[02:44:18] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HRB/2026-10-11.md
-[02:44:18] OK /Users/oskaraspinall/paper-portfolio/research/HRB/2026-10-11.md type=CORE 1=50 2=148 3=143 4=70 5=81 6=52 total=544
+[02:44:18] $ bin/py scripts/check_docs.py note research/HRB/2026-10-11.md
+[02:44:18] OK research/HRB/2026-10-11.md type=CORE 1=50 2=148 3=143 4=70 5=81 6=52 total=544
 [02:44:18] $ claude -p Ticker HRB, date 2026-10-11. Research: research/HRB/factsheet-2026-10-11.md, research/HRB/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/HRB/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:45:04] research/TYO-6323/2026-10-11-macro.md
 OK research/TYO-6323/2026-10-11-macro.md macro_weight=secondary words=236
-[02:45:04] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/TYO-6323/2026-10-11-macro.md
-[02:45:04] OK /Users/oskaraspinall/paper-portfolio/research/TYO-6323/2026-10-11-macro.md macro_weight=secondary words=236
+[02:45:04] $ bin/py scripts/check_docs.py macro research/TYO-6323/2026-10-11-macro.md
+[02:45:04] OK research/TYO-6323/2026-10-11-macro.md macro_weight=secondary words=236
 [02:45:04] $ claude -p Evaluate TYO:6323 for 2026-10-11: fact sheet research/TYO-6323/factsheet-2026-10-11.md, note research/TYO-6323/2026-10-11.md, state portfolio/state.json, macro overlay research/TYO-6323/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-09 closed +15.8% on 5.2x average volume, 0 session(s) ago, still holding 100% of the jump; stop below that day's low (4610); last close 5134 (2026-10-09), ATR(14) 209.571 (4.1%), suggested stop 4557.61 (-11.2%), minimum 2:1 target 6286.79, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:45:25] research/HRB/2026-10-11-macro.md
 OK research/HRB/2026-10-11-macro.md macro_weight=context words=68
-[02:45:25] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HRB/2026-10-11-macro.md
-[02:45:25] OK /Users/oskaraspinall/paper-portfolio/research/HRB/2026-10-11-macro.md macro_weight=context words=68
+[02:45:25] $ bin/py scripts/check_docs.py macro research/HRB/2026-10-11-macro.md
+[02:45:25] OK research/HRB/2026-10-11-macro.md macro_weight=context words=68
 [02:45:25] $ claude -p Evaluate HRB for 2026-10-11: fact sheet research/HRB/factsheet-2026-10-11.md, note research/HRB/2026-10-11.md, state portfolio/state.json, macro overlay research/HRB/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:45:31] research/HKG-2076/2026-10-11-macro.md
 OK research/HKG-2076/2026-10-11-macro.md macro_weight=context words=76
-[02:45:31] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11-macro.md
-[02:45:31] OK /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11-macro.md macro_weight=context words=76
+[02:45:31] $ bin/py scripts/check_docs.py macro research/HKG-2076/2026-10-11-macro.md
+[02:45:31] OK research/HKG-2076/2026-10-11-macro.md macro_weight=context words=76
 [02:45:31] $ claude -p Evaluate HKG:2076 for 2026-10-11: fact sheet research/HKG-2076/factsheet-2026-10-11.md, note research/HKG-2076/2026-10-11.md, state portfolio/state.json, macro overlay research/HKG-2076/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:45:36] research/TYO-6323/2026-10-11-evaluation.md
 OK research/TYO-6323/2026-10-11-evaluation.md Bear case=124 Bull case=101 decision=AVOID
-[02:45:36] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/TYO-6323/2026-10-11-evaluation.md
-[02:45:36] OK /Users/oskaraspinall/paper-portfolio/research/TYO-6323/2026-10-11-evaluation.md Bear case=124 Bull case=101 decision=AVOID
-[02:45:36] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py TYO:6323 --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/TYO-6323/2026-10-11-evaluation.md
+[02:45:36] $ bin/py scripts/check_docs.py eval research/TYO-6323/2026-10-11-evaluation.md
+[02:45:36] OK research/TYO-6323/2026-10-11-evaluation.md Bear case=124 Bull case=101 decision=AVOID
+[02:45:36] $ bin/py scripts/valuation.py TYO:6323 --asof 2026-10-11 --eval research/TYO-6323/2026-10-11-evaluation.md
 [02:45:37] {"out": "research/TYO-6323/2026-10-11-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 290.96, "base": 2011.28, "bull": 4319.9}, "price": 5134}
 [02:45:37] Monte Carlo skipped for TYO:6323 (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:45:37] $ claude -p Ticker KRX:402340, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 1.05e+06 (2026-10-08), ATR(14) 58357.1 (5.6%), suggested stop 904107 (-13.9%), minimum 2:1 target 1.34179e+06, risk-based size 5.0%; 3-month peak (resistance) 1.502e+06 (2026-07-07), 3.1x the stop distance. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:46:07] research/HRB/2026-10-11-evaluation.md
 OK research/HRB/2026-10-11-evaluation.md Bear case=130 Bull case=129 decision=BUY
-[02:46:07] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HRB/2026-10-11-evaluation.md
-[02:46:07] OK /Users/oskaraspinall/paper-portfolio/research/HRB/2026-10-11-evaluation.md Bear case=130 Bull case=129 decision=BUY
-[02:46:07] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py HRB --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/HRB/2026-10-11-evaluation.md
+[02:46:07] $ bin/py scripts/check_docs.py eval research/HRB/2026-10-11-evaluation.md
+[02:46:07] OK research/HRB/2026-10-11-evaluation.md Bear case=130 Bull case=129 decision=BUY
+[02:46:07] $ bin/py scripts/valuation.py HRB --asof 2026-10-11 --eval research/HRB/2026-10-11-evaluation.md
 [02:46:07] {"out": "research/HRB/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 64.96, "base": 92.38, "bull": 110.48}, "price": 44.05}
-[02:46:07] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py HRB --asof 2026-10-11
+[02:46:07] $ bin/py scripts/mc_inputs.py HRB --asof 2026-10-11
 [02:46:09] research/HKG-2076/2026-10-11-evaluation.md
 OK research/HKG-2076/2026-10-11-evaluation.md Bear case=130 Bull case=131 decision=BUY
-[02:46:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11-evaluation.md
-[02:46:09] OK /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11-evaluation.md Bear case=130 Bull case=131 decision=BUY
-[02:46:09] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py HKG:2076 --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11-evaluation.md
+[02:46:09] $ bin/py scripts/check_docs.py eval research/HKG-2076/2026-10-11-evaluation.md
+[02:46:09] OK research/HKG-2076/2026-10-11-evaluation.md Bear case=130 Bull case=131 decision=BUY
+[02:46:09] $ bin/py scripts/valuation.py HKG:2076 --asof 2026-10-11 --eval research/HKG-2076/2026-10-11-evaluation.md
 [02:46:10] {"out": "research/HKG-2076/2026-10-11-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 71.75, "base": 131.83, "bull": 237.23}, "price": 60}
-[02:46:10] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_inputs.py HKG:2076 --asof 2026-10-11
+[02:46:10] $ bin/py scripts/mc_inputs.py HKG:2076 --asof 2026-10-11
 [02:46:54] {"out": "research/HRB/2026-10-11-mc-inputs.json", "betas": {"SPY": 0.335, "IEF": 0.402}, "r2": 0.029, "residual_vol": 0.3808}
 [02:46:54] $ claude -p Ticker HRB, date 2026-10-11. Research: research/HRB/factsheet-2026-10-11.md, research/HRB/2026-10-11.md, research/HRB/2026-10-11-evaluation.md, inputs research/HRB/2026-10-11-mc-inputs.json, macro overlay research/HRB/2026-10-11-macro.md. Write research/HRB/2026-10-11-mc-params.json and run the simulation. --agent mc-parameters --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:47:08] {"out": "research/HKG-2076/2026-10-11-mc-inputs.json", "betas": {"HKG:2800": 0.805, "KWEB": 0.31, "IEF": 0.018}, "r2": 0.319, "residual_vol": 0.379}
@@ -336,9 +336,9 @@ OK research/HKG-2076/2026-10-11-evaluation.md Bear case=130 Bull case=131 decisi
 ```
 {"3m": {"mean": 0.065, "median": 0.0443, "p5": -0.3114, "p25": -0.1113, "p50": 0.0443, "p75": 0.2181, "p95": 0.5115, "prob_loss": 0.4262}, "6m": {"mean": 0.1543, "median": 0.0906, "p5": -0.4565, "p25": -0.1625, "p50": 0.0906, "p75": 0.4021, "p95": 0.9737, "prob_loss": 0.4098}, "12m": {"mean": 0.4158, "median": 0.2022, "p5": -0.6545, "p25": -0.2517, "p50": 0.2022, "p75": 0.8391, "p95": 2.2343, "prob_loss": 0.3963}}
 ```
-[02:49:56] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/HKG-2076/2026-10-11-mc-params.json
+[02:49:56] $ bin/py scripts/montecarlo.py research/HKG-2076/2026-10-11-mc-params.json
 [02:49:57] {"3m": {"mean": 0.065, "median": 0.0443, "p5": -0.3114, "p25": -0.1113, "p50": 0.0443, "p75": 0.2181, "p95": 0.5115, "prob_loss": 0.4262}, "6m": {"mean": 0.1543, "median": 0.0906, "p5": -0.4565, "p25": -0.1625, "p50": 0.0906, "p75": 0.4021, "p95": 0.9737, "prob_loss": 0.4098}, "12m": {"mean": 0.4158, "median": 0.2022, "p5": -0.6545, "p25": -0.2517, "p50": 0.2022, "p75": 0.8391, "p95": 2.2343, "prob_loss": 0.3963}}
-[02:49:57] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_backtest.py HKG:2076 --asof 2026-10-11
+[02:49:57] $ bin/py scripts/mc_backtest.py HKG:2076 --asof 2026-10-11
 [02:49:58] {"3m": {"in_p5_p95": 4, "in_p25_p75": 2, "n": 4}, "6m": {"in_p5_p95": 4, "in_p25_p75": 2, "n": 4}}
 [02:49:58] $ claude -p Ticker EPA:CAP, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-01 closed +7.4% on 2.9x average volume, 6 session(s) ago, still holding 138% of the jump; stop below that day's low (100.95); last close 115.05 (2026-10-09), ATR(14) 4.3929 (3.8%), suggested stop 99.8518 (-13.2%), minimum 2:1 target 145.446, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:51:27] The script ran successfully.
@@ -346,9 +346,9 @@ OK research/HKG-2076/2026-10-11-evaluation.md Bear case=130 Bull case=131 decisi
 research/HRB/2026-10-11-mc-params.json
 
 `{"3m": {"mean": 0.0175, "median": 0.0211, "p5": -0.2559, "p25": -0.0882, "p50": 0.0211, "p75": 0.1233, "p95": 0.2872, "prob_loss": 0.4464}, "6m": {"mean": 0.0504, "median": 0.041, "p5": -0.4072, "p25": -0.1437, "p50": 0.041, "p75": 0.2364, "p95": 0.5399, "prob_loss": 0.4417}, "12m": {"mean": 0.1653, "median": 0.0881, "p5": -0.6182, "p25": -0.2355, "p50": 0.0881, "p75": 0.4905, "p95": 1.1946, "prob_loss": 0.4312}}`
-[02:51:27] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/montecarlo.py /Users/oskaraspinall/paper-portfolio/research/HRB/2026-10-11-mc-params.json
+[02:51:27] $ bin/py scripts/montecarlo.py research/HRB/2026-10-11-mc-params.json
 [02:51:28] {"3m": {"mean": 0.0175, "median": 0.0211, "p5": -0.2559, "p25": -0.0882, "p50": 0.0211, "p75": 0.1233, "p95": 0.2872, "prob_loss": 0.4464}, "6m": {"mean": 0.0504, "median": 0.041, "p5": -0.4072, "p25": -0.1437, "p50": 0.041, "p75": 0.2364, "p95": 0.5399, "prob_loss": 0.4417}, "12m": {"mean": 0.1653, "median": 0.0881, "p5": -0.6182, "p25": -0.2355, "p50": 0.0881, "p75": 0.4905, "p95": 1.1946, "prob_loss": 0.4312}}
-[02:51:28] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/mc_backtest.py HRB --asof 2026-10-11
+[02:51:28] $ bin/py scripts/mc_backtest.py HRB --asof 2026-10-11
 [02:51:30] {"3m": {"in_p5_p95": 7, "in_p25_p75": 3, "n": 8}, "6m": {"in_p5_p95": 7, "in_p25_p75": 5, "n": 8}}
 [02:51:30] $ claude -p Ticker ETR:DHER, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 36.6 (2026-10-09), ATR(14) 0.2664 (0.7%), suggested stop 35.9339 (-1.8%), minimum 2:1 target 37.9321, risk-based size 5.0%; 3-month peak (resistance) 38.96 (2026-07-17), 3.5x the stop distance. --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:52:00] Passes. Now the decision.
@@ -361,8 +361,8 @@ The screen's mechanical pullback filters are technically satisfied (50-day proxi
 - Fact sheet: `research/KRX-402340/factsheet-2026-10-11.md`
 - Check: `OK research/KRX-402340/2026-10-11.md type=TACTICAL 1=119 2=80 3=62 4=68 5=50 total=379`
 - No data conflicts. Blocked URLs: `https://www.reuters.com/markets/companies/402340.KS/` (fetch unavailable) and `https://www.sksquare.com/en/ir/` (not on allowlist — no IR domain recorded for this ticker in `universe/watchlist.txt`, and no company website was found on the stockanalysis.com overview page).
-[02:52:00] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/KRX-402340/2026-10-11.md
-[02:52:00] OK /Users/oskaraspinall/paper-portfolio/research/KRX-402340/2026-10-11.md type=TACTICAL 1=119 2=80 3=62 4=68 5=50 total=379
+[02:52:00] $ bin/py scripts/check_docs.py note research/KRX-402340/2026-10-11.md
+[02:52:00] OK research/KRX-402340/2026-10-11.md type=TACTICAL 1=119 2=80 3=62 4=68 5=50 total=379
 [02:52:00] $ claude -p Ticker KRX:402340, date 2026-10-11. Research: research/KRX-402340/factsheet-2026-10-11.md, research/KRX-402340/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/KRX-402340/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:54:08] Note: research/EPA-CAP/2026-10-11.md
 Fact sheet: research/EPA-CAP/factsheet-2026-10-11.md
@@ -374,21 +374,21 @@ Blocked/failed URLs:
 - https://investors.capgemini.com/en/ — blocked, not on allowlist
 - https://www.capgemini.com/news/ — blocked, not on allowlist
 - https://www.reuters.com/business/capgemini-sees-multi-year-it-modernisation-boom-firms-prepare-ai-2026-07-30/ — fetch failed (unable to fetch)
-[02:54:08] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/EPA-CAP/2026-10-11.md
-[02:54:08] OK /Users/oskaraspinall/paper-portfolio/research/EPA-CAP/2026-10-11.md type=TACTICAL 1=107 2=89 3=67 4=69 5=43 total=375
+[02:54:08] $ bin/py scripts/check_docs.py note research/EPA-CAP/2026-10-11.md
+[02:54:08] OK research/EPA-CAP/2026-10-11.md type=TACTICAL 1=107 2=89 3=67 4=69 5=43 total=375
 [02:54:08] $ claude -p Ticker EPA:CAP, date 2026-10-11. Research: research/EPA-CAP/factsheet-2026-10-11.md, research/EPA-CAP/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/EPA-CAP/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:54:24] research/KRX-402340/2026-10-11-macro.md
 OK research/KRX-402340/2026-10-11-macro.md macro_weight=secondary words=248
-[02:54:24] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/KRX-402340/2026-10-11-macro.md
-[02:54:24] OK /Users/oskaraspinall/paper-portfolio/research/KRX-402340/2026-10-11-macro.md macro_weight=secondary words=248
+[02:54:24] $ bin/py scripts/check_docs.py macro research/KRX-402340/2026-10-11-macro.md
+[02:54:24] OK research/KRX-402340/2026-10-11-macro.md macro_weight=secondary words=248
 [02:54:24] $ claude -p Evaluate KRX:402340 for 2026-10-11: fact sheet research/KRX-402340/factsheet-2026-10-11.md, note research/KRX-402340/2026-10-11.md, state portfolio/state.json, macro overlay research/KRX-402340/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 1.05e+06 (2026-10-08), ATR(14) 58357.1 (5.6%), suggested stop 904107 (-13.9%), minimum 2:1 target 1.34179e+06, risk-based size 5.0%; 3-month peak (resistance) 1.502e+06 (2026-07-07), 3.1x the stop distance. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:55:00] AVOID, TACTICAL, conviction 2.
 
 research/KRX-402340/2026-10-11-evaluation.md
 OK research/KRX-402340/2026-10-11-evaluation.md Bear case=144 Bull case=110 decision=AVOID
-[02:55:00] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/KRX-402340/2026-10-11-evaluation.md
-[02:55:00] OK /Users/oskaraspinall/paper-portfolio/research/KRX-402340/2026-10-11-evaluation.md Bear case=144 Bull case=110 decision=AVOID
-[02:55:00] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py KRX:402340 --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/KRX-402340/2026-10-11-evaluation.md
+[02:55:00] $ bin/py scripts/check_docs.py eval research/KRX-402340/2026-10-11-evaluation.md
+[02:55:00] OK research/KRX-402340/2026-10-11-evaluation.md Bear case=144 Bull case=110 decision=AVOID
+[02:55:00] $ bin/py scripts/valuation.py KRX:402340 --asof 2026-10-11 --eval research/KRX-402340/2026-10-11-evaluation.md
 [02:55:00] {"out": "research/KRX-402340/2026-10-11-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 3033.13, "base": 93007.69, "bull": 1096055.23}, "price": 1050000}
 [02:55:00] Monte Carlo skipped for KRX:402340 (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:55:00] $ claude -p Ticker HKG:0659, note type TACTICAL, date 2026-10-11. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-09-25 closed +6.5% on 11.5x average volume, 9 session(s) ago, still holding 201% of the jump; stop below that day's low (8.17); last close 8.92 (2026-10-09), ATR(14) 0.1857 (2.1%), suggested stop 8.1236 (-8.9%), minimum 2:1 target 10.5129, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
@@ -398,31 +398,31 @@ OK research/KRX-402340/2026-10-11-evaluation.md Bear case=144 Bull case=110 deci
 - Fact sheet: research/ETR-DHER/factsheet-2026-10-11.md
 - Check: `OK research/ETR-DHER/2026-10-11.md type=TACTICAL 1=92 2=88 3=79 4=95 5=45 total=399`
 - No data conflicts. No blocked URLs (no WebFetch calls made — qualitative content came from the fact sheet's news headlines only, correctly cited without fetching their non-allowlisted article sites).
-[02:55:01] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/ETR-DHER/2026-10-11.md
-[02:55:02] OK /Users/oskaraspinall/paper-portfolio/research/ETR-DHER/2026-10-11.md type=TACTICAL 1=92 2=88 3=79 4=95 5=45 total=399
+[02:55:01] $ bin/py scripts/check_docs.py note research/ETR-DHER/2026-10-11.md
+[02:55:02] OK research/ETR-DHER/2026-10-11.md type=TACTICAL 1=92 2=88 3=79 4=95 5=45 total=399
 [02:55:02] $ claude -p Ticker ETR:DHER, date 2026-10-11. Research: research/ETR-DHER/factsheet-2026-10-11.md, research/ETR-DHER/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/ETR-DHER/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [02:55:39] research/ETR-DHER/2026-10-11-macro.md
 OK research/ETR-DHER/2026-10-11-macro.md macro_weight=context words=72
-[02:55:39] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/ETR-DHER/2026-10-11-macro.md
-[02:55:39] OK /Users/oskaraspinall/paper-portfolio/research/ETR-DHER/2026-10-11-macro.md macro_weight=context words=72
+[02:55:39] $ bin/py scripts/check_docs.py macro research/ETR-DHER/2026-10-11-macro.md
+[02:55:39] OK research/ETR-DHER/2026-10-11-macro.md macro_weight=context words=72
 [02:55:39] $ claude -p Evaluate ETR:DHER for 2026-10-11: fact sheet research/ETR-DHER/factsheet-2026-10-11.md, note research/ETR-DHER/2026-10-11.md, state portfolio/state.json, macro overlay research/ETR-DHER/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 36.6 (2026-10-09), ATR(14) 0.2664 (0.7%), suggested stop 35.9339 (-1.8%), minimum 2:1 target 37.9321, risk-based size 5.0%; 3-month peak (resistance) 38.96 (2026-07-17), 3.5x the stop distance. --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:55:40] research/EPA-CAP/2026-10-11-macro.md
 OK research/EPA-CAP/2026-10-11-macro.md macro_weight=context words=65
-[02:55:40] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/EPA-CAP/2026-10-11-macro.md
-[02:55:40] OK /Users/oskaraspinall/paper-portfolio/research/EPA-CAP/2026-10-11-macro.md macro_weight=context words=65
+[02:55:40] $ bin/py scripts/check_docs.py macro research/EPA-CAP/2026-10-11-macro.md
+[02:55:40] OK research/EPA-CAP/2026-10-11-macro.md macro_weight=context words=65
 [02:55:40] $ claude -p Evaluate EPA:CAP for 2026-10-11: fact sheet research/EPA-CAP/factsheet-2026-10-11.md, note research/EPA-CAP/2026-10-11.md, state portfolio/state.json, macro overlay research/EPA-CAP/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-01 closed +7.4% on 2.9x average volume, 6 session(s) ago, still holding 138% of the jump; stop below that day's low (100.95); last close 115.05 (2026-10-09), ATR(14) 4.3929 (3.8%), suggested stop 99.8518 (-13.2%), minimum 2:1 target 145.446, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [02:56:08] research/ETR-DHER/2026-10-11-evaluation.md
 OK research/ETR-DHER/2026-10-11-evaluation.md Bear case=139 Bull case=113 decision=AVOID
-[02:56:08] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/ETR-DHER/2026-10-11-evaluation.md
-[02:56:08] OK /Users/oskaraspinall/paper-portfolio/research/ETR-DHER/2026-10-11-evaluation.md Bear case=139 Bull case=113 decision=AVOID
-[02:56:08] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py ETR:DHER --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/ETR-DHER/2026-10-11-evaluation.md
+[02:56:08] $ bin/py scripts/check_docs.py eval research/ETR-DHER/2026-10-11-evaluation.md
+[02:56:08] OK research/ETR-DHER/2026-10-11-evaluation.md Bear case=139 Bull case=113 decision=AVOID
+[02:56:08] $ bin/py scripts/valuation.py ETR:DHER --asof 2026-10-11 --eval research/ETR-DHER/2026-10-11-evaluation.md
 [02:56:08] {"out": "research/ETR-DHER/2026-10-11-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 21.95, "base": 41.89, "bull": 72.19}, "price": 36.6}
 [02:56:08] Monte Carlo skipped for ETR:DHER (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:56:21] research/EPA-CAP/2026-10-11-evaluation.md
 OK research/EPA-CAP/2026-10-11-evaluation.md Bear case=148 Bull case=125 decision=AVOID
-[02:56:21] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/EPA-CAP/2026-10-11-evaluation.md
-[02:56:21] OK /Users/oskaraspinall/paper-portfolio/research/EPA-CAP/2026-10-11-evaluation.md Bear case=148 Bull case=125 decision=AVOID
-[02:56:21] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py EPA:CAP --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/EPA-CAP/2026-10-11-evaluation.md
+[02:56:21] $ bin/py scripts/check_docs.py eval research/EPA-CAP/2026-10-11-evaluation.md
+[02:56:21] OK research/EPA-CAP/2026-10-11-evaluation.md Bear case=148 Bull case=125 decision=AVOID
+[02:56:21] $ bin/py scripts/valuation.py EPA:CAP --asof 2026-10-11 --eval research/EPA-CAP/2026-10-11-evaluation.md
 [02:56:21] {"out": "research/EPA-CAP/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 142.13, "base": 175.65, "bull": 282.35}, "price": 115.05}
 [02:56:21] Monte Carlo skipped for EPA:CAP (AVOID: informational only, runs for BUY/ADD and holdings)
 [02:58:52] Note: research/HKG-0659/2026-10-11.md
@@ -430,20 +430,20 @@ Fact sheet: research/HKG-0659/factsheet-2026-10-11.md
 OK research/HKG-0659/2026-10-11.md type=TACTICAL 1=92 2=84 3=60 4=101 5=45 total=382
 
 No data conflicts. No blocked URLs (one WebFetch to stockanalysis.com/quote/hkg/0659/ for company identification, within allowlist).
-[02:58:52] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11.md
-[02:58:52] OK /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11.md type=TACTICAL 1=92 2=84 3=60 4=101 5=45 total=382
+[02:58:52] $ bin/py scripts/check_docs.py note research/HKG-0659/2026-10-11.md
+[02:58:52] OK research/HKG-0659/2026-10-11.md type=TACTICAL 1=92 2=84 3=60 4=101 5=45 total=382
 [02:58:52] $ claude -p Ticker HKG:0659, date 2026-10-11. Research: research/HKG-0659/factsheet-2026-10-11.md, research/HKG-0659/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/HKG-0659/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [03:00:08] research/HKG-0659/2026-10-11-macro.md
 OK research/HKG-0659/2026-10-11-macro.md macro_weight=secondary words=242
-[03:00:08] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11-macro.md
-[03:00:09] OK /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11-macro.md macro_weight=secondary words=242
+[03:00:08] $ bin/py scripts/check_docs.py macro research/HKG-0659/2026-10-11-macro.md
+[03:00:09] OK research/HKG-0659/2026-10-11-macro.md macro_weight=secondary words=242
 [03:00:09] $ claude -p Evaluate HKG:0659 for 2026-10-11: fact sheet research/HKG-0659/factsheet-2026-10-11.md, note research/HKG-0659/2026-10-11.md, state portfolio/state.json, macro overlay research/HKG-0659/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-09-25 closed +6.5% on 11.5x average volume, 9 session(s) ago, still holding 201% of the jump; stop below that day's low (8.17); last close 8.92 (2026-10-09), ATR(14) 0.1857 (2.1%), suggested stop 8.1236 (-8.9%), minimum 2:1 target 10.5129, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [03:00:14] You've hit your session limit · resets 7am (Europe/London)
 [03:00:14] SKIPPED initiation HKG:0659 (make-up): claude -p Evaluate HKG:0659 for 2026-10-11: fact sheet research/HKG-0659/factsheet-2026-10-11.md, note research/HKG-0659/2026-10-11.md, state portfolio/state.json, macro overlay research/HKG-0659/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-ear
 [03:00:17] $ claude -p Evaluation files: research/HKG-1530/2026-10-11-evaluation.md research/DFM-EMAARDEV/2026-10-11-evaluation.md research/ASX-GGP/2026-10-11-evaluation.md research/JSE-GFI/2026-10-11-evaluation.md research/TSX-OGC/2026-10-11-evaluation.md research/TSX-K/2026-10-11-evaluation.md research/DFM-EMAAR/2026-10-11-evaluation.md research/HKG-2076/2026-10-11-evaluation.md research/HRB/2026-10-11-evaluation.md research/TYO-6323/2026-10-11-evaluation.md research/KRX-402340/2026-10-11-evaluation.md research/EPA-CAP/2026-10-11-evaluation.md research/ETR-DHER/2026-10-11-evaluation.md. Date 2026-10-11. Write the requests to runs/2026-10-11/requests-makeup.json and submit with --at-market --save runs/2026-10-11/submit-makeup.json (decided trades fill now at the live price where the market is open, else at the next open). Cash strategy: reports/regime/2026-10-11.md (new buys can't take cash below the reserve; if one would, it must name the holding it replaces and why). --agent portfolio-manager --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [03:00:20] You've hit your session limit · resets 7am (Europe/London)
 [03:00:20] !! PORTFOLIO-MANAGER FAILED (make-up; research kept): claude -p Evaluation files: research/HKG-1530/2026-10-11-evaluation.md research/DFM-EMAARDEV/2026-10-11-evaluation.md research/ASX-GGP/2026-10-11-evaluation.md research/JSE-GFI/2026-10-11-evaluation.md research/TSX-OGC/2026-10-11-evaluation.md research/TSX-K/2026-10-11-evaluation.md research/DFM-EMA
-[03:00:20] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/regime.py --asof 2026-10-11
+[03:00:20] $ bin/py scripts/regime.py --asof 2026-10-11
 [03:00:20] {"asof": "2026-10-11", "points": 1, "score_regime": "risk_on", "final_regime": "risk_on", "reserve_pct": 10.0, "drawdown_pct": 0.0}
 [03:00:20] $ claude -p Date 2026-10-11. Regime score: reports/regime/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write reports/regime/2026-10-11-view.md. --agent macro-strategist --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [03:00:22] You've hit your session limit · resets 7am (Europe/London)
@@ -456,19 +456,19 @@ Fact sheet: research/HKG-0659/factsheet-2026-10-11.md
 OK research/HKG-0659/2026-10-11.md type=TACTICAL 1=93 2=85 3=67 4=114 5=40 total=399
 
 No data conflicts. No blocked URLs (no WebFetch calls were made — no allowlisted IR/company domain was found for HKG:0659 beyond stockanalysis.com, so all evidence came from the fact sheet).
-[15:52:22] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py note /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11.md
-[15:52:22] OK /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11.md type=TACTICAL 1=93 2=85 3=67 4=114 5=40 total=399
+[15:52:22] $ bin/py scripts/check_docs.py note research/HKG-0659/2026-10-11.md
+[15:52:22] OK research/HKG-0659/2026-10-11.md type=TACTICAL 1=93 2=85 3=67 4=114 5=40 total=399
 [15:52:22] $ claude -p Ticker HKG:0659, date 2026-10-11. Research: research/HKG-0659/factsheet-2026-10-11.md, research/HKG-0659/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write research/HKG-0659/2026-10-11-macro.md. --agent macro-overlay --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [15:53:50] research/HKG-0659/2026-10-11-macro.md
 OK research/HKG-0659/2026-10-11-macro.md macro_weight=context words=69
-[15:53:50] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py macro /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11-macro.md
-[15:53:50] OK /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11-macro.md macro_weight=context words=69
+[15:53:50] $ bin/py scripts/check_docs.py macro research/HKG-0659/2026-10-11-macro.md
+[15:53:50] OK research/HKG-0659/2026-10-11-macro.md macro_weight=context words=69
 [15:53:50] $ claude -p Evaluate HKG:0659 for 2026-10-11: fact sheet research/HKG-0659/factsheet-2026-10-11.md, note research/HKG-0659/2026-10-11.md, state portfolio/state.json, macro overlay research/HKG-0659/2026-10-11-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-09-25 closed +6.5% on 11.5x average volume, 9 session(s) ago, still holding 201% of the jump; stop below that day's low (8.17); last close 8.92 (2026-10-09), ATR(14) 0.1857 (2.1%), suggested stop 8.1236 (-8.9%), minimum 2:1 target 10.5129, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --allowedTools Read,Write,Bash(bin/py:*) --output-format text
 [15:54:25] research/HKG-0659/2026-10-11-evaluation.md
 OK research/HKG-0659/2026-10-11-evaluation.md Bear case=149 Bull case=101 decision=AVOID
-[15:54:25] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11-evaluation.md
-[15:54:26] OK /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11-evaluation.md Bear case=149 Bull case=101 decision=AVOID
-[15:54:26] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/valuation.py HKG:0659 --asof 2026-10-11 --eval /Users/oskaraspinall/paper-portfolio/research/HKG-0659/2026-10-11-evaluation.md
+[15:54:25] $ bin/py scripts/check_docs.py eval research/HKG-0659/2026-10-11-evaluation.md
+[15:54:26] OK research/HKG-0659/2026-10-11-evaluation.md Bear case=149 Bull case=101 decision=AVOID
+[15:54:26] $ bin/py scripts/valuation.py HKG:0659 --asof 2026-10-11 --eval research/HKG-0659/2026-10-11-evaluation.md
 [15:54:26] {"out": "research/HKG-0659/2026-10-11-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 2.94, "base": 6.97, "bull": 13.07}, "price": 8.92}
 [15:54:26] Monte Carlo skipped for HKG:0659 (AVOID: informational only, runs for BUY/ADD and holdings)
 [15:54:28] $ claude -p Evaluation files: research/HKG-1530/2026-10-11-evaluation.md research/DFM-EMAARDEV/2026-10-11-evaluation.md research/ASX-GGP/2026-10-11-evaluation.md research/JSE-GFI/2026-10-11-evaluation.md research/TSX-OGC/2026-10-11-evaluation.md research/TSX-K/2026-10-11-evaluation.md research/DFM-EMAAR/2026-10-11-evaluation.md research/HKG-2076/2026-10-11-evaluation.md research/HRB/2026-10-11-evaluation.md research/TYO-6323/2026-10-11-evaluation.md research/KRX-402340/2026-10-11-evaluation.md research/EPA-CAP/2026-10-11-evaluation.md research/ETR-DHER/2026-10-11-evaluation.md research/HKG-0659/2026-10-11-evaluation.md. Date 2026-10-11. Write the requests to runs/2026-10-11/requests-makeup.json and submit with --at-market --save runs/2026-10-11/submit-makeup.json (decided trades fill now at the live price where the market is open, else at the next open). Cash strategy: reports/regime/2026-10-11.md (new buys can't take cash below the reserve; if one would, it must name the holding it replaces and why). --agent portfolio-manager --allowedTools Read,Write,Bash(bin/py:*) --output-format text
@@ -517,13 +517,13 @@ OK research/HKG-0659/2026-10-11-evaluation.md Bear case=149 Bull case=101 decisi
 ```
 
 Both buys queued for the next open (neither HKG nor US market was open at decision time); no replacements needed since cash remains well above the 10% risk-on reserve.
-[15:55:41] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/regime.py --asof 2026-10-11
+[15:55:41] $ bin/py scripts/regime.py --asof 2026-10-11
 [15:55:42] {"asof": "2026-10-11", "points": 1, "score_regime": "risk_on", "final_regime": "risk_on", "reserve_pct": 10.0, "drawdown_pct": 0.0}
 [15:55:42] $ claude -p Date 2026-10-11. Regime score: reports/regime/2026-10-11.md. Macro snapshot: reports/macro/2026-10-11.md. Write reports/regime/2026-10-11-view.md. --agent macro-strategist --allowedTools Read,Write,WebFetch,Bash(bin/py:*) --output-format text
 [15:56:58] reports/regime/2026-10-11-view.md
 OK reports/regime/2026-10-11-view.md final_regime=neutral score_regime=risk_on reasons=2
-[15:56:58] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py regime /Users/oskaraspinall/paper-portfolio/reports/regime/2026-10-11-view.md
-[15:56:58] OK /Users/oskaraspinall/paper-portfolio/reports/regime/2026-10-11-view.md final_regime=neutral score_regime=risk_on reasons=2
-[15:56:58] $ /Users/oskaraspinall/paper-portfolio/bin/py scripts/regime.py --apply-view --asof 2026-10-11
+[15:56:58] $ bin/py scripts/check_docs.py regime reports/regime/2026-10-11-view.md
+[15:56:58] OK reports/regime/2026-10-11-view.md final_regime=neutral score_regime=risk_on reasons=2
+[15:56:58] $ bin/py scripts/regime.py --apply-view --asof 2026-10-11
 [15:56:58] {"asof": "2026-10-11", "points": 1, "score_regime": "risk_on", "final_regime": "neutral", "reserve_pct": 20.0, "drawdown_pct": 0.0}
 [15:56:58] == MAKE-UP finished: 14 of 14 evaluated
