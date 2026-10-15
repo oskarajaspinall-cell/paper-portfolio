@@ -213,7 +213,7 @@ def fake_repo(tmp_path, monkeypatch):
 
 
 def make_sh(root, scan, calls, fail_on=None):
-    def sh(args, log):
+    def sh(args, log, timeout=None):
         cmd = " ".join(args)
         calls.append(cmd)
         if fail_on and fail_on in cmd:
@@ -245,7 +245,12 @@ def test_run_makes_no_model_calls_for_unflagged_or_exits(fake_repo, monkeypatch)
 def test_run_reinitiates_fired_core_trigger(fake_repo, monkeypatch):
     scan_ = dict(SCAN_QUIET, reinitiate=["TRIG"], exits=[], mechanical_requests=[])
     (fake_repo / "portfolio" / "state.json").write_text(json.dumps({"holdings": {"TRIG": {"type": "CORE"}}}))
-    monkeypatch.setattr(wr, "sh", make_sh(fake_repo, scan_, []))
+    calls = []
+    base_sh = make_sh(fake_repo, scan_, calls)
+
+    def sh(args, log, timeout=None):  # the SEC delta step reports a written file
+        return "OK research/TRIG/sec-delta-2026-10-10.md" if "sec_delta.py" in " ".join(args) else base_sh(args, log, timeout)
+    monkeypatch.setattr(wr, "sh", sh)
     seen, prompts = [], []
 
     def agent(name, prompt, log):
@@ -263,6 +268,7 @@ def test_run_reinitiates_fired_core_trigger(fake_repo, monkeypatch):
     assert wr.run("2026-10-10", False, 0, agent=agent) == 0
     assert seen == ["macro-strategist", "researcher", "macro-overlay", "evaluator", "portfolio-manager"]  # no Monte Carlo (owner 2026-10-11)
     assert "full re-initiation of an existing CORE holding (scan: core or macro trigger fired)" in prompts[1]
+    assert "SEC filing delta: research/TRIG/sec-delta-2026-10-10.md" in prompts[1]
     assert "Decide ADD, HOLD, TRIM or SELL" in prompts[3]
 
 

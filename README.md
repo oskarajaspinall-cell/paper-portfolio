@@ -50,6 +50,9 @@ The one exception is the bulk S&P 500 research loop. A stock priced above its ba
 out** there before any AI research (`scripts/prescreen.py`, no model calls; verdicts in `reports/prescreen/`).
 Every buy so far had a base fair value well above the price. Your own requests, entry-price hits and holdings
 are never pre-screened.
+For US companies, core research starts from an **SEC filing delta**: the Risk Factors and MD&A paragraphs that
+were added, removed or reworded since the comparable 10-K/10-Q (`scripts/sec_delta.py`). sec.gov asks for a
+contact email in automated requests, so this stays off until you put yours in `CLAUDE.md` `[sec] contact`.
 Each research note includes the stock's recent **news headlines** (analyst price targets and ratings are
 filtered out by rule) and sentiment figures such as short interest.
 

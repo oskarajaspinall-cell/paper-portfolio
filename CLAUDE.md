@@ -202,6 +202,14 @@ allowlist = ["stockanalysis.com", "sec.gov", "londonstockexchange.com", "reuters
 request_interval_seconds = 3
 user_agent = "paper-portfolio-research-bot/0.1 (personal paper-trading research; respects robots.txt; max 1 req/3s)"
 
+[sec]
+# SEC filing delta (scripts/sec_delta.py; design by Claude 2026-10-16): before a CORE initiation/re-initiation of a
+# US SEC filer, the latest 10-K/10-Q's Risk Factors and MD&A are diffed against the comparable filing (10-K vs the
+# previous 10-K; 10-Q vs the same quarter a year earlier) and the researcher reads the changes first. sec.gov asks
+# automated clients to name a contact (an email) in the User-Agent; the step stays OFF while this is empty.
+contact = ""
+max_words = 2000                  # cap on the delta file
+
 [universe]
 # Which stocks are eligible (rebuilt by scripts/universe.py each Friday). Each source is optional.
 sp500 = true                          # S&P 500 (from stockanalysis.com)
@@ -285,6 +293,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/regime.py` → `reports/regime/<date>.json/.md` (+ `-view.md` from `.claude/agents/macro-strategist.md`) — macro regime score, cash reserve, dip release.
 - `scripts/risk.py` — volatility-scaled core sizing (`[core].vol_*`, used by `portfolio.py`) and `risk.py report` → `reports/risk/<date>.md/.json` (weekly: each holding's vol, marginal contribution to risk and share of portfolio variance; informational, never trades).
 - `scripts/attribution.py report` → `reports/attribution/<date>.md/.json` (weekly; design by Claude 2026-10-16): Brinson-Fachler allocation / selection / interaction by sector vs a sector-weighted S&P 500 (SPDR sector ETFs; S&P 500 members' caps from stockanalysis.com sector pages), cash as its own sector, linked daily (Carino). Rebuilt from the ledger; informational.
+- `scripts/sec_delta.py <TICKER>` → `research/<SLUG>/sec-delta-<date>.md` (design by Claude 2026-10-16; `[sec]`): run by `weekly_run.research_and_evaluate` before every CORE researcher call. US SEC filers only: added / removed / reworded Risk Factors and MD&A paragraphs vs the comparable filing; figure-only edits dropped. OFF until `[sec].contact` is set.
 - `scripts/setups.py` — tactical setups (drift signal, pullback filter, ATR, volatility stop, 2:1 target, risk-based size).
 - `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`; a liquidity gate (`[screen].min_addv_usd`, `min_float_pct`) drops untradable names before ranking.
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.

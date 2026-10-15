@@ -94,7 +94,16 @@ def entry_hit_reason(h: dict) -> str:
 def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, log, run: Path) -> Path:
     slug = Ticker(ticker).slug
     note, ev = ROOT / "research" / slug / f"{asof}.md", ROOT / "research" / slug / f"{asof}-evaluation.md"
-    agent("researcher", f"Ticker {ticker}, note type {ptype}, date {asof}. {why}", log)
+    delta = ""
+    if ptype == "CORE":  # SEC filing delta (scripts/sec_delta.py): context only, a failure never blocks research
+        try:
+            out = sh(PY + ["scripts/sec_delta.py", ticker, "--asof", asof], log, timeout=300)
+            if out.strip().startswith("OK "):
+                delta = (f" SEC filing delta: research/{slug}/sec-delta-{asof}.md (read it before any web fetch; "
+                         "it does not count toward the fetch cap).")
+        except StepFailed as e:
+            log(f"sec delta skipped for {ticker}: {e}")
+    agent("researcher", f"Ticker {ticker}, note type {ptype}, date {asof}. {why}{delta}", log)
     if not note.exists():
         raise StepFailed(f"researcher wrote no note at {note}")
     check_doc("note", note, log)
