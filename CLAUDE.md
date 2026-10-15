@@ -217,6 +217,8 @@ min_metrics_per_pillar = 2
 quality = ["roic", "roce", "fcfMargin", "operatingMargin", "fScore", "-debtEbitda"]   # "-" = lower is better
 valuation = ["fcfYield", "earningsYield", "-evEbitda", "-pe"]
 momentum = ["ch1y", "price_vs_sma200", "price_vs_sma50"]
+min_addv_usd = 10_000_000        # liquidity gate before ranking (design by Claude 2026-10-16): 20-day avg volume x price, USD
+min_float_pct = 20                # ...and free float >= this % of shares outstanding (a missing float figure doesn't fail)
 deep_dive_top = 500               # stage 2: also read the ratios page (5y history) for the top N core candidates (~3 s each)
 history = ["cheap_evebitda", "cheap_pfcf", "cheap_pe", "cheap_pb", "roic_trend", "roce_trend", "roic_min",
            "roe_trend", "roe_min"]   # P/B and ROE give banks/insurers a history score too
@@ -277,7 +279,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/corporate_actions.py check` — dividends (stockanalysis.com dividend pages) and splits (Yahoo split column, confirmed on stockanalysis.com); log in `portfolio/corporate_actions.csv`, DIVIDEND/SPLIT rows in the ledger, receivables in `state.json`.
 - `scripts/regime.py` → `reports/regime/<date>.json/.md` (+ `-view.md` from `.claude/agents/macro-strategist.md`) — macro regime score, cash reserve, dip release.
 - `scripts/setups.py` — tactical setups (drift signal, pullback filter, ATR, volatility stop, 2:1 target, risk-based size).
-- `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`.
+- `scripts/universe.py build` — `universe/universe.csv` from the `[universe]` sources. `scripts/screen.py` — weekly two-stage screen → `reports/screen/<date>.md/.json`; a liquidity gate (`[screen].min_addv_usd`, `min_float_pct`) drops untradable names before ranking.
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.
 - `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions (3 new initiations at a time); any failure (other than a skipped new initiation) restores `portfolio/` and writes `runs/<date>/error.log`.
 - Monte Carlo removed (owner 2026-10-11, to save usage; it was informational only). Past `*-montecarlo.*` / `*-mc-*` files in `research/` are kept as history.

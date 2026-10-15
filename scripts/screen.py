@@ -13,6 +13,11 @@ post-earnings-drift candidates (results just reported, above the 50-day average)
 daily history of the top `tactical_check_top` of each to confirm the earnings reaction and size a
 volatility stop (ATR). Picks alternate between the two setups.
 
+Liquidity gate (design by Claude 2026-10-16): before ranking, a stock needs average daily dollar volume
+(20-day average volume x price, in USD) >= `min_addv_usd` and a free float >= `min_float_pct` of shares
+outstanding; names that fail are excluded (listed in the report), so the percentiles rank tradable names only.
+A missing volume fails; a missing float figure is not counted against the stock.
+
 A page that fails to load or parse is EXCLUDED and listed in the report (never guessed). Pages are
 cached per day, so an interrupted run resumes where it stopped.
 
@@ -53,6 +58,24 @@ def stock_metrics(stats: dict, info: dict) -> dict:
         v["earnings_date"] = None
     v["price"] = price
     return v
+
+
+def liquidity(v: dict, mcap_usd: float | None) -> dict:
+    """ADDV in USD = turnover (20-day average volume / shares outstanding) x USD market cap from the
+    universe file, so no FX or quote-unit (pence) conversion is needed; float % of shares outstanding."""
+    av, so, fl = v.get("averageVolume"), v.get("sharesout"), v.get("float")
+    addv = av / so * mcap_usd if av and so and mcap_usd else None
+    return {"addv_usd": addv, "float_pct": fl / so * 100 if fl and so else None}
+
+
+def liquidity_fail(liq: dict, sc: dict) -> str | None:
+    if liq["addv_usd"] is None:
+        return "ADDV unavailable (volume, shares or USD market cap missing)"
+    if liq["addv_usd"] < sc["min_addv_usd"]:
+        return f"ADDV ${liq['addv_usd'] / 1e6:.1f}M < ${sc['min_addv_usd'] / 1e6:g}M"
+    if liq["float_pct"] is not None and liq["float_pct"] < sc["min_float_pct"]:
+        return f"free float {liq['float_pct']:.0f}% < {sc['min_float_pct']:g}%"
+    return None
 
 
 def percentile_ranks(values: dict[str, float | None], higher_better: bool) -> dict[str, float]:
@@ -263,15 +286,23 @@ def run(fetcher, cfg: dict, asof: str, limit: int | None = None, state: dict | N
            and (index is None or index in r["indexes"].split(";"))]
     if limit:
         uni = uni[:limit]
-    metrics, failed, names = {}, [], {}
+    metrics, failed, names, illiquid = {}, [], {}, []
     for r in uni:
         url = page_url(r["ticker"], "statistics/")
         try:
             nodes = page_nodes(fetcher.html(url), url)
-            metrics[r["ticker"]] = stock_metrics(parse_statistics(nodes, url), parse_info(nodes, url))
-            names[r["ticker"]] = r["name"]
+            m = stock_metrics(parse_statistics(nodes, url), parse_info(nodes, url))
         except DataError as e:
             failed.append({"ticker": r["ticker"], "url": e.url, "field": e.field})
+            continue
+        mcap = float(r["market_cap_usd"]) if r.get("market_cap_usd") else None
+        m.update(liquidity(m, mcap))
+        why = liquidity_fail(m, cfg["screen"])
+        if why:
+            illiquid.append({"ticker": r["ticker"], "reason": why, "url": url})
+            continue
+        metrics[r["ticker"]] = m
+        names[r["ticker"]] = r["name"]
     rows = score(metrics, cfg, asof)
     for r in rows:  # a recent decision blocks only the same kind of research
         slug = Ticker(r["ticker"]).slug
@@ -282,7 +313,7 @@ def run(fetcher, cfg: dict, asof: str, limit: int | None = None, state: dict | N
     deep_failed = deep_dive(rows, fetcher, cfg)
     tac_failed = tactical_check(rows, fetcher, cfg, asof)
     return {"asof": asof, "screened": len(metrics), "failed": failed + deep_failed + tac_failed, "excluded_held": sorted(held),
-            "excluded_recent": sorted(recent_core | recent_tac), "rows": rows, "names": names, "picks": pick(rows, cfg),
+            "excluded_recent": sorted(recent_core | recent_tac), "illiquid": illiquid, "rows": rows, "names": names, "picks": pick(rows, cfg),
             "deep_dived": sum(1 for r in rows if r.get("history") is not None)}
 
 
@@ -296,7 +327,9 @@ def report_md(res: dict, top: int = 15) -> str:
              "stockanalysis.com statistics page. The top core candidates "
              f"({res.get('deep_dived', 0)} stocks) also had their ratios page read: History = valuation vs its own "
              "5-year range plus return-on-capital trend and consistency; their core score = mean(Quality, Valuation, "
-             "History).", "",
+             "History).",
+             f"Liquidity gate: {len(res.get('illiquid', []))} stocks excluded before ranking (ADDV below the minimum "
+             "or free float too low; listed below).", "",
              "## This week's picks for initiation"]
     for p in res["picks"]:
         lines.append(f"- {p['ticker']} ({res['names'].get(p['ticker'], '')}): {p['type']}"
@@ -321,6 +354,9 @@ def report_md(res: dict, top: int = 15) -> str:
         if skipped:
             lines += ["", f"Skipped on structure ({len(skipped)}): "
                       + "; ".join(f"{r['ticker']} — {r['setup_skipped'].split(': ', 1)[1]}" for r in skipped[:top])]
+    if res.get("illiquid"):
+        lines += ["", "## Excluded by the liquidity gate"] + [f"- {x['ticker']}: {x['reason']} — {x['url']}"
+                                                              for x in res["illiquid"]]
     if res["failed"]:
         lines += ["", "## Failed pages (excluded)"] + [f"- {x['ticker']}: {x['url']} ({x['field']})" for x in res["failed"]]
     return "\n".join(lines) + "\n"
@@ -341,8 +377,8 @@ def main(argv=None) -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     stem = a.asof + (f"-{a.index.lower()}" if a.index else "")
     (OUT / f"{stem}.md").write_text(report_md(res))
-    (OUT / f"{stem}.json").write_text(json.dumps({k: res[k] for k in ("asof", "screened", "failed", "picks")}, indent=1))
-    print(json.dumps({"screened": res["screened"], "failed": len(res["failed"]), "picks": res["picks"],
+    (OUT / f"{stem}.json").write_text(json.dumps({k: res[k] for k in ("asof", "screened", "failed", "illiquid", "picks")}, indent=1))
+    print(json.dumps({"screened": res["screened"], "failed": len(res["failed"]), "illiquid": len(res["illiquid"]), "picks": res["picks"],
                       "report": str((OUT / f"{stem}.md").relative_to(ROOT))}))
     return 0
 

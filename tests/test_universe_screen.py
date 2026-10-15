@@ -439,3 +439,52 @@ def test_recent_core_decision_does_not_hide_a_tactical_setup(cfg, monkeypatch):
     by = {r["ticker"]: r for r in screen.run(F(), cfg, "2026-10-07")["rows"]}
     assert by["AAA"]["core"] is None and by["AAA"]["pullback_cand"] == 50.0      # recent CORE: tactical still open
     assert by["BBB"]["core"] == 50.0 and by["BBB"]["pullback_cand"] is None      # recent TACTICAL: core still open
+
+
+def test_liquidity_from_real_page():
+    from screen import liquidity
+    url = "https://stockanalysis.com/stocks/aapl/statistics/"
+    nodes = page_nodes((FIX / "aapl_statistics.html").read_text(), url)
+    m = stock_metrics(parse_statistics(nodes, url), parse_info(nodes, url))
+    liq = liquidity(m, 4.84e12)
+    assert liq["addv_usd"] == pytest.approx(39896300 / 14594180000 * 4.84e12)
+    assert liq["float_pct"] == pytest.approx(14569114269 / 14594180000 * 100)
+
+
+@pytest.mark.parametrize("liq,fails", [
+    ({"addv_usd": 50e6, "float_pct": 80}, None),
+    ({"addv_usd": 50e6, "float_pct": None}, None),           # missing float figure: not held against the stock
+    ({"addv_usd": 9e6, "float_pct": 80}, "ADDV"),
+    ({"addv_usd": None, "float_pct": 80}, "ADDV unavailable"),
+    ({"addv_usd": 50e6, "float_pct": 15}, "free float"),
+])
+def test_liquidity_gate(cfg, liq, fails):
+    from screen import liquidity_fail
+    why = liquidity_fail(liq, cfg["screen"])
+    assert (why is None) if fails is None else why.startswith(fails)
+
+
+def test_illiquid_names_are_excluded_before_ranking(cfg, monkeypatch):
+    import screen
+    uni = [{"ticker": "BIG", "name": "B", "indexes": "SP500", "screen": "yes", "market_cap_usd": "1e11"},
+           {"ticker": "TINY", "name": "T", "indexes": "SP500", "screen": "yes", "market_cap_usd": "1e8"}]
+
+    class F:
+        def html(self, url):
+            return url
+
+    monkeypatch.setattr(screen, "read_universe", lambda: uni)
+    monkeypatch.setattr(screen, "read_watchlist", lambda: {})
+    monkeypatch.setattr(screen, "recently_researched", lambda days, asof, kind=None: set())
+    monkeypatch.setattr(screen, "page_nodes", lambda html, url: url)
+    monkeypatch.setattr(screen, "parse_statistics", lambda nodes, url: {})
+    monkeypatch.setattr(screen, "parse_info", lambda nodes, url: {})
+    monkeypatch.setattr(screen, "stock_metrics", lambda s, i: {"averageVolume": 1e6, "sharesout": 1e9, "float": 9e8})
+    scored = {}
+    monkeypatch.setattr(screen, "score", lambda m, c, a: scored.update(m) or [])
+    monkeypatch.setattr(screen, "deep_dive", lambda rows, f, c: [])
+    monkeypatch.setattr(screen, "tactical_check", lambda rows, f, c, a: [])
+    res = screen.run(F(), cfg, "2026-10-07")
+    # turnover 0.1%/day: BIG trades $100M a day, TINY $0.1M
+    assert list(scored) == ["BIG"] and [x["ticker"] for x in res["illiquid"]] == ["TINY"]
+    assert "Excluded by the liquidity gate" in screen.report_md(res)
