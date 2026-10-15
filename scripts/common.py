@@ -55,7 +55,7 @@ class Ticker:
         return BASE_URL + self.base_path(etf) + page
 
 
-ETF_TICKERS = {"SPY"}
+ETF_TICKERS = {"SPY", "XLK", "XLV", "XLF", "XLY", "XLP", "XLE", "XLI", "XLB", "XLU", "XLRE", "XLC"}  # SPDR sector ETFs: attribution.py
 
 
 def page_url(ticker: str, page: str = "") -> str:

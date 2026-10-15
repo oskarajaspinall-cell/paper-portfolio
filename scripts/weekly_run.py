@@ -311,6 +311,10 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             sh(PY + ["scripts/risk.py", "report", "--asof", asof], log)
         except StepFailed as e:
             log(f"risk report not written: {e}")
+        try:  # informational (scripts/attribution.py)
+            sh(PY + ["scripts/attribution.py", "report", "--asof", asof], log)
+        except StepFailed as e:
+            log(f"attribution not written: {e}")
         step("report")
         sh(PY + ["scripts/weekly_report.py", "--asof", asof, "--run", str(rundir)], log)
         if not dry_run:

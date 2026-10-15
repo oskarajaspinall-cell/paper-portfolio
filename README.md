@@ -29,7 +29,10 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Core positions are sized by conviction and volatility**: 7% (conviction 4) or 10% (5), scaled down
 for a volatile stock and up for a steady one (between 0.6× and 1.4×), so one jumpy name can't dominate the
-portfolio's risk; a weekly risk table (`reports/risk/`) shows each holding's share of the portfolio's volatility. **Trades fill at the next market open**: decisions become pending orders filled at the
+portfolio's risk; a weekly risk table (`reports/risk/`) shows each holding's share of the portfolio's volatility.
+A weekly **return attribution** (`reports/attribution/`) splits the return over the S&P 500 into sector bets
+(including the cash reserve), stock picking within sectors and their interaction, so a sector tailwind can't hide
+weak stock picks. **Trades fill at the next market open**: decisions become pending orders filled at the
 opening price of the next trading day; a tactical order that opens beyond its stop or target is cancelled.
 **Cash is managed as a position**: each week a score of official indicators (credit spreads, VIX, the yield curve,
 real yields, the S&P 500's trend) sets a macro regime — risk-on, neutral or defensive — and an AI macro step may
