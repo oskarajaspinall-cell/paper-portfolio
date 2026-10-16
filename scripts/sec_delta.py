@@ -182,7 +182,14 @@ def section(ls: list[str], start: str) -> list[str]:
             j = next((k for k in range(i + 1, len(ls)) if _heading(ls[k], ITEM)), len(ls))
             if sum(map(len, ls[i + 1:j])) > sum(map(len, best)):
                 best = ls[i + 1:j]
-    return [x for x in best if len(x) >= MIN_PARA_CHARS]
+    return [x for x in best if len(x) >= MIN_PARA_CHARS and not _table_row(x)]
+
+
+def _table_row(p: str) -> bool:
+    """A financial-table line ("Research and development $11,729 $8,866 32% ..."): few words, mostly figures."""
+    words = re.findall(r"[A-Za-z]{2,}", p)
+    figures = re.findall(r"\d[\d,.]*", p)
+    return len(words) < 8 or len(figures) > len(words)
 
 
 def _norm(p: str) -> str:
@@ -231,8 +238,9 @@ def render(ticker: str, asof: str, latest: dict, comp: dict, urls: tuple[str, st
            f"compared with {comp['form']} filed {comp['filingDate']} (period {comp['reportDate']}): {urls[1]}", "",
            "Only added, removed and reworded paragraphs; paragraphs whose only change is a number or date are left "
            "out. Filing text is qualitative context: never take a number from it (fact sheet only).", ""]
-    budget, left = max_words, 0
-    for name, d in deltas:
+    left = 0
+    for name, d in deltas:  # each section gets an equal share of the cap
+        budget = max_words // len(deltas)
         out.append(f"## {name}")
         n = sum(len(v) for v in d.values())
         if not n:

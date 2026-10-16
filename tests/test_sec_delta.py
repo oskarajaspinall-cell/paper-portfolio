@@ -100,3 +100,10 @@ def test_fetcher_refuses_without_contact(cfg):
 def test_item_label_and_title_on_separate_lines():
     ls = S.lines("<p>ITEM 1A.</p><p>RISK FACTORS</p>" + "".join(f"<p>{r}</p>" for r in RISK_OLD) + "<p>ITEM 1B.</p><p>X</p>")
     assert S.section(ls, S.SECTIONS["10-K"][0][1]) == RISK_OLD
+
+
+def test_table_rows_are_not_paragraphs():
+    ls = S.lines("<p>Item 7. Management's Discussion and Analysis</p>"
+                 "<p>Research and development$11,729 $8,866 32%$34,035 $25,684 33%</p>"
+                 f"<p>{RISK_OLD[0]}</p><p>Item 8. Financial Statements</p>")
+    assert S.section(ls, S.SECTIONS["10-K"][1][1]) == [RISK_OLD[0]]
