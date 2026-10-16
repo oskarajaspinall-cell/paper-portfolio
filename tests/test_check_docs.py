@@ -234,3 +234,27 @@ def test_eval_numbers_must_come_from_sources_or_the_decision_block():
           "{\"target_price_12m\": 250, \"basis\": \"multiple re-rates to 31.7x\"}}}\n```\n")
     errs = eval_number_problems(md, ["ROIC 23.47% | FCF yield 4.4%"])
     assert len(errs) == 1 and "31.7" in errs[0]          # 250 is in the Decision block; 31.7x is invented
+
+
+def _note(sec2: str) -> str:
+    return ("# Core initiation: X (X) — 2026-10-16\n## 1. Business\nA business.\n## 2. Quality\n" + sec2 +
+            "\n## 4. What would prove this wrong\n- ROIC falls below 70% for two years\n## Sources\n")
+
+
+SHEET = "ROIC 23.47% | Revenue 1,234.5M"
+
+
+def test_note_threshold_in_section_4_and_sheet_figures_pass():
+    from check_docs import note_number_problems
+    assert note_number_problems(_note("ROIC 23.5% [Certain]; distress below <1.8 is far off."), SHEET, {"sec.gov"}) == []
+
+
+def test_company_reported_figure_needs_tag_and_primary_url():
+    from check_docs import note_number_problems
+    ok = "Combined ratio 76.6% [company-reported] [Certain] (source: https://www.sec.gov/Archives/x.htm)."
+    assert note_number_problems(_note(ok), SHEET, {"sec.gov"}) == []
+    untagged = note_number_problems(_note(ok.replace("[company-reported] ", "")), SHEET, {"sec.gov"})
+    assert len(untagged) == 1 and "tag it" in untagged[0]
+    news = note_number_problems(_note(ok.replace("www.sec.gov", "www.reuters.com")), SHEET, {"sec.gov"})
+    assert len(news) == 1 and "cite its primary source" in news[0]
+    assert len(note_number_problems(_note("Combined ratio 76.6% [Likely]."), SHEET, {"sec.gov"})) == 1

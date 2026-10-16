@@ -7,7 +7,9 @@ Usage:
 Number provenance (design by Claude 2026-10-16): every number in an evaluation's prose (Bear/Bull cases,
 thesis, rationale, scenario bases) must appear in the fact sheet, the research note, the macro overlay, the CLAUDE.md config
 block or the evaluation's own Decision block (rounding, sign, x100 and thousand-scale allowed; small counts, years and
-dates exempt). An unsourced number fails the evaluation; in a note it is only a warning.
+dates exempt). An unsourced number fails the evaluation. In a note, a number not in the fact sheet must be
+in section 4 (the analyst's own levels) or be a [company-reported] figure cited inline to sec.gov or the
+company's own domain (company-reported exception, owner-approved 2026-10-16).
 
 Word counts exclude URLs, markdown link targets, confidence tags and the Sources section.
 Exit 0 = pass (prints word counts), exit 1 = fail (prints every problem).
@@ -70,6 +72,42 @@ def unsourced_numbers(text: str, sources: list[str]) -> list[str]:
             continue
         out.append(f"{t[max(0, end - 40):end].strip()!r}")
     return out
+
+
+COMPANY_TAG = "[company-reported]"
+_NOT_PRIMARY = {"reuters.com", "stockanalysis.com"}  # news; and the fact sheet's own source
+
+
+def primary_hosts() -> set[str]:
+    """Where a company-reported figure may come from: sec.gov, the company's own IR/website domains, RNS."""
+    return allowed_hosts() - _NOT_PRIMARY
+
+
+def _sentences(text: str) -> list[str]:
+    return [x for x in re.split(r"(?<=[.!?])\s+(?=[A-Z(\[*])|\n+", text) if x.strip()]
+
+
+def note_number_problems(md: str, sheet: str, primary: set[str] | None = None) -> list[str]:
+    """Company-reported exception (owner-approved 2026-10-16): a number not in the fact sheet must sit in the
+    '4.' section (the analyst's own trigger levels / exit plan), or in a sentence tagged [company-reported]
+    that cites a primary source (sec.gov, the company's own domain) inline."""
+    primary = primary_hosts() if primary is None else primary
+    errs = []
+    for head, body in sections(md):
+        if head.startswith("4.") or head.lower() == "sources":
+            continue
+        for sent in _sentences(body):
+            bad = unsourced_numbers(re.sub(r"[<>≤≥]\s*[$£€]?\d[\d,.]*", "", sent), [sheet])  # thresholds are levels
+            if not bad:
+                continue
+            hosts = {(urlparse(u).hostname or "").lower() for u in re.findall(r"https?://[^\s)\]>|]+", sent)}
+            cited = any(h == d or h.endswith("." + d) for h in hosts for d in primary)
+            if COMPANY_TAG in sent and cited:
+                continue
+            why = ("tag it [company-reported]" if cited else
+                   "cite its primary source (sec.gov or the company's own site) inline and tag it [company-reported]")
+            errs += [f"number not in the fact sheet in '{head}': ...{b} -- {why}, or drop it" for b in bad]
+    return errs
 
 
 def eval_number_problems(md: str, sources: list[str]) -> list[str]:
@@ -454,10 +492,7 @@ def main(argv=None) -> int:
         sheet_urls = set(re.findall(r"https?://[^\s)\]>|]+", sheets[-1].read_text())) if sheets else set()
         errs, counts = check_note(md, {u.rstrip(".,;") for u in sheet_urls})
         if sheets:
-            warn = unsourced_numbers(re.split(r"^## +Sources", md, flags=re.M)[0], _sources_for(path, False))
-            counts["unsourced_numbers"] = len(warn)
-            for w in warn:
-                print(f"WARNING number not in the fact sheet: ...{w}")
+            errs += note_number_problems(md, _sources_for(path, False)[0])
     elif a.kind == "macro":
         errs, counts = check_macro(md, load_config())
     elif a.kind == "regime":  # reports/regime/<date>-view.md, checked against reports/regime/<date>.json

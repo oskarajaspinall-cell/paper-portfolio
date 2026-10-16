@@ -8,7 +8,7 @@ differs by season). The sections are split into paragraphs and diffed (difflib);
 in their numbers or dates (routine figure updates), whitespace or position are dropped. What is left -- added,
 removed and reworded paragraphs, Risk Factors first -- goes to research/<SLUG>/sec-delta-<date>.md, capped at
 [sec].max_words, each block citing its filing URL. The researcher reads it before any web fetch.
-Numbers inside filings are context, never data (the stockanalysis.com-only rule is unchanged).
+Numbers inside filings may be used only under the company-reported exception (tagged, cited inline).
 
 sec.gov asks automated clients to name a contact in the User-Agent (its fair-access policy). The contact is
 SEC_CONTACT in the environment or in the git-ignored .env file (never in CLAUDE.md, which is public); the step
@@ -237,7 +237,8 @@ def render(ticker: str, asof: str, latest: dict, comp: dict, urls: tuple[str, st
            f"{latest['form']} filed {latest['filingDate']} (period {latest['reportDate']}): {urls[0]}",
            f"compared with {comp['form']} filed {comp['filingDate']} (period {comp['reportDate']}): {urls[1]}", "",
            "Only added, removed and reworded paragraphs; paragraphs whose only change is a number or date are left "
-           "out. Filing text is qualitative context: never take a number from it (fact sheet only).", ""]
+           "out. A number from a filing may be used only as a [company-reported] figure with the filing URL inline; "
+           "statements, ratios and prices come from the fact sheet only.", ""]
     left = 0
     for name, d in deltas:  # each section gets an equal share of the cap
         budget = max_words // len(deltas)
