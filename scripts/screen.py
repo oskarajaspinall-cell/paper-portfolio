@@ -16,7 +16,9 @@ volatility stop (ATR). Picks alternate between the two setups.
 Liquidity gate (design by Claude 2026-10-16): before ranking, a stock needs average daily dollar volume
 (20-day average volume x price, in USD) >= `min_addv_usd` and a free float >= `min_float_pct` of shares
 outstanding; names that fail are excluded (listed in the report), so the percentiles rank tradable names only.
-A missing volume fails; a missing float figure is not counted against the stock.
+A missing volume fails; a missing float figure is not counted against the stock, and the float test is
+only a backstop for thinner names (ADDV below `float_check_below_addv_usd`): a closely held giant that
+trades heavily (Saudi Aramco, Berkshire's share-class quirk) is tradable.
 
 A page that fails to load or parse is EXCLUDED and listed in the report (never guessed). Pages are
 cached per day, so an interrupted run resumes where it stopped.
@@ -65,7 +67,7 @@ def liquidity(v: dict, mcap_usd: float | None) -> dict:
     universe file, so no FX or quote-unit (pence) conversion is needed; float % of shares outstanding."""
     av, so, fl = v.get("averageVolume"), v.get("sharesout"), v.get("float")
     addv = av / so * mcap_usd if av and so and mcap_usd else None
-    return {"addv_usd": addv, "float_pct": fl / so * 100 if fl and so else None}
+    return {"addv_usd": addv, "float_pct": fl / so * 100 if fl and fl > 0 and so else None}  # 0 = a data gap
 
 
 def liquidity_fail(liq: dict, sc: dict) -> str | None:
@@ -73,7 +75,8 @@ def liquidity_fail(liq: dict, sc: dict) -> str | None:
         return "ADDV unavailable (volume, shares or USD market cap missing)"
     if liq["addv_usd"] < sc["min_addv_usd"]:
         return f"ADDV ${liq['addv_usd'] / 1e6:.1f}M < ${sc['min_addv_usd'] / 1e6:g}M"
-    if liq["float_pct"] is not None and liq["float_pct"] < sc["min_float_pct"]:
+    if (liq["float_pct"] is not None and liq["float_pct"] < sc["min_float_pct"]
+            and liq["addv_usd"] < sc.get("float_check_below_addv_usd", float("inf"))):
         return f"free float {liq['float_pct']:.0f}% < {sc['min_float_pct']:g}%"
     return None
 

@@ -49,13 +49,76 @@ BANNED_KEYS = {"target", "analysts", "priceTarget", "analystRating", "consensus"
 # --------------------------------------------------------------------------- JS literal parser
 class JSLiteralParser:
     """Minimal parser for the JS object literals SvelteKit emits (unquoted keys,
-    `void 0`, `.5` style numbers, `new Date(n)`). No code is executed."""
+    `void 0`, `.5` style numbers, `new Date(n)`, and the deduplication wrapper
+    `(function(a){a[0]="x";...;return {...a[0]...}}(Array(n)))`, read as data). No code is executed."""
 
     _num = re.compile(r"-?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?")
     _ident = re.compile(r"[A-Za-z_$][\w$]*")
 
     def __init__(self, text: str, pos: int = 0):
         self.s, self.i = text, pos
+        self.env: dict[str, list] = {}  # the wrapper's parameters -> their assigned values
+
+    def _expect(self, tok: str):
+        self._ws()
+        if not self.s.startswith(tok, self.i):
+            raise ValueError(f"expected {tok!r} at {self.i}")
+        self.i += len(tok)
+
+    def _wrapper(self):
+        """`(function(a,b){a[0]=<literal>;...;return <value>}(<args>))` -> <value>, a[i] resolved."""
+        self._expect("(function(")
+        names = []
+        while True:
+            self._ws()
+            m = self._ident.match(self.s, self.i)
+            if m:
+                names.append(m.group(0))
+                self.i = m.end()
+            self._ws()
+            c = self.s[self.i]
+            self.i += 1
+            if c == ")":
+                break
+        self._expect("{")
+        saved = dict(self.env)
+        for n in names:
+            self.env[n] = []
+        while True:
+            self._ws()
+            if self.s.startswith("return", self.i):
+                self.i += 6
+                break
+            m = self._ident.match(self.s, self.i)
+            if not m or m.group(0) not in self.env:
+                raise ValueError(f"unsupported statement at {self.i}")
+            self.i = m.end()
+            self._expect("[")
+            idx = int(self._num.match(self.s, self.i).group(0))
+            self.i = self._num.match(self.s, self.i).end()
+            self._expect("]")
+            self._expect("=")
+            val = self.parse()
+            arr = self.env[m.group(0)]
+            arr.extend([None] * (idx + 1 - len(arr)))
+            arr[idx] = val
+            self._ws()
+            if self.s[self.i] == ";":
+                self.i += 1
+        out = self.parse()
+        self._ws()
+        if self.s[self.i] == ";":
+            self.i += 1
+        self._expect("}")
+        self._expect("(")
+        depth = 1  # skip the call's arguments, e.g. Array(7)
+        while depth:
+            c = self.s[self.i]
+            depth += {"(": 1, ")": -1}.get(c, 0)
+            self.i += 1
+        self._expect(")")
+        self.env = saved
+        return out
 
     def _ws(self):
         while self.i < len(self.s) and self.s[self.i] in " \t\r\n":
@@ -70,6 +133,8 @@ class JSLiteralParser:
             return self._array()
         if c in "\"'`":
             return self._string()
+        if c == "(" and self.s.startswith("(function(", self.i):
+            return self._wrapper()
         if c == "-" or c == "." or c.isdigit():
             if self.s.startswith("-Infinity", self.i):
                 self.i += 9
@@ -85,6 +150,14 @@ class JSLiteralParser:
             raise ValueError(f"unexpected {c!r} at {self.i}")
         word = m.group(0)
         self.i = m.end()
+        if word in self.env:
+            if self.s.startswith("[", self.i):
+                self.i += 1
+                idx = int(self._num.match(self.s, self.i).group(0))
+                self.i = self._num.match(self.s, self.i).end()
+                self._expect("]")
+                return self.env[word][idx]
+            return self.env[word]
         if word == "true":
             return True
         if word == "false":

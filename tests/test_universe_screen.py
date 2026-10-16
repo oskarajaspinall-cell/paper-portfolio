@@ -457,6 +457,7 @@ def test_liquidity_from_real_page():
     ({"addv_usd": 9e6, "float_pct": 80}, "ADDV"),
     ({"addv_usd": None, "float_pct": 80}, "ADDV unavailable"),
     ({"addv_usd": 50e6, "float_pct": 15}, "free float"),
+    ({"addv_usd": 500e6, "float_pct": 2}, None),            # closely held but heavily traded (Saudi Aramco)
 ])
 def test_liquidity_gate(cfg, liq, fails):
     from screen import liquidity_fail
@@ -488,3 +489,14 @@ def test_illiquid_names_are_excluded_before_ranking(cfg, monkeypatch):
     # turnover 0.1%/day: BIG trades $100M a day, TINY $0.1M
     assert list(scored) == ["BIG"] and [x["ticker"] for x in res["illiquid"]] == ["TINY"]
     assert "Excluded by the liquidity gate" in screen.report_md(res)
+
+
+def test_zero_float_is_a_data_gap():
+    from screen import liquidity
+    assert liquidity({"averageVolume": 1e6, "sharesout": 1e9, "float": 0}, 1e11)["float_pct"] is None
+
+
+def test_parser_reads_dedup_wrapper():
+    from fetch_data import JSLiteralParser
+    v = JSLiteralParser('(function(a,b){a[0]="x";b[1]=2;return {k:a[0],v:b[1],cols:a}}(Array(1),Array(2)))').parse()
+    assert v == {"k": "x", "v": 2, "cols": ["x"]}
