@@ -1,7 +1,7 @@
 """Build docs/index.html: a self-contained portfolio dashboard (no external libraries, no model calls).
 
 Reads portfolio/state.json, valuations.csv, ledger.csv, decisions.csv, universe/universe.csv (names,
-optional) and the latest reports/screen/<date>.json. Open the file in any browser, or publish it with
+optional) and the latest reports/screen/, reports/risk/ and reports/attribution/ <date>.json. Open the file in any browser, or publish it with
 GitHub Pages (Settings -> Pages -> Deploy from branch: main, /docs).
 
     python scripts/dashboard.py [--out docs/index.html]
@@ -147,6 +147,11 @@ def build_data(live: bool = True) -> dict:
     decisions = _csv(port / "decisions.csv")
     screens = sorted((ROOT / "reports" / "screen").glob("20??-??-??.json"))
     screen = json.loads(screens[-1].read_text()) if screens else {}
+
+    def latest(kind):
+        files = sorted((ROOT / "reports" / kind).glob("20??-??-??.json"))
+        return json.loads(files[-1].read_text()) if files else None
+    risk, attr = latest("risk"), latest("attribution")
     from decision_log import HORIZONS
     hits = {}
     for h in HORIZONS:
@@ -186,7 +191,13 @@ def build_data(live: bool = True) -> dict:
                      "ticker": o["request"]["ticker"], "type": o["request"]["position_type"],
                      "conviction": o["request"].get("conviction"), "est": o.get("estimate", {})}
                     for o in state.get("pending", [])],
-        "screen": {"asof": screen.get("asof"), "screened": screen.get("screened"), "picks": screen.get("picks", [])},
+        "screen": {"asof": screen.get("asof"), "screened": screen.get("screened"), "picks": screen.get("picks", []),
+                   "illiquid": len(screen.get("illiquid") or [])},
+        "risk": risk and {"asof": risk["asof"], "sigma_p": risk.get("sigma_p_pct"),
+                          "rows": sorted(({k: r.get(k) for k in ("ticker", "weight_pct", "target_pct", "vol_pct",
+                                                                  "mcr_pct", "risk_share_pct", "flag")}
+                                          for r in risk["rows"]), key=lambda r: -(r["risk_share_pct"] or 0))},
+        "attribution": attr if attr and not attr.get("note") else None,
     }
 
 
@@ -236,6 +247,11 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 <div class="grid2"><section class="card"><h2>Holdings by weight</h2><div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Core</span>
 <span><span class="sw" style="background:var(--s2)"></span>Tactical</span></div><div id="bars"></div></section>
 <section class="card"><h2>Sectors</h2><div class="sub">% of the portfolio (cash excluded)</div><div id="sectors"></div></section></div>
+<div class="grid2"><section class="card"><h2>Risk</h2><div class="sub" id="riskSub"></div>
+<div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Share of portfolio risk</span><span><span class="sw" style="background:var(--axis)"></span>Share of invested money</span></div>
+<div id="risk"></div><details><summary>Show as a table</summary><div class="tw"><table id="riskTable"></table></div></details></section>
+<section class="card"><h2>Where the excess return came from</h2><div class="sub" id="attrSub"></div><div class="tiles" id="attrTiles"></div>
+<div class="tw" style="margin-top:12px"><table id="attrTable"></table></div></section></div>
 <section class="card"><h2>Holdings</h2><div class="tw"><table id="holdings"></table></div></section>
 <section class="card"><h2>Pending orders</h2><div class="sub">Decided trades fill at the next market open.</div><div class="tw"><table id="pending"></table></div></section>
 <section class="card"><h2>Close to entry</h2><div class="sub" id="nearSub"></div><div class="tw"><table id="near"></table></div></section>
@@ -327,9 +343,39 @@ function hbars(box,items,emptyMsg){box.replaceChildren();if(!items.length){box.a
   const tipN=()=>[el('div',{},el('b',{},it.v.toFixed(2)+'%'),' ',el('span',{class:'muted'},it.tip||it.label))];
   hit.addEventListener('pointermove',ev=>{bar.style.opacity=.8;showTip(ev,tipN());});hit.addEventListener('pointerleave',()=>{bar.style.opacity=1;hideTip();});
   svg.append(hit);});box.append(svg);}
-function drawAll(){drawLine();
+function drawAll(){drawLine();riskBars();
  hbars($('bars'),D.holdings.map(h=>({label:h.ticker,v:h.weight,c:h.type==='CORE'?'--s1':'--s2',tip:`${h.ticker} ${h.name} · ${h.type.toLowerCase()} · ${usd(h.value)}`})),'No holdings yet.');
  hbars($('sectors'),D.sectors.map(([s,v])=>({label:s,v})),'No holdings yet.');}
+// ---- risk: paired bars (risk share vs share of invested money)
+function riskBars(){const box=$('risk');box.replaceChildren();const R=D.risk;
+ if(!R||!R.rows.some(r=>r.risk_share_pct!=null)){box.append(el('div',{class:'empty'},'Appears after the first weekly risk report.'));return;}
+ const inv=R.rows.reduce((a,r)=>a+(r.weight_pct||0),0),rows=R.rows.filter(r=>r.risk_share_pct!=null);
+ const rowH=34,W=Math.max(280,Math.round(box.getBoundingClientRect().width)),L=78,Rm=52,H=rows.length*rowH+4,max=Math.max(...rows.flatMap(r=>[r.risk_share_pct,r.weight_pct/inv*100]));
+ const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Each holding: share of portfolio risk vs share of invested money'});
+ rows.forEach((r,i)=>{const y=2+i*rowH,ws=r.weight_pct/inv*100,sc=x=>Math.max(2,x/max*(W-L-Rm));
+  const lab=sv('text',{x:L-8,y:y+13,'text-anchor':'end'});lab.style.fill='var(--ink2)';lab.textContent=r.ticker;svg.append(lab);
+  const b1=sv('rect',{x:L,y:y+2,width:sc(r.risk_share_pct),height:12,rx:3,fill:r.flag?'var(--down)':'var(--s1)'});svg.append(b1);
+  const b2=sv('rect',{x:L,y:y+17,width:sc(ws),height:8,rx:2,fill:'var(--axis)'});svg.append(b2);
+  const v=sv('text',{x:L+sc(r.risk_share_pct)+6,y:y+12});v.textContent=r.risk_share_pct.toFixed(1)+'%';svg.append(v);
+  const hit=sv('rect',{x:0,y,width:W,height:rowH,fill:'transparent'});
+  hit.addEventListener('pointermove',ev=>showTip(ev,[el('div',{},el('b',{},r.ticker),el('span',{class:'muted'},` · vol ${r.vol_pct==null?'n/a':r.vol_pct.toFixed(0)+'%'}`)),
+   el('div',{},`${r.risk_share_pct.toFixed(1)}% of risk on ${ws.toFixed(1)}% of invested money`),r.flag?el('div',{class:'down'},'over its risk budget (more than 2x)'):'']));
+  hit.addEventListener('pointerleave',hideTip);svg.append(hit);});box.append(svg);}
+{const R=D.risk;$('riskSub').textContent=R?`${R.asof}: portfolio volatility ${R.sigma_p==null?'n/a':R.sigma_p.toFixed(1)+'%'} a year (cash included). How much of the portfolio's ups and downs each holding drives, next to how much money it holds. Red = more than twice its share. Informational; never trades.`:'No risk report yet.';
+ table('riskTable',[{h:'Ticker',f:r=>r.ticker},{h:'Weight',n:1,f:r=>r.weight_pct==null?'':r.weight_pct.toFixed(1)+'%'},{h:'Target',n:1,f:r=>r.target_pct==null?'':r.target_pct.toFixed(1)+'%'},
+  {h:'Volatility',n:1,f:r=>r.vol_pct==null?'n/a':r.vol_pct.toFixed(0)+'%'},{h:'MCR',n:1,f:r=>r.mcr_pct==null?'n/a':r.mcr_pct.toFixed(1)+'%'},
+  {h:'Risk share',n:1,f:r=>r.risk_share_pct==null?'n/a':r.risk_share_pct.toFixed(1)+'%',c:r=>r.flag?'down':''}],R?R.rows:[],'No risk report yet.');}
+{const A=D.attribution,p2=x=>x==null?'n/a':pct(x*100,2);
+ if(!A){$('attrSub').textContent='Appears after the first weekly attribution report.';}
+ else{$('attrSub').textContent=`${A.start} to ${A.end} (${A.days} trading days) vs a sector-weighted S&P 500. Informational: not meaningful until about 6 months of history. Cash is its own sector, so the reserve's cost or benefit shows in allocation.`;
+  $('attrTiles').append(tile('Excess return',p2(A.excess),`portfolio ${p2(A.portfolio)} · index ${p2(A.benchmark)}`,cls(A.excess)),
+   tile('Sector bets (allocation)',p2(A.allocation),'which sectors, and cash, we held',cls(A.allocation)),
+   tile('Stock picking (selection)',p2(A.selection),'our stocks vs their sector',cls(A.selection)),
+   tile('Interaction',p2(A.interaction),'overweight where we also picked well (or not)',cls(A.interaction)));
+  const rows=Object.entries(A.sectors).map(([s,e])=>({s,...e,t:e.allocation+e.selection+e.interaction})).filter(r=>r.wp_avg>0||Math.abs(r.t)>5e-5).sort((a,b)=>Math.abs(b.t)-Math.abs(a.t));
+  table('attrTable',[{h:'Sector',f:r=>r.s},{h:'Our weight',n:1,f:r=>(r.wp_avg*100).toFixed(1)+'%'},{h:'Index',n:1,f:r=>(r.wb*100).toFixed(1)+'%'},
+   {h:'Allocation',n:1,f:r=>p2(r.allocation),c:r=>cls(r.allocation)},{h:'Selection',n:1,f:r=>p2(r.selection),c:r=>cls(r.selection)},
+   {h:'Interaction',n:1,f:r=>p2(r.interaction),c:r=>cls(r.interaction)},{h:'Total',n:1,f:r=>p2(r.t),c:r=>cls(r.t)}],rows,'');}}
 {let t0='invested';try{t0=localStorage.getItem('chartTab')||t0}catch(e){}setTab(TABS[t0]?t0:'invested');}
 drawAll();let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(drawAll,150);});
 // ---- tables
@@ -367,7 +413,7 @@ table('trades',[{h:'Date',f:r=>r.date},{h:'Side',f:r=>r.side},{h:'Ticker',f:r=>r
 table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Decision',f:r=>r.decision},
  {h:'Conv.',n:1,f:r=>r.conviction},{h:'Price',n:1,f:r=>`${(+r.price).toFixed(2)} ${r.currency} (${r.live?'live, ':'close '}${r.price_date})`},{h:'1m vs SPY',n:1,f:r=>r.excess_1m===''?'–':pct(+r.excess_1m,1),c:r=>r.excess_1m===''?'':cls(+r.excess_1m)},
  {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.');
-$('screenSub').textContent=D.screen.asof?`${D.screen.asof}: ${D.screen.screened} stocks scored. The picks below were sent to research. The score ranks how well a stock fits the screen (core: quality and value; tactical: the strength of its setup). It is not a rating: research decides, and most picks come back AVOID.`:'No screen yet.';
+$('screenSub').textContent=D.screen.asof?`${D.screen.asof}: ${D.screen.screened} stocks scored${D.screen.illiquid?` (${D.screen.illiquid} too thinly traded to rank were left out first)`:''}. The picks below were sent to research. The score ranks how well a stock fits the screen (core: quality and value; tactical: the strength of its setup). It is not a rating: research decides, and most picks come back AVOID.`:'No screen yet.';
 D.screen.picks.forEach(p=>$('picks').append(el('span',{class:'pill',style:'margin:0 6px 6px 0'},`${p.ticker} · ${p.type.toLowerCase()} · ${p.score}`)));
 if(D.repo)$('repo').append('Source and research notes: ',el('a',{href:D.repo},D.repo.replace('https://','')));
 </script></body></html>
