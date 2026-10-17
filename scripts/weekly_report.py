@@ -27,12 +27,21 @@ def pct(x):
     return "n/a" if x is None else f"{x * 100:+.2f}%"
 
 
+def _num4(x) -> str:
+    return f"{x:.4g}" if isinstance(x, (int, float)) else str(x or "")
+
+
 def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     scan = _load(run / "scan.json", {})
     empty = {"applied": [], "rejected": [], "warnings": []}
     mech_sub, sub = _load(run / "submit-mechanical.json", empty), _load(run / "submit.json", empty)
     fills = _load(run / "fills.json", empty)
-    placed = sub.get("placed", [])
+    for f in sorted(run.glob("submit-resubmit*.json")):  # orders resubmitted by hand after the run (logged in git)
+        re_ = _load(f, empty)
+        sub.setdefault("placed", []).extend(re_.get("placed", []))
+        sub["rejected"] = [r for r in sub.get("rejected", []) if r["ticker"] not in {x["ticker"] for x in re_.get("placed", [])}] \
+            + re_.get("rejected", [])
+    placed = [p for p in sub.get("placed", []) if p.get("action") != "HOLD"]  # a HOLD records a decision, not an order
     sub = {"applied": fills.get("applied", []) + mech_sub.get("applied", []) + sub.get("applied", []),
            "rejected": fills.get("rejected", []) + mech_sub.get("rejected", []) + sub.get("rejected", []),
            "dry_run": mech_sub.get("dry_run") or sub.get("dry_run")}
@@ -89,7 +98,7 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     if placed:
         out += ["| Action | Ticker | Type | Est. shares | Latest close | Replaces |", "|---|---|---|---|---|---|"]
         out += [f"| {p['action']} | {p['ticker']} | {p['type']} | {p.get('est_shares', '')} | "
-                f"{p.get('est_price', '')} {p.get('est_currency', '')} ({p.get('est_close_date', '')}) | {p.get('replaces') or ''} |"
+                f"{_num4(p.get('est_price'))} {p.get('est_currency', '')} ({p.get('est_close_date', '')}) | {p.get('replaces') or ''} |"
                 for p in placed]
     else:
         out.append("None.")
