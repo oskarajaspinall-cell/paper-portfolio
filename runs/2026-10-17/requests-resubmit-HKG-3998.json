@@ -1,0 +1,51 @@
+[
+ {
+  "ticker": "HKG:3998",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "China's leading down-jacket brand, with 81.2% ROIC, net cash and a 12.15% FCF yield, trades below its own 5-year minimum EV/EBITDA and EV/Sales, where the price implies a -13.0% revenue decline its margins and cash flow do not show.",
+  "reason": "Quality is rising, the balance sheet is net cash, and even the mechanical bear fair value sits above the price. Single-category weather risk, falling gross margin and added China concentration keep conviction at 4, not 5; standard volatility-scaled core size. Consumer Discretionary stays under the sector cap and holdings well below 15.",
+  "research_note": "research/HKG-3998/2026-10-17.md",
+  "triggers": [
+   {
+    "text": "TTM gross margin falls below 55%, under the five-year low of 57.2%, signalling loss of brand pricing power.",
+    "check": {
+     "source": "statistics",
+     "field": "grossMargin",
+     "op": "<",
+     "value": 55
+    }
+   },
+   {
+    "text": "TTM net margin falls below 10%, reversing the five-year rise to 14.6% and indicating the brand premium has eroded.",
+    "check": {
+     "source": "statistics",
+     "field": "profitMargin",
+     "op": "<",
+     "value": 10
+    }
+   },
+   {
+    "text": "TTM ROIC falls below 40%, a reversion toward FY2022 levels that undercuts the moat thesis.",
+    "check": {
+     "source": "statistics",
+     "field": "roic",
+     "op": "<",
+     "value": 40
+    }
+   },
+   {
+    "text": "TTM FCF margin falls below the FY2025 five-year low of 12.2%, signalling inventory or working-capital stress from a demand down-cycle.",
+    "check": {
+     "source": "statistics",
+     "field": "fcfMargin",
+     "op": "<",
+     "value": 12.2
+    }
+   }
+  ],
+  "replaces": null,
+  "replacement_reason": null
+ }
+]

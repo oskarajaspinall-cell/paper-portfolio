@@ -94,3 +94,18 @@ def test_core_buy_is_vol_sized_and_target_recorded(cfg):
     h = e.s["holdings"]["HOT"]
     assert h["target_pct"] == pytest.approx(4.2, abs=0.05)
     assert h["market_value_usd"] / 100000 * 100 == pytest.approx(h["target_pct"], abs=0.2)
+
+
+def test_scale_up_is_capped_at_the_cash_reserve_but_never_below_conviction_size(cfg):
+    from portfolio import Engine, empty_state, mark
+    m = VolMarket({"CALM": 20}, cfg)
+    s = empty_state(cfg)
+    s["cash_usd"] = 100000.0
+    mark(s, m)
+    e = Engine(s, m, cfg, {"CALM": None}, "2026-10-06")
+    e.reserve = {"pct": 92.0, "regime": "test", "dip_multiplier": 1.0}
+    assert e.core_size(4, "CALM", s) == pytest.approx(7.96, abs=0.05)   # room 8% x 0.995, not 9.8%
+    e.reserve["pct"] = 95.0
+    assert e.core_size(4, "CALM", s) == 7.0                             # room 5% < 7%: plain size (replacement rule decides)
+    e.reserve["pct"] = 20.0
+    assert e.core_size(4, "CALM", s) == pytest.approx(9.8, abs=0.4)     # plenty of room: full scale-up

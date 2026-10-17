@@ -536,8 +536,17 @@ class Engine:
         return math.floor((t * pv - current_mv) / (q["price_usd"] * (1 + t * self.cost_rate(q["currency"]))))
 
     def core_size(self, conviction: int, ticker: str, s: dict) -> float:
-        """Conviction size scaled by the stock's volatility (scripts/risk.py; design by Claude 2026-10-16)."""
-        return self.sizer.target(conviction, ticker, s)[0]
+        """Conviction size scaled by the stock's volatility (scripts/risk.py; design by Claude 2026-10-16).
+        A scale-UP is capped at the room above the cash reserve: a steadier stock's bigger size never turns a buy
+        that fits at its plain conviction size into a reserve breach (it never goes below that size either)."""
+        target = self.sizer.target(conviction, ticker, s)[0]
+        base = float(self.cfg["core"]["conviction_size_pct"][str(conviction)])
+        if target <= base:
+            return target
+        pv = self.pv(s)
+        held = (s["holdings"].get(ticker) or {}).get("market_value_usd", 0.0)
+        room = (s["cash_usd"] - self.reserve["pct"] / 100 * pv) * 0.995  # 0.5% margin for spread and FX costs
+        return round(max(base, min(target, (held + room) / pv * 100)), 2)
 
     # ---- the trade primitive (no rule checks; callers validate)
     def _execute(self, s, ticker, ptype, side, shares, q, reason):
