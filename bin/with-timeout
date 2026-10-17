@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+# Usage: bin/with-timeout SECONDS COMMAND [ARGS...]
+# Runs COMMAND in its own process group; after SECONDS it stops the whole group (TERM, then KILL) and exits 124,
+# so a dropped network connection can never hang a scheduled job for hours (2026-10-16: a Yahoo read hung the
+# 22:30 update for 4.5 h and the screen for 5 h). Otherwise exits with COMMAND's own status.
+use strict;
+use warnings;
+use POSIX qw(setpgid :sys_wait_h);
+
+my $secs = shift @ARGV;
+die "usage: with-timeout SECONDS COMMAND...\n" unless defined $secs && $secs =~ /^\d+$/ && @ARGV;
+my $pid = fork();
+die "fork failed: $!\n" unless defined $pid;
+if ($pid == 0) {
+    setpgid(0, 0);
+    exec @ARGV or die "exec $ARGV[0]: $!\n";
+}
+setpgid($pid, $pid);
+$SIG{ALRM} = sub {
+    print STDERR "!! timed out after ${secs}s, stopped: @ARGV\n";
+    kill 'TERM', -$pid;
+    for (1 .. 10) { sleep 1; exit 124 if waitpid($pid, WNOHANG) > 0; }
+    kill 'KILL', -$pid;
+    waitpid($pid, 0);
+    exit 124;
+};
+alarm $secs;
+waitpid($pid, 0);
+my $st = $?;
+alarm 0;
+exit($st & 127 ? 128 + ($st & 127) : $st >> 8);

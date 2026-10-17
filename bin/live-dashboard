@@ -12,7 +12,7 @@ dow=$(date +%u); hm=$(date +%H%M)
 mkdir -p logs
 LOG="logs/live-dashboard-$(date +%F).log"
 exec >>"$LOG" 2>&1
-bin/py scripts/dashboard.py >/dev/null || { echo "$(date +%T) !! dashboard build failed"; exit 1; }
+bin/with-timeout 600 bin/py scripts/dashboard.py >/dev/null || { echo "$(date +%T) !! dashboard build failed"; exit 1; }
 git diff --quiet -- docs && exit 0
 git add -- docs/index.html
 git commit -q -m "Dashboard: live prices $(date '+%a %H:%M') UK" && git pull -q --rebase --autostash && git push -q \

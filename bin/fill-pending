@@ -13,17 +13,17 @@ LOCK=/tmp/paper-portfolio-review.lock      # same lock as the weekly review: nev
 if ! mkdir "$LOCK" 2>/dev/null; then echo "weekly review running; skipping"; exit 0; fi
 trap 'rmdir "$LOCK"' EXIT
 ASOF=$(date -v+1d +%F)                     # include today's session (all markets have opened by 22:30)
-python_out=$(bin/py scripts/portfolio.py fill-pending --asof "$ASOF") || { echo "!! fill-pending failed"; echo "$python_out"; exit 1; }
+python_out=$(bin/with-timeout 900 bin/py scripts/portfolio.py fill-pending --asof "$ASOF") || { echo "!! fill-pending failed"; echo "$python_out"; exit 1; }
 echo "$python_out"
 # Dividends and splits (no AI, owner request 2026-10-16) BEFORE re-pricing: a split not applied would re-price
 # the old share count at the new price, so a failure here stops the run.
-bin/py scripts/corporate_actions.py check --asof "$ASOF" || { echo "!! dividends/splits check failed: not re-pricing"; exit 1; }
+bin/with-timeout 1200 bin/py scripts/corporate_actions.py check --asof "$ASOF" || { echo "!! dividends/splits check failed: not re-pricing"; exit 1; }
 # Daily re-pricing (no AI): every holding at its latest close, a valuation point, a fresh dashboard.
-bin/py scripts/portfolio.py mark --phase daily --asof "$ASOF" || { echo "!! daily re-pricing failed"; exit 1; }
+bin/with-timeout 900 bin/py scripts/portfolio.py mark --phase daily --asof "$ASOF" || { echo "!! daily re-pricing failed"; exit 1; }
 # Entry prices (no AI): a conviction-3+ name closing at/below its entry price is re-researched first next run
-bin/py scripts/entry_watch.py check --asof "$ASOF" || echo "!! entry watch not updated"
+bin/with-timeout 900 bin/py scripts/entry_watch.py check --asof "$ASOF" || echo "!! entry watch not updated"
 if git diff --quiet -- portfolio; then echo "nothing changed"; exit 0; fi
-bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
+bin/with-timeout 600 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
 git add -A -- portfolio docs reports/entry-watch "$LOG"
 git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
 echo "== end $(date)"

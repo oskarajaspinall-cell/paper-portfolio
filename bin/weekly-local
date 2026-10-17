@@ -23,27 +23,28 @@ caffeinate -i -w $$ &             # keep the Mac awake until this script ends
 if [ $TEST = 1 ]; then SCREEN_ARGS="--limit 20"; REVIEW_ARGS="--dry-run --max-new 0"; else SCREEN_ARGS=""; REVIEW_ARGS=""; fi
 
 # 1-2. Universe + screen. A failure here is logged but never blocks the review (exits must still run).
-bin/py scripts/universe.py build || echo "!! universe build failed (previous list kept)"
+bin/with-timeout 3600 bin/py scripts/universe.py build || echo "!! universe build failed (previous list kept)"
 # shellcheck disable=SC2086
-bin/py scripts/screen.py --asof "$FRIDAY" $SCREEN_ARGS || echo "!! screen failed (no new initiations this week)"
+bin/with-timeout 25200 bin/py scripts/screen.py --asof "$FRIDAY" $SCREEN_ARGS || echo "!! screen failed (no new initiations this week)"
 
 # 3. Weekly review (restores portfolio/ itself and writes runs/$ASOF/error.log on failure).
 # shellcheck disable=SC2086
-bin/py scripts/weekly_run.py --local --asof "$ASOF" $REVIEW_ARGS
+bin/with-timeout 43200 bin/py scripts/weekly_run.py --local --asof "$ASOF" $REVIEW_ARGS
 review=$?
 
 if [ $TEST = 1 ]; then echo "== test finished $(date) review_exit=$review (no commit/upload in test mode)"; exit $review; fi
 
-# 4. Commit + upload. On failure keep ONLY the error log and this log (no trades from the run).
+# 4. Commit + upload. On failure keep ONLY the error log, the run log and this log (no trades from the run).
 if [ $review = 0 ]; then
   git add -A -- portfolio research reports runs logs docs universe/ir_domains.txt
   git commit -q -m "Weekly run $ASOF" || echo "nothing to commit"
 else
   err="runs/$ASOF/error.log"; tmp=$(mktemp); [ -f "$err" ] && cp "$err" "$tmp"
+  runlog="runs/$ASOF/run.log"; tmplog=$(mktemp); [ -f "$runlog" ] && cp "$runlog" "$tmplog"   # keep the cause
   git checkout -q -- portfolio research reports 2>/dev/null
   git clean -q -fd -e "reports/screen/*" -- research reports "runs/$ASOF"   # keep the screen (logged below)
-  mkdir -p "runs/$ASOF"; [ -s "$tmp" ] && mv "$tmp" "$err"
-  git add -- "$err" "$LOG" reports/screen 2>/dev/null
+  mkdir -p "runs/$ASOF"; [ -s "$tmp" ] && mv "$tmp" "$err"; [ -s "$tmplog" ] && mv "$tmplog" "$runlog"
+  git add -- "$err" "$runlog" "$LOG" reports/screen 2>/dev/null
   git commit -q -m "Weekly run $ASOF FAILED (error log only)" || true
 fi
 git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (results are committed locally; next run retries)"
