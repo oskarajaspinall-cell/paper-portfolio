@@ -1051,7 +1051,7 @@ def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, po
                        **({"placed_at": now.astimezone(dt.timezone.utc).isoformat(timespec="seconds")} if now else {}),
                        "estimate": {"side": last.get("side", r["action"]), "shares": last.get("shares", 0),
                                     "price": last.get("fill_price"), "currency": last.get("currency"),
-                                    "close_date": last.get("fill_close_date")}})
+                                    "close_date": last.get("fill_close_date"), "usd": last.get("gross_usd")}})
     summary = {"mode": "next_open",
                "placed": [{"id": o["id"], "ticker": o["request"]["ticker"], "action": o["request"]["action"],
                            "type": o["request"]["position_type"], **{f"est_{k}": v for k, v in o["estimate"].items()},

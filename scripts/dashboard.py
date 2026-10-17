@@ -103,6 +103,31 @@ def live_snapshot(tickers: list[str], fetch=None) -> dict:
         return {t: q for t, q in pool.map(one, dict.fromkeys(tickers)) if q}
 
 
+def expected_fill(order: dict, cfg: dict) -> str:
+    """When a pending order should fill: the first weekday on/after its first eligible open, at that exchange's
+    opening time (exchange holidays aren't known here, so it can be a session later)."""
+    t = order["request"]["ticker"]
+    d = dt.date.fromisoformat(portfolio.first_eligible_open(order, t, cfg))
+    while d.weekday() >= 5:
+        d += dt.timedelta(days=1)
+    ex = portfolio.Ticker(t).exchange or "US"
+    spec = cfg.get("fills", {}).get("open_times", {}).get(ex)
+    return f"{d:%a %d %b} open" + (f" ({spec.split()[1]} {ex} time)" if spec else "")
+
+
+def est_usd(est: dict, ledger: list[dict]) -> float | None:
+    """An order's estimated USD value: recorded by portfolio.py, else shares x price x the latest ledger FX rate."""
+    if est.get("usd") is not None:
+        return float(est["usd"])
+    if not est.get("shares") or est.get("price") is None:
+        return None
+    if est.get("currency") == "USD":
+        return est["shares"] * est["price"]
+    fx = next((_f(r.get("fx_usd_per_unit")) for r in reversed(ledger)
+               if r.get("currency") == est.get("currency") and _f(r.get("fx_usd_per_unit"))), None)
+    return est["shares"] * est["price"] * fx if fx else None
+
+
 def build_data(live: bool = True) -> dict:
     cfg = load_config()
     port = ROOT / "portfolio"
@@ -143,7 +168,8 @@ def build_data(live: bool = True) -> dict:
         sectors[h["sector"] or "Unknown"] = sectors.get(h["sector"] or "Unknown", 0) + h["weight"]
     vals = _csv(port / "valuations.csv")
     ser = series(vals, start)
-    ledger = _csv(port / "ledger.csv")[-25:][::-1]
+    all_ledger = _csv(port / "ledger.csv")
+    ledger = all_ledger[-25:][::-1]
     decisions = _csv(port / "decisions.csv")
     screens = sorted((ROOT / "reports" / "screen").glob("20??-??-??.json"))
     screen = json.loads(screens[-1].read_text()) if screens else {}
@@ -189,7 +215,9 @@ def build_data(live: bool = True) -> dict:
         "near_pct": near_pct,
         "pending": [{"id": o["id"], "placed": o["placed"], "action": o["request"]["action"],
                      "ticker": o["request"]["ticker"], "type": o["request"]["position_type"],
-                     "conviction": o["request"].get("conviction"), "est": o.get("estimate", {})}
+                     "conviction": o["request"].get("conviction"), "est": o.get("estimate", {}),
+                     "fills": expected_fill(o, cfg), "replaces": o["request"].get("replaces"),
+                     "est_usd": est_usd(o.get("estimate", {}), all_ledger)}
                     for o in state.get("pending", [])],
         "screen": {"asof": screen.get("asof"), "screened": screen.get("screened"), "picks": screen.get("picks", []),
                    "illiquid": len(screen.get("illiquid") or [])},
@@ -253,7 +281,7 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 <section class="card"><h2>Where the excess return came from</h2><div class="sub" id="attrSub"></div><div class="tiles" id="attrTiles"></div>
 <div class="tw" style="margin-top:12px"><table id="attrTable"></table></div></section></div>
 <section class="card"><h2>Holdings</h2><div class="tw"><table id="holdings"></table></div></section>
-<section class="card"><h2>Pending orders</h2><div class="sub">Decided trades fill at the next market open.</div><div class="tw"><table id="pending"></table></div></section>
+<section class="card"><h2>Pending orders</h2><div class="sub">Decided trades fill at the next opening price of their own market; every rule is checked again at that price. The 22:30 UK job records the fills.</div><div class="tw"><table id="pending"></table></div></section>
 <section class="card"><h2>Close to entry</h2><div class="sub" id="nearSub"></div><div class="tw"><table id="near"></table></div></section>
 <section class="card"><h2>Watchlist: entry prices</h2><div class="sub">Conviction-3 names and the price at which we'd consider buying. A close at or below it triggers a full re-research (never an automatic buy). Closest first.</div><div class="tw"><table id="watch"></table></div></section>
 <section class="card"><h2>Recent trades</h2><div class="tw"><table id="trades"></table></div></section>
@@ -390,8 +418,13 @@ table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>r.name},{h:'Type',f:
  {h:'Change',n:1,f:r=>pct(r.change_pct,1),c:r=>cls(r.change_pct)},
  {h:'Live',n:1,f:r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–'},{h:'Live change',n:1,f:r=>r.live_change_pct==null?'–':pct(r.live_change_pct,1),c:r=>cls(r.live_change_pct)},{h:'Value',n:1,f:r=>usd(r.value)},{h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},
  {h:'P/L',n:1,f:r=>r.pl==null?'':usd(r.pl),c:r=>cls(r.pl)},{h:'Plan',w:1,f:r=>r.plan}],D.holdings,'No holdings yet: the portfolio is all cash.');
+const isHold=r=>r.action==='HOLD';
 table('pending',[{h:'Placed',f:r=>r.placed},{h:'Action',f:r=>r.action},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},
- {h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Est. shares',n:1,f:r=>r.est.shares??''},{h:'Latest close',n:1,f:r=>r.est.price==null?'':`${px(r.est.price)} ${r.est.currency}`}],
+ {h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Est. shares',n:1,f:r=>isHold(r)?'–':(r.est.shares??'')},
+ {h:'Latest close',n:1,f:r=>isHold(r)||r.est.price==null?'–':`${px(r.est.price)} ${r.est.currency} (${r.est.close_date})`},
+ {h:'Est. value',n:1,f:r=>isHold(r)||r.est_usd==null?'–':usd(r.est_usd)},
+ {h:'Fills',f:r=>r.fills||''},
+ {h:'Note',w:1,f:r=>isHold(r)?'No trade: records the refreshed thesis and conviction from the re-research.':(r.replaces?`Replaces ${r.replaces}.`:'Rules re-checked at the opening price before it fills.')}],
  D.pending,'No pending orders.');
 {const np=D.near_pct??10,nr=(D.watch||[]).filter(r=>r.to_entry!=null&&r.to_entry>=-np);
 document.getElementById('nearSub').textContent=`Stocks within ${np}% of their entry price, closest first, with the evaluator's reason each isn't a buy yet. Information only: a close at or below the entry price triggers a re-research, never a purchase.`;

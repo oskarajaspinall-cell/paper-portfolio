@@ -19,6 +19,9 @@ LOCK=/tmp/paper-portfolio-weekly.lock
 if ! mkdir "$LOCK" 2>/dev/null; then echo "another run is in progress; exiting"; exit 0; fi
 trap 'rmdir "$LOCK"' EXIT
 caffeinate -i -w $$ &             # keep the Mac awake until this script ends
+# Uncommitted research/report files that exist BEFORE the run: a failed run's clean-up leaves them alone.
+PRE=$(mktemp)
+{ git ls-files --others --exclude-standard -- research reports; git diff --name-only -- research reports; } > "$PRE"
 
 if [ $TEST = 1 ]; then SCREEN_ARGS="--limit 20"; REVIEW_ARGS="--dry-run --max-new 0"; else SCREEN_ARGS=""; REVIEW_ARGS=""; fi
 
@@ -41,8 +44,14 @@ if [ $review = 0 ]; then
 else
   err="runs/$ASOF/error.log"; tmp=$(mktemp); [ -f "$err" ] && cp "$err" "$tmp"
   runlog="runs/$ASOF/run.log"; tmplog=$(mktemp); [ -f "$runlog" ] && cp "$runlog" "$tmplog"   # keep the cause
-  git checkout -q -- portfolio research reports 2>/dev/null
-  git clean -q -fd -e "reports/screen/*" -- research reports "runs/$ASOF"   # keep the screen (logged below)
+  git checkout -q -- portfolio 2>/dev/null
+  # undo only what this run changed in research/ and reports/ (the screen is kept and logged below)
+  git diff --name-only -- research reports | grep -vxFf "$PRE" | grep -v '^reports/screen/' \
+    | while IFS= read -r f; do git checkout -q -- "$f"; done
+  git ls-files --others --exclude-standard -- research reports | grep -vxFf "$PRE" | grep -v '^reports/screen/' \
+    | while IFS= read -r f; do rm -f -- "$f"; done
+  find research -type d -empty -delete 2>/dev/null
+  git clean -q -fd -- "runs/$ASOF"
   mkdir -p "runs/$ASOF"; [ -s "$tmp" ] && mv "$tmp" "$err"; [ -s "$tmplog" ] && mv "$tmplog" "$runlog"
   git add -- "$err" "$runlog" "$LOG" reports/screen 2>/dev/null
   git commit -q -m "Weekly run $ASOF FAILED (error log only)" || true
