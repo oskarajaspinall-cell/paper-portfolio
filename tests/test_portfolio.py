@@ -794,3 +794,19 @@ def test_invested_return_partial_sale():
     assert r["gain"] == pytest.approx(2600) and r["pct"] == pytest.approx(0.26)
     # SPY: 100 units, 50 sold at 120 for 6000, 50 left at 120
     assert r["spy_pct"] == pytest.approx(0.20)
+
+
+def test_hold_requests_apply_at_once_and_only_trades_are_queued(cfg, tmp_path):
+    import json as _json
+    from portfolio import apply_holds
+    e = engine(cfg, holdings={"AAPL": holding("AAPL", "CORE", 7)})
+    sp = tmp_path / "state.json"
+    sp.write_text(_json.dumps(e.s))
+    hold = {"ticker": "AAPL", "action": "HOLD", "position_type": "CORE", "conviction": 5, "reason": "re-init",
+            "thesis": "new thesis", "research_note": "research/AAPL/n.md",
+            "triggers": [{"text": "ROIC < 20%"}, {"text": "gross margin < 40%"}]}
+    rest, out = apply_holds([hold, core_buy("MSFT")], sp, e.mkt, cfg, WATCH, TODAY, port_dir=tmp_path)
+    h = _json.loads(sp.read_text())["holdings"]["AAPL"]
+    assert [r["ticker"] for r in rest] == ["MSFT"] and [a["ticker"] for a in out["applied"]] == ["AAPL"]
+    assert h["thesis"] == "new thesis" and h["conviction"] == 5 and h["triggers"][0]["text"] == "ROIC < 20%"
+    assert not _json.loads(sp.read_text()).get("pending")

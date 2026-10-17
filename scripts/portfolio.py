@@ -924,6 +924,26 @@ def run_submit(requests, state_path, mkt, cfg, watch, today, dry_run=False, port
     return summary
 
 
+def apply_holds(requests, state_path, mkt, cfg, watch, today, dry_run=False, port_dir=PORT) -> tuple[list, dict]:
+    """HOLD requests record a re-initiation's refreshed thesis, triggers and conviction. No trade and no price is
+    involved, so they apply at once, whatever the market hours (2026-10-17: they used to wait in the order queue
+    with the trades). Returns (the other requests, summary)."""
+    holds = [r for r in requests if r.get("action") == "HOLD"]
+    rest = [r for r in requests if r.get("action") != "HOLD"]
+    if not holds:
+        return rest, {"applied": [], "rejected": []}
+    state = load_state(state_path, cfg)
+    eng = Engine(state, mkt, cfg, watch, today)
+    eng.process(holds)
+    if not dry_run:
+        append_csv(port_dir / "rejections.csv", REJECT_COLS, eng.rejections)
+        if eng.applied:
+            atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
+    return rest, {"applied": [{"side": "HOLD", "ticker": r["ticker"], "type": r["position_type"], "shares": 0,
+                               "reason": r.get("reason", "")} for r in eng.applied],
+                  "rejected": eng.rejections}
+
+
 def first_eligible_open(order: dict, ticker: str, cfg: dict) -> str:
     """Earliest session date whose OPEN comes after the decision. With the order's `placed_at` (UTC) and the
     exchange's opening time ([fills].open_times, local time + timezone; daylight saving via zoneinfo), a
@@ -1161,6 +1181,17 @@ def main(argv=None) -> int:
     try:
         if args.cmd == "submit":
             reqs = json.loads(Path(args.requests).read_text())
+            hold_sp = state_path
+            if args.dry_run and (args.at_market or args.at_next_open):
+                import shutil
+                import tempfile
+                hold_sp = Path(tempfile.mkdtemp()) / "state.json"
+                shutil.copy(state_path, hold_sp)
+            if args.at_market or args.at_next_open:  # decision records apply now; only trades wait for an open
+                reqs, holds = apply_holds(reqs, hold_sp, mkt, cfg, investable(), args.asof, args.dry_run,
+                                          port_dir=hold_sp.parent if args.dry_run else PORT)
+                if args.dry_run:
+                    state_path = hold_sp
             if args.at_market:  # owner rule 2026-10-09: fill now where the market is open, else at the next open
                 now = dt.datetime.now(dt.timezone.utc)
                 if args.dry_run:  # validate + fill on a scratch copy so nothing real changes
@@ -1182,6 +1213,9 @@ def main(argv=None) -> int:
                                    now=dt.datetime.now(dt.timezone.utc))
             else:
                 out = run_submit(reqs, state_path, mkt, cfg, investable(), args.asof, args.dry_run)
+            if args.at_market or args.at_next_open:
+                out["applied"] = holds["applied"] + out.get("applied", [])
+                out["rejected"] = holds["rejected"] + out.get("rejected", [])
             out["dry_run"] = args.dry_run
             if args.save:
                 Path(args.save).parent.mkdir(parents=True, exist_ok=True)
