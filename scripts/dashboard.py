@@ -270,6 +270,7 @@ const NS='http://www.w3.org/2000/svg',sv=(t,a={})=>{const e=document.createEleme
 const usd=(x,d=0)=>x==null||isNaN(x)?'n/a':(x<0?'-':'')+'$'+Math.abs(x).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 const pct=(x,d=2)=>x==null?'n/a':(x>=0?'+':'')+x.toFixed(d)+'%';
 const cls=x=>x==null?'':x>=0?'up':'down';
+const px=x=>x==null||x===''||isNaN(+x)?'':(+x).toLocaleString('en-US',{maximumFractionDigits:Math.abs(+x)<10?4:2});  // share prices
 try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}
 $('theme').onclick=()=>{const dark=matchMedia('(prefers-color-scheme: dark)').matches;const cur=document.documentElement.dataset.theme||(dark?'dark':'light');
 const n=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}};
@@ -385,12 +386,12 @@ function table(id,cols,rows,empty){const t=$(id);t.append(el('tr',{},...cols.map
   if(v instanceof Node)td.append(v);else td.textContent=v;return td;}))));}
 const link=(path,txt)=>D.repo&&path?el('a',{href:`${D.repo}/blob/main/${path}`,target:'_blank',rel:'noopener'},txt):txt;
 table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>r.name},{h:'Type',f:r=>r.type.toLowerCase()},{h:'Conv.',n:1,f:r=>r.conviction??''},
- {h:'Entry',f:r=>r.entry_date},{h:'Entry price',n:1,f:r=>r.entry_price==null?'':r.entry_price+' '+r.currency},{h:'Close',n:1,f:r=>r.last_price==null?'':`${r.last_price} ${r.currency} (${r.last_date})`},
+ {h:'Entry',f:r=>r.entry_date},{h:'Entry price',n:1,f:r=>r.entry_price==null?'':px(r.entry_price)+' '+r.currency},{h:'Close',n:1,f:r=>r.last_price==null?'':`${px(r.last_price)} ${r.currency} (${r.last_date})`},
  {h:'Change',n:1,f:r=>pct(r.change_pct,1),c:r=>cls(r.change_pct)},
  {h:'Live',n:1,f:r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–'},{h:'Live change',n:1,f:r=>r.live_change_pct==null?'–':pct(r.live_change_pct,1),c:r=>cls(r.live_change_pct)},{h:'Value',n:1,f:r=>usd(r.value)},{h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},
  {h:'P/L',n:1,f:r=>r.pl==null?'':usd(r.pl),c:r=>cls(r.pl)},{h:'Plan',w:1,f:r=>r.plan}],D.holdings,'No holdings yet: the portfolio is all cash.');
 table('pending',[{h:'Placed',f:r=>r.placed},{h:'Action',f:r=>r.action},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},
- {h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Est. shares',n:1,f:r=>r.est.shares??''},{h:'Latest close',n:1,f:r=>r.est.price==null?'':`${r.est.price} ${r.est.currency}`}],
+ {h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Est. shares',n:1,f:r=>r.est.shares??''},{h:'Latest close',n:1,f:r=>r.est.price==null?'':`${px(r.est.price)} ${r.est.currency}`}],
  D.pending,'No pending orders.');
 {const np=D.near_pct??10,nr=(D.watch||[]).filter(r=>r.to_entry!=null&&r.to_entry>=-np);
 document.getElementById('nearSub').textContent=`Stocks within ${np}% of their entry price, closest first, with the evaluator's reason each isn't a buy yet. Information only: a close at or below the entry price triggers a re-research, never a purchase.`;
@@ -407,7 +408,7 @@ table('watch',[{h:'Ticker',f:r=>r.ticker},{h:'Conv.',n:1,f:r=>r.conviction??''},
  {h:'Entry price',n:1,f:r=>`${(+r.entry).toFixed(2)} ${r.ccy}`},{h:'To entry (close)',n:1,f:r=>r.to_entry==null?'':pct(r.to_entry,1),c:r=>r.to_entry!=null&&r.to_entry>=0?'up':''},
  {h:'Status',f:r=>r.hit?'HIT '+r.hit+': re-research next run':''},{h:'Set by',f:r=>r.source}],D.watch||[],'No entry prices yet.');
 table('trades',[{h:'Date',f:r=>r.date},{h:'Side',f:r=>r.side},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Shares',n:1,f:r=>r.shares},
- {h:'Fill',n:1,f:r=>`${r.fill_price} ${r.currency} (${r.fill_close_date})`},{h:'Gross',n:1,f:r=>usd(+r.gross_usd,2)},{h:'Costs',n:1,f:r=>usd(+r.costs_usd,2)},
+ {h:'Fill',n:1,f:r=>`${px(r.fill_price)} ${r.currency} (${r.fill_close_date})`},{h:'Gross',n:1,f:r=>usd(+r.gross_usd,2)},{h:'Costs',n:1,f:r=>usd(+r.costs_usd,2)},
  {h:'Reason',w:1,f:r=>{const sp=el('span',{title:r.reason||''});sp.textContent=(r.reason||'').length>140?r.reason.slice(0,139)+'…':(r.reason||'');return sp;}}],D.ledger,'No trades yet.');
 ['1m','3m','6m','12m'].forEach(h=>{const x=D.hits[h];$('hits').append(tile(h+' hit rate',x.n?Math.round(x.hits/x.n*100)+'%':'–',x.n?`${x.hits} of ${x.n} decisions`:'none matured yet'));});
 table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Decision',f:r=>r.decision},

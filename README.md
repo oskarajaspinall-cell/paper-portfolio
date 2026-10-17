@@ -28,7 +28,7 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Core positions are sized by conviction and volatility**: 7% (conviction 4) or 10% (5), scaled down
-for a volatile stock and up for a steady one (between 0.6× and 1.4×), so one jumpy name can't dominate the
+for a volatile stock and up for a steady one (between 0.6× and 1.4×; never so far up that it eats into the cash reserve), so one jumpy name can't dominate the
 portfolio's risk; a weekly risk table (`reports/risk/`) shows each holding's share of the portfolio's volatility.
 A weekly **return attribution** (`reports/attribution/`) splits the return over the S&P 500 into sector bets
 (including the cash reserve), stock picking within sectors and their interaction, so a sector tailwind can't hide
