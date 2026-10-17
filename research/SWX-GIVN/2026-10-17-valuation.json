@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Specialty Chemicals",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 804.301011513744,
+    "base": 1667.6595051272996,
+    "bull": 2113.419874766332
+   },
+   "implied_growth": 0.19832272058805822,
+   "discount_rate": 0.08507887195287095,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.009321090672454829,
+     "base": 0.023652775830663098,
+     "bull": 0.02825328466756205
+    },
+    "cash_flow_margin": {
+     "bear": 0.11049250526907405,
+     "base": 0.1598586593762657,
+     "bull": 0.18910295736643282
+    },
+    "cagr_3y": 0.01635781865509034,
+    "cagr_5y": 0.02825328466756205,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 3026.5626772949813,
+    "base": 3758.5586578730868,
+    "bull": 4172.924926078422
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 20.676,
+     "base": 24.974,
+     "bull": 27.407
+    },
+    "ttm_ebitda": 1582000000
+   }
+  }
+ ],
+ "price": 3915,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "CHF",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 1545.0549001074899,
+  "base": 2364.6258893758954,
+  "bull": 2799.921558537029
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6053499616583679,
+  "base": -0.3960087128030918,
+  "bull": -0.28482207955631444
+ },
+ "implied_growth": 0.19832272058805822,
+ "ticker": "SWX:GIVN",
+ "asof": "2026-10-17",
+ "quote_currency": "CHF",
+ "financials_currency": "CHF",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/swx/GIVN/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/swx/GIVN/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/swx/GIVN/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/swx/GIVN/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/swx/GIVN/statistics/"
+ }
+}

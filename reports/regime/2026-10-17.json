@@ -1,0 +1,86 @@
+{
+ "asof": "2026-10-17",
+ "indicators": [
+  {
+   "name": "High-yield credit spread, %",
+   "value": 3.23,
+   "date": "2026-10-15",
+   "points": 0,
+   "rule": ">5.0 (+1); widened >1.0pp in 3m (+1); 3m change 0.52",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2"
+  },
+  {
+   "name": "VIX",
+   "value": 16.46,
+   "date": "2026-10-15",
+   "points": 0,
+   "rule": ">25 (+1), >35 (+2)",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
+  },
+  {
+   "name": "Yield curve, 10y - 2y, pp",
+   "value": 0.33,
+   "date": "2026-10-15",
+   "points": 0,
+   "rule": "< 0 inverted (+1)",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10, https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2"
+  },
+  {
+   "name": "Real 10y yield, 3m change, pp",
+   "value": 0.43,
+   "date": "2026-10-15",
+   "points": 0,
+   "rule": "rose >0.5pp in 3m (+1); level 2.78%",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10"
+  },
+  {
+   "name": "S&P 500 vs its 40-week (~200-day) average, %",
+   "value": 5.11,
+   "date": "2026-10-12",
+   "points": 0,
+   "rule": "below the average (+1)",
+   "source": "https://stockanalysis.com/api/symbol/e/spy/history?range=5Y&period=Weekly"
+  }
+ ],
+ "points": 0,
+ "score_regime": "risk_on",
+ "final_regime": "neutral",
+ "view": {
+  "final_regime": "neutral",
+  "keep_score": false,
+  "reasons": [
+   {
+    "text": "Core CPI (CPILFESL) rose 1.13 index points in the latest month, annualizing to roughly 4% \u2014 a reacceleration not captured by any of the score's five inputs.",
+    "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPILFESL (2026-09-01)"
+   },
+   {
+    "text": "Effective fed funds rate (DFF) rose 0.25pp over the past month to 3.88%, consistent with tightening resuming; DFF is outside the score's five inputs.",
+    "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFF (2026-10-15)"
+   },
+   {
+    "text": "Corroborating near-misses already inside the score: the HY spread widened 0.52pp over 3 months (threshold 1.0pp) and the 10y real yield rose 0.43pp over 3 months (threshold 0.5pp), both just short of adding a risk point.",
+    "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2, https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10 (2026-10-15)"
+   }
+  ],
+  "watch": [
+   "Next core CPI print for a further reacceleration or reversal",
+   "Any FOMC statement or minutes confirming/denying a resumed hiking stance",
+   "Whether HY spread (3m change) or real-yield (3m change) crosses its score threshold outright",
+   "VIX and S&P 500 vs its 40-week average for a shift away from benign"
+  ]
+ },
+ "spy": {
+  "close": 763.25,
+  "date": "2026-10-12",
+  "avg_40w": 726.11425,
+  "high_52w": 778.57,
+  "drawdown_pct": 1.97,
+  "source": "https://stockanalysis.com/api/symbol/e/spy/history?range=5Y&period=Weekly"
+ },
+ "dip": {
+  "drawdown_pct": 1.97,
+  "multiplier": 1.0
+ },
+ "base_reserve_pct": 20,
+ "reserve_pct": 20.0
+}

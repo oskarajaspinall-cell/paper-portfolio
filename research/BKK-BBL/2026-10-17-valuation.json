@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 120.13164753333332,
+    "base": 210.0148583866667,
+    "bull": 213.20087711999997
+   },
+   "cost_of_equity": 0.106,
+   "assumptions": {
+    "roe": {
+     "bear": 0.05705,
+     "base": 0.08103,
+     "bull": 0.08188
+    },
+    "justified_pb": {
+     "bear": 0.395679012345679,
+     "base": 0.6917283950617286,
+     "bull": 0.7022222222222222
+    },
+    "bvps": 303.608844
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 240.6222237981904,
+    "base": 321.8948703518853,
+    "bull": 396.07880248237774
+   },
+   "implied_growth": -0.07360487830122736,
+   "discount_rate": 0.106,
+   "cost_of_equity": 0.106,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.02809304296022737,
+     "base": 0.0609012183777775,
+     "bull": 0.10241878759065526
+    },
+    "cash_flow_margin": {
+     "bear": 0.26399579981692917,
+     "base": 0.3096128195879182,
+     "bull": 0.32319139251216555
+    },
+    "cagr_3y": 0.10241878759065526,
+    "cagr_5y": 0.09118608592045474,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 111.53846153846152,
+    "base": 126.54320987654323,
+    "bull": 145.77464788732397
+   },
+   "cost_of_equity": 0.106,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 10.0
+   }
+  }
+ ],
+ "price": 186,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "THB",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 160.29517295495233,
+  "base": 247.30819570840626,
+  "bull": 274.16018557412593
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.1381979948658476,
+  "base": 0.32961395542153893,
+  "bull": 0.4739794923340104
+ },
+ "implied_growth": -0.07360487830122736,
+ "ticker": "BKK:BBL",
+ "asof": "2026-10-17",
+ "quote_currency": "THB",
+ "financials_currency": "THB",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-15",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bkk/BBL/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bkk/BBL/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bkk/BBL/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bkk/BBL/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bkk/BBL/statistics/"
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Apparel Retail",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -16.71591215435274,
+    "base": 77.82096750946691,
+    "bull": 157.25679921490553
+   },
+   "implied_growth": 0.2905784353718087,
+   "discount_rate": 0.11988994947514897,
+   "cost_of_equity": 0.125455,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.07761588735181275,
+     "base": 0.12368969922113875,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.023423427708675868,
+     "base": 0.1448289519850032,
+     "bull": 0.176674132875695
+    },
+    "cagr_3y": 0.1902317747036255,
+    "cagr_5y": 0.2545270221809295,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 41.17316923436938,
+    "base": 58.65559342431865,
+    "bull": 147.5629920687321
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 15.126,
+     "base": 20.8,
+     "bull": 21.894
+    },
+    "ttm_ebitda": 836135000,
+    "peak_earnings": "TTM EBITDA is 2.5x its 5y median: bear/base use the 5y average (3.687e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 149.08,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "CAD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 2.5804483085546344,
+  "base": 71.43250948108415,
+  "bull": 154.02553016618106
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.9826908484803151,
+  "base": -0.5208444494158563,
+  "bull": 0.03317366626094076
+ },
+ "implied_growth": 0.2905784353718087,
+ "ticker": "TSX:ATZ",
+ "asof": "2026-10-17",
+ "quote_currency": "CAD",
+ "financials_currency": "CAD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tsx/ATZ/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tsx/ATZ/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tsx/ATZ/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tsx/ATZ/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tsx/ATZ/statistics/"
+ }
+}

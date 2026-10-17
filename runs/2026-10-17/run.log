@@ -1,0 +1,588 @@
+$ bin/py scripts/portfolio.py fill-pending --asof 2026-10-17 --save runs/2026-10-17/fills.json
+{
+ "applied": [],
+ "rejected": [],
+ "still_pending": [],
+ "expired": []
+}
+$ bin/py scripts/corporate_actions.py check --asof 2026-10-17
+{
+ "dry_run": false,
+ "applied": [],
+ "receivables": [],
+ "upcoming": [
+  {
+   "ticker": "ZTS",
+   "ex_date": "2026-10-30",
+   "pay_date": "2026-12-01",
+   "amount": 0.53,
+   "currency": "USD"
+  }
+ ],
+ "notes": []
+}
+$ bin/py scripts/portfolio.py mark --asof 2026-10-17
+{"total": 105123.63, "cash": 29988.99, "core": 75134.64, "tactical": 0, "receivable": 0, "sectors": {"Healthcare": 15336.74, "Consumer Discretionary": 15292.64, "Technology": 22154.309999999998, "Communication Services": 14789.97, "Industrials": 7560.98}, "n": 10}
+$ bin/py scripts/macro_data.py --asof 2026-10-17
+{"out": "reports/macro/2026-10-17.md", "series": 11, "unavailable": []}
+$ bin/py scripts/regime.py --asof 2026-10-17
+{"asof": "2026-10-17", "points": 0, "score_regime": "risk_on", "final_regime": "risk_on", "reserve_pct": 10.0, "drawdown_pct": 1.97}
+$ claude -p Date 2026-10-17. Regime score: reports/regime/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write reports/regime/2026-10-17-view.md. --agent macro-strategist --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+reports/regime/2026-10-17-view.md
+OK reports/regime/2026-10-17-view.md final_regime=neutral score_regime=risk_on reasons=3
+$ bin/py scripts/check_docs.py regime reports/regime/2026-10-17-view.md
+OK reports/regime/2026-10-17-view.md final_regime=neutral score_regime=risk_on reasons=3
+$ bin/py scripts/regime.py --apply-view --asof 2026-10-17
+{"asof": "2026-10-17", "points": 0, "score_regime": "risk_on", "final_regime": "neutral", "reserve_pct": 20.0, "drawdown_pct": 1.97}
+$ bin/py scripts/weekly_scan.py --asof 2026-10-17 --out runs/2026-10-17
+{"flagged_for_review": ["HRB", "INTU"], "reinitiate": ["OTIS"], "mechanical_exits": [], "trims": [], "unflagged": 7, "scan": "runs/2026-10-17/scan.json"}
+$ claude -p Scan file runs/2026-10-17/scan.json, date 2026-10-17. Write runs/2026-10-17/reviews.md. --agent weekly-reviewer --permission-mode dontAsk --allowedTools Read,WebFetch,Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+runs/2026-10-17/reviews.md — Tally: HOLD 2, ESCALATE 0
+$ bin/py scripts/sec_delta.py OTIS --asof 2026-10-17
+OK research/OTIS/sec-delta-2026-10-17.md
+$ claude -p Ticker OTIS, note type CORE, date 2026-10-17. This is a full re-initiation of an existing CORE holding (scan: the price reached its base fair value). Decide ADD, HOLD, TRIM or SELL. The close 71.33000183105469 reached the base fair value 70.93 from research/OTIS/2026-10-07-valuation.json. Owner rule: fair value is ONE model estimate, not a sell signal and not the thesis. Re-examine whether the original thesis has played out or still has room: has the business improved so the old fair value is stale, does the evidence (quality trend, cash returns, peers, own history) still support holding, and is there a better use of the capital? SELL or TRIM only if the whole evidence says the opportunity is spent; HOLD is right when the thesis is still running. SEC filing delta: research/OTIS/sec-delta-2026-10-17.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/OTIS/2026-10-17.md
+research/OTIS/factsheet-2026-10-17.md
+OK research/OTIS/2026-10-17.md type=CORE 1=61 2=133 3=147 4=65 5=92 6=70 total=568
+
+No data conflicts or blocked URLs. Note: Schindler (`SWX:SCHP`) was requested as a peer but returned a 404, so the final peer set is JCI, HON and KONE (HEL:KNEBV) instead of the originally intended 4-peer set.
+$ bin/py scripts/check_docs.py note research/OTIS/2026-10-17.md
+OK research/OTIS/2026-10-17.md type=CORE 1=61 2=133 3=147 4=65 5=92 6=70 total=568
+$ claude -p Ticker OTIS, date 2026-10-17. Research: research/OTIS/factsheet-2026-10-17.md, research/OTIS/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/OTIS/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/OTIS/2026-10-17-macro.md
+OK research/OTIS/2026-10-17-macro.md macro_weight=secondary words=241
+$ bin/py scripts/check_docs.py macro research/OTIS/2026-10-17-macro.md
+OK research/OTIS/2026-10-17-macro.md macro_weight=secondary words=241
+$ claude -p Evaluate OTIS for 2026-10-17: fact sheet research/OTIS/factsheet-2026-10-17.md, note research/OTIS/2026-10-17.md, state portfolio/state.json, macro overlay research/OTIS/2026-10-17-macro.md. This is a full re-initiation of an existing CORE holding (scan: the price reached its base fair value). Decide ADD, HOLD, TRIM or SELL. The close 71.33000183105469 reached the base fair value 70.93 from research/OTIS/2026-10-07-valuation.json. Owner rule: fair value is ONE model estimate, not a sell signal and not the thesis. Re-examine whether the original thesis has played out or still has room: has the business improved so the old fair value is stale, does the evidence (quality trend, cash returns, peers, own history) still support holding, and is there a better use of the capital? SELL or TRIM only if the whole evidence says the opportunity is spent; HOLD is right when the thesis is still running. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+I've kept OTIS as a HOLD at conviction 4, so the position stays at its current size and there's no ADD. The price reached the blended base fair value of 71.95 only because of the cautious DCF part of the model, which alone values the shares at 59.53. The original idea still holds: OTIS trades below its own 5-year low on every valuation multiple and below its peers, and returns on capital and margins are stable or improving. Debt creeping up, the Q2 guidance cut and a small bearish macro tilt keep conviction from going higher. The entry price for adding more is 57.56 (base fair value less 20%).
+
+research/OTIS/2026-10-17-evaluation.md
+OK research/OTIS/2026-10-17-evaluation.md Bear case=126 Bull case=122 decision=HOLD
+$ bin/py scripts/check_docs.py eval research/OTIS/2026-10-17-evaluation.md
+OK research/OTIS/2026-10-17-evaluation.md Bear case=126 Bull case=122 decision=HOLD
+$ bin/py scripts/valuation.py OTIS --asof 2026-10-17 --eval research/OTIS/2026-10-17-evaluation.md
+{"out": "research/OTIS/2026-10-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 56.55, "base": 71.95, "bull": 72.62}, "price": 71.33}
+$ bin/py scripts/sec_delta.py INTU --asof 2026-10-17
+OK research/INTU/sec-delta-2026-10-17.md
+$ claude -p Ticker INTU, note type CORE, date 2026-10-17. This is a full re-initiation of an existing CORE holding (scan: escalated by weekly review). Decide ADD, HOLD, TRIM or SELL. SEC filing delta: research/INTU/sec-delta-2026-10-17.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+check_docs passes. Final summary:
+
+- Note: research/INTU/2026-10-17.md
+- Fact sheet: research/INTU/factsheet-2026-10-17.md
+- `check_docs.py note` → OK research/INTU/2026-10-17.md type=CORE 1=70 2=146 3=133 4=70 5=75 6=100 total=594
+
+No data conflicts found. No blocked URLs (both WebFetch calls to investors.intuit.com succeeded but yielded no new disclosable figures, so none were used in the note).
+$ bin/py scripts/check_docs.py note research/INTU/2026-10-17.md
+OK research/INTU/2026-10-17.md type=CORE 1=70 2=146 3=133 4=70 5=75 6=100 total=594
+$ claude -p Ticker INTU, date 2026-10-17. Research: research/INTU/factsheet-2026-10-17.md, research/INTU/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/INTU/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/INTU/2026-10-17-macro.md
+OK research/INTU/2026-10-17-macro.md macro_weight=secondary words=248
+$ bin/py scripts/check_docs.py macro research/INTU/2026-10-17-macro.md
+OK research/INTU/2026-10-17-macro.md macro_weight=secondary words=248
+$ claude -p Evaluate INTU for 2026-10-17: fact sheet research/INTU/factsheet-2026-10-17.md, note research/INTU/2026-10-17.md, state portfolio/state.json, macro overlay research/INTU/2026-10-17-macro.md. This is a full re-initiation of an existing CORE holding (scan: escalated by weekly review). Decide ADD, HOLD, TRIM or SELL. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/INTU/2026-10-17-evaluation.md
+OK research/INTU/2026-10-17-evaluation.md Bear case=130 Bull case=104 decision=HOLD
+$ bin/py scripts/check_docs.py eval research/INTU/2026-10-17-evaluation.md
+OK research/INTU/2026-10-17-evaluation.md Bear case=130 Bull case=104 decision=HOLD
+$ bin/py scripts/valuation.py INTU --asof 2026-10-17 --eval research/INTU/2026-10-17-evaluation.md
+{"out": "research/INTU/2026-10-17-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 244.65, "base": 557.68, "bull": 658.76}, "price": 330.17}
+$ bin/py scripts/sec_delta.py SHE:000807 --asof 2026-10-17
+$ bin/py scripts/sec_delta.py SHE:002558 --asof 2026-10-17
+$ bin/py scripts/sec_delta.py KRX:009540 --asof 2026-10-17
+SKIP SHE:000807: not a US listing (SEC filers only)
+$ claude -p Ticker SHE:000807, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+SKIP KRX:009540: not a US listing (SEC filers only)
+SKIP SHE:002558: not a US listing (SEC filers only)
+$ claude -p Ticker SHE:002558, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+$ claude -p Ticker KRX:009540, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/KRX-009540/2026-10-17.md
+research/KRX-009540/factsheet-2026-10-17.md
+OK research/KRX-009540/2026-10-17.md type=CORE 1=57 2=142 3=140 4=84 5=64 6=84 total=571
+
+No data conflicts. No blocked URLs — no qualitative fetches were made (no allowlisted IR domain found for this ticker; qualitative claims drawn from the fact sheet's News & sentiment headlines only, cited as listed).
+$ bin/py scripts/check_docs.py note research/KRX-009540/2026-10-17.md
+OK research/KRX-009540/2026-10-17.md type=CORE 1=57 2=142 3=140 4=84 5=64 6=84 total=571
+$ claude -p Ticker KRX:009540, date 2026-10-17. Research: research/KRX-009540/factsheet-2026-10-17.md, research/KRX-009540/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/KRX-009540/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/SHE-000807/2026-10-17.md
+research/SHE-000807/factsheet-2026-10-17.md
+OK research/SHE-000807/2026-10-17.md type=CORE 1=45 2=149 3=140 4=95 5=61 6=84 total=574
+
+No data conflicts. Blocked URL: https://www.reuters.com/markets/companies/000807.SZ/ (fetch unavailable, skipped, moved on). No company IR domain recorded for this ticker, so qualitative sourcing was limited to stockanalysis.com.
+$ bin/py scripts/check_docs.py note research/SHE-000807/2026-10-17.md
+OK research/SHE-000807/2026-10-17.md type=CORE 1=45 2=149 3=140 4=95 5=61 6=84 total=574
+$ claude -p Ticker SHE:000807, date 2026-10-17. Research: research/SHE-000807/factsheet-2026-10-17.md, research/SHE-000807/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/SHE-000807/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Passes. No qualitative WebFetch calls were made: the fact sheet's news section was `[data unavailable]`, and no allowlisted company IR/website domain was recorded for this ticker (only stockanalysis.com, sec.gov, londonstockexchange.com, reuters.com are allowlisted, and this China A-share is not an SEC filer), so there was no citable primary source to fetch.
+
+research/SHE-002558/2026-10-17.md
+research/SHE-002558/factsheet-2026-10-17.md
+OK research/SHE-002558/2026-10-17.md type=CORE 1=68 2=134 3=140 4=84 5=57 6=56 total=539
+
+No data conflicts and no blocked URLs.
+$ bin/py scripts/check_docs.py note research/SHE-002558/2026-10-17.md
+OK research/SHE-002558/2026-10-17.md type=CORE 1=68 2=134 3=140 4=84 5=57 6=56 total=539
+$ claude -p Ticker SHE:002558, date 2026-10-17. Research: research/SHE-002558/factsheet-2026-10-17.md, research/SHE-002558/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/SHE-002558/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/KRX-009540/2026-10-17-macro.md
+OK research/KRX-009540/2026-10-17-macro.md macro_weight=secondary words=211
+$ bin/py scripts/check_docs.py macro research/KRX-009540/2026-10-17-macro.md
+OK research/KRX-009540/2026-10-17-macro.md macro_weight=secondary words=211
+$ claude -p Evaluate KRX:009540 for 2026-10-17: fact sheet research/KRX-009540/factsheet-2026-10-17.md, note research/KRX-009540/2026-10-17.md, state portfolio/state.json, macro overlay research/KRX-009540/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/SHE-000807/2026-10-17-macro.md
+OK research/SHE-000807/2026-10-17-macro.md macro_weight=context words=77
+$ bin/py scripts/check_docs.py macro research/SHE-000807/2026-10-17-macro.md
+OK research/SHE-000807/2026-10-17-macro.md macro_weight=context words=77
+$ claude -p Evaluate SHE:000807 for 2026-10-17: fact sheet research/SHE-000807/factsheet-2026-10-17.md, note research/SHE-000807/2026-10-17.md, state portfolio/state.json, macro overlay research/SHE-000807/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/SHE-002558/2026-10-17-macro.md
+OK research/SHE-002558/2026-10-17-macro.md macro_weight=context words=62
+$ bin/py scripts/check_docs.py macro research/SHE-002558/2026-10-17-macro.md
+OK research/SHE-002558/2026-10-17-macro.md macro_weight=context words=62
+$ claude -p Evaluate SHE:002558 for 2026-10-17: fact sheet research/SHE-002558/factsheet-2026-10-17.md, note research/SHE-002558/2026-10-17.md, state portfolio/state.json, macro overlay research/SHE-002558/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/KRX-009540/2026-10-17-evaluation.md
+OK research/KRX-009540/2026-10-17-evaluation.md Bear case=147 Bull case=116 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/KRX-009540/2026-10-17-evaluation.md
+OK research/KRX-009540/2026-10-17-evaluation.md Bear case=147 Bull case=116 decision=AVOID
+$ bin/py scripts/valuation.py KRX:009540 --asof 2026-10-17 --eval research/KRX-009540/2026-10-17-evaluation.md
+{"out": "research/KRX-009540/2026-10-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 140201.08, "base": 1008525.51, "bull": 1610628.65}, "price": 265000}
+$ bin/py scripts/sec_delta.py LON:FRES --asof 2026-10-17
+SKIP LON:FRES: not a US listing (SEC filers only)
+$ claude -p Ticker LON:FRES, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/SHE-000807/2026-10-17-evaluation.md
+OK research/SHE-000807/2026-10-17-evaluation.md Bear case=135 Bull case=120 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/SHE-000807/2026-10-17-evaluation.md
+OK research/SHE-000807/2026-10-17-evaluation.md Bear case=135 Bull case=120 decision=AVOID
+$ bin/py scripts/valuation.py SHE:000807 --asof 2026-10-17 --eval research/SHE-000807/2026-10-17-evaluation.md
+{"out": "research/SHE-000807/2026-10-17-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 24.16, "base": 27.97, "bull": 47.58}, "price": 25.21}
+$ bin/py scripts/sec_delta.py TSX:KNT --asof 2026-10-17
+SKIP TSX:KNT: not a US listing (SEC filers only)
+$ claude -p Ticker TSX:KNT, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+I chose AVOID for SHE:002558 at conviction 3: the stock is cheap, but the evidence isn't strong enough for a buy.
+
+research/SHE-002558/2026-10-17-evaluation.md
+OK research/SHE-002558/2026-10-17-evaluation.md Bear case=146 Bull case=123 decision=AVOID
+
+The entry price is null on purpose. The stock already trades below its own 5-year minimum on every multiple except P/B, so a lower price wouldn't help. What's missing is proof that revenue and margins will last, which the Oct 30 Q3 results may show.
+$ bin/py scripts/check_docs.py eval research/SHE-002558/2026-10-17-evaluation.md
+OK research/SHE-002558/2026-10-17-evaluation.md Bear case=146 Bull case=123 decision=AVOID
+$ bin/py scripts/valuation.py SHE:002558 --asof 2026-10-17 --eval research/SHE-002558/2026-10-17-evaluation.md
+{"out": "research/SHE-002558/2026-10-17-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 10.97, "base": 40.28, "bull": 55.85}, "price": 20.95}
+$ bin/py scripts/sec_delta.py HKG:9995 --asof 2026-10-17
+SKIP HKG:9995: not a US listing (SEC filers only)
+$ claude -p Ticker HKG:9995, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/TSX-KNT/2026-10-17.md
+research/TSX-KNT/factsheet-2026-10-17.md
+OK research/TSX-KNT/2026-10-17.md type=CORE 1=67 2=148 3=148 4=91 5=93 6=69 total=616
+
+No data conflicts. No blocked URLs (2 WebFetch calls used: initial company identification + news headlines citation only from fact sheet, no additional qualitative fetches needed beyond the allowlisted stockanalysis.com/globenewswire URLs already listed in the fact sheet's news section).
+$ bin/py scripts/check_docs.py note research/TSX-KNT/2026-10-17.md
+OK research/TSX-KNT/2026-10-17.md type=CORE 1=67 2=148 3=148 4=91 5=93 6=69 total=616
+$ claude -p Ticker TSX:KNT, date 2026-10-17. Research: research/TSX-KNT/factsheet-2026-10-17.md, research/TSX-KNT/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/TSX-KNT/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Note: research/LON-FRES/2026-10-17.md
+Fact sheet: research/LON-FRES/factsheet-2026-10-17.md
+check_docs: OK research/LON-FRES/2026-10-17.md type=CORE 1=63 2=139 3=139 4=101 5=92 6=81 total=615
+
+Blocked: WebFetch to londonstockexchange.com/stock/FRES/fresnillo-plc/company-page returned no usable RNS content (not retried, per protocol). No data conflicts found.
+
+Note: this research-note task covers the initiation researcher role only; the BUY/AVOID conviction decision is made in the separate evaluator step, not performed here.
+$ bin/py scripts/check_docs.py note research/LON-FRES/2026-10-17.md
+OK research/LON-FRES/2026-10-17.md type=CORE 1=63 2=139 3=139 4=101 5=92 6=81 total=615
+$ claude -p Ticker LON:FRES, date 2026-10-17. Research: research/LON-FRES/factsheet-2026-10-17.md, research/LON-FRES/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/LON-FRES/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/TSX-KNT/2026-10-17-macro.md
+OK research/TSX-KNT/2026-10-17-macro.md macro_weight=primary words=240
+$ bin/py scripts/check_docs.py macro research/TSX-KNT/2026-10-17-macro.md
+OK research/TSX-KNT/2026-10-17-macro.md macro_weight=primary words=240
+$ claude -p Evaluate TSX:KNT for 2026-10-17: fact sheet research/TSX-KNT/factsheet-2026-10-17.md, note research/TSX-KNT/2026-10-17.md, state portfolio/state.json, macro overlay research/TSX-KNT/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Note path: `research/HKG-9995/2026-10-17.md`
+Fact sheet: `research/HKG-9995/factsheet-2026-10-17.md`
+
+check_docs: `OK research/HKG-9995/2026-10-17.md type=CORE 1=69 2=141 3=138 4=104 5=76 6=73 total=601`
+
+Data conflicts: none. Blocked URL: `https://www.reuters.com/business/healthcare-pharmaceuticals/abbvie-remegen-partner-experimental-solid-tumor-treatment-2026-01-12/` (WebFetch blocked despite being allowlisted; cited only as the fact sheet's listed headline URL, no figures taken from it). This is not a US SEC filer, so no SEC filing delta was applicable; no company IR/website domain was listed on the fact sheet, so no further qualitative fetches were available.
+$ bin/py scripts/check_docs.py note research/HKG-9995/2026-10-17.md
+OK research/HKG-9995/2026-10-17.md type=CORE 1=69 2=141 3=138 4=104 5=76 6=73 total=601
+$ claude -p Ticker HKG:9995, date 2026-10-17. Research: research/HKG-9995/factsheet-2026-10-17.md, research/HKG-9995/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/HKG-9995/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/TSX-KNT/2026-10-17-evaluation.md
+OK research/TSX-KNT/2026-10-17-evaluation.md Bear case=143 Bull case=115 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/TSX-KNT/2026-10-17-evaluation.md
+OK research/TSX-KNT/2026-10-17-evaluation.md Bear case=143 Bull case=115 decision=AVOID
+$ bin/py scripts/valuation.py TSX:KNT --asof 2026-10-17 --eval research/TSX-KNT/2026-10-17-evaluation.md
+{"out": "research/TSX-KNT/2026-10-17-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 8.54, "base": 14.57, "bull": 52.97}, "price": 27.35}
+$ bin/py scripts/sec_delta.py OSL:VAR --asof 2026-10-17
+SKIP OSL:VAR: not a US listing (SEC filers only)
+$ claude -p Ticker OSL:VAR, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/LON-FRES/2026-10-17-macro.md
+OK research/LON-FRES/2026-10-17-macro.md macro_weight=primary words=248
+$ bin/py scripts/check_docs.py macro research/LON-FRES/2026-10-17-macro.md
+OK research/LON-FRES/2026-10-17-macro.md macro_weight=primary words=248
+$ claude -p Evaluate LON:FRES for 2026-10-17: fact sheet research/LON-FRES/factsheet-2026-10-17.md, note research/LON-FRES/2026-10-17.md, state portfolio/state.json, macro overlay research/LON-FRES/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+The decision on LON:FRES is **AVOID** at conviction 2 (CORE). The checker passes.
+
+research/LON-FRES/2026-10-17-evaluation.md
+OK research/LON-FRES/2026-10-17-evaluation.md Bear case=133 Bull case=110 decision=AVOID
+
+- **Why:** The low trailing multiples (P/E 11.7x, EV/EBITDA 6.3x) rest on peak margins that come from metal prices, while ore grades fell in Q1 and Q2 2026. The fact sheet's base fair value is 1,440.45 GBX against a 2,719.00 close. The macro overlay (primary weight) leans moderately bearish because real yields and the dollar are both rising.
+- **Scenarios (12 months):** bull 3,900 GBX (20%), base 2,400 GBX (45%), bear 1,440.45 GBX (35%). The macro overlay is why the bear probability is higher.
+- **Entry price:** none set. At conviction 2 it isn't required, and the obstacle is the business model and macro, not just the price.
+- **What would change the view:** three text-only triggers on production/ore grades, gross margin and ROIC. None has an automatic statistics check, because gross margin (66.5%) and ROIC (65.7%) are already above the trigger levels and would fire at once. So the weekly reviewer has to test them by hand against new filings.
+- **Next step:** results are due Oct 20, 2026, three days from now. They are the first chance to test the production and margin triggers.
+
+I didn't read `portfolio/state.json`, since that is only needed for a BUY.
+$ bin/py scripts/check_docs.py eval research/LON-FRES/2026-10-17-evaluation.md
+OK research/LON-FRES/2026-10-17-evaluation.md Bear case=133 Bull case=110 decision=AVOID
+$ bin/py scripts/valuation.py LON:FRES --asof 2026-10-17 --eval research/LON-FRES/2026-10-17-evaluation.md
+{"out": "research/LON-FRES/2026-10-17-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 784.72, "base": 1440.45, "bull": 4842.12}, "price": 2719}
+$ bin/py scripts/sec_delta.py SHA:605499 --asof 2026-10-17
+SKIP SHA:605499: not a US listing (SEC filers only)
+$ claude -p Ticker SHA:605499, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/HKG-9995/2026-10-17-macro.md
+OK research/HKG-9995/2026-10-17-macro.md macro_weight=context words=68
+$ bin/py scripts/check_docs.py macro research/HKG-9995/2026-10-17-macro.md
+OK research/HKG-9995/2026-10-17-macro.md macro_weight=context words=68
+$ claude -p Evaluate HKG:9995 for 2026-10-17: fact sheet research/HKG-9995/factsheet-2026-10-17.md, note research/HKG-9995/2026-10-17.md, state portfolio/state.json, macro overlay research/HKG-9995/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/HKG-9995/2026-10-17-evaluation.md
+OK research/HKG-9995/2026-10-17-evaluation.md Bear case=121 Bull case=99 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/HKG-9995/2026-10-17-evaluation.md
+OK research/HKG-9995/2026-10-17-evaluation.md Bear case=121 Bull case=99 decision=AVOID
+$ bin/py scripts/valuation.py HKG:9995 --asof 2026-10-17 --eval research/HKG-9995/2026-10-17-evaluation.md
+{"out": "research/HKG-9995/2026-10-17-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 154.83, "base": 359.42, "bull": 447.17}, "price": 65.9}
+$ bin/py scripts/sec_delta.py HKG:3998 --asof 2026-10-17
+SKIP HKG:3998: not a US listing (SEC filers only)
+$ claude -p Ticker HKG:3998, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Note: `research/SHA-605499/2026-10-17.md`
+Fact sheet: `research/SHA-605499/factsheet-2026-10-17.md`
+
+`OK research/SHA-605499/2026-10-17.md type=CORE 1=55 2=132 3=126 4=79 5=71 6=72 total=535`
+
+No data conflicts. No qualitative fetches were made: no IR domain is recorded for this ticker (Chinese A-share, not an SEC filer, no allowlisted company website found), and no specific reuters.com/sec.gov URLs applied — the note relies entirely on the fact sheet, as the data rules require.
+$ bin/py scripts/check_docs.py note research/SHA-605499/2026-10-17.md
+OK research/SHA-605499/2026-10-17.md type=CORE 1=55 2=132 3=126 4=79 5=71 6=72 total=535
+$ claude -p Ticker SHA:605499, date 2026-10-17. Research: research/SHA-605499/factsheet-2026-10-17.md, research/SHA-605499/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/SHA-605499/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/OSL-VAR/2026-10-17.md
+research/OSL-VAR/factsheet-2026-10-17.md
+OK research/OSL-VAR/2026-10-17.md type=CORE 1=69 2=146 3=138 4=75 5=92 6=92 total=612
+
+No data conflicts. No blocked URLs (both WebFetch calls were to stockanalysis.com, which is allowlisted; the WSJ URL was cited only as the fact sheet's listed headline, not fetched).
+$ bin/py scripts/check_docs.py note research/OSL-VAR/2026-10-17.md
+OK research/OSL-VAR/2026-10-17.md type=CORE 1=69 2=146 3=138 4=75 5=92 6=92 total=612
+$ claude -p Ticker OSL:VAR, date 2026-10-17. Research: research/OSL-VAR/factsheet-2026-10-17.md, research/OSL-VAR/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/OSL-VAR/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/SHA-605499/2026-10-17-macro.md
+OK research/SHA-605499/2026-10-17-macro.md macro_weight=context words=64
+$ bin/py scripts/check_docs.py macro research/SHA-605499/2026-10-17-macro.md
+OK research/SHA-605499/2026-10-17-macro.md macro_weight=context words=64
+$ claude -p Evaluate SHA:605499 for 2026-10-17: fact sheet research/SHA-605499/factsheet-2026-10-17.md, note research/SHA-605499/2026-10-17.md, state portfolio/state.json, macro overlay research/SHA-605499/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Note passes. 
+
+research/HKG-3998/2026-10-17.md
+research/HKG-3998/factsheet-2026-10-17.md
+OK research/HKG-3998/2026-10-17.md type=CORE 1=57 2=144 3=138 4=92 5=89 6=80 total=600
+
+No data conflicts. One blocked URL during qualitative research (not cited in note): https://www.reuters.com/markets/companies/3998.HK/ — fetch failed (unreachable), no company IR/website domain was listed for this ticker so no further qualitative sources were available within the allowlist.
+$ bin/py scripts/check_docs.py note research/HKG-3998/2026-10-17.md
+OK research/HKG-3998/2026-10-17.md type=CORE 1=57 2=144 3=138 4=92 5=89 6=80 total=600
+$ claude -p Ticker HKG:3998, date 2026-10-17. Research: research/HKG-3998/factsheet-2026-10-17.md, research/HKG-3998/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/HKG-3998/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/SHA-605499/2026-10-17-evaluation.md
+OK research/SHA-605499/2026-10-17-evaluation.md Bear case=146 Bull case=128 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/SHA-605499/2026-10-17-evaluation.md
+OK research/SHA-605499/2026-10-17-evaluation.md Bear case=146 Bull case=128 decision=AVOID
+$ bin/py scripts/valuation.py SHA:605499 --asof 2026-10-17 --eval research/SHA-605499/2026-10-17-evaluation.md
+{"out": "research/SHA-605499/2026-10-17-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 103.71, "base": 140.04, "bull": 255.9}, "price": 114.25}
+$ bin/py scripts/sec_delta.py HKG:9992 --asof 2026-10-17
+SKIP HKG:9992: not a US listing (SEC filers only)
+$ claude -p Ticker HKG:9992, note type CORE, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/HKG-3998/2026-10-17-macro.md
+OK research/HKG-3998/2026-10-17-macro.md macro_weight=context words=74
+$ bin/py scripts/check_docs.py macro research/HKG-3998/2026-10-17-macro.md
+OK research/HKG-3998/2026-10-17-macro.md macro_weight=context words=74
+$ claude -p Evaluate HKG:3998 for 2026-10-17: fact sheet research/HKG-3998/factsheet-2026-10-17.md, note research/HKG-3998/2026-10-17.md, state portfolio/state.json, macro overlay research/HKG-3998/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/OSL-VAR/2026-10-17-macro.md
+OK research/OSL-VAR/2026-10-17-macro.md macro_weight=primary words=205
+$ bin/py scripts/check_docs.py macro research/OSL-VAR/2026-10-17-macro.md
+OK research/OSL-VAR/2026-10-17-macro.md macro_weight=primary words=205
+$ claude -p Evaluate OSL:VAR for 2026-10-17: fact sheet research/OSL-VAR/factsheet-2026-10-17.md, note research/OSL-VAR/2026-10-17.md, state portfolio/state.json, macro overlay research/OSL-VAR/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/OSL-VAR/2026-10-17-evaluation.md
+OK research/OSL-VAR/2026-10-17-evaluation.md Bear case=133 Bull case=110 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/OSL-VAR/2026-10-17-evaluation.md
+OK research/OSL-VAR/2026-10-17-evaluation.md Bear case=133 Bull case=110 decision=AVOID
+$ bin/py scripts/valuation.py OSL:VAR --asof 2026-10-17 --eval research/OSL-VAR/2026-10-17-evaluation.md
+{"out": "research/OSL-VAR/2026-10-17-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 17.24, "base": 33.16, "bull": 54.49}, "price": 55.76}
+$ claude -p Ticker TSX:ATZ, note type TACTICAL, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-09 closed +20.5% on 3.5x average volume, 3 session(s) ago, still holding 114% of the jump; stop below that day's low (135); last close 150.35 (2026-10-15), ATR(14) 5.8593 (3.9%), suggested stop 133.535 (-11.2%), minimum 2:1 target 183.98, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/HKG-3998/2026-10-17-evaluation.md
+OK research/HKG-3998/2026-10-17-evaluation.md Bear case=149 Bull case=139 decision=BUY
+$ bin/py scripts/check_docs.py eval research/HKG-3998/2026-10-17-evaluation.md
+OK research/HKG-3998/2026-10-17-evaluation.md Bear case=149 Bull case=139 decision=BUY
+$ bin/py scripts/valuation.py HKG:3998 --asof 2026-10-17 --eval research/HKG-3998/2026-10-17-evaluation.md
+{"out": "research/HKG-3998/2026-10-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 4.94, "base": 7.62, "bull": 13.14}, "price": 4.405}
+$ claude -p Ticker MOG.A, note type TACTICAL, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 365.14 (2026-10-15), ATR(14) 12.4823 (3.4%), suggested stop 333.934 (-8.6%), minimum 2:1 target 427.551, risk-based size 5.0%; 3-month peak (resistance) 448.85 (2026-08-17), 2.7x the stop distance. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/HKG-9992/2026-10-17.md
+research/HKG-9992/factsheet-2026-10-17.md
+OK research/HKG-9992/2026-10-17.md type=CORE 1=60 2=126 3=134 4=79 5=77 6=83 total=559
+
+Data conflicts/blocked URLs: Reuters article fetch was blocked (tool could not retrieve www.reuters.com despite its allowlisted domain); its headline is cited but not fetched. The stockanalysis.com filing-index page (https://stockanalysis.com/quote/hkg/9992/filings/3559055/) was fetched but contained no usable segment/geographic data, so it isn't cited in the note.
+$ bin/py scripts/check_docs.py note research/HKG-9992/2026-10-17.md
+OK research/HKG-9992/2026-10-17.md type=CORE 1=60 2=126 3=134 4=79 5=77 6=83 total=559
+$ claude -p Ticker HKG:9992, date 2026-10-17. Research: research/HKG-9992/factsheet-2026-10-17.md, research/HKG-9992/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/HKG-9992/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Note: research/MOG.A/2026-10-17.md
+Fact sheet: research/MOG.A/factsheet-2026-10-17.md
+OK research/MOG.A/2026-10-17.md type=TACTICAL 1=105 2=64 3=56 4=76 5=27 total=328
+
+Data conflict: caller's screen setup (last close 365.14 on 2026-10-15, ATR 12.4823, stop 333.934, target 427.551, resistance room 2.7x) is stale vs. the fact sheet (last close 368.60 on 2026-10-16, ATR(14) 13.15). The note uses the fact-sheet figures throughout, which shifts the stop to 335.73, target to 434.35, and the resistance-room ratio to ~2.4x (below the usual 2.5x buffer) — flagged as a caution in section 4. No blocked URLs.
+$ bin/py scripts/check_docs.py note research/MOG.A/2026-10-17.md
+OK research/MOG.A/2026-10-17.md type=TACTICAL 1=105 2=64 3=56 4=76 5=27 total=328
+$ claude -p Ticker MOG.A, date 2026-10-17. Research: research/MOG.A/factsheet-2026-10-17.md, research/MOG.A/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/MOG.A/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/TSX-ATZ/2026-10-17.md
+research/TSX-ATZ/factsheet-2026-10-17.md
+OK research/TSX-ATZ/2026-10-17.md type=TACTICAL 1=90 2=77 3=76 4=110 5=46 total=399
+
+Data note: the caller's screen figures (last close 150.35 on 2026-10-15, ATR 5.8593, day-low-based stop 133.535, "114% held") reflect an earlier run; the note uses the fact sheet's own as-of figures instead (last close 149.08 CAD on 2026-10-16, ATR 6.186, 109% held), giving stop 133.45 and target 180.34. No blocked URLs or allowlist conflicts.
+$ bin/py scripts/check_docs.py note research/TSX-ATZ/2026-10-17.md
+OK research/TSX-ATZ/2026-10-17.md type=TACTICAL 1=90 2=77 3=76 4=110 5=46 total=399
+$ claude -p Ticker TSX:ATZ, date 2026-10-17. Research: research/TSX-ATZ/factsheet-2026-10-17.md, research/TSX-ATZ/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/TSX-ATZ/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/HKG-9992/2026-10-17-macro.md
+OK research/HKG-9992/2026-10-17-macro.md macro_weight=context words=68
+$ bin/py scripts/check_docs.py macro research/HKG-9992/2026-10-17-macro.md
+OK research/HKG-9992/2026-10-17-macro.md macro_weight=context words=68
+$ claude -p Evaluate HKG:9992 for 2026-10-17: fact sheet research/HKG-9992/factsheet-2026-10-17.md, note research/HKG-9992/2026-10-17.md, state portfolio/state.json, macro overlay research/HKG-9992/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/MOG.A/2026-10-17-macro.md
+OK research/MOG.A/2026-10-17-macro.md macro_weight=context words=78
+$ bin/py scripts/check_docs.py macro research/MOG.A/2026-10-17-macro.md
+OK research/MOG.A/2026-10-17-macro.md macro_weight=context words=78
+$ claude -p Evaluate MOG.A for 2026-10-17: fact sheet research/MOG.A/factsheet-2026-10-17.md, note research/MOG.A/2026-10-17.md, state portfolio/state.json, macro overlay research/MOG.A/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 365.14 (2026-10-15), ATR(14) 12.4823 (3.4%), suggested stop 333.934 (-8.6%), minimum 2:1 target 427.551, risk-based size 5.0%; 3-month peak (resistance) 448.85 (2026-08-17), 2.7x the stop distance. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/HKG-9992/2026-10-17-evaluation.md
+OK research/HKG-9992/2026-10-17-evaluation.md Bear case=137 Bull case=99 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/HKG-9992/2026-10-17-evaluation.md
+OK research/HKG-9992/2026-10-17-evaluation.md Bear case=137 Bull case=99 decision=AVOID
+$ bin/py scripts/valuation.py HKG:9992 --asof 2026-10-17 --eval research/HKG-9992/2026-10-17-evaluation.md
+{"out": "research/HKG-9992/2026-10-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 56.27, "base": 119.17, "bull": 315.39}, "price": 142.2}
+$ claude -p Ticker TYO:7453, note type TACTICAL, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-15 closed +9.5% on 4.1x average volume, 0 session(s) ago, still holding 100% of the jump; stop below that day's low (4550); last close 4804 (2026-10-15), ATR(14) 131.571 (2.7%), suggested stop 4517.11 (-6.0%), minimum 2:1 target 5377.79, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/MOG.A/2026-10-17-evaluation.md
+OK research/MOG.A/2026-10-17-evaluation.md Bear case=134 Bull case=110 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/MOG.A/2026-10-17-evaluation.md
+OK research/MOG.A/2026-10-17-evaluation.md Bear case=134 Bull case=110 decision=AVOID
+$ bin/py scripts/valuation.py MOG.A --asof 2026-10-17 --eval research/MOG.A/2026-10-17-evaluation.md
+{"out": "research/MOG.A/2026-10-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 6.13, "base": 148.95, "bull": 216.05}, "price": 368.6}
+$ claude -p Ticker BKK:BBL, note type TACTICAL, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 186 (2026-10-15), ATR(14) 2.5714 (1.4%), suggested stop 179.571 (-3.5%), minimum 2:1 target 198.857, risk-based size 5.0%; 3-month peak (resistance) 204 (2026-07-16), 2.8x the stop distance. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/TSX-ATZ/2026-10-17-macro.md
+OK research/TSX-ATZ/2026-10-17-macro.md macro_weight=secondary words=250
+$ bin/py scripts/check_docs.py macro research/TSX-ATZ/2026-10-17-macro.md
+OK research/TSX-ATZ/2026-10-17-macro.md macro_weight=secondary words=250
+$ claude -p Evaluate TSX:ATZ for 2026-10-17: fact sheet research/TSX-ATZ/factsheet-2026-10-17.md, note research/TSX-ATZ/2026-10-17.md, state portfolio/state.json, macro overlay research/TSX-ATZ/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-09 closed +20.5% on 3.5x average volume, 3 session(s) ago, still holding 114% of the jump; stop below that day's low (135); last close 150.35 (2026-10-15), ATR(14) 5.8593 (3.9%), suggested stop 133.535 (-11.2%), minimum 2:1 target 183.98, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/TSX-ATZ/2026-10-17-evaluation.md
+OK research/TSX-ATZ/2026-10-17-evaluation.md Bear case=131 Bull case=116 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/TSX-ATZ/2026-10-17-evaluation.md
+OK research/TSX-ATZ/2026-10-17-evaluation.md Bear case=131 Bull case=116 decision=AVOID
+$ bin/py scripts/valuation.py TSX:ATZ --asof 2026-10-17 --eval research/TSX-ATZ/2026-10-17-evaluation.md
+{"out": "research/TSX-ATZ/2026-10-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 2.58, "base": 71.43, "bull": 154.03}, "price": 149.08}
+$ claude -p Ticker SWX:GIVN, note type TACTICAL, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-13 closed +9.4% on 4.2x average volume, 2 session(s) ago, still holding 136% of the jump; stop below that day's low (3662); last close 3935 (2026-10-15), ATR(14) 88.4286 (2.2%), suggested stop 3639.89 (-7.5%), minimum 2:1 target 4525.21, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Note: research/TYO-7453/2026-10-17.md
+Fact sheet: research/TYO-7453/factsheet-2026-10-17.md
+
+OK research/TYO-7453/2026-10-17.md type=TACTICAL 1=93 2=98 3=66 4=86 5=33 total=376
+
+No data conflicts. No blocked URLs (no WebFetch calls made — no allowlisted IR/company domain is on record for TYO:7453, and no Reuters URL was available, so qualitative research relied solely on the fact sheet).
+
+One flag for the evaluator: the screen's caller-supplied setup figures (last close 4804, ATR 131.571, stop 4517.11, 100% jump held) are one session stale versus the fact sheet (as-of 2026-10-17), which shows a further close on 2026-10-16 at 4,709.00 (ATR 133.7, 77% of the jump held, stop recomputed to 4,516.58). The note uses the fact-sheet figures throughout, per the data rules.
+$ bin/py scripts/check_docs.py note research/TYO-7453/2026-10-17.md
+OK research/TYO-7453/2026-10-17.md type=TACTICAL 1=93 2=98 3=66 4=86 5=33 total=376
+$ claude -p Ticker TYO:7453, date 2026-10-17. Research: research/TYO-7453/factsheet-2026-10-17.md, research/TYO-7453/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/TYO-7453/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Note: research/BKK-BBL/2026-10-17.md
+Fact sheet: research/BKK-BBL/factsheet-2026-10-17.md
+
+OK research/BKK-BBL/2026-10-17.md type=TACTICAL 1=114 2=96 3=62 4=76 5=50 total=398
+
+No data conflicts. No blocked URLs (no WebFetch calls were needed; all figures came from the fact sheet, and the one headline cited is sourced from the fact sheet's listed URL without fetching the article site).
+$ bin/py scripts/check_docs.py note research/BKK-BBL/2026-10-17.md
+OK research/BKK-BBL/2026-10-17.md type=TACTICAL 1=114 2=96 3=62 4=76 5=50 total=398
+$ claude -p Ticker BKK:BBL, date 2026-10-17. Research: research/BKK-BBL/factsheet-2026-10-17.md, research/BKK-BBL/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/BKK-BBL/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/TYO-7453/2026-10-17-macro.md
+OK research/TYO-7453/2026-10-17-macro.md macro_weight=context words=75
+$ bin/py scripts/check_docs.py macro research/TYO-7453/2026-10-17-macro.md
+OK research/TYO-7453/2026-10-17-macro.md macro_weight=context words=75
+$ claude -p Evaluate TYO:7453 for 2026-10-17: fact sheet research/TYO-7453/factsheet-2026-10-17.md, note research/TYO-7453/2026-10-17.md, state portfolio/state.json, macro overlay research/TYO-7453/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-15 closed +9.5% on 4.1x average volume, 0 session(s) ago, still holding 100% of the jump; stop below that day's low (4550); last close 4804 (2026-10-15), ATR(14) 131.571 (2.7%), suggested stop 4517.11 (-6.0%), minimum 2:1 target 5377.79, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Note complete and passing checks.
+
+**Decision: BUY** — genuine, volume-confirmed post-earnings drift (reaction-day reaction held at 130% two sessions on), reward:risk exactly 2:1 at the mechanically-set stop/target, no earnings inside the 8-week window. Risk: RSI 80.2 and price far above both MAs mean the trade has no margin for a sharp mean-reversion before the stop.
+
+- Note: `research/SWX-GIVN/2026-10-17.md`
+- Fact sheet: `research/SWX-GIVN/factsheet-2026-10-17.md`
+- `check_docs.py` OK: `OK research/SWX-GIVN/2026-10-17.md type=TACTICAL 1=85 2=84 3=76 4=108 5=47 total=400`
+- Data note: peer `XETRA:SY1` (Symrise) 404'd on stockanalysis.com, so peers used are IFF, AMS:DSFIR, LON:CRDA (3 peers, within the 3–5 range). No other blocked URLs or data conflicts.
+$ bin/py scripts/check_docs.py note research/SWX-GIVN/2026-10-17.md
+OK research/SWX-GIVN/2026-10-17.md type=TACTICAL 1=85 2=84 3=76 4=108 5=47 total=400
+$ claude -p Ticker SWX:GIVN, date 2026-10-17. Research: research/SWX-GIVN/factsheet-2026-10-17.md, research/SWX-GIVN/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/SWX-GIVN/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/TYO-7453/2026-10-17-evaluation.md
+OK research/TYO-7453/2026-10-17-evaluation.md Bear case=129 Bull case=117 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/TYO-7453/2026-10-17-evaluation.md
+OK research/TYO-7453/2026-10-17-evaluation.md Bear case=129 Bull case=117 decision=AVOID
+$ bin/py scripts/valuation.py TYO:7453 --asof 2026-10-17 --eval research/TYO-7453/2026-10-17-evaluation.md
+{"out": "research/TYO-7453/2026-10-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 1129.3, "base": 2554.71, "bull": 4133.84}, "price": 4709}
+$ claude -p Ticker NSE:HCLTECH, note type TACTICAL, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-13 closed +8.4% on 9.1x average volume, 2 session(s) ago, still holding 133% of the jump; stop below that day's low (1238.2); last close 1360 (2026-10-15), ATR(14) 39.9429 (2.9%), suggested stop 1228.21 (-9.7%), minimum 2:1 target 1623.57, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/BKK-BBL/2026-10-17-macro.md
+OK research/BKK-BBL/2026-10-17-macro.md macro_weight=context words=78
+$ bin/py scripts/check_docs.py macro research/BKK-BBL/2026-10-17-macro.md
+OK research/BKK-BBL/2026-10-17-macro.md macro_weight=context words=78
+$ claude -p Evaluate BKK:BBL for 2026-10-17: fact sheet research/BKK-BBL/factsheet-2026-10-17.md, note research/BKK-BBL/2026-10-17.md, state portfolio/state.json, macro overlay research/BKK-BBL/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: pullback in uptrend: back near the 50-day average after a strong 12-month trend; last close 186 (2026-10-15), ATR(14) 2.5714 (1.4%), suggested stop 179.571 (-3.5%), minimum 2:1 target 198.857, risk-based size 5.0%; 3-month peak (resistance) 204 (2026-07-16), 2.8x the stop distance. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/BKK-BBL/2026-10-17-evaluation.md
+OK research/BKK-BBL/2026-10-17-evaluation.md Bear case=136 Bull case=121 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/BKK-BBL/2026-10-17-evaluation.md
+OK research/BKK-BBL/2026-10-17-evaluation.md Bear case=136 Bull case=121 decision=AVOID
+$ bin/py scripts/valuation.py BKK:BBL --asof 2026-10-17 --eval research/BKK-BBL/2026-10-17-evaluation.md
+{"out": "research/BKK-BBL/2026-10-17-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 160.3, "base": 247.31, "bull": 274.16}, "price": 186}
+$ claude -p Ticker LW, note type TACTICAL, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-06 closed +7.5% on 5.2x average volume, 7 session(s) ago, still holding 289% of the jump; stop below that day's low (46.78); last close 54.21 (2026-10-15), ATR(14) 2.2452 (4.1%), suggested stop 46.2187 (-14.7%), minimum 2:1 target 70.1926, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/SWX-GIVN/2026-10-17-macro.md
+OK research/SWX-GIVN/2026-10-17-macro.md macro_weight=context words=76
+$ bin/py scripts/check_docs.py macro research/SWX-GIVN/2026-10-17-macro.md
+OK research/SWX-GIVN/2026-10-17-macro.md macro_weight=context words=76
+$ claude -p Evaluate SWX:GIVN for 2026-10-17: fact sheet research/SWX-GIVN/factsheet-2026-10-17.md, note research/SWX-GIVN/2026-10-17.md, state portfolio/state.json, macro overlay research/SWX-GIVN/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-13 closed +9.4% on 4.2x average volume, 2 session(s) ago, still holding 136% of the jump; stop below that day's low (3662); last close 3935 (2026-10-15), ATR(14) 88.4286 (2.2%), suggested stop 3639.89 (-7.5%), minimum 2:1 target 4525.21, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/SWX-GIVN/2026-10-17-evaluation.md
+OK research/SWX-GIVN/2026-10-17-evaluation.md Bear case=131 Bull case=100 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/SWX-GIVN/2026-10-17-evaluation.md
+OK research/SWX-GIVN/2026-10-17-evaluation.md Bear case=131 Bull case=100 decision=AVOID
+$ bin/py scripts/valuation.py SWX:GIVN --asof 2026-10-17 --eval research/SWX-GIVN/2026-10-17-evaluation.md
+{"out": "research/SWX-GIVN/2026-10-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 1545.05, "base": 2364.63, "bull": 2799.92}, "price": 3915}
+$ claude -p Ticker LON:TSCO, note type TACTICAL, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-08 closed +5.2% on 2.0x average volume, 5 session(s) ago, still holding 239% of the jump; stop below that day's low (476.3); last close 534.6 (2026-10-15), ATR(14) 11.8114 (2.2%), suggested stop 473.347 (-11.5%), minimum 2:1 target 657.106, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Decision: **BUY** — the drift setup remains valid on the fact sheet's fresher data (gain extending to 152% of the jump, reward:risk exactly 2:1), supported by margin expansion, AI-revenue growth and narrowed FY2027 guidance.
+
+- Note: `research/NSE-HCLTECH/2026-10-17.md`
+- Fact sheet: `research/NSE-HCLTECH/factsheet-2026-10-17.md`
+- `OK research/NSE-HCLTECH/2026-10-17.md type=TACTICAL 1=107 2=87 3=65 4=67 5=36 total=362`
+- No data conflicts; no blocked URLs (no WebFetch calls needed — fact sheet's own headlines sufficed).
+$ bin/py scripts/check_docs.py note research/NSE-HCLTECH/2026-10-17.md
+OK research/NSE-HCLTECH/2026-10-17.md type=TACTICAL 1=107 2=87 3=65 4=67 5=36 total=362
+$ claude -p Ticker NSE:HCLTECH, date 2026-10-17. Research: research/NSE-HCLTECH/factsheet-2026-10-17.md, research/NSE-HCLTECH/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/NSE-HCLTECH/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Note: research/LW/2026-10-17.md
+Fact sheet: research/LW/factsheet-2026-10-17.md
+OK research/LW/2026-10-17.md type=TACTICAL 1=110 2=82 3=69 4=86 5=39 total=386
+
+Data conflicts: the caller's screen numbers (last close 54.21 on 2026-10-15, ATR 2.2452, 289% jump held, stop 46.2187, target 70.1926) differ slightly from the fact sheet pulled today (last close 53.59 on 2026-10-16, ATR 2.299, 270% jump held) — likely a one-day-stale screen snapshot; the note uses only the fact sheet's figures per data rules, giving stop 46.21 / target 68.35. No blocked URLs.
+$ bin/py scripts/check_docs.py note research/LW/2026-10-17.md
+OK research/LW/2026-10-17.md type=TACTICAL 1=110 2=82 3=69 4=86 5=39 total=386
+$ claude -p Ticker LW, date 2026-10-17. Research: research/LW/factsheet-2026-10-17.md, research/LW/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/LW/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/NSE-HCLTECH/2026-10-17-macro.md
+OK research/NSE-HCLTECH/2026-10-17-macro.md macro_weight=secondary words=248
+$ bin/py scripts/check_docs.py macro research/NSE-HCLTECH/2026-10-17-macro.md
+OK research/NSE-HCLTECH/2026-10-17-macro.md macro_weight=secondary words=248
+$ claude -p Evaluate NSE:HCLTECH for 2026-10-17: fact sheet research/NSE-HCLTECH/factsheet-2026-10-17.md, note research/NSE-HCLTECH/2026-10-17.md, state portfolio/state.json, macro overlay research/NSE-HCLTECH/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-13 closed +8.4% on 9.1x average volume, 2 session(s) ago, still holding 133% of the jump; stop below that day's low (1238.2); last close 1360 (2026-10-15), ATR(14) 39.9429 (2.9%), suggested stop 1228.21 (-9.7%), minimum 2:1 target 1623.57, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Waiting for the fact sheet fetch to complete (running in background); will proceed once notified.
+SKIPPED initiation LON:TSCO: researcher wrote no note at /Users/oskaraspinall/paper-portfolio/research/LON-TSCO/2026-10-17.md
+$ claude -p Ticker LON:WTB, note type TACTICAL, date 2026-10-17. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-06 closed +5.2% on 2.4x average volume, 7 session(s) ago, still holding 128% of the jump; stop below that day's low (2449); last close 2586 (2026-10-15), ATR(14) 74.7857 (2.9%), suggested stop 2430.3 (-6.0%), minimum 2:1 target 2897.39, risk-based size 5.0%; at its 3-month high (clear overhead). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/LW/2026-10-17-macro.md
+OK research/LW/2026-10-17-macro.md macro_weight=context words=57
+$ bin/py scripts/check_docs.py macro research/LW/2026-10-17-macro.md
+OK research/LW/2026-10-17-macro.md macro_weight=context words=57
+$ claude -p Evaluate LW for 2026-10-17: fact sheet research/LW/factsheet-2026-10-17.md, note research/LW/2026-10-17.md, state portfolio/state.json, macro overlay research/LW/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-06 closed +7.5% on 5.2x average volume, 7 session(s) ago, still holding 289% of the jump; stop below that day's low (46.78); last close 54.21 (2026-10-15), ATR(14) 2.2452 (4.1%), suggested stop 46.2187 (-14.7%), minimum 2:1 target 70.1926, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/NSE-HCLTECH/2026-10-17-evaluation.md
+OK research/NSE-HCLTECH/2026-10-17-evaluation.md Bear case=130 Bull case=114 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/NSE-HCLTECH/2026-10-17-evaluation.md
+OK research/NSE-HCLTECH/2026-10-17-evaluation.md Bear case=130 Bull case=114 decision=AVOID
+$ bin/py scripts/valuation.py NSE:HCLTECH --asof 2026-10-17 --eval research/NSE-HCLTECH/2026-10-17-evaluation.md
+{"out": "research/NSE-HCLTECH/2026-10-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 1058.82, "base": 1228.36, "bull": 1817.33}, "price": 1380}
+research/LW/2026-10-17-evaluation.md
+OK research/LW/2026-10-17-evaluation.md Bear case=132 Bull case=107 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/LW/2026-10-17-evaluation.md
+OK research/LW/2026-10-17-evaluation.md Bear case=132 Bull case=107 decision=AVOID
+$ bin/py scripts/valuation.py LW --asof 2026-10-17 --eval research/LW/2026-10-17-evaluation.md
+{"out": "research/LW/2026-10-17-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": -16.89, "base": 54.32, "bull": 95.24}, "price": 53.59}
+Passes exactly at the 400-word limit.
+
+research/LON-WTB/2026-10-17.md
+research/LON-WTB/factsheet-2026-10-17.md
+OK research/LON-WTB/2026-10-17.md type=TACTICAL 1=106 2=88 3=62 4=104 5=40 total=400
+
+Data conflicts: the screen's prompt figures (last close 2,586 on 2026-10-15; ATR 74.7857; stop 2,430.3) differ slightly from the fact sheet's as-of-2026-10-17 figures (last close 2,611.00 on 2026-10-16; ATR 75.75; stop 2,430.1) — the note uses the fact sheet's figures per the data rules. Also flagged in the note: the reaction day (2026-10-06) preceded the formal H1 earnings release (2026-10-13), so this may not be a clean post-earnings drift (likely the Corvex activist news instead) — tagged [Guessing] in section 1.
+
+Blocked/unproductive fetches: londonstockexchange.com company page returned no usable content (JS-rendered); reuters.com could not be fetched at all (not accessible). No other allowlisted domain had relevant information, so the note cites two fact-sheet-listed headline URLs (thearmchairtrader.com, marketbeat.com) without fetching them, per the headline-citation rule.
+$ bin/py scripts/check_docs.py note research/LON-WTB/2026-10-17.md
+OK research/LON-WTB/2026-10-17.md type=TACTICAL 1=106 2=88 3=62 4=104 5=40 total=400
+$ claude -p Ticker LON:WTB, date 2026-10-17. Research: research/LON-WTB/factsheet-2026-10-17.md, research/LON-WTB/2026-10-17.md. Macro snapshot: reports/macro/2026-10-17.md. Write research/LON-WTB/2026-10-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+research/LON-WTB/2026-10-17-macro.md
+OK research/LON-WTB/2026-10-17-macro.md macro_weight=context words=67
+$ bin/py scripts/check_docs.py macro research/LON-WTB/2026-10-17-macro.md
+OK research/LON-WTB/2026-10-17-macro.md macro_weight=context words=67
+$ claude -p Evaluate LON:WTB for 2026-10-17: fact sheet research/LON-WTB/factsheet-2026-10-17.md, note research/LON-WTB/2026-10-17.md, state portfolio/state.json, macro overlay research/LON-WTB/2026-10-17-macro.md. New initiation from this week's screen. Decide BUY or AVOID. Screen setup: post-earnings drift: 2026-10-06 closed +5.2% on 2.4x average volume, 7 session(s) ago, still holding 128% of the jump; stop below that day's low (2449); last close 2586 (2026-10-15), ATR(14) 74.7857 (2.9%), suggested stop 2430.3 (-6.0%), minimum 2:1 target 2897.39, risk-based size 5.0%; at its 3-month high (clear overhead). --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Decision on LON:WTB: **AVOID**, tactical, conviction 2.
+
+research/LON-WTB/2026-10-17-evaluation.md
+OK research/LON-WTB/2026-10-17-evaluation.md Bear case=141 Bull case=114 decision=AVOID
+$ bin/py scripts/check_docs.py eval research/LON-WTB/2026-10-17-evaluation.md
+OK research/LON-WTB/2026-10-17-evaluation.md Bear case=141 Bull case=114 decision=AVOID
+$ bin/py scripts/valuation.py LON:WTB --asof 2026-10-17 --eval research/LON-WTB/2026-10-17-evaluation.md
+{"out": "research/LON-WTB/2026-10-17-valuation.md", "used": null, "fair_value": {}, "price": 2611}
+$ bin/py scripts/portfolio.py submit runs/2026-10-17/requests-mechanical.json --asof 2026-10-17 --save runs/2026-10-17/submit-mechanical.json
+{
+ "cash_before_usd": 29988.98853282801,
+ "cash_after_usd": 29988.98853282801,
+ "applied": [],
+ "rejected": [],
+ "warnings": [
+  "cash 28.5% vs a 20% reserve (neutral regime)"
+ ],
+ "dry_run": false
+}
+$ claude -p Evaluation files: research/OTIS/2026-10-17-evaluation.md research/INTU/2026-10-17-evaluation.md research/SHE-000807/2026-10-17-evaluation.md research/SHE-002558/2026-10-17-evaluation.md research/KRX-009540/2026-10-17-evaluation.md research/LON-FRES/2026-10-17-evaluation.md research/TSX-KNT/2026-10-17-evaluation.md research/HKG-9995/2026-10-17-evaluation.md research/OSL-VAR/2026-10-17-evaluation.md research/SHA-605499/2026-10-17-evaluation.md research/HKG-3998/2026-10-17-evaluation.md research/HKG-9992/2026-10-17-evaluation.md research/TSX-ATZ/2026-10-17-evaluation.md research/MOG.A/2026-10-17-evaluation.md research/TYO-7453/2026-10-17-evaluation.md research/BKK-BBL/2026-10-17-evaluation.md research/SWX-GIVN/2026-10-17-evaluation.md research/NSE-HCLTECH/2026-10-17-evaluation.md research/LW/2026-10-17-evaluation.md research/LON-WTB/2026-10-17-evaluation.md. Date 2026-10-17. Write the requests to runs/2026-10-17/requests-decisions.json and submit with --at-market --save runs/2026-10-17/submit.json (decided trades fill now at the live price where the market is open, else at the next open). Cash strategy: reports/regime/2026-10-17.md (new buys can't take cash below the reserve; if one would, it must name the holding it replaces and why). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+HKG:3998 was rejected for lacking a replacement (my cash estimate was off — the reserve check uses pre-trade cash of 28.5%, and the BUY's full size would drop cash to 19.70%, below the 20% neutral reserve). Per instructions, this is a rejection to report, not something to fix myself (the evaluator set `replaces: null`). Exited zero, so proceeding to report results.
+
+## Decisions
+
+| Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| OTIS | HOLD | CORE | 4 |
+| INTU | HOLD | CORE | 4 |
+| HKG:3998 | BUY | CORE | 4 |
+| SHE:000807 | AVOID (no trade) | — | — |
+| SHE:002558 | AVOID (no trade) | — | — |
+| KRX:009540 | AVOID (no trade) | — | — |
+| LON:FRES | AVOID (no trade) | — | — |
+| TSX:KNT | AVOID (no trade) | — | — |
+| HKG:9995 | AVOID (no trade) | — | — |
+| OSL:VAR | AVOID (no trade) | — | — |
+| SHA:605499 | AVOID (no trade) | — | — |
+| HKG:9992 | AVOID (no trade) | — | — |
+| TSX:ATZ | AVOID (no trade) | — | — |
+| MOG.A | AVOID (no trade) | — | — |
+| TYO:7453 | AVOID (no trade) | — | — |
+| BKK:BBL | AVOID (no trade) | — | — |
+| SWX:GIVN | AVOID (no trade) | — | — |
+| NSE:HCLTECH | AVOID (no trade) | — | — |
+| LW | AVOID (no trade) | — | — |
+| LON:WTB | AVOID (no trade) | — | — |
+
+## Script output
+
+```json
+{
+ "mode": "at_market",
+ "placed": [
+  {"id": "2026-10-17-1", "ticker": "OTIS", "action": "HOLD", "type": "CORE"},
+  {"id": "2026-10-17-2", "ticker": "INTU", "action": "HOLD", "type": "CORE"}
+ ],
+ "applied": [],
+ "rejected": [
+  {
+   "ticker": "HKG:3998", "action": "BUY", "type": "CORE",
+   "rule": "REPLACEMENT_REQUIRED",
+   "detail": "BUY would breach cash would be 19.70%, below the 20% reserve (neutral regime) -- name the holding it replaces and why the new idea is better"
+  }
+ ],
+ "warnings": ["cash 28.5% vs a 20% reserve (neutral regime)"],
+ "filled_now": [],
+ "queued_for_next_open": [
+  {"id": "2026-10-17-1", "ticker": "OTIS", "action": "HOLD"},
+  {"id": "2026-10-17-2", "ticker": "INTU", "action": "HOLD"}
+ ],
+ "dry_run": false
+}
+```
+
+Note: the OTIS and INTU HOLDs carry no trade (shares/price null) and simply refresh the recorded thesis/triggers; "queued_for_next_open" is nominal for them. The HKG:3998 BUY was rejected under rule `REPLACEMENT_REQUIRED` — the evaluator submitted it with `replaces: null`, and buying it at full size would take cash to 19.70%, below the 20% neutral-regime reserve; it was not resized or given a replacement, per instructions not to fix a decision myself.
+$ bin/py scripts/decision_log.py record research/OTIS/2026-10-17-evaluation.md research/INTU/2026-10-17-evaluation.md research/SHE-000807/2026-10-17-evaluation.md research/SHE-002558/2026-10-17-evaluation.md research/KRX-009540/2026-10-17-evaluation.md research/LON-FRES/2026-10-17-evaluation.md research/TSX-KNT/2026-10-17-evaluation.md research/HKG-9995/2026-10-17-evaluation.md research/OSL-VAR/2026-10-17-evaluation.md research/SHA-605499/2026-10-17-evaluation.md research/HKG-3998/2026-10-17-evaluation.md research/HKG-9992/2026-10-17-evaluation.md research/TSX-ATZ/2026-10-17-evaluation.md research/MOG.A/2026-10-17-evaluation.md research/TYO-7453/2026-10-17-evaluation.md research/BKK-BBL/2026-10-17-evaluation.md research/SWX-GIVN/2026-10-17-evaluation.md research/NSE-HCLTECH/2026-10-17-evaluation.md research/LW/2026-10-17-evaluation.md research/LON-WTB/2026-10-17-evaluation.md --asof 2026-10-17
+recorded 20 decision(s); 293 total
+$ bin/py scripts/decision_log.py update --asof 2026-10-17
+{"rows": 293, "notes": []}
+$ bin/py scripts/portfolio.py stamp --asof 2026-10-17
+last_scan = 2026-10-17
+$ bin/py scripts/risk.py report --asof 2026-10-17
+OK reports/risk/2026-10-17.md sigma_p=13.497492734564661
+$ bin/py scripts/attribution.py report --asof 2026-10-17
+OK reports/attribution/2026-10-17.md excess=0.07261561498282965
+$ bin/py scripts/weekly_report.py --asof 2026-10-17 --run runs/2026-10-17
+reports/weekly/2026-10-17.md
+$ bin/py scripts/dashboard.py
+docs/index.html

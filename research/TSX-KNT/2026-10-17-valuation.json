@@ -1,0 +1,80 @@
+{
+ "industry": {
+  "industry": "Gold",
+  "known": true,
+  "best": "Mine NAV",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 8.537462926660556,
+    "base": 14.569165228678028,
+    "bull": 52.967807986030806
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.041,
+     "base": 13.309,
+     "bull": 15.478
+    },
+    "ttm_ebitda": 573998000,
+    "peak_earnings": "TTM EBITDA is 7.1x its 5y median: bear/base use the 5y average (1.67e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 27.35,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 8.537462926660556,
+  "base": 14.569165228678028,
+  "bull": 52.967807986030806
+ },
+ "used": [
+  "ev_ebitda"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.6878441343085719,
+  "base": -0.46730657299166267,
+  "bull": 0.9366657398914371
+ },
+ "implied_growth": null,
+ "ticker": "TSX:KNT",
+ "asof": "2026-10-17",
+ "quote_currency": "CAD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.41575,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tsx/KNT/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tsx/KNT/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tsx/KNT/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tsx/KNT/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tsx/KNT/statistics/"
+ }
+}

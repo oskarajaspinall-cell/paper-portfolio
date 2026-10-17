@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Leisure",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 52.35806018023704,
+    "base": 121.94212608438787,
+    "bull": 265.3234285457224
+   },
+   "implied_growth": 0.24578182810756988,
+   "discount_rate": 0.13439855046877985,
+   "cost_of_equity": 0.1366365,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.17,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.07547304262344146,
+     "base": 0.17630389348243874,
+     "bull": 0.3342273807671861
+    },
+    "cagr_3y": 1.0032696367872251,
+    "cagr_5y": 0.6956055050648231,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 64.08383655371641,
+    "base": 113.62159490509046,
+    "bull": 415.52336827943833
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 12.088,
+     "base": 22.965,
+     "bull": 24.006
+    },
+    "ttm_ebitda": 19208485000,
+    "peak_earnings": "TTM EBITDA is 12.5x its 5y median: bear/base use the 5y average (5.166e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 142.2,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 56.266652304730165,
+  "base": 119.16861569128874,
+  "bull": 315.3900751236277
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.604313274931574,
+  "base": -0.1619647279093619,
+  "bull": 1.2179330177470304
+ },
+ "implied_growth": 0.24578182810756988,
+ "ticker": "HKG:9992",
+ "asof": "2026-10-17",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.1725914802695474,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/9992/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/9992/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/9992/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/9992/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/9992/statistics/"
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Department Stores",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 1113.2166091315512,
+    "base": 3065.2158448310106,
+    "bull": 4031.6383129918486
+   },
+   "implied_growth": 0.2093307191201274,
+   "discount_rate": 0.09506140840728707,
+   "cost_of_equity": 0.097223,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.06590309414858093,
+     "base": 0.09621455981033343,
+     "bull": 0.16805205094417186
+    },
+    "cash_flow_margin": {
+     "bear": 0.032451281090591755,
+     "base": 0.08610907360609446,
+     "bull": 0.08610907360609446
+    },
+    "cagr_3y": 0.16680618829716187,
+    "cagr_5y": 0.16805205094417186,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 1161.4582863670473,
+    "base": 1533.6867375716067,
+    "bull": 4338.255056597968
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.065,
+     "base": 8.269,
+     "bull": 15.728
+    },
+    "ttm_ebitda": 141915000000,
+    "peak_earnings": "TTM EBITDA is 1.7x its 5y median: bear/base use the 5y average (8.973e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 4709,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "JPY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 1129.29716821005,
+  "base": 2554.7061424112094,
+  "bull": 4133.843894193888
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7601832303652474,
+  "base": -0.4574843613482248,
+  "bull": -0.12213975489618001
+ },
+ "implied_growth": 0.2093307191201274,
+ "ticker": "TYO:7453",
+ "asof": "2026-10-17",
+ "quote_currency": "JPY",
+ "financials_currency": "JPY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tyo/7453/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tyo/7453/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tyo/7453/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tyo/7453/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tyo/7453/statistics/"
+ }
+}
