@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Railroads",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 2039.4910918021474,
+    "base": 224384.55018700685,
+    "bull": 323835.4265368019
+   },
+   "implied_growth": -0.14070859809097513,
+   "discount_rate": 0.1319937158382978,
+   "cost_of_equity": 0.13337800000000002,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.0795211941260134,
+     "base": 0.11768073811637296,
+     "bull": 0.22668056421346505
+    },
+    "cash_flow_margin": {
+     "bear": -0.0300100269933916,
+     "base": 0.25677031498552855,
+     "bull": 0.25677031498552855
+    },
+    "cagr_3y": 0.22668056421346505,
+    "cagr_5y": 0.1940423882520268,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 62350.13443528075,
+    "base": 93714.2882355825,
+    "bull": 232644.56026940903
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.262,
+     "base": 18.336,
+     "bull": 21.508
+    },
+    "ttm_ebitda": 1066446535000,
+    "peak_earnings": "TTM EBITDA is 4.3x its 5y median: bear/base use the 5y average (4.24e+11), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 96900,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.01,
+ "reporting_currency": "KRW",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 22143.038872961683,
+  "base": 180827.79620319873,
+  "bull": 293438.4711143376
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7714856669456999,
+  "base": 0.8661279277935885,
+  "bull": 2.0282607958135976
+ },
+ "implied_growth": -0.14070859809097513,
+ "ticker": "KRX:064350",
+ "asof": "2026-10-18",
+ "quote_currency": "KRW",
+ "financials_currency": "KRW",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/krx/064350/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/krx/064350/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/krx/064350/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/krx/064350/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/krx/064350/statistics/"
+ }
+}

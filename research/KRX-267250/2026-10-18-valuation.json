@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Refining & Marketing",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -1636029.2357548594,
+    "base": 2121990.606950198,
+    "bull": 6578002.117698515
+   },
+   "implied_growth": null,
+   "discount_rate": 0.06616747601634297,
+   "cost_of_equity": 0.114417,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.009525219729369552,
+     "base": 0.09078619574397516,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.06199383874726292,
+     "base": 0.05800262582633943,
+     "bull": 0.09259924393011977
+    },
+    "cagr_3y": 0.05405043945873911,
+    "cagr_5y": 0.25909434351716154,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 283412.2844390487,
+    "base": 442344.4730409293,
+    "bull": 1620743.9658014053
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.595,
+     "base": 6.961,
+     "bull": 9.147
+    },
+    "ttm_ebitda": 12716711797000,
+    "peak_earnings": "TTM EBITDA is 2.6x its 5y median: bear/base use the 5y average (4.747e+12), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 157400,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.01,
+ "reporting_currency": "KRW",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -996215.3956902233,
+  "base": 1562108.5623137748,
+  "bull": 4925582.733732811
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -7.32919565241565,
+  "base": 8.924450840621187,
+  "bull": 30.293409998302486
+ },
+ "implied_growth": null,
+ "ticker": "KRX:267250",
+ "asof": "2026-10-18",
+ "quote_currency": "KRW",
+ "financials_currency": "KRW",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/krx/267250/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/krx/267250/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/krx/267250/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/krx/267250/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/krx/267250/statistics/"
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Farm & Heavy Construction Machinery",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 4.3052638216612955,
+    "base": 37.23351973379877,
+    "bull": 95.44614038128734
+   },
+   "implied_growth": 0.02895985422580652,
+   "discount_rate": 0.12556633192458191,
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.06027696450516269,
+     "base": 0.11104937018372023,
+     "bull": 0.23864355172455554
+    },
+    "cash_flow_margin": {
+     "bear": -0.006190303567141715,
+     "base": 0.12071899892923343,
+     "bull": 0.21374138693865713
+    },
+    "cagr_3y": 0.23864355172455554,
+    "cagr_5y": 0.1555539290103254,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 16.039114913882056,
+    "base": 20.046790159805138,
+    "bull": 44.77969978665979
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.517,
+     "base": 10.414,
+     "bull": 13.829
+    },
+    "ttm_ebitda": 6265636182,
+    "peak_earnings": "TTM EBITDA is 2.3x its 5y median: bear/base use the 5y average (3.063e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 28.71,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 8.216547519068216,
+  "base": 31.504609875800895,
+  "bull": 78.55732684974483
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.713808863842974,
+  "base": 0.09733925028912904,
+  "bull": 1.736235696612498
+ },
+ "implied_growth": 0.02895985422580652,
+ "ticker": "SHA:600066",
+ "asof": "2026-10-18",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/600066/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/600066/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/600066/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/600066/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/600066/statistics/"
+ }
+}

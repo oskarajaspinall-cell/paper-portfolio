@@ -1,0 +1,113 @@
+{
+ "industry": {
+  "industry": "Drug Manufacturers - Specialty & Generic",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -2.1170544985233097,
+    "base": 27.701514035736157,
+    "bull": 39.22168985713973
+   },
+   "implied_growth": 0.052805388847949414,
+   "discount_rate": 0.11910575512602697,
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.035070941200937636,
+     "base": 0.0682225788597061,
+     "bull": 0.11774843303694915
+    },
+    "cash_flow_margin": {
+     "bear": -0.033236528869503,
+     "base": 0.26256064782159744,
+     "bull": 0.31013152858719584
+    },
+    "cagr_3y": 0.11774843303694915,
+    "cagr_5y": 0.10514188240187528,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 17.24446,
+    "base": 24.099851999999995,
+    "bull": 43.12190154
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.39,
+     "base": 15.918,
+     "bull": 18.42
+    },
+    "ttm_eps": 2.341037,
+    "peak_earnings": "TTM EPS is 1.7x its 5y median: bear/base use the 5y average (1.514), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 26.14,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 4.336783667651127,
+  "base": 26.500960023824103,
+  "bull": 40.52176041809315
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8340939683377534,
+  "base": 0.013808723176132354,
+  "bull": 0.5501821123983608
+ },
+ "implied_growth": 0.052805388847949414,
+ "ticker": "SHE:002001",
+ "asof": "2026-10-18",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/she/002001/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/she/002001/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/she/002001/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/she/002001/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/she/002001/statistics/"
+ }
+}
