@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Telecom Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 3879.366879913421,
+    "base": 6989.303441872395,
+    "bull": 6989.303441872395
+   },
+   "implied_growth": -0.2604069598782036,
+   "discount_rate": 0.08740311328404039,
+   "cost_of_equity": 0.106,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.01813894358541988,
+     "base": 0.01370791625908709,
+     "bull": 0.01370791625908709
+    },
+    "cash_flow_margin": {
+     "bear": 0.19942057654675102,
+     "base": 0.30550052634744945,
+     "bull": 0.30550052634744945
+    },
+    "cagr_3y": -0.0012778871708397643,
+    "cagr_5y": 0.006109552207188118,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 2940.3918074856224,
+    "base": 3764.188618646886,
+    "bull": 3842.5529379476034
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.921,
+     "base": 6.193,
+     "bull": 6.314
+    },
+    "ttm_ebitda": 64076000000000
+   }
+  }
+ ],
+ "price": 1900,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "IDR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 3566.375189104155,
+  "base": 5914.265167463892,
+  "bull": 5940.386607230797
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.8770395732127132,
+  "base": 2.1127711407704695,
+  "bull": 2.1265192669635775
+ },
+ "implied_growth": -0.2604069598782036,
+ "ticker": "IDX:TLKM",
+ "asof": "2026-10-18",
+ "quote_currency": "IDR",
+ "financials_currency": "IDR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/idx/TLKM/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/idx/TLKM/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/idx/TLKM/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/idx/TLKM/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/idx/TLKM/statistics/"
+ }
+}

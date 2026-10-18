@@ -1,0 +1,123 @@
+{
+ "industry": {
+  "industry": "Information Technology Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 13.103072834776466,
+    "base": 14.836561688909592,
+    "bull": 22.595332103595496
+   },
+   "implied_growth": 0.04673539971308836,
+   "discount_rate": 0.11191272369169507,
+   "cost_of_equity": 0.11507,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.12178767458046133,
+     "base": 0.1710460000852546,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.199,
+     "base": 0.199,
+     "bull": 0.262
+    },
+    "cagr_3y": 0.27857534916092264,
+    "cagr_5y": 0.35560865118009577,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 14.364246673788482,
+    "base": 16.76480761386812,
+    "bull": 39.13001534427503
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.717,
+     "base": 10.896,
+     "bull": 31.197
+    },
+    "ttm_ebitda": 1134400000
+   }
+  }
+ ],
+ "price": 10.98,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [
+  {
+   "method": "dcf",
+   "scenario": "bear",
+   "field": "margin",
+   "value": 0.199
+  },
+  {
+   "method": "dcf",
+   "scenario": "base",
+   "field": "margin",
+   "value": 0.199
+  },
+  {
+   "method": "dcf",
+   "scenario": "bull",
+   "field": "margin",
+   "value": 0.262
+  }
+ ],
+ "fair_value": {
+  "bear": 13.523464114447137,
+  "base": 15.479310330562434,
+  "bull": 28.106893183822006
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.23164518346513074,
+  "base": 0.4097732541495842,
+  "bull": 1.5598263373244086
+ },
+ "implied_growth": 0.04673539971308836,
+ "ticker": "WSE",
+ "asof": "2026-10-18",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/wse/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/wse/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/wse/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/wse/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/wse/statistics/"
+ }
+}

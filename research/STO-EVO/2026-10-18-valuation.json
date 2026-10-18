@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Gambling",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 998.0001026947574,
+    "base": 1300.5278622013718,
+    "bull": 1940.6128392293945
+   },
+   "implied_growth": -0.03724891244226074,
+   "discount_rate": 0.09686996587196656,
+   "cost_of_equity": 0.097223,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.04431184650403548,
+     "base": 0.0882070830905579,
+     "bull": 0.17920463935416064
+    },
+    "cash_flow_margin": {
+     "bear": 0.5312345238529647,
+     "base": 0.5878996826753509,
+     "bull": 0.6217513128092335
+    },
+    "cagr_3y": 0.12362369300807097,
+    "cagr_5y": 0.17920463935416064,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 668.2637673521577,
+    "base": 1360.6970014282047,
+    "bull": 1464.6598668432976
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.71,
+     "base": 18.614,
+     "bull": 20.101
+    },
+    "ttm_ebitda": 1253491000
+   }
+  }
+ ],
+ "price": 800,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 888.0879909138908,
+  "base": 1320.5842419436494,
+  "bull": 1781.9618484340288
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.11010998864236354,
+  "base": 0.6507303024295619,
+  "bull": 1.2274523105425361
+ },
+ "implied_growth": -0.03724891244226074,
+ "ticker": "STO:EVO",
+ "asof": "2026-10-18",
+ "quote_currency": "SEK",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 11.137414666373044,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sto/EVO/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sto/EVO/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sto/EVO/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sto/EVO/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sto/EVO/statistics/"
+ }
+}
