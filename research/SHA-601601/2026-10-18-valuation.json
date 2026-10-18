@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 30.856729469999994,
+    "base": 43.83935428267327,
+    "bull": 47.551491438118816
+   },
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "roe": {
+     "bear": 0.11893,
+     "base": 0.15845,
+     "bull": 0.16975
+    },
+    "justified_pb": {
+     "bear": 0.9299999999999998,
+     "base": 1.3212871287128714,
+     "bull": 1.4331683168316833
+    },
+    "bvps": 33.179279
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 31.493721258,
+    "base": 39.161611836,
+    "bull": 41.544194904
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 5.631,
+     "base": 7.002,
+     "bull": 7.428
+    },
+    "ttm_eps": 5.592918
+   }
+  }
+ ],
+ "price": 29.32,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 31.069060065999995,
+  "base": 42.28010680044884,
+  "bull": 45.54905926007921
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.05965416323328765,
+  "base": 0.4420227421708336,
+  "bull": 0.5535149815852392
+ },
+ "implied_growth": null,
+ "ticker": "SHA:601601",
+ "asof": "2026-10-18",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/601601/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/601601/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/601601/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/601601/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/601601/statistics/"
+ }
+}

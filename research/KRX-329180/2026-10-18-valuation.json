@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Aerospace & Defense",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -84211.48679214182,
+    "base": 674751.9160151916,
+    "bull": 1102984.2841363563
+   },
+   "implied_growth": -0.05760262912429365,
+   "discount_rate": 0.11273082063658917,
+   "cost_of_equity": 0.11317749999999999,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.08549221863033436,
+     "base": 0.1259863193070065,
+     "bull": 0.24796083996735718
+    },
+    "cash_flow_margin": {
+     "bear": -0.040674486224152914,
+     "base": 0.1617540817811075,
+     "bull": 0.17204269346739154
+    },
+    "cagr_3y": 0.24796083996735718,
+    "cagr_5y": 0.20598443726066873,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 325171.8446036642,
+    "base": 394657.01137277955,
+    "bull": 1106333.9762285862
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 21.168,
+     "base": 26.514,
+     "bull": 30.031
+    },
+    "ttm_ebitda": 3454965482000,
+    "peak_earnings": "TTM EBITDA is 3.4x its 5y median: bear/base use the 5y average (1.277e+12), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 351500,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.01,
+ "reporting_currency": "KRW",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 52249.62367312685,
+  "base": 581386.9478010542,
+  "bull": 1104100.8481670998
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8513524219825694,
+  "base": 0.6540169211978784,
+  "bull": 2.1411119435763863
+ },
+ "implied_growth": -0.05760262912429365,
+ "ticker": "KRX:329180",
+ "asof": "2026-10-18",
+ "quote_currency": "KRW",
+ "financials_currency": "KRW",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/krx/329180/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/krx/329180/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/krx/329180/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/krx/329180/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/krx/329180/statistics/"
+ }
+}
