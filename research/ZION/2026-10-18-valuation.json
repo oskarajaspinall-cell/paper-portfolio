@@ -1,0 +1,145 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 76.40867384149506,
+    "base": 81.60149633557727,
+    "bull": 90.36252971487878
+   },
+   "cost_of_equity": 0.09533849999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.128,
+     "base": 0.135,
+     "bull": 0.14681
+    },
+    "justified_pb": {
+     "bear": 1.4643474057592927,
+     "base": 1.563866161490507,
+     "bull": 1.7317685193741692
+    },
+    "bvps": 52.179335
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 71.31867897924215,
+    "base": 114.99244821480414,
+    "bull": 132.41660978768832
+   },
+   "implied_growth": -0.11819065094612463,
+   "discount_rate": 0.09533849999999999,
+   "cost_of_equity": 0.09533849999999999,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.012629671834524608,
+     "base": 0.02248796532753482,
+     "bull": 0.0302112049791885
+    },
+    "cash_flow_margin": {
+     "bear": 0.2279584311096212,
+     "base": 0.317602386764307,
+     "bull": 0.35425164731722625
+    },
+    "cagr_3y": 0.0302112049791885,
+    "cagr_5y": 0.009740656330950781,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 24.257361041094864,
+    "base": 27.978987325575606,
+    "bull": 32.93419624286318
+   },
+   "cost_of_equity": 0.09533849999999999,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 1.92
+   }
+  }
+ ],
+ "price": 63.37,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [
+  {
+   "method": "pb_roe",
+   "scenario": "base",
+   "field": "roe",
+   "value": 0.135
+  },
+  {
+   "method": "pb_roe",
+   "scenario": "bear",
+   "field": "roe",
+   "value": 0.128
+  }
+ ],
+ "fair_value": {
+  "bear": 74.71200888741076,
+  "base": 92.73181362865289,
+  "bull": 104.38055640581528
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.17898073043097318,
+  "base": 0.46333933452190146,
+  "bull": 0.6471604293169526
+ },
+ "implied_growth": -0.11819065094612463,
+ "ticker": "ZION",
+ "asof": "2026-10-18",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/zion/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/zion/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/zion/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/zion/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/zion/statistics/"
+ }
+}

@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Leisure",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 87.36382773486065,
+    "base": 119.1698368438825,
+    "bull": 184.14954032677977
+   },
+   "implied_growth": -0.03241525017914888,
+   "discount_rate": 0.11330028126598045,
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.04713258595592869,
+     "base": 0.08068929975681537,
+     "bull": 0.1434920271154041
+    },
+    "cash_flow_margin": {
+     "bear": 0.18772766709965266,
+     "base": 0.22838373717452043,
+     "bull": 0.2814363576881134
+    },
+    "cagr_3y": 0.1434920271154041,
+    "cagr_5y": 0.12926517191185738,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 96.92373094297247,
+    "base": 108.5911311765766,
+    "bull": 185.53998364603524
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.136,
+     "base": 11.428,
+     "bull": 19.949
+    },
+    "ttm_ebitda": 22324000000
+   }
+  }
+ ],
+ "price": 77.95,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 90.5504621375646,
+  "base": 115.6436016214472,
+  "bull": 184.61302143319827
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.16164800689627445,
+  "base": 0.4835612780172829,
+  "bull": 1.3683517823373736
+ },
+ "implied_growth": -0.03241525017914888,
+ "ticker": "HKG:2020",
+ "asof": "2026-10-18",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.1725914802695474,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/2020/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/2020/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/2020/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/2020/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/2020/statistics/"
+ }
+}

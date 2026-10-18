@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 69.75110523217859,
+    "base": 76.22724661537616,
+    "bull": 80.01433275295535
+   },
+   "cost_of_equity": 0.097918,
+   "assumptions": {
+    "roe": {
+     "bear": 0.11838,
+     "base": 0.12705,
+     "bull": 0.13212
+    },
+    "justified_pb": {
+     "bear": 1.2806165830110532,
+     "base": 1.3995172659699935,
+     "bull": 1.4690474231328339
+    },
+    "bvps": 54.466814
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 85.34249867233905,
+    "base": 99.53208456286988,
+    "bull": 136.68094169871048
+   },
+   "implied_growth": -0.12611098428190898,
+   "discount_rate": 0.097918,
+   "cost_of_equity": 0.097918,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.019833022253263846,
+     "base": 0.057465270340830196,
+     "bull": 0.1051950368567931
+    },
+    "cash_flow_margin": {
+     "bear": 0.44533246063517135,
+     "base": 0.44533246063517135,
+     "bull": 0.5046646834152058
+    },
+    "cagr_3y": 0.1051950368567931,
+    "cagr_5y": 0.0746660445065277,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 23.50273764441978,
+    "base": 26.989220768534512,
+    "bull": 31.58396643249944
+   },
+   "cost_of_equity": 0.097918,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 1.92
+   }
+  }
+ ],
+ "price": 46.12,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 74.94823637889874,
+  "base": 83.9955259312074,
+  "bull": 98.9032024015404
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.6250701730030084,
+  "base": 0.8212386368431788,
+  "bull": 1.1444753339449352
+ },
+ "implied_growth": -0.12611098428190898,
+ "ticker": "OZK",
+ "asof": "2026-10-18",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/ozk/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/ozk/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/ozk/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/ozk/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/ozk/statistics/"
+ }
+}
