@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "AMS:WKL",
+    "action": "BUY",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A professional-information franchise with rising ROIC (24.8%) and five-year-high margins trades below its own 5-year minimum on every earnings multiple and well below peers at a 7.66% FCF yield, pricing AI-disruption fears that its reported fundamentals do not yet show.",
+    "reason": "Quality is rising, cash returns are strong and the mechanical bear value sits at the price, so the skew is favourable. The unexplained drawdown (likely AI-disruption fear), rising leverage, missing revenue-growth data and a stretched three-month rebound hold conviction at 4, not 5: standard volatility-scaled core size. Industrials stays well under the sector cap.",
+    "research_note": "research/AMS-WKL/2026-10-18.md",
+    "triggers": [
+      {"text": "TTM ROIC falls below 20%, giving up most of the five-year rise from 18.6% to 24.8% and signalling moat erosion.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 20}},
+      {"text": "TTM FCF margin falls below 18%, under the 22-24% range it has held for five years, showing cash generation is weakening.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 18}},
+      {"text": "TTM gross margin falls below 70%, under the five-year low of 71.1%, signalling AI-driven price pressure on content and software.", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 70}},
+      {"text": "Net debt/EBITDA rises above 3.0x (2.08x TTM now), showing capital returns are becoming balance-sheet risk.", "check": {"source": "statistics", "field": "debtEbitda", "op": ">", "value": 3.0}}
+    ]
+  }
+]

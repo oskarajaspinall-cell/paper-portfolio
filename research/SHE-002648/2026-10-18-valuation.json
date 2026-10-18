@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Specialty Chemicals",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -2.5621633859031117,
+    "base": 59.36870564474272,
+    "bull": 76.6727138293008
+   },
+   "implied_growth": -0.1413708696286649,
+   "discount_rate": 0.1101091897837243,
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.02019416424864258,
+     "base": 0.06309537008451215,
+     "bull": 0.12699315184076343
+    },
+    "cash_flow_margin": {
+     "bear": -0.0049474855348336936,
+     "base": 0.2516245201232053,
+     "bull": 0.2516245201232053
+    },
+    "cagr_3y": 0.07538832849728516,
+    "cagr_5y": 0.12699315184076343,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 15.697156276702788,
+    "base": 22.96491666631556,
+    "bull": 52.79437746728521
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.076,
+     "base": 8.636,
+     "bull": 9.994
+    },
+    "ttm_ebitda": 18165663912,
+    "peak_earnings": "TTM EBITDA is 2.2x its 5y median: bear/base use the 5y average (9.484e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 24.9,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 3.524276501632188,
+  "base": 47.23410931860033,
+  "bull": 68.71326837529561
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.858462791099109,
+  "base": 0.8969521814698929,
+  "bull": 1.759569011056049
+ },
+ "implied_growth": -0.1413708696286649,
+ "ticker": "SHE:002648",
+ "asof": "2026-10-18",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/she/002648/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/she/002648/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/she/002648/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/she/002648/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/she/002648/statistics/"
+ }
+}

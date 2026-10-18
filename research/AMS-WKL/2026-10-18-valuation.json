@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Specialty Business Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 75.99650697488218,
+    "base": 101.22487926334485,
+    "bull": 115.62222487136214
+   },
+   "implied_growth": -0.004030824916766143,
+   "discount_rate": 0.08301318943418436,
+   "cost_of_equity": 0.096,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.0022488488484194297,
+     "base": 0.038486252127645046,
+     "bull": 0.06444731081374133
+    },
+    "cash_flow_margin": {
+     "bear": 0.21794158309455589,
+     "base": 0.23706924336717983,
+     "bull": 0.238305281496424
+    },
+    "cagr_3y": 0.03949769769683886,
+    "cagr_5y": 0.06444731081374133,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 89.46032534622994,
+    "base": 150.52824357001538,
+    "bull": 157.94131017806112
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 12.533,
+     "base": 19.667,
+     "bull": 20.533
+    },
+    "ttm_ebitda": 1947000000
+   }
+  }
+ ],
+ "price": 81.52,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 80.4844464319981,
+  "base": 117.65933403223501,
+  "bull": 129.7285866402618
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.012703061432800533,
+  "base": 0.44331862159267676,
+  "bull": 0.5913712787078238
+ },
+ "implied_growth": -0.004030824916766143,
+ "ticker": "AMS:WKL",
+ "asof": "2026-10-18",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/ams/WKL/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/ams/WKL/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/ams/WKL/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/ams/WKL/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/ams/WKL/statistics/"
+ }
+}
