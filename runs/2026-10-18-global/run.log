@@ -1184,3 +1184,41 @@ OK research/HKG-0175/2026-10-18-evaluation.md Bear case=135 Bull case=121 decisi
 [17:37:54] $ bin/py scripts/valuation.py HKG:0175 --asof 2026-10-18 --eval research/HKG-0175/2026-10-18-evaluation.md
 [17:37:54] {"out": "research/HKG-0175/2026-10-18-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 41.46, "base": 67.9, "bull": 105.89}, "price": 15.01}
 [17:37:55] == done HKG:0175
+[17:37:58] == Research batch 07: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-18-batch-07.md; uploaded to GitHub
+[17:38:16] == initiate LON:RMV
+[17:38:16] $ bin/py scripts/sec_delta.py LON:RMV --asof 2026-10-18
+[17:38:16] SKIP LON:RMV: not a US listing (SEC filers only)
+[17:38:16] $ claude -p Ticker LON:RMV, note type CORE, date 2026-10-18. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:39:36] Note path: `research/SHE-000783/2026-10-18.md`
+Fact sheet path: `research/SHE-000783/factsheet-2026-10-18.md`
+Check: `OK research/SHE-000783/2026-10-18.md type=CORE 1=48 2=144 3=137 4=51 5=84 6=75 total=539`
+
+Data conflicts: none. Blocked URLs: `https://www.reuters.com/markets/companies/000783.SZ/` (fetch blocked — not retried).
+[17:39:36] $ bin/py scripts/check_docs.py note research/SHE-000783/2026-10-18.md
+[17:39:36] OK research/SHE-000783/2026-10-18.md type=CORE 1=48 2=144 3=137 4=51 5=84 6=75 total=539
+[17:39:36] $ claude -p Ticker SHE:000783, date 2026-10-18. Research: research/SHE-000783/factsheet-2026-10-18.md, research/SHE-000783/2026-10-18.md. Macro snapshot: reports/macro/2026-10-18.md. Write research/SHE-000783/2026-10-18-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:40:31] Note path: `research/HESM/2026-10-18.md`
+Fact sheet path: `research/HESM/factsheet-2026-10-18.md`
+
+check_docs.py result: `OK research/HESM/2026-10-18.md type=CORE 1=70 2=120 3=150 4=91 5=87 6=114 total=632`
+
+Data conflicts / blocked URLs:
+- Reuters article fetch failed ("Claude Code is unable to fetch from www.reuters.com") — not retried per instructions; covered instead via the primary SEC 8-K exhibit (EX-99.1).
+- No fact-sheet/qualitative data conflicts found.
+[17:40:31] $ bin/py scripts/check_docs.py note research/HESM/2026-10-18.md
+[17:40:31] OK research/HESM/2026-10-18.md type=CORE 1=70 2=120 3=150 4=91 5=87 6=114 total=632
+[17:40:31] $ claude -p Ticker HESM, date 2026-10-18. Research: research/HESM/factsheet-2026-10-18.md, research/HESM/2026-10-18.md. Macro snapshot: reports/macro/2026-10-18.md. Write research/HESM/2026-10-18-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:41:58] research/LON-RMV/2026-10-18.md
+research/LON-RMV/factsheet-2026-10-18.md
+OK research/LON-RMV/2026-10-18.md type=CORE 1=51 2=137 3=140 4=83 5=67 6=93 total=571
+
+Data conflicts: none. Blocked/unproductive fetches: www.reuters.com/markets/companies/RMV.L/ (unable to fetch — Reuters not reachable via WebFetch); londonstockexchange.com company/analysis pages for RMV returned no retrievable announcement content (no RNS detail found, noted in the note's Unusual items section). Fair value section of the fact sheet is [data unavailable] (missing FX rate for GBP), flagged in Valuation.
+[17:41:58] $ bin/py scripts/check_docs.py note research/LON-RMV/2026-10-18.md
+[17:41:58] OK research/LON-RMV/2026-10-18.md type=CORE 1=51 2=137 3=140 4=83 5=67 6=93 total=571
+[17:41:58] $ claude -p Ticker LON:RMV, date 2026-10-18. Research: research/LON-RMV/factsheet-2026-10-18.md, research/LON-RMV/2026-10-18.md. Macro snapshot: reports/macro/2026-10-18.md. Write research/LON-RMV/2026-10-18-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:42:02] research/HESM/2026-10-18-macro.md
+OK research/HESM/2026-10-18-macro.md macro_weight=secondary words=250
+[17:42:02] $ bin/py scripts/check_docs.py macro research/HESM/2026-10-18-macro.md
+[17:42:02] OK research/HESM/2026-10-18-macro.md macro_weight=secondary words=250
+[17:42:02] $ claude -p Evaluate HESM for 2026-10-18: fact sheet research/HESM/factsheet-2026-10-18.md, note research/HESM/2026-10-18.md, state portfolio/state.json, macro overlay research/HESM/2026-10-18-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:42:52] == research loop stopped by the owner; in-progress SHE:000783, LON:RMV, HESM unfinished (no decision; partial files left uncommitted)
