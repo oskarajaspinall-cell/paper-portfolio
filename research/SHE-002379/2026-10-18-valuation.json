@@ -1,0 +1,113 @@
+{
+ "industry": {
+  "industry": "Aluminum",
+  "known": true,
+  "best": "NAV / normalized DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav",
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -25.169624322891927,
+    "base": 24.435555906095026,
+    "bull": 53.2609804166159
+   },
+   "implied_growth": 0.05972310682833737,
+   "discount_rate": 0.11902006344421089,
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.17,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.1021436656725456,
+     "base": 0.09158497974718588,
+     "bull": 0.16454004053429322
+    },
+    "cagr_3y": 2.5411743142377192,
+    "cagr_5y": 1.6473794363371983,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": -0.037807902618102913,
+    "base": 16.87647753979243,
+    "bull": 81.26088425200433
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 0.304,
+     "base": 14.32,
+     "bull": 27.788
+    },
+    "ttm_ebitda": 38297552783,
+    "peak_earnings": "TTM EBITDA is 2.4x its 5y median: bear/base use the 5y average (1.573e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 14.16,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -16.792352182800652,
+  "base": 21.915863117327493,
+  "bull": 62.59428169507871
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -2.185900577881402,
+  "base": 0.5477304461389472,
+  "bull": 3.420500119708949
+ },
+ "implied_growth": 0.05972310682833737,
+ "ticker": "SHE:002379",
+ "asof": "2026-10-18",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/she/002379/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/she/002379/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/she/002379/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/she/002379/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/she/002379/statistics/"
+ }
+}

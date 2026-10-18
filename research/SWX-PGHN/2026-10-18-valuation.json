@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 516.1765980951027,
+    "base": 658.1116484113958,
+    "bull": 1022.4060660620272
+   },
+   "implied_growth": 0.018976073436129753,
+   "discount_rate": 0.100464,
+   "cost_of_equity": 0.100464,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.020516801624982966,
+     "base": 0.03863275407290227,
+     "bull": 0.11056461954157504
+    },
+    "cash_flow_margin": {
+     "bear": 0.4804315204607211,
+     "base": 0.4804315204607211,
+     "bull": 0.5591808665087491
+    },
+    "cagr_3y": 0.11056461954157504,
+    "cagr_5y": -0.006033603249965935,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 926.432340696,
+    "base": 1246.686781842,
+    "bull": 1305.2190448079998
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 20.212,
+     "base": 27.199,
+     "bull": 28.476
+    },
+    "ttm_eps": 45.835758
+   }
+  }
+ ],
+ "price": 607.4,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "CHF",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 652.9285122954018,
+  "base": 854.3033595549305,
+  "bull": 1116.6770589773514
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.07495639166184032,
+  "base": 0.4064921955135503,
+  "bull": 0.8384541636110494
+ },
+ "implied_growth": 0.018976073436129753,
+ "ticker": "SWX:PGHN",
+ "asof": "2026-10-18",
+ "quote_currency": "CHF",
+ "financials_currency": "CHF",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/swx/PGHN/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/swx/PGHN/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/swx/PGHN/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/swx/PGHN/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/swx/PGHN/statistics/"
+ }
+}

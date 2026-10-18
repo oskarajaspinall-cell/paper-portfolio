@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Agricultural Inputs",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 10.993643253590319,
+    "base": 20.74265717488551,
+    "bull": 26.95405648022647
+   },
+   "implied_growth": 0.003462060147561492,
+   "discount_rate": 0.13021843374462852,
+   "cost_of_equity": 0.13117600000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.11952112973416094,
+     "base": -0.035247646281507214,
+     "bull": 0.01305167434229304
+    },
+    "cash_flow_margin": {
+     "bear": 0.2035336863168527,
+     "base": 0.4600448434757974,
+     "bull": 0.5473242501668694
+    },
+    "cagr_3y": -0.20404225946832188,
+    "cagr_5y": 0.01305167434229304,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 17.478764282120004,
+    "base": 33.393481557886474,
+    "bull": 46.82971037082727
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 5.38,
+     "base": 13.151,
+     "bull": 16.757
+    },
+    "ttm_ebitda": 12748623806,
+    "peak_earnings": "TTM EBITDA is 1.6x its 5y median: bear/base use the 5y average (1.084e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 23.06,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 13.155350263100212,
+  "base": 24.95959863588583,
+  "bull": 33.57927444376007
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.429516467341708,
+  "base": 0.08237635021187462,
+  "bull": 0.4561697503798816
+ },
+ "implied_growth": 0.003462060147561492,
+ "ticker": "SHE:000792",
+ "asof": "2026-10-18",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/she/000792/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/she/000792/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/she/000792/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/she/000792/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/she/000792/statistics/"
+ }
+}
