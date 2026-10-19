@@ -1,7 +1,7 @@
 {
  "base_currency": "USD",
  "baseline": {
-  "cash_usd": 29987.52916161577,
+  "cash_usd": 29996.722968758026,
   "frozen_from": "2026-10-14",
   "holdings": {
    "CI": {
@@ -38,16 +38,16 @@
   "start": "2026-10-07"
  },
  "cash_interest": {
-  "accrued_through": "2026-10-16",
+  "accrued_through": "2026-10-19",
   "aer_pct": 3.8,
   "start": "2026-10-06",
-  "total_usd": 53.83968181428437
+  "total_usd": 62.59011577651497
  },
- "cash_usd": 29988.98853282801,
+ "cash_usd": 25654.450433962233,
  "entry_hits": [],
  "flows": {
   "CORE": {
-   "in": 70064.85,
+   "in": 74408.14,
    "out": 0.0
   },
   "TACTICAL": {
@@ -62,7 +62,7 @@
    "decision_price": 124.8499984741211,
    "expires": "2026-11-18",
    "fair_value_base": 279.7799487968779,
-   "last_close": 124.8499984741211,
+   "last_close": 126.05000305175781,
    "price_date": "2026-10-16",
    "request": {
     "action": "BUY",
@@ -110,12 +110,116 @@
    "valuation": "research/LDOS/2026-10-19-valuation.json"
   },
   {
+   "added": "2026-10-19",
+   "currency": "EUR",
+   "decision_price": 54.4,
+   "expires": "2026-11-18",
+   "fair_value_base": 100.14301651531697,
+   "last_close": 54.3,
+   "price_date": "2026-10-16",
+   "request": {
+    "action": "BUY",
+    "conviction": 4,
+    "position_type": "CORE",
+    "reason": "Rising quality, a 9.38% FCF yield funding buybacks, and a price below even the mechanical bear value give a favourable skew. AI/direct-booking disintermediation risk, the peer P/E premium and pending acquisitions cap conviction at 4, not 5: standard volatility-scaled core size. Holdings stay well below 15.",
+    "research_note": "research/BME-AMS/2026-10-19.md",
+    "thesis": "A 19%-ROIC, 32.5%-FCF-margin travel-IT oligopolist trades below its own 5-year minimum on every earnings multiple at a 9.38% FCF yield, where the price implies a revenue decline that its reported growth and guidance do not show.",
+    "ticker": "BME:AMS",
+    "triggers": [
+     {
+      "check": {
+       "field": "roic",
+       "op": "<",
+       "source": "statistics",
+       "value": 12
+      },
+      "text": "TTM ROIC falls below 12%, giving up most of the post-pandemic rise to 19.0% and signalling moat erosion rather than a cyclical dip."
+     },
+     {
+      "check": {
+       "field": "operatingMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 20
+      },
+      "text": "TTM operating margin falls below 20%, under every year since FY2022 (21.1%), showing disintermediation is forcing price cuts."
+     },
+     {
+      "check": {
+       "field": "fcfMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 25
+      },
+      "text": "TTM FCF margin falls below 25%, under the 31.2%-33.8% band held since FY2022, showing cash generation can no longer fund buybacks and acquisitions."
+     },
+     {
+      "text": "Air Distribution segment revenue in the earnings release declines year on year for two consecutive quarters, signalling structural bookings loss rather than one-off Middle East disruption."
+     }
+    ]
+   },
+   "ticker": "BME:AMS",
+   "valuation": "research/BME-AMS/2026-10-19-valuation.json"
+  },
+  {
+   "added": "2026-10-19",
+   "currency": "CAD",
+   "decision_price": 106.42,
+   "expires": "2026-11-18",
+   "fair_value_base": 196.18279160064807,
+   "last_close": 106.95999908447266,
+   "price_date": "2026-10-16",
+   "request": {
+    "action": "BUY",
+    "conviction": 4,
+    "position_type": "CORE",
+    "reason": "Cash yield plus buybacks cushion the downside even if no re-rating comes, and margins remain steady. Sector-wide AI-disruption pricing, slipping ROIC/ROE, rising leverage and no revenue-growth data cap conviction at 4, not 5: standard volatility-scaled core size. Mechanical fair value likely overstates value, so scenario targets sit well below it.",
+    "research_note": "research/TSX-GIB.A/2026-10-19.md",
+    "thesis": "A stable-margin, 14%-ROIC IT services franchise with an 11.39% FCF yield and 5% annual share shrinkage trades below its own 5-year minimum on every multiple and below peers on P/E, where the price implies a 9.4% revenue decline its fundamentals do not show.",
+    "ticker": "TSX:GIB.A",
+    "triggers": [
+     {
+      "check": {
+       "field": "roic",
+       "op": "<",
+       "source": "statistics",
+       "value": 12
+      },
+      "text": "TTM ROIC falls below 12%, well under the five-year range of 14.8%-16.5%, signalling the switching-cost moat is eroding."
+     },
+     {
+      "check": {
+       "field": "operatingMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 15
+      },
+      "text": "TTM operating margin falls below 15%, breaking the 16.1%-16.5% band held for five years, showing AI-driven pricing pressure or broken cost discipline."
+     },
+     {
+      "check": {
+       "field": "fcfMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 11
+      },
+      "text": "TTM FCF margin falls below 11%, under the five-year low of 13.3%, showing cash generation can no longer fund buybacks and tuck-ins."
+     },
+     {
+      "text": "Annual revenue (income statement) declines year on year for a full fiscal year, evidencing real displacement of labour-based services by AI."
+     }
+    ]
+   },
+   "ticker": "TSX:GIB.A",
+   "valuation": "research/TSX-GIB.A/2026-10-19-valuation.json"
+  },
+  {
    "added": "2026-10-18",
    "currency": "EUR",
    "decision_price": 81.52,
    "expires": "2026-11-17",
    "fair_value_base": 117.65933403223501,
-   "last_close": 81.52,
+   "last_close": 84.1,
    "price_date": "2026-10-16",
    "request": {
     "action": "BUY",
@@ -169,112 +273,11 @@
   },
   {
    "added": "2026-10-19",
-   "currency": "CAD",
-   "decision_price": 106.42,
-   "expires": "2026-11-18",
-   "fair_value_base": 196.18279160064807,
-   "price_date": "2026-10-16",
-   "request": {
-    "action": "BUY",
-    "conviction": 4,
-    "position_type": "CORE",
-    "reason": "Cash yield plus buybacks cushion the downside even if no re-rating comes, and margins remain steady. Sector-wide AI-disruption pricing, slipping ROIC/ROE, rising leverage and no revenue-growth data cap conviction at 4, not 5: standard volatility-scaled core size. Mechanical fair value likely overstates value, so scenario targets sit well below it.",
-    "research_note": "research/TSX-GIB.A/2026-10-19.md",
-    "thesis": "A stable-margin, 14%-ROIC IT services franchise with an 11.39% FCF yield and 5% annual share shrinkage trades below its own 5-year minimum on every multiple and below peers on P/E, where the price implies a 9.4% revenue decline its fundamentals do not show.",
-    "ticker": "TSX:GIB.A",
-    "triggers": [
-     {
-      "check": {
-       "field": "roic",
-       "op": "<",
-       "source": "statistics",
-       "value": 12
-      },
-      "text": "TTM ROIC falls below 12%, well under the five-year range of 14.8%-16.5%, signalling the switching-cost moat is eroding."
-     },
-     {
-      "check": {
-       "field": "operatingMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 15
-      },
-      "text": "TTM operating margin falls below 15%, breaking the 16.1%-16.5% band held for five years, showing AI-driven pricing pressure or broken cost discipline."
-     },
-     {
-      "check": {
-       "field": "fcfMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 11
-      },
-      "text": "TTM FCF margin falls below 11%, under the five-year low of 13.3%, showing cash generation can no longer fund buybacks and tuck-ins."
-     },
-     {
-      "text": "Annual revenue (income statement) declines year on year for a full fiscal year, evidencing real displacement of labour-based services by AI."
-     }
-    ]
-   },
-   "ticker": "TSX:GIB.A",
-   "valuation": "research/TSX-GIB.A/2026-10-19-valuation.json"
-  },
-  {
-   "added": "2026-10-19",
-   "currency": "EUR",
-   "decision_price": 54.4,
-   "expires": "2026-11-18",
-   "fair_value_base": 100.14301651531697,
-   "price_date": "2026-10-16",
-   "request": {
-    "action": "BUY",
-    "conviction": 4,
-    "position_type": "CORE",
-    "reason": "Rising quality, a 9.38% FCF yield funding buybacks, and a price below even the mechanical bear value give a favourable skew. AI/direct-booking disintermediation risk, the peer P/E premium and pending acquisitions cap conviction at 4, not 5: standard volatility-scaled core size. Holdings stay well below 15.",
-    "research_note": "research/BME-AMS/2026-10-19.md",
-    "thesis": "A 19%-ROIC, 32.5%-FCF-margin travel-IT oligopolist trades below its own 5-year minimum on every earnings multiple at a 9.38% FCF yield, where the price implies a revenue decline that its reported growth and guidance do not show.",
-    "ticker": "BME:AMS",
-    "triggers": [
-     {
-      "check": {
-       "field": "roic",
-       "op": "<",
-       "source": "statistics",
-       "value": 12
-      },
-      "text": "TTM ROIC falls below 12%, giving up most of the post-pandemic rise to 19.0% and signalling moat erosion rather than a cyclical dip."
-     },
-     {
-      "check": {
-       "field": "operatingMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 20
-      },
-      "text": "TTM operating margin falls below 20%, under every year since FY2022 (21.1%), showing disintermediation is forcing price cuts."
-     },
-     {
-      "check": {
-       "field": "fcfMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 25
-      },
-      "text": "TTM FCF margin falls below 25%, under the 31.2%-33.8% band held since FY2022, showing cash generation can no longer fund buybacks and acquisitions."
-     },
-     {
-      "text": "Air Distribution segment revenue in the earnings release declines year on year for two consecutive quarters, signalling structural bookings loss rather than one-off Middle East disruption."
-     }
-    ]
-   },
-   "ticker": "BME:AMS",
-   "valuation": "research/BME-AMS/2026-10-19-valuation.json"
-  },
-  {
-   "added": "2026-10-19",
    "currency": "USD",
    "decision_price": 60.060001373291016,
    "expires": "2026-11-18",
    "fair_value_base": 80.79543745758366,
+   "last_close": 59.9900016784668,
    "price_date": "2026-10-16",
    "request": {
     "action": "BUY",
@@ -331,10 +334,10 @@
    "entry_price": 281.1600036621094,
    "entry_url": "https://finance.yahoo.com/quote/CI/history",
    "exit_plan": null,
-   "last_close": 302.29998779296875,
-   "last_close_date": "2026-10-16",
-   "last_price_usd": 302.299988,
-   "market_value_usd": 7557.5,
+   "last_close": 298.5,
+   "last_close_date": "2026-10-19",
+   "last_price_usd": 298.5,
+   "market_value_usd": 7462.5,
    "reporting_currency": "USD",
    "research_note": "research/CI/2026-10-09.md",
    "sector": "Healthcare",
@@ -389,10 +392,10 @@
    "entry_price": 80.14,
    "entry_url": "https://stockanalysis.com/stocks/deck/history/",
    "exit_plan": null,
-   "last_close": 85.70999908447266,
-   "last_close_date": "2026-10-16",
-   "last_price_usd": 85.709999,
-   "market_value_usd": 7456.77,
+   "last_close": 87.23999786376953,
+   "last_close_date": "2026-10-19",
+   "last_price_usd": 87.239998,
+   "market_value_usd": 7589.88,
    "reporting_currency": "USD",
    "research_note": "research/DECK/2026-10-07.md",
    "sector": "Consumer Discretionary",
@@ -438,10 +441,10 @@
    "entry_price": 97.2,
    "entry_url": "https://stockanalysis.com/stocks/gddy/history/",
    "exit_plan": null,
-   "last_close": 105.95999908447266,
-   "last_close_date": "2026-10-16",
-   "last_price_usd": 105.959999,
-   "market_value_usd": 7629.12,
+   "last_close": 106.69999694824219,
+   "last_close_date": "2026-10-19",
+   "last_price_usd": 106.699997,
+   "market_value_usd": 7682.4,
    "reporting_currency": "USD",
    "research_note": "research/GDDY/2026-10-07.md",
    "sector": "Technology",
@@ -594,10 +597,10 @@
    "entry_price": 44.209999084472656,
    "entry_url": "https://finance.yahoo.com/quote/HRB/history",
    "exit_plan": null,
-   "last_close": 48.66999816894531,
-   "last_close_date": "2026-10-16",
-   "last_price_usd": 48.669998,
-   "market_value_usd": 7835.87,
+   "last_close": 47.369998931884766,
+   "last_close_date": "2026-10-19",
+   "last_price_usd": 47.369999,
+   "market_value_usd": 7626.57,
    "reporting_currency": "USD",
    "research_note": "research/HRB/2026-10-11.md",
    "sector": "Consumer Discretionary",
@@ -646,15 +649,15 @@
    "entry_price": 296.76,
    "entry_url": "https://stockanalysis.com/stocks/intu/history/",
    "exit_plan": null,
-   "last_close": 325.1499938964844,
-   "last_close_date": "2026-10-16",
+   "last_close": 325.6199951171875,
+   "last_close_date": "2026-10-19",
    "last_decision": {
     "action": "HOLD",
     "conviction": 4,
     "date": "2026-10-17"
    },
-   "last_price_usd": 325.149994,
-   "market_value_usd": 7478.45,
+   "last_price_usd": 325.619995,
+   "market_value_usd": 7489.26,
    "reporting_currency": "USD",
    "research_note": "research/INTU/2026-10-17.md",
    "sector": "Technology",
@@ -709,10 +712,10 @@
    "entry_price": 151.60000610351562,
    "entry_url": "https://finance.yahoo.com/quote/JKHY/history",
    "exit_plan": null,
-   "last_close": 153.19000244140625,
-   "last_close_date": "2026-10-16",
-   "last_price_usd": 153.190002,
-   "market_value_usd": 7046.74,
+   "last_close": 152.7899932861328,
+   "last_close_date": "2026-10-19",
+   "last_price_usd": 152.789993,
+   "market_value_usd": 7028.34,
    "reporting_currency": "USD",
    "research_note": "research/JKHY/2026-10-08.md",
    "sector": "Technology",
@@ -752,6 +755,59 @@
    ],
    "type": "CORE"
   },
+  "LDOS": {
+   "conviction": 4,
+   "cost_basis_usd": 4343.29,
+   "currency": "USD",
+   "entry_close_date": "2026-10-19",
+   "entry_date": "2026-10-19",
+   "entry_price": 123.97000122070312,
+   "entry_url": "https://finance.yahoo.com/quote/LDOS/history",
+   "exit_plan": null,
+   "last_close": 126.05000305175781,
+   "last_close_date": "2026-10-19",
+   "last_price_usd": 126.050003,
+   "market_value_usd": 4411.75,
+   "reporting_currency": "USD",
+   "research_note": "research/LDOS/2026-10-19.md",
+   "sector": "Technology",
+   "shares": 35,
+   "target_pct": 7.56,
+   "thesis": "A government-IT incumbent with ROIC up from 9.9% to 14.2% and a 13.80% FCF yield funding buybacks trades below its own 5-year minimum on every earnings multiple and below peers, where the price implies a -13.7% revenue decline that its contract base does not show.",
+   "triggers": [
+    {
+     "check": {
+      "field": "operatingMargin",
+      "op": "<",
+      "source": "statistics",
+      "value": 10
+     },
+     "text": "TTM operating margin falls below 10%, reversing the five-year expansion from 8.5% to 11.8%."
+    },
+    {
+     "check": {
+      "field": "roic",
+      "op": "<",
+      "source": "statistics",
+      "value": 10
+     },
+     "text": "TTM ROIC falls below 10%, erasing the improvement from 9.9% in FY2021 to 14.2%."
+    },
+    {
+     "check": {
+      "field": "fcfMargin",
+      "op": "<",
+      "source": "statistics",
+      "value": 6
+     },
+     "text": "TTM FCF margin falls below 6%, under the FY2022 five-year low of 6.0%, showing the cash step-up was transitory."
+    },
+    {
+     "text": "Net debt/EBITDA on the ratios page rises above 3.0x (2.45x TTM now) without a visible deleveraging path from the Entrust/Analogic debt."
+    }
+   ],
+   "type": "CORE"
+  },
   "OTIS": {
    "conviction": 4,
    "cost_basis_usd": 6962.68,
@@ -761,15 +817,15 @@
    "entry_price": 65.62,
    "entry_url": "https://stockanalysis.com/stocks/otis/history/",
    "exit_plan": null,
-   "last_close": 71.33000183105469,
-   "last_close_date": "2026-10-16",
+   "last_close": 71.04000091552734,
+   "last_close_date": "2026-10-19",
    "last_decision": {
     "action": "HOLD",
     "conviction": 4,
     "date": "2026-10-17"
    },
-   "last_price_usd": 71.330002,
-   "market_value_usd": 7560.98,
+   "last_price_usd": 71.040001,
+   "market_value_usd": 7530.24,
    "reporting_currency": "USD",
    "research_note": "research/OTIS/2026-10-17.md",
    "sector": "Industrials",
@@ -812,10 +868,10 @@
    "entry_price": 71.36,
    "entry_url": "https://stockanalysis.com/stocks/zts/history/",
    "exit_plan": null,
-   "last_close": 79.37999725341797,
-   "last_close_date": "2026-10-16",
-   "last_price_usd": 79.379997,
-   "market_value_usd": 7779.24,
+   "last_close": 79.58999633789062,
+   "last_close_date": "2026-10-19",
+   "last_price_usd": 79.589996,
+   "market_value_usd": 7799.82,
    "reporting_currency": "USD",
    "research_note": "research/ZTS/2026-10-07.md",
    "sector": "Healthcare",
@@ -851,7 +907,7 @@
   }
  },
  "inception_date": "2026-10-07",
- "last_marked": "2026-10-19",
+ "last_marked": "2026-10-20",
  "last_scan": "2026-10-17",
  "pending": [
   {
@@ -911,62 +967,6 @@
        "value": 12.2
       },
       "text": "TTM FCF margin falls below the FY2025 five-year low of 12.2%, signalling inventory or working-capital stress from a demand down-cycle."
-     }
-    ]
-   }
-  },
-  {
-   "estimate": {
-    "close_date": "2026-10-16",
-    "currency": "USD",
-    "price": 124.8499984741211,
-    "shares": 35,
-    "side": "BUY",
-    "usd": 4369.75
-   },
-   "id": "2026-10-19-2",
-   "placed": "2026-10-19",
-   "placed_at": "2026-10-19T12:27:03+00:00",
-   "request": {
-    "action": "BUY",
-    "cap_pct": 4.2,
-    "conviction": 4,
-    "funding_stage": "starter",
-    "position_type": "CORE",
-    "reason": "Rising quality, a strong FCF yield and a price below even the mechanical bear value give a favourable skew. The unexplained mid-year crash, single-customer budget risk, re-levering for M&A, a bearish rate backdrop and results on Nov 3 hold conviction at 4, not 5: standard volatility-scaled core size. [funding queue: decided 2026-10-19 at 124.85; resubmitted 2026-10-19 with room above the cash reserve]",
-    "research_note": "research/LDOS/2026-10-19.md",
-    "thesis": "A government-IT incumbent with ROIC up from 9.9% to 14.2% and a 13.80% FCF yield funding buybacks trades below its own 5-year minimum on every earnings multiple and below peers, where the price implies a -13.7% revenue decline that its contract base does not show.",
-    "ticker": "LDOS",
-    "triggers": [
-     {
-      "check": {
-       "field": "operatingMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 10
-      },
-      "text": "TTM operating margin falls below 10%, reversing the five-year expansion from 8.5% to 11.8%."
-     },
-     {
-      "check": {
-       "field": "roic",
-       "op": "<",
-       "source": "statistics",
-       "value": 10
-      },
-      "text": "TTM ROIC falls below 10%, erasing the improvement from 9.9% in FY2021 to 14.2%."
-     },
-     {
-      "check": {
-       "field": "fcfMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 6
-      },
-      "text": "TTM FCF margin falls below 6%, under the FY2022 five-year low of 6.0%, showing the cash step-up was transitory."
-     },
-     {
-      "text": "Net debt/EBITDA on the ratios page rises above 3.0x (2.45x TTM now) without a visible deleveraging path from the Entrust/Analogic debt."
      }
     ]
    }
