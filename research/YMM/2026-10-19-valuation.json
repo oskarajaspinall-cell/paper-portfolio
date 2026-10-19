@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Software - Application",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -18.129857166875535,
+    "base": 13.716443257891612,
+    "bull": 22.02030020271997
+   },
+   "implied_growth": -0.03049383512993359,
+   "discount_rate": 0.12596506113019437,
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.09683576405352132,
+     "base": 0.13959598446052096,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.8787534046822656,
+     "base": 0.36,
+     "bull": 0.43200256095924566
+    },
+    "cagr_3y": 0.2286715281070426,
+    "cagr_5y": 0.2797124097350412,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 10.795653823598043,
+    "base": 13.014401109409903,
+    "bull": 13.433274257349652
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.061,
+     "base": 5.274,
+     "bull": 5.503
+    },
+    "ttm_revenue": 12780793000
+   }
+  }
+ ],
+ "price": 8.75,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [
+  {
+   "method": "dcf",
+   "scenario": "base",
+   "field": "margin",
+   "value": 0.36
+  }
+ ],
+ "fair_value": {
+  "bear": -8.488020170051009,
+  "base": 13.48242920839771,
+  "bull": 19.157958220929864
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.9700594480058295,
+  "base": 0.5408490523883096,
+  "bull": 1.1894809395348416
+ },
+ "implied_growth": -0.03049383512993359,
+ "ticker": "YMM",
+ "asof": "2026-10-19",
+ "quote_currency": "USD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 0.14941652845637787,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/ymm/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/ymm/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/ymm/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/ymm/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/ymm/statistics/"
+ }
+}
