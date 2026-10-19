@@ -92,7 +92,8 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
             except (ValueError, IndexError):
                 verdict = "; swap review: unreadable"
         out.append("- Funding queue (conviction-4 BUYs waiting for room above the cash reserve): "
-                   + (", ".join(f"{e['ticker']} (decided {e['added']})" for e in fq) or "empty") + verdict + "."
+                   + (", ".join(f"{e['ticker']} ({'top-up of a starter, ' if e.get('stage') == 'topup' else ''}decided {e['added']})"
+                              for e in fq) or "empty") + verdict + "."
                    + (f" Details: runs/{asof}/swap-review.md." if swap.exists() else ""))
     hits = (state.get("entry_hits") or [])
     if hits:

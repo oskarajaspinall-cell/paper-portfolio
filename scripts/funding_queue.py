@@ -38,7 +38,9 @@ QUEUEABLE = {"CASH_RESERVE", "CASH_MIN"}  # breaches that more cash fixes; secto
 def settings(cfg: dict) -> dict:
     fq = cfg.get("funding_queue") or {}
     return {"max_days": int(fq.get("max_days", 30)), "max_rise_pct": float(fq.get("max_rise_pct", 10)),
-            "swap_candidates": int(fq.get("swap_candidates", 3))}
+            "swap_candidates": int(fq.get("swap_candidates", 3)),
+            "starter_min_fraction": float(fq.get("starter_min_fraction", 0.5)),
+            "min_step_pct": float(fq.get("min_step_pct", 1.0))}
 
 
 def queueable(rej: dict, req: dict | None, cfg: dict) -> bool:
@@ -99,10 +101,10 @@ def enqueue(state: dict, rejections: list[dict], requests: list[dict], quote, cf
 def drop_ordered(state: dict, tickers: set[str], today: str, port_dir: Path = PORT) -> bool:
     """A queued idea that got an order by any route (research loop, swap, resubmission) leaves the queue."""
     q = state.get("funding_queue") or []
-    gone = [e for e in q if e["ticker"] in tickers]
+    gone = [e for e in q if e["ticker"] in tickers and e.get("stage") != "topup"]
     if not gone:
         return False
-    state["funding_queue"] = [e for e in q if e["ticker"] not in tickers]
+    state["funding_queue"] = [e for e in q if e not in gone]
     log_events([{"date": today, "ticker": e["ticker"], "event": "ORDERED", "detail": "order placed"} for e in gone],
                port_dir)
     return True
@@ -114,15 +116,45 @@ def _upside(e: dict) -> float | None:
 
 
 def _rank(q: list[dict]) -> list[dict]:
-    return sorted(q, key=lambda e: (_upside(e) is None, -(_upside(e) or 0)))
+    """Top-ups of positions already started come first (finish what we started), then the best upside."""
+    return sorted(q, key=lambda e: (e.get("stage") != "topup", _upside(e) is None, -(_upside(e) or 0)))
+
+
+def room(state_path: Path, mkt, cfg: dict, watch: dict, today: str) -> dict:
+    """Cash above the reserve once the pending orders fill, as % of the portfolio (0.5% margin for costs)."""
+    from portfolio import Engine, load_state, mark, totals
+    state = load_state(state_path, cfg)
+    mark(state, mkt)
+    work = copy.deepcopy(state)
+    eng = Engine(work, mkt, cfg, watch, today)
+    eng.process([copy.deepcopy(o["request"]) for o in state.get("pending", [])])
+    tt = totals(work)
+    return {"pct": tt["cash"] / tt["total"] * 100 - eng.reserve["pct"] - 0.5, "engine": eng, "state": work}
+
+
+def _request(e: dict, today: str) -> dict:
+    req = copy.deepcopy(e["request"])
+    stage = e.get("stage", "full")
+    if stage == "topup":
+        req["action"] = "ADD"
+        req.pop("replaces", None)
+        req.pop("replacement_reason", None)
+    req["funding_stage"] = stage
+    req["reason"] = (f"{req.get('reason', '')} [funding queue: decided {e['added']} at {e['decision_price']:g}; "
+                     + ("top-up of the starter position" if stage == "topup" else "resubmitted")
+                     + f" {today} with room above the cash reserve]").strip()
+    return req
 
 
 def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.datetime | None = None,
            dry_run: bool = False, port_dir: Path = PORT) -> dict:
+    """Drop stale ideas, then, best first (top-ups before new names): a full-size order when it fits; otherwise
+    a starter position when the room above the reserve is at least starter_min_fraction of its target (the rest
+    stays queued as a top-up); a top-up in steps of at least min_step_pct whenever room appears."""
     from portfolio import atomic_write, load_state, place_orders
     st = settings(cfg)
     state = load_state(state_path, cfg)
-    out = {"resubmitted": [], "dropped": [], "waiting": []}
+    out = {"resubmitted": [], "started": [], "topped_up": [], "dropped": [], "waiting": []}
     q = state.get("funding_queue") or []
     if not q:
         return out
@@ -135,12 +167,16 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
         events.append({"date": today, "ticker": e["ticker"], "event": "DROPPED", "detail": why})
 
     for e in q:
-        t = e["ticker"]
-        if t in held or t in ordered:
+        t, topup = e["ticker"], e.get("stage") == "topup"
+        if not topup and (t in held or t in ordered):
             drop(e, "now held or ordered")
             continue
+        if topup and t not in held and t not in ordered:
+            drop(e, "the starter position is no longer held: top-up cancelled")
+            continue
         if today > e["expires"]:
-            drop(e, f"waited {st['max_days']} days without room (decided {e['added']})")
+            drop(e, f"waited {st['max_days']} days" + (" (the position stays at its starter size)" if topup else
+                                                        f" without room (decided {e['added']})"))
             continue
         try:
             c = mkt.quote(t)["close"]
@@ -151,7 +187,8 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
         rise = (c / e["decision_price"] - 1) * 100
         if rise > st["max_rise_pct"]:
             drop(e, f"close {c:g} is {rise:+.1f}% above the decision price {e['decision_price']:g} "
-                    f"(> {st['max_rise_pct']:g}%): the research is too stale to act on")
+                    f"(> {st['max_rise_pct']:g}%): the research is too stale to act on"
+                    + ("; the position stays at its starter size" if topup else ""))
             continue
         e["last_close"] = c
         e.pop("note", None)
@@ -161,37 +198,112 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
         atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
         log_events(events, port_dir)
 
-    for e in list(state["funding_queue"]):
-        if e.get("note"):
-            out["waiting"].append({"ticker": e["ticker"], "reason": e["note"]})
-            continue
-        req = copy.deepcopy(e["request"])
-        req["reason"] = (f"{req.get('reason', '')} [funding queue: decided {e['added']} at {e['decision_price']:g}; "
-                         f"resubmitted {today} with room above the cash reserve]").strip()
-        trial = place_orders([req], state_path, mkt, cfg, watch, today, dry_run=True, port_dir=port_dir, now=now)
-        if trial["placed"]:
-            if not dry_run:
-                real = place_orders([req], state_path, mkt, cfg, watch, today, port_dir=port_dir, now=now)
-                if not real["placed"]:
-                    out["waiting"].append({"ticker": e["ticker"], "reason": "rejected on placing: "
-                                           + "; ".join(r["rule"] for r in real["rejected"])})
-                    continue
-            p = trial["placed"][0]
-            out["resubmitted"].append({"ticker": e["ticker"], "est_shares": p.get("est_shares"),
-                                       "est_price": p.get("est_price"), "upside_pct": _upside(e)})
-            continue
-        rej = (trial["rejected"] or [{}])[0]
-        if queueable(rej, req, cfg):
-            out["waiting"].append({"ticker": e["ticker"], "reason": rej.get("detail", "")[:200],
-                                   "upside_pct": _upside(e)})
+    def save_entry(t, update=None):
+        """Remove (update None) or update a queue entry in the saved state."""
+        if dry_run:
+            return
+        s2 = load_state(state_path, cfg)
+        qq = s2.get("funding_queue", [])
+        if update is None:
+            s2["funding_queue"] = [x for x in qq if x["ticker"] != t]
         else:
+            for x in qq:
+                if x["ticker"] == t:
+                    x.update(update)
+        atomic_write(state_path, json.dumps(s2, indent=1, sort_keys=True))
+
+    def place(req):
+        trial = place_orders([req], state_path, mkt, cfg, watch, today, dry_run=True, port_dir=port_dir, now=now)
+        if trial["placed"] and not dry_run:
+            real = place_orders([req], state_path, mkt, cfg, watch, today, port_dir=port_dir, now=now)
+            if not real["placed"]:
+                return None, real["rejected"]
+        return trial["placed"], trial["rejected"]
+
+    # one starter at a time: none while another starter's order is still waiting for its open (2026-10-19)
+    starter_busy = any(x.get("stage") == "topup" and x["ticker"] in ordered for x in state["funding_queue"])
+    for e in list(state["funding_queue"]):
+        t = e["ticker"]
+        if e.get("note"):
+            out["waiting"].append({"ticker": t, "reason": e["note"]})
+            continue
+        if t in ordered:  # the starter order hasn't filled yet
+            out["waiting"].append({"ticker": t, "reason": "starter order waiting for its open"})
+            continue
+        req = _request(e, today)
+        if e.get("stage") == "topup":
+            r = room(state_path, mkt, cfg, watch, today)
+            h = r["state"]["holdings"].get(t)
+            if not h:
+                out["waiting"].append({"ticker": t, "reason": "starter not filled yet"})
+                continue
+            from portfolio import totals
+            pv = totals(r["state"])["total"]
+            now_pct = h["market_value_usd"] / pv * 100
+            target = r["engine"].core_size(int(req["conviction"]), t, r["state"])
+            if target - now_pct < st["min_step_pct"]:
+                save_entry(t)
+                events.append({"date": today, "ticker": t, "event": "COMPLETE", "detail": f"at {now_pct:.2f}% of {target:.2f}%"})
+                out["topped_up"].append({"ticker": t, "complete": True})
+                if not dry_run:
+                    log_events([events[-1]], port_dir)
+                continue
+            step = min(target, now_pct + max(0.0, r["pct"]))
+            if step - now_pct < st["min_step_pct"]:
+                out["waiting"].append({"ticker": t, "reason": f"top-up: {now_pct:.2f}% of {target:.2f}%, "
+                                                              f"room {max(0.0, r['pct']):.2f}%"})
+                continue
+            req["cap_pct"] = round(step, 2)
+            placed, rej = place(req)
+            if placed:
+                done = step >= target - 1e-6
+                save_entry(t) if done else None
+                ev = {"date": today, "ticker": t, "event": "TOPPED_UP" if done else "TOPUP_STEP",
+                      "detail": f"to {step:.2f}% of {target:.2f}%"}
+                if not dry_run:
+                    log_events([ev], port_dir)
+                out["topped_up"].append({"ticker": t, "to_pct": round(step, 2), "target_pct": round(target, 2),
+                                         "complete": done})
+            else:
+                out["waiting"].append({"ticker": t, "reason": "; ".join(x["rule"] for x in rej or [])})
+            continue
+        placed, rej = place(req)
+        if placed:
+            p = placed[0]
+            out["resubmitted"].append({"ticker": t, "est_shares": p.get("est_shares"), "est_price": p.get("est_price"),
+                                       "upside_pct": _upside(e)})
+            save_entry(t)
             if not dry_run:
-                s2 = load_state(state_path, cfg)
-                s2["funding_queue"] = [x for x in s2.get("funding_queue", []) if x["ticker"] != e["ticker"]]
-                atomic_write(state_path, json.dumps(s2, indent=1, sort_keys=True))
-            drop(e, f"{rej.get('rule')}: {rej.get('detail', '')}"[:300])
+                log_events([{"date": today, "ticker": t, "event": "RESUBMITTED", "detail": "full size, next open"}],
+                           port_dir)
+            continue
+        first = (rej or [{}])[0]
+        if not queueable(first, e["request"], cfg):
+            save_entry(t)
+            drop(e, f"{first.get('rule')}: {first.get('detail', '')}"[:300])
             if not dry_run:
                 log_events([events[-1]], port_dir)
+            continue
+        # no room for the full size: a starter position when the room is at least half the target (2026-10-19)
+        r = room(state_path, mkt, cfg, watch, today)
+        target = r["engine"].sizer.target(int(req["conviction"]), t, r["state"])[0]
+        if not starter_busy and r["pct"] >= st["starter_min_fraction"] * target:
+            req["cap_pct"] = round(r["pct"], 2)
+            req["funding_stage"] = "starter"
+            placed, rej2 = place(req)
+            if placed:
+                save_entry(t, {"stage": "topup"})
+                ev = {"date": today, "ticker": t, "event": "STARTER",
+                      "detail": f"{req['cap_pct']:.2f}% now of a {target:.2f}% target; the rest waits as a top-up"}
+                if not dry_run:
+                    log_events([ev], port_dir)
+                out["started"].append({"ticker": t, "starter_pct": req["cap_pct"], "target_pct": round(target, 2),
+                                       "est_shares": placed[0].get("est_shares"), "est_price": placed[0].get("est_price")})
+                ordered.add(t)
+                starter_busy = True
+                continue
+            first = (rej2 or [first])[0]
+        out["waiting"].append({"ticker": t, "reason": first.get("detail", "")[:200], "upside_pct": _upside(e)})
     return out
 
 
@@ -224,7 +336,7 @@ def swap_candidates(state: dict, mkt, cfg: dict, today: str) -> list[dict]:
 
 def brief(state: dict, mkt, cfg: dict, today: str) -> tuple[str, dict] | tuple[None, None]:
     """Markdown brief + {"buy", "candidates"} for the weekly swap-reviewer, or (None, None) when nothing waits."""
-    q = _rank(state.get("funding_queue") or [])
+    q = _rank([e for e in state.get("funding_queue") or [] if e.get("stage") != "topup"])
     if not q:
         return None, None
     best = q[0]

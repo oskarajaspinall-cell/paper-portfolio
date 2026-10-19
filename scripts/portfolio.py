@@ -18,6 +18,8 @@ A trade-request file is a JSON list. Each request:
      "triggers": [{"text": "...", "check": {...}}],     # CORE BUY (2-4)
      "exit_plan": {"target": 250.0, "stop": 200.0, "time_limit": "2027-01-06"},  # TACTICAL BUY
      "target_weight_pct": 4.0,                          # TACTICAL BUY/ADD, optional TRIM
+     "cap_pct": 5.0,                                    # CORE BUY/ADD: buy at most up to this weight (funding-
+                                                        # queue starter / top-up step); the target stays full size
      "replaces": "XYZ", "replacement_reason": "...",    # when the replacement rule applies
      "core_initiation": true,                           # BUY CORE on a held TACTICAL (re-initiation)
      "fill_date": "YYYY-MM-DD"}                         # SELL/TRIM only: fill at that day's close
@@ -641,7 +643,10 @@ class Engine:
                 elif delta < 0:
                     rows.append(self._execute(s, t, "CORE", "TRIM", -delta, q, r["reason"]))
             else:
-                shares = math.floor(target_pct / 100 * pv / q["price_usd"]) if ptype == "CORE" \
+                buy_pct = target_pct
+                if ptype == "CORE" and r.get("cap_pct") is not None:  # a starter position (funding queue,
+                    buy_pct = min(target_pct, float(r["cap_pct"]))     # 2026-10-19): the target stays the full size
+                shares = math.floor(buy_pct / 100 * pv / q["price_usd"]) if ptype == "CORE" \
                     else self.capped_shares(target_pct, pv, 0.0, q)
                 if shares < 1:
                     raise Reject("MIN_SHARES", f"{target_pct}% of ${pv:,.0f} buys <1 share at ${q['price_usd']:,.2f}")
@@ -675,6 +680,9 @@ class Engine:
                 if ptype == "CORE":
                     target_pct = r.get("target_weight_pct") if act == "TRIM" and r.get("target_weight_pct") is not None \
                         else self.core_size(r["conviction"], t, s)
+                    full_pct = target_pct
+                    if act == "ADD" and r.get("cap_pct") is not None:  # a funding-queue top-up step (2026-10-19)
+                        target_pct = min(target_pct, float(r["cap_pct"]))
                 else:
                     target_pct = r.get("target_weight_pct")
                     if target_pct is None:
@@ -689,7 +697,7 @@ class Engine:
                     held = s["holdings"][t]
                     held["conviction"] = r["conviction"]
                     if ptype == "CORE":
-                        held["target_pct"] = target_pct
+                        held["target_pct"] = full_pct
                 else:
                     n = round(-delta)  # nearest share to the target weight
                     if n < 1:
@@ -1113,7 +1121,8 @@ def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, po
         queued = funding_queue.enqueue(state, eng.rejections, requests, eng.quote, cfg, today, port_dir)
         if orders:
             state.setdefault("pending", []).extend(orders)
-            queued |= funding_queue.drop_ordered(state, {o["request"]["ticker"] for o in orders}, today, port_dir)
+            queued |= funding_queue.drop_ordered(state, {o["request"]["ticker"] for o in orders
+                                                         if not o["request"].get("funding_stage")}, today, port_dir)
         if orders or queued:
             atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
     return summary

@@ -43,7 +43,8 @@ reserve is released to buy the dip. The regime is set weekly, but the dip check 
 a sell-off frees the reserve for the next morning's open.
 A high-conviction buy that the reserve blocks is not thrown away: it waits in a **funding queue** and is bought
 automatically at the next open once there is room above the reserve (it drops out after 30 days or if the price
-runs 10% above where it was decided). Each week an AI step also checks whether the best waiting idea is clearly
+runs 10% above where it was decided). If there is room for at least half a position, the best idea starts with a
+smaller starter position straight away and is topped up as more room appears. Each week an AI step also checks whether the best waiting idea is clearly
 better than the weakest holding and, if so, swaps them.
 **Buying dips in stocks we know**: every weekday night a dip radar checks the holdings and every stock we recently
 rated "good but not now" (conviction 3+). If one has fallen unusually since we last researched it — more than its
