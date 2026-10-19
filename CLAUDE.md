@@ -36,7 +36,8 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - **Cash is a holding** (owner rule 2026-10-09): `scripts/regime.py` scores official macro indicators into a regime (risk-on / neutral / defensive); the weekly `macro-strategist` may move it one notch with cited official sources. The regime sets a cash reserve (`[cash_strategy]`, 10/20/35%) that new buys can't spend (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0, and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
 - **Funding queue** (design by Claude, owner-approved 2026-10-18; `[funding_queue]`): a conviction-4+ CORE BUY rejected only because it would take cash below the reserve (or the cash floor) is not lost. It waits in `state.json` `funding_queue`; weekdays it is resubmitted for the next open once there is room above the reserve (best base-fair-value upside first, every rule re-checked); weekly the `swap-reviewer` weighs the best waiting idea against the weakest CORE holdings and may swap (a BUY with `replaces`, only when clearly better). It drops out after 30 days or once its close is 10% above the decision price. The reserve itself is never relaxed.
 - **Dividends and splits** (owner request 2026-10-16): credited / applied mechanically by `scripts/corporate_actions.py` before every re-pricing (`[corporate_actions]`). A split never reads as a price move: shares, entry prices, tactical levels, watchlist entry prices and decision scoring are all adjusted.
-- When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve or sector limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
+- **Country exposure** (owner-approved 2026-10-19; `[portfolio].country_group_caps`): China + Hong Kong combined (companies reporting in CNY or HKD) is capped at 25%, enforced by `portfolio.py` like the sector cap. Evaluators judge each stock on its merits and do NOT lower conviction for portfolio concentration: the caps handle it.
+- When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve, sector or country limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
 
 ## Config (edit values here; scripts read this block)
 The portfolio is kept entirely in **US dollars**: cash, holdings, costs, returns and the SPY benchmark. Percentages are percent of total portfolio value (cash + holdings, in USD).
@@ -52,6 +53,9 @@ max_holdings = 15
 min_cash_pct = 0                  # hard: cash can never go below this
 max_cash_pct = 20                 # (superseded by [cash_strategy]: the regime's reserve; kept for reference)
 max_sector_pct = 30               # stockanalysis.com sector classification
+country_group_caps = [            # owner-approved 2026-10-19: combined exposure by the currency a company REPORTS in
+  { name = "China/HK", currencies = ["CNY", "HKD"], max_pct = 25 },  # (valuation file; HKG/SHA/SHE listing if unknown)
+]
 
 [core]
 # conviction -> target position size (% of portfolio). 1 = no position.

@@ -120,6 +120,17 @@ class Market:
             self._sector[ticker] = self.f.section(ticker, "overview")["data"]["sector"]
         return self._sector[ticker]
 
+    def reporting_currency(self, ticker: str) -> str | None:
+        """The currency the company reports in (where its business is; the country-exposure caps key on it):
+        the latest research valuation file's `reporting_currency`, else the listing's home currency for the
+        Chinese / Hong Kong exchanges, else unknown (None: counted in no group)."""
+        d = ROOT / "research" / Ticker(ticker).slug
+        for f in sorted(d.glob("20??-??-??-valuation.json"), reverse=True):
+            ccy = json.loads(f.read_text()).get("reporting_currency")
+            if ccy:
+                return ccy
+        return {"HKG": "HKD", "SHA": "CNY", "SHE": "CNY"}.get(Ticker(ticker).exchange or "")
+
     def fx(self, ccy: str) -> dict:
         """USD per quoted unit (e.g. per penny for GBX), implied by stockanalysis.com's own USD prices."""
         if ccy not in self._fx:
@@ -754,6 +765,7 @@ class Engine:
 
     def _new_holding(self, t, ptype, r, q) -> dict:
         return {"type": ptype, "shares": 0, "currency": q["currency"], "sector": self.mkt.sector(t),
+                "reporting_currency": self.mkt.reporting_currency(t),
                 "cost_basis_usd": 0.0, "conviction": r["conviction"], "thesis": r.get("thesis", ""),
                 "triggers": r.get("triggers") if ptype == "CORE" else None,
                 "exit_plan": r.get("exit_plan") if ptype == "TACTICAL" else None,
@@ -797,6 +809,13 @@ class Engine:
             sec = tt["sectors"][h["sector"]] / pv * 100
             if sec > p["max_sector_pct"] + 1e-9:
                 out.append(("SECTOR_MAX", f"{h['sector']} would be {sec:.2f}% (> {p['max_sector_pct']}%)"))
+            ccy = h.get("reporting_currency") or self.mkt.reporting_currency(r["ticker"])
+            for g in p.get("country_group_caps", []):  # owner-approved 2026-10-19: e.g. China/HK combined
+                if ccy in g["currencies"]:
+                    gw = sum(x["market_value_usd"] for t, x in s["holdings"].items()
+                             if (x.get("reporting_currency") or self.mkt.reporting_currency(t)) in g["currencies"]) / pv * 100
+                    if gw > g["max_pct"] + 1e-9:
+                        out.append(("COUNTRY_MAX", f"{g['name']} exposure would be {gw:.2f}% (> {g['max_pct']}%)"))
             w = h["market_value_usd"] / pv * 100
             if h["type"] == "TACTICAL" and w > tc["max_position_pct"] + 1e-9:
                 out.append(("TACTICAL_POSITION_MAX", f"{w:.2f}% (> {tc['max_position_pct']}%)"))
@@ -832,7 +851,8 @@ class Engine:
                 breaches = self.limit_breaches(work, r)
                 if breaches:
                     if r["action"] == "BUY" and not r.get("replaces") and any(
-                            b[0] in ("CASH_MIN", "CASH_RESERVE", "MAX_HOLDINGS", "TACTICAL_SLEEVE_MAX", "SECTOR_MAX")
+                            b[0] in ("CASH_MIN", "CASH_RESERVE", "MAX_HOLDINGS", "TACTICAL_SLEEVE_MAX", "SECTOR_MAX",
+                                     "COUNTRY_MAX")
                             for b in breaches):
                         raise Reject("REPLACEMENT_REQUIRED", "BUY would breach " + "; ".join(d for _, d in breaches)
                                      + " -- name the holding it replaces and why the new idea is better",

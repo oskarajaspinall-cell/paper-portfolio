@@ -43,6 +43,8 @@ A high-conviction buy that the reserve blocks is not thrown away: it waits in a 
 automatically at the next open once there is room above the reserve (it drops out after 30 days or if the price
 runs 10% above where it was decided). Each week an AI step also checks whether the best waiting idea is clearly
 better than the weakest holding and, if so, swaps them.
+Concentration is capped by rule: no sector above 30%, and China + Hong Kong combined (companies that report in
+yuan or Hong Kong dollars) no more than 25%. The AI judges each stock on its own merits; the rules handle the mix.
 Uninvested **cash earns interest** at a flat 3.8% AER (set in `CLAUDE.md` `[cash]`), credited daily on each
 day's closing cash balance and logged in `portfolio/interest.csv`.
 Every fact sheet includes a **fair value**: the industry-appropriate method from

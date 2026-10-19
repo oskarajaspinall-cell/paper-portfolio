@@ -810,3 +810,46 @@ def test_hold_requests_apply_at_once_and_only_trades_are_queued(cfg, tmp_path):
     assert [r["ticker"] for r in rest] == ["MSFT"] and [a["ticker"] for a in out["applied"]] == ["AAPL"]
     assert h["thesis"] == "new thesis" and h["conviction"] == 5 and h["triggers"][0]["text"] == "ROIC < 20%"
     assert not _json.loads(sp.read_text()).get("pending")
+
+
+# ------------------------------------------------------------------ country exposure (owner 2026-10-19)
+CHINA = {"HK1": (50.0, "HKD", "Consumer Discretionary"), "HK2": (50.0, "HKD", "Technology"),
+         "SH1": (10.0, "CNY", "Industrials"), "HSBCX": (50.0, "HKD", "Financials")}
+
+
+@pytest.fixture
+def china(monkeypatch):
+    """Reporting currencies: HSBCX is Hong Kong-listed but reports in USD (not counted)."""
+    rep = {"HK1": "CNY", "HK2": "CNY", "SH1": "CNY", "HSBCX": "USD"}
+    monkeypatch.setattr(Market, "reporting_currency", lambda self, t: rep.get(t, "USD"))
+    monkeypatch.setattr(FakeMarket, "fx", lambda self, c: {"rate": {"HKD": 0.128, "CNY": 0.14}.get(c, 1.0),
+                                                           "date": self.asof, "url": "https://stockanalysis.com/x/"})
+
+
+def hk_hold(t, weight_pct, pv=100000.0):
+    c, ccy, sector = CHINA[t]
+    usd = c * {"HKD": 0.128, "CNY": 0.14}[ccy]
+    shares = round(weight_pct / 100 * pv / usd)
+    return {"type": "CORE", "shares": shares, "currency": ccy, "sector": sector, "cost_basis_usd": shares * usd,
+            "conviction": 4, "thesis": "x", "triggers": [{"text": "a"}, {"text": "b"}], "exit_plan": None,
+            "entry_date": "2026-09-01", "entry_price": c, "market_value_usd": shares * usd}
+
+
+def test_country_cap_needs_replacement(cfg, china):
+    w = dict(WATCH, **{t: None for t in CHINA})
+    e = engine(cfg, {"HK1": hk_hold("HK1", 10), "HK2": hk_hold("HK2", 10)}, prices=CHINA, watch=w)
+    e.process([core_buy("SH1", conv=4)])  # 20% + 7% > 25%
+    assert only_rule(e) == "REPLACEMENT_REQUIRED"
+    assert "China/HK exposure would be" in e.rejections[0]["detail"] and e.rejections[0]["breaches"] == ["COUNTRY_MAX"]
+    e = engine(cfg, {"HK1": hk_hold("HK1", 10), "HK2": hk_hold("HK2", 10)}, prices=CHINA, watch=w)
+    e.process([core_buy("SH1", conv=4, replaces="HK1", replacement_reason="better")])
+    assert e.applied and e.s["holdings"]["SH1"]["reporting_currency"] == "CNY"
+
+
+def test_country_cap_ignores_non_group_names(cfg, china):
+    w = dict(WATCH, **{t: None for t in CHINA})
+    e = engine(cfg, {"HK1": hk_hold("HK1", 10), "HK2": hk_hold("HK2", 12)}, prices=CHINA, watch=w)
+    e.process([core_buy("HSBCX", conv=4)])  # Hong Kong listing, USD reporter: not China/HK exposure
+    assert e.applied
+    e.process([core_buy("AAPL", conv=4)])
+    assert len(e.applied) == 2
