@@ -1909,3 +1909,223 @@ OK research/YMM/2026-10-19-evaluation.md Bear case=148 Bull case=118 decision=AV
 [03:03:55] !! FAILED ETR:EVD: claude -p Ticker ETR:EVD, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(repor
 [03:04:12] You've hit your session limit · resets 6:40am (Europe/London)
 [03:04:12] !! FAILED SHA:600926: claude -p Ticker SHA:600926, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(re
+[03:04:17] == Research batch 04: 3 researched, 0 BUY, 3 AVOID -> reports/research/2026-10-19-batch-04.md; uploaded to GitHub
+[03:04:17] == pre-screen: 16 names skipped without AI research (reports/prescreen/)
+[03:04:17] == research loop stopped (repeated failures: usage limit?)
+[06:47:26] == research loop: 2845 names queued, best first: ['BMV:PE_OLES', 'TSX:IMG', 'HKG:6181', 'KNSL', 'SHE:002532', 'AU', 'TSX:EDV', 'BVMF:BBSE3', 'SHA:600989', 'ADX:ADNOCLS']
+[06:47:26] == screened out HKG:6181: price above base fair value (-28.2%; floor +0%) (no AI research)
+[06:47:26] == screened out TSX:IMG: price above base fair value (-45.6%; floor +0%) (no AI research)
+[06:47:26] == screened out BMV:PE_OLES: price above base fair value (-34.0%; floor +0%) (no AI research)
+[06:47:26] == screened out KNSL: price above base fair value (-17.3%; floor +0%) (no AI research)
+[06:47:26] == screened out AU: price above base fair value (-59.3%; floor +0%) (no AI research)
+[06:47:26] == screened out SHE:002532: price above base fair value (-28.9%; floor +0%) (no AI research)
+[06:47:27] == screened out TSX:EDV: price above base fair value (-42.6%; floor +0%) (no AI research)
+[06:47:27] == initiate ADX:ADNOCLS
+[06:47:27] == screened out SHA:600989: price above base fair value (-22.7%; floor +0%) (no AI research)
+[06:47:27] $ bin/py scripts/sec_delta.py ADX:ADNOCLS --asof 2026-10-19
+[06:47:27] == screened out BVMF:BBSE3: price above base fair value (-47.6%; floor +0%) (no AI research)
+[06:47:27] == screened out SHE:300475: price above base fair value (-42.2%; floor +0%) (no AI research)
+[06:47:27] == screened out HKG:0883: price above base fair value (-14.4%; floor +0%) (no AI research)
+[06:47:27] SKIP ADX:ADNOCLS: not a US listing (SEC filers only)
+[06:47:27] $ claude -p Ticker ADX:ADNOCLS, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:47:27] == screened out TSX:TXG: price above base fair value (-78.7%; floor +0%) (no AI research)
+[06:47:27] == screened out TSX:PAAS: price above base fair value (-44.9%; floor +0%) (no AI research)
+[06:47:27] == screened out MCY: price above base fair value (-6.5%; floor +0%) (no AI research)
+[06:47:27] == screened out ASX:GMD: price above base fair value (-32.8%; floor +0%) (no AI research)
+[06:47:27] == screened out NSE:NATIONALUM: price above base fair value (-19.5%; floor +0%) (no AI research)
+[06:47:27] == initiate SHE:000651
+[06:47:27] $ bin/py scripts/sec_delta.py SHE:000651 --asof 2026-10-19
+[06:47:27] == initiate SHA:600926
+[06:47:27] $ bin/py scripts/sec_delta.py SHA:600926 --asof 2026-10-19
+[06:47:27] SKIP SHE:000651: not a US listing (SEC filers only)
+[06:47:27] $ claude -p Ticker SHE:000651, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:47:27] SKIP SHA:600926: not a US listing (SEC filers only)
+[06:47:27] $ claude -p Ticker SHA:600926, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:47:46] Ticker format confirmed correct (`ADX:ADNOCLS` matches `universe/universe.csv`). The fact sheet script failed and I'm stopping per instructions (never estimate a missing number).
+
+**Error (verbatim):**
+```
+ERROR: https://stockanalysis.com/quote/adx/ADNOCLS/ :: field 'infoTable.Sector' :: sector missing
+```
+
+No note was written. This ticker's stockanalysis.com page is missing the Sector field needed by `fact_sheet.py`, so I cannot proceed with research or a BUY/AVOID decision for ADX:ADNOCLS until that's resolved.
+[06:47:46] !! FAILED ADX:ADNOCLS: researcher wrote no note at /Users/oskaraspinall/paper-portfolio/research/ADX-ADNOCLS/2026-10-19.md
+[06:47:46] == initiate SHA:601336
+[06:47:46] $ bin/py scripts/sec_delta.py SHA:601336 --asof 2026-10-19
+[06:47:46] SKIP SHA:601336: not a US listing (SEC filers only)
+[06:47:46] $ claude -p Ticker SHA:601336, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:48:50] research/SHA-600926/2026-10-19.md
+research/SHA-600926/factsheet-2026-10-19.md
+OK research/SHA-600926/2026-10-19.md type=CORE 1=43 2=123 3=139 4=62 5=70 6=89 total=526
+
+No data conflicts. No qualitative fetches were made: SHA:600926 has no recorded IR domain and isn't a US SEC filer or LSE-listed name, so beyond stockanalysis.com no allowlisted source was available (0 WebFetch calls used, within the 6-call CORE cap).
+[06:48:50] $ bin/py scripts/check_docs.py note research/SHA-600926/2026-10-19.md
+[06:48:50] OK research/SHA-600926/2026-10-19.md type=CORE 1=43 2=123 3=139 4=62 5=70 6=89 total=526
+[06:48:50] $ claude -p Ticker SHA:600926, date 2026-10-19. Research: research/SHA-600926/factsheet-2026-10-19.md, research/SHA-600926/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/SHA-600926/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:49:31] Note: `research/SHE-000651/2026-10-19.md`
+Fact sheet: `research/SHE-000651/factsheet-2026-10-19.md`
+Check: `OK research/SHE-000651/2026-10-19.md type=CORE 1=37 2=130 3=139 4=81 5=73 6=123 total=583`
+
+No data conflicts. No WebFetch calls were made — no IR domain is recorded for this ticker in `universe/watchlist.txt`/`universe/ir_domains.txt`, and the one non-filing headline (SCMP) is on a non-allowlisted domain, so it was cited by URL only, not fetched, consistent with the house rules.
+[06:49:31] $ bin/py scripts/check_docs.py note research/SHE-000651/2026-10-19.md
+[06:49:31] OK research/SHE-000651/2026-10-19.md type=CORE 1=37 2=130 3=139 4=81 5=73 6=123 total=583
+[06:49:31] $ claude -p Ticker SHE:000651, date 2026-10-19. Research: research/SHE-000651/factsheet-2026-10-19.md, research/SHE-000651/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/SHE-000651/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:50:05] research/SHA-600926/2026-10-19-macro.md
+OK research/SHA-600926/2026-10-19-macro.md macro_weight=context words=67
+[06:50:05] $ bin/py scripts/check_docs.py macro research/SHA-600926/2026-10-19-macro.md
+[06:50:06] OK research/SHA-600926/2026-10-19-macro.md macro_weight=context words=67
+[06:50:06] $ claude -p Evaluate SHA:600926 for 2026-10-19: fact sheet research/SHA-600926/factsheet-2026-10-19.md, note research/SHA-600926/2026-10-19.md, state portfolio/state.json, macro overlay research/SHA-600926/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:50:40] research/SHE-000651/2026-10-19-macro.md
+OK research/SHE-000651/2026-10-19-macro.md macro_weight=context words=65
+[06:50:40] $ bin/py scripts/check_docs.py macro research/SHE-000651/2026-10-19-macro.md
+[06:50:40] OK research/SHE-000651/2026-10-19-macro.md macro_weight=context words=65
+[06:50:40] $ claude -p Evaluate SHE:000651 for 2026-10-19: fact sheet research/SHE-000651/factsheet-2026-10-19.md, note research/SHE-000651/2026-10-19.md, state portfolio/state.json, macro overlay research/SHE-000651/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:50:42] research/SHA-600926/2026-10-19-evaluation.md
+OK research/SHA-600926/2026-10-19-evaluation.md Bear case=140 Bull case=129 decision=AVOID
+[06:50:42] $ bin/py scripts/check_docs.py eval research/SHA-600926/2026-10-19-evaluation.md
+[06:50:42] OK research/SHA-600926/2026-10-19-evaluation.md Bear case=140 Bull case=129 decision=AVOID
+[06:50:42] $ bin/py scripts/valuation.py SHA:600926 --asof 2026-10-19 --eval research/SHA-600926/2026-10-19-evaluation.md
+[06:50:42] {"out": "research/SHA-600926/2026-10-19-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 19.69, "base": 25.16, "bull": 29.86}, "price": 16.83}
+[06:50:43] == done SHA:600926
+[06:50:43] == initiate ETR:EVD
+[06:50:43] $ bin/py scripts/sec_delta.py ETR:EVD --asof 2026-10-19
+[06:50:43] SKIP ETR:EVD: not a US listing (SEC filers only)
+[06:50:43] $ claude -p Ticker ETR:EVD, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:51:46] research/SHE-000651/2026-10-19-evaluation.md
+OK research/SHE-000651/2026-10-19-evaluation.md Bear case=125 Bull case=93 decision=AVOID
+[06:51:46] $ bin/py scripts/check_docs.py eval research/SHE-000651/2026-10-19-evaluation.md
+[06:51:46] OK research/SHE-000651/2026-10-19-evaluation.md Bear case=125 Bull case=93 decision=AVOID
+[06:51:46] $ bin/py scripts/valuation.py SHE:000651 --asof 2026-10-19 --eval research/SHE-000651/2026-10-19-evaluation.md
+[06:51:46] {"out": "research/SHE-000651/2026-10-19-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 17.13, "base": 72.98, "bull": 84.44}, "price": 39.49}
+[06:51:48] == done SHE:000651
+[06:51:48] == initiate HOSE:VHM
+[06:51:48] $ bin/py scripts/sec_delta.py HOSE:VHM --asof 2026-10-19
+[06:51:48] SKIP HOSE:VHM: not a US listing (SEC filers only)
+[06:51:48] $ claude -p Ticker HOSE:VHM, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:52:08] I already have the result from the first run (which did execute). Per the workflow, a non-zero exit means I must stop and return the error verbatim.
+
+ERROR: https://stockanalysis.com/quote/hose/VHM/ :: field 'infoTable.Sector' :: sector missing
+
+The `fact_sheet.py` script failed fetching HOSE:VHM (exit code 2) because the sector field is missing/unparseable on stockanalysis.com's page for this ticker. Per the data rules, I cannot estimate or substitute this number, so no fact sheet or note can be produced. No research note was written.
+[06:52:08] !! FAILED HOSE:VHM: researcher wrote no note at /Users/oskaraspinall/paper-portfolio/research/HOSE-VHM/2026-10-19.md
+[06:52:25] == initiate HKG:1378
+[06:52:25] $ bin/py scripts/sec_delta.py HKG:1378 --asof 2026-10-19
+[06:52:25] SKIP HKG:1378: not a US listing (SEC filers only)
+[06:52:25] $ claude -p Ticker HKG:1378, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:53:35] check_docs.py passes.
+
+Note: `research/SHA-601336/2026-10-19.md`
+Fact sheet: `research/SHA-601336/factsheet-2026-10-19.md`
+check_docs: `OK research/SHA-601336/2026-10-19.md type=CORE 1=50 2=142 3=149 4=86 5=88 6=58 total=573`
+
+Data conflicts: none. Blocked/failed URLs: peer tickers `SHA:601628` (China Life A-share) and `SHA:601319` (PICC Group) both 404'd on stockanalysis.com and were dropped; substituted `HKG:2628` (China Life H-shares) as the third peer alongside `SHA:601318` (Ping An) and `SHA:601601` (CPIC).
+[06:53:35] $ bin/py scripts/check_docs.py note research/SHA-601336/2026-10-19.md
+[06:53:36] OK research/SHA-601336/2026-10-19.md type=CORE 1=50 2=142 3=149 4=86 5=88 6=58 total=573
+[06:53:36] $ claude -p Ticker SHA:601336, date 2026-10-19. Research: research/SHA-601336/factsheet-2026-10-19.md, research/SHA-601336/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/SHA-601336/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:54:47] research/ETR-EVD/2026-10-19.md
+research/ETR-EVD/factsheet-2026-10-19.md
+OK research/ETR-EVD/2026-10-19.md type=CORE 1=61 2=148 3=141 4=77 5=91 6=77 total=595
+
+No data conflicts. No WebFetch calls were made: CTS Eventim has no recorded IR domain in `universe/watchlist.txt`/`universe/ir_domains.txt` and is not a US SEC filer, so qualitative claims beyond the fact sheet draw only on its listed news headlines (all allowlisted-exempt per the headline-citation rule).
+[06:54:47] $ bin/py scripts/check_docs.py note research/ETR-EVD/2026-10-19.md
+[06:54:48] OK research/ETR-EVD/2026-10-19.md type=CORE 1=61 2=148 3=141 4=77 5=91 6=77 total=595
+[06:54:48] $ claude -p Ticker ETR:EVD, date 2026-10-19. Research: research/ETR-EVD/factsheet-2026-10-19.md, research/ETR-EVD/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/ETR-EVD/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:55:07] Note path: `research/HKG-1378/2026-10-19.md`
+Fact sheet: `research/HKG-1378/factsheet-2026-10-19.md`
+Check: `OK research/HKG-1378/2026-10-19.md type=CORE 1=55 2=139 3=146 4=80 5=87 6=116 total=623`
+
+Data conflicts: none. Blocked/unfetched URLs: none fetched (no company IR domain recorded for this ticker in `universe/ir_domains.txt`, so qualitative research stayed within stockanalysis.com only; this limitation is flagged in sections 2 and 6 of the note).
+[06:55:07] $ bin/py scripts/check_docs.py note research/HKG-1378/2026-10-19.md
+[06:55:07] OK research/HKG-1378/2026-10-19.md type=CORE 1=55 2=139 3=146 4=80 5=87 6=116 total=623
+[06:55:07] $ claude -p Ticker HKG:1378, date 2026-10-19. Research: research/HKG-1378/factsheet-2026-10-19.md, research/HKG-1378/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/HKG-1378/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:56:07] research/ETR-EVD/2026-10-19-macro.md
+OK research/ETR-EVD/2026-10-19-macro.md macro_weight=context words=75
+[06:56:07] $ bin/py scripts/check_docs.py macro research/ETR-EVD/2026-10-19-macro.md
+[06:56:07] OK research/ETR-EVD/2026-10-19-macro.md macro_weight=context words=75
+[06:56:07] $ claude -p Evaluate ETR:EVD for 2026-10-19: fact sheet research/ETR-EVD/factsheet-2026-10-19.md, note research/ETR-EVD/2026-10-19.md, state portfolio/state.json, macro overlay research/ETR-EVD/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:57:03] research/HKG-1378/2026-10-19-macro.md
+OK research/HKG-1378/2026-10-19-macro.md macro_weight=secondary words=243
+[06:57:03] $ bin/py scripts/check_docs.py macro research/HKG-1378/2026-10-19-macro.md
+[06:57:04] OK research/HKG-1378/2026-10-19-macro.md macro_weight=secondary words=243
+[06:57:04] $ claude -p Evaluate HKG:1378 for 2026-10-19: fact sheet research/HKG-1378/factsheet-2026-10-19.md, note research/HKG-1378/2026-10-19.md, state portfolio/state.json, macro overlay research/HKG-1378/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:57:15] research/SHA-601336/2026-10-19-macro.md
+OK research/SHA-601336/2026-10-19-macro.md macro_weight=secondary words=242
+[06:57:15] $ bin/py scripts/check_docs.py macro research/SHA-601336/2026-10-19-macro.md
+[06:57:15] OK research/SHA-601336/2026-10-19-macro.md macro_weight=secondary words=242
+[06:57:15] $ claude -p Evaluate SHA:601336 for 2026-10-19: fact sheet research/SHA-601336/factsheet-2026-10-19.md, note research/SHA-601336/2026-10-19.md, state portfolio/state.json, macro overlay research/SHA-601336/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:57:15] research/ETR-EVD/2026-10-19-evaluation.md
+OK research/ETR-EVD/2026-10-19-evaluation.md Bear case=139 Bull case=132 decision=AVOID
+[06:57:15] $ bin/py scripts/check_docs.py eval research/ETR-EVD/2026-10-19-evaluation.md
+[06:57:15] OK research/ETR-EVD/2026-10-19-evaluation.md Bear case=139 Bull case=132 decision=AVOID
+[06:57:15] $ bin/py scripts/valuation.py ETR:EVD --asof 2026-10-19 --eval research/ETR-EVD/2026-10-19-evaluation.md
+[06:57:16] {"out": "research/ETR-EVD/2026-10-19-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 48.8, "base": 78.54, "bull": 172.97}, "price": 61.75}
+[06:57:17] == done ETR:EVD
+[06:57:37] == initiate SHA:601229
+[06:57:37] $ bin/py scripts/sec_delta.py SHA:601229 --asof 2026-10-19
+[06:57:37] SKIP SHA:601229: not a US listing (SEC filers only)
+[06:57:37] $ claude -p Ticker SHA:601229, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:57:49] research/HKG-1378/2026-10-19-evaluation.md
+OK research/HKG-1378/2026-10-19-evaluation.md Bear case=144 Bull case=119 decision=AVOID
+[06:57:49] $ bin/py scripts/check_docs.py eval research/HKG-1378/2026-10-19-evaluation.md
+[06:57:49] OK research/HKG-1378/2026-10-19-evaluation.md Bear case=144 Bull case=119 decision=AVOID
+[06:57:49] $ bin/py scripts/valuation.py HKG:1378 --asof 2026-10-19 --eval research/HKG-1378/2026-10-19-evaluation.md
+[06:57:49] {"out": "research/HKG-1378/2026-10-19-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 2.53, "base": 35.83, "bull": 55.63}, "price": 19.64}
+[06:57:50] == done HKG:1378
+[06:58:11] == screened out ATH:HTO: price above base fair value (-5.4%; floor +0%) (no AI research)
+[06:58:13] research/SHA-601336/2026-10-19-evaluation.md
+OK research/SHA-601336/2026-10-19-evaluation.md Bear case=141 Bull case=128 decision=AVOID
+[06:58:13] $ bin/py scripts/check_docs.py eval research/SHA-601336/2026-10-19-evaluation.md
+[06:58:13] OK research/SHA-601336/2026-10-19-evaluation.md Bear case=141 Bull case=128 decision=AVOID
+[06:58:13] $ bin/py scripts/valuation.py SHA:601336 --asof 2026-10-19 --eval research/SHA-601336/2026-10-19-evaluation.md
+[06:58:13] {"out": "research/SHA-601336/2026-10-19-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 23.89, "base": 58.55, "bull": 87.87}, "price": 52.31}
+[06:58:14] == done SHA:601336
+[06:58:51] == initiate SHE:002142
+[06:58:51] $ bin/py scripts/sec_delta.py SHE:002142 --asof 2026-10-19
+[06:58:51] SKIP SHE:002142: not a US listing (SEC filers only)
+[06:58:51] $ claude -p Ticker SHE:002142, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:58:54] == initiate SHA:688578
+[06:58:54] $ bin/py scripts/sec_delta.py SHA:688578 --asof 2026-10-19
+[06:58:55] SKIP SHA:688578: not a US listing (SEC filers only)
+[06:58:55] $ claude -p Ticker SHA:688578, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:00:31] Note written and validated.
+
+- Note: `research/SHA-601229/2026-10-19.md`
+- Fact sheet: `research/SHA-601229/factsheet-2026-10-19.md`
+- Check: `OK research/SHA-601229/2026-10-19.md type=CORE 1=48 2=141 3=145 4=67 5=89 6=101 total=591`
+- No data conflicts. No qualitative fetches made: stockanalysis.com's overview lists no company website for this issuer (not recorded in `universe/ir_domains.txt`), it is not a US SEC filer (no sec.gov filing-delta step), and it has no LSE listing — so beyond stockanalysis.com there was no allowlisted URL to fetch for this name. No URLs were blocked.
+[07:00:31] $ bin/py scripts/check_docs.py note research/SHA-601229/2026-10-19.md
+[07:00:31] OK research/SHA-601229/2026-10-19.md type=CORE 1=48 2=141 3=145 4=67 5=89 6=101 total=591
+[07:00:31] $ claude -p Ticker SHA:601229, date 2026-10-19. Research: research/SHA-601229/factsheet-2026-10-19.md, research/SHA-601229/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/SHA-601229/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:01:02] Note path: `research/SHE-002142/2026-10-19.md`
+Fact sheet: `research/SHE-002142/factsheet-2026-10-19.md`
+Check: `OK research/SHE-002142/2026-10-19.md type=CORE 1=43 2=130 3=135 4=81 5=81 6=46 total=516`
+
+No data conflicts. No qualitative fetches were needed (news items were routine filing announcements only, no catalyst). No blocked URLs.
+[07:01:02] $ bin/py scripts/check_docs.py note research/SHE-002142/2026-10-19.md
+[07:01:02] OK research/SHE-002142/2026-10-19.md type=CORE 1=43 2=130 3=135 4=81 5=81 6=46 total=516
+[07:01:02] $ claude -p Ticker SHE:002142, date 2026-10-19. Research: research/SHE-002142/factsheet-2026-10-19.md, research/SHE-002142/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/SHE-002142/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:02:47] research/SHE-002142/2026-10-19-macro.md
+OK research/SHE-002142/2026-10-19-macro.md macro_weight=context words=73
+[07:02:47] $ bin/py scripts/check_docs.py macro research/SHE-002142/2026-10-19-macro.md
+[07:02:47] OK research/SHE-002142/2026-10-19-macro.md macro_weight=context words=73
+[07:02:47] $ claude -p Evaluate SHE:002142 for 2026-10-19: fact sheet research/SHE-002142/factsheet-2026-10-19.md, note research/SHE-002142/2026-10-19.md, state portfolio/state.json, macro overlay research/SHE-002142/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:03:00] research/SHA-601229/2026-10-19-macro.md
+OK research/SHA-601229/2026-10-19-macro.md macro_weight=context words=79
+[07:03:00] $ bin/py scripts/check_docs.py macro research/SHA-601229/2026-10-19-macro.md
+[07:03:00] OK research/SHA-601229/2026-10-19-macro.md macro_weight=context words=79
+[07:03:00] $ claude -p Evaluate SHA:601229 for 2026-10-19: fact sheet research/SHA-601229/factsheet-2026-10-19.md, note research/SHA-601229/2026-10-19.md, state portfolio/state.json, macro overlay research/SHA-601229/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:03:26] Decision: **AVOID**, conviction 3, no position.
+
+research/SHE-002142/2026-10-19-evaluation.md
+OK research/SHE-002142/2026-10-19-evaluation.md Bear case=144 Bull case=104 decision=AVOID
+[07:03:26] $ bin/py scripts/check_docs.py eval research/SHE-002142/2026-10-19-evaluation.md
+[07:03:26] OK research/SHE-002142/2026-10-19-evaluation.md Bear case=144 Bull case=104 decision=AVOID
+[07:03:26] $ bin/py scripts/valuation.py SHE:002142 --asof 2026-10-19 --eval research/SHE-002142/2026-10-19-evaluation.md
+[07:03:26] {"out": "research/SHE-002142/2026-10-19-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 37.5, "base": 45.0, "bull": 49.51}, "price": 34.72}
+[07:03:27] == done SHE:002142
+[07:03:28] Note path: `research/SHA-688578/2026-10-19.md`
+Fact sheet: `research/SHA-688578/factsheet-2026-10-19.md`
+Check: `OK research/SHA-688578/2026-10-19.md type=CORE 1=60 2=139 3=141 4=88 5=78 6=141 total=647`
+
+Data conflicts: none. No WebFetch calls were made — no allowlisted company IR domain is recorded for this ticker (not in `universe/watchlist.txt`/`universe/ir_domains.txt`), and no company website was found on the cached stockanalysis.com overview page, so the note relies solely on the fact sheet and its listed news headlines (no blocked URLs to report). SEC filing delta step skipped (not a US SEC filer).
+[07:03:28] $ bin/py scripts/check_docs.py note research/SHA-688578/2026-10-19.md

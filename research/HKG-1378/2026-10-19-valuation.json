@@ -1,0 +1,113 @@
+{
+ "industry": {
+  "industry": "Aluminum",
+  "known": true,
+  "best": "NAV / normalized DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav",
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -0.5814324313287291,
+    "base": 46.074105078130344,
+    "bull": 70.92895372633616
+   },
+   "implied_growth": -0.14264810745497786,
+   "discount_rate": 0.10448194307655831,
+   "cost_of_equity": 0.132047,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.018620970384343585,
+     "base": 0.05337205953375461,
+     "bull": 0.09124629736633127
+    },
+    "cash_flow_margin": {
+     "bear": 0.0036117420996827874,
+     "base": 0.16529549488154216,
+     "bull": 0.21641577390738714
+    },
+    "cagr_3y": 0.07224194076868717,
+    "cagr_5y": 0.09124629736633127,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 8.75196418618942,
+    "base": 15.34446411775421,
+    "bull": 25.01941013112301
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 2.781,
+     "base": 4.572,
+     "bull": 4.658
+    },
+    "ttm_ebitda": 48271868000,
+    "peak_earnings": "TTM EBITDA is 1.6x its 5y median: bear/base use the 5y average (3.123e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 19.64,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 2.529699774510654,
+  "base": 35.830891424671634,
+  "bull": 55.62577252793178
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8711965491593353,
+  "base": 0.8243834737612847,
+  "bull": 1.8322694769822698
+ },
+ "implied_growth": -0.14264810745497786,
+ "ticker": "HKG:1378",
+ "asof": "2026-10-19",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.1725914802695476,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/1378/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/1378/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/1378/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/1378/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/1378/statistics/"
+ }
+}

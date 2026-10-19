@@ -1,0 +1,100 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 22.970983620106193,
+    "base": 69.20372280487689,
+    "bull": 84.96582795534923
+   },
+   "cost_of_equity": 0.129903,
+   "assumptions": {
+    "roe": {
+     "bear": 0.08583,
+     "base": 0.20826,
+     "bull": 0.25
+    },
+    "justified_pb": {
+     "bear": 0.5798690218582881,
+     "base": 1.7469471797756024,
+     "bull": 2.144838565150663
+    },
+    "bvps": 39.61409
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 25.741637882,
+    "base": 37.2529118732,
+    "bull": 93.6649956
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.73,
+     "base": 5.398,
+     "bull": 6.6
+    },
+    "ttm_eps": 14.191666,
+    "peak_earnings": "TTM EPS is 2.1x its 5y median: bear/base use the 5y average (6.901), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 52.31,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 23.894535040737463,
+  "base": 58.55345249431792,
+  "bull": 87.86555050356615
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5432128648301001,
+  "base": 0.1193548555595092,
+  "bull": 0.6797084783706013
+ },
+ "implied_growth": null,
+ "ticker": "SHA:601336",
+ "asof": "2026-10-18",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/601336/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/601336/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/601336/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/601336/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/601336/statistics/"
+ }
+}
