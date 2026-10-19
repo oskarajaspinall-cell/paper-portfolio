@@ -212,3 +212,17 @@ def test_one_starter_at_a_time(cfg, tmp_path, reserve20):
     sp.write_text(json.dumps(s))
     out = FQ.review(sp, OpenMarket(cfg), cfg, WATCH, "2026-10-12", dry_run=True, port_dir=tmp_path)
     assert [x["ticker"] for x in out["started"]] == ["NVDA"]
+
+
+def test_an_idea_that_picks_up_a_sector_cap_stays_for_the_swap_review(cfg, tmp_path, reserve20):
+    hold = {"MSFT": holding("MSFT", "CORE", 22, conv=4), "LON:ULVR": holding("LON:ULVR", "CORE", 56, conv=3)}
+    sp = state_file(tmp_path, cfg, hold, 22000)
+    place_orders([core_buy("NVDA", conv=4)], sp, OpenMarket(cfg), cfg, WATCH, TODAY, port_dir=tmp_path)
+    assert json.loads(sp.read_text())["funding_queue"]  # queued: cash only (Tech 22% + 7% = 29%)
+    s = json.loads(sp.read_text())
+    s["holdings"]["AAPL"] = holding("AAPL", "CORE", 3)  # Tech now 25%: NVDA would also breach the sector cap
+    s["cash_usd"] = 19000
+    sp.write_text(json.dumps(s))
+    out = FQ.review(sp, OpenMarket(cfg), cfg, WATCH, "2026-10-12", port_dir=tmp_path)
+    assert not out["dropped"] and out["waiting"][0]["reason"].startswith("needs a replacement")
+    assert json.loads(sp.read_text())["funding_queue"][0]["ticker"] == "NVDA"

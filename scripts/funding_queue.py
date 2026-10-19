@@ -278,6 +278,12 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
                            port_dir)
             continue
         first = (rej or [{}])[0]
+        if first.get("rule") == "REPLACEMENT_REQUIRED" and not queueable(first, e["request"], cfg):
+            # a sector / holdings / country cap on top of the cash (e.g. another starter took the sector's room):
+            # it stays for the weekly swap review, which can replace a holding (2026-10-19)
+            out["waiting"].append({"ticker": t, "reason": "needs a replacement: " + first.get("detail", "")[:180],
+                                   "upside_pct": _upside(e)})
+            continue
         if not queueable(first, e["request"], cfg):
             save_entry(t)
             drop(e, f"{first.get('rule')}: {first.get('detail', '')}"[:300])
