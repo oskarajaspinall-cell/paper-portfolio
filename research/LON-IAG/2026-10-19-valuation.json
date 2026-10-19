@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Airlines",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -917.7081708713264,
+    "base": 2938.0989489218687,
+    "bull": 6626.097833139509
+   },
+   "implied_growth": -0.2371669059827482,
+   "discount_rate": 0.055,
+   "cost_of_equity": 0.11799300000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.04711005778931272,
+     "base": 0.1467612386168609,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.038243414547604965,
+     "base": 0.08941883231097575,
+     "bull": 0.12951529771358364
+    },
+    "cagr_3y": 0.12922011557862545,
+    "cagr_5y": 0.40782483888881815,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 399.527294155787,
+    "base": 444.28201163118007,
+    "bull": 463.7621784237986
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.358,
+     "base": 4.7635000000000005,
+     "bull": 4.94
+    },
+    "ttm_ebitda": 6357000000
+   }
+  }
+ ],
+ "price": 414.8,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -478.62968252895524,
+  "base": 2106.8266364916394,
+  "bull": 4571.985948234272
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -2.153880623261705,
+  "base": 4.079138467916199,
+  "bull": 10.02214548754646
+ },
+ "implied_growth": -0.2371669059827482,
+ "ticker": "LON:IAG",
+ "asof": "2026-10-19",
+ "quote_currency": "GBX",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 84.4997281008858,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/lon/IAG/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/lon/IAG/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/lon/IAG/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/lon/IAG/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/lon/IAG/statistics/"
+ }
+}

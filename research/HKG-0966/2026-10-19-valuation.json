@@ -1,0 +1,100 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 14.909154153397868,
+    "base": 20.99421807280514,
+    "bull": 22.53716302730841
+   },
+   "cost_of_equity": 0.12143549999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.07486,
+     "base": 0.09521,
+     "bull": 0.10037
+    },
+    "justified_pb": {
+     "bear": 0.5170295171383983,
+     "base": 0.7280513918629551,
+     "bull": 0.7815586583778796
+    },
+    "bvps": 28.836176
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 7.267232256600001,
+    "base": 14.432943224400002,
+    "bull": 50.284431
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 2.577,
+     "base": 5.118,
+     "bull": 5.619
+    },
+    "ttm_eps": 8.949,
+    "peak_earnings": "TTM EPS is 4.3x its 5y median: bear/base use the 5y average (2.82), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 17.46,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.02,
+ "reporting_currency": "HKD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 12.361846854465247,
+  "base": 18.807126456670094,
+  "bull": 31.786252351538938
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.29199044361596527,
+  "base": 0.07715500897308658,
+  "bull": 0.8205184622874533
+ },
+ "implied_growth": null,
+ "ticker": "HKG:0966",
+ "asof": "2026-10-19",
+ "quote_currency": "HKD",
+ "financials_currency": "HKD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/0966/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/0966/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/0966/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/0966/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/0966/statistics/"
+ }
+}

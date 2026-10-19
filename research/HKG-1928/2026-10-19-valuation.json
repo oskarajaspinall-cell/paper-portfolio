@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Resorts & Casinos",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -42.64632995962347,
+    "base": 33.67070759394144,
+    "bull": 142.66983524933744
+   },
+   "implied_growth": -0.15770505108171345,
+   "discount_rate": 0.07672403212898908,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.11678628100849972,
+     "base": 0.03,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.16801714641744547,
+     "base": 0.2542417037037037,
+     "bull": 0.3912871900826446
+    },
+    "cagr_3y": 0.6675965734870117,
+    "cagr_5y": 0.2685725620169994,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 20.04053259243357,
+    "base": 23.001550578729343,
+    "bull": 25.168508647027448
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 12.95,
+     "base": 14.456499999999998,
+     "bull": 15.559
+    },
+    "ttm_ebitda": 2027000000
+   }
+  }
+ ],
+ "price": 11.49,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [
+  {
+   "method": "dcf",
+   "scenario": "base",
+   "field": "growth",
+   "value": 0.03
+  }
+ ],
+ "fair_value": {
+  "bear": -21.750709108937787,
+  "base": 30.114321922204073,
+  "bull": 103.50272638190079
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -2.893012106957162,
+  "base": 1.6209157460577956,
+  "bull": 8.008070181192409
+ },
+ "implied_growth": -0.15770505108171345,
+ "ticker": "HKG:1928",
+ "asof": "2026-10-19",
+ "quote_currency": "HKD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 7.847803000000001,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/1928/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/1928/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/1928/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/1928/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/1928/statistics/"
+ }
+}

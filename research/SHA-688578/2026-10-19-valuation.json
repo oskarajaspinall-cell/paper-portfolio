@@ -1,0 +1,87 @@
+{
+ "industry": {
+  "industry": "Biotechnology",
+  "known": true,
+  "best": "rNPV / probability-adjusted DCF",
+  "second": "EV/Revenue / pipeline value",
+  "best_models": [
+   "rnpv"
+  ],
+  "second_models": [
+   "ev_revenue",
+   "pipeline"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 100.83387127040625,
+    "base": 123.66374912845778,
+    "bull": 128.27323608133418
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.725,
+     "base": 8.404,
+     "bull": 8.743
+    },
+    "ttm_revenue": 6133363637
+   }
+  },
+  {
+   "model": "pipeline",
+   "label": "pipeline value",
+   "slot": "second",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline asset values, not on stockanalysis.com]"
+  }
+ ],
+ "price": 81.79,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 100.83387127040625,
+  "base": 123.66374912845778,
+  "bull": 128.27323608133418
+ },
+ "used": [
+  "ev_revenue"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": 0.23283862660968624,
+  "base": 0.5119666111805572,
+  "bull": 0.568324197106421
+ },
+ "implied_growth": null,
+ "ticker": "SHA:688578",
+ "asof": "2026-10-19",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/688578/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/688578/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/688578/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/688578/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/688578/statistics/"
+ }
+}

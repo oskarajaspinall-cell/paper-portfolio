@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 60.78748753848484,
+    "base": 61.09700791378788,
+    "bull": 63.47481864742424
+   },
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "roe": {
+     "bear": 0.23514,
+     "base": 0.23621,
+     "bull": 0.24443
+    },
+    "justified_pb": {
+     "bear": 3.1839393939393936,
+     "base": 3.200151515151515,
+     "bull": 3.3246969696969697
+    },
+    "bvps": 19.091911
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 48.603684,
+    "base": 86.42982239999999,
+    "bull": 94.91761559999999
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.21,
+     "base": 18.156,
+     "bull": 19.939
+    },
+    "ttm_eps": 4.7604
+   }
+  }
+ ],
+ "price": 61.07,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 56.72621969232322,
+  "base": 69.54127940919192,
+  "bull": 73.9557509649495
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.07112789107052209,
+  "base": 0.1387142526476488,
+  "bull": 0.21099968830767146
+ },
+ "implied_growth": null,
+ "ticker": "RLI",
+ "asof": "2026-10-19",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/rli/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/rli/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/rli/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/rli/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/rli/statistics/"
+ }
+}
