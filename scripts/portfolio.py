@@ -501,7 +501,8 @@ class Reject(Exception):
 
 def current_reserve(cfg: dict, asof: str) -> dict:
     """Cash reserve (owner rule 2026-10-09: cash is a holding) from the latest regime file on/before asof
-    (scripts/regime.py): {pct, regime, dip_multiplier}. No regime file yet -> the neutral reserve."""
+    (scripts/regime.py): {pct, regime, dip_multiplier}, the dip release taken from the newest daily dip check
+    after that file when there is one. No regime file yet -> the neutral reserve."""
     cs = cfg.get("cash_strategy")
     if not cs:
         return {"pct": 0.0, "regime": None, "dip_multiplier": 1.0}
@@ -509,6 +510,10 @@ def current_reserve(cfg: dict, asof: str) -> dict:
     doc = regime.latest(asof)
     if not doc:
         return {"pct": float(cs["reserve_pct"]["neutral"]), "regime": "neutral (no regime file yet)", "dip_multiplier": 1.0}
+    dip = regime.latest_dip(asof, doc["asof"])  # the daily dip check since that weekly regime (2026-10-19)
+    if dip:
+        return {"pct": round(float(doc["base_reserve_pct"]) * dip["multiplier"], 2), "regime": doc["final_regime"],
+                "dip_multiplier": dip["multiplier"], "asof": doc["asof"], "dip_asof": dip["asof"]}
     return {"pct": float(doc["reserve_pct"]), "regime": doc["final_regime"], "dip_multiplier": doc["dip"]["multiplier"],
             "asof": doc["asof"]}
 

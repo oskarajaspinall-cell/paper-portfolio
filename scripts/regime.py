@@ -3,12 +3,16 @@
     python scripts/regime.py [--asof D]               score -> reports/regime/<D>.json and .md
     python scripts/regime.py --apply-view [--asof D]  merge the macro-strategist's checked view
                                                       (reports/regime/<D>-view.md, at most one notch)
+    python scripts/regime.py --dip [--asof D]         daily dip check (weekdays, bin/fill-pending; 2026-10-19):
+                                                      S&P 500 daily close vs its 52-week high -> reports/regime/dip-<D>.json
 
 Risk points from official FRED data (the day's macro snapshot) and the S&P 500 trend (stockanalysis.com
 weekly chart data); thresholds in CLAUDE.md [cash_strategy]. 0-1 points = risk-on, 2-3 = neutral,
 4+ = defensive. The regime sets the cash RESERVE (new buys can't take cash below it). When the S&P 500
 falls far enough below its 52-week high, the reserve is released in steps (buy the dip). A missing
 indicator scores 0 and is listed as [data unavailable]; nothing is guessed.
+The regime itself (score + macro view) is set weekly; the dip release is re-checked daily from daily closes, so
+a sell-off releases the reserve the next morning instead of at the next weekly run (and a recovery restores it).
 """
 from __future__ import annotations
 
@@ -106,6 +110,28 @@ def spy_trend(fetcher, asof: str) -> dict:
             "high_52w": hi, "drawdown_pct": round((1 - last["close"] / hi) * 100, 2), "source": h["source_url"]}
 
 
+def spy_dip_daily(fetcher, asof: str) -> dict:
+    """The S&P 500 (SPY) daily close before asof vs its 52-week (252-session) high, stockanalysis.com."""
+    h = fetcher.long_history("SPY", etf=True, range_="1Y", period="Daily")
+    rows = [r for r in h["rows"] if r["date"] < asof and r.get("close")]
+    if len(rows) < 200:
+        raise DataError(h["source_url"], "history", "fewer than 200 daily closes")
+    last, hi = rows[-1], max(r["close"] for r in rows[-252:])
+    return {"close": last["close"], "date": last["date"], "high_52w": hi,
+            "drawdown_pct": round((1 - last["close"] / hi) * 100, 2), "source": h["source_url"]}
+
+
+def dip_doc(spy: dict, cfg: dict, asof: str) -> dict:
+    return {"asof": asof, "spy": spy, "drawdown_pct": spy["drawdown_pct"],
+            "multiplier": dip_multiplier(spy["drawdown_pct"], cfg["cash_strategy"])}
+
+
+def latest_dip(asof: str, after: str, out: Path = OUT) -> dict | None:
+    """The newest daily dip check dated after the weekly regime file (`after`) and on/before asof."""
+    files = sorted(p for p in out.glob("dip-20??-??-??.json") if after < p.stem[4:] <= asof)
+    return json.loads(files[-1].read_text()) if files else None
+
+
 def build(snap: dict, spy: dict | None, cfg: dict, asof: str) -> dict:
     cs = cfg["cash_strategy"]
     ind = score_indicators(snap, spy, cs)
@@ -170,8 +196,25 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--asof", default=dt.date.today().isoformat())
     ap.add_argument("--apply-view", action="store_true")
+    ap.add_argument("--dip", action="store_true")
     a = ap.parse_args(argv)
     cfg = load_config()
+    if a.dip:
+        from fetch_data import Fetcher
+        try:
+            d = dip_doc(spy_dip_daily(Fetcher(cfg, refresh=True), a.asof), cfg, a.asof)
+        except DataError as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            return 2
+        OUT.mkdir(parents=True, exist_ok=True)
+        (OUT / f"dip-{a.asof}.json").write_text(json.dumps(d, indent=1))
+        wk = latest(a.asof)
+        base = (wk or {}).get("base_reserve_pct", cfg["cash_strategy"]["reserve_pct"]["neutral"])
+        print(json.dumps({"asof": a.asof, "spy_close": d["spy"]["close"], "close_date": d["spy"]["date"],
+                          "high_52w": d["spy"]["high_52w"], "drawdown_pct": d["drawdown_pct"],
+                          "multiplier": d["multiplier"], "weekly_regime": (wk or {}).get("final_regime"),
+                          "reserve_pct": round(base * d["multiplier"], 2)}))
+        return 0
     if a.apply_view:
         doc = json.loads((OUT / f"{a.asof}.json").read_text())
         doc = apply_view(doc, view_from_md((OUT / f"{a.asof}-view.md").read_text()), cfg)

@@ -1,7 +1,11 @@
 import pytest
 
+import json
+
 import portfolio as P
 import regime as R
+
+REAL_RESERVE = P.current_reserve  # conftest patches it to 0% for the rule tests
 
 
 def snap(hy=3.1, hy3=0.4, vix=15.0, t10=5.3, t2=4.8, ry3=0.2):
@@ -116,3 +120,32 @@ def test_new_orders_are_checked_after_the_pending_ones(cfg, tmp_path, monkeypatc
     assert out["placed"]  # 100% cash -> ~93% after a 7% buy: above the 88% reserve
     out = P.place_orders([core_buy("MSFT", conv=4)], sp, mkt, cfg, WATCH, "2026-10-06", port_dir=tmp_path)
     assert not out["placed"] and out["rejected"][0]["rule"] == "REPLACEMENT_REQUIRED"  # ~86% once AAPL's order counts
+
+
+# ------------------------------------------------------------------ daily dip check (2026-10-19)
+def test_daily_dip_check_overrides_the_weekly_dip_until_the_next_weekly_file(cfg, tmp_path, monkeypatch):
+    weekly = {"asof": "2026-10-17", "final_regime": "neutral", "base_reserve_pct": 20, "reserve_pct": 20,
+              "dip": {"drawdown_pct": 2.0, "multiplier": 1.0}}
+    spy = {"close": 680.0, "date": "2026-10-20", "high_52w": 780.0, "drawdown_pct": 12.82, "source": "x"}
+    (tmp_path / "dip-2026-10-21.json").write_text(json.dumps(R.dip_doc(spy, cfg, "2026-10-21")))
+    (tmp_path / "dip-2026-10-17.json").write_text(json.dumps(R.dip_doc(dict(spy, drawdown_pct=25.0), cfg, "2026-10-17")))
+    assert R.latest_dip("2026-10-20", "2026-10-17", tmp_path) is None  # not in force before its date
+    assert R.latest_dip("2026-10-21", "2026-10-17", tmp_path)["multiplier"] == 0.5
+    assert R.latest_dip("2026-10-21", "2026-10-21", tmp_path) is None  # a newer weekly file supersedes it
+    monkeypatch.setattr(R, "latest", lambda asof: weekly)
+    monkeypatch.setattr(R, "latest_dip", lambda asof, after: R.dip_doc(spy, cfg, "2026-10-21"))
+    res = REAL_RESERVE(cfg, "2026-10-21")
+    assert (res["pct"], res["regime"], res["dip_multiplier"], res["dip_asof"]) == (10.0, "neutral", 0.5, "2026-10-21")
+    monkeypatch.setattr(R, "latest_dip", lambda asof, after: None)
+    assert REAL_RESERVE(cfg, "2026-10-21")["pct"] == 20
+
+
+def test_spy_dip_daily_uses_closes_before_asof(cfg):
+    rows = [{"date": f"2026-{1 + i // 28:02d}-{1 + i % 28:02d}", "close": 700.0 + i} for i in range(260)]
+
+    class F:
+        def long_history(self, t, etf=False, range_="1Y", period="Daily"):
+            assert (t, etf, period) == ("SPY", True, "Daily")
+            return {"rows": rows + [{"date": "2026-12-31", "close": 1.0}], "source_url": "u"}
+    d = R.spy_dip_daily(F(), "2026-12-30")
+    assert d["close"] == 959.0 and d["high_52w"] == 959.0 and d["drawdown_pct"] == 0.0
