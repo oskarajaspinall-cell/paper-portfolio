@@ -1,0 +1,108 @@
+{
+ "asof": "2026-10-19",
+ "indicators": [
+  {
+   "key": "hy_spread",
+   "name": "High-yield credit spread, %",
+   "value": 3.23,
+   "date": "2026-10-15",
+   "score": 0.057,
+   "weight": 1,
+   "rule": "calm 3.0 -> stressed 7.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2"
+  },
+  {
+   "key": "hy_widening_3m",
+   "name": "High-yield spread, 3m change, pp",
+   "value": 0.52,
+   "date": "2026-10-15",
+   "score": 0.26,
+   "weight": 1,
+   "rule": "calm 0.0 -> stressed 2.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2"
+  },
+  {
+   "key": "vix",
+   "name": "VIX",
+   "value": 16.46,
+   "date": "2026-10-15",
+   "score": 0.117,
+   "weight": 1,
+   "rule": "calm 14 -> stressed 35",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
+  },
+  {
+   "key": "curve_10y_2y",
+   "name": "Yield curve, 10y - 2y, pp",
+   "value": 0.33,
+   "date": "2026-10-15",
+   "score": 0.447,
+   "weight": 1,
+   "rule": "calm 1.0 -> stressed -0.5",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10, https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2"
+  },
+  {
+   "key": "real_yield_3m",
+   "name": "Real 10y yield, 3m change, pp",
+   "value": 0.43,
+   "date": "2026-10-15",
+   "score": 0.43,
+   "weight": 1,
+   "rule": "calm 0.0 -> stressed 1.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10"
+  },
+  {
+   "key": "spy_vs_40w",
+   "name": "S&P 500 vs its 40-week (~200-day) average, %",
+   "value": 5.11,
+   "date": "2026-10-12",
+   "score": 0.0,
+   "weight": 1,
+   "rule": "calm 5.0 -> stressed -10.0",
+   "source": "https://stockanalysis.com/api/symbol/e/spy/history?range=5Y&period=Weekly"
+  },
+  {
+   "key": "core_cpi_3m_ann",
+   "name": "US core CPI, 3m annualised, %",
+   "value": 3.41,
+   "date": "2026-09-01",
+   "score": 0.364,
+   "weight": 1,
+   "rule": "calm 2.5 -> stressed 5.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPILFESL"
+  },
+  {
+   "key": "fed_funds_3m",
+   "name": "Fed funds rate, 3m change, pp",
+   "value": 0.25,
+   "date": "2026-10-15",
+   "score": 0.25,
+   "weight": 1,
+   "rule": "calm 0.0 -> stressed 1.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFF"
+  }
+ ],
+ "stress": 24.1,
+ "unsmoothed_reserve_pct": 12.0,
+ "previous_score_reserve_pct": 20,
+ "score_reserve_pct": 15,
+ "note": null,
+ "score_regime": "risk_on",
+ "final_regime": "risk_on",
+ "view": null,
+ "view_adjust_pp": 0,
+ "spy": {
+  "close": 763.25,
+  "date": "2026-10-12",
+  "avg_40w": 726.11425,
+  "high_52w": 778.57,
+  "drawdown_pct": 1.97,
+  "source": "https://stockanalysis.com/api/symbol/e/spy/history?range=5Y&period=Weekly"
+ },
+ "dip": {
+  "drawdown_pct": 1.97,
+  "multiplier": 1.0
+ },
+ "base_reserve_pct": 15,
+ "reserve_pct": 15.0
+}

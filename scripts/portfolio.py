@@ -509,7 +509,7 @@ def current_reserve(cfg: dict, asof: str) -> dict:
     import regime
     doc = regime.latest(asof)
     if not doc:
-        return {"pct": float(cs["reserve_pct"]["neutral"]), "regime": "neutral (no regime file yet)", "dip_multiplier": 1.0}
+        return {"pct": float(cs["fallback_reserve_pct"]), "regime": "neutral (no regime file yet)", "dip_multiplier": 1.0}
     dip = regime.latest_dip(asof, doc["asof"])  # the daily dip check since that weekly regime (2026-10-19)
     if dip:
         return {"pct": round(float(doc["base_reserve_pct"]) * dip["multiplier"], 2), "regime": doc["final_regime"],

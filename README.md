@@ -34,10 +34,11 @@ A weekly **return attribution** (`reports/attribution/`) splits the return over 
 (including the cash reserve), stock picking within sectors and their interaction, so a sector tailwind can't hide
 weak stock picks. **Trades fill at the next market open**: decisions become pending orders filled at the
 opening price of the next trading day; a tactical order that opens beyond its stop or target is cancelled.
-**Cash is managed as a position**: each week a score of official indicators (credit spreads, VIX, the yield curve,
-real yields, the S&P 500's trend) sets a macro regime — risk-on, neutral or defensive — and an AI macro step may
-move it one notch with cited official sources. The regime sets a cash reserve (10% / 20% / 35%) that new buys can't
-spend; nothing is sold to reach it. When the S&P 500 drops 10% (20%) below its 52-week high, half (all) of the
+**Cash is managed as a position**: each week eight official indicators (credit spreads and their change, VIX, the
+yield curve, real yields, the S&P 500's trend, core inflation and fed rate moves) are each scored on a sliding scale
+from calm to stressed and combined into a 0–100 stress score. That sets a cash reserve anywhere from 5% to 35%,
+moving at most 5 points a week, and an AI macro step may add or take away 5 points with cited official sources.
+New buys can't spend the reserve; nothing is sold to reach it. When the S&P 500 drops 10% (20%) below its 52-week high, half (all) of the
 reserve is released to buy the dip. The regime is set weekly, but the dip check runs every weekday evening, so
 a sell-off frees the reserve for the next morning's open.
 A high-conviction buy that the reserve blocks is not thrown away: it waits in a **funding queue** and is bought

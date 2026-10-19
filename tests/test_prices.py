@@ -17,6 +17,7 @@ def frame(rows):
 
 def test_yahoo_symbols():
     assert yahoo_symbol("DECK") == "DECK" and yahoo_symbol("BRK.B") == "BRK-B"
+    assert yahoo_symbol("TSX:GIB.A") == "GIB-A.TO" and yahoo_symbol("LON:BT.A") == "BT-A.L"  # share classes
     assert yahoo_symbol("LON:SHEL") == "SHEL.L" and yahoo_symbol("HKG:9999") == "9999.HK"
     assert yahoo_symbol("HKG:700") == "0700.HK" and yahoo_symbol("SHA:600036") == "600036.SS"
     assert yahoo_symbol("TPE:2330") == "2330.TW" and yahoo_symbol("KRX:000660") == "000660.KS"

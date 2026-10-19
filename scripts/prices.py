@@ -25,7 +25,7 @@ def yahoo_symbol(ticker: str) -> str | None:
     sfx = SUFFIX.get(t.exchange)
     if not sfx:
         return None
-    sym = t.symbol
+    sym = t.symbol.replace(".", "-")  # share classes: TSX:GIB.A -> GIB-A.TO, CPH:NOVO.B -> NOVO-B.CO
     if t.exchange == "HKG" and sym.isdigit():
         sym = sym.zfill(4)
     return sym + sfx

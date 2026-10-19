@@ -33,7 +33,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - When a core invalidation trigger fires, the holding gets a full core re-initiation (researcher + evaluator), not a quick review.
 - **Fair value reached** (owner rule 2026-10-09): when a core holding's close reaches its latest base fair value, the weekly scan sends it to a full re-initiation (once per crossing; `[core].fv_review_*`). Fair value is one model estimate, NEVER a sell signal on its own: the re-initiation decides on the whole evidence whether the thesis has played out.
 - **Text-only triggers** (owner rule 2026-10-09): triggers no script can check (bookings, share, guidance, regulation) are tested by the weekly reviewer against every new release/filing of the holding; one that is met escalates to a re-initiation.
-- **Cash is a holding** (owner rule 2026-10-09): `scripts/regime.py` scores official macro indicators into a regime (risk-on / neutral / defensive); the weekly `macro-strategist` may move it one notch with cited official sources. The regime sets a cash reserve (`[cash_strategy]`, 10/20/35%) that new buys can't spend (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0 (re-checked every weekday from daily closes by `regime.py --dip` in bin/fill-pending, 2026-10-19, so a sell-off releases the reserve for the next open; the regime itself stays weekly), and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
+- **Cash is a holding** (owner rule 2026-10-09; continuous score 2026-10-19): `scripts/regime.py` scores eight official macro indicators on sliding scales into a 0–100 stress score, which sets a cash reserve between 5% and 35% (`[cash_strategy]`), moving at most 5pp a week; the weekly `macro-strategist` may move it one notch (5pp) with cited official sources. New buys can't spend the reserve (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0 (re-checked every weekday from daily closes by `regime.py --dip` in bin/fill-pending, 2026-10-19, so a sell-off releases the reserve for the next open; the regime itself stays weekly), and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
 - **Funding queue** (design by Claude, owner-approved 2026-10-18; `[funding_queue]`): a conviction-4+ CORE BUY rejected only because it would take cash below the reserve (or the cash floor) is not lost. It waits in `state.json` `funding_queue`; weekdays it is resubmitted for the next open once there is room above the reserve (best base-fair-value upside first, every rule re-checked); weekly the `swap-reviewer` weighs the best waiting idea against the weakest CORE holdings and may swap (a BUY with `replaces`, only when clearly better). It drops out after 30 days or once its close is 10% above the decision price. The reserve itself is never relaxed.
 - **Dividends and splits** (owner request 2026-10-16): credited / applied mechanically by `scripts/corporate_actions.py` before every re-pricing (`[corporate_actions]`). A split never reads as a price move: shares, entry prices, tactical levels, watchlist entry prices and decision scoring are all adjusted.
 - **Country exposure** (owner-approved 2026-10-19; `[portfolio].country_group_caps`): China + Hong Kong combined (companies reporting in CNY or HKD) is capped at 25%, enforced by `portfolio.py` like the sector cap. Evaluators judge each stock on its merits and do NOT lower conviction for portfolio concentration: the caps handle it.
@@ -111,21 +111,34 @@ interest_start = "2026-10-06"     # back-credited from the portfolio's first day
 withholding_pct = { USD = 15, default = 0 }   # US 15% = treaty rate for a UK resident (W-8BEN)
 
 [cash_strategy]
-# Cash is a holding (owner rule 2026-10-09, design by Claude). scripts/regime.py scores official indicators into a
-# regime; the weekly macro-strategist may move it one notch with cited reasons. The regime's reserve is the cash
-# new buys can't spend (a BUY/ADD below it must name a holding to replace); nothing is ever sold to reach it.
-# When the S&P 500 falls below its 52-week high, the reserve is released in steps (buy the dip).
-reserve_pct = { risk_on = 10, neutral = 20, defensive = 35 }
-neutral_from = 2                  # risk points: 0-1 risk-on, 2-3 neutral, 4+ defensive
-defensive_from = 4
-hy_spread_high = 5.0              # %: high-yield credit spread above this (+1)
-hy_widening_3m = 1.0              # pp: ...or widened this much in 3 months (+1)
-vix_high = 25                     # +1 (above vix_extreme: +2)
-vix_extreme = 35
-real_yield_rise_3m = 0.5          # pp: 10y real yield rose this much in 3 months (+1)
+# Cash is a holding (owner rule 2026-10-09, design by Claude; continuous score 2026-10-19). scripts/regime.py turns
+# official indicators into a 0-100 stress score: each scores 0-1 on a sliding scale between its calm and stressed
+# level (fixed anchors, owner-editable), weighted. The reserve = reserve_min_pct + (max - min) x stress / 100, moving at
+# most max_weekly_change_pp a week; the weekly macro-strategist may move it one notch (view_notch_pp) with cited
+# official reasons. New buys can't spend the reserve (a BUY/ADD below it must name a holding to replace); nothing is
+# ever sold to reach it. When the S&P 500 falls below its 52-week high, the reserve is released in steps (buy the dip),
+# re-checked every weekday (regime.py --dip).
+reserve_min_pct = 5
+reserve_max_pct = 35
+max_weekly_change_pp = 5          # no whipsaw: the score reserve moves at most this much week to week
+fallback_reserve_pct = 20         # before the first regime file, or when too few indicators are available
+regime_bands = [33, 60]           # stress below 33 = risk-on, below 60 = neutral, else defensive (labels for the view)
+notch_override = 1                # the macro view may move the label at most this many steps...
+view_notch_pp = 5                 # ...each step moving the reserve this many percentage points
 dip_steps = [[10, 0.5], [20, 0.0]]  # S&P 500 % below its 52-week high -> reserve multiplier
-notch_override = 1                # the macro view may move the regime at most this many steps
 dip_add_gap_pp = 2                # in a dip, flag holdings this far below their conviction size (ADD eligible)
+
+[cash_strategy.indicators]
+# calm -> stressed level (score 0 -> 1, linear, clamped); weight in the stress score. A missing indicator is left out
+# (weights renormalised); fewer than 5 available keeps last week's reserve.
+hy_spread       = { calm = 3.0, stressed = 7.0, weight = 1 }    # US high-yield spread, % (2022 peak ~6, 2020 ~11)
+hy_widening_3m  = { calm = 0.0, stressed = 2.0, weight = 1 }    # its 3-month change, pp
+vix             = { calm = 14, stressed = 35, weight = 1 }
+curve_10y_2y    = { calm = 1.0, stressed = -0.5, weight = 1 }   # pp; inversion is the stressed end
+real_yield_3m   = { calm = 0.0, stressed = 1.0, weight = 1 }    # 10y TIPS yield, 3-month change, pp
+spy_vs_40w      = { calm = 5.0, stressed = -10.0, weight = 1 }  # S&P 500 vs its 40-week average, %
+core_cpi_3m_ann = { calm = 2.5, stressed = 5.0, weight = 1 }    # core CPI, 3-month annualised, %
+fed_funds_3m    = { calm = 0.0, stressed = 1.0, weight = 1 }    # effective fed funds, 3-month change, pp (hikes)
 
 [funding_queue]
 # Funding queue (design by Claude, owner-approved 2026-10-18; scripts/funding_queue.py, no AI except the weekly swap

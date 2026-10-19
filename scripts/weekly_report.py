@@ -72,7 +72,8 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     import regime as _rg
     rg = _rg.latest(asof)
     if rg:
-        out.append(f"- Cash strategy: **{_rg.LABEL[rg['final_regime']]}** regime (score {rg['points']}"
+        out.append(f"- Cash strategy: **{_rg.LABEL[rg['final_regime']]}** regime ("
+                   + (f"stress {rg['stress']:g}/100" if rg.get("stress") is not None else f"score {rg.get('points', 'n/a')}")
                    + (f", macro view moved it from {_rg.LABEL[rg['score_regime']]}" if rg["final_regime"] != rg["score_regime"] else "")
                    + f"); cash reserve {rg['reserve_pct']:g}%"
                    + (f" (dip release x{rg['dip']['multiplier']:g}: S&P 500 {rg['dip']['drawdown_pct']:.1f}% below its high)"

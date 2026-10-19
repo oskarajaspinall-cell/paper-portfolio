@@ -8,61 +8,84 @@ import regime as R
 REAL_RESERVE = P.current_reserve  # conftest patches it to 0% for the rule tests
 
 
-def snap(hy=3.1, hy3=0.4, vix=15.0, t10=5.3, t2=4.8, ry3=0.2):
+def snap(hy=3.1, hy3=0.4, vix=15.0, t10=5.3, t2=4.8, ry3=0.2, cpi=300.0, cpi3=1.5, ff3=0.0):
     s = lambda sid, v, c3=None: {"id": sid, "value": v, "date": "2026-10-07", "chg_3m": c3}  # noqa: E731
     return {"series": [s("BAMLH0A0HYM2", hy, hy3), s("VIXCLS", vix), s("DGS10", t10), s("DGS2", t2),
-                       s("DFII10", 2.9, ry3)]}
+                       s("DFII10", 2.9, ry3), s("CPILFESL", cpi, cpi3), s("DFF", 3.6, ff3)]}
 
 
 SPY_UP = {"close": 780.0, "date": "2026-10-05", "avg_40w": 730.0, "high_52w": 782.0, "drawdown_pct": 0.3, "source": "x"}
 
 
-def test_calm_market_is_risk_on(cfg):
+def scores(doc):
+    return {i["key"]: i["score"] for i in doc["indicators"]}
+
+
+def test_calm_market_has_a_low_reserve(cfg):
     d = R.build(snap(), SPY_UP, cfg, "2026-10-09")
-    assert d["points"] == 0 and d["final_regime"] == "risk_on" and d["reserve_pct"] == 10
+    assert d["stress"] < 15 and d["final_regime"] == "risk_on" and 5 <= d["reserve_pct"] <= 10
 
 
-def test_each_indicator_scores(cfg):
+def test_indicators_slide_between_calm_and_stressed(cfg):
+    sc = scores(R.build(snap(hy=5.0, hy3=1.0, vix=24.5, t10=4.5, t2=4.5, ry3=0.5, ff3=0.5), dict(SPY_UP, close=711.75),
+                        cfg, "2026-10-09"))
+    assert sc["hy_spread"] == 0.5 and sc["hy_widening_3m"] == 0.5 and sc["vix"] == 0.5
+    assert sc["curve_10y_2y"] == pytest.approx(0.667, abs=1e-3)  # flat curve: 2/3 of the way to -0.5
+    assert sc["real_yield_3m"] == 0.5 and sc["fed_funds_3m"] == 0.5
+    assert sc["spy_vs_40w"] == pytest.approx(0.5, abs=0.01)  # 711.75 / 730 = -2.5%, halfway from +5 to -10
+    assert sc["core_cpi_3m_ann"] == pytest.approx(0.0, abs=1e-9)  # 1.5 on 298.5 = ~2.0% annualised: calm
+    assert R.slide(50, 3, 7) == 1.0 and R.slide(-1, 3, 7) == 0.0  # clamped
+
+
+def test_stress_maps_linearly_to_the_reserve(cfg):
     cs = cfg["cash_strategy"]
-    pts = lambda **k: {i["name"]: i["points"] for i in R.score_indicators(snap(**k), SPY_UP, cs)}  # noqa: E731
-    assert pts(hy=5.5)["High-yield credit spread, %"] == 1 and pts(hy=5.5, hy3=1.5)["High-yield credit spread, %"] == 2
-    assert pts(vix=28)["VIX"] == 1 and pts(vix=40)["VIX"] == 2
-    assert pts(t10=4.0, t2=4.5)["Yield curve, 10y - 2y, pp"] == 1
-    assert pts(ry3=0.7)["Real 10y yield, 3m change, pp"] == 1
-    below = dict(SPY_UP, close=700.0)
-    assert {i["name"]: i["points"] for i in R.score_indicators(snap(), below, cs)}[
-        "S&P 500 vs its 40-week (~200-day) average, %"] == 1
+    assert [R.reserve_for(x, cs) for x in (0, 50, 100)] == [5.0, 20.0, 35.0]
+    assert [R.regime_for(x, cs) for x in (0, 32.9, 33, 59.9, 60)] == ["risk_on", "risk_on", "neutral", "neutral",
+                                                                       "defensive"]
 
 
-def test_regime_boundaries_and_missing_data(cfg):
-    cs = cfg["cash_strategy"]
-    assert [R.regime_for(p, cs) for p in (0, 1, 2, 3, 4, 6)] == ["risk_on", "risk_on", "neutral", "neutral",
-                                                                 "defensive", "defensive"]
-    d = R.build({"series": []}, None, cfg, "2026-10-09")  # nothing available: never guessed, scores 0
-    assert d["points"] == 0 and all(i["value"] == "[data unavailable]" for i in d["indicators"])
+def test_missing_data_is_never_guessed(cfg):
+    d = R.build({"series": []}, None, cfg, "2026-10-09")
+    assert d["stress"] is None and all(i["value"] == "[data unavailable]" for i in d["indicators"])
+    assert d["reserve_pct"] == cfg["cash_strategy"]["fallback_reserve_pct"] and "too few" in d["note"]
+    d = R.build({"series": []}, None, cfg, "2026-10-16", prev={"score_reserve_pct": 12.0})
+    assert d["reserve_pct"] == 12.0  # last week's reserve stands
+    part = R.build({"series": snap()["series"][:2]}, SPY_UP, cfg, "2026-10-09")  # HY only + SPY: 3 of 8
+    assert part["stress"] is None
 
 
 def test_stressed_market_is_defensive(cfg):
-    d = R.build(snap(hy=5.6, hy3=1.4, vix=31, t10=4.0, t2=4.4), dict(SPY_UP, close=700.0), cfg, "2026-10-09")
-    assert d["final_regime"] == "defensive" and d["reserve_pct"] == 35
+    d = R.build(snap(hy=7.5, hy3=2.5, vix=36, t10=4.0, t2=4.6, ry3=1.2, cpi3=4.0, ff3=1.0), dict(SPY_UP, close=600.0),
+                cfg, "2026-10-09")
+    assert d["stress"] > 95 and d["final_regime"] == "defensive" and d["reserve_pct"] >= 34
 
 
+def test_weekly_move_is_capped(cfg):
+    calm, hot = snap(), snap(hy=7.5, hy3=2.5, vix=36, t10=4.0, t2=4.6, ry3=1.2, cpi3=4.0, ff3=1.0)
+    d = R.build(hot, dict(SPY_UP, close=600.0), cfg, "2026-10-16", prev={"score_reserve_pct": 10.0})
+    assert d["unsmoothed_reserve_pct"] >= 34 and d["score_reserve_pct"] == 15.0
+    d = R.build(calm, SPY_UP, cfg, "2026-10-16", prev={"base_reserve_pct": 20.0})  # an old-format file
+    assert d["score_reserve_pct"] == 15.0
 @pytest.mark.parametrize("dd,mult", [(None, 1.0), (9.9, 1.0), (10.0, 0.5), (19.0, 0.5), (20.0, 0.0), (35.0, 0.0)])
 def test_dip_steps(cfg, dd, mult):
     assert R.dip_multiplier(dd, cfg["cash_strategy"]) == mult
 
 
 def test_dip_releases_the_reserve(cfg):
-    d = R.build(snap(vix=28, t10=4.0, t2=4.5), dict(SPY_UP, drawdown_pct=12.0), cfg, "2026-10-09")
-    assert d["final_regime"] == "neutral" and d["reserve_pct"] == 10  # 20% x 0.5
+    d = R.build(snap(), dict(SPY_UP, drawdown_pct=12.0), cfg, "2026-10-09")
+    assert d["reserve_pct"] == d["score_reserve_pct"] * 0.5
 
 
-def test_view_may_move_one_notch_only(cfg):
+def test_view_moves_the_reserve_one_notch_of_5pp(cfg):
     d = R.build(snap(), SPY_UP, cfg, "2026-10-09")
+    assert d["score_regime"] == "risk_on"
     v = {"final_regime": "neutral", "reasons": [{"text": "a", "source": "x"}, {"text": "b", "source": "y"}]}
-    assert R.apply_view(dict(d), v, cfg)["reserve_pct"] == 20
+    got = R.apply_view(dict(d), v, cfg)
+    assert got["view_adjust_pp"] == 5 and got["reserve_pct"] == d["score_reserve_pct"] + 5
     with pytest.raises(ValueError, match="notches"):
         R.apply_view(dict(d), dict(v, final_regime="defensive"), cfg)
+    low = R.apply_view(dict(d, score_regime="neutral"), dict(v, final_regime="risk_on"), cfg)
+    assert low["base_reserve_pct"] >= cfg["cash_strategy"]["reserve_min_pct"]  # never below the minimum
 
 
 def test_buy_below_the_reserve_needs_a_replacement(cfg, monkeypatch):
