@@ -112,6 +112,57 @@
    },
    "ticker": "AMS:WKL",
    "valuation": "research/AMS-WKL/2026-10-18-valuation.json"
+  },
+  {
+   "added": "2026-10-19",
+   "currency": "CAD",
+   "decision_price": 106.42,
+   "expires": "2026-11-18",
+   "fair_value_base": 196.18279160064807,
+   "price_date": "2026-10-16",
+   "request": {
+    "action": "BUY",
+    "conviction": 4,
+    "position_type": "CORE",
+    "reason": "Cash yield plus buybacks cushion the downside even if no re-rating comes, and margins remain steady. Sector-wide AI-disruption pricing, slipping ROIC/ROE, rising leverage and no revenue-growth data cap conviction at 4, not 5: standard volatility-scaled core size. Mechanical fair value likely overstates value, so scenario targets sit well below it.",
+    "research_note": "research/TSX-GIB.A/2026-10-19.md",
+    "thesis": "A stable-margin, 14%-ROIC IT services franchise with an 11.39% FCF yield and 5% annual share shrinkage trades below its own 5-year minimum on every multiple and below peers on P/E, where the price implies a 9.4% revenue decline its fundamentals do not show.",
+    "ticker": "TSX:GIB.A",
+    "triggers": [
+     {
+      "check": {
+       "field": "roic",
+       "op": "<",
+       "source": "statistics",
+       "value": 12
+      },
+      "text": "TTM ROIC falls below 12%, well under the five-year range of 14.8%-16.5%, signalling the switching-cost moat is eroding."
+     },
+     {
+      "check": {
+       "field": "operatingMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 15
+      },
+      "text": "TTM operating margin falls below 15%, breaking the 16.1%-16.5% band held for five years, showing AI-driven pricing pressure or broken cost discipline."
+     },
+     {
+      "check": {
+       "field": "fcfMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 11
+      },
+      "text": "TTM FCF margin falls below 11%, under the five-year low of 13.3%, showing cash generation can no longer fund buybacks and tuck-ins."
+     },
+     {
+      "text": "Annual revenue (income statement) declines year on year for a full fiscal year, evidencing real displacement of labour-based services by AI."
+     }
+    ]
+   },
+   "ticker": "TSX:GIB.A",
+   "valuation": "research/TSX-GIB.A/2026-10-19-valuation.json"
   }
  ],
  "holdings": {
@@ -644,7 +695,7 @@
   }
  },
  "inception_date": "2026-10-07",
- "last_marked": "2026-10-18",
+ "last_marked": "2026-10-19",
  "last_scan": "2026-10-17",
  "pending": [
   {

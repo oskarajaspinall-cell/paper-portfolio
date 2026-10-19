@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Information Technology Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 157.8947698332694,
+    "base": 212.61666529532116,
+    "bull": 263.04008499645613
+   },
+   "implied_growth": -0.09409006739211873,
+   "discount_rate": 0.08186109887833477,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.017642320862385555,
+     "base": 0.048415863081023455,
+     "bull": 0.07337881059932272
+    },
+    "cash_flow_margin": {
+     "bear": 0.13182073243194276,
+     "base": 0.15173624234773922,
+     "bull": 0.1665723233479783
+    },
+    "cagr_3y": 0.07337881059932272,
+    "cagr_5y": 0.07028464172477111,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 128.72567051425406,
+    "base": 163.31504421130194,
+    "bull": 167.24103966028193
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.822,
+     "base": 13.377,
+     "bull": 13.667
+    },
+    "ttm_ebitda": 2917811000
+   }
+  }
+ ],
+ "price": 106.42,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "CAD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 148.17173672693096,
+  "base": 196.18279160064807,
+  "bull": 231.10706988439804
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.3923297944646773,
+  "base": 0.8434767111506114,
+  "bull": 1.171650722461925
+ },
+ "implied_growth": -0.09409006739211873,
+ "ticker": "TSX:GIB.A",
+ "asof": "2026-10-19",
+ "quote_currency": "CAD",
+ "financials_currency": "CAD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tsx/GIB.A/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tsx/GIB.A/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tsx/GIB.A/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tsx/GIB.A/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tsx/GIB.A/statistics/"
+ }
+}

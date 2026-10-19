@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Midstream",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 102.93482436069148,
+    "base": 149.38214706976044,
+    "bull": 173.9955482877455
+   },
+   "implied_growth": -0.19330960397640023,
+   "discount_rate": 0.0764831629234165,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.021138342766574628,
+     "base": 0.05265224692850044,
+     "bull": 0.08333230218085252
+    },
+    "cash_flow_margin": {
+     "bear": 0.5375189127382146,
+     "base": 0.6357272264899022,
+     "bull": 0.6357272264899022
+    },
+    "cagr_3y": 0.08333230218085252,
+    "cagr_5y": 0.07727668553314926,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 14.8199188248937,
+    "base": 22.134074217240045,
+    "bull": 32.75475840742173
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.563,
+     "base": 5.335,
+     "bull": 6.456
+    },
+    "ttm_ebitda": 1225500000
+   }
+  }
+ ],
+ "price": 30.66,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 73.56318918209222,
+  "base": 106.96612278558696,
+  "bull": 126.91528499430423
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 1.399321238815793,
+  "base": 2.4887841743505206,
+  "bull": 3.1394417806361457
+ },
+ "implied_growth": -0.19330960397640023,
+ "ticker": "HESM",
+ "asof": "2026-10-18",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/hesm/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/hesm/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/hesm/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/hesm/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/hesm/statistics/"
+ }
+}

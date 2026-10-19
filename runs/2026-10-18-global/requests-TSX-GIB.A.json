@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "TSX:GIB.A",
+    "action": "BUY",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A stable-margin, 14%-ROIC IT services franchise with an 11.39% FCF yield and 5% annual share shrinkage trades below its own 5-year minimum on every multiple and below peers on P/E, where the price implies a 9.4% revenue decline its fundamentals do not show.",
+    "reason": "Cash yield plus buybacks cushion the downside even if no re-rating comes, and margins remain steady. Sector-wide AI-disruption pricing, slipping ROIC/ROE, rising leverage and no revenue-growth data cap conviction at 4, not 5: standard volatility-scaled core size. Mechanical fair value likely overstates value, so scenario targets sit well below it.",
+    "research_note": "research/TSX-GIB.A/2026-10-19.md",
+    "triggers": [
+      {"text": "TTM ROIC falls below 12%, well under the five-year range of 14.8%-16.5%, signalling the switching-cost moat is eroding.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 12}},
+      {"text": "TTM operating margin falls below 15%, breaking the 16.1%-16.5% band held for five years, showing AI-driven pricing pressure or broken cost discipline.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 15}},
+      {"text": "TTM FCF margin falls below 11%, under the five-year low of 13.3%, showing cash generation can no longer fund buybacks and tuck-ins.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 11}},
+      {"text": "Annual revenue (income statement) declines year on year for a full fiscal year, evidencing real displacement of labour-based services by AI."}
+    ]
+  }
+]
