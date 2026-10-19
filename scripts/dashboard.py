@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import ROOT, load_config  # noqa: E402
+from common import ROOT, Ticker, load_config  # noqa: E402
 import entry_watch  # noqa: E402
 import portfolio  # noqa: E402
 
@@ -178,6 +178,20 @@ def build_data(live: bool = True) -> dict:
         files = sorted((ROOT / "reports" / kind).glob("20??-??-??.json"))
         return json.loads(files[-1].read_text()) if files else None
     risk, attr = latest("risk"), latest("attribution")
+    dip = latest("dip-radar")
+    fq = []
+    for e in state.get("funding_queue") or []:  # 2026-10-19: conviction-4 ideas waiting for room
+        c = e.get("last_close") or e.get("decision_price")
+        fv = e.get("fair_value_base")
+        h = state["holdings"].get(e["ticker"]) or {}
+        fq.append({"ticker": e["ticker"], "name": names.get(e["ticker"], ""), "stage": e.get("stage", "full"),
+                   "conviction": e["request"].get("conviction"), "added": e["added"], "expires": e["expires"],
+                   "decision_price": e["decision_price"], "close": c, "ccy": e.get("currency", ""),
+                   "upside": (fv / c - 1) * 100 if fv and c else None,
+                   "weight": h.get("market_value_usd", 0) / total * 100 if h and total else None,
+                   "target": h.get("target_pct"), "ordered": e["ticker"] in {o["request"]["ticker"] for o in state.get("pending", [])},
+                   "evaluation": next((str(p_.relative_to(ROOT)) for p_ in sorted((ROOT / "research" / Ticker(e["ticker"]).slug).glob("20??-??-??-evaluation.md"))[-1:]), "")})
+    fq.sort(key=lambda x: (x["stage"] != "topup", -(x["upside"] or -999)))
     from decision_log import HORIZONS
     hits = {}
     for h in HORIZONS:
@@ -226,6 +240,14 @@ def build_data(live: bool = True) -> dict:
                                                                   "mcr_pct", "risk_share_pct", "flag")}
                                           for r in risk["rows"]), key=lambda r: -(r["risk_share_pct"] or 0))},
         "attribution": attr if attr and not attr.get("note") else None,
+        "funding_queue": fq,
+        "dip": dip and {"asof": dip["asof"], "watched": len(dip["assessed"]), "hits": [h["ticker"] for h in dip["hits"]],
+                        "no_data": len(dip.get("failed") or []),
+                        "rows": sorted(({k: a.get(k) for k in ("ticker", "kind", "z", "ret_pct", "spy_pct", "specific_pct",
+                                                                 "sessions", "last_research", "vs_base_pct", "signal", "why_not",
+                                                                 "close", "close_date", "currency")}
+                                        for a in dip["assessed"] if a.get("signal") or (a.get("z") is not None and a["z"] <= -1.0)),
+                                       key=lambda a: (not a["signal"], a["z"] if a["z"] is not None else 0))[:15]},
     }
 
 
@@ -282,6 +304,8 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 <div class="tw" style="margin-top:12px"><table id="attrTable"></table></div></section></div>
 <section class="card"><h2>Holdings</h2><div class="tw"><table id="holdings"></table></div></section>
 <section class="card"><h2>Pending orders</h2><div class="sub">Decided trades fill at the next opening price of their own market; every rule is checked again at that price. The 22:30 UK job records the fills.</div><div class="tw"><table id="pending"></table></div></section>
+<section class="card"><h2>Funding queue</h2><div class="sub">Conviction-4 buys waiting for room above the cash reserve, best first. A position that started small (a starter) is topped up first as room appears; the others are bought once there's room, or swapped in for a weaker holding by the weekly review. Each drops out after 30 days or if the price runs 10% above where we decided.</div><div class="tw"><table id="fqueue"></table></div></section>
+<section class="card"><h2>Dip radar</h2><div class="sub" id="dipSub"></div><div class="tw"><table id="dips"></table></div></section>
 <section class="card"><h2>Close to entry</h2><div class="sub" id="nearSub"></div><div class="tw"><table id="near"></table></div></section>
 <section class="card"><h2>Watchlist: entry prices</h2><div class="sub">Conviction-3 names and the price at which we'd consider buying. A close at or below it triggers a full re-research (never an automatic buy). Closest first.</div><div class="tw"><table id="watch"></table></div></section>
 <section class="card"><h2>Recent trades</h2><div class="tw"><table id="trades"></table></div></section>
@@ -315,7 +339,7 @@ $('tiles').append(
   :tile('Whole portfolio (incl. cash)','–','starts with the first trade'),
  tile('This week (whole portfolio)',D.week?pct(D.week.portfolio*100):'n/a',D.week&&D.week.spy!=null?'SPY '+pct(D.week.spy*100):'',''),
  tile('Cash',usd(D.cash),(D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':'')+(D.interest?` · earns ${D.interest.aer_pct}% AER, ${usd(D.interest.total_usd)} so far`:'')+(D.receivable?` · ${usd(D.receivable,2)} dividends due`:'')),
- tile('Cash strategy',D.regime?({risk_on:'Risk-on',neutral:'Neutral',defensive:'Defensive'})[D.regime.final_regime]:'n/a',D.regime?`reserve ${D.regime.reserve_pct}% · S&P ${D.regime.dip.drawdown_pct}% off its high`+(D.regime.dip.multiplier<1?' · buying the dip':''):''),
+ tile('Cash strategy',D.regime?({risk_on:'Risk-on',neutral:'Neutral',defensive:'Defensive'})[D.regime.final_regime]:'n/a',D.regime?(D.regime.stress!=null?`stress ${D.regime.stress}/100 · `:'')+`reserve ${D.regime.reserve_pct}% · S&P ${D.regime.dip.drawdown_pct}% off its high`+(D.regime.dip.multiplier<1?' · buying the dip':''):''),
  tile('Holdings',String(D.holdings.length),D.holdings.filter(h=>h.type==='CORE').length+' core · '+D.holdings.filter(h=>h.type==='TACTICAL').length+' tactical'),
  tile('Decisions logged',String(D.n_decisions),'')
 );
@@ -426,6 +450,19 @@ table('pending',[{h:'Placed',f:r=>r.placed},{h:'Action',f:r=>r.action},{h:'Ticke
  {h:'Fills',f:r=>r.fills||''},
  {h:'Note',w:1,f:r=>isHold(r)?'No trade: records the refreshed thesis and conviction from the re-research.':(r.replaces?`Replaces ${r.replaces}.`:'Rules re-checked at the opening price before it fills.')}],
  D.pending,'No pending orders.');
+table('fqueue',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>r.name},{h:'Stage',f:r=>r.stage==='topup'?(r.ordered?'starter ordered':'top-up'):'waiting'},
+ {h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Decided',f:r=>`${r.added} at ${px(r.decision_price)} ${r.ccy}`},
+ {h:'Latest close',n:1,f:r=>r.close==null?'':`${px(r.close)} ${r.ccy}`},{h:'Base FV upside',n:1,f:r=>r.upside==null?'–':pct(r.upside,0),c:r=>cls(r.upside)},
+ {h:'Weight / target',n:1,f:r=>r.stage==='topup'&&r.weight!=null&&r.target!=null?`${r.weight.toFixed(1)}% of ${(+r.target).toFixed(1)}%`:'–'},
+ {h:'Expires',f:r=>r.expires},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.funding_queue||[],'Nothing waiting: every conviction-4 buy fitted.');
+{const P=D.dip;$('dipSub').textContent=P?`${P.asof}: ${P.watched} stocks watched (holdings and recent conviction-3+ AVOIDs). A signal is an unusual fall since our last research, beyond what the market explains (z = standard deviations of the stock's own moves; −2 or lower), with the price at or below base fair value. Signals are re-researched the next day; a fall is never a buy on its own. ${P.hits.length?'Queued: '+P.hits.join(', ')+'.':'Nothing queued.'}`:'The dip radar has not run yet.';
+table('dips',[{h:'Ticker',f:r=>r.ticker},{h:'Kind',f:r=>r.kind==='holding'?'holding':'avoid'},{h:'Signal',f:r=>r.signal?'YES':''},
+ {h:'z',n:1,f:r=>r.z==null?'–':r.z.toFixed(2),c:r=>r.z!=null&&r.z<=-2?'down':''},
+ {h:'Since research',f:r=>r.last_research?`${r.last_research} (${r.sessions} sessions)`:''},
+ {h:'Return',n:1,f:r=>r.ret_pct==null?'–':pct(r.ret_pct,1),c:r=>cls(r.ret_pct)},{h:'S&P',n:1,f:r=>r.spy_pct==null?'–':pct(r.spy_pct,1)},
+ {h:'Stock-specific',n:1,f:r=>r.specific_pct==null?'–':pct(r.specific_pct,1),c:r=>cls(r.specific_pct)},
+ {h:'vs base FV',n:1,f:r=>r.vs_base_pct==null?'–':pct(r.vs_base_pct,0)},{h:'Why not a signal',w:1,f:r=>r.signal?'':(r.why_not||'')}],
+ P?P.rows:[],'No unusual falls since our last research (nothing at z −1 or lower).');}
 {const np=D.near_pct??10,nr=(D.watch||[]).filter(r=>r.to_entry!=null&&r.to_entry>=-np);
 document.getElementById('nearSub').textContent=`Stocks within ${np}% of their entry price, closest first, with the evaluator's reason each isn't a buy yet. Information only: a close at or below the entry price triggers a re-research, never a purchase.`;
 const lv=r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–',lte=r=>r.live?(r.entry/r.live.price-1)*100:null;
