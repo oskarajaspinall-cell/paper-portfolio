@@ -34,6 +34,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - **Fair value reached** (owner rule 2026-10-09): when a core holding's close reaches its latest base fair value, the weekly scan sends it to a full re-initiation (once per crossing; `[core].fv_review_*`). Fair value is one model estimate, NEVER a sell signal on its own: the re-initiation decides on the whole evidence whether the thesis has played out.
 - **Text-only triggers** (owner rule 2026-10-09): triggers no script can check (bookings, share, guidance, regulation) are tested by the weekly reviewer against every new release/filing of the holding; one that is met escalates to a re-initiation.
 - **Cash is a holding** (owner rule 2026-10-09): `scripts/regime.py` scores official macro indicators into a regime (risk-on / neutral / defensive); the weekly `macro-strategist` may move it one notch with cited official sources. The regime sets a cash reserve (`[cash_strategy]`, 10/20/35%) that new buys can't spend (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0, and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
+- **Funding queue** (design by Claude, owner-approved 2026-10-18; `[funding_queue]`): a conviction-4+ CORE BUY rejected only because it would take cash below the reserve (or the cash floor) is not lost. It waits in `state.json` `funding_queue`; weekdays it is resubmitted for the next open once there is room above the reserve (best base-fair-value upside first, every rule re-checked); weekly the `swap-reviewer` weighs the best waiting idea against the weakest CORE holdings and may swap (a BUY with `replaces`, only when clearly better). It drops out after 30 days or once its close is 10% above the decision price. The reserve itself is never relaxed.
 - **Dividends and splits** (owner request 2026-10-16): credited / applied mechanically by `scripts/corporate_actions.py` before every re-pricing (`[corporate_actions]`). A split never reads as a price move: shares, entry prices, tactical levels, watchlist entry prices and decision scoring are all adjusted.
 - When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve or sector limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
 
@@ -121,6 +122,16 @@ real_yield_rise_3m = 0.5          # pp: 10y real yield rose this much in 3 month
 dip_steps = [[10, 0.5], [20, 0.0]]  # S&P 500 % below its 52-week high -> reserve multiplier
 notch_override = 1                # the macro view may move the regime at most this many steps
 dip_add_gap_pp = 2                # in a dip, flag holdings this far below their conviction size (ADD eligible)
+
+[funding_queue]
+# Funding queue (design by Claude, owner-approved 2026-10-18; scripts/funding_queue.py, no AI except the weekly swap
+# review). A conviction-4+ CORE BUY rejected ONLY by the cash reserve / cash floor waits here instead of being lost.
+# Weekdays (bin/fill-pending) the best waiting idea (base fair value upside at the latest close) is resubmitted for
+# the next open once there is room above the reserve; weekly, the swap-reviewer weighs it against the weakest CORE
+# holdings. The reserve itself is never relaxed.
+max_days = 30                     # dropped after waiting this long (the research goes stale)
+max_rise_pct = 10                 # ...or once its close is this far above the decision price
+swap_candidates = 3               # weakest CORE holdings shown in the weekly swap brief
 
 [entry]
 # Entry prices (owner rule 2026-10-09; scripts/entry_watch.py): every conviction-3+ AVOID/HOLD carries the price
@@ -301,17 +312,18 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/weekly_scan.py`, `scripts/decision_log.py`, `scripts/weekly_report.py`, `scripts/dashboard.py` — scan (flags, mechanical exits/trims, headlines), decision log + hit rates, weekly report, `docs/index.html` dashboard. No model calls.
 - `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions (3 new initiations at a time); any failure (other than a skipped new initiation) restores `portfolio/` and writes `runs/<date>/error.log`.
 - Monte Carlo removed (owner 2026-10-11, to save usage; it was informational only). Past `*-montecarlo.*` / `*-mc-*` files in `research/` are kept as history.
+- `scripts/funding_queue.py` — the funding queue (no AI): `enqueue` (called by `portfolio.place_orders` / `fill_pending` on a cash-reserve rejection), `review` (bin/fill-pending weekdays and the weekly run: resubmit when room appears, drop stale ideas), `brief` (weekly swap brief for `.claude/agents/swap-reviewer.md`); events in `portfolio/funding_queue.csv`.
 - `scripts/prescreen.py` — mechanical gate before a bulk initiation (no model calls): price above the base fair value by more than `[screen].prescreen_min_base_upside_pct` → no AI research that day; verdicts in `reports/prescreen/<date>.csv`. Owner requests, entry-price hits, holdings and the weekly picks are never gated.
 - `scripts/check_docs.py` — template, word-limit, tag, allowlist, conviction and Decision-block checks for notes and evaluations; number provenance (design by Claude 2026-10-16): a number in an evaluation's prose that isn't in the fact sheet, note, macro overlay, config or its own Decision block fails it (notes: a number not in the fact sheet must be a cited `[company-reported]` figure or a section-4 level).
 - `scripts/allowlist_hook.py` — WebFetch guard (wired in `.claude/settings.json`); blocked URLs go to `logs/skipped-urls.log`. WebSearch, curl and wget are denied.
 - `scripts/common.py` — config reader, ticker/URL mapping, allowlist, thesis-only trigger rule.
 - `bin/py` — project Python launcher (`.venv` locally, `python3` in CI).
-- Mac schedule: `bin/install-mac-schedule` (launchd) → `bin/weekly-local` (Fri 22:00) and `bin/fill-pending` (weekdays 22:30: fill orders + re-price holdings daily; no AI).
+- Mac schedule: `bin/install-mac-schedule` (launchd) → `bin/weekly-local` (Fri 22:00) and `bin/fill-pending` (weekdays 22:30: fill orders + re-price holdings daily + funding-queue review; no AI).
 - GitHub Actions: `.github/workflows/screen.yml` (Fri 21:00 UTC), `weekly-review.yml` (Sat 08:00 UTC), `fills.yml` (weekdays 21:30 UTC); one concurrency group; `bin/ci-paused` and `bin/ci-finish` handle PAUSED and commit-or-error-log.
 - `universe/` — `watchlist.txt` (always eligible and always screened, optional `ir=` domain), `ftse100.txt` (owner-maintained; `screen=no`), `custom.txt` (your own tickers), `ir_domains.txt` (auto-recorded company domains), `universe.csv` (built locally; not in the public repo).
 - `portfolio/` — `state.json` (cash, holdings, pending orders, cash interest), `ledger.csv`, `rejections.csv`, `valuations.csv`, `decisions.csv`, `interest.csv` (daily interest on cash, `[cash]`).
 - `research/<SLUG>/` — fact sheets, notes, evaluations. `reports/weekly/` — weekly reports (and `-recap.md` summaries). `reports/screen/` — screens. `reports/sample/` — older simulated sample. `runs/<date>/` — each run's working files and log. `docs/index.html` — dashboard (GitHub Pages).
-- `.claude/agents/` — the subagents (researcher, macro-overlay, evaluator, portfolio-manager, weekly-reviewer, macro-strategist). `tests/` — pytest suite (`tests/fixtures/*.html` saved site pages stay local, not in the public repo).
+- `.claude/agents/` — the subagents (researcher, macro-overlay, evaluator, portfolio-manager, weekly-reviewer, macro-strategist, swap-reviewer). `tests/` — pytest suite (`tests/fixtures/*.html` saved site pages stay local, not in the public repo).
 - `data/cache/` — per-day page cache (git-ignored). `README.md` — plain-English setup guide.
 
 ## How to pause

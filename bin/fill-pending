@@ -22,6 +22,9 @@ bin/with-timeout 1200 bin/py scripts/corporate_actions.py check --asof "$ASOF" |
 bin/with-timeout 900 bin/py scripts/portfolio.py mark --phase daily --asof "$ASOF" || { echo "!! daily re-pricing failed"; exit 1; }
 # Entry prices (no AI): a conviction-3+ name closing at/below its entry price is re-researched first next run
 bin/with-timeout 900 bin/py scripts/entry_watch.py check --asof "$ASOF" || echo "!! entry watch not updated"
+# Funding queue (no AI, 2026-10-18): a conviction-4 BUY stopped only by the cash reserve is resubmitted for the
+# next open once there is room above the reserve (best upside first); stale ideas drop out
+bin/with-timeout 600 bin/py scripts/funding_queue.py review --asof "$ASOF" || echo "!! funding queue not reviewed"
 if git diff --quiet -- portfolio; then echo "nothing changed"; exit 0; fi
 bin/with-timeout 600 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
 git add -A -- portfolio docs reports/entry-watch "$LOG"

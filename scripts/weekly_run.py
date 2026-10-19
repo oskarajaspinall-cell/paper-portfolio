@@ -51,7 +51,8 @@ TOOLS = {"researcher": f"Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),{_CH
                               "Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json)",
          "weekly-reviewer": f"Read,WebFetch,{_OUT}",
          "macro-overlay": f"Read,WebFetch,{_CHECK},{_OUT}",
-         "macro-strategist": f"Read,WebFetch,{_CHECK},{_OUT}"}
+         "macro-strategist": f"Read,WebFetch,{_CHECK},{_OUT}",
+         "swap-reviewer": f"Read,{_OUT}"}
 
 
 class StepFailed(Exception):
@@ -160,6 +161,31 @@ def run_cash_strategy(asof: str, agent, log) -> None:
         sh(PY + ["scripts/regime.py", "--apply-view", "--asof", asof], log)
     except Exception as e:  # noqa: BLE001  the view is optional: never cancels the week
         log(f"!! MACRO VIEW UNAVAILABLE (the mechanical score stands): {e}")
+
+
+def run_funding_queue(asof: str, dry_run: bool, agent, log, rundir: Path) -> None:
+    """Funding queue (2026-10-18): resubmit waiting conviction-4 BUYs that now fit above the cash reserve, then
+    the swap-reviewer weighs the best one still waiting against the weakest CORE holdings. A swap is a BUY with
+    `replaces`, validated by portfolio.py like any other trade."""
+    dry = ["--dry-run"] if dry_run else []
+    sh(PY + ["scripts/funding_queue.py", "review", "--asof", asof] + dry, log)
+    brief = rundir / "funding-queue.md"
+    if not sh(PY + ["scripts/funding_queue.py", "brief", "--asof", asof, "--out", str(brief)], log).strip().startswith("OK "):
+        return  # nothing waiting
+    review = rundir / "swap-review.md"
+    agent("swap-reviewer", f"Brief runs/{asof}/funding-queue.md, date {asof}. Write runs/{asof}/swap-review.md.", log)
+    if not review.exists():
+        raise StepFailed("swap-reviewer wrote no swap-review.md")
+    import funding_queue
+    swap = funding_queue.parse_swap(review.read_text(), json.loads(brief.with_suffix(".json").read_text()))
+    if swap is None:
+        log("swap review: no swap this week")
+        return
+    state = json.loads((ROOT / "portfolio" / "state.json").read_text())
+    req = rundir / "requests-swap.json"
+    req.write_text(json.dumps([funding_queue.swap_request(state, swap)], indent=1))
+    sh(PY + ["scripts/portfolio.py", "submit", str(req), "--asof", asof, "--at-market",
+             "--save", str(rundir / "submit-swap.json")] + dry, log)
 
 
 def screen_picks(asof: str, max_age_days: int = 7) -> list[dict]:
@@ -300,6 +326,12 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
         else:
             (rundir / "submit.json").write_text(json.dumps({"applied": [], "rejected": [], "warnings": [],
                                                             "dry_run": dry_run}))
+
+        step("funding queue")
+        try:  # 2026-10-18: a problem here trades nothing and never cancels the week
+            run_funding_queue(asof, dry_run, agent, log, rundir)
+        except Exception as e:  # noqa: BLE001
+            log(f"!! FUNDING QUEUE STEP FAILED (no swap this week): {str(e)[:300]}")
 
         from decision_log import decision_from_eval
         for kind, e in evals:

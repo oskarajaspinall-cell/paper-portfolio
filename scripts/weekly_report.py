@@ -36,7 +36,8 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     empty = {"applied": [], "rejected": [], "warnings": []}
     mech_sub, sub = _load(run / "submit-mechanical.json", empty), _load(run / "submit.json", empty)
     fills = _load(run / "fills.json", empty)
-    for f in sorted(run.glob("submit-resubmit*.json")):  # orders resubmitted by hand after the run (logged in git)
+    # orders resubmitted by hand after the run (logged in git), and the funding-queue swap (2026-10-18)
+    for f in sorted(run.glob("submit-resubmit*.json")) + sorted(run.glob("submit-swap.json")):
         re_ = _load(f, empty)
         sub.setdefault("placed", []).extend(re_.get("placed", []))
         sub["rejected"] = [r for r in sub.get("rejected", []) if r["ticker"] not in {x["ticker"] for x in re_.get("placed", [])}] \
@@ -78,6 +79,20 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
                       if rg["dip"]["multiplier"] < 1 else "")
                    + (f"; {len(scan.get('dips') or [])} holding(s) flagged to top up in the dip" if scan.get("dips") else "")
                    + f". Details: reports/regime/{rg['asof']}.md")
+    fq = state.get("funding_queue") or []
+    swap = run / "swap-review.md"
+    if fq or swap.exists():
+        verdict = ""
+        if swap.exists() and "```json" in swap.read_text():
+            try:
+                v = json.loads(swap.read_text().rsplit("```json", 1)[1].split("```", 1)[0])
+                verdict = (f"; swap review: buy {v.get('buy')} replacing {v.get('replaces')}" if v.get("swap") is True
+                           else f"; swap review: no swap ({v.get('reason', '')})")
+            except (ValueError, IndexError):
+                verdict = "; swap review: unreadable"
+        out.append("- Funding queue (conviction-4 BUYs waiting for room above the cash reserve): "
+                   + (", ".join(f"{e['ticker']} (decided {e['added']})" for e in fq) or "empty") + verdict + "."
+                   + (f" Details: runs/{asof}/swap-review.md." if swap.exists() else ""))
     hits = (state.get("entry_hits") or [])
     if hits:
         out.append("- Entry prices reached (re-researched first this run): "

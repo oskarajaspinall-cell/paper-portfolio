@@ -39,6 +39,10 @@ real yields, the S&P 500's trend) sets a macro regime — risk-on, neutral or de
 move it one notch with cited official sources. The regime sets a cash reserve (10% / 20% / 35%) that new buys can't
 spend; nothing is sold to reach it. When the S&P 500 drops 10% (20%) below its 52-week high, half (all) of the
 reserve is released to buy the dip.
+A high-conviction buy that the reserve blocks is not thrown away: it waits in a **funding queue** and is bought
+automatically at the next open once there is room above the reserve (it drops out after 30 days or if the price
+runs 10% above where it was decided). Each week an AI step also checks whether the best waiting idea is clearly
+better than the weakest holding and, if so, swaps them.
 Uninvested **cash earns interest** at a flat 3.8% AER (set in `CLAUDE.md` `[cash]`), credited daily on each
 day's closing cash balance and logged in `portfolio/interest.csv`.
 Every fact sheet includes a **fair value**: the industry-appropriate method from

@@ -483,8 +483,8 @@ def format_returns(rt: dict) -> str:
 
 # --------------------------------------------------------------------------- validation + application
 class Reject(Exception):
-    def __init__(self, rule: str, detail: str):
-        self.rule, self.detail = rule, detail
+    def __init__(self, rule: str, detail: str, breaches: list[str] | None = None):
+        self.rule, self.detail, self.breaches = rule, detail, breaches or []
         super().__init__(f"{rule}: {detail}")
 
 
@@ -804,9 +804,12 @@ class Engine:
                 out.append(("CORE_POSITION_MAX", f"{w:.2f}% (> {cc['trim_above_pct']}%)"))
         return out
 
-    def _reject(self, r, rule, detail):
+    def _reject(self, r, rule, detail, breaches=None):
+        """`breaches` (the limit codes behind a REPLACEMENT_REQUIRED) is kept in memory for the funding queue;
+        it isn't a rejections.csv column."""
         self.rejections.append({"date": self.today, "ticker": r.get("ticker", ""), "action": r.get("action", ""),
-                                "type": r.get("position_type", ""), "rule": rule, "detail": detail})
+                                "type": r.get("position_type", ""), "rule": rule, "detail": detail,
+                                **({"breaches": breaches} if breaches else {})})
 
     def process(self, requests: list[dict]):
         order = {"SELL": 0, "TRIM": 1, "ADD": 2, "BUY": 3}
@@ -832,10 +835,11 @@ class Engine:
                             b[0] in ("CASH_MIN", "CASH_RESERVE", "MAX_HOLDINGS", "TACTICAL_SLEEVE_MAX", "SECTOR_MAX")
                             for b in breaches):
                         raise Reject("REPLACEMENT_REQUIRED", "BUY would breach " + "; ".join(d for _, d in breaches)
-                                     + " -- name the holding it replaces and why the new idea is better")
+                                     + " -- name the holding it replaces and why the new idea is better",
+                                     [b[0] for b in breaches])
                     raise Reject(breaches[0][0], "; ".join(d for _, d in breaches))
             except Reject as e:
-                self._reject(r, e.rule, e.detail)
+                self._reject(r, e.rule, e.detail, e.breaches)
                 continue
             self.s.clear()
             self.s.update(work)
@@ -1080,8 +1084,12 @@ def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, po
                "applied": [], "rejected": eng.rejections, "warnings": target_warnings(state, cfg)}
     if not dry_run:
         append_csv(port_dir / "rejections.csv", REJECT_COLS, eng.rejections)
+        import funding_queue  # a BUY stopped only by the cash reserve waits for room (2026-10-18)
+        queued = funding_queue.enqueue(state, eng.rejections, requests, eng.quote, cfg, today, port_dir)
         if orders:
             state.setdefault("pending", []).extend(orders)
+            queued |= funding_queue.drop_ordered(state, {o["request"]["ticker"] for o in orders}, today, port_dir)
+        if orders or queued:
             atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
     return summary
 
@@ -1139,6 +1147,9 @@ def fill_pending(state_path, mkt, cfg, watch, dry_run=False, port_dir=PORT, max_
                              f"{price_check(mkt, row['ticker'], q, cfg)}]")
         for rej in eng.rejections:
             rej["detail"] = f"at the open of {fill_day}: {rej['detail']}"
+        if not dry_run:  # an order the open price pushed below the cash reserve waits for room (2026-10-18)
+            import funding_queue
+            funding_queue.enqueue(state, eng.rejections, [r], eng.quote, cfg, fill_day, port_dir)
         eng.update_baseline()
         ledger += eng.ledger
         rejections += eng.rejections

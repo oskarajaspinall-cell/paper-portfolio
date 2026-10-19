@@ -615,3 +615,44 @@ def test_decision_log_reprice_intraday_rows(real_cfg):
     assert out == ["AAA: 171.31 -> 149.93 at 12:39"]
     assert (rows[0]["price"], rows[0]["spy_close"], rows[0]["price_date"]) == (149.93, 771.5, "2026-10-09")
     assert "re-priced afterwards" in rows[0]["note"] and rows[1]["price"] == "50"
+
+
+def test_funding_queue_swap_is_submitted_as_a_replacement(fake_repo, monkeypatch):
+    q = [{"ticker": "WAIT", "added": "2026-10-08", "request": {"ticker": "WAIT", "action": "BUY", "position_type": "CORE",
+                                                               "conviction": 4, "reason": "cheap"}}]
+    (fake_repo / "portfolio" / "state.json").write_text(json.dumps({"holdings": {}, "cash_usd": 1.0, "funding_queue": q}))
+    calls = []
+    base_sh = make_sh(fake_repo, dict(SCAN_QUIET, exits=[], mechanical_requests=[]), calls)
+    run = fake_repo / "runs" / "2026-10-10"
+
+    def sh(args, log, timeout=None):
+        cmd = " ".join(args)
+        if "funding_queue.py brief" in cmd:
+            (run / "funding-queue.md").write_text("brief")
+            (run / "funding-queue.json").write_text(json.dumps({"buy": "WAIT", "candidates": ["WEAK"]}))
+            calls.append(cmd)
+            return "OK runs/2026-10-10/funding-queue.md"
+        if "requests-swap.json" in cmd or "requests-mechanical.json" in cmd and "portfolio.py submit" in cmd:
+            calls.append(cmd)  # (the default fake submit would overwrite state.json and its queue)
+            return ""
+        return base_sh(args, log, timeout)
+    monkeypatch.setattr(wr, "sh", sh)
+    seen = []
+
+    def agent(name, prompt, log):
+        seen.append(name)
+        if name == "swap-reviewer":
+            (run / "swap-review.md").write_text('```json\n{"swap": true, "buy": "WAIT", "replaces": "WEAK", '
+                                                '"replacement_reason": "better business, cheaper"}\n```')
+
+    assert wr.run("2026-10-10", False, 0, agent=agent) == 0
+    assert seen == ["macro-strategist", "swap-reviewer"]
+    req = json.loads((run / "requests-swap.json").read_text())[0]
+    assert (req["ticker"], req["replaces"], req["replacement_reason"]) == ("WAIT", "WEAK", "better business, cheaper")
+    assert any("portfolio.py submit" in c and "requests-swap.json" in c and "--at-market" in c for c in calls)
+
+
+def test_funding_queue_problem_never_cancels_the_week(fake_repo, monkeypatch):
+    calls = []
+    monkeypatch.setattr(wr, "sh", make_sh(fake_repo, SCAN_QUIET, calls, fail_on="funding_queue.py review"))
+    assert wr.run("2026-10-10", False, 0, agent=lambda *a: None) == 0
