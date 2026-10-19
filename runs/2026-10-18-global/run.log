@@ -2472,3 +2472,160 @@ OK research/VIPS/2026-10-19-evaluation.md Bear case=133 Bull case=120 decision=A
 [07:31:05] $ bin/py scripts/valuation.py VIPS --asof 2026-10-19 --eval research/VIPS/2026-10-19-evaluation.md
 [07:31:05] {"out": "research/VIPS/2026-10-19-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 13.06, "base": 20.31, "bull": 32.7}, "price": 12.86}
 [07:31:06] == done VIPS
+[07:31:10] == Research batch 07: 6 researched, 1 BUY (DOX), 5 AVOID -> reports/research/2026-10-19-batch-07.md; uploaded to GitHub
+[07:31:25] Note: research/JSE-IMP/2026-10-19.md
+Fact sheet: research/JSE-IMP/factsheet-2026-10-19.md
+Check: OK research/JSE-IMP/2026-10-19.md type=CORE 1=66 2=146 3=145 4=103 5=96 6=62 total=618
+
+No data conflicts. No blocked URLs (WSJ/GlobeNewsWire/TheNewswire headlines in the fact sheet were not fetched, as they are off the allowlist and no company IR domain was recorded for JSE:IMP). Note: this task is scoped to the research note only — the BUY/AVOID decision belongs to the evaluator step, which I did not run.
+[07:31:25] $ bin/py scripts/check_docs.py note research/JSE-IMP/2026-10-19.md
+[07:31:25] OK research/JSE-IMP/2026-10-19.md type=CORE 1=66 2=146 3=145 4=103 5=96 6=62 total=618
+[07:31:25] $ claude -p Ticker JSE:IMP, date 2026-10-19. Research: research/JSE-IMP/factsheet-2026-10-19.md, research/JSE-IMP/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/JSE-IMP/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:31:31] == initiate LDOS
+[07:31:31] $ bin/py scripts/sec_delta.py LDOS --asof 2026-10-19
+[07:31:41] research/SHA-600809/2026-10-19-macro.md
+OK research/SHA-600809/2026-10-19-macro.md macro_weight=context words=72
+[07:31:41] $ bin/py scripts/check_docs.py macro research/SHA-600809/2026-10-19-macro.md
+[07:31:41] OK research/SHA-600809/2026-10-19-macro.md macro_weight=context words=72
+[07:31:41] $ claude -p Evaluate SHA:600809 for 2026-10-19: fact sheet research/SHA-600809/factsheet-2026-10-19.md, note research/SHA-600809/2026-10-19.md, state portfolio/state.json, macro overlay research/SHA-600809/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:31:42] OK research/LDOS/sec-delta-2026-10-19.md
+[07:31:42] $ claude -p Ticker LDOS, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. SEC filing delta: research/LDOS/sec-delta-2026-10-19.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:32:22] Decision: AVOID at conviction 3, with no entry price set. The stock is cheap, below its own 5-year minimum multiples and net cash, but margins and returns on capital are still falling. The mechanical bear fair value is about the current price, so there's no margin of safety, and Q3 results are due Oct 29.
+
+research/SHA-600809/2026-10-19-evaluation.md
+OK research/SHA-600809/2026-10-19-evaluation.md Bear case=134 Bull case=138 decision=AVOID
+[07:32:22] $ bin/py scripts/check_docs.py eval research/SHA-600809/2026-10-19-evaluation.md
+[07:32:22] OK research/SHA-600809/2026-10-19-evaluation.md Bear case=134 Bull case=138 decision=AVOID
+[07:32:22] $ bin/py scripts/valuation.py SHA:600809 --asof 2026-10-19 --eval research/SHA-600809/2026-10-19-evaluation.md
+[07:32:22] {"out": "research/SHA-600809/2026-10-19-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 117.69, "base": 166.26, "bull": 279.81}, "price": 116.7}
+[07:32:23] == done SHA:600809
+[07:32:44] == initiate SHA:600909
+[07:32:44] $ bin/py scripts/sec_delta.py SHA:600909 --asof 2026-10-19
+[07:32:44] SKIP SHA:600909: not a US listing (SEC filers only)
+[07:32:44] $ claude -p Ticker SHA:600909, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:33:27] research/JSE-IMP/2026-10-19-macro.md
+OK research/JSE-IMP/2026-10-19-macro.md macro_weight=primary words=244
+[07:33:27] $ bin/py scripts/check_docs.py macro research/JSE-IMP/2026-10-19-macro.md
+[07:33:27] OK research/JSE-IMP/2026-10-19-macro.md macro_weight=primary words=244
+[07:33:27] $ claude -p Evaluate JSE:IMP for 2026-10-19: fact sheet research/JSE-IMP/factsheet-2026-10-19.md, note research/JSE-IMP/2026-10-19.md, state portfolio/state.json, macro overlay research/JSE-IMP/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:33:44] research/LDOS/2026-10-19.md
+research/LDOS/factsheet-2026-10-19.md
+OK research/LDOS/2026-10-19.md type=CORE 1=54 2=125 3=115 4=65 5=84 6=45 total=488
+
+No data conflicts; no blocked URLs (no WebFetch calls were needed — all qualitative content came from the fact sheet's news section and the pre-built SEC filing delta).
+[07:33:44] $ bin/py scripts/check_docs.py note research/LDOS/2026-10-19.md
+[07:33:44] OK research/LDOS/2026-10-19.md type=CORE 1=54 2=125 3=115 4=65 5=84 6=45 total=488
+[07:33:44] $ claude -p Ticker LDOS, date 2026-10-19. Research: research/LDOS/factsheet-2026-10-19.md, research/LDOS/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/LDOS/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:34:10] Decision: AVOID, conviction 3.
+
+research/JSE-IMP/2026-10-19-evaluation.md
+OK research/JSE-IMP/2026-10-19-evaluation.md Bear case=141 Bull case=102 decision=AVOID
+[07:34:10] $ bin/py scripts/check_docs.py eval research/JSE-IMP/2026-10-19-evaluation.md
+[07:34:10] OK research/JSE-IMP/2026-10-19-evaluation.md Bear case=141 Bull case=102 decision=AVOID
+[07:34:10] $ bin/py scripts/valuation.py JSE:IMP --asof 2026-10-19 --eval research/JSE-IMP/2026-10-19-evaluation.md
+[07:34:11] {"out": "research/JSE-IMP/2026-10-19-valuation.md", "used": null, "fair_value": {}, "price": 18800}
+[07:34:12] == done JSE:IMP
+[07:34:30] == initiate JSE:NPH
+[07:34:30] $ bin/py scripts/sec_delta.py JSE:NPH --asof 2026-10-19
+[07:34:30] SKIP JSE:NPH: not a US listing (SEC filers only)
+[07:34:30] $ claude -p Ticker JSE:NPH, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:35:27] check_docs passes cleanly. Now the decision.
+
+**Decision: AVOID.** Low/flat ROIC (2.2–4.4% over 5 years, likely below cost of capital), no durable moat in a fragmented, commission-competitive industry, and the stock trades at a 17–79% premium to peer multiples despite no quality edge — base-case fair value upside is only +8.8% against a -32.6% bear case. Doesn't clear the conviction-4 bar needed for a BUY.
+
+- Note: `research/SHA-600909/2026-10-19.md`
+- Fact sheet: `research/SHA-600909/factsheet-2026-10-19.md`
+- check_docs: `OK research/SHA-600909/2026-10-19.md type=CORE 1=45 2=129 3=128 4=74 5=89 6=61 total=526`
+- No data conflicts. No blocked URLs (no WebFetch calls were needed — fact sheet had no news items and no allowlisted IR domain on record for this name).
+[07:35:27] $ bin/py scripts/check_docs.py note research/SHA-600909/2026-10-19.md
+[07:35:28] OK research/SHA-600909/2026-10-19.md type=CORE 1=45 2=129 3=128 4=74 5=89 6=61 total=526
+[07:35:28] $ claude -p Ticker SHA:600909, date 2026-10-19. Research: research/SHA-600909/factsheet-2026-10-19.md, research/SHA-600909/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/SHA-600909/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:35:30] research/LDOS/2026-10-19-macro.md
+OK research/LDOS/2026-10-19-macro.md macro_weight=secondary words=232
+[07:35:30] $ bin/py scripts/check_docs.py macro research/LDOS/2026-10-19-macro.md
+[07:35:30] OK research/LDOS/2026-10-19-macro.md macro_weight=secondary words=232
+[07:35:30] $ claude -p Evaluate LDOS for 2026-10-19: fact sheet research/LDOS/factsheet-2026-10-19.md, note research/LDOS/2026-10-19.md, state portfolio/state.json, macro overlay research/LDOS/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:36:21] research/LDOS/2026-10-19-evaluation.md
+OK research/LDOS/2026-10-19-evaluation.md Bear case=135 Bull case=125 decision=BUY
+[07:36:21] $ bin/py scripts/check_docs.py eval research/LDOS/2026-10-19-evaluation.md
+[07:36:22] OK research/LDOS/2026-10-19-evaluation.md Bear case=135 Bull case=125 decision=BUY
+[07:36:22] $ bin/py scripts/valuation.py LDOS --asof 2026-10-19 --eval research/LDOS/2026-10-19-evaluation.md
+[07:36:22] {"out": "research/LDOS/2026-10-19-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 138.1, "base": 279.78, "bull": 300.72}, "price": 124.85}
+[07:36:23] == portfolio-manager LDOS (BUY 4)
+[07:36:23] $ claude -p Evaluation files: research/LDOS/2026-10-19-evaluation.md. Date 2026-10-19. Write the requests to runs/2026-10-18-global/requests-LDOS.json and submit with --at-market --save runs/2026-10-18-global/submit-LDOS.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[07:37:24] The script exited successfully (rejection is a normal outcome, not a script error), so nothing further to fix.
+
+Decisions:
+
+| Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| LDOS | BUY | CORE | 4 |
+
+```json
+{
+ "mode": "at_market",
+ "placed": [],
+ "applied": [],
+ "rejected": [
+  {
+   "date": "2026-10-19",
+   "ticker": "LDOS",
+   "action": "BUY",
+   "type": "CORE",
+   "rule": "REPLACEMENT_REQUIRED",
+   "detail": "BUY would breach cash would be 12.80%, below the 15% reserve (risk_on regime) -- name the holding it replaces and why the new idea is better",
+   "breaches": [
+    "CASH_RESERVE"
+   ]
+  }
+ ],
+ "warnings": [
+  "cash 28.5% vs a 15% reserve (risk_on regime)"
+ ],
+ "filled_now": [],
+ "queued_for_next_open": [],
+ "dry_run": false
+}
+```
+
+LDOS BUY was rejected under REPLACEMENT_REQUIRED: it would take cash to 12.80%, below the 15% cash reserve, and no holding to replace was named in this evaluation. Per the funding queue rule, a conviction-4 CORE BUY rejected only by the cash reserve is not lost — `portfolio.py submit` will have queued it in `state.json`'s `funding_queue` for review on a future weekday/weekly run once there is room above the reserve.
+[07:37:24] == done LDOS
+[07:37:44] == initiate SHA:601169
+[07:37:44] $ bin/py scripts/sec_delta.py SHA:601169 --asof 2026-10-19
+[07:37:44] SKIP SHA:601169: not a US listing (SEC filers only)
+[07:37:44] $ claude -p Ticker SHA:601169, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:38:16] research/JSE-NPH/2026-10-19.md
+research/JSE-NPH/factsheet-2026-10-19.md
+OK research/JSE-NPH/2026-10-19.md type=CORE 1=58 2=150 3=149 4=102 5=83 6=91 total=633
+
+Data notes: peer JSE:RBP (Royal Bafokeng Platinum) returned a 404 on stockanalysis.com and was dropped from the peer set (used JSE:IMP, JSE:AMS, JSE:SSW instead). No fair value is computable from stockanalysis.com data for this name (NAV and EV/EBITDA methods both unavailable). No company IR domain is recorded for NPH in `universe/ir_domains.txt`/`watchlist.txt`, so qualitative color came only from the stockanalysis.com-hosted earnings-call transcript (1 WebFetch call, within the CORE cap of 6); no numeric figures from that transcript could be used as `[company-reported]` since stockanalysis.com is excluded as a primary host — those numbers were dropped or confined to the analyst's own section-4 trigger level.
+[07:38:16] $ bin/py scripts/check_docs.py note research/JSE-NPH/2026-10-19.md
+[07:38:16] OK research/JSE-NPH/2026-10-19.md type=CORE 1=58 2=150 3=149 4=102 5=83 6=91 total=633
+[07:38:16] $ claude -p Ticker JSE:NPH, date 2026-10-19. Research: research/JSE-NPH/factsheet-2026-10-19.md, research/JSE-NPH/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/JSE-NPH/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:38:26] research/SHA-600909/2026-10-19-macro.md
+OK research/SHA-600909/2026-10-19-macro.md macro_weight=secondary words=244
+[07:38:26] $ bin/py scripts/check_docs.py macro research/SHA-600909/2026-10-19-macro.md
+[07:38:26] OK research/SHA-600909/2026-10-19-macro.md macro_weight=secondary words=244
+[07:38:26] $ claude -p Evaluate SHA:600909 for 2026-10-19: fact sheet research/SHA-600909/factsheet-2026-10-19.md, note research/SHA-600909/2026-10-19.md, state portfolio/state.json, macro overlay research/SHA-600909/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:38:56] research/SHA-600909/2026-10-19-evaluation.md
+OK research/SHA-600909/2026-10-19-evaluation.md Bear case=132 Bull case=106 decision=AVOID
+[07:38:56] $ bin/py scripts/check_docs.py eval research/SHA-600909/2026-10-19-evaluation.md
+[07:38:56] OK research/SHA-600909/2026-10-19-evaluation.md Bear case=132 Bull case=106 decision=AVOID
+[07:38:56] $ bin/py scripts/valuation.py SHA:600909 --asof 2026-10-19 --eval research/SHA-600909/2026-10-19-evaluation.md
+[07:38:56] {"out": "research/SHA-600909/2026-10-19-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 4.85, "base": 7.83, "bull": 10.94}, "price": 7.19}
+[07:38:57] == done SHA:600909
+[07:39:12] You've hit your session limit · resets 11:40am (Europe/London)
+[07:39:12] !! FAILED SHA:601169: claude -p Ticker SHA:601169, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(re
+[07:39:21] == initiate SSB
+[07:39:21] $ bin/py scripts/sec_delta.py SSB --asof 2026-10-19
+[07:39:23] You've hit your session limit · resets 11:40am (Europe/London)
+[07:39:23] !! MACRO OVERLAY UNAVAILABLE for JSE:NPH: claude -p Ticker JSE:NPH, date 2026-10-19. Research: research/JSE-NPH/factsheet-2026-10-19.md, research/JSE-NPH/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/JSE-NPH/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text exited 1: 
+[07:39:23] $ claude -p Evaluate JSE:NPH for 2026-10-19: fact sheet research/JSE-NPH/factsheet-2026-10-19.md, note research/JSE-NPH/2026-10-19.md, state portfolio/state.json. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:39:25] You've hit your session limit · resets 11:40am (Europe/London)
+[07:39:25] !! FAILED JSE:NPH: claude -p Evaluate JSE:NPH for 2026-10-19: fact sheet research/JSE-NPH/factsheet-2026-10-19.md, note research/JSE-NPH/2026-10-19.md, state portfolio/state.json. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/p
+[07:39:34] OK research/SSB/sec-delta-2026-10-19.md
+[07:39:34] $ claude -p Ticker SSB, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. SEC filing delta: research/SSB/sec-delta-2026-10-19.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:39:36] You've hit your session limit · resets 11:40am (Europe/London)
+[07:39:36] !! FAILED SSB: claude -p Ticker SSB, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. SEC filing delta: research/SSB/sec-delta-2026-10-19.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowe
+[07:39:54] == screened out INSW: price above base fair value (-14.6%; floor +0%) (no AI research)
+[07:40:04] == screened out TSX:LUG: price above base fair value (-72.5%; floor +0%) (no AI research)
