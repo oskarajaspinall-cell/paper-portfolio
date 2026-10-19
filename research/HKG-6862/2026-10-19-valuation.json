@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Restaurants",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -0.17173983149189517,
+    "base": 9.641633750566562,
+    "bull": 32.20324153671176
+   },
+   "implied_growth": 0.04028711751544789,
+   "discount_rate": 0.11739003048741446,
+   "cost_of_equity": 0.1281945,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.004792646822085172,
+     "base": 0.048034337882814124,
+     "bull": 0.11672264517542685
+    },
+    "cash_flow_margin": {
+     "bear": -0.005931483174282082,
+     "base": 0.07836736100788946,
+     "bull": 0.20660086112634377
+    },
+    "cagr_3y": 0.11672264517542685,
+    "cagr_5y": 0.025414706355829653,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 13.790384030991289,
+    "base": 15.172289607786393,
+    "bull": 33.274385359046946
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.266,
+     "base": 10.222,
+     "bull": 22.745
+    },
+    "ttm_ebitda": 6675715000
+   }
+  }
+ ],
+ "price": 9.365,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 4.482301456002499,
+  "base": 11.485185702973174,
+  "bull": 32.56028947749015
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5213773138278164,
+  "base": 0.22639462925501053,
+  "bull": 2.4768061374789268
+ },
+ "implied_growth": 0.04028711751544789,
+ "ticker": "HKG:6862",
+ "asof": "2026-10-19",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.1725914802695474,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/6862/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/6862/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/6862/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/6862/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/6862/statistics/"
+ }
+}

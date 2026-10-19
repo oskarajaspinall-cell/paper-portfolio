@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Equipment & Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 176.52679354891572,
+    "base": 324.74051572293615,
+    "bull": 480.44986832483266
+   },
+   "implied_growth": 0.06229419074169307,
+   "discount_rate": 0.0953323046096809,
+   "cost_of_equity": 0.096,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.11443994138265787,
+     "base": 0.17282930301929483,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.37405687205086985,
+     "base": 0.5574460770861919,
+     "bull": 0.6175101835188856
+    },
+    "cagr_3y": 0.3774373293118636,
+    "cagr_5y": 0.2638798827653157,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 89.22202008766094,
+    "base": 141.15336165625297,
+    "bull": 265.5793518322175
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.195,
+     "base": 16.675,
+     "bull": 17.697
+    },
+    "ttm_ebitda": 542300000,
+    "peak_earnings": "TTM EBITDA is 2.3x its 5y median: bear/base use the 5y average (2.98e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 211.6,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 147.42520239516412,
+  "base": 263.54479770070844,
+  "bull": 408.8263628272943
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.30328354255593515,
+  "base": 0.24548581144002113,
+  "bull": 0.9320716579739807
+ },
+ "implied_growth": 0.06229419074169307,
+ "ticker": "EPA:GTT",
+ "asof": "2026-10-19",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/epa/GTT/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/epa/GTT/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/epa/GTT/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/epa/GTT/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/epa/GTT/statistics/"
+ }
+}
