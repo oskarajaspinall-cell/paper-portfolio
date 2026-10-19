@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Information Technology Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 61.38965817948622,
+    "base": 109.28121277567068,
+    "bull": 204.88550010055638
+   },
+   "implied_growth": -0.046229833464141626,
+   "discount_rate": 0.08827009697014956,
+   "cost_of_equity": 0.096,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.04878629173837741,
+     "base": 0.10812451124365695,
+     "bull": 0.24992546149787298
+    },
+    "cash_flow_margin": {
+     "bear": 0.24767087265917603,
+     "base": 0.3318894333955309,
+     "bull": 0.3468891199505023
+    },
+    "cagr_3y": 0.13257258347675482,
+    "cagr_5y": 0.24992546149787298,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 63.344380530055396,
+    "base": 81.86662399460958,
+    "bull": 84.06592563047501
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 12.121,
+     "base": 15.355,
+     "bull": 15.739
+    },
+    "ttm_ebitda": 2479700000
+   }
+  }
+ ],
+ "price": 54.4,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 62.041232296342606,
+  "base": 100.14301651531697,
+  "bull": 164.61230861052925
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.14046382897688625,
+  "base": 0.840864274178621,
+  "bull": 2.0259615553406114
+ },
+ "implied_growth": -0.046229833464141626,
+ "ticker": "BME:AMS",
+ "asof": "2026-10-19",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bme/AMS/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bme/AMS/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bme/AMS/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bme/AMS/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bme/AMS/statistics/"
+ }
+}

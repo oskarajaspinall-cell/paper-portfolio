@@ -1,0 +1,80 @@
+{
+ "industry": {
+  "industry": "Copper",
+  "known": true,
+  "best": "NAV",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 5.163405908339894,
+    "base": 8.158914256470949,
+    "bull": 17.796011410485725
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.107,
+     "base": 6.294,
+     "bull": 6.392
+    },
+    "ttm_ebitda": 4556300000,
+    "peak_earnings": "TTM EBITDA is 2.2x its 5y median: bear/base use the 5y average (2.185e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 7.635,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 5.163405908339894,
+  "base": 8.158914256470949,
+  "bull": 17.796011410485725
+ },
+ "used": [
+  "ev_ebitda"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.32371893800394314,
+  "base": 0.06862007288421079,
+  "bull": 1.3308462882103114
+ },
+ "implied_growth": null,
+ "ticker": "HKG:1208",
+ "asof": "2026-10-19",
+ "quote_currency": "HKD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 7.847803000000001,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/1208/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/1208/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/1208/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/1208/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/1208/statistics/"
+ }
+}
