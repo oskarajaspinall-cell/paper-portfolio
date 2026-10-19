@@ -25,11 +25,14 @@ bin/with-timeout 900 bin/py scripts/entry_watch.py check --asof "$ASOF" || echo 
 # Daily dip check (no AI, 2026-10-19): the S&P 500's distance below its 52-week high resets the dip release on the
 # weekly regime's reserve, so a sell-off frees the reserve for tomorrow's open (the funding queue below can use it)
 bin/with-timeout 300 bin/py scripts/regime.py --dip --asof "$ASOF" || echo "!! dip check failed (the last reserve stands)"
+# Dip radar (no AI, 2026-10-19): known stocks (holdings, conviction-3+ AVOIDs) that fell unusually since our last
+# research, with the price at/below base fair value -> state dip_hits, re-researched in tomorrow's intraday window
+bin/with-timeout 1200 bin/py scripts/dip_radar.py --asof "$ASOF" || echo "!! dip radar failed"
 # Funding queue (no AI, 2026-10-18): a conviction-4 BUY stopped only by the cash reserve is resubmitted for the
 # next open once there is room above the reserve (best upside first); stale ideas drop out
 bin/with-timeout 600 bin/py scripts/funding_queue.py review --asof "$ASOF" || echo "!! funding queue not reviewed"
 if git diff --quiet -- portfolio; then echo "nothing changed"; exit 0; fi
 bin/with-timeout 600 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
-git add -A -- portfolio docs reports/entry-watch reports/regime "$LOG"
+git add -A -- portfolio docs reports/entry-watch reports/regime reports/dip-radar "$LOG"
 git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
 echo "== end $(date)"

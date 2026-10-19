@@ -86,7 +86,10 @@ def check_doc(kind: str, path: Path, log) -> None:
 
 
 def entry_hit_reason(h: dict) -> str:
-    """The re-research instruction for a stock that reached its entry price (daily close or intraday check)."""
+    """The re-research instruction for a stock that reached its entry price (daily close or intraday check), or
+    for a dip-radar signal (scripts/dip_radar.py writes its own)."""
+    if h.get("kind") == "dip":
+        return h["reason"]
     how = f"traded at {h['close']} at {h['time']}" if h.get("intraday") else f"closed at {h['close']} on {h['hit_date']}"
     return (f"Re-research: the price reached the entry price we set ({h['entry_price']}; it {how}). "
             "Find out why it fell; decide BUY or AVOID.")
@@ -237,6 +240,7 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
         state = json.loads((port / "state.json").read_text())
 
         reinit = list(scan["reinitiate"])
+        dip_holdings = {h["ticker"]: h for h in state.get("dip_hits") or [] if h["ticker"] in state["holdings"]}
         if scan["review"]:
             step("review")
             agent("weekly-reviewer", f"Scan file runs/{asof}/scan.json, date {asof}. "
@@ -254,13 +258,16 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
 
         evals = []
         fvr = {f["ticker"]: f for f in scan.get("fair_value_reached", [])}
-        for t in dict.fromkeys(reinit):
+        for t in dict.fromkeys(reinit + list(dip_holdings)):
             step(f"reinitiate {t}")
             h = state["holdings"][t]
             src = ("the price reached its base fair value" if t in fvr and t in scan["reinitiate"] else
-                   "core or macro trigger fired" if t in scan["reinitiate"] else "escalated by weekly review")
+                   "core or macro trigger fired" if t in scan["reinitiate"] else
+                   "escalated by weekly review" if t in reinit else "dip radar")
             why = (f"This is a full re-initiation of an existing {h['type']} holding (scan: {src}). "
                    f"Decide ADD, HOLD, TRIM or SELL.")
+            if t in dip_holdings and t not in reinit:
+                why = dip_holdings[t]["reason"]
             if t in fvr:
                 f = fvr[t]
                 why += (f" The close {f['close']} reached the base fair value {f['base']:.2f} from {f['file']}. "
@@ -282,8 +289,10 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
                  and Ticker(p["ticker"]).slug not in recent.get(p["type"], set())]
         # entry-price hits (owner rule 2026-10-09) go first and bypass the 90-day rule: the price reached the
         # level we set, so re-research whether it's now a BUY (it fell for a reason; nothing is bought blindly)
-        hits = [{"ticker": h["ticker"], "type": "CORE", "entry_hit": h} for h in state.get("entry_hits", [])
+        hits = [{"ticker": h["ticker"], "type": "CORE", "entry_hit": h}
+                for h in (state.get("entry_hits") or []) + (state.get("dip_hits") or [])
                 if h["ticker"] not in state["holdings"]]
+        hits = list({h["ticker"]: h for h in reversed(hits)}.values())[::-1]  # one per stock, first kept
         picks = hits + [p for p in picks if p["ticker"] not in {h["ticker"] for h in hits}]
         manifest["skipped"] = []
 

@@ -35,6 +35,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - **Text-only triggers** (owner rule 2026-10-09): triggers no script can check (bookings, share, guidance, regulation) are tested by the weekly reviewer against every new release/filing of the holding; one that is met escalates to a re-initiation.
 - **Cash is a holding** (owner rule 2026-10-09; continuous score 2026-10-19): `scripts/regime.py` scores eight official macro indicators on sliding scales into a 0–100 stress score, which sets a cash reserve between 5% and 35% (`[cash_strategy]`), moving at most 5pp a week; the weekly `macro-strategist` may move it one notch (5pp) with cited official sources. New buys can't spend the reserve (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0 (re-checked every weekday from daily closes by `regime.py --dip` in bin/fill-pending, 2026-10-19, so a sell-off releases the reserve for the next open; the regime itself stays weekly), and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
 - **Funding queue** (design by Claude, owner-approved 2026-10-18; `[funding_queue]`): a conviction-4+ CORE BUY rejected only because it would take cash below the reserve (or the cash floor) is not lost. It waits in `state.json` `funding_queue`; weekdays it is resubmitted for the next open once there is room above the reserve (best base-fair-value upside first, every rule re-checked); weekly the `swap-reviewer` weighs the best waiting idea against the weakest CORE holdings and may swap (a BUY with `replaces`, only when clearly better). It drops out after 30 days or once its close is 10% above the decision price. The reserve itself is never relaxed.
+- **Dip radar** (design by Claude, owner request 2026-10-19; `[dip]`): every weekday night `scripts/dip_radar.py` checks holdings and recent conviction-3+ AVOIDs for an unusual stock-specific fall since our last research (beta-adjusted, in standard deviations of the stock's own moves) with the price at or below base fair value; the best few are re-researched the next day in the intraday window (holdings as re-initiations: ADD is the question). Complements the entry prices, which only cover names with a price-based obstacle. A dip is never a buy on its own.
 - **Dividends and splits** (owner request 2026-10-16): credited / applied mechanically by `scripts/corporate_actions.py` before every re-pricing (`[corporate_actions]`). A split never reads as a price move: shares, entry prices, tactical levels, watchlist entry prices and decision scoring are all adjusted.
 - **Country exposure** (owner-approved 2026-10-19; `[portfolio].country_group_caps`): China + Hong Kong combined (companies reporting in CNY or HKD) is capped at 25%, enforced by `portfolio.py` like the sector cap. Evaluators judge each stock on its merits and do NOT lower conviction for portfolio concentration: the caps handle it.
 - When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve, sector or country limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
@@ -160,6 +161,24 @@ expiry_days = 90
 near_pct = 10                     # close-to-entry watchlist: within this % of the entry price (notify on entering; info only)
 intraday_window_et = ["10:15", "11:15"]  # bin/entry-intraday acts only in this New York window (weekdays)
 intraday_max_research = 3         # re-researches a day triggered by the intraday check
+
+[dip]
+# Dip radar (design by Claude, owner request 2026-10-19; scripts/dip_radar.py, daily in bin/fill-pending, no AI). Watches
+# CORE holdings (an ADD question) and conviction-3+ AVOIDs from the last watch_days, including those with no entry price.
+# Signal: since our LAST research (at most lookback_sessions, at least min_sessions), the stock-specific part of the move
+# (return minus beta x S&P 500) is <= z_threshold standard deviations of its own daily residuals (or, while a market dip
+# releases the reserve, the price is market_dip_from_decision_pct below our decision), AND the close is at/below base fair
+# value (no fair value: no_fv_drop_pct since the decision). The top max_hits_per_day are re-researched in the next intraday
+# window (scripts/entry_research.py), else by the research loop / weekly run. Never a buy on its own.
+z_threshold = -2.0
+lookback_sessions = 20
+min_sessions = 5
+beta_sessions = 120               # daily returns before the window used to estimate beta and residual volatility
+watch_days = 120
+min_conviction = 3
+market_dip_from_decision_pct = -10
+no_fv_drop_pct = -15
+max_hits_per_day = 3
 
 [prices]
 # Portfolio prices (owner-approved 2026-10-08): fills use the OPEN and re-pricing uses the CLOSE from Yahoo
@@ -330,12 +349,13 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/weekly_run.py` — the weekly run in the required order; agents run as separate `claude -p --agent` sessions (3 new initiations at a time); any failure (other than a skipped new initiation) restores `portfolio/` and writes `runs/<date>/error.log`.
 - Monte Carlo removed (owner 2026-10-11, to save usage; it was informational only). Past `*-montecarlo.*` / `*-mc-*` files in `research/` are kept as history.
 - `scripts/funding_queue.py` — the funding queue (no AI): `enqueue` (called by `portfolio.place_orders` / `fill_pending` on a cash-reserve rejection), `review` (bin/fill-pending weekdays and the weekly run: resubmit when room appears, drop stale ideas), `brief` (weekly swap brief for `.claude/agents/swap-reviewer.md`); events in `portfolio/funding_queue.csv`.
+- `scripts/dip_radar.py` — the dip radar (no AI): `reports/dip-radar/<date>.md/.json` (signals, near-misses), hits in `state.json` `dip_hits` (cleared once the stock is re-researched by any route).
 - `scripts/prescreen.py` — mechanical gate before a bulk initiation (no model calls): price above the base fair value by more than `[screen].prescreen_min_base_upside_pct` → no AI research that day; verdicts in `reports/prescreen/<date>.csv`. Owner requests, entry-price hits, holdings and the weekly picks are never gated.
 - `scripts/check_docs.py` — template, word-limit, tag, allowlist, conviction and Decision-block checks for notes and evaluations; number provenance (design by Claude 2026-10-16): a number in an evaluation's prose that isn't in the fact sheet, note, macro overlay, config or its own Decision block fails it (notes: a number not in the fact sheet must be a cited `[company-reported]` figure or a section-4 level).
 - `scripts/allowlist_hook.py` — WebFetch guard (wired in `.claude/settings.json`); blocked URLs go to `logs/skipped-urls.log`. WebSearch, curl and wget are denied.
 - `scripts/common.py` — config reader, ticker/URL mapping, allowlist, thesis-only trigger rule.
 - `bin/py` — project Python launcher (`.venv` locally, `python3` in CI).
-- Mac schedule: `bin/install-mac-schedule` (launchd) → `bin/weekly-local` (Fri 22:00) and `bin/fill-pending` (weekdays 22:30: fill orders + re-price holdings daily + dip check + funding-queue review; no AI).
+- Mac schedule: `bin/install-mac-schedule` (launchd) → `bin/weekly-local` (Fri 22:00) and `bin/fill-pending` (weekdays 22:30: fill orders + re-price holdings daily + dip check + dip radar + funding-queue review; no AI).
 - GitHub Actions: `.github/workflows/screen.yml` (Fri 21:00 UTC), `weekly-review.yml` (Sat 08:00 UTC), `fills.yml` (weekdays 21:30 UTC); one concurrency group; `bin/ci-paused` and `bin/ci-finish` handle PAUSED and commit-or-error-log.
 - `universe/` — `watchlist.txt` (always eligible and always screened, optional `ir=` domain), `ftse100.txt` (owner-maintained; `screen=no`), `custom.txt` (your own tickers), `ir_domains.txt` (auto-recorded company domains), `universe.csv` (built locally; not in the public repo).
 - `portfolio/` — `state.json` (cash, holdings, pending orders, cash interest), `ledger.csv`, `rejections.csv`, `valuations.csv`, `decisions.csv`, `interest.csv` (daily interest on cash, `[cash]`).

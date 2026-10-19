@@ -172,7 +172,9 @@ st = json.loads((ROOT / "portfolio" / "state.json").read_text())
 ranked = json.loads((run / "loop-queue.json").read_text())  # the global core ranking, best first
 queue = [t for t in ranked if t not in SKIP and not (ROOT / "research" / Ticker(t).slug / f"{dt.date.today()}.md").exists()
          and not list((ROOT / "research" / Ticker(t).slug).glob("*-evaluation.md"))] + sorted(SKIP)
-hits = [h["ticker"] for h in st.get("entry_hits", []) if h["ticker"] not in st.get("holdings", {})]
+hit_rows = {h["ticker"]: h for h in reversed((st.get("entry_hits") or []) + (st.get("dip_hits") or []))
+            if h["ticker"] not in st.get("holdings", {})}  # entry-price and dip-radar hits (2026-10-19)
+hits = list(hit_rows)
 queue = hits + [t for t in queue if t not in hits]  # entry-price hits first (owner rule 2026-10-09)
 (run / "loop-queue.json").write_text(json.dumps([t for t in queue if t not in hits]))
 log(f"== research loop: {len(queue)} names queued, best first: {queue[:10]}")
@@ -230,8 +232,9 @@ def attempt(t):
             return t, "SCREENED"
     try:
         log(f"== initiate {t}")
-        ev = wr.research_and_evaluate(t, "CORE", asof, "New initiation from the global core screen. Decide BUY or AVOID.",
-                                      agent, log, run)
+        why = (wr.entry_hit_reason(hit_rows[t]) if t in hit_rows else
+               "New initiation from the global core screen. Decide BUY or AVOID.")
+        ev = wr.research_and_evaluate(t, "CORE", asof, why, agent, log, run)
         subprocess.run([str(ROOT / "bin" / "py"), "scripts/decision_log.py", "record", str(ev.relative_to(ROOT)),
                         "--asof", asof], cwd=ROOT, capture_output=True)
         with lk:

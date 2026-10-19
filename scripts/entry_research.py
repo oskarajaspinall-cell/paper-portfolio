@@ -5,7 +5,8 @@ fair value), decision log (which replaces the stock's entry-watch row), then the
 price alone: the re-initiation decides. At most [entry].intraday_max_research a day; holdings and stocks
 already evaluated today are skipped.
 
-    python scripts/entry_research.py [--asof D]     re-research the intraday hits in portfolio/state.json
+    python scripts/entry_research.py [--asof D]     re-research the intraday hits and the dip radar's hits
+                                                    (state.json entry_hits / dip_hits; holdings get a re-initiation)
 """
 from __future__ import annotations
 
@@ -33,6 +34,12 @@ def todo(state: dict, asof: str, cap: int, root: Path = ROOT) -> list[dict]:
         if (root / "research" / Ticker(h["ticker"]).slug / f"{asof}-evaluation.md").exists():
             continue
         out.append(h)
+    for h in state.get("dip_hits") or []:  # dip radar (2026-10-19): last night's signals, holdings included
+        if h["ticker"] in {x["ticker"] for x in out}:
+            continue
+        if (root / "research" / Ticker(h["ticker"]).slug / f"{asof}-evaluation.md").exists():
+            continue
+        out.append(h)
     return out[:max(0, cap - done_today)]
 
 
@@ -56,8 +63,9 @@ def main(argv=None) -> int:
     def one(h):
         t = h["ticker"]
         try:
-            log(f"== re-research {t} (entry price hit)")
-            ev = wr.research_and_evaluate(t, "CORE", a.asof, wr.entry_hit_reason(h), wr.claude_agent, log, run)
+            log(f"== re-research {t} ({'dip radar' if h.get('kind') == 'dip' else 'entry price hit'})")
+            ptype = (state["holdings"].get(t) or {}).get("type", "CORE")
+            ev = wr.research_and_evaluate(t, ptype, a.asof, wr.entry_hit_reason(h), wr.claude_agent, log, run)
             subprocess.run([str(ROOT / "bin" / "py"), "scripts/decision_log.py", "record", str(ev.relative_to(ROOT)),
                             "--asof", a.asof], cwd=ROOT, capture_output=True)
             (run / f"done-{Ticker(t).slug}").write_text(str(ev.relative_to(ROOT)))
@@ -70,7 +78,8 @@ def main(argv=None) -> int:
 
     with ThreadPoolExecutor(max_workers=3) as pool:
         results = list(pool.map(one, hits))
-    buys = [ev for _, d, ev in results if d and d["decision"] == "BUY"]
+    buys = [ev for _, d, ev in results if d and d["decision"] in ("BUY", "ADD", "TRIM", "SELL", "HOLD")
+            and (d["decision"] == "BUY" or d["ticker"] in state.get("holdings", {}))]
     if buys:
         try:
             wr.claude_agent("portfolio-manager",
@@ -84,6 +93,7 @@ def main(argv=None) -> int:
     st = json.loads((ROOT / "portfolio" / "state.json").read_text())
     ok = {t for t, d, _ in results if d}
     st["entry_hits"] = [h for h in st.get("entry_hits") or [] if h["ticker"] not in ok]
+    st["dip_hits"] = [h for h in st.get("dip_hits") or [] if h["ticker"] not in ok]
     tmp = (ROOT / "portfolio" / "state.json").with_suffix(".tmp")
     tmp.write_text(json.dumps(st, indent=1, sort_keys=True))
     tmp.replace(ROOT / "portfolio" / "state.json")
