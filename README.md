@@ -24,7 +24,7 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 | Schedule | On your Mac (`bin/install-mac-schedule`) | On GitHub Actions (UTC) |
 |---|---|---|
 | Screen + review | Friday 22:00, one script (`bin/weekly-local`) | Screen Friday 21:00, review Saturday 08:00 |
-| Order fills + daily prices | Weekdays 22:30 (`bin/fill-pending`) | Weekdays 21:30 |
+| Order fills + daily prices | Weekdays 21:30 (`bin/fill-pending`) | Weekdays 21:30 |
 
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Core positions are sized by conviction and volatility**: 7% (conviction 4) or 10% (5), scaled down
@@ -206,7 +206,7 @@ bin/py scripts/weekly_run.py --local --dry-run
 ```
 `--local` runs on your computer even though the repository contains `PAUSED` (which then only pauses
 GitHub). Drop `--dry-run` for a real run. To run everything automatically (Friday 22:00 screen + review,
-weekday 22:30 order fills, each committing and uploading to your GitHub repo):
+weekday 21:30 order fills, each committing and uploading to your GitHub repo):
 ```bash
 bin/install-mac-schedule
 ```

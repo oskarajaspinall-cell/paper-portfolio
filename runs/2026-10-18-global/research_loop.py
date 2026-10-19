@@ -185,7 +185,7 @@ WEEKLY_LOCK = Path("/tmp/paper-portfolio-review.lock")
 
 def weekly_run_near() -> bool:
     """Leave the machine to the Friday 22:00 weekly run: stop from 21:15 on Fridays, or while its lock exists
-    over the weekend. On other days the lock is the weekday 22:30 fills job (about a minute): wait it out
+    over the weekend. On other days the lock is the weekday 21:30 fills job (about a minute): wait it out
     rather than stop (it stopped the loop every weekday night before 2026-10-12)."""
     now = dt.datetime.now()
     if (now.weekday() == 4 and (now.hour, now.minute) >= (21, 15)) or (WEEKLY_LOCK.exists() and now.weekday() >= 5):

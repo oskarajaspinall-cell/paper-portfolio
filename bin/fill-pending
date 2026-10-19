@@ -1,5 +1,5 @@
 #!/bin/bash
-# Weekdays 22:30 (launchd: ~/Library/LaunchAgents/com.paperportfolio.fills.plist): fill pending orders
+# Weekdays 21:30 (launchd: ~/Library/LaunchAgents/com.paperportfolio.fills.plist): fill pending orders
 # at their next open, re-price every holding at its latest close (daily valuation), refresh the dashboard,
 # commit and upload if anything changed. No AI.
 set -u
@@ -12,7 +12,7 @@ echo "== start $(date)"
 LOCK=/tmp/paper-portfolio-review.lock      # same lock as the weekly review: never runs alongside it
 if ! mkdir "$LOCK" 2>/dev/null; then echo "weekly review running; skipping"; exit 0; fi
 trap 'rmdir "$LOCK"' EXIT
-ASOF=$(date -v+1d +%F)                     # include today's session (all markets have opened by 22:30)
+ASOF=$(date -v+1d +%F)                     # include today's session (every market has closed by 21:30 UK, the US at 21:00 or earlier)
 python_out=$(bin/with-timeout 900 bin/py scripts/portfolio.py fill-pending --asof "$ASOF") || { echo "!! fill-pending failed"; echo "$python_out"; exit 1; }
 echo "$python_out"
 # Dividends and splits (no AI, owner request 2026-10-16) BEFORE re-pricing: a split not applied would re-price

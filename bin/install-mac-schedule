@@ -1,7 +1,7 @@
 #!/bin/bash
 # Schedule the portfolio on this Mac with macOS's built-in scheduler (launchd):
 #   Friday 22:00   bin/weekly-local   screen + weekly review, commit, upload
-#   Weekdays 22:30 bin/fill-pending   fill pending orders at the next open, commit, upload
+#   Weekdays 21:30 bin/fill-pending   fill pending orders at the next open, commit, upload
 #   Weekdays 14:30 + 15:30 bin/entry-intraday   ~10:30 New York: live prices vs entry prices (acts only in the
 #                  New York window, so exactly one of the two runs across the UK/US clock-change weeks)
 #   Every 15 min   bin/live-dashboard  weekdays 08:00-21:15 UK: dashboard with live prices, upload if changed
@@ -53,7 +53,7 @@ plist com.paperportfolio.weekly weekly-local \
   "  <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>22</integer><key>Minute</key><integer>0</integer></dict>" \
   > "$AGENTS/com.paperportfolio.weekly.plist"
 days=""
-for d in 1 2 3 4 5; do days="$days    <dict><key>Weekday</key><integer>$d</integer><key>Hour</key><integer>22</integer><key>Minute</key><integer>30</integer></dict>
+for d in 1 2 3 4 5; do days="$days    <dict><key>Weekday</key><integer>$d</integer><key>Hour</key><integer>21</integer><key>Minute</key><integer>30</integer></dict>
 "; done
 plist com.paperportfolio.fills fill-pending "  <array>
 $days  </array>" > "$AGENTS/com.paperportfolio.fills.plist"
@@ -71,4 +71,4 @@ for label in $JOBS; do
   plutil -lint -s "$AGENTS/$label.plist"
   launchctl bootstrap "gui/$UIDN" "$AGENTS/$label.plist"
 done
-echo "Scheduled: Friday 22:00 weekly run; weekdays 22:30 order fills; weekdays ~10:30 New York intraday entry check; live dashboard every 15 min in market hours. Logs in $DIR/logs/."
+echo "Scheduled: Friday 22:00 weekly run; weekdays 21:30 order fills; weekdays ~10:30 New York intraday entry check; live dashboard every 15 min in market hours. Logs in $DIR/logs/."
