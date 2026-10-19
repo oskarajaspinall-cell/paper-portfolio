@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Equipment & Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -112.41806651663651,
+    "base": 372.27879566772515,
+    "bull": 490.17543555698245
+   },
+   "implied_growth": null,
+   "discount_rate": 0.08134897771703482,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.014051495098948943,
+     "base": 0.05834040635977676,
+     "bull": 0.12025863524120917
+    },
+    "cash_flow_margin": {
+     "bear": -0.15662662120903725,
+     "base": 0.6383585174418605,
+     "bull": 0.6383585174418605
+    },
+    "cagr_3y": 0.06310299019789789,
+    "cagr_5y": 0.12025863524120917,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 19.90591620191391,
+    "base": 34.76500046522929,
+    "bull": 75.19916513148718
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.38,
+     "base": 10.85,
+     "bull": 11.287
+    },
+    "ttm_ebitda": 1818000000,
+    "peak_earnings": "TTM EBITDA is 1.7x its 5y median: bear/base use the 5y average (1.168e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 35.32,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -68.31007227711972,
+  "base": 259.77419726689317,
+  "bull": 351.85001208181734
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -2.9340337564303427,
+  "base": 6.354875347307281,
+  "bull": 8.961778371512382
+ },
+ "implied_growth": null,
+ "ticker": "AMS:SBMO",
+ "asof": "2026-10-19",
+ "quote_currency": "EUR",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 0.890036,
+ "price_date": "2026-10-16",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/ams/SBMO/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/ams/SBMO/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/ams/SBMO/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/ams/SBMO/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/ams/SBMO/statistics/"
+ }
+}

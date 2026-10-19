@@ -2278,3 +2278,197 @@ OK research/RLI/2026-10-19-evaluation.md Bear case=124 Bull case=87 decision=AVO
 [07:17:21] $ bin/py scripts/valuation.py RLI --asof 2026-10-19 --eval research/RLI/2026-10-19-evaluation.md
 [07:17:21] {"out": "research/RLI/2026-10-19-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 56.73, "base": 69.54, "bull": 73.96}, "price": 61.07}
 [07:17:22] == done RLI
+[07:17:26] == Research batch 06: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-10-19-batch-06.md; uploaded to GitHub
+[07:17:46] Decision: **BUY, conviction 4, CORE**, at the 60.06 USD close on 2026-10-16.
+
+research/DOX/2026-10-19-evaluation.md
+OK research/DOX/2026-10-19-evaluation.md Bear case=125 Bull case=126 decision=BUY
+[07:17:46] $ bin/py scripts/check_docs.py eval research/DOX/2026-10-19-evaluation.md
+[07:17:46] OK research/DOX/2026-10-19-evaluation.md Bear case=125 Bull case=126 decision=BUY
+[07:17:46] $ bin/py scripts/valuation.py DOX --asof 2026-10-19 --eval research/DOX/2026-10-19-evaluation.md
+[07:17:46] {"out": "research/DOX/2026-10-19-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 63.75, "base": 80.8, "bull": 98.1}, "price": 60.06}
+[07:17:47] == screened out SHA:601555: price above base fair value (-5.9%; floor +0%) (no AI research)
+[07:17:47] == portfolio-manager DOX (BUY 4)
+[07:17:47] $ claude -p Evaluation files: research/DOX/2026-10-19-evaluation.md. Date 2026-10-19. Write the requests to runs/2026-10-18-global/requests-DOX.json and submit with --at-market --save runs/2026-10-18-global/submit-DOX.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[07:17:59] Note passes. Decision: this is a researcher note only (BUY/AVOID is formally decided by the evaluator's Decision block), but on the evidence — rising ROIC/ROE/margins, net-cash balance sheet, high FCF conversion, and trading at a discount to its own 5-year range and to peers — the fact pattern supports a **BUY** case, with the thesis resting on the margin trend continuing rather than reversing toward the market's implied growth-shrinkage scenario.
+
+- Note: `research/HKG-0322/2026-10-19.md`
+- Fact sheet: `research/HKG-0322/factsheet-2026-10-19.md`
+- Check: `OK research/HKG-0322/2026-10-19.md type=CORE 1=46 2=126 3=142 4=82 5=69 6=71 total=536`
+- No data conflicts. No blocked URLs (no additional WebFetch calls were made — business description relies on the fact sheet's sector/industry tag plus well-known identity, tagged [Likely]; stockanalysis.com's overview page does not expose a company-website domain for this listing, so no company-reported figures were available/used).
+[07:17:59] $ bin/py scripts/check_docs.py note research/HKG-0322/2026-10-19.md
+[07:17:59] OK research/HKG-0322/2026-10-19.md type=CORE 1=46 2=126 3=142 4=82 5=69 6=71 total=536
+[07:17:59] $ claude -p Ticker HKG:0322, date 2026-10-19. Research: research/HKG-0322/factsheet-2026-10-19.md, research/HKG-0322/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/HKG-0322/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:18:10] == initiate CPH:PNDORA
+[07:18:10] $ bin/py scripts/sec_delta.py CPH:PNDORA --asof 2026-10-19
+[07:18:10] SKIP CPH:PNDORA: not a US listing (SEC filers only)
+[07:18:10] $ claude -p Ticker CPH:PNDORA, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:18:14] The trade exited successfully (rejected by rule, not a script error).
+
+## Decisions
+
+| Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| DOX | BUY | CORE | 4 |
+
+## Submission result
+
+```json
+{
+ "mode": "at_market",
+ "placed": [],
+ "applied": [],
+ "rejected": [
+  {
+   "date": "2026-10-19",
+   "ticker": "DOX",
+   "action": "BUY",
+   "type": "CORE",
+   "rule": "REPLACEMENT_REQUIRED",
+   "detail": "BUY would breach cash would be 12.72%, below the 15% reserve (risk_on regime) -- name the holding it replaces and why the new idea is better",
+   "breaches": [
+    "CASH_RESERVE"
+   ]
+  }
+ ],
+ "warnings": [
+  "cash 28.5% vs a 15% reserve (risk_on regime)"
+ ],
+ "filled_now": [],
+ "queued_for_next_open": [],
+ "dry_run": false
+}
+```
+
+DOX was rejected under `REPLACEMENT_REQUIRED` — the BUY would take cash below the 15% reserve and no replacement holding was named in the evaluation (`replaces`: null). Per the funding queue rule, this conviction-4 CORE BUY should now be picked up by `scripts/funding_queue.py` for resubmission once cash headroom reopens.
+[07:18:14] == done DOX
+[07:18:48] == screened out SHA:603993: price above base fair value (-35.0%; floor +0%) (no AI research)
+[07:19:12] == screened out SHE:300972: price above base fair value (-34.1%; floor +0%) (no AI research)
+[07:19:14] research/HKG-0322/2026-10-19-macro.md
+OK research/HKG-0322/2026-10-19-macro.md macro_weight=context words=78
+[07:19:14] $ bin/py scripts/check_docs.py macro research/HKG-0322/2026-10-19-macro.md
+[07:19:14] OK research/HKG-0322/2026-10-19-macro.md macro_weight=context words=78
+[07:19:14] $ claude -p Evaluate HKG:0322 for 2026-10-19: fact sheet research/HKG-0322/factsheet-2026-10-19.md, note research/HKG-0322/2026-10-19.md, state portfolio/state.json, macro overlay research/HKG-0322/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:19:35] == screened out KRX:005930: price above base fair value (-12.5%; floor +0%) (no AI research)
+[07:19:56] I've decided to AVOID Tingyi (HKG:0322) at conviction 3, and the checker passed:
+
+research/HKG-0322/2026-10-19-evaluation.md
+OK research/HKG-0322/2026-10-19-evaluation.md Bear case=135 Bull case=124 decision=AVOID
+
+The entry price is 12.18 HKD (base fair value 15.23 less the 20% margin of safety), just below the 12.37 close.
+[07:19:56] $ bin/py scripts/check_docs.py eval research/HKG-0322/2026-10-19-evaluation.md
+[07:19:56] OK research/HKG-0322/2026-10-19-evaluation.md Bear case=135 Bull case=124 decision=AVOID
+[07:19:56] $ bin/py scripts/valuation.py HKG:0322 --asof 2026-10-19 --eval research/HKG-0322/2026-10-19-evaluation.md
+[07:19:56] {"out": "research/HKG-0322/2026-10-19-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 6.4, "base": 15.23, "bull": 16.43}, "price": 12.37}
+[07:19:57] == done HKG:0322
+[07:19:59] == screened out HKG:1258: price above base fair value (-14.7%; floor +0%) (no AI research)
+[07:20:36] == initiate SHA:601009
+[07:20:36] $ bin/py scripts/sec_delta.py SHA:601009 --asof 2026-10-19
+[07:20:36] SKIP SHA:601009: not a US listing (SEC filers only)
+[07:20:36] $ claude -p Ticker SHA:601009, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:20:42] == initiate AMS:SBMO
+[07:20:42] $ bin/py scripts/sec_delta.py AMS:SBMO --asof 2026-10-19
+[07:20:42] SKIP AMS:SBMO: not a US listing (SEC filers only)
+[07:20:42] $ claude -p Ticker AMS:SBMO, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:22:39] research/CPH-PNDORA/2026-10-19.md
+research/CPH-PNDORA/factsheet-2026-10-19.md
+OK research/CPH-PNDORA/2026-10-19.md type=CORE 1=65 2=142 3=150 4=80 5=92 6=66 total=595
+
+Blocked/unfetched URLs: both Reuters article fetches (Vietnam factory, CEO interview) returned "unable to fetch" — cited as headlines only, per fact sheet. CNBC headlines (tariff refunds, silver hedging) were not fetched (not on the allowlist) — cited as headlines only. No data conflicts found.
+[07:22:39] $ bin/py scripts/check_docs.py note research/CPH-PNDORA/2026-10-19.md
+[07:22:39] OK research/CPH-PNDORA/2026-10-19.md type=CORE 1=65 2=142 3=150 4=80 5=92 6=66 total=595
+[07:22:39] $ claude -p Ticker CPH:PNDORA, date 2026-10-19. Research: research/CPH-PNDORA/factsheet-2026-10-19.md, research/CPH-PNDORA/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/CPH-PNDORA/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:23:05] Note path: research/SHA-601009/2026-10-19.md
+Fact sheet path: research/SHA-601009/factsheet-2026-10-19.md
+check_docs.py: OK research/SHA-601009/2026-10-19.md type=CORE 1=50 2=140 3=147 4=79 5=60 6=67 total=543
+
+No data conflicts found. No URLs blocked — no qualitative WebFetch calls were made: stockanalysis.com's overview page shows no company website for this ticker (so no IR domain is allowlisted per `universe/ir_domains.txt`), and no other allowlisted domain (sec.gov, londonstockexchange.com, reuters.com) had a known, relevant URL for this Chinese A-share bank.
+[07:23:05] $ bin/py scripts/check_docs.py note research/SHA-601009/2026-10-19.md
+[07:23:06] OK research/SHA-601009/2026-10-19.md type=CORE 1=50 2=140 3=147 4=79 5=60 6=67 total=543
+[07:23:06] $ claude -p Ticker SHA:601009, date 2026-10-19. Research: research/SHA-601009/factsheet-2026-10-19.md, research/SHA-601009/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/SHA-601009/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:24:15] research/CPH-PNDORA/2026-10-19-macro.md
+OK research/CPH-PNDORA/2026-10-19-macro.md macro_weight=context words=67
+[07:24:15] $ bin/py scripts/check_docs.py macro research/CPH-PNDORA/2026-10-19-macro.md
+[07:24:15] OK research/CPH-PNDORA/2026-10-19-macro.md macro_weight=context words=67
+[07:24:15] $ claude -p Evaluate CPH:PNDORA for 2026-10-19: fact sheet research/CPH-PNDORA/factsheet-2026-10-19.md, note research/CPH-PNDORA/2026-10-19.md, state portfolio/state.json, macro overlay research/CPH-PNDORA/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:24:47] research/SHA-601009/2026-10-19-macro.md
+OK research/SHA-601009/2026-10-19-macro.md macro_weight=context words=66
+[07:24:47] $ bin/py scripts/check_docs.py macro research/SHA-601009/2026-10-19-macro.md
+[07:24:47] OK research/SHA-601009/2026-10-19-macro.md macro_weight=context words=66
+[07:24:47] $ claude -p Evaluate SHA:601009 for 2026-10-19: fact sheet research/SHA-601009/factsheet-2026-10-19.md, note research/SHA-601009/2026-10-19.md, state portfolio/state.json, macro overlay research/SHA-601009/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:25:01] research/CPH-PNDORA/2026-10-19-evaluation.md
+OK research/CPH-PNDORA/2026-10-19-evaluation.md Bear case=142 Bull case=101 decision=AVOID
+[07:25:01] $ bin/py scripts/check_docs.py eval research/CPH-PNDORA/2026-10-19-evaluation.md
+[07:25:01] OK research/CPH-PNDORA/2026-10-19-evaluation.md Bear case=142 Bull case=101 decision=AVOID
+[07:25:01] $ bin/py scripts/valuation.py CPH:PNDORA --asof 2026-10-19 --eval research/CPH-PNDORA/2026-10-19-evaluation.md
+[07:25:01] {"out": "research/CPH-PNDORA/2026-10-19-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 547.37, "base": 1126.92, "bull": 1433.18}, "price": 847}
+[07:25:02] == done CPH:PNDORA
+[07:25:10] check_docs OK.
+
+- Note: `research/AMS-SBMO/2026-10-19.md`
+- Fact sheet: `research/AMS-SBMO/factsheet-2026-10-19.md`
+- `OK research/AMS-SBMO/2026-10-19.md type=CORE 1=57 2=130 3=144 4=68 5=83 6=68 total=550`
+
+Data conflicts: none. Blocked URLs: `https://www.reuters.com/business/energy/brazils-petrobras-sign-contract-oil-platforms-with-sbm-offshore-says-executive-2026-05-28/` (WebFetch blocked by the tool itself — not retried, moved on; no data lost since the fact sheet's listed headline was used instead). No IR/company domain was available for SBMO (stockanalysis.com overview lists no website field), so qualitative sourcing was limited to the fact sheet's listed headlines (cited as-is, no numbers taken from them) plus stockanalysis.com pages.
+[07:25:10] $ bin/py scripts/check_docs.py note research/AMS-SBMO/2026-10-19.md
+[07:25:10] OK research/AMS-SBMO/2026-10-19.md type=CORE 1=57 2=130 3=144 4=68 5=83 6=68 total=550
+[07:25:10] $ claude -p Ticker AMS:SBMO, date 2026-10-19. Research: research/AMS-SBMO/factsheet-2026-10-19.md, research/AMS-SBMO/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/AMS-SBMO/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:25:19] == initiate SHA:600809
+[07:25:19] $ bin/py scripts/sec_delta.py SHA:600809 --asof 2026-10-19
+[07:25:19] SKIP SHA:600809: not a US listing (SEC filers only)
+[07:25:19] $ claude -p Ticker SHA:600809, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:25:25] research/SHA-601009/2026-10-19-evaluation.md
+OK research/SHA-601009/2026-10-19-evaluation.md Bear case=130 Bull case=114 decision=AVOID
+[07:25:25] $ bin/py scripts/check_docs.py eval research/SHA-601009/2026-10-19-evaluation.md
+[07:25:25] OK research/SHA-601009/2026-10-19-evaluation.md Bear case=130 Bull case=114 decision=AVOID
+[07:25:25] $ bin/py scripts/valuation.py SHA:601009 --asof 2026-10-19 --eval research/SHA-601009/2026-10-19-evaluation.md
+[07:25:25] {"out": "research/SHA-601009/2026-10-19-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 14.28, "base": 15.78, "bull": 18.51}, "price": 11.74}
+[07:25:26] == done SHA:601009
+[07:25:50] == initiate VIPS
+[07:25:50] $ bin/py scripts/sec_delta.py VIPS --asof 2026-10-19
+[07:25:54] SKIP VIPS: no 10-K/10-Q with a comparable earlier filing
+[07:25:54] $ claude -p Ticker VIPS, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:26:30] research/AMS-SBMO/2026-10-19-macro.md
+OK research/AMS-SBMO/2026-10-19-macro.md macro_weight=secondary words=236
+[07:26:30] $ bin/py scripts/check_docs.py macro research/AMS-SBMO/2026-10-19-macro.md
+[07:26:30] OK research/AMS-SBMO/2026-10-19-macro.md macro_weight=secondary words=236
+[07:26:30] $ claude -p Evaluate AMS:SBMO for 2026-10-19: fact sheet research/AMS-SBMO/factsheet-2026-10-19.md, note research/AMS-SBMO/2026-10-19.md, state portfolio/state.json, macro overlay research/AMS-SBMO/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:27:32] research/AMS-SBMO/2026-10-19-evaluation.md
+OK research/AMS-SBMO/2026-10-19-evaluation.md Bear case=130 Bull case=102 decision=AVOID
+[07:27:32] $ bin/py scripts/check_docs.py eval research/AMS-SBMO/2026-10-19-evaluation.md
+[07:27:32] OK research/AMS-SBMO/2026-10-19-evaluation.md Bear case=130 Bull case=102 decision=AVOID
+[07:27:32] $ bin/py scripts/valuation.py AMS:SBMO --asof 2026-10-19 --eval research/AMS-SBMO/2026-10-19-evaluation.md
+[07:27:32] {"out": "research/AMS-SBMO/2026-10-19-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -68.31, "base": 259.77, "bull": 351.85}, "price": 35.32}
+[07:27:33] == done AMS:SBMO
+[07:27:51] == initiate JSE:IMP
+[07:27:51] $ bin/py scripts/sec_delta.py JSE:IMP --asof 2026-10-19
+[07:27:51] SKIP JSE:IMP: not a US listing (SEC filers only)
+[07:27:51] $ claude -p Ticker JSE:IMP, note type CORE, date 2026-10-19. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:28:03] research/VIPS/2026-10-19.md
+research/VIPS/factsheet-2026-10-19.md
+OK research/VIPS/2026-10-19.md type=CORE 1=49 2=142 3=127 4=84 5=82 6=80 total=564
+
+No data conflicts. No blocked URLs other than https://ir.vip.com/ (403 Forbidden, not an allowlist block — substituted with SEC EDGAR 6-K filing for company-reported figures instead).
+[07:28:03] $ bin/py scripts/check_docs.py note research/VIPS/2026-10-19.md
+[07:28:03] OK research/VIPS/2026-10-19.md type=CORE 1=49 2=142 3=127 4=84 5=82 6=80 total=564
+[07:28:03] $ claude -p Ticker VIPS, date 2026-10-19. Research: research/VIPS/factsheet-2026-10-19.md, research/VIPS/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/VIPS/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:29:54] research/SHA-600809/2026-10-19.md
+research/SHA-600809/factsheet-2026-10-19.md
+OK research/SHA-600809/2026-10-19.md type=CORE 1=71 2=148 3=147 4=87 5=83 6=87 total=623
+
+No data conflicts or blocked URLs. No qualitative WebFetch calls were made: the stock has no listed IR domain in `universe/watchlist.txt`/`universe/ir_domains.txt`, isn't a US SEC filer (no filing delta), and the fact sheet's news items are routine filing-publication notices only, so nothing beyond the allowlisted stockanalysis.com data was needed.
+[07:29:54] $ bin/py scripts/check_docs.py note research/SHA-600809/2026-10-19.md
+[07:29:54] OK research/SHA-600809/2026-10-19.md type=CORE 1=71 2=148 3=147 4=87 5=83 6=87 total=623
+[07:29:54] $ claude -p Ticker SHA:600809, date 2026-10-19. Research: research/SHA-600809/factsheet-2026-10-19.md, research/SHA-600809/2026-10-19.md. Macro snapshot: reports/macro/2026-10-19.md. Write research/SHA-600809/2026-10-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:30:18] research/VIPS/2026-10-19-macro.md
+OK research/VIPS/2026-10-19-macro.md macro_weight=secondary words=242
+[07:30:18] $ bin/py scripts/check_docs.py macro research/VIPS/2026-10-19-macro.md
+[07:30:18] OK research/VIPS/2026-10-19-macro.md macro_weight=secondary words=242
+[07:30:18] $ claude -p Evaluate VIPS for 2026-10-19: fact sheet research/VIPS/factsheet-2026-10-19.md, note research/VIPS/2026-10-19.md, state portfolio/state.json, macro overlay research/VIPS/2026-10-19-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[07:31:05] research/VIPS/2026-10-19-evaluation.md
+OK research/VIPS/2026-10-19-evaluation.md Bear case=133 Bull case=120 decision=AVOID
+[07:31:05] $ bin/py scripts/check_docs.py eval research/VIPS/2026-10-19-evaluation.md
+[07:31:05] OK research/VIPS/2026-10-19-evaluation.md Bear case=133 Bull case=120 decision=AVOID
+[07:31:05] $ bin/py scripts/valuation.py VIPS --asof 2026-10-19 --eval research/VIPS/2026-10-19-evaluation.md
+[07:31:05] {"out": "research/VIPS/2026-10-19-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 13.06, "base": 20.31, "bull": 32.7}, "price": 12.86}
+[07:31:06] == done VIPS
