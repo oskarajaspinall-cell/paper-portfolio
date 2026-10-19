@@ -3,6 +3,9 @@
 # 14:30 and 15:30 UK time; the script acts only inside [entry].intraday_window_et). Live prices vs entry
 # prices for US watch stocks; any hit is re-researched at once (never bought on price alone). Commit, upload.
 set -u
+# Keep the Mac awake for the whole job (2026-10-19: the 21:30 run paused for 30 minutes when the Mac slept). -i stops
+# idle sleep, -s system sleep while on mains power; closing the lid on battery still forces sleep.
+[ -z "${PP_CAFFEINATED:-}" ] && exec env PP_CAFFEINATED=1 /usr/bin/caffeinate -i -s "$0" "$@"
 cd "$(dirname "$0")/.." || exit 1
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 mkdir -p logs
