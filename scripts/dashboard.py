@@ -152,9 +152,27 @@ def build_data(live: bool = True) -> dict:
                      "entry_price": ep, "last_price": lp, "last_date": h.get("last_close_date", ""),
                      "change_pct": (lp / ep - 1) * 100 if ep and lp else None,
                      "value": mv, "weight": mv / total * 100 if total else 0, "pl": mv - cb if cb else None,
-                     "plan": plan, "thesis": h.get("thesis", "")})
+                     "plan": plan, "thesis": h.get("thesis", ""),
+                     "prev_close": _f(h.get("prev_close")), "prev_date": h.get("prev_close_date", "")})
     watch_rows = sorted(_csv(port / "entry_watch.csv"), key=lambda r: -(_f(r.get("pct_to_entry")) or -999))[:40]
-    snap = live_snapshot([h["ticker"] for h in hold] + [r["ticker"] for r in watch_rows]) if live else {}
+    snap = live_snapshot([h["ticker"] for h in hold] + [r["ticker"] for r in watch_rows] + ["SPY"]) if live else {}
+    if live:  # holdings re-priced before prev_close was recorded (2026-10-20): read it from the daily history once
+        from fetch_data import Fetcher
+        mkt = portfolio.Market(Fetcher(cfg), dt.date.today().isoformat(), cfg, portfolio.price_provider(cfg))
+        for h in hold:  # the portfolio's own price chain: Yahoo, else stockanalysis.com
+            if h["prev_close"] is None and h["last_date"]:
+                try:
+                    rows = [r for r in mkt.history(h["ticker"])["all_rows"] if r["date"] < h["last_date"] and r.get("close")]
+                    if rows:
+                        h["prev_close"], h["prev_date"] = rows[-1]["close"], rows[-1]["date"]
+                except Exception:  # noqa: BLE001  display only
+                    pass
+    for h in hold:  # the latest session's change (close vs the close before; bought that day: vs the fill)
+        lp, pc = h["last_price"], h["prev_close"]
+        if h["entry_date"] and h["entry_date"] == h["last_date"] and h["entry_price"]:
+            pc, h["prev_date"] = h["entry_price"], "bought at the open"
+        h["day_pct"] = (lp / pc - 1) * 100 if lp and pc else None
+        h["day_usd"] = h["value"] * (1 - pc / lp) if lp and pc else None
     live_total = state.get("cash_usd", 0.0) + recv
     for h in hold:
         q, lc = snap.get(h["ticker"]), h["last_price"]
@@ -162,6 +180,9 @@ def build_data(live: bool = True) -> dict:
         if q and lc:
             h["live_change_pct"] = (q["price"] / h["entry_price"] - 1) * 100 if h["entry_price"] else None
             h["live_value"] = h["value"] * q["price"] / lc
+            if q["date"] > (h["last_date"] or ""):  # a session after the last close is trading: today's move
+                h["live_day_pct"] = (q["price"] / lc - 1) * 100
+                h["live_day_usd"] = h["live_value"] - h["value"]
         live_total += h.get("live_value", h["value"])
     sectors: dict[str, float] = {}
     for h in hold:
@@ -199,6 +220,14 @@ def build_data(live: bool = True) -> dict:
         hits[f"{h}m"] = {"n": len(done), "hits": sum(int(d[f"hit_{h}m"]) for d in done)}
     last = ser[-1] if ser else None
     week = week_change(ser)
+    live_pt = None  # the chart's live point (1D range): whole portfolio and SPY at live prices
+    spy_live = snap.get("SPY")
+    if snap and last and last["portfolio"] is not None and vals:
+        lsc = _f(vals[-1].get("spy_close"))
+        live_pt = {"date": dt.datetime.now().isoformat(timespec="minutes"), "live": True, "value": live_total,
+                   "portfolio": live_total / start * 100,
+                   "spy": last["spy"] * spy_live["price"] / lsc if spy_live and lsc and last["spy"] else None,
+                   "baseline": None, "invested": None, "spy_same": None}
     return {
         "generated": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
         "repo": repo_url(),
@@ -209,7 +238,7 @@ def build_data(live: bool = True) -> dict:
         "since": None if not last or last["portfolio"] is None else last["portfolio"] / 100 - 1,
         "since_spy": None if not last or last["spy"] is None else last["spy"] / 100 - 1,
         "invested": portfolio.invested_return(vals),
-        "week": week, "series": ser, "holdings": hold, "interest": state.get("cash_interest"),
+        "week": week, "series": ser, "live_point": live_pt, "holdings": hold, "interest": state.get("cash_interest"),
         "regime": __import__("regime").latest(dt.date.today().isoformat()),
         "sectors": sorted(([k, v] for k, v in sectors.items()), key=lambda kv: -kv[1]),
         "ledger": [{k: r.get(k, "") for k in ("date", "ticker", "type", "side", "shares", "fill_price", "currency",
@@ -283,6 +312,12 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 .tabs{display:flex;gap:4px;margin:8px 0;border-bottom:1px solid var(--grid)}
 .tab{background:none;border:0;border-bottom:2px solid transparent;color:var(--ink2);padding:6px 10px;margin-bottom:-1px;cursor:pointer;font:inherit;font-size:14px}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--s1);font-weight:600}
+.ranges{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 8px}
+.rng{background:none;border:1px solid var(--ring);border-radius:999px;color:var(--ink2);padding:3px 12px;cursor:pointer;font:inherit;font-size:13px}
+.rng[aria-pressed="true"]{background:var(--ink);color:var(--page);border-color:var(--ink)}
+.chg{display:inline-block;min-width:76px;text-align:right;padding:2px 8px;border-radius:6px;font-weight:600;font-variant-numeric:tabular-nums}
+.chg.up{color:var(--up);background:color-mix(in srgb,var(--up) 13%,transparent)}.chg.down{color:var(--down);background:color-mix(in srgb,var(--down) 13%,transparent)}
+.chg.flat{color:var(--ink2);background:color-mix(in srgb,var(--ink2) 10%,transparent)}.chg small{font-weight:400;opacity:.8;margin-left:4px}
 .toggle{background:none;border:1px solid var(--ring);border-radius:8px;color:var(--ink2);padding:4px 10px;cursor:pointer;font:inherit;font-size:13px}
 </style></head><body><main>
 <header><div><h1>Paper Portfolio</h1><div class="sub">Simulated $<span id="start"></span> portfolio · paper trading only, not investment advice · updated <span id="gen"></span></div></div>
@@ -291,6 +326,7 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 <div class="tiles" id="tiles"></div></section>
 <section class="card"><h2>Return vs the S&amp;P 500</h2>
 <div class="tabs" role="tablist"><button type="button" role="tab" class="tab" data-tab="invested">Invested money</button><button type="button" role="tab" class="tab" data-tab="whole">Whole portfolio</button></div>
+<div class="ranges" role="group" aria-label="Chart period" id="ranges"></div>
 <div class="sub" id="lineSub"></div>
 <div class="legend" id="lineLegend"></div><div id="line"></div>
 <details><summary>Show as a table</summary><div class="tw"><table id="lineTable"></table></div></details></section>
@@ -330,13 +366,17 @@ $('start').textContent=D.start.toLocaleString('en-US');$('gen').textContent=D.ge
 $('hero').textContent=usd(D.total);
 const I=D.invested;
 $('heroSub').textContent=(D.inception?`At the ${D.close_date} close. `+(I?`Invested money ${pct(I.pct*100)} vs the same money in the S&P 500 ${pct(I.spy_pct==null?null:I.spy_pct*100)}; whole portfolio incl. cash ${pct(D.since==null?null:D.since*100)} since ${D.series.length?D.series[0].date:D.inception}`:`Since ${D.inception}: ${pct(D.since==null?null:D.since*100)} vs SPY ${pct(D.since_spy==null?null:D.since_spy*100)}`):'No trades yet: the portfolio is all cash.')
- +(D.live_total!=null?` · Live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
+ +(D.live_total!=null&&D.holdings.some(h=>h.live_day_pct!=null)?` · Live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
 const tile=(l,v,d,c)=>el('div',{class:'tile'},el('div',{class:'l'},l),el('div',{class:'v'},v),d?el('div',{class:'d '+(c||'')},d):'');
 $('tiles').append(
  I?tile('Return on invested money',pct(I.pct*100),`${usd(I.gain)} gain on ${usd(I.invested)} invested`+(I.dividends?` incl. ${usd(I.dividends)} dividends`:'')+(I.spy_pct==null?'':` · same money in S&P 500 ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
   :tile('Return on invested money','–','starts with the first trade'),
  D.inception?tile('Whole portfolio (incl. cash)',D.since==null?'n/a':pct(D.since*100),D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
   :tile('Whole portfolio (incl. cash)','–','starts with the first trade'),
+ (()=>{const s=D.series,a=s.length>1?s[s.length-2]:null,b=s.length?s[s.length-1]:null;
+  if(D.live_total!=null&&D.total&&D.holdings.some(h=>h.live_day_pct!=null))return tile('Today (whole portfolio)',pct((D.live_total/D.total-1)*100),`live ${D.live_at} · ${(D.live_total>=D.total?'+':'−')+usd(Math.abs(D.live_total-D.total))} vs the ${D.close_date} close`,cls(D.live_total-D.total));
+  if(a&&b&&a.value&&b.value)return tile('Latest day (whole portfolio)',pct((b.value/a.value-1)*100),`${b.date} vs ${a.date} · ${(b.value>=a.value?'+':'−')+usd(Math.abs(b.value-a.value))}`,cls(b.value-a.value));
+  return tile('Latest day (whole portfolio)','n/a','');})(),
  tile('This week (whole portfolio)',D.week?pct(D.week.portfolio*100):'n/a',D.week&&D.week.spy!=null?'SPY '+pct(D.week.spy*100):'',''),
  tile('Cash',usd(D.cash),(D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':'')+(D.interest?` · earns ${D.interest.aer_pct}% AER, ${usd(D.interest.total_usd)} so far`:'')+(D.receivable?` · ${usd(D.receivable,2)} dividends due`:'')),
  tile('Cash strategy',D.regime?({risk_on:'Risk-on',neutral:'Neutral',defensive:'Defensive'})[D.regime.final_regime]:'n/a',D.regime?(D.regime.stress!=null?`stress ${D.regime.stress}/100 · `:'')+`reserve ${D.regime.reserve_pct}% · S&P ${D.regime.dip.drawdown_pct}% off its high`+(D.regime.dip.multiplier<1?' · buying the dip':''):''),
@@ -351,22 +391,40 @@ const TABS={invested:{sub:'Gain on the money put into stocks, cash excluded, vs 
   defs:[['invested','Invested money','--s1','Invested'],['spy_same','Same money in S&P 500','--s2','S&P 500']]},
  whole:{sub:'All $100k, cash and its interest included, vs the S&P 500 since inception (%, US dollars). Baseline = the first week\'s picks held unchanged.',
   defs:[['portfolio','Whole portfolio (incl. cash)','--s1','Portfolio'],['spy','S&P 500 (SPY)','--s2','S&P 500'],['baseline','Baseline','--s3','Baseline']]}};
-let defs=[];
-function setTab(name){const t=TABS[name]||TABS.invested;defs=t.defs.filter(([k])=>S.some(p=>p[k]!=null));
+let defs=[],RANGE='All';
+const RANGES=[['1D','24h'],['1W','1 week'],['3M','3 months'],['6M','6 months'],['YTD','Year to date'],['All','All']];
+const LP=D.live_point?{...D.live_point,...Object.fromEntries(['invested','spy_same','portfolio','spy','baseline'].map(k=>[k,D.live_point[k]==null?null:D.live_point[k]-100]))}:null;
+function rangeSeries(){if(!S.length)return {pts:[],base:null};const last=S[S.length-1],ld=new Date(last.date+'T00:00:00');let cut=null;
+ if(RANGE==='1W'){cut=new Date(ld);cut.setDate(cut.getDate()-7);}
+ else if(RANGE==='3M'||RANGE==='6M'){cut=new Date(ld);cut.setMonth(cut.getMonth()-(RANGE==='3M'?3:6));}
+ else if(RANGE==='YTD'){cut=new Date(ld.getFullYear(),0,1);cut.setDate(0);}
+ if(RANGE==='All')return {pts:S,base:S[0]};  // since inception, exactly as the headline figures
+ let i0=0;if(RANGE==='1D')i0=Math.max(0,S.length-2);
+ else if(cut){const c=`${cut.getFullYear()}-${String(cut.getMonth()+1).padStart(2,'0')}-${String(cut.getDate()).padStart(2,'0')}`;S.forEach((p,i)=>{if(p.date<=c)i0=i;});}
+ const win=S.slice(i0).concat(RANGE==='1D'&&LP?[LP]:[]);const keys=['invested','spy_same','portfolio','spy','baseline'];
+ const base={};keys.forEach(k=>{const b=win.find(p=>p[k]!=null);base[k]=b?b[k]:null;});
+ return {pts:win.map(p=>({...p,...Object.fromEntries(keys.map(k=>[k,p[k]==null||base[k]==null?null:((100+p[k])/(100+base[k])-1)*100]))})),base:win[0]};}
+function setRange(r){RANGE=r;document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===r)));
+ try{localStorage.setItem('chartRange',r)}catch(e){}drawLine();}
+RANGES.forEach(([r,l])=>{const b=el('button',{type:'button',class:'rng','data-r':r,title:l,'aria-pressed':'false'},r);b.onclick=()=>setRange(r);$('ranges').append(b);});
+let CUR='invested';
+function setTab(name){const t=TABS[name]||TABS.invested;CUR=TABS[name]?name:'invested';defs=t.defs.filter(([k])=>S.some(p=>p[k]!=null));
  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===name)));
  $('lineSub').textContent=t.sub;$('lineLegend').replaceChildren(...defs.map(([k,n,c])=>el('span',{},el('span',{class:'key',style:`background:var(${c})`}),n)));
  $('lineTable').replaceChildren(el('tr',{},el('th',{},'Date'),...defs.map(([,n])=>el('th',{class:'n'},n)),el('th',{class:'n'},'Value')),
   ...S.map(p=>el('tr',{},el('td',{},p.date),...defs.map(([k])=>el('td',{class:'n'},p[k]==null?'n/a':pct(p[k]))),el('td',{class:'n'},usd(p.value)))));
  try{localStorage.setItem('chartTab',name)}catch(e){}drawLine();}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
-function drawLine(){const box=$('line');box.replaceChildren();
- if(S.length<2){box.append(el('div',{class:'empty'},'The chart appears after the second weekly run.'));return;}
+function drawLine(){const box=$('line');box.replaceChildren();const RS=rangeSeries(),S=RS.pts;
+ const rl=(RANGES.find(([r])=>r===RANGE)||[])[1]||RANGE;
+ $('lineSub').textContent=(TABS[CUR]||TABS.invested).sub+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+'.':'');
+ if(S.length<2){box.append(el('div',{class:'empty'},'Not enough data for this period yet.'));return;}
  const W=Math.max(300,Math.round(box.getBoundingClientRect().width)),H=W<560?220:300,L=40,R=W<560?92:120,T=12,B=28,xs=S.map(p=>Date.parse(p.date)),x0=Math.min(...xs),x1=Math.max(...xs);
  const all=S.flatMap(p=>defs.map(([k])=>p[k]).filter(v=>v!=null));let lo=Math.min(0,...all),hi=Math.max(0,...all);const pad=Math.max((hi-lo)*.1,1);lo-=pad;hi+=pad;
  const X=t=>L+(t-x0)/(x1-x0||1)*(W-L-R),Y=v=>T+(hi-v)/(hi-lo)*(H-T-B);const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Return on invested money vs the same money in the S&P 500, and the whole portfolio (%)'});
  const step=(hi-lo)/4;for(let i=0;i<=4;i++){const v=lo+step*i;svg.append(sv('line',{x1:L,x2:W-R,y1:Y(v),y2:Y(v),stroke:'var(--grid)','stroke-width':1}));
   const t=sv('text',{x:L-6,y:Y(v)+4,'text-anchor':'end'});t.textContent=v.toFixed(Math.abs(hi-lo)<4?1:0)+'%';svg.append(t);}
- const ticks=S.length<=6?S:S.filter((_,i)=>i%Math.ceil(S.length/6)===0);ticks.forEach(p=>{const t=sv('text',{x:X(Date.parse(p.date)),y:H-8,'text-anchor':'middle'});t.textContent=p.date.slice(5);svg.append(t);});
+ const ticks=S.length<=6?S:S.filter((_,i)=>i%Math.ceil(S.length/6)===0);ticks.forEach(p=>{const t=sv('text',{x:X(Date.parse(p.date)),y:H-8,'text-anchor':'middle'});t.textContent=p.live?'live':p.date.slice(5);svg.append(t);});
  svg.append(sv('line',{x1:L,x2:W-R,y1:Y(0),y2:Y(0),stroke:'var(--axis)','stroke-width':1}));
  const ends=[];defs.forEach(([k,n,c,short])=>{const P=S.filter(p=>p[k]!=null);if(P.length<2)return;
   svg.append(sv('path',{d:P.map((p,i)=>(i?'L':'M')+X(Date.parse(p.date)).toFixed(1)+','+Y(p[k]).toFixed(1)).join(''),fill:'none',stroke:`var(${c})`,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
@@ -380,7 +438,7 @@ function drawLine(){const box=$('line');box.replaceChildren();
  hit.addEventListener('pointermove',ev=>{const r=svg.getBoundingClientRect(),px=(ev.clientX-r.left)/r.width*W;let best=S[0];
   S.forEach(p=>{if(Math.abs(X(Date.parse(p.date))-px)<Math.abs(X(Date.parse(best.date))-px))best=p;});const cx=X(Date.parse(best.date));
   cross.setAttribute('x1',cx);cross.setAttribute('x2',cx);cross.setAttribute('visibility','visible');
-  const rows=[el('div',{},el('span',{class:'muted'},best.date+' · '+usd(best.value)))];
+  const rows=[el('div',{},el('span',{class:'muted'},(best.live?'Live '+(D.live_at||''):best.date+' close')+' · '+usd(best.value)))];
   defs.forEach(([k,n,c])=>{if(best[k]!=null)rows.push(el('div',{class:'r'},el('span',{class:'key',style:`background:var(${c})`}),el('b',{},pct(best[k])),el('span',{class:'muted'},n)));});showTip(ev,rows);});
  hit.addEventListener('pointerleave',()=>{cross.setAttribute('visibility','hidden');hideTip();});box.append(svg);}
 // ---- horizontal bars
@@ -429,6 +487,8 @@ function riskBars(){const box=$('risk');box.replaceChildren();const R=D.risk;
   table('attrTable',[{h:'Sector',f:r=>r.s},{h:'Our weight',n:1,f:r=>(r.wp_avg*100).toFixed(1)+'%'},{h:'Index',n:1,f:r=>(r.wb*100).toFixed(1)+'%'},
    {h:'Allocation',n:1,f:r=>p2(r.allocation),c:r=>cls(r.allocation)},{h:'Selection',n:1,f:r=>p2(r.selection),c:r=>cls(r.selection)},
    {h:'Interaction',n:1,f:r=>p2(r.interaction),c:r=>cls(r.interaction)},{h:'Total',n:1,f:r=>p2(r.t),c:r=>cls(r.t)}],rows,'');}}
+{let r0='All';try{r0=localStorage.getItem('chartRange')||r0}catch(e){}RANGE=RANGES.some(([r])=>r===r0)?r0:'All';
+ document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===RANGE)));}
 {let t0='invested';try{t0=localStorage.getItem('chartTab')||t0}catch(e){}setTab(TABS[t0]?t0:'invested');}
 drawAll();let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(drawAll,150);});
 // ---- tables
@@ -437,7 +497,12 @@ function table(id,cols,rows,empty){const t=$(id);t.append(el('tr',{},...cols.map
  rows.forEach(r=>t.append(el('tr',{},...cols.map(c=>{const v=c.f(r);const td=el('td',{class:(c.n?'n ':'')+(c.w?'w ':'')+(c.c?c.c(r):'')});
   if(v instanceof Node)td.append(v);else td.textContent=v;return td;}))));}
 const link=(path,txt)=>D.repo&&path?el('a',{href:`${D.repo}/blob/main/${path}`,target:'_blank',rel:'noopener'},txt):txt;
-table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>r.name},{h:'Type',f:r=>r.type.toLowerCase()},{h:'Conv.',n:1,f:r=>r.conviction??''},
+const dayOf=r=>r.live_day_pct!=null?{p:r.live_day_pct,u:r.live_day_usd,t:'live vs the '+r.last_date+' close'}:
+ (r.day_pct!=null?{p:r.day_pct,u:r.day_usd,t:r.prev_date==='bought at the open'?`${r.last_date} close vs our fill at the open`:`${r.last_date} close vs ${r.prev_date}`}:null);
+const chg=d=>{if(!d)return '–';const c=d.p>0.005?'up':d.p<-0.005?'down':'flat';
+ const b=el('span',{class:'chg '+c,title:d.t},(c==='up'?'▲ ':c==='down'?'▼ ':'')+pct(d.p,2));
+ if(d.u!=null)b.append(el('small',{},(d.u>=0?'+':'−')+usd(Math.abs(d.u))));return b;};
+table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Today',n:1,f:r=>chg(dayOf(r))},{h:'Name',f:r=>r.name},{h:'Type',f:r=>r.type.toLowerCase()},{h:'Conv.',n:1,f:r=>r.conviction??''},
  {h:'Entry',f:r=>r.entry_date},{h:'Entry price',n:1,f:r=>r.entry_price==null?'':px(r.entry_price)+' '+r.currency},{h:'Close',n:1,f:r=>r.last_price==null?'':`${px(r.last_price)} ${r.currency} (${r.last_date})`},
  {h:'Change',n:1,f:r=>pct(r.change_pct,1),c:r=>cls(r.change_pct)},
  {h:'Live',n:1,f:r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–'},{h:'Live change',n:1,f:r=>r.live_change_pct==null?'–':pct(r.live_change_pct,1),c:r=>cls(r.live_change_pct)},{h:'Value',n:1,f:r=>usd(r.value)},{h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},

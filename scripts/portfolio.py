@@ -254,6 +254,9 @@ def mark(state: dict, mkt: Market) -> dict:
         q = mkt.quote(t)
         h.update(last_close=q["close"], last_close_date=q["date"], last_price_usd=round(q["price_usd"], 6),
                  market_value_usd=round(h["shares"] * q["price_usd"], 2))
+        prev = [r for r in mkt.history(t)["rows"] if r["date"] < q["date"] and r.get("close")]
+        if prev:  # the session before, for the dashboard's daily change (display only, 2026-10-20)
+            h.update(prev_close=prev[-1]["close"], prev_close_date=prev[-1]["date"])
     state["last_marked"] = mkt.asof
     return totals(state)
 
