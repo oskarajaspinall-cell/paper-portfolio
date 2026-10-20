@@ -2,7 +2,7 @@
 
 Paper Portfolio is a hands-off, simulated stock portfolio that runs itself every week, on your own Mac or on GitHub Actions. A Python screen scores thousands of stocks on quality, valuation and momentum. Claude agents then research the best ideas, argue the bear case before the bull case, and must reach a firm decision with a conviction level. Simple scripts handle everything else: prices, position sizing, trading costs, stop-losses and returns, so no maths is left to the AI. Every decision is logged and scored against the S&P 500 at 1, 3, 6 and 12 months, building an honest track record. It's paper trading only, with no broker connection. Fork it, add your own Claude key, and choose your own stocks.
 
-**📊 Live dashboard:** https://oskarajaspinall-cell.github.io/paper-portfolio/ (updated after every weekly run)
+**📊 Live dashboard:** https://oskarajaspinall-cell.github.io/paper-portfolio/ (updated every 15 minutes while markets are open, and after every run)
 
 > **Paper trading only. Not investment advice.** There is no broker connection, no real orders and no
 > broker credentials anywhere in this project. Prices and financials are read from
@@ -19,12 +19,16 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 |---|---|---|
 | **Weekly screen** | Rebuilds the stock list (default: S&P 500 + FTSE 100 + the ~3,800 largest stocks worldwide) drops stocks too thin to trade (under $10M a day traded, or under 20% free float), scores the rest on quality, valuation and momentum, with a 5-year history check on the top 500. Picks 10 core + 10 tactical ideas. Tactical ideas are one of two setups: **post-earnings drift** (a stock that just beat and jumped on heavy volume) or **pullback in an uptrend** (a strong stock that has dipped back to its 50-day average), each with a volatility-based stop, a target at least 2× the risk, and a size that limits a stop-out to ~1% of the portfolio. ~4 hours with the default list. | No |
 | **Weekly review** | Fills last week's orders; checks every holding; sells tactical positions that hit their stop, target or time limit; reviews holdings that moved >8% or reported results (using recent headlines); fully re-researches any core holding whose thesis broke; researches the screen's 20 picks (3 at a time; a failed one is skipped and listed); places orders for the next open; updates the decision log, report and dashboard. | Only for flagged holdings and new research |
-| **Daily update** (weekdays) | Fills pending orders at the opening price of the next trading day, re-prices every holding at its latest close, and refreshes the dashboard. | No |
+| **Daily update** (weekdays) | Fills pending orders at their opening price, credits dividends and applies splits, re-prices every holding at its latest close, checks entry prices, re-checks the dip release of the cash reserve, runs the dip radar, places any queued buys that now fit (funding queue), and refreshes the dashboard. | No |
+| **Intraday check** (weekdays, ~10:30 New York) | Live prices vs entry prices for US watch stocks; hits, and last night's dip-radar signals, are re-researched at once. | Only for hits |
+| **Research loop** (when you start it) | Works through the whole ranked universe, 3 stocks at a time, best first, until it's done or the usage limit stops it (`bin/research-loop`, see below). | Yes |
 
 | Schedule | On your Mac (`bin/install-mac-schedule`) | On GitHub Actions (UTC) |
 |---|---|---|
 | Screen + review | Friday 22:00, one script (`bin/weekly-local`) | Screen Friday 21:00, review Saturday 08:00 |
-| Order fills + daily prices | Weekdays 21:30 (`bin/fill-pending`) | Weekdays 21:30 |
+| Daily update | Weekdays 21:30 UK (`bin/fill-pending`) | Weekdays 21:30 |
+| Intraday check | Weekdays 14:30 + 15:30 UK (`bin/entry-intraday`; acts once, ~10:30 New York) | – |
+| Live dashboard | Every 15 min, weekdays 08:00–21:15 UK (`bin/live-dashboard`) | – |
 
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Core positions are sized by conviction and volatility**: 7% (conviction 4) or 10% (5), scaled down
@@ -32,8 +36,9 @@ for a volatile stock and up for a steady one (between 0.6× and 1.4×; never so 
 portfolio's risk; a weekly risk table (`reports/risk/`) shows each holding's share of the portfolio's volatility.
 A weekly **return attribution** (`reports/attribution/`) splits the return over the S&P 500 into sector bets
 (including the cash reserve), stock picking within sectors and their interaction, so a sector tailwind can't hide
-weak stock picks. **Trades fill at the next market open**: decisions become pending orders filled at the
-opening price of the next trading day; a tactical order that opens beyond its stop or target is cancelled.
+weak stock picks. **Trades fill at the live price or the next open**: a decided trade fills at once at the live price when its
+market is open, otherwise it becomes a pending order filled at the next opening price (every rule is checked
+again at that price); a tactical order that opens beyond its stop or target is cancelled.
 **Cash is managed as a position**: each week eight official indicators (credit spreads and their change, VIX, the
 yield curve, real yields, the S&P 500's trend, core inflation and fed rate moves) are each scored on a sliding scale
 from calm to stressed and combined into a 0–100 stress score. That sets a cash reserve anywhere from 5% to 35%,
@@ -59,7 +64,7 @@ Every fact sheet includes a **fair value**: the industry-appropriate method from
 mine or reserve NAV isn't available), with bear/base/bull assumptions taken from the stock's own five-year history,
 a discount rate of the 10-year Treasury yield + beta × 5%, and a reverse DCF showing the growth the price implies.
 It informs the research only (no buy rule) and is logged with each decision so its accuracy can be checked later.
-The one exception is the bulk S&P 500 research loop. A stock priced above its base fair value is **pre-screened
+The one exception is the bulk research loop. A stock priced above its base fair value is **pre-screened
 out** there before any AI research (`scripts/prescreen.py`, no model calls; verdicts in `reports/prescreen/`).
 Every buy so far had a base fair value well above the price. Your own requests, entry-price hits and holdings
 are never pre-screened.
@@ -164,6 +169,10 @@ sector weights, recent trades, decisions and hit rates.
 | `portfolio/decisions.csv` | Every decision and how it did vs SPY after 1, 3, 6 and 12 months |
 | `research/<TICKER>/` | Fact sheets, research notes and evaluations |
 | `runs/<date>/` | Each run's working files and log; `error.log` if it failed |
+| `reports/research/<date>-batch-NN.md` | The research loop's batch reports: every decision, its fair value and any order |
+| `reports/regime/<date>.md` | The cash strategy: the stress score, each indicator and the reserve |
+| `reports/dip-radar/<date>.md` | The dip radar: unusual falls since our last research, and what was queued |
+| `portfolio/funding_queue.csv` | Conviction-4 buys waiting for room above the cash reserve (added, started, topped up, dropped) |
 
 A red ✗ in **Actions** means a run failed: read `runs/<date>/error.log`. Nothing from that run was traded.
 
@@ -210,9 +219,22 @@ weekday 21:30 order fills, each committing and uploading to your GitHub repo):
 ```bash
 bin/install-mac-schedule
 ```
-The Mac must be on at those times (if it is asleep, the job runs when it wakes).
-The saved copies of stockanalysis.com pages used by some parser tests are not included in this repository,
-so those tests are skipped (about 25 of 197); everything else runs.
+The Mac must be on at those times: each job keeps it awake while it runs, but a closed lid on battery still
+sends it to sleep (the job then pauses until it wakes), so keep it plugged in. The saved copies of
+stockanalysis.com pages used by some parser tests are not included in this repository, so those tests are
+skipped; everything else runs.
+
+### The research loop
+To research the whole universe rather than the weekly 20 picks, build a ranked queue from a day's page cache and
+start the loop. It runs in the background (3 stocks at a time), commits a batch report every 6 stocks, sends any
+BUY to the portfolio, and stops when it's done or the Claude usage limit stops it; run the same command again to
+continue where it stopped.
+```bash
+bin/py scripts/research_loop.py rank runs/my-loop --cache-date 2026-10-16
+```
+```bash
+bin/research-loop runs/my-loop
+```
 
 ## License
 MIT. See `LICENSE`.

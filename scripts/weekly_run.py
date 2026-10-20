@@ -95,6 +95,14 @@ def entry_hit_reason(h: dict) -> str:
             "Find out why it fell; decide BUY or AVOID.")
 
 
+def discard_partial(ticker: str, asof: str) -> None:
+    """A failed research step leaves no half-finished docs: today's note, macro, evaluation, valuation, fact sheet
+    and SEC delta for that stock."""
+    d = ROOT / "research" / Ticker(ticker).slug
+    for f in list(d.glob(f"{asof}*")) + list(d.glob(f"factsheet-{asof}.md")) + list(d.glob(f"sec-delta-{asof}.md")):
+        f.unlink()
+
+
 def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, log, run: Path) -> Path:
     slug = Ticker(ticker).slug
     note, ev = ROOT / "research" / slug / f"{asof}.md", ROOT / "research" / slug / f"{asof}-evaluation.md"
@@ -307,9 +315,7 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             except Exception as e:  # noqa: BLE001
                 log(f"SKIPPED initiation {p['ticker']}: {e}")
                 manifest["skipped"].append({"ticker": p["ticker"], "type": p["type"], "reason": str(e)[:300]})
-                slug = Ticker(p["ticker"]).slug
-                for f in (ROOT / "research" / slug).glob(f"{asof}*.md"):  # no half-finished docs left behind
-                    f.unlink()
+                discard_partial(p["ticker"], asof)  # no half-finished docs left behind
                 return None
 
         workers = max(1, int(cfg["agents"].get("parallel_research", 1)))

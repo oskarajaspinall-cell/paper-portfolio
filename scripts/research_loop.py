@@ -1,7 +1,16 @@
-"""Keep researching the global core ranking (runs/2026-10-18-global/rank.py) (best first), 3 at a time, until the usage limit
-(or anything else) makes `stop_after` initiations in a row fail. A network outage is not a failure: the loop
-waits until api.anthropic.com is reachable again and retries the step (owner request 2026-10-09). The portfolio-manager runs only for BUYs (owner rule 2026-10-08: buys happen autonomously; the portfolio's rules still validate
-them). Each finished evaluation is recorded in the decision log. Usage: research_loop.py"""
+"""Bulk core research loop (no fixed schedule; started by hand with bin/research-loop). Works through a ranked queue
+(`<run>/loop-queue.json`, best first), 3 stocks at a time: the free pre-screen (scripts/prescreen.py) first, then
+researcher -> macro-overlay -> evaluator, the decision log, and the portfolio-manager for any BUY (owner rule
+2026-10-08: buys happen autonomously; the portfolio's rules still validate them, and the funding queue keeps a BUY
+the cash reserve blocks). Entry-price and dip-radar hits go first. Every 6 finished stocks a batch report
+(reports/research/<date>-batch-NN.md) is committed and pushed. It stops when the queue is done or `stop_after`
+stocks in a row fail (usually the usage limit); a network outage is waited out, not counted (owner request
+2026-10-09). It leaves the machine to the Friday weekly run. Run it again to continue where it stopped.
+
+    bin/py scripts/research_loop.py rank runs/<name> [--cache-date YYYY-MM-DD]   build the queue: the global core
+                                                       ranking (scripts/screen.py on that day's page cache)
+    bin/research-loop runs/<name>                      start the loop detached (log: runs/<name>/run.log)
+"""
 import datetime as dt
 import json
 import socket
@@ -20,9 +29,8 @@ from common import Ticker, load_config  # noqa: E402
 from fetch_data import Fetcher  # noqa: E402
 import prescreen  # noqa: E402
 
-SKIP: set[str] = set()
 stop_after = 3
-run = ROOT / "runs" / "2026-10-18-global"
+run: Path = ROOT / "runs"  # the run folder, set by main()
 lk = threading.Lock()
 pm_lock = threading.Lock()  # one portfolio-manager session at a time: they share portfolio/state.json
 state = {"fails_in_row": 0, "stop": False, "screened": 0}
@@ -140,7 +148,7 @@ def publish(tickers: list[str], n: int) -> None:
         path = REPORTS / f"{dt.date.today()}-batch-{n:02d}.md"
         path.write_text(md)
         subprocess.run([str(ROOT / "bin" / "py"), "scripts/dashboard.py"], cwd=ROOT, capture_output=True)  # keep GitHub current
-        paths = [str(path.relative_to(ROOT)), "portfolio", "docs", "universe/ir_domains.txt", "runs/2026-10-18-global", "reports/prescreen"]
+        paths = [str(path.relative_to(ROOT)), "portfolio", "docs", "universe/ir_domains.txt", str(run.relative_to(ROOT)), "reports/prescreen"]
         paths += [str((ROOT / "research" / Ticker(t).slug).relative_to(ROOT)) for t in tickers]
         git = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True)  # noqa: E731
         git("add", "--", *paths)
@@ -166,18 +174,23 @@ def batch_add(t: str | None, flush: bool = False) -> None:
 
 
 cfg = load_config()
-REPORTS.mkdir(parents=True, exist_ok=True)
-batch["n"] = len(list(REPORTS.glob(f"{dt.date.today()}-batch-*.md")))
-st = json.loads((ROOT / "portfolio" / "state.json").read_text())
-ranked = json.loads((run / "loop-queue.json").read_text())  # the global core ranking, best first
-queue = [t for t in ranked if t not in SKIP and not (ROOT / "research" / Ticker(t).slug / f"{dt.date.today()}.md").exists()
-         and not list((ROOT / "research" / Ticker(t).slug).glob("*-evaluation.md"))] + sorted(SKIP)
-hit_rows = {h["ticker"]: h for h in reversed((st.get("entry_hits") or []) + (st.get("dip_hits") or []))
-            if h["ticker"] not in st.get("holdings", {})}  # entry-price and dip-radar hits (2026-10-19)
-hits = list(hit_rows)
-queue = hits + [t for t in queue if t not in hits]  # entry-price hits first (owner rule 2026-10-09)
-(run / "loop-queue.json").write_text(json.dumps([t for t in queue if t not in hits]))
-log(f"== research loop: {len(queue)} names queued, best first: {queue[:10]}")
+hits: list[str] = []
+hit_rows: dict[str, dict] = {}
+
+
+def build_queue() -> list[str]:
+    """The ranked queue minus stocks already evaluated (or noted today), entry-price and dip-radar hits first."""
+    global hits, hit_rows
+    st = json.loads((ROOT / "portfolio" / "state.json").read_text())
+    ranked = json.loads((run / "loop-queue.json").read_text())
+    queue = [t for t in ranked if not (ROOT / "research" / Ticker(t).slug / f"{dt.date.today()}.md").exists()
+             and not list((ROOT / "research" / Ticker(t).slug).glob("*-evaluation.md"))]
+    hit_rows = {h["ticker"]: h for h in reversed((st.get("entry_hits") or []) + (st.get("dip_hits") or []))
+                if h["ticker"] not in st.get("holdings", {})}  # entry-price and dip-radar hits (2026-10-19)
+    hits = list(hit_rows)
+    queue = hits + [t for t in queue if t not in hits]
+    (run / "loop-queue.json").write_text(json.dumps([t for t in queue if t not in hits]))
+    return queue
 
 
 WEEKLY_LOCK = Path("/tmp/paper-portfolio-review.lock")
@@ -247,16 +260,15 @@ def attempt(t):
                     log(f"== portfolio-manager {t} (BUY {d['conviction']})")
                     agent("portfolio-manager",
                                     f"Evaluation files: {ev.relative_to(ROOT)}. Date {asof}. Write the requests to "
-                                    f"runs/2026-10-18-global/requests-{Ticker(t).slug}.json and submit with --at-market "
-                                    f"--save runs/2026-10-18-global/submit-{Ticker(t).slug}.json (decided trades fill now at the live price where the market is open, else at the next open).", log)
+                                    f"{run.relative_to(ROOT)}/requests-{Ticker(t).slug}.json and submit with --at-market "
+                                    f"--save {run.relative_to(ROOT)}/submit-{Ticker(t).slug}.json (decided trades fill now at the live price where the market is open, else at the next open).", log)
             except Exception as e:  # noqa: BLE001  research stands; the order step is reported, not retried
                 log(f"!! PORTFOLIO-MANAGER FAILED for {t} (research kept): {str(e)[:300]}")
         log(f"== done {t}")
         batch_add(t)
         return t, str(ev.relative_to(ROOT))
     except Exception as e:  # noqa: BLE001
-        for f in (ROOT / "research" / Ticker(t).slug).glob(f"{asof}*"):  # no half-finished docs
-            f.unlink()
+        wr.discard_partial(t, asof)  # no half-finished docs
         if not online():  # an outage (e.g. a data fetch failed offline), not the stock: retried, not counted
             log(f"!! {t} interrupted by a network outage: {str(e)[:200]}")
             return t, "NETWORK"
@@ -268,10 +280,44 @@ def attempt(t):
         return t, "FAILED"
 
 
-with ThreadPoolExecutor(max_workers=3) as pool:
-    for t, r in pool.map(one, queue):
-        if r != "not started":
-            print(t, r, flush=True)
-batch_add(None, flush=True)  # report and upload whatever finished since the last group
-log(f"== pre-screen: {state['screened']} names skipped without AI research (reports/prescreen/)")
-log("== research loop stopped" + (" (repeated failures: usage limit?)" if state["stop"] else " (queue finished)"))
+def rank(run_dir: Path, cache_date: str) -> None:
+    """The global core ranking on that day's page cache; names with a core decision in the last 90 days excluded."""
+    state_ = json.loads((ROOT / "portfolio" / "state.json").read_text())
+    res = screen.run(Fetcher(today=cache_date), cfg, dt.date.today().isoformat(), state=state_)
+    ranked = sorted((r for r in res["rows"] if r["core"] is not None), key=screen.core_rank_key, reverse=True)
+    run_dir.mkdir(parents=True, exist_ok=True)
+    (run_dir / "loop-queue.json").write_text(json.dumps([r["ticker"] for r in ranked]))
+    (run_dir / "ranking.json").write_text(json.dumps([{"ticker": r["ticker"], "name": res["names"].get(r["ticker"], ""),
+                                                        "core": r["core"], "core_deep": r.get("core_deep")}
+                                                       for r in ranked], indent=0))
+    print("screened", res["screened"], "failed", len(res["failed"]), "ranked", len(ranked))
+
+
+def main(argv=None) -> int:
+    import argparse
+    global run
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("cmd", choices=["run", "rank"])
+    ap.add_argument("run_dir", help="runs/<name>")
+    ap.add_argument("--cache-date", default=dt.date.today().isoformat(), help="rank: the page-cache day to screen")
+    a = ap.parse_args(argv)
+    run = (ROOT / a.run_dir).resolve()
+    if a.cmd == "rank":
+        rank(run, a.cache_date)
+        return 0
+    REPORTS.mkdir(parents=True, exist_ok=True)
+    batch["n"] = len(list(REPORTS.glob(f"{dt.date.today()}-batch-*.md")))
+    queue = build_queue()
+    log(f"== research loop: {len(queue)} names queued, best first: {queue[:10]}")
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        for t, r in pool.map(one, queue):
+            if r != "not started":
+                print(t, r, flush=True)
+    batch_add(None, flush=True)  # report and upload whatever finished since the last group
+    log(f"== pre-screen: {state['screened']} names skipped without AI research (reports/prescreen/)")
+    log("== research loop stopped" + (" (repeated failures: usage limit?)" if state["stop"] else " (queue finished)"))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

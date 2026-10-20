@@ -288,7 +288,7 @@ float_check_below_addv_usd = 100_000_000  # ...checked only for names trading le
 deep_dive_top = 500               # stage 2: also read the ratios page (5y history) for the top N core candidates (~3 s each)
 history = ["cheap_evebitda", "cheap_pfcf", "cheap_pe", "cheap_pb", "roic_trend", "roce_trend", "roic_min",
            "roe_trend", "roe_min"]   # P/B and ROE give banks/insurers a history score too
-prescreen_min_base_upside_pct = 0  # owner 2026-10-12 (efficiency): bulk initiations (S&P 500 loop) skip the AI steps when
+prescreen_min_base_upside_pct = 0  # owner 2026-10-12 (efficiency): bulk initiations (research loop) skip the AI steps when
                                    # the mechanical base fair value is this % or more BELOW the price (scripts/prescreen.py;
                                    # no fair value = researched). Every BUY so far had base upside +30% or more.
 
@@ -354,6 +354,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - Monte Carlo removed (owner 2026-10-11, to save usage; it was informational only). Past `*-montecarlo.*` / `*-mc-*` files in `research/` are kept as history.
 - `scripts/funding_queue.py` — the funding queue (no AI): `enqueue` (called by `portfolio.place_orders` / `fill_pending` on a cash-reserve rejection), `review` (bin/fill-pending weekdays and the weekly run: resubmit when room appears, drop stale ideas), `brief` (weekly swap brief for `.claude/agents/swap-reviewer.md`); events in `portfolio/funding_queue.csv`.
 - `scripts/dip_radar.py` — the dip radar (no AI): `reports/dip-radar/<date>.md/.json` (signals, near-misses), hits in `state.json` `dip_hits` (cleared once the stock is re-researched by any route).
+- `scripts/research_loop.py` + `bin/research-loop runs/<name>` — the bulk research loop (owner-started, no schedule): `rank` builds `runs/<name>/loop-queue.json` (the global core ranking on a day's page cache); `run` (via `bin/research-loop`, detached, Mac kept awake) researches it 3 at a time, entry-price / dip-radar hits first, pre-screen gate, portfolio-manager for BUYs, a committed batch report every 6 stocks; stops after 3 failures in a row (usage limit). Rerun to continue.
 - `scripts/prescreen.py` — mechanical gate before a bulk initiation (no model calls): price above the base fair value by more than `[screen].prescreen_min_base_upside_pct` → no AI research that day; verdicts in `reports/prescreen/<date>.csv`. Owner requests, entry-price hits, holdings and the weekly picks are never gated.
 - `scripts/check_docs.py` — template, word-limit, tag, allowlist, conviction and Decision-block checks for notes and evaluations; number provenance (design by Claude 2026-10-16): a number in an evaluation's prose that isn't in the fact sheet, note, macro overlay, config or its own Decision block fails it (notes: a number not in the fact sheet must be a cited `[company-reported]` figure or a section-4 level).
 - `scripts/allowlist_hook.py` — WebFetch guard (wired in `.claude/settings.json`); blocked URLs go to `logs/skipped-urls.log`. WebSearch, curl and wget are denied.

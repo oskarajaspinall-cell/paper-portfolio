@@ -656,3 +656,15 @@ def test_funding_queue_problem_never_cancels_the_week(fake_repo, monkeypatch):
     calls = []
     monkeypatch.setattr(wr, "sh", make_sh(fake_repo, SCAN_QUIET, calls, fail_on="funding_queue.py review"))
     assert wr.run("2026-10-10", False, 0, agent=lambda *a: None) == 0
+
+
+def test_discard_partial_removes_only_that_days_files(fake_repo):
+    d = fake_repo / "research" / "LON-SHEL"
+    d.mkdir(parents=True)
+    keep = ["2026-10-09.md", "factsheet-2026-10-09.md", "2026-10-09-evaluation.md"]
+    gone = ["2026-10-10.md", "2026-10-10-macro.md", "2026-10-10-valuation.json", "factsheet-2026-10-10.md",
+            "sec-delta-2026-10-10.md"]
+    for n in keep + gone:
+        (d / n).write_text("x")
+    wr.discard_partial("LON:SHEL", "2026-10-10")
+    assert sorted(p.name for p in d.iterdir()) == sorted(keep)
