@@ -178,6 +178,20 @@ hits: list[str] = []
 hit_rows: dict[str, dict] = {}
 
 
+def record_missing() -> None:
+    """Record any evaluation the decision log is missing (a failed record step earlier), dated by its file."""
+    import csv
+    with (ROOT / "portfolio" / "decisions.csv").open() as fh:
+        logged = {r["evaluation"] for r in csv.DictReader(fh)}
+    for ev in sorted((ROOT / "research").glob("*/20??-??-??-evaluation.md")):
+        rel = str(ev.relative_to(ROOT))
+        if rel not in logged:
+            r = subprocess.run([str(ROOT / "bin" / "py"), "scripts/decision_log.py", "record", rel, "--asof", ev.name[:10]],
+                               cwd=ROOT, capture_output=True, text=True)
+            log(f"== decision log: recorded the missing {rel}" if r.returncode == 0 else
+                f"!! decision log: still can't record {rel}: {r.stderr.strip()[-200:]}")
+
+
 def build_queue() -> list[str]:
     """The ranked queue minus stocks already evaluated (or noted today), entry-price and dip-radar hits first."""
     global hits, hit_rows
@@ -248,8 +262,10 @@ def attempt(t):
         why = (wr.entry_hit_reason(hit_rows[t]) if t in hit_rows else
                "New initiation from the global core screen. Decide BUY or AVOID.")
         ev = wr.research_and_evaluate(t, "CORE", asof, why, agent, log, run)
-        subprocess.run([str(ROOT / "bin" / "py"), "scripts/decision_log.py", "record", str(ev.relative_to(ROOT)),
-                        "--asof", asof], cwd=ROOT, capture_output=True)
+        rec = subprocess.run([str(ROOT / "bin" / "py"), "scripts/decision_log.py", "record", str(ev.relative_to(ROOT)),
+                              "--asof", asof], cwd=ROOT, capture_output=True, text=True)
+        if rec.returncode:  # never silent (2026-10-20: three decisions were missing); the next start records it
+            log(f"!! DECISION LOG not updated for {t} (recorded at the next loop start): {rec.stderr.strip()[-200:]}")
         with lk:
             state["fails_in_row"] = 0
         from decision_log import decision_from_eval
@@ -307,6 +323,7 @@ def main(argv=None) -> int:
         return 0
     REPORTS.mkdir(parents=True, exist_ok=True)
     batch["n"] = len(list(REPORTS.glob(f"{dt.date.today()}-batch-*.md")))
+    record_missing()
     queue = build_queue()
     log(f"== research loop: {len(queue)} names queued, best first: {queue[:10]}")
     with ThreadPoolExecutor(max_workers=3) as pool:
