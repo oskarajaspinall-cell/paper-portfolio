@@ -17,6 +17,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 - Cite the exact URL for every figure and every qualitative claim.
 - `scripts/fetch_data.py` reads stockanalysis.com HTML pages (no official API): respects robots.txt, ≤1 request per 3 seconds, descriptive User-Agent, per-day cache in `data/cache/` (git-ignored). A failed load or parse exits non-zero naming the URL and field. NEVER substitute a guessed value.
 - Sell-side analyst price targets and ratings are NEVER an input. The parsers drop them.
+- **Missing sector** (2026-10-20): stockanalysis.com classifies no sector for a few stocks (e.g. ADX:ADNOCLS, HOSE:VHM). The page's own industry label is then mapped to a sector by the owner-editable `universe/sector_map.csv` (the fact sheet says "mapped from the industry …"); an unmapped industry gets sector "Unknown" (its own sector for the 30% cap). Research continues; nothing is guessed.
 
 ## House rules (every agent prompt)
 - Write to the standard of a J.P. Morgan equity research analyst, concisely.

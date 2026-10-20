@@ -249,7 +249,8 @@ def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str, fv_out: di
     w(f"# Fact sheet: {info['name']} ({ticker}) — {asof}")
     if ov.get("website"):
         w(f"Company website: {ov['website']} [OV] (its domain is allowlisted for qualitative research)")
-    w(f"Sector: {ov['sector']} [OV] · Industry: {ov['industry']} [OV] · Price ccy: {ccy_p} · Financials ccy: {ccy_f} · "
+    sec_src = ov.get("sector_source", "OV")
+    w(f"Sector: {ov['sector']} " + ("[OV]" if sec_src == "OV" else f"({sec_src})") + f" · Industry: {ov['industry']} [OV] · Price ccy: {ccy_p} · Financials ccy: {ccy_f} · "
       f"Market cap: {f(ratio(sv('marketcap'), 1e9), 1)}bn {ccy_p if ccy_p != 'GBX' else 'GBP'} [ST]"
       + (f" (= ${sv('marketcap') * usd_rate / 1e9:,.1f}bn USD [ST,FX])" if usd_rate and sv('marketcap') else ""))
     w("All figures from stockanalysis.com; computed rows are Python arithmetic on the cited pages. "

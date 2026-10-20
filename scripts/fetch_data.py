@@ -360,9 +360,25 @@ def parse_overview(nodes, url) -> dict:
     out["earnings_date_label"] = page.get("earningsDateLabel")
     out["ch1y_pct"] = parse_number(page.get("ch1y"))  # ETFs show this on the overview
     out["news"] = parse_news_overview(page)
+    out["sector_source"] = "OV"
     if out["info"]["type"] != "etf" and not out["sector"]:
-        raise DataError(url, "infoTable.Sector", "sector missing")
+        # stockanalysis.com classifies no sector for a few stocks (2026-10-20: ADX:ADNOCLS, HOSE:VHM). Never guessed:
+        # the owner-editable universe/sector_map.csv maps the page's own industry label to a sector, labelled as
+        # mapped wherever it is shown; an industry not in the map is "Unknown" (its own sector for the 30% cap).
+        mapped = sector_map().get((out["industry"] or "").strip().lower())
+        out["sector"] = mapped or "Unknown"
+        out["sector_source"] = (f"mapped from the industry '{out['industry']}' (universe/sector_map.csv)" if mapped
+                                else "[data unavailable]")
     return out
+
+
+def sector_map() -> dict[str, str]:
+    import csv
+    p = ROOT / "universe" / "sector_map.csv"
+    if not p.exists():
+        return {}
+    with p.open() as fh:
+        return {r["industry"].strip().lower(): r["sector"].strip() for r in csv.DictReader(fh) if r.get("sector")}
 
 
 def parse_statement(nodes, url) -> dict:
