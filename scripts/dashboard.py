@@ -449,16 +449,29 @@ function drawLine(){const box=$('line');box.replaceChildren();const RS=rangeSeri
  const rl=(RANGES.find(([r])=>r===RANGE)||[])[1]||RANGE;
  $('lineSub').textContent=(TABS[CUR]||TABS.invested).sub+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+'.':'');
  if(S.length<2){box.append(el('div',{class:'empty'},'Not enough data for this period yet.'));return;}
- const W=Math.max(300,Math.round(box.getBoundingClientRect().width)),H=W<560?220:300,L=40,R=W<560?92:120,T=12,B=28,xs=S.map(p=>Date.parse(p.date)),x0=Math.min(...xs),x1=Math.max(...xs);
+ const W=Math.max(300,Math.round(box.getBoundingClientRect().width)),L=40,R=W<560?92:120,T=12;
+ // equal spacing per trading day (weekends and holidays take no room), so every day can be marked (2026-10-20)
+ const XI=new Map(S.map((p,i)=>[p.date,i])),XD=p=>L+XI.get(p.date)/((S.length-1)||1)*(W-L-R);
+ const mg=(W-L-R)/((S.length-1)||1),DAYS=mg>=17,B=DAYS?42:28,H=(W<560?220:300)+(DAYS?14:0);
  const all=S.flatMap(p=>defs.map(([k])=>p[k]).filter(v=>v!=null));let lo=Math.min(0,...all),hi=Math.max(0,...all);const pad=Math.max((hi-lo)*.1,1);lo-=pad;hi+=pad;
- const X=t=>L+(t-x0)/(x1-x0||1)*(W-L-R),Y=v=>T+(hi-v)/(hi-lo)*(H-T-B);const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Return on invested money vs the same money in the S&P 500, and the whole portfolio (%)'});
+ const Y=v=>T+(hi-v)/(hi-lo)*(H-T-B);const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Return on invested money vs the same money in the S&P 500, and the whole portfolio (%)'});
  const step=(hi-lo)/4;for(let i=0;i<=4;i++){const v=lo+step*i;svg.append(sv('line',{x1:L,x2:W-R,y1:Y(v),y2:Y(v),stroke:'var(--grid)','stroke-width':1}));
   const t=sv('text',{x:L-6,y:Y(v)+4,'text-anchor':'end'});t.textContent=v.toFixed(Math.abs(hi-lo)<4?1:0)+'%';svg.append(t);}
- const ticks=S.length<=6?S:S.filter((_,i)=>i%Math.ceil(S.length/6)===0);ticks.forEach(p=>{const t=sv('text',{x:X(Date.parse(p.date)),y:H-8,'text-anchor':'middle'});t.textContent=p.live?'live':p.date.slice(5);svg.append(t);});
+ // every day gets an axis tick (and a dot on each line below); labels on every day that has room (2026-10-20)
+ const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+ const dl=p=>p.live?'live':(+p.date.slice(8))+' '+MON[+p.date.slice(5,7)-1];
+ const px=S.map(p=>XD(p));
+ // the day number under every day, the month once beneath it (and where it changes); if days are packed too
+ // tightly even for that, "D Mon" labels on every day that has room
+ S.forEach((p,i)=>{const x=px[i];svg.append(sv('line',{x1:x,x2:x,y1:H-B,y2:H-B+4,stroke:'var(--axis)','stroke-width':1}));});
+ if(DAYS){let pm='';S.forEach((p,i)=>{const x=px[i],t=sv('text',{x,y:H-B+16,'text-anchor':'middle'});t.textContent=p.live?'live':String(+p.date.slice(8));svg.append(t);
+   const m=p.live?pm:p.date.slice(0,7);if(m!==pm){const mt=sv('text',{x,y:H-B+31,'text-anchor':'start'});mt.textContent=MON[+m.slice(5,7)-1]+(i===0||m.slice(0,4)!==pm.slice(0,4)?' '+m.slice(0,4):'');mt.style.fill='var(--ink2)';svg.append(mt);pm=m;}});}
+ else{let lastX=1e9;for(let i=S.length-1;i>=0;i--){const x=px[i];if(lastX-x>=42){const t=sv('text',{x,y:H-8,'text-anchor':'middle'});t.textContent=dl(S[i]);svg.append(t);lastX=x;}}}
  svg.append(sv('line',{x1:L,x2:W-R,y1:Y(0),y2:Y(0),stroke:'var(--axis)','stroke-width':1}));
  const ends=[];defs.forEach(([k,n,c,short])=>{const P=S.filter(p=>p[k]!=null);if(P.length<2)return;
-  svg.append(sv('path',{d:P.map((p,i)=>(i?'L':'M')+X(Date.parse(p.date)).toFixed(1)+','+Y(p[k]).toFixed(1)).join(''),fill:'none',stroke:`var(${c})`,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
-  const e=P[P.length-1];ends.push({y:Y(e[k]),x:X(Date.parse(e.date)),c,label:(short||n)+' '+pct(e[k],1)});});
+  svg.append(sv('path',{d:P.map((p,i)=>(i?'L':'M')+XD(p).toFixed(1)+','+Y(p[k]).toFixed(1)).join(''),fill:'none',stroke:`var(${c})`,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+  P.slice(0,-1).forEach(p=>svg.append(sv('circle',{cx:XD(p),cy:Y(p[k]),r:P.length>60?1.5:2.5,fill:`var(${c})`,stroke:'var(--surface)','stroke-width':1})));  // a dot on every day
+  const e=P[P.length-1];ends.push({y:Y(e[k]),x:XD(e),c,label:(short||n)+' '+pct(e[k],1)});});
  ends.sort((a,b)=>a.y-b.y);let prev=-1e9;ends.forEach(e=>{e.ly=Math.max(e.y,prev+16);prev=e.ly;});
  ends.forEach(e=>{svg.append(sv('circle',{cx:e.x,cy:e.y,r:4,fill:`var(${e.c})`,stroke:'var(--surface)','stroke-width':2}));
   if(Math.abs(e.ly-e.y)>2)svg.append(sv('line',{x1:e.x+6,y1:e.y,x2:e.x+12,y2:e.ly,stroke:'var(--axis)','stroke-width':1}));
@@ -466,7 +479,7 @@ function drawLine(){const box=$('line');box.replaceChildren();const RS=rangeSeri
  const cross=sv('line',{y1:T,y2:H-B,stroke:'var(--axis)','stroke-width':1,visibility:'hidden'});svg.append(cross);
  const hit=sv('rect',{x:L,y:T,width:W-L-R,height:H-T-B,fill:'transparent'});svg.append(hit);
  hit.addEventListener('pointermove',ev=>{const r=svg.getBoundingClientRect(),px=(ev.clientX-r.left)/r.width*W;let best=S[0];
-  S.forEach(p=>{if(Math.abs(X(Date.parse(p.date))-px)<Math.abs(X(Date.parse(best.date))-px))best=p;});const cx=X(Date.parse(best.date));
+  S.forEach(p=>{if(Math.abs(XD(p)-px)<Math.abs(XD(best)-px))best=p;});const cx=XD(best);
   cross.setAttribute('x1',cx);cross.setAttribute('x2',cx);cross.setAttribute('visibility','visible');
   const rows=[el('div',{},el('span',{class:'muted'},(best.live?'Live '+(D.live_at||''):best.date+' close')+' · '+usd(best.value)))];
   defs.forEach(([k,n,c])=>{if(best[k]!=null)rows.push(el('div',{class:'r'},el('span',{class:'key',style:`background:var(${c})`}),el('b',{},pct(best[k])),el('span',{class:'muted'},n)));});showTip(ev,rows);});
