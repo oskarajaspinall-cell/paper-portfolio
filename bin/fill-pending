@@ -34,8 +34,13 @@ bin/with-timeout 1200 bin/py scripts/dip_radar.py --asof "$ASOF" || echo "!! dip
 # Funding queue (no AI, 2026-10-18): a conviction-4 BUY stopped only by the cash reserve is resubmitted for the
 # next open once there is room above the reserve (best upside first); stale ideas drop out
 bin/with-timeout 600 bin/py scripts/funding_queue.py review --asof "$ASOF" || echo "!! funding queue not reviewed"
+# Dashboard sections that used to refresh only weekly (2026-10-20, no AI): return attribution, the risk table and the
+# decision log's 1/3/6/12-month scores. Informational: a failure is logged and never stops the update.
+bin/with-timeout 600 bin/py scripts/attribution.py report --asof "$ASOF" || echo "!! attribution not updated"
+bin/with-timeout 300 bin/py scripts/risk.py report --asof "$ASOF" || echo "!! risk report not updated"
+bin/with-timeout 600 bin/py scripts/decision_log.py update --asof "$ASOF" || echo "!! decision scores not updated"
 if git diff --quiet -- portfolio; then echo "nothing changed"; exit 0; fi
 bin/with-timeout 600 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
-git add -A -- portfolio docs reports/entry-watch reports/regime reports/dip-radar "$LOG"
+git add -A -- portfolio docs reports/entry-watch reports/regime reports/dip-radar reports/attribution reports/risk "$LOG"
 git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
 echo "== end $(date)"

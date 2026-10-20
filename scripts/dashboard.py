@@ -147,6 +147,21 @@ def country_of(ticker: str, reporting_ccy: str | None, listed: str) -> str:
     return listed or ("United States" if not ex else ex)
 
 
+def regime_now() -> dict | None:
+    """The weekly regime with the daily dip check applied (2026-10-20: the tile showed the weekly file's dip only).
+    Dated for the next session, as the 21:30 run writes its dip check."""
+    import regime as R
+    asof = (dt.date.today() + dt.timedelta(days=1)).isoformat()
+    doc = R.latest(asof)
+    if not doc:
+        return None
+    dip = R.latest_dip(asof, doc["asof"])
+    if dip:
+        doc = dict(doc, reserve_pct=round(doc["base_reserve_pct"] * dip["multiplier"], 2),
+                   dip={"drawdown_pct": dip["drawdown_pct"], "multiplier": dip["multiplier"], "asof": dip["asof"]})
+    return doc
+
+
 def build_data(live: bool = True) -> dict:
     cfg = load_config()
     port = ROOT / "portfolio"
@@ -265,7 +280,7 @@ def build_data(live: bool = True) -> dict:
         "since_spy": None if not last or last["spy"] is None else last["spy"] / 100 - 1,
         "invested": portfolio.invested_return(vals),
         "week": week, "series": ser, "live_point": live_pt, "holdings": hold, "interest": state.get("cash_interest"),
-        "regime": __import__("regime").latest(dt.date.today().isoformat()),
+        "regime": regime_now(),
         "sectors": sorted(([k, v] for k, v in sectors.items()), key=lambda kv: -kv[1]),
         "countries": sorted(([k, v] for k, v in countries.items()), key=lambda kv: -kv[1]),
         "ledger": [{k: r.get(k, "") for k in ("date", "ticker", "type", "side", "shares", "fill_price", "currency",
