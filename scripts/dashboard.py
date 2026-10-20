@@ -128,13 +128,34 @@ def est_usd(est: dict, ledger: list[dict]) -> float | None:
     return est["shares"] * est["price"] * fx if fx else None
 
 
+CCY_COUNTRY = {"CNY": "China", "HKD": "Hong Kong", "GBP": "United Kingdom", "JPY": "Japan", "KRW": "South Korea",
+               "TWD": "Taiwan", "INR": "India", "CAD": "Canada", "CHF": "Switzerland", "AUD": "Australia",
+               "BRL": "Brazil", "SGD": "Singapore", "SEK": "Sweden", "DKK": "Denmark", "NOK": "Norway",
+               "ZAR": "South Africa", "MXN": "Mexico", "IDR": "Indonesia", "THB": "Thailand", "PLN": "Poland"}
+EUR_EXCHANGE = {"AMS": "Netherlands", "BME": "Spain", "EPA": "France", "ETR": "Germany", "BIT": "Italy",
+                "EBR": "Belgium", "ELI": "Portugal", "HEL": "Finland", "ISE": "Ireland", "VIE": "Austria"}
+
+
+def country_of(ticker: str, reporting_ccy: str | None, listed: str) -> str:
+    """Where the business is (2026-10-20): the reporting currency's country (NetEase reports in yuan: China, though
+    incorporated in the Cayman Islands); euro reporters by their exchange; USD and others by the listed country."""
+    if reporting_ccy in CCY_COUNTRY:
+        return CCY_COUNTRY[reporting_ccy]
+    ex = Ticker(ticker).exchange
+    if reporting_ccy == "EUR" and ex in EUR_EXCHANGE:
+        return EUR_EXCHANGE[ex]
+    return listed or ("United States" if not ex else ex)
+
+
 def build_data(live: bool = True) -> dict:
     cfg = load_config()
     port = ROOT / "portfolio"
     near_pct = float(cfg["entry"].get("near_pct", 10))
     state = json.loads((port / "state.json").read_text()) if (port / "state.json").exists() else {"holdings": {}, "cash_usd": 0}
     start = float(cfg["portfolio"]["starting_cash_usd"])
-    names = {r["ticker"]: r["name"] for r in _csv(ROOT / "universe" / "universe.csv")}
+    uni = _csv(ROOT / "universe" / "universe.csv")
+    names = {r["ticker"]: r["name"] for r in uni}
+    listed = {r["ticker"]: r.get("country", "") for r in uni}
     hold = []
     recv = sum(r["net_usd"] for r in state.get("receivables", []))  # dividends past the ex-date, not yet paid
     total = state.get("cash_usd", 0.0) + recv + sum(h.get("market_value_usd", 0.0) for h in state["holdings"].values())
@@ -187,6 +208,11 @@ def build_data(live: bool = True) -> dict:
     sectors: dict[str, float] = {}
     for h in hold:
         sectors[h["sector"] or "Unknown"] = sectors.get(h["sector"] or "Unknown", 0) + h["weight"]
+    countries: dict[str, float] = {}  # where the business is: the reporting currency's country, else the listing
+    for h in hold:
+        c = country_of(h["ticker"], state["holdings"][h["ticker"]].get("reporting_currency"), listed.get(h["ticker"], ""))
+        h["country"] = c
+        countries[c] = countries.get(c, 0) + h["weight"]
     vals = _csv(port / "valuations.csv")
     ser = series(vals, start)
     all_ledger = _csv(port / "ledger.csv")
@@ -241,6 +267,7 @@ def build_data(live: bool = True) -> dict:
         "week": week, "series": ser, "live_point": live_pt, "holdings": hold, "interest": state.get("cash_interest"),
         "regime": __import__("regime").latest(dt.date.today().isoformat()),
         "sectors": sorted(([k, v] for k, v in sectors.items()), key=lambda kv: -kv[1]),
+        "countries": sorted(([k, v] for k, v in countries.items()), key=lambda kv: -kv[1]),
         "ledger": [{k: r.get(k, "") for k in ("date", "ticker", "type", "side", "shares", "fill_price", "currency",
                                               "fill_close_date", "gross_usd", "costs_usd", "reason")} for r in ledger],
         "decisions": [{k: d.get(k, "") for k in ("date", "ticker", "type", "decision", "conviction", "price", "currency",
@@ -310,6 +337,8 @@ box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;z-index:10}.tip b{font-weight
 .empty{color:var(--ink2);padding:24px 0;text-align:center}details summary{cursor:pointer;color:var(--ink2);font-size:13px;margin-top:8px}
 a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px;border:1px solid var(--ring);font-size:12px;color:var(--ink2)}
 .tabs{display:flex;gap:4px;margin:8px 0;border-bottom:1px solid var(--grid)}
+.tab2{background:none;border:0;border-bottom:2px solid transparent;color:var(--ink2);padding:6px 10px;margin-bottom:-1px;cursor:pointer;font:inherit;font-size:14px}
+.tab2[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--s1)}
 .tab{background:none;border:0;border-bottom:2px solid transparent;color:var(--ink2);padding:6px 10px;margin-bottom:-1px;cursor:pointer;font:inherit;font-size:14px}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--s1);font-weight:600}
 .ranges{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 8px}
@@ -332,7 +361,8 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 <details><summary>Show as a table</summary><div class="tw"><table id="lineTable"></table></div></details></section>
 <div class="grid2"><section class="card"><h2>Holdings by weight</h2><div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Core</span>
 <span><span class="sw" style="background:var(--s2)"></span>Tactical</span></div><div id="bars"></div></section>
-<section class="card"><h2>Sectors</h2><div class="sub">% of the portfolio (cash excluded)</div><div id="sectors"></div></section></div>
+<section class="card"><h2>Sectors &amp; countries</h2><div class="tabs" role="tablist"><button type="button" role="tab" class="tab2" data-mix="sectors">Sectors</button><button type="button" role="tab" class="tab2" data-mix="countries">Countries</button></div>
+<div class="sub" id="mixSub"></div><div id="sectors"></div></section></div>
 <div class="grid2"><section class="card"><h2>Risk</h2><div class="sub" id="riskSub"></div>
 <div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Share of portfolio risk</span><span><span class="sw" style="background:var(--axis)"></span>Share of invested money</span></div>
 <div id="risk"></div><details><summary>Show as a table</summary><div class="tw"><table id="riskTable"></table></div></details></section>
@@ -374,8 +404,8 @@ $('tiles').append(
  D.inception?tile('Whole portfolio (incl. cash)',D.since==null?'n/a':pct(D.since*100),D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
   :tile('Whole portfolio (incl. cash)','–','starts with the first trade'),
  (()=>{const s=D.series,a=s.length>1?s[s.length-2]:null,b=s.length?s[s.length-1]:null;
-  if(D.live_total!=null&&D.total&&D.holdings.some(h=>h.live_day_pct!=null))return tile('Today (whole portfolio)',pct((D.live_total/D.total-1)*100),`live ${D.live_at} · ${(D.live_total>=D.total?'+':'−')+usd(Math.abs(D.live_total-D.total))} vs the ${D.close_date} close`,cls(D.live_total-D.total));
-  if(a&&b&&a.value&&b.value)return tile('Latest day (whole portfolio)',pct((b.value/a.value-1)*100),`${b.date} vs ${a.date} · ${(b.value>=a.value?'+':'−')+usd(Math.abs(b.value-a.value))}`,cls(b.value-a.value));
+  if(D.live_total!=null&&D.total&&D.holdings.some(h=>h.live_day_pct!=null))return tile('Last 24h (whole portfolio)',pct((D.live_total/D.total-1)*100),`live ${D.live_at} · ${(D.live_total>=D.total?'+':'−')+usd(Math.abs(D.live_total-D.total))} vs the ${D.close_date} close`,cls(D.live_total-D.total));
+  if(a&&b&&a.value&&b.value)return tile('Last 24h (whole portfolio)',pct((b.value/a.value-1)*100),`${b.date} vs ${a.date} · ${(b.value>=a.value?'+':'−')+usd(Math.abs(b.value-a.value))}`,cls(b.value-a.value));
   return tile('Latest day (whole portfolio)','n/a','');})(),
  tile('This week (whole portfolio)',D.week?pct(D.week.portfolio*100):'n/a',D.week&&D.week.spy!=null?'SPY '+pct(D.week.spy*100):'',''),
  tile('Cash',usd(D.cash),(D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':'')+(D.interest?` · earns ${D.interest.aer_pct}% AER, ${usd(D.interest.total_usd)} so far`:'')+(D.receivable?` · ${usd(D.receivable,2)} dividends due`:'')),
@@ -456,7 +486,12 @@ function hbars(box,items,emptyMsg){box.replaceChildren();if(!items.length){box.a
   svg.append(hit);});box.append(svg);}
 function drawAll(){drawLine();riskBars();
  hbars($('bars'),D.holdings.map(h=>({label:h.ticker,v:h.weight,c:h.type==='CORE'?'--s1':'--s2',tip:`${h.ticker} ${h.name} · ${h.type.toLowerCase()} · ${usd(h.value)}`})),'No holdings yet.');
- hbars($('sectors'),D.sectors.map(([s,v])=>({label:s,v})),'No holdings yet.');}
+ drawMix();}
+let MIX='sectors';try{MIX=localStorage.getItem('mixTab')||MIX}catch(e){}if(!['sectors','countries'].includes(MIX))MIX='sectors';
+function drawMix(){document.querySelectorAll('.tab2').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mix===MIX)));
+ $('mixSub').textContent=MIX==='sectors'?'% of the portfolio (cash not shown)':"% of the portfolio (cash not shown), by where the business is: the country of the currency a company reports in (NetEase reports in yuan: China, not its Cayman Islands incorporation), else where it's listed.";
+ hbars($('sectors'),(D[MIX]||[]).map(([s,v])=>({label:s,v,tip:s+' · '+D.holdings.filter(h=>(MIX==='sectors'?h.sector:h.country)===s).map(h=>h.ticker).join(', ')})),'No holdings yet.');}
+document.querySelectorAll('.tab2').forEach(b=>b.onclick=()=>{MIX=b.dataset.mix;try{localStorage.setItem('mixTab',MIX)}catch(e){}drawMix();});
 // ---- risk: paired bars (risk share vs share of invested money)
 function riskBars(){const box=$('risk');box.replaceChildren();const R=D.risk;
  if(!R||!R.rows.some(r=>r.risk_share_pct!=null)){box.append(el('div',{class:'empty'},'Appears after the first weekly risk report.'));return;}
@@ -497,15 +532,15 @@ function table(id,cols,rows,empty){const t=$(id);t.append(el('tr',{},...cols.map
  rows.forEach(r=>t.append(el('tr',{},...cols.map(c=>{const v=c.f(r);const td=el('td',{class:(c.n?'n ':'')+(c.w?'w ':'')+(c.c?c.c(r):'')});
   if(v instanceof Node)td.append(v);else td.textContent=v;return td;}))));}
 const link=(path,txt)=>D.repo&&path?el('a',{href:`${D.repo}/blob/main/${path}`,target:'_blank',rel:'noopener'},txt):txt;
-const dayOf=r=>r.live_day_pct!=null?{p:r.live_day_pct,u:r.live_day_usd,t:'live vs the '+r.last_date+' close'}:
- (r.day_pct!=null?{p:r.day_pct,u:r.day_usd,t:r.prev_date==='bought at the open'?`${r.last_date} close vs our fill at the open`:`${r.last_date} close vs ${r.prev_date}`}:null);
+const dayOf=r=>r.live_day_pct!=null?{p:r.live_day_pct,u:r.live_day_usd,t:'last 24h: live price vs the '+r.last_date+' close'}:
+ (r.day_pct!=null?{p:r.day_pct,u:r.day_usd,t:r.prev_date==='bought at the open'?`last session: ${r.last_date} close vs our fill at the open`:`last session: ${r.last_date} close vs the ${r.prev_date} close`}:null);
 const chg=d=>{if(!d)return '–';const c=d.p>0.005?'up':d.p<-0.005?'down':'flat';
  const b=el('span',{class:'chg '+c,title:d.t},(c==='up'?'▲ ':c==='down'?'▼ ':'')+pct(d.p,2));
  if(d.u!=null)b.append(el('small',{},(d.u>=0?'+':'−')+usd(Math.abs(d.u))));return b;};
-table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Today',n:1,f:r=>chg(dayOf(r))},{h:'Name',f:r=>r.name},{h:'Type',f:r=>r.type.toLowerCase()},{h:'Conv.',n:1,f:r=>r.conviction??''},
+table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>r.name},{h:'Type',f:r=>r.type.toLowerCase()},{h:'Conv.',n:1,f:r=>r.conviction??''},
  {h:'Entry',f:r=>r.entry_date},{h:'Entry price',n:1,f:r=>r.entry_price==null?'':px(r.entry_price)+' '+r.currency},{h:'Close',n:1,f:r=>r.last_price==null?'':`${px(r.last_price)} ${r.currency} (${r.last_date})`},
- {h:'Change',n:1,f:r=>pct(r.change_pct,1),c:r=>cls(r.change_pct)},
- {h:'Live',n:1,f:r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–'},{h:'Live change',n:1,f:r=>r.live_change_pct==null?'–':pct(r.live_change_pct,1),c:r=>cls(r.live_change_pct)},{h:'Value',n:1,f:r=>usd(r.value)},{h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},
+ {h:'Since entry',n:1,f:r=>pct(r.live_change_pct!=null&&r.live_day_pct!=null?r.live_change_pct:r.change_pct,1),c:r=>cls(r.live_day_pct!=null?r.live_change_pct:r.change_pct)},
+ {h:'Live',n:1,f:r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–'},{h:'24h change',n:1,f:r=>chg(dayOf(r))},{h:'Value',n:1,f:r=>usd(r.value)},{h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},
  {h:'P/L',n:1,f:r=>r.pl==null?'':usd(r.pl),c:r=>cls(r.pl)},{h:'Plan',w:1,f:r=>r.plan}],D.holdings,'No holdings yet: the portfolio is all cash.');
 const isHold=r=>r.action==='HOLD';
 table('pending',[{h:'Placed',f:r=>r.placed},{h:'Action',f:r=>r.action},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},
