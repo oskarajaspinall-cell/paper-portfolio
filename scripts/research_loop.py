@@ -174,6 +174,7 @@ def batch_add(t: str | None, flush: bool = False) -> None:
 
 
 cfg = load_config()
+OPTS = {"no_prescreen": False, "why": "New initiation from the global core screen. Decide BUY or AVOID."}
 hits: list[str] = []
 hit_rows: dict[str, dict] = {}
 
@@ -246,7 +247,8 @@ def attempt(t):
             log("== research loop pausing for the weekly run")
         return t, "not started"
     asof = dt.date.today().isoformat()
-    if t not in hits:  # owner 2026-10-12: a free mechanical gate first; entry-price hits are never gated
+    if t not in hits and not OPTS["no_prescreen"]:  # owner 2026-10-12: a free mechanical gate first; hits and
+        # owner requests (--no-prescreen) are never gated
         try:
             row = prescreen.check(t, asof, Fetcher(), cfg)
             prescreen.record(row)
@@ -260,7 +262,7 @@ def attempt(t):
     try:
         log(f"== initiate {t}")
         why = (wr.entry_hit_reason(hit_rows[t]) if t in hit_rows else
-               "New initiation from the global core screen. Decide BUY or AVOID.")
+               OPTS["why"])
         ev = wr.research_and_evaluate(t, "CORE", asof, why, agent, log, run)
         rec = subprocess.run([str(ROOT / "bin" / "py"), "scripts/decision_log.py", "record", str(ev.relative_to(ROOT)),
                               "--asof", asof], cwd=ROOT, capture_output=True, text=True)
@@ -316,8 +318,13 @@ def main(argv=None) -> int:
     ap.add_argument("cmd", choices=["run", "rank"])
     ap.add_argument("run_dir", help="runs/<name>")
     ap.add_argument("--cache-date", default=dt.date.today().isoformat(), help="rank: the page-cache day to screen")
+    ap.add_argument("--no-prescreen", action="store_true", help="run: research every name (owner requests)")
+    ap.add_argument("--why", help="run: the reason given to the researcher (default: the global core screen)")
     a = ap.parse_args(argv)
     run = (ROOT / a.run_dir).resolve()
+    OPTS["no_prescreen"] = a.no_prescreen
+    if a.why:
+        OPTS["why"] = a.why
     if a.cmd == "rank":
         rank(run, a.cache_date)
         return 0

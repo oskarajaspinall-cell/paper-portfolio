@@ -2,13 +2,15 @@
 # Start the bulk research loop (scripts/research_loop.py) in the background, detached from the terminal, keeping the
 # Mac awake while it runs. It continues where it stopped (stocks already evaluated are skipped).
 #   bin/research-loop runs/<name>          e.g. bin/research-loop runs/2026-10-18-global
+#   bin/research-loop runs/<name> --no-prescreen --why "Owner request..."   research every name in the queue
 # Build a new queue first with: bin/py scripts/research_loop.py rank runs/<name> [--cache-date YYYY-MM-DD]
 # Progress: runs/<name>/run.log (batch reports in reports/research/). Stop: pkill -f "research_loop.py run"
 set -u
 cd "$(dirname "$0")/.." || exit 1
-RUN="${1:?usage: bin/research-loop runs/<name>}"
+RUN="${1:?usage: bin/research-loop runs/<name> [--no-prescreen] [--why TEXT]}"
+shift
 [ -f "$RUN/loop-queue.json" ] || { echo "no queue at $RUN/loop-queue.json (build one with scripts/research_loop.py rank $RUN)"; exit 1; }
 if pgrep -f "research_loop.py run" >/dev/null; then echo "a research loop is already running"; exit 1; fi
-nohup /usr/bin/caffeinate -i bin/py scripts/research_loop.py run "$RUN" >> "$RUN/loop.out" 2>&1 &
+nohup /usr/bin/caffeinate -i bin/py scripts/research_loop.py run "$RUN" "$@" >> "$RUN/loop.out" 2>&1 &
 disown
 echo "research loop started (pid $!); progress in $RUN/run.log"
