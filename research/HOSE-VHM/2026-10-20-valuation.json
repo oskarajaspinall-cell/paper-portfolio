@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Land Subdividers and Developers, Except Cemeteries",
+  "known": false,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": ""
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -153424.8739455443,
+    "base": 165342.11448524467,
+    "bull": 262294.5215493378
+   },
+   "implied_growth": -0.0688175438468239,
+   "discount_rate": 0.10282085667029711,
+   "cost_of_equity": 0.126888,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.06192683342028733,
+     "base": 0.13953870332400187,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.30628732464448477,
+     "base": 0.3088610256447507,
+     "bull": 0.3088610256447507
+    },
+    "cagr_3y": 0.34930114645543275,
+    "cagr_5y": 0.15885366684057467,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 12242.427771850082,
+    "base": 15613.754389295495,
+    "bull": 86271.82287116868
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.698,
+     "base": 8.529,
+     "bull": 8.731
+    },
+    "ttm_ebitda": 99036856000000,
+    "peak_earnings": "TTM EBITDA is 3.4x its 5y median: bear/base use the 5y average (3.333e+13), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 60300,
+ "risk_free": 0.0509,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "VND",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -98202.44003974617,
+  "base": 115432.66111992828,
+  "bull": 203620.28865661475
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -2.6285645114385767,
+  "base": 0.9143061545593412,
+  "bull": 2.3767875399106924
+ },
+ "implied_growth": -0.0688175438468239,
+ "ticker": "HOSE:VHM",
+ "asof": "2026-10-20",
+ "quote_currency": "VND",
+ "financials_currency": "VND",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-19",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hose/VHM/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hose/VHM/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hose/VHM/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hose/VHM/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hose/VHM/statistics/"
+ }
+}

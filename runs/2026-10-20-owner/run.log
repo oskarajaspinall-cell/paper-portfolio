@@ -1,0 +1,53 @@
+[04:55:54] == research loop: 2 names queued, best first: ['ADX:ADNOCLS', 'HOSE:VHM']
+[04:55:54] == initiate ADX:ADNOCLS
+[04:55:54] == initiate HOSE:VHM
+[04:55:54] $ bin/py scripts/sec_delta.py ADX:ADNOCLS --asof 2026-10-20
+[04:55:54] $ bin/py scripts/sec_delta.py HOSE:VHM --asof 2026-10-20
+[04:55:54] SKIP ADX:ADNOCLS: not a US listing (SEC filers only)
+[04:55:54] $ claude -p Ticker ADX:ADNOCLS, note type CORE, date 2026-10-20. Owner request: research this top-100 global core screen name (it previously failed only because stockanalysis.com shows no sector; the sector is now mapped from its industry). Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:55:54] SKIP HOSE:VHM: not a US listing (SEC filers only)
+[04:55:54] $ claude -p Ticker HOSE:VHM, note type CORE, date 2026-10-20. Owner request: research this top-100 global core screen name (it previously failed only because stockanalysis.com shows no sector; the sector is now mapped from its industry). Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:59:57] research/ADX-ADNOCLS/2026-10-20.md
+research/ADX-ADNOCLS/factsheet-2026-10-20.md
+OK research/ADX-ADNOCLS/2026-10-20.md type=CORE 1=70 2=144 3=143 4=57 5=88 6=89 total=591
+
+Data conflicts: none.
+
+Blocked/failed fetches: https://adnocls.ae (company website, not yet on allowlist/ir_domains.txt — blocked by allowlist hook); https://www.reuters.com/world/middle-east/adnoc-ls-lifts-annual-outlook-q2-profit-quadruples-2026-08-11/ (allowlisted domain, but WebFetch tool itself failed to retrieve it — not used for any data, only cited as a headline).
+[04:59:57] $ bin/py scripts/check_docs.py note research/ADX-ADNOCLS/2026-10-20.md
+[04:59:57] OK research/ADX-ADNOCLS/2026-10-20.md type=CORE 1=70 2=144 3=143 4=57 5=88 6=89 total=591
+[04:59:57] $ bin/py scripts/macro_data.py --asof 2026-10-20
+[05:00:20] {"out": "reports/macro/2026-10-20.md", "series": 11, "unavailable": []}
+[05:00:20] $ claude -p Ticker ADX:ADNOCLS, date 2026-10-20. Research: research/ADX-ADNOCLS/factsheet-2026-10-20.md, research/ADX-ADNOCLS/2026-10-20.md. Macro snapshot: reports/macro/2026-10-20.md. Write research/ADX-ADNOCLS/2026-10-20-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:01:16] research/HOSE-VHM/2026-10-20.md
+research/HOSE-VHM/factsheet-2026-10-20.md
+OK research/HOSE-VHM/2026-10-20.md type=CORE 1=43 2=131 3=147 4=75 5=73 6=63 total=532
+
+No data conflicts. No blocked URLs — the only non-stockanalysis.com domain considered (vinhomes.vn) was not fetched, since it is not recorded in `universe/ir_domains.txt` or shown as a website line on the fact sheet; the company description used instead comes from stockanalysis.com's own company-profile page (already cached, zero extra fetches, 0 of the 6-fetch CORE cap used). No fact sheet news headlines were available (Recent news: [data unavailable]).
+[05:01:16] $ bin/py scripts/check_docs.py note research/HOSE-VHM/2026-10-20.md
+[05:01:16] OK research/HOSE-VHM/2026-10-20.md type=CORE 1=43 2=131 3=147 4=75 5=73 6=63 total=532
+[05:01:16] $ claude -p Ticker HOSE:VHM, date 2026-10-20. Research: research/HOSE-VHM/factsheet-2026-10-20.md, research/HOSE-VHM/2026-10-20.md. Macro snapshot: reports/macro/2026-10-20.md. Write research/HOSE-VHM/2026-10-20-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:01:31] research/ADX-ADNOCLS/2026-10-20-macro.md
+OK research/ADX-ADNOCLS/2026-10-20-macro.md macro_weight=context words=67
+[05:01:31] $ bin/py scripts/check_docs.py macro research/ADX-ADNOCLS/2026-10-20-macro.md
+[05:01:31] OK research/ADX-ADNOCLS/2026-10-20-macro.md macro_weight=context words=67
+[05:01:31] $ claude -p Evaluate ADX:ADNOCLS for 2026-10-20: fact sheet research/ADX-ADNOCLS/factsheet-2026-10-20.md, note research/ADX-ADNOCLS/2026-10-20.md, state portfolio/state.json, macro overlay research/ADX-ADNOCLS/2026-10-20-macro.md. Owner request: research this top-100 global core screen name (it previously failed only because stockanalysis.com shows no sector; the sector is now mapped from its industry). Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:02:09] research/ADX-ADNOCLS/2026-10-20-evaluation.md
+OK research/ADX-ADNOCLS/2026-10-20-evaluation.md Bear case=134 Bull case=82 decision=AVOID
+[05:02:09] $ bin/py scripts/check_docs.py eval research/ADX-ADNOCLS/2026-10-20-evaluation.md
+[05:02:09] OK research/ADX-ADNOCLS/2026-10-20-evaluation.md Bear case=134 Bull case=82 decision=AVOID
+[05:02:09] $ bin/py scripts/valuation.py ADX:ADNOCLS --asof 2026-10-20 --eval research/ADX-ADNOCLS/2026-10-20-evaluation.md
+[05:02:09] {"out": "research/ADX-ADNOCLS/2026-10-20-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -11.78, "base": 8.04, "bull": 11.69}, "price": 7.37}
+[05:02:10] == done ADX:ADNOCLS
+[05:02:22] research/HOSE-VHM/2026-10-20-macro.md
+OK research/HOSE-VHM/2026-10-20-macro.md macro_weight=context words=72
+[05:02:22] $ bin/py scripts/check_docs.py macro research/HOSE-VHM/2026-10-20-macro.md
+[05:02:22] OK research/HOSE-VHM/2026-10-20-macro.md macro_weight=context words=72
+[05:02:22] $ claude -p Evaluate HOSE:VHM for 2026-10-20: fact sheet research/HOSE-VHM/factsheet-2026-10-20.md, note research/HOSE-VHM/2026-10-20.md, state portfolio/state.json, macro overlay research/HOSE-VHM/2026-10-20-macro.md. Owner request: research this top-100 global core screen name (it previously failed only because stockanalysis.com shows no sector; the sector is now mapped from its industry). Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:03:18] research/HOSE-VHM/2026-10-20-evaluation.md
+OK research/HOSE-VHM/2026-10-20-evaluation.md Bear case=138 Bull case=93 decision=AVOID
+[05:03:18] $ bin/py scripts/check_docs.py eval research/HOSE-VHM/2026-10-20-evaluation.md
+[05:03:18] OK research/HOSE-VHM/2026-10-20-evaluation.md Bear case=138 Bull case=93 decision=AVOID
+[05:03:18] $ bin/py scripts/valuation.py HOSE:VHM --asof 2026-10-20 --eval research/HOSE-VHM/2026-10-20-evaluation.md
+[05:03:18] {"out": "research/HOSE-VHM/2026-10-20-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -98202.44, "base": 115432.66, "bull": 203620.29}, "price": 60300}
+[05:03:19] == done HOSE:VHM
