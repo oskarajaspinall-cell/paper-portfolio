@@ -575,7 +575,7 @@ def test_daily_valuation_rows(tmp_path):
     from portfolio import VAL_COLS, record_valuation
     path = tmp_path / "valuations.csv"
     base = {k: "" for k in VAL_COLS}
-    assert record_valuation(path, {**base, "date": "2026-10-09", "phase": "post", "total_usd": 100}) == "appended"
+    assert record_valuation(path, {**base, "date": "2026-10-09", "phase": "pre", "total_usd": 100}) == "appended"
     # the weekly run already valued that close: no duplicate daily row
     assert record_valuation(path, {**base, "date": "2026-10-09", "phase": "daily", "total_usd": 100}) == "skipped"
     assert record_valuation(path, {**base, "date": "2026-10-12", "phase": "daily", "total_usd": 101}) == "appended"
@@ -583,7 +583,10 @@ def test_daily_valuation_rows(tmp_path):
     assert record_valuation(path, {**base, "date": "2026-10-12", "phase": "daily", "total_usd": 102}) == "replaced"
     rows = read_csv(path)
     assert [(r["date"], r["phase"], r["total_usd"]) for r in rows] == [
-        ("2026-10-09", "post", "100"), ("2026-10-12", "daily", "102")]
+        ("2026-10-09", "pre", "100"), ("2026-10-12", "daily", "102")]
+    # trades valued before the close (an afternoon fill): the closing valuation replaces that row
+    assert record_valuation(path, {**base, "date": "2026-10-13", "phase": "post", "total_usd": 103}) == "appended"
+    assert record_valuation(path, {**base, "date": "2026-10-13", "phase": "daily", "total_usd": 104}) == "replaced"
     assert record_valuation(path, {**base, "date": "2026-10-09", "phase": "daily", "total_usd": 99}) == "skipped"
 
 

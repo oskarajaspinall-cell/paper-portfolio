@@ -39,8 +39,12 @@ bin/with-timeout 600 bin/py scripts/funding_queue.py review --asof "$ASOF" || ec
 bin/with-timeout 600 bin/py scripts/attribution.py report --asof "$ASOF" || echo "!! attribution not updated"
 bin/with-timeout 300 bin/py scripts/risk.py report --asof "$ASOF" || echo "!! risk report not updated"
 bin/with-timeout 600 bin/py scripts/decision_log.py update --asof "$ASOF" || echo "!! decision scores not updated"
+# The run's plain-English summary (owner request 2026-10-21): reports/daily/<date>.md + a Mac notification
+HEAD_LINE=$(bin/with-timeout 120 bin/py scripts/daily_summary.py --asof "$ASOF" --log "$LOG") || HEAD_LINE="summary not written"
+echo "summary: $HEAD_LINE"
+osascript -e "display notification \"${HEAD_LINE//\"/}\" with title \"Paper portfolio: 21:30 run\" subtitle \"reports/daily/$(date +%F).md\"" 2>/dev/null || true
 if git diff --quiet -- portfolio; then echo "nothing changed"; exit 0; fi
 bin/with-timeout 600 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
-git add -A -- portfolio docs reports/entry-watch reports/regime reports/dip-radar reports/attribution reports/risk "$LOG"
+git add -A -- portfolio docs reports/entry-watch reports/regime reports/dip-radar reports/attribution reports/risk reports/daily "$LOG"
 git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
 echo "== end $(date)"

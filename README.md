@@ -160,6 +160,7 @@ sector weights, recent trades, decisions and hit rates.
 
 | File | What it is |
 |---|---|
+| `reports/daily/<date>.md` | What each weekday 21:30 run did, in plain English: value and day's change, trades, best and worst movers, cash reserve, funding queue, watchlist hits, problems |
 | `reports/weekly/<date>.md` | Weekly report: summary, trades (and rejections with the rule broken), returns vs SPY, review notes, hit rates |
 | `reports/screen/<date>.md` | The screen's rankings and the week's picks |
 | `docs/index.html` | The dashboard (also the public GitHub Pages site) |

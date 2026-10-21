@@ -350,13 +350,14 @@ def spy_div_cum(mkt: Market, vals: list[dict], through: str) -> float | None:
 
 def record_valuation(path: Path, row: dict) -> str:
     """Append a valuation row. A "daily" row for a close date that is already valued is not duplicated:
-    it replaces an earlier daily row of that date (same-day re-run) and is skipped when the weekly run
-    already recorded that date."""
+    it replaces an earlier daily or post-trade row of that date (a same-day re-run, or trades valued before the
+    close, e.g. a fill booked in the afternoon: 2026-10-21) and is skipped when the weekly run recorded that
+    date ("pre")."""
     vals = read_csv(path)
     if vals and row["date"] < vals[-1]["date"]:
         return "skipped"  # never dated before the latest valuation (a stale price source would do that)
     if row["phase"] == "daily" and vals and vals[-1]["date"] == row["date"]:
-        if vals[-1]["phase"] != "daily":
+        if vals[-1]["phase"] not in ("daily", "post"):
             return "skipped"
         tmp = path.with_suffix(".rewrite.tmp")
         tmp.unlink(missing_ok=True)
