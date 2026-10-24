@@ -1,0 +1,37 @@
+$ bin/py scripts/portfolio.py fill-pending --asof 2026-10-24 --save runs/2026-10-24/fills.json
+{
+ "applied": [],
+ "rejected": [],
+ "still_pending": [],
+ "expired": []
+}
+$ bin/py scripts/corporate_actions.py check --asof 2026-10-24
+{
+ "dry_run": false,
+ "applied": [],
+ "receivables": [],
+ "upcoming": [
+  {
+   "ticker": "ZTS",
+   "ex_date": "2026-10-30",
+   "pay_date": "2026-12-01",
+   "amount": 0.53,
+   "currency": "USD"
+  }
+ ],
+ "notes": []
+}
+$ bin/py scripts/portfolio.py mark --asof 2026-10-24
+{"total": 106374.25, "cash": 16948.49, "core": 89425.76, "tactical": 0, "receivable": 0, "sectors": {"Healthcare": 15614.689999999999, "Consumer Discretionary": 23264.97, "Technology": 28258.95, "Communication Services": 14321.25, "Industrials": 7965.9}, "n": 12}
+$ bin/py scripts/macro_data.py --asof 2026-10-24
+{"out": "reports/macro/2026-10-24.md", "series": 11, "unavailable": []}
+$ bin/py scripts/regime.py --asof 2026-10-24
+{"asof": "2026-10-24", "stress": 24.7, "score_regime": "risk_on", "score_reserve_pct": 12.5, "final_regime": "risk_on", "reserve_pct": 12.5, "drawdown_pct": 2.39}
+$ claude -p Date 2026-10-24. Regime score: reports/regime/2026-10-24.md. Macro snapshot: reports/macro/2026-10-24.md. Write reports/regime/2026-10-24-view.md. --agent macro-strategist --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Failed to authenticate: OAuth session expired and could not be refreshed
+!! MACRO VIEW UNAVAILABLE (the mechanical score stands): claude -p Date 2026-10-24. Regime score: reports/regime/2026-10-24.md. Macro snapshot: reports/macro/2026-10-24.md. Write reports/regime/2026-10-24-view.md. --agent macro-strategist --permission-mode dontAsk --allowedTools Read,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text exited 1: 
+$ bin/py scripts/weekly_scan.py --asof 2026-10-24 --out runs/2026-10-24
+{"flagged_for_review": ["DECK", "GDDY", "HKG:9999", "INTU"], "reinitiate": [], "mechanical_exits": [], "trims": [], "unflagged": 8, "scan": "runs/2026-10-24/scan.json"}
+$ claude -p Scan file runs/2026-10-24/scan.json, date 2026-10-24. Write runs/2026-10-24/reviews.md. --agent weekly-reviewer --permission-mode dontAsk --allowedTools Read,WebFetch,Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+Failed to authenticate: OAuth session expired and could not be refreshed
+FAILED: claude -p Scan file runs/2026-10-24/scan.json, date 2026-10-24. Write runs/2026-10-24/reviews.md. --agent weekly-reviewer --permission-mode dontAsk --allowedTools Read,WebFetch,Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text exited 1: 

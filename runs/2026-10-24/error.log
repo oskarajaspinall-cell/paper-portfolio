@@ -1,0 +1,14 @@
+Weekly run 2026-10-24 FAILED at step: review
+claude -p Scan file runs/2026-10-24/scan.json, date 2026-10-24. Write runs/2026-10-24/reviews.md. --agent weekly-reviewer --permission-mode dontAsk --allowedTools Read,WebFetch,Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text exited 1: 
+
+Traceback (most recent call last):
+  File "/Users/oskaraspinall/paper-portfolio/scripts/weekly_run.py", line 254, in run
+    agent("weekly-reviewer", f"Scan file runs/{asof}/scan.json, date {asof}. "
+  File "/Users/oskaraspinall/paper-portfolio/scripts/weekly_run.py", line 79, in claude_agent
+    return sh(["claude", "-p", prompt, "--agent", name, "--permission-mode", "dontAsk", "--allowedTools", TOOLS[name],
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/oskaraspinall/paper-portfolio/scripts/weekly_run.py", line 73, in sh
+    raise StepFailed(f"{' '.join(args)} exited {p.returncode}: {p.stderr.strip()[-2000:]}")
+StepFailed: claude -p Scan file runs/2026-10-24/scan.json, date 2026-10-24. Write runs/2026-10-24/reviews.md. --agent weekly-reviewer --permission-mode dontAsk --allowedTools Read,WebFetch,Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text exited 1: 
+
+No trades from this run were applied; portfolio/ restored.
