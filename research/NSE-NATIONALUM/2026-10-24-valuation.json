@@ -1,0 +1,113 @@
+{
+ "industry": {
+  "industry": "Aluminum",
+  "known": true,
+  "best": "NAV / normalized DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav",
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 1.2407110110837676,
+    "base": 308.8543687501634,
+    "bull": 455.76828858054336
+   },
+   "implied_growth": 0.039614707233011484,
+   "discount_rate": 0.11072498292521323,
+   "cost_of_equity": 0.11075600000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.01174135105143699,
+     "base": 0.046535721518624715,
+     "bull": 0.07766018397162489
+    },
+    "cash_flow_margin": {
+     "bear": -0.03836898610843209,
+     "base": 0.19081812741565352,
+     "bull": 0.2634304598802809
+    },
+    "cagr_3y": 0.07766018397162489,
+    "cagr_5y": 0.058482702102873985,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 150.381533775761,
+    "base": 173.86744348257554,
+    "bull": 444.09452616850854
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.744,
+     "base": 4.595,
+     "bull": 7.951
+    },
+    "ttm_ebitda": 91699425000,
+    "peak_earnings": "TTM EBITDA is 2.0x its 5y median: bear/base use the 5y average (5.068e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 301.75,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.02,
+ "reporting_currency": "INR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 50.95431859930951,
+  "base": 263.85872699430075,
+  "bull": 451.8770344431984
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8311373037305402,
+  "base": -0.1255717415267581,
+  "bull": 0.49752124090537997
+ },
+ "implied_growth": 0.039614707233011484,
+ "ticker": "NSE:NATIONALUM",
+ "asof": "2026-10-24",
+ "quote_currency": "INR",
+ "financials_currency": "INR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-23",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/nse/NATIONALUM/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/nse/NATIONALUM/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/nse/NATIONALUM/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/nse/NATIONALUM/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/nse/NATIONALUM/statistics/"
+ }
+}

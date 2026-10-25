@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Staffing & Employment Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 28.786564144777618,
+    "base": 40.240859964546054,
+    "bull": 72.78361927833566
+   },
+   "implied_growth": -0.0012242143227386578,
+   "discount_rate": 0.09018353310959595,
+   "cost_of_equity": 0.10466700000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.04627531334377398,
+     "base": -0.005937725967668322,
+     "bull": -0.005937725967668322
+    },
+    "cash_flow_margin": {
+     "bear": 0.024458025039383137,
+     "base": 0.026847111644246423,
+     "bull": 0.044596642806575944
+    },
+    "cagr_3y": -0.05755062668754796,
+    "cagr_5y": -0.016200277183125333,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 25.166757679180886,
+    "base": 34.82957906712173,
+    "bull": 34.856177474402735
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.987,
+     "base": 11.53,
+     "bull": 11.537
+    },
+    "ttm_ebitda": 668000000
+   }
+  }
+ ],
+ "price": 41.23,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 27.579961989578706,
+  "base": 38.43709966540461,
+  "bull": 60.141138677024685
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.33107053141938614,
+  "base": -0.06773951818082435,
+  "bull": 0.45867423422325215
+ },
+ "implied_growth": -0.0012242143227386578,
+ "ticker": "AMS:RAND",
+ "asof": "2026-10-24",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-23",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/ams/RAND/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/ams/RAND/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/ams/RAND/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/ams/RAND/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/ams/RAND/statistics/"
+ }
+}

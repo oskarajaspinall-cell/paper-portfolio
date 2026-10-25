@@ -1,0 +1,100 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 0.8153973232758621,
+    "base": 1.761948501724138,
+    "bull": 3.68007363362069
+   },
+   "cost_of_equity": 0.0946,
+   "assumptions": {
+    "roe": {
+     "bear": 0.03445,
+     "base": 0.04542,
+     "bull": 0.06765
+    },
+    "justified_pb": {
+     "bear": 0.13577586206896552,
+     "base": 0.29339080459770117,
+     "bull": 0.6127873563218391
+    },
+    "bvps": 6.005466
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 4.6469974676,
+    "base": 8.9647836248,
+    "bull": 19.992774041999997
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 13.438,
+     "base": 25.924,
+     "bull": 28.929
+    },
+    "ttm_eps": 0.691098,
+    "peak_earnings": "TTM EPS is 2.5x its 5y median: bear/base use the 5y average (0.3458), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 11.92,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "AUD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 2.092597371383908,
+  "base": 4.162893542749425,
+  "bull": 9.117640436413792
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8244465292463165,
+  "base": -0.6507639645344442,
+  "bull": -0.23509727882434628
+ },
+ "implied_growth": null,
+ "ticker": "ASX:CGF",
+ "asof": "2026-10-24",
+ "quote_currency": "AUD",
+ "financials_currency": "AUD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-23",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/asx/CGF/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/asx/CGF/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/asx/CGF/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/asx/CGF/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/asx/CGF/statistics/"
+ }
+}

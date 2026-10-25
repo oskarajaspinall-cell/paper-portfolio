@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Electrical Equipment & Parts",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 19.599504082753693,
+    "base": 216.4975706361352,
+    "bull": 700.6743075222719
+   },
+   "implied_growth": 0.15191889954820853,
+   "discount_rate": 0.11256781205664762,
+   "cost_of_equity": 0.1246,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.026714674417121678,
+     "base": 0.12028505034709418,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.022315452026926516,
+     "base": 0.0751389369103743,
+     "bull": 0.18250878543268234
+    },
+    "cagr_3y": 0.08842934883424336,
+    "cagr_5y": 0.34271085255413336,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 174.90786255231103,
+    "base": 258.7827502517532,
+    "bull": 640.289151302689
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.644,
+     "base": 14.601,
+     "bull": 21.919
+    },
+    "ttm_ebitda": 122175666500,
+    "peak_earnings": "TTM EBITDA is 1.7x its 5y median: bear/base use the 5y average (6.423e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 237.6,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 71.36895690593947,
+  "base": 230.5926305080079,
+  "bull": 680.5459221157442
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6996256022477295,
+  "base": -0.029492295841717642,
+  "bull": 1.8642505139551528
+ },
+ "implied_growth": 0.15191889954820853,
+ "ticker": "SHE:300750",
+ "asof": "2026-10-24",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-23",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/she/300750/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/she/300750/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/she/300750/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/she/300750/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/she/300750/statistics/"
+ }
+}

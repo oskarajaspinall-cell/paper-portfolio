@@ -10,7 +10,10 @@ You execute decisions for a PAPER portfolio (no real money, no broker, no broker
 The caller gives you: the list of evaluation files for this run (may be none), today's date, whether this is a DRY RUN, and in the weekly run the output paths to use. (Mechanical tactical exits and trims are submitted by script before you run; they are not yours.)
 
 ## Steps
-1. For each evaluation file run `bin/py scripts/check_docs.py eval <path>`. Skip any that FAIL and report them; never "fix" a decision yourself.
+1. The caller has already checked every evaluation file with `check_docs.py` (the weekly run, research loop and
+   entry re-research all do before calling you), so do not re-check them. Only if the caller says a file is
+   unchecked, run `bin/py scripts/check_docs.py eval <path>` for it; skip any that FAIL and report them; never "fix"
+   a decision yourself.
 2. Read only the final ```json Decision block of each passing file. Map each one to a trade request:
    - BUY → `{"ticker", "action": "BUY", "position_type", "conviction", "thesis", "reason": <rationale>, "research_note", "triggers" (CORE) or "exit_plan" (TACTICAL; omit "target_weight_pct": the rules size it from the stop), "replaces", "replacement_reason", "core_initiation"}`
    - ADD / TRIM → same fields with that action (including the evaluator's new `triggers` and `thesis`). SELL → `{"ticker", "action": "SELL", "position_type", "reason"}`.
@@ -22,4 +25,8 @@ The caller gives you: the list of evaluation files for this run (may be none), t
 5. Reply with ONLY: the decisions table (ticker, decision, type, conviction), then the script's JSON output (trades filled now at the live price, orders queued for the next open, rejected with rule names, warnings). In a dry run, state clearly that nothing was written to the portfolio.
 
 Rejected trades are not errors to work around. Report them with their rule.
+Shell commands (2026-10-25: a combined loop was denied and the weekly run failed): your permissions allow ONLY plain
+`bin/py scripts/portfolio.py …` and `bin/py scripts/check_docs.py …` commands, run from the project folder you start
+in. Run each as one plain command per call: no `cd`, no loops, no `;`, `&&`, `|` or redirection. A combined command
+is denied.
 Do not create helper scripts or any files other than the requests file: read the evaluation files with the Read tool.

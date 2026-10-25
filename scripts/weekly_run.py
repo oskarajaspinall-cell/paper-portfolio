@@ -106,6 +106,14 @@ def discard_partial(ticker: str, asof: str) -> None:
 def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, log, run: Path) -> Path:
     slug = Ticker(ticker).slug
     note, ev = ROOT / "research" / slug / f"{asof}.md", ROOT / "research" / slug / f"{asof}-evaluation.md"
+    if note.exists() and ev.exists():  # a re-run (2026-10-24: the usage limit stopped the first): today's research
+        try:                            # is reused when both documents still pass their checks
+            check_doc("note", note, log)
+            check_doc("eval", ev, log)
+            log(f"== {ticker}: reusing today's research ({ev.relative_to(ROOT)})")
+            return ev
+        except StepFailed as e:
+            log(f"{ticker}: today's research doesn't pass its checks, redoing it: {str(e)[:200]}")
     delta = ""
     if ptype == "CORE":  # SEC filing delta (scripts/sec_delta.py): context only, a failure never blocks research
         try:

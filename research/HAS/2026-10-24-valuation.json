@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Leisure",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 8.546802732121174,
+    "base": 115.53719844329312,
+    "bull": 115.53719844329312
+   },
+   "implied_growth": -0.020557028699931763,
+   "discount_rate": 0.08078973998383093,
+   "cost_of_equity": 0.0896,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.0549763181175557,
+     "base": -0.023895830496010555,
+     "bull": -0.023895830496010555
+    },
+    "cash_flow_margin": {
+     "bear": 0.049032984445165365,
+     "base": 0.2403327099015634,
+     "bull": 0.2403327099015634
+    },
+    "cagr_3y": -0.07063068574893083,
+    "cagr_5y": -0.07495263623511139,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 58.703138893766464,
+    "base": 75.2747209833187,
+    "bull": 166.11160105355575
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.661,
+     "base": 14.296,
+     "bull": 17.544
+    },
+    "ttm_ebitda": 1466800000,
+    "peak_earnings": "TTM EBITDA is 1.6x its 5y median: bear/base use the 5y average (8.954e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 117.44,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 25.265581452669604,
+  "base": 102.11637262330164,
+  "bull": 132.395332646714
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7848639181482493,
+  "base": -0.13048047834382115,
+  "bull": 0.12734445373564363
+ },
+ "implied_growth": -0.020557028699931763,
+ "ticker": "HAS",
+ "asof": "2026-10-24",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-23",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/has/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/has/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/has/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/has/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/has/statistics/"
+ }
+}

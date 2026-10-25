@@ -1,0 +1,87 @@
+{
+ "industry": {
+  "industry": "Biotechnology",
+  "known": true,
+  "best": "rNPV / probability-adjusted DCF",
+  "second": "EV/Revenue / pipeline value",
+  "best_models": [
+   "rnpv"
+  ],
+  "second_models": [
+   "ev_revenue",
+   "pipeline"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 118.34579165217994,
+    "base": 141.0578390673079,
+    "bull": 249.91751700674138
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.025,
+     "base": 3.542,
+     "bull": 6.02
+    },
+    "ttm_revenue": 8524000000
+   }
+  },
+  {
+   "model": "pipeline",
+   "label": "pipeline value",
+   "slot": "second",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline asset values, not on stockanalysis.com]"
+  }
+ ],
+ "price": 272.7,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 118.34579165217994,
+  "base": 141.0578390673079,
+  "bull": 249.91751700674138
+ },
+ "used": [
+  "ev_revenue"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.5660220328119547,
+  "base": -0.48273619703957493,
+  "bull": -0.08354412538782041
+ },
+ "implied_growth": null,
+ "ticker": "EBR:UCB",
+ "asof": "2026-10-24",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-23",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/ebr/UCB/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/ebr/UCB/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/ebr/UCB/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/ebr/UCB/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/ebr/UCB/statistics/"
+ }
+}

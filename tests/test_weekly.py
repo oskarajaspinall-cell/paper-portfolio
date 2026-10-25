@@ -668,3 +668,15 @@ def test_discard_partial_removes_only_that_days_files(fake_repo):
         (d / n).write_text("x")
     wr.discard_partial("LON:SHEL", "2026-10-10")
     assert sorted(p.name for p in d.iterdir()) == sorted(keep)
+
+
+def test_rerun_reuses_todays_checked_research(fake_repo, monkeypatch):
+    d = fake_repo / "research" / "AAA"
+    d.mkdir(parents=True)
+    (d / "2026-10-10.md").write_text("note")
+    (d / "2026-10-10-evaluation.md").write_text("eval")
+    monkeypatch.setattr(wr, "check_doc", lambda kind, path, log: None)
+    calls = []
+    ev = wr.research_and_evaluate("AAA", "CORE", "2026-10-10", "why", lambda *a: calls.append(a), lambda m: None,
+                                  fake_repo / "runs" / "2026-10-10")
+    assert ev == d / "2026-10-10-evaluation.md" and calls == []  # no agent called
