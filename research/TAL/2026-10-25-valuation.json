@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Education & Training Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -16.877803339659874,
+    "base": 26.743286926461902,
+    "bull": 45.176013150376434
+   },
+   "implied_growth": -0.2122464921755201,
+   "discount_rate": 0.0861175277563267,
+   "cost_of_equity": 0.0896,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.06258142310207514,
+     "base": 0.09853038877419663,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.3262899799062016,
+     "base": 0.17392345334973122,
+     "bull": 0.17392345334973122
+    },
+    "cagr_3y": 0.4342844013009368,
+    "cagr_5y": -0.09016284620415027,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 6.92633355292103,
+    "base": 18.275158013921544,
+    "bull": 80.0396158271885
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.977,
+     "base": 48.85,
+     "bull": 88.723
+    },
+    "ttm_ebitda": 481726250,
+    "peak_earnings": "TTM EBITDA is 6.0x its 5y median: bear/base use the 5y average (1.608e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 10.17,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -8.943091042132906,
+  "base": 23.92057728894845,
+  "bull": 56.79721404264712
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.8793599844771784,
+  "base": 1.3520724964551083,
+  "bull": 4.584780141853208
+ },
+ "implied_growth": -0.2122464921755201,
+ "ticker": "TAL",
+ "asof": "2026-10-25",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-23",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/tal/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/tal/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/tal/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/tal/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/tal/statistics/"
+ }
+}

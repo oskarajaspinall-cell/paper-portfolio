@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Telecom Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 91.2618473075059,
+    "base": 185.0799796619818,
+    "bull": 187.9745090973058
+   },
+   "implied_growth": -0.004331085748035736,
+   "discount_rate": 0.09139814153874262,
+   "cost_of_equity": 0.1046,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.007113044417625319,
+     "base": 0.02463385766647307,
+     "bull": 0.027761519501142917
+    },
+    "cash_flow_margin": {
+     "bear": 0.21689478257775247,
+     "base": 0.33010984907031277,
+     "bull": 0.33010984907031277
+    },
+    "cagr_3y": 0.02077391116474936,
+    "cagr_5y": 0.027761519501142917,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 91.5068055728484,
+    "base": 110.79871700526002,
+    "bull": 243.29928505740693
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.392,
+     "base": 9.664,
+     "bull": 11.339
+    },
+    "ttm_ebitda": 17169000000,
+    "peak_earnings": "TTM EBITDA is 1.6x its 5y median: bear/base use the 5y average (1.058e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 159.85,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "SEK",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 91.34350006262007,
+  "base": 160.3195587764079,
+  "bull": 206.4161010840062
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.4285674065522673,
+  "base": 0.0029374962552886075,
+  "bull": 0.2913112360588439
+ },
+ "implied_growth": -0.004331085748035736,
+ "ticker": "STO:TEL2.B",
+ "asof": "2026-10-25",
+ "quote_currency": "SEK",
+ "financials_currency": "SEK",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-23",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sto/TEL2.B/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sto/TEL2.B/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sto/TEL2.B/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sto/TEL2.B/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sto/TEL2.B/statistics/"
+ }
+}
