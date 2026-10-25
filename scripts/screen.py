@@ -6,7 +6,8 @@ by percentile rank within the screened set (config [screen]):
     quality, valuation, momentum (price vs 50/200-day computed from the page's own quote and averages)
 Core score = mean(quality, valuation). Stage 2: the top `deep_dive_top` core candidates also get
 their ratios page (5-year history) read, adding a history pillar (valuation vs own 5y range,
-ROIC/ROCE trend, worst-year ROIC); they are ranked by mean(quality, valuation, history).
+ROIC/ROCE trend, worst-year ROIC); they are ranked by mean(quality, valuation, history), scaled down by
+peak_profit_x / ratio when today's ROIC (ROE) is more than [screen].peak_profit_x times its 5-year median.
 Tactical (owner rule 2026-10-08, scripts/setups.py): two setups. Stage 1 from the statistics page:
 post-earnings-drift candidates (results just reported, above the 50-day average) and pullback candidates
 (uptrend intact, back near the 50-day average, RSI cooled, no earnings for a month). Stage 2 reads the
@@ -201,6 +202,21 @@ def history_metrics(ratios: dict) -> dict:
     _, roe_fy = series("roe")  # banks/insurers have no ROIC/EBITDA/FCF: ROE and P/B carry their history
     vals = [v * 100 for v in roe_fy if v is not None]
     out["roe_min"] = min(vals) if len(vals) >= 3 else None
+    # peak profits (2026-10-25): today's ROIC (ROE when there is no ROIC) vs its own 5-fiscal-year median. Cheap
+    # multiples on peak profits ranked cyclicals first; every one researched from the top 25 was rejected for it.
+    for key in ("roic", "roe"):
+        cur, fy = series(key)
+        hist = sorted(v for v in fy if v is not None)
+        if cur is not None and len(hist) >= 3:
+            med = st.median(hist)
+            fy_ = [v for v in fy if v is not None]  # oldest -> newest
+            # a steady climb (every year up, dips <= 5%, always positive, today no more than 15% below the last
+            # year) is a business improving (NetEase, GoDaddy, WKL), not a cyclical peak: not penalised
+            steady = (all(v > 0 for v in fy_) and all(b >= 0.95 * a for a, b in zip(fy_, fy_[1:]))
+                      and cur >= 0.85 * fy_[-1])
+            out["peak_ratio"] = round(cur / med, 2) if med > 0 and not steady else None
+            out["peak_basis"] = key
+            break
     return out
 
 
@@ -223,6 +239,10 @@ def deep_dive(rows: list[dict], fetcher, cfg: dict) -> list[dict]:
         r["history"] = h.get(r["ticker"])
         if r["history"] is not None:
             r["core_deep"] = st.mean([r["quality"], r["valuation"], r["history"]])
+            pk, lim = (hist.get(r["ticker"]) or {}).get("peak_ratio"), sc.get("peak_profit_x")
+            if pk and lim and pk > lim:  # profits far above their own norm: scale down, keep it visible
+                r["peak_ratio"] = pk
+                r["core_deep"] = r["core_deep"] * lim / pk
         elif r["ticker"] in checked:  # in the top N but no usable history: keep its stage-1 score, no penalty
             r["core_deep"] = r["core"]
         else:

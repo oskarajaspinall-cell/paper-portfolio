@@ -500,3 +500,16 @@ def test_parser_reads_dedup_wrapper():
     from fetch_data import JSLiteralParser
     v = JSLiteralParser('(function(a,b){a[0]="x";b[1]=2;return {k:a[0],v:b[1],cols:a}}(Array(1),Array(2)))').parse()
     assert v == {"k": "x", "v": 2, "cols": ["x"]}
+
+
+def test_peak_profit_ratio_from_roic_history():
+    from screen import history_metrics
+    per = ["TTM", "2025", "2024", "2023", "2022", "2021"]
+    peak = {"periods": per, "rows": {"roic": [0.41, 0.556, 0.395, 0.221, 0.164, 0.121]}}
+    steady = {"periods": per, "rows": {"roic": [0.248, 0.255, 0.251, 0.23, 0.226, 0.186]}}
+    bank = {"periods": per, "rows": {"roe": [0.12, 0.11, 0.10, 0.12, 0.11, 0.10]}}
+    assert history_metrics(peak)["peak_ratio"] == 1.86  # rising, but today far below the last year: a past peak
+    assert history_metrics(steady)["peak_ratio"] is None  # a steady climb is not a peak
+    zigzag = {"periods": per, "rows": {"roic": [0.39, 0.29, 0.03, 0.01, 0.06, 0.11]}}
+    assert history_metrics(zigzag)["peak_ratio"] == 6.5
+    assert history_metrics(bank)["peak_basis"] == "roe"
