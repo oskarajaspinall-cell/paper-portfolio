@@ -681,3 +681,28 @@ OK research/HKG-1024/2026-10-25-evaluation.md Bear case=140 Bull case=122 decisi
 [17:40:56] $ claude -p Ticker LON:III, note type CORE, date 2026-10-25. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
 [17:40:59] You've hit your session limit · resets 8:20pm (Europe/London)
 [17:40:59] !! FAILED LON:III: claude -p Ticker LON:III, note type CORE, date 2026-10-25. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),
+[17:41:03] == Research batch 03: 2 researched, 0 BUY, 2 AVOID -> reports/research/2026-10-25-batch-03.md; uploaded to GitHub
+[17:41:03] == pre-screen: 10 names skipped without AI research (reports/prescreen/)
+[17:41:03] == research loop stopped (repeated failures: usage limit?)
+[23:56:10] == research loop: 2792 names queued, best first: ['SHA:605499', 'KNSL', 'HKG:0883', 'BVMF:BBSE3', 'SHA:603979', 'NSE:ITC', 'PRI', 'SHA:600600', 'CDE', 'SHA:600016']
+[23:56:10] == initiate SHA:605499
+[23:56:10] $ bin/py scripts/sec_delta.py SHA:605499 --asof 2026-10-25
+[23:56:10] == screened out HKG:0883: price above base fair value (-11.2%; floor +0%) (no AI research)
+[23:56:10] == screened out KNSL: price above base fair value (-18.5%; floor +0%) (no AI research)
+[23:56:10] SKIP SHA:605499: not a US listing (SEC filers only)
+[23:56:10] $ claude -p Ticker SHA:605499, note type CORE, date 2026-10-25. Re-research: the price reached the entry price we set (112.03; it closed at 104.48 on 2026-10-20). Find out why it fell; decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[23:56:10] == screened out SHA:603979: price above base fair value (-27.8%; floor +0%) (no AI research)
+[23:56:10] == screened out BVMF:BBSE3: price above base fair value (-49.2%; floor +0%) (no AI research)
+[23:56:10] == screened out NSE:ITC: price above base fair value (-15.1%; floor +0%) (no AI research)
+[23:56:10] == screened out PRI: price above base fair value (-13.3%; floor +0%) (no AI research)
+[23:56:10] == screened out SHA:600600: price above base fair value (-0.6%; floor +0%) (no AI research)
+[23:56:10] == screened out CDE: price above base fair value (-58.3%; floor +0%) (no AI research)
+[23:56:10] == initiate SHA:600016
+[23:56:10] == initiate SHA:601211
+[23:56:10] $ bin/py scripts/sec_delta.py SHA:600016 --asof 2026-10-25
+[23:56:10] $ bin/py scripts/sec_delta.py SHA:601211 --asof 2026-10-25
+[23:56:10] SKIP SHA:600016: not a US listing (SEC filers only)
+[23:56:10] SKIP SHA:601211: not a US listing (SEC filers only)
+[23:56:10] $ claude -p Ticker SHA:600016, note type CORE, date 2026-10-25. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[23:56:10] $ claude -p Ticker SHA:601211, note type CORE, date 2026-10-25. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[23:56:45] == research loop stopped by the owner
