@@ -1,0 +1,112 @@
+{
+ "industry": {
+  "industry": "Thermal Coal",
+  "known": true,
+  "best": "NAV / normalized DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav",
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 30.581441966318433,
+    "base": 636.7692004040484,
+    "bull": 1337.8533918684445
+   },
+   "implied_growth": -0.07290178299322986,
+   "discount_rate": 0.10731574368323872,
+   "cost_of_equity": 0.1096,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.02463289820162147,
+     "base": 0.061831587157267984,
+     "bull": 0.113060552225829
+    },
+    "cash_flow_margin": {
+     "bear": -0.01116706227897689,
+     "base": 0.1411134322983672,
+     "bull": 0.2577433610207207
+    },
+    "cagr_3y": 0.08426579640324294,
+    "cagr_5y": 0.113060552225829,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 207.76382569157744,
+    "base": 375.5973666224373,
+    "bull": 392.1677677690606
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 2.081,
+     "base": 4.603,
+     "bull": 4.852
+    },
+    "ttm_ebitda": 410073675000
+   }
+  }
+ ],
+ "price": 397.45,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.02,
+ "reporting_currency": "INR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 89.64223654140477,
+  "base": 549.7119224768447,
+  "bull": 1022.6248505019831
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7744565692756201,
+  "base": 0.3830970498851296,
+  "bull": 1.5729647767064616
+ },
+ "implied_growth": -0.07290178299322986,
+ "ticker": "NSE:COALINDIA",
+ "asof": "2026-10-25",
+ "quote_currency": "INR",
+ "financials_currency": "INR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-23",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/nse/COALINDIA/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/nse/COALINDIA/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/nse/COALINDIA/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/nse/COALINDIA/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/nse/COALINDIA/statistics/"
+ }
+}

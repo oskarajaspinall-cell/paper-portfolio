@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Airlines",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 127.23472566892501,
+    "base": 243.0390273081969,
+    "bull": 774.1096117004122
+   },
+   "implied_growth": -0.2743827193311593,
+   "discount_rate": 0.07957660818107326,
+   "cost_of_equity": 0.0996,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.06679448465503963,
+     "base": 0.10635403126439667,
+     "bull": 0.20682715574750743
+    },
+    "cash_flow_margin": {
+     "bear": 0.132400747424572,
+     "base": 0.21234853972020945,
+     "bull": 0.44713196973813174
+    },
+    "cagr_3y": 0.16858896931007927,
+    "cagr_5y": 0.20682715574750743,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 40.81841059555217,
+    "base": 45.97641680094233,
+    "bull": 66.82676992749298
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.785,
+     "base": 5.352,
+     "bull": 7.644
+    },
+    "ttm_ebitda": 49535654000
+   }
+  }
+ ],
+ "price": 42.2,
+ "risk_free": 0.0496,
+ "country_risk_premium": 0.01,
+ "reporting_currency": "TWD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 98.42928731113408,
+  "base": 177.35149047244536,
+  "bull": 538.3486644427725
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 1.3324475666145514,
+  "base": 3.20264195432335,
+  "bull": 11.757077356463801
+ },
+ "implied_growth": -0.2743827193311593,
+ "ticker": "TPE:2618",
+ "asof": "2026-10-25",
+ "quote_currency": "TWD",
+ "financials_currency": "TWD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-22",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tpe/2618/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tpe/2618/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tpe/2618/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tpe/2618/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tpe/2618/statistics/"
+ }
+}
