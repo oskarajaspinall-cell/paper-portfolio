@@ -200,8 +200,11 @@ def build_queue() -> list[str]:
     ranked = json.loads((run / "loop-queue.json").read_text())
     queue = [t for t in ranked if not (ROOT / "research" / Ticker(t).slug / f"{dt.date.today()}.md").exists()
              and not list((ROOT / "research" / Ticker(t).slug).glob("*-evaluation.md"))]
+    def researched_since(h):  # 2026-10-25: a hit the weekly run already re-researched is not repeated
+        evs = sorted(p.name[:10] for p in (ROOT / "research" / Ticker(h["ticker"]).slug).glob("20??-??-??-evaluation.md"))
+        return bool(evs) and evs[-1] >= (h.get("hit_date") or "9999")
     hit_rows = {h["ticker"]: h for h in reversed((st.get("entry_hits") or []) + (st.get("dip_hits") or []))
-                if h["ticker"] not in st.get("holdings", {})}  # entry-price and dip-radar hits (2026-10-19)
+                if h["ticker"] not in st.get("holdings", {}) and not researched_since(h)}  # entry-price / dip hits
     hits = list(hit_rows)
     queue = hits + [t for t in queue if t not in hits]
     (run / "loop-queue.json").write_text(json.dumps([t for t in queue if t not in hits]))
