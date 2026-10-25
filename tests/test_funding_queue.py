@@ -226,3 +226,18 @@ def test_an_idea_that_picks_up_a_sector_cap_stays_for_the_swap_review(cfg, tmp_p
     out = FQ.review(sp, OpenMarket(cfg), cfg, WATCH, "2026-10-12", port_dir=tmp_path)
     assert not out["dropped"] and out["waiting"][0]["reason"].startswith("needs a replacement")
     assert json.loads(sp.read_text())["funding_queue"][0]["ticker"] == "NVDA"
+
+
+def test_swap_brief_offers_only_swaps_the_rules_accept(cfg, tmp_path):
+    hold = {"MSFT": holding("MSFT", "CORE", 25, conv=4), "LON:ULVR": holding("LON:ULVR", "CORE", 50, conv=3)}
+    s = empty_state(cfg)
+    s["holdings"], s["cash_usd"] = hold, 25000
+    s["funding_queue"] = [{"ticker": "NVDA", "added": TODAY, "expires": "2026-11-09", "decision_price": 100.0,
+                           "currency": "USD", "fair_value_base": 180.0, "request": core_buy("NVDA", conv=4)}]
+    mkt = OpenMarket(cfg)
+    P.mark(s, mkt)
+    # Tech 25% + 7% breaks the 30% cap: selling ULVR (consumer staples) frees no Tech room, selling MSFT does
+    md, allowed = FQ.brief(s, mkt, cfg, TODAY, WATCH)
+    assert allowed == {"buy": "NVDA", "candidates": ["MSFT"]}
+    _, unchecked = FQ.brief(s, mkt, cfg, TODAY)
+    assert unchecked["candidates"] == ["LON:ULVR", "MSFT"]

@@ -340,15 +340,38 @@ def swap_candidates(state: dict, mkt, cfg: dict, today: str) -> list[dict]:
                                        else float("inf")))
 
 
-def brief(state: dict, mkt, cfg: dict, today: str) -> tuple[str, dict] | tuple[None, None]:
-    """Markdown brief + {"buy", "candidates"} for the weekly swap-reviewer, or (None, None) when nothing waits."""
+def swap_allowed(state: dict, mkt, cfg: dict, watch: dict, today: str, idea: dict, holding: str) -> bool:
+    """Would the rules accept BUY idea replacing holding (after the pending orders)? 2026-10-25: the first swap
+    review picked OTIS for Amadeus, which a Technology cap blocks: only a tech holding's sale frees that room."""
+    from portfolio import Engine
+    work = copy.deepcopy(state)
+    eng = Engine(work, mkt, cfg, watch, today)
+    eng.process([copy.deepcopy(o["request"]) for o in state.get("pending", [])])
+    req = dict(copy.deepcopy(idea["request"]), replaces=holding, replacement_reason="trial")
+    n = len(eng.rejections)
+    eng.process([req])
+    return len(eng.rejections) == n
+
+
+def brief(state: dict, mkt, cfg: dict, today: str, watch: dict | None = None) -> tuple[str, dict] | tuple[None, None]:
+    """Markdown brief + {"buy", "candidates"} for the weekly swap-reviewer, or (None, None) when nothing waits.
+    The best waiting idea that some swap could actually bring in, against the weakest CORE holdings whose sale
+    the rules would accept for it (with `watch`; without it, the weakest holdings unchecked)."""
     q = _rank([e for e in state.get("funding_queue") or [] if e.get("stage") != "topup"])
     if not q:
         return None, None
-    best = q[0]
-    cands = swap_candidates(state, mkt, cfg, today)[:settings(cfg)["swap_candidates"]]
-    if not cands:
+    n = settings(cfg)["swap_candidates"]
+    best, cands = None, []
+    for idea in q:
+        pool = swap_candidates(state, mkt, cfg, today)
+        if watch is not None:
+            pool = [c for c in pool if swap_allowed(state, mkt, cfg, watch, today, idea, c["ticker"])]
+        if pool:
+            best, cands = idea, pool[:n]
+            break
+    if best is None:
         return None, None
+    q = [best] + [e for e in q if e is not best]
     d = ROOT / "research" / Ticker(best["ticker"]).slug
     evs = sorted(p for p in d.glob("20??-??-??-evaluation.md") if p.name[:10] <= today)
     f = lambda x, n=1: "n/a" if x is None else f"{x:,.{n}f}"  # noqa: E731
@@ -362,7 +385,7 @@ def brief(state: dict, mkt, cfg: dict, today: str) -> tuple[str, dict] | tuple[N
          f"{best['currency']} | {f(best.get('last_close') or best['decision_price'], 2)} | {f(best.get('fair_value_base'), 2)} | "
          f"{f(_upside(best))}% | {str(evs[-1].relative_to(ROOT)) if evs else 'n/a'} |", "",
          f"Thesis: {best['request'].get('thesis', '')}", "",
-         "## Weakest CORE holdings (lowest conviction, then least upside)", "",
+         "## Weakest CORE holdings whose sale the rules would accept for this buy (lowest conviction, then least upside)", "",
          "| Ticker | Conviction | Weight | Entry | Return since entry | Latest close | Base fair value | Upside | Latest evaluation |",
          "|---|---|---|---|---|---|---|---|---|"]
     for c in cands:
@@ -441,7 +464,7 @@ def main(argv=None) -> int:
                               "rejected": trial["rejected"]}, indent=1, default=str))
         elif a.cmd == "brief":
             mark(state, mkt)
-            md, allowed = brief(state, mkt, cfg, a.asof)
+            md, allowed = brief(state, mkt, cfg, a.asof, investable())
             if md is None:
                 print("nothing waiting")
                 return 0
