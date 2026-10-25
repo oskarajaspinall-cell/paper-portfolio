@@ -45,14 +45,14 @@ PY = [str(ROOT / "bin" / "py")]
 # script and then run it.
 _CHECK = "Bash(bin/py scripts/check_docs.py:*)"
 _OUT = "Edit(research/**),Edit(reports/**),Edit(runs/**)"
-TOOLS = {"researcher": f"Read,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),{_CHECK},{_OUT}",
-         "evaluator": f"Read,{_CHECK},{_OUT}",
-         "portfolio-manager": f"Read,Bash(bin/py scripts/portfolio.py:*),{_CHECK},Edit(runs/**),"
+TOOLS = {"researcher": f"Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),{_CHECK},{_OUT}",
+         "evaluator": f"Read,Glob,Grep,{_CHECK},{_OUT}",
+         "portfolio-manager": f"Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),{_CHECK},Edit(runs/**),"
                               "Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json)",
-         "weekly-reviewer": f"Read,WebFetch,{_OUT}",
-         "macro-overlay": f"Read,WebFetch,{_CHECK},{_OUT}",
-         "macro-strategist": f"Read,WebFetch,{_CHECK},{_OUT}",
-         "swap-reviewer": f"Read,{_OUT}"}
+         "weekly-reviewer": f"Read,Glob,Grep,WebFetch,{_OUT}",
+         "macro-overlay": f"Read,Glob,Grep,WebFetch,{_CHECK},{_OUT}",
+         "macro-strategist": f"Read,Glob,Grep,WebFetch,{_CHECK},{_OUT}",
+         "swap-reviewer": f"Read,Glob,Grep,{_OUT}"}
 
 
 class StepFailed(Exception):
