@@ -1,7 +1,7 @@
 {
  "base_currency": "USD",
  "baseline": {
-  "cash_usd": 30008.985763087356,
+  "cash_usd": 30018.186148559384,
   "frozen_from": "2026-10-14",
   "holdings": {
    "CI": {
@@ -38,42 +38,49 @@
   "start": "2026-10-07"
  },
  "cash_interest": {
-  "accrued_through": "2026-10-23",
+  "accrued_through": "2026-10-26",
   "aer_pct": 3.8,
   "start": "2026-10-06",
-  "total_usd": 69.51590117361852
+  "total_usd": 74.4598209743611
  },
- "cash_usd": 16948.485785397104,
- "dip_hits": [],
+ "cash_usd": 14484.603919800742,
+ "dip_hits": [
+  {
+   "close": 181.1,
+   "hit_date": "2026-10-27",
+   "holding": false,
+   "kind": "dip",
+   "reason": "Dip radar: the close 181.1 (2026-10-26) is -12.7% over the 5 sessions since our last research (2026-10-19) vs the S&P 500 -0.1% (beta -0.16); the stock-specific part is -12.7% (-3.88 standard deviations); -14.4% since our AVOID at conviction 3 on 2026-10-19; base fair value 263.54. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason.",
+   "ticker": "EPA:GTT",
+   "z": -3.88
+  },
+  {
+   "close": 37.18000030517578,
+   "hit_date": "2026-10-27",
+   "holding": false,
+   "kind": "dip",
+   "reason": "Dip radar: the close 37.18 (2026-10-26) is -6.8% over the 5 sessions since our last research (2026-10-19) vs the S&P 500 -0.1% (beta -0.04); the stock-specific part is -6.8% (-2.43 standard deviations); -5.8% since our AVOID at conviction 3 on 2026-10-19; base fair value 72.98. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason.",
+   "ticker": "SHE:000651",
+   "z": -2.43
+  }
+ ],
  "entry_hits": [
   {
-   "close": 394.7,
-   "entry_price": 399.53,
-   "hit_date": "2026-10-23",
-   "ticker": "LON:IAG"
+   "close": 26.3,
+   "entry_price": 27.13,
+   "hit_date": "2026-10-26",
+   "ticker": "BVMF:SANB11"
   },
   {
-   "close": 341.34,
-   "entry_price": 354.21,
-   "hit_date": "2026-10-22",
-   "ticker": "MOG.A"
-  },
-  {
-   "close": 104.48,
+   "close": 104.36,
    "entry_price": 112.03,
    "hit_date": "2026-10-20",
    "ticker": "SHA:605499"
-  },
-  {
-   "close": 237.6,
-   "entry_price": 240.58,
-   "hit_date": "2026-10-21",
-   "ticker": "SHE:300750"
   }
  ],
  "flows": {
   "CORE": {
-   "in": 83121.03,
+   "in": 85589.86,
    "out": 0.0
   },
   "TACTICAL": {
@@ -88,7 +95,7 @@
    "decision_price": 54.4,
    "expires": "2026-11-18",
    "fair_value_base": 100.14301651531697,
-   "last_close": 56.6,
+   "last_close": 56.7,
    "price_date": "2026-10-16",
    "request": {
     "action": "BUY",
@@ -140,7 +147,7 @@
    "decision_price": 106.42,
    "expires": "2026-11-18",
    "fair_value_base": 196.18279160064807,
-   "last_close": 114.80999755859375,
+   "last_close": 114.94999694824219,
    "price_date": "2026-10-16",
    "request": {
     "action": "BUY",
@@ -187,12 +194,64 @@
    "valuation": "research/TSX-GIB.A/2026-10-19-valuation.json"
   },
   {
+   "added": "2026-10-25",
+   "currency": "EUR",
+   "decision_price": 25.91,
+   "expires": "2026-11-24",
+   "fair_value_base": 37.901295235458,
+   "last_close": 25.22,
+   "price_date": "2026-10-23",
+   "request": {
+    "action": "BUY",
+    "conviction": 4,
+    "position_type": "CORE",
+    "reason": "Rising returns, strong cash generation and a price implying shrinkage against guided growth give a favourable skew. Unresolved Italy/Brazil voucher regulation, float-flattered FCF and a mechanical bear value below the price cap conviction at 4, not 5: standard volatility-scaled core size. Financials is not held, so no cap is breached.",
+    "research_note": "research/EPA-EDEN/2026-10-25.md",
+    "thesis": "A two-sided benefits and mobility payments network with ROIC rising to 18.5% and a 38.2% FCF margin trades at the bottom of its own 5-year multiples and below peers on P/E, where the price implies a revenue decline that reaffirmed guidance and 6.6% Q3 intrinsic growth do not show.",
+    "ticker": "EPA:EDEN",
+    "triggers": [
+     {
+      "check": {
+       "field": "operatingMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 26
+      },
+      "text": "TTM operating margin falls below 26%, under every year except the FY2023 trough (23.5%), showing regulation is compressing take rates structurally."
+     },
+     {
+      "check": {
+       "field": "roic",
+       "op": "<",
+       "source": "statistics",
+       "value": 14
+      },
+      "text": "TTM ROIC falls below 14%, giving up most of the recovery from 10.0% in FY2023 to 18.5%, signalling the network moat is eroding."
+     },
+     {
+      "check": {
+       "field": "fcfMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 28
+      },
+      "text": "TTM FCF margin falls below 28%, under the five-year FY range of 31.0%-44.3%, showing float outflows or lost volumes are draining cash generation."
+     },
+     {
+      "text": "Management withdraws or cuts the FY2026 EBITDA guidance or the 2027-2028 growth target in a results release, or a further country imposes a meal-voucher fee cap, or net debt/EBITDA on the ratios page rises above 2.5x."
+     }
+    ]
+   },
+   "ticker": "EPA:EDEN",
+   "valuation": "research/EPA-EDEN/2026-10-25-valuation.json"
+  },
+  {
    "added": "2026-10-18",
    "currency": "EUR",
    "decision_price": 81.52,
    "expires": "2026-11-17",
    "fair_value_base": 117.65933403223501,
-   "last_close": 88.18,
+   "last_close": 86.58,
    "price_date": "2026-10-16",
    "request": {
     "action": "BUY",
@@ -250,7 +309,7 @@
    "decision_price": 60.060001373291016,
    "expires": "2026-11-18",
    "fair_value_base": 80.79543745758366,
-   "last_close": 62.7400016784668,
+   "last_close": 62.68000030517578,
    "price_date": "2026-10-16",
    "request": {
     "action": "BUY",
@@ -295,57 +354,6 @@
    },
    "ticker": "DOX",
    "valuation": "research/DOX/2026-10-19-valuation.json"
-  },
-  {
-   "added": "2026-10-25",
-   "currency": "EUR",
-   "decision_price": 25.91,
-   "expires": "2026-11-24",
-   "fair_value_base": 37.901295235458,
-   "price_date": "2026-10-23",
-   "request": {
-    "action": "BUY",
-    "conviction": 4,
-    "position_type": "CORE",
-    "reason": "Rising returns, strong cash generation and a price implying shrinkage against guided growth give a favourable skew. Unresolved Italy/Brazil voucher regulation, float-flattered FCF and a mechanical bear value below the price cap conviction at 4, not 5: standard volatility-scaled core size. Financials is not held, so no cap is breached.",
-    "research_note": "research/EPA-EDEN/2026-10-25.md",
-    "thesis": "A two-sided benefits and mobility payments network with ROIC rising to 18.5% and a 38.2% FCF margin trades at the bottom of its own 5-year multiples and below peers on P/E, where the price implies a revenue decline that reaffirmed guidance and 6.6% Q3 intrinsic growth do not show.",
-    "ticker": "EPA:EDEN",
-    "triggers": [
-     {
-      "check": {
-       "field": "operatingMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 26
-      },
-      "text": "TTM operating margin falls below 26%, under every year except the FY2023 trough (23.5%), showing regulation is compressing take rates structurally."
-     },
-     {
-      "check": {
-       "field": "roic",
-       "op": "<",
-       "source": "statistics",
-       "value": 14
-      },
-      "text": "TTM ROIC falls below 14%, giving up most of the recovery from 10.0% in FY2023 to 18.5%, signalling the network moat is eroding."
-     },
-     {
-      "check": {
-       "field": "fcfMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 28
-      },
-      "text": "TTM FCF margin falls below 28%, under the five-year FY range of 31.0%-44.3%, showing float outflows or lost volumes are draining cash generation."
-     },
-     {
-      "text": "Management withdraws or cuts the FY2026 EBITDA guidance or the 2027-2028 growth target in a results release, or a further country imposes a meal-voucher fee cap, or net debt/EBITDA on the ratios page rises above 2.5x."
-     }
-    ]
-   },
-   "ticker": "EPA:EDEN",
-   "valuation": "research/EPA-EDEN/2026-10-25-valuation.json"
   }
  ],
  "holdings": {
@@ -358,12 +366,12 @@
    "entry_price": 281.1600036621094,
    "entry_url": "https://finance.yahoo.com/quote/CI/history",
    "exit_plan": null,
-   "last_close": 306.95001220703125,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 306.950012,
-   "market_value_usd": 7673.75,
-   "prev_close": 315.8800048828125,
-   "prev_close_date": "2026-10-22",
+   "last_close": 305.7799987792969,
+   "last_close_date": "2026-10-26",
+   "last_price_usd": 305.779999,
+   "market_value_usd": 7644.5,
+   "prev_close": 306.95001220703125,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "USD",
    "research_note": "research/CI/2026-10-09.md",
    "sector": "Healthcare",
@@ -418,12 +426,12 @@
    "entry_price": 80.14,
    "entry_url": "https://stockanalysis.com/stocks/deck/history/",
    "exit_plan": null,
-   "last_close": 81.08999633789062,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 81.089996,
-   "market_value_usd": 7054.83,
-   "prev_close": 85.27999877929688,
-   "prev_close_date": "2026-10-22",
+   "last_close": 80.37000274658203,
+   "last_close_date": "2026-10-26",
+   "last_price_usd": 80.370003,
+   "market_value_usd": 6992.19,
+   "prev_close": 81.08999633789062,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "USD",
    "research_note": "research/DECK/2026-10-07.md",
    "sector": "Consumer Discretionary",
@@ -469,12 +477,12 @@
    "entry_price": 97.2,
    "entry_url": "https://stockanalysis.com/stocks/gddy/history/",
    "exit_plan": null,
-   "last_close": 112.79000091552734,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 112.790001,
-   "market_value_usd": 8120.88,
-   "prev_close": 114.7300033569336,
-   "prev_close_date": "2026-10-22",
+   "last_close": 109.81999969482422,
+   "last_close_date": "2026-10-26",
+   "last_price_usd": 109.82,
+   "market_value_usd": 7907.04,
+   "prev_close": 112.79000091552734,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "USD",
    "research_note": "research/GDDY/2026-10-07.md",
    "sector": "Technology",
@@ -523,12 +531,12 @@
    "entry_price": 61.3,
    "entry_url": "https://stockanalysis.com/quote/hkg/2076/history/",
    "exit_plan": null,
-   "last_close": 63.79999923706055,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 8.140961,
-   "market_value_usd": 7432.7,
-   "prev_close": 61.849998474121094,
-   "prev_close_date": "2026-10-22",
+   "last_close": 63.70000076293945,
+   "last_close_date": "2026-10-26",
+   "last_price_usd": 8.128201,
+   "market_value_usd": 7421.05,
+   "prev_close": 63.79999923706055,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "CNY",
    "research_note": "research/HKG-2076/2026-10-11.md",
    "sector": "Communication Services",
@@ -577,12 +585,12 @@
    "entry_price": 4.5,
    "entry_url": "https://finance.yahoo.com/quote/3998.HK/history",
    "exit_plan": null,
-   "last_close": 4.244999885559082,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 0.541667,
-   "market_value_usd": 8210.05,
-   "prev_close": 4.164999961853027,
-   "prev_close_date": "2026-10-22",
+   "last_close": 4.224999904632568,
+   "last_close_date": "2026-10-26",
+   "last_price_usd": 0.539115,
+   "market_value_usd": 8171.37,
+   "prev_close": 4.244999885559082,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "CNY",
    "research_note": "research/HKG-3998/2026-10-17.md",
    "sector": "Consumer Discretionary",
@@ -638,12 +646,12 @@
    "entry_price": 185.6,
    "entry_url": "https://stockanalysis.com/quote/hkg/9999/history/",
    "exit_plan": null,
-   "last_close": 183.0,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 23.351031,
-   "market_value_usd": 6888.55,
-   "prev_close": 181.8000030517578,
-   "prev_close_date": "2026-10-22",
+   "last_close": 184.89999389648438,
+   "last_close_date": "2026-10-26",
+   "last_price_usd": 23.593473,
+   "market_value_usd": 6960.07,
+   "prev_close": 183.0,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "CNY",
    "research_note": "research/HKG-9999/2026-10-07.md",
    "sector": "Communication Services",
@@ -692,12 +700,12 @@
    "entry_price": 44.209999084472656,
    "entry_url": "https://finance.yahoo.com/quote/HRB/history",
    "exit_plan": null,
-   "last_close": 49.689998626708984,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 49.689999,
-   "market_value_usd": 8000.09,
-   "prev_close": 50.08000183105469,
-   "prev_close_date": "2026-10-22",
+   "last_close": 50.060001373291016,
+   "last_close_date": "2026-10-26",
+   "last_price_usd": 50.060001,
+   "market_value_usd": 8059.66,
+   "prev_close": 49.689998626708984,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "USD",
    "research_note": "research/HRB/2026-10-11.md",
    "sector": "Consumer Discretionary",
@@ -746,17 +754,17 @@
    "entry_price": 296.76,
    "entry_url": "https://stockanalysis.com/stocks/intu/history/",
    "exit_plan": null,
-   "last_close": 343.3900146484375,
-   "last_close_date": "2026-10-23",
+   "last_close": 339.8900146484375,
+   "last_close_date": "2026-10-26",
    "last_decision": {
     "action": "HOLD",
     "conviction": 4,
     "date": "2026-10-17"
    },
-   "last_price_usd": 343.390015,
-   "market_value_usd": 7897.97,
-   "prev_close": 354.8999938964844,
-   "prev_close_date": "2026-10-22",
+   "last_price_usd": 339.890015,
+   "market_value_usd": 7817.47,
+   "prev_close": 343.3900146484375,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "USD",
    "research_note": "research/INTU/2026-10-17.md",
    "sector": "Technology",
@@ -811,12 +819,12 @@
    "entry_price": 151.60000610351562,
    "entry_url": "https://finance.yahoo.com/quote/JKHY/history",
    "exit_plan": null,
-   "last_close": 162.5500030517578,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 162.550003,
-   "market_value_usd": 7477.3,
-   "prev_close": 161.8000030517578,
-   "prev_close_date": "2026-10-22",
+   "last_close": 162.35000610351562,
+   "last_close_date": "2026-10-26",
+   "last_price_usd": 162.350006,
+   "market_value_usd": 7468.1,
+   "prev_close": 162.5500030517578,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "USD",
    "research_note": "research/JKHY/2026-10-08.md",
    "sector": "Technology",
@@ -858,24 +866,29 @@
   },
   "LDOS": {
    "conviction": 4,
-   "cost_basis_usd": 4343.29,
+   "cost_basis_usd": 6812.12,
    "currency": "USD",
    "entry_close_date": "2026-10-19",
    "entry_date": "2026-10-19",
    "entry_price": 123.97000122070312,
    "entry_url": "https://finance.yahoo.com/quote/LDOS/history",
    "exit_plan": null,
-   "last_close": 136.0800018310547,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 136.080002,
-   "market_value_usd": 4762.8,
-   "prev_close": 134.72999572753906,
-   "prev_close_date": "2026-10-22",
+   "last_close": 139.86000061035156,
+   "last_close_date": "2026-10-26",
+   "last_decision": {
+    "action": "ADD",
+    "conviction": 4,
+    "date": "2026-10-26"
+   },
+   "last_price_usd": 139.860001,
+   "market_value_usd": 7412.58,
+   "prev_close": 136.0800018310547,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "USD",
    "research_note": "research/LDOS/2026-10-19.md",
    "sector": "Technology",
-   "shares": 35,
-   "target_pct": 7.56,
+   "shares": 53,
+   "target_pct": 7.01,
    "thesis": "A government-IT incumbent with ROIC up from 9.9% to 14.2% and a 13.80% FCF yield funding buybacks trades below its own 5-year minimum on every earnings multiple and below peers, where the price implies a -13.7% revenue decline that its contract base does not show.",
    "triggers": [
     {
@@ -920,17 +933,17 @@
    "entry_price": 65.62,
    "entry_url": "https://stockanalysis.com/stocks/otis/history/",
    "exit_plan": null,
-   "last_close": 75.1500015258789,
-   "last_close_date": "2026-10-23",
+   "last_close": 75.2699966430664,
+   "last_close_date": "2026-10-26",
    "last_decision": {
     "action": "HOLD",
     "conviction": 4,
     "date": "2026-10-17"
    },
-   "last_price_usd": 75.150002,
-   "market_value_usd": 7965.9,
-   "prev_close": 75.5999984741211,
-   "prev_close_date": "2026-10-22",
+   "last_price_usd": 75.269997,
+   "market_value_usd": 7978.62,
+   "prev_close": 75.1500015258789,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "USD",
    "research_note": "research/OTIS/2026-10-17.md",
    "sector": "Industrials",
@@ -973,12 +986,12 @@
    "entry_price": 71.36,
    "entry_url": "https://stockanalysis.com/stocks/zts/history/",
    "exit_plan": null,
-   "last_close": 81.02999877929688,
-   "last_close_date": "2026-10-23",
-   "last_price_usd": 81.029999,
-   "market_value_usd": 7940.94,
-   "prev_close": 82.0,
-   "prev_close_date": "2026-10-22",
+   "last_close": 80.97000122070312,
+   "last_close_date": "2026-10-26",
+   "last_price_usd": 80.970001,
+   "market_value_usd": 7935.06,
+   "prev_close": 81.02999877929688,
+   "prev_close_date": "2026-10-23",
    "reporting_currency": "USD",
    "research_note": "research/ZTS/2026-10-07.md",
    "sector": "Healthcare",
@@ -1014,64 +1027,7 @@
   }
  },
  "inception_date": "2026-10-07",
- "last_marked": "2026-10-25",
+ "last_marked": "2026-10-27",
  "last_scan": "2026-10-24",
- "pending": [
-  {
-   "estimate": {
-    "close_date": "2026-10-23",
-    "currency": "USD",
-    "price": 136.0800018310547,
-    "shares": 20,
-    "side": "ADD",
-    "usd": 2721.6
-   },
-   "id": "2026-10-24-1",
-   "placed": "2026-10-24",
-   "placed_at": "2026-10-25T03:00:29+00:00",
-   "request": {
-    "action": "ADD",
-    "cap_pct": 7.05,
-    "conviction": 4,
-    "funding_stage": "topup",
-    "position_type": "CORE",
-    "reason": "Rising quality, a strong FCF yield and a price below even the mechanical bear value give a favourable skew. The unexplained mid-year crash, single-customer budget risk, re-levering for M&A, a bearish rate backdrop and results on Nov 3 hold conviction at 4, not 5: standard volatility-scaled core size. [funding queue: decided 2026-10-19 at 124.85; top-up of the starter position 2026-10-24 with room above the cash reserve]",
-    "research_note": "research/LDOS/2026-10-19.md",
-    "thesis": "A government-IT incumbent with ROIC up from 9.9% to 14.2% and a 13.80% FCF yield funding buybacks trades below its own 5-year minimum on every earnings multiple and below peers, where the price implies a -13.7% revenue decline that its contract base does not show.",
-    "ticker": "LDOS",
-    "triggers": [
-     {
-      "check": {
-       "field": "operatingMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 10
-      },
-      "text": "TTM operating margin falls below 10%, reversing the five-year expansion from 8.5% to 11.8%."
-     },
-     {
-      "check": {
-       "field": "roic",
-       "op": "<",
-       "source": "statistics",
-       "value": 10
-      },
-      "text": "TTM ROIC falls below 10%, erasing the improvement from 9.9% in FY2021 to 14.2%."
-     },
-     {
-      "check": {
-       "field": "fcfMargin",
-       "op": "<",
-       "source": "statistics",
-       "value": 6
-      },
-      "text": "TTM FCF margin falls below 6%, under the FY2022 five-year low of 6.0%, showing the cash step-up was transitory."
-     },
-     {
-      "text": "Net debt/EBITDA on the ratios page rises above 3.0x (2.45x TTM now) without a visible deleveraging path from the Entrust/Analogic debt."
-     }
-    ]
-   }
-  }
- ]
+ "pending": []
 }
