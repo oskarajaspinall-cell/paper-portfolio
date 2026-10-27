@@ -1,0 +1,61 @@
+[15:01:11] == re-research EPA:GTT (dip radar)
+[15:01:11] == re-research SHE:000651 (dip radar)
+[15:01:11] $ bin/py scripts/sec_delta.py EPA:GTT --asof 2026-10-27
+[15:01:11] $ bin/py scripts/sec_delta.py SHE:000651 --asof 2026-10-27
+[15:01:11] SKIP SHE:000651: not a US listing (SEC filers only)
+[15:01:11] SKIP EPA:GTT: not a US listing (SEC filers only)
+[15:01:11] $ claude -p Ticker SHE:000651, note type CORE, date 2026-10-27. Dip radar: the close 37.18 (2026-10-26) is -6.8% over the 5 sessions since our last research (2026-10-19) vs the S&P 500 -0.1% (beta -0.04); the stock-specific part is -6.8% (-2.43 standard deviations); -5.8% since our AVOID at conviction 3 on 2026-10-19; base fair value 72.98. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:01:11] $ claude -p Ticker EPA:GTT, note type CORE, date 2026-10-27. Dip radar: the close 181.1 (2026-10-26) is -12.7% over the 5 sessions since our last research (2026-10-19) vs the S&P 500 -0.1% (beta -0.16); the stock-specific part is -12.7% (-3.88 standard deviations); -14.4% since our AVOID at conviction 3 on 2026-10-19; base fair value 263.54. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:03:32] - Note: `research/SHE-000651/2026-10-27.md`
+- Fact sheet: `research/SHE-000651/factsheet-2026-10-27.md`
+- Check: `OK research/SHE-000651/2026-10-27.md type=CORE 1=40 2=104 3=95 4=29 5=36 6=71 total=375`
+- Data conflict: the dip-radar prompt cites a base fair value of 72.98. The 2026-10-27 fact sheet shows 51.99. I used the fact-sheet figure and did not reconcile the two.
+- Blocked or unreadable: the Q3 2026 filing page (`https://stockanalysis.com/quote/she/000651/filings/3882635/`) is only an index with no results text. I could not find why the stock fell. The note says so and marks the cause as [Guessing].
+
+The note's lean is AVOID.
+[15:03:32] $ bin/py scripts/check_docs.py note research/SHE-000651/2026-10-27.md
+[15:03:32] OK research/SHE-000651/2026-10-27.md type=CORE 1=40 2=104 3=95 4=29 5=36 6=71 total=375
+[15:03:32] $ bin/py scripts/macro_data.py --asof 2026-10-27
+[15:04:01] {"out": "reports/macro/2026-10-27.md", "series": 11, "unavailable": []}
+[15:04:01] $ claude -p Ticker SHE:000651, date 2026-10-27. Research: research/SHE-000651/factsheet-2026-10-27.md, research/SHE-000651/2026-10-27.md. Macro snapshot: reports/macro/2026-10-27.md. Write research/SHE-000651/2026-10-27-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:04:12] research/SHE-000651/2026-10-27-macro.md
+OK research/SHE-000651/2026-10-27-macro.md macro_weight=context words=80
+[15:04:12] $ bin/py scripts/check_docs.py macro research/SHE-000651/2026-10-27-macro.md
+[15:04:12] OK research/SHE-000651/2026-10-27-macro.md macro_weight=context words=80
+[15:04:12] $ claude -p Evaluate SHE:000651 for 2026-10-27: fact sheet research/SHE-000651/factsheet-2026-10-27.md, note research/SHE-000651/2026-10-27.md, state portfolio/state.json, macro overlay research/SHE-000651/2026-10-27-macro.md. Dip radar: the close 37.18 (2026-10-26) is -6.8% over the 5 sessions since our last research (2026-10-19) vs the S&P 500 -0.1% (beta -0.04); the stock-specific part is -6.8% (-2.43 standard deviations); -5.8% since our AVOID at conviction 3 on 2026-10-19; base fair value 72.98. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:04:24] Note: research/EPA-GTT/2026-10-27.md
+Fact sheet: research/EPA-GTT/factsheet-2026-10-27.md
+Check: OK research/EPA-GTT/2026-10-27.md type=CORE 1=53 2=125 3=116 4=40 5=37 6=69 total=440
+
+Data conflicts and blocked URLs:
+- No data conflicts and no blocked URLs.
+- The first fact-sheet run failed because NYSE:BWXT has no stockanalysis.com page. I swapped it for EPA:SU and reran for EPA:GTT only.
+- I made one WebFetch, of the Q3 2026 call transcript on stockanalysis.com. Its numbers are not used, because they are not fact-sheet figures.
+[15:04:24] $ bin/py scripts/check_docs.py note research/EPA-GTT/2026-10-27.md
+[15:04:24] OK research/EPA-GTT/2026-10-27.md type=CORE 1=53 2=125 3=116 4=40 5=37 6=69 total=440
+[15:04:24] $ claude -p Ticker EPA:GTT, date 2026-10-27. Research: research/EPA-GTT/factsheet-2026-10-27.md, research/EPA-GTT/2026-10-27.md. Macro snapshot: reports/macro/2026-10-27.md. Write research/EPA-GTT/2026-10-27-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:04:39] research/EPA-GTT/2026-10-27-macro.md
+OK research/EPA-GTT/2026-10-27-macro.md macro_weight=context words=34
+[15:04:39] $ bin/py scripts/check_docs.py macro research/EPA-GTT/2026-10-27-macro.md
+[15:04:39] OK research/EPA-GTT/2026-10-27-macro.md macro_weight=context words=34
+[15:04:39] $ claude -p Evaluate EPA:GTT for 2026-10-27: fact sheet research/EPA-GTT/factsheet-2026-10-27.md, note research/EPA-GTT/2026-10-27.md, state portfolio/state.json, macro overlay research/EPA-GTT/2026-10-27-macro.md. Dip radar: the close 181.1 (2026-10-26) is -12.7% over the 5 sessions since our last research (2026-10-19) vs the S&P 500 -0.1% (beta -0.16); the stock-specific part is -12.7% (-3.88 standard deviations); -14.4% since our AVOID at conviction 3 on 2026-10-19; base fair value 263.54. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:04:50] I wrote `research/SHE-000651/2026-10-27-evaluation.md`. The decision is AVOID at conviction 3, and the checker prints `OK research/SHE-000651/2026-10-27-evaluation.md Bear case=143 Bull case=93 decision=AVOID`.
+
+- **Why it fell:** the cause is still unknown. The drop lines up with the Q3 2026 report filed on 2026-10-26, but the research couldn't read what was in it.
+- **Why AVOID:** the fall doesn't remove the reason for the 2026-10-19 AVOID. Returns and margins keep slipping from their peak: return on capital is 34.1% now against 46.8% in FY2025, and return on equity is 16.3% against 19.8%. Even after the dip, the P/E of 8.3x sits near the top of its own 5-year range.
+- **Why conviction stays at 3:** an 11.36% free-cash-flow yield and net cash keep it from going lower.
+- **Entry price:** none set. The base fair value of 51.99 is already well above the 37.18 close, so price isn't what's holding this back; the falling earnings and the unread Q3 report are. The usual default (base fair value × 0.8 = 41.59) would also sit above the close, which the rules don't allow.
+- **12-month scenarios:** bull 51.99 (20%), base 36.86 (50%), bear 26.18 (30%). The bear uses the EV/EBITDA bear value rather than the blended 9.34, because net cash and positive cash flow make the mechanical DCF bear of 0.92 implausible.
+- **Macro:** the overlay is context only, so it doesn't change the decision.
+[15:04:50] $ bin/py scripts/check_docs.py eval research/SHE-000651/2026-10-27-evaluation.md
+[15:04:50] OK research/SHE-000651/2026-10-27-evaluation.md Bear case=143 Bull case=93 decision=AVOID
+[15:04:50] $ bin/py scripts/valuation.py SHE:000651 --asof 2026-10-27 --eval research/SHE-000651/2026-10-27-evaluation.md
+[15:04:50] {"out": "research/SHE-000651/2026-10-27-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 9.34, "base": 51.99, "bull": 76.92}, "price": 37.18}
+[15:04:51] == SHE:000651: AVOID 3
+[15:05:28] research/EPA-GTT/2026-10-27-evaluation.md
+OK research/EPA-GTT/2026-10-27-evaluation.md Bear case=139 Bull case=118 decision=AVOID
+[15:05:28] $ bin/py scripts/check_docs.py eval research/EPA-GTT/2026-10-27-evaluation.md
+[15:05:28] OK research/EPA-GTT/2026-10-27-evaluation.md Bear case=139 Bull case=118 decision=AVOID
+[15:05:28] $ bin/py scripts/valuation.py EPA:GTT --asof 2026-10-27 --eval research/EPA-GTT/2026-10-27-evaluation.md
+[15:05:28] {"out": "research/EPA-GTT/2026-10-27-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 149.29, "base": 267.15, "bull": 414.37}, "price": 181.1}
+[15:05:29] == EPA:GTT: AVOID 3
