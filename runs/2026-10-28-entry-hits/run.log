@@ -1,0 +1,58 @@
+[17:07:45] == research loop: 2 names queued, best first: ['SHA:605499', 'BVMF:SANB11']
+[17:07:45] == initiate BVMF:SANB11
+[17:07:45] == initiate SHA:605499
+[17:07:45] $ bin/py scripts/sec_delta.py BVMF:SANB11 --asof 2026-10-28
+[17:07:45] $ bin/py scripts/sec_delta.py SHA:605499 --asof 2026-10-28
+[17:07:45] SKIP BVMF:SANB11: not a US listing (SEC filers only)
+[17:07:45] SKIP SHA:605499: not a US listing (SEC filers only)
+[17:07:45] $ claude -p Ticker BVMF:SANB11, note type CORE, date 2026-10-28. Re-research: the price reached the entry price we set (27.13; it closed at 25.87 on 2026-10-26). Find out why it fell; decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:07:45] $ claude -p Ticker SHA:605499, note type CORE, date 2026-10-28. Re-research: the price reached the entry price we set (112.03; it closed at 103.21 on 2026-10-20). Find out why it fell; decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:09:51] - Note: `research/BVMF-SANB11/2026-10-28.md`
+- Fact sheet: `research/BVMF-SANB11/factsheet-2026-10-28.md`
+- check_docs: `OK research/BVMF-SANB11/2026-10-28.md type=CORE 1=49 2=137 3=132 4=57 5=51 6=104 total=530`
+- Data conflicts: none.
+- Blocked URLs: none.
+- Missing data: the fact sheet shows ROIC, ROCE and EV/EBITDA as [data unavailable] (banks). The note uses ROE and P/B instead.
+- Why it fell: I found no company-specific event before the results. The fall to 25.87 on 2026-10-26 came the day before the Q3 print, and the only headline is a technical "oversold" item. The note tags the cause [Guessing]. The Q3 results (28 Oct) are newer than the fact sheet's last close, so the price is still reacting.
+[17:09:51] $ bin/py scripts/check_docs.py note research/BVMF-SANB11/2026-10-28.md
+[17:09:51] OK research/BVMF-SANB11/2026-10-28.md type=CORE 1=49 2=137 3=132 4=57 5=51 6=104 total=530
+[17:09:51] $ bin/py scripts/macro_data.py --asof 2026-10-28
+[17:10:06] - Note: `research/SHA-605499/2026-10-28.md`
+- Fact sheet: `research/SHA-605499/factsheet-2026-10-28.md`
+- check_docs: `OK research/SHA-605499/2026-10-28.md type=CORE 1=42 2=124 3=114 4=36 5=44 6=79 total=439`
+- Data conflicts: none.
+- Blocked URLs: none. The one fetch (the stockanalysis.com Q2 2026 filing page) returned only a title and no content.
+- Peers used: HKG:9633, SHA:600600, KO, PEP.
+- Cause of the fall: none found. The fact sheet's only headlines are filing notices, so the note calls the derating a guess.
+- Caveat for the decision step: Q3 results are due 2026-10-29.
+[17:10:06] $ bin/py scripts/check_docs.py note research/SHA-605499/2026-10-28.md
+[17:10:06] OK research/SHA-605499/2026-10-28.md type=CORE 1=42 2=124 3=114 4=36 5=44 6=79 total=439
+[17:10:06] $ bin/py scripts/macro_data.py --asof 2026-10-28
+[17:10:33] {"out": "reports/macro/2026-10-28.md", "series": 11, "unavailable": []}
+[17:10:33] $ claude -p Ticker BVMF:SANB11, date 2026-10-28. Research: research/BVMF-SANB11/factsheet-2026-10-28.md, research/BVMF-SANB11/2026-10-28.md. Macro snapshot: reports/macro/2026-10-28.md. Write research/BVMF-SANB11/2026-10-28-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:10:36] {"out": "reports/macro/2026-10-28.md", "series": 11, "unavailable": []}
+[17:10:36] $ claude -p Ticker SHA:605499, date 2026-10-28. Research: research/SHA-605499/factsheet-2026-10-28.md, research/SHA-605499/2026-10-28.md. Macro snapshot: reports/macro/2026-10-28.md. Write research/SHA-605499/2026-10-28-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:10:55] research/SHA-605499/2026-10-28-macro.md
+OK research/SHA-605499/2026-10-28-macro.md macro_weight=context words=72
+[17:10:55] $ bin/py scripts/check_docs.py macro research/SHA-605499/2026-10-28-macro.md
+[17:10:55] OK research/SHA-605499/2026-10-28-macro.md macro_weight=context words=72
+[17:10:55] $ claude -p Evaluate SHA:605499 for 2026-10-28: fact sheet research/SHA-605499/factsheet-2026-10-28.md, note research/SHA-605499/2026-10-28.md, state portfolio/state.json, macro overlay research/SHA-605499/2026-10-28-macro.md. Re-research: the price reached the entry price we set (112.03; it closed at 103.21 on 2026-10-20). Find out why it fell; decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:11:05] research/BVMF-SANB11/2026-10-28-macro.md
+OK research/BVMF-SANB11/2026-10-28-macro.md macro_weight=context words=47
+[17:11:05] $ bin/py scripts/check_docs.py macro research/BVMF-SANB11/2026-10-28-macro.md
+[17:11:05] OK research/BVMF-SANB11/2026-10-28-macro.md macro_weight=context words=47
+[17:11:05] $ claude -p Evaluate BVMF:SANB11 for 2026-10-28: fact sheet research/BVMF-SANB11/factsheet-2026-10-28.md, note research/BVMF-SANB11/2026-10-28.md, state portfolio/state.json, macro overlay research/BVMF-SANB11/2026-10-28-macro.md. Re-research: the price reached the entry price we set (27.13; it closed at 25.87 on 2026-10-26). Find out why it fell; decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:11:30] research/SHA-605499/2026-10-28-evaluation.md
+OK research/SHA-605499/2026-10-28-evaluation.md Bear case=149 Bull case=118 decision=AVOID
+[17:11:30] $ bin/py scripts/check_docs.py eval research/SHA-605499/2026-10-28-evaluation.md
+[17:11:30] OK research/SHA-605499/2026-10-28-evaluation.md Bear case=149 Bull case=118 decision=AVOID
+[17:11:30] $ bin/py scripts/valuation.py SHA:605499 --asof 2026-10-28 --eval research/SHA-605499/2026-10-28-evaluation.md
+[17:11:30] {"out": "research/SHA-605499/2026-10-28-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 104.58, "base": 141.43, "bull": 258.32}, "price": 103.21}
+[17:11:31] == done SHA:605499
+[17:11:42] research/BVMF-SANB11/2026-10-28-evaluation.md
+OK research/BVMF-SANB11/2026-10-28-evaluation.md Bear case=147 Bull case=123 decision=AVOID
+[17:11:42] $ bin/py scripts/check_docs.py eval research/BVMF-SANB11/2026-10-28-evaluation.md
+[17:11:42] OK research/BVMF-SANB11/2026-10-28-evaluation.md Bear case=147 Bull case=123 decision=AVOID
+[17:11:42] $ bin/py scripts/valuation.py BVMF:SANB11 --asof 2026-10-28 --eval research/BVMF-SANB11/2026-10-28-evaluation.md
+[17:11:42] {"out": "research/BVMF-SANB11/2026-10-28-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 23.54, "base": 34.27, "bull": 41.8}, "price": 25.87}
+[17:11:43] == done BVMF:SANB11
