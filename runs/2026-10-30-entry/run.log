@@ -1,0 +1,12 @@
+[16:12:18] == re-research RDDT (entry price hit)
+[16:12:18] == re-research ADX:ADNOCLS (dip radar)
+[16:12:18] $ bin/py scripts/sec_delta.py RDDT --asof 2026-10-30
+[16:12:18] $ bin/py scripts/sec_delta.py ADX:ADNOCLS --asof 2026-10-30
+[16:12:18] SKIP ADX:ADNOCLS: not a US listing (SEC filers only)
+[16:12:18] $ claude -p Ticker ADX:ADNOCLS, note type CORE, date 2026-10-30. Dip radar: the close 6.8 (2026-10-29) is -8.1% over the 7 sessions since our last research (2026-10-20) vs the S&P 500 +0.0% (beta 0.44); the stock-specific part is -8.1% (-2.22 standard deviations); -7.7% since our AVOID at conviction 3 on 2026-10-20; base fair value 8.04. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:12:28] You've hit your weekly limit · resets 2pm (Europe/London)
+[16:12:28] !! FAILED ADX:ADNOCLS: claude -p Ticker ADX:ADNOCLS, note type CORE, date 2026-10-30. Dip radar: the close 6.8 (2026-10-29) is -8.1% over the 7 sessions since our last research (2026-10-20) vs the S&P 500 +0.0% (beta 0.44); the stock-specific part is -8.1% (-2.22 standard deviations); -7.7% since our AVOID at conviction 3
+[16:29:12] OK research/RDDT/sec-delta-2026-10-30.md
+[16:29:12] $ claude -p Ticker RDDT, note type CORE, date 2026-10-30. Re-research: the price reached the entry price we set (116.6; it traded at 91.8066 at 12:12 ET). Find out why it fell; decide BUY or AVOID. SEC filing delta: research/RDDT/sec-delta-2026-10-30.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:29:16] You've hit your weekly limit · resets 2pm (Europe/London)
+[16:29:16] !! FAILED RDDT: claude -p Ticker RDDT, note type CORE, date 2026-10-30. Re-research: the price reached the entry price we set (116.6; it traded at 91.8066 at 12:12 ET). Find out why it fell; decide BUY or AVOID. SEC filing delta: research/RDDT/sec-delta-2026-10-30.md (read it before any web fetch; it does not count
