@@ -1,0 +1,112 @@
+{
+ "industry": {
+  "industry": "Diagnostics & Research",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 57.65513454221157,
+    "base": 177.41615806880378,
+    "bull": 325.3728027410038
+   },
+   "implied_growth": 0.08137580706172559,
+   "discount_rate": 0.09745578641287105,
+   "cost_of_equity": 0.10787350000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.006753666450830347,
+     "base": 0.044796547994034416,
+     "bull": 0.10769352487779837
+    },
+    "cash_flow_margin": {
+     "bear": 0.07014313763969399,
+     "base": 0.1301498826353024,
+     "bull": 0.17135018938355034
+    },
+    "cagr_3y": 0.021492667098339302,
+    "cagr_5y": 0.10769352487779837,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 184.35730211350122,
+    "base": 243.4672639245644,
+    "bull": 323.9461148076127
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 2.062,
+     "base": 2.618,
+     "bull": 3.375
+    },
+    "ttm_revenue": 8234759000
+   }
+  }
+ ],
+ "price": 211.36,
+ "risk_free": 0.049800000000000004,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 99.88919039930812,
+  "base": 199.43319335405735,
+  "bull": 324.8972400965401
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5273978501168238,
+  "base": -0.05642887323023593,
+  "bull": 0.5371746787307914
+ },
+ "implied_growth": 0.08137580706172559,
+ "ticker": "ICLR",
+ "asof": "2026-10-31",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-30",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/iclr/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/iclr/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/iclr/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/iclr/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/iclr/statistics/"
+ }
+}

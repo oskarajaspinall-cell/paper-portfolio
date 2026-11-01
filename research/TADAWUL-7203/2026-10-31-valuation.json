@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Information Technology Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 348.84977975957446,
+    "base": 667.1464307711876,
+    "bull": 1466.4897641730115
+   },
+   "implied_growth": 0.09818509120638858,
+   "discount_rate": 0.1024796489885825,
+   "cost_of_equity": 0.1048,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.10949745380810358,
+     "base": 0.14383298260393562,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.1332173359643062,
+     "base": 0.22953357444993627,
+     "bull": 0.3421761967648661
+    },
+    "cagr_3y": 0.2713370227995353,
+    "cagr_5y": 0.25399490761620713,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 427.7562251561416,
+    "base": 656.434357831987,
+    "bull": 1321.1248772618133
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 21.685,
+     "base": 33.8835,
+     "bull": 41.86
+    },
+    "ttm_ebitda": 2423587777,
+    "peak_earnings": "TTM EBITDA is 1.7x its 5y median: bear/base use the 5y average (1.463e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 561,
+ "risk_free": 0.049800000000000004,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "SAR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 375.1519282250968,
+  "base": 663.5757397914541,
+  "bull": 1418.0348018692787
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.33127998533850833,
+  "base": 0.1828444559562461,
+  "bull": 1.5276912689291957
+ },
+ "implied_growth": 0.09818509120638858,
+ "ticker": "TADAWUL:7203",
+ "asof": "2026-10-31",
+ "quote_currency": "SAR",
+ "financials_currency": "SAR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-29",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tadawul/7203/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tadawul/7203/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tadawul/7203/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tadawul/7203/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tadawul/7203/statistics/"
+ }
+}

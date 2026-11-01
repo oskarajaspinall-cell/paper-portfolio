@@ -1,0 +1,100 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 236.18899609043896,
+    "base": 272.16288087856583,
+    "bull": 272.16288087856583
+   },
+   "cost_of_equity": 0.0954785,
+   "assumptions": {
+    "roe": {
+     "bear": 0.22026,
+     "base": 0.25,
+     "bull": 0.25
+    },
+    "justified_pb": {
+     "bear": 2.7704902913654523,
+     "base": 3.1924629496938786,
+     "bull": 3.1924629496938786
+    },
+    "bvps": 85.251696
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 239.02641,
+    "base": 345.44853,
+    "bull": 816.3383462279999
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 18.067,
+     "base": 26.111,
+     "bull": 35.559
+    },
+    "ttm_eps": 22.957292,
+    "peak_earnings": "TTM EPS is 1.7x its 5y median: bear/base use the 5y average (13.23), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 365.71,
+ "risk_free": 0.049800000000000004,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 237.1348007269593,
+  "base": 296.59143058571055,
+  "bull": 453.5547026617105
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.35157693055437556,
+  "base": -0.1889983030660617,
+  "bull": 0.24020317372155686
+ },
+ "implied_growth": null,
+ "ticker": "KNSL",
+ "asof": "2026-10-31",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-10-30",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/knsl/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/knsl/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/knsl/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/knsl/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/knsl/statistics/"
+ }
+}
