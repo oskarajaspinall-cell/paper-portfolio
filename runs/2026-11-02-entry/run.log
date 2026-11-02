@@ -1,0 +1,55 @@
+[15:30:29] == re-research ADX:ADNOCLS (dip radar)
+[15:30:29] == re-research RDDT (dip radar)
+[15:30:29] $ bin/py scripts/sec_delta.py ADX:ADNOCLS --asof 2026-11-02
+[15:30:29] $ bin/py scripts/sec_delta.py RDDT --asof 2026-11-02
+[15:30:29] SKIP ADX:ADNOCLS: not a US listing (SEC filers only)
+[15:30:29] $ claude -p Ticker ADX:ADNOCLS, note type CORE, date 2026-11-02. Dip radar: the close 6.8 (2026-10-29) is -8.1% over the 7 sessions since our last research (2026-10-20) vs the S&P 500 +0.0% (beta 0.44); the stock-specific part is -8.1% (-2.22 standard deviations); -7.7% since our AVOID at conviction 3 on 2026-10-20; base fair value 8.04. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:44] OK research/RDDT/sec-delta-2026-11-02.md
+[15:30:44] $ claude -p Ticker RDDT, note type CORE, date 2026-11-02. Dip radar: the close 91.73 (2026-10-30) is -42.6% over the 15 sessions since our last research (2026-10-09) vs the S&P 500 -2.9% (beta 1.82); the stock-specific part is -37.3% (-2.07 standard deviations); -41.4% since our AVOID at conviction 3 on 2026-10-09; base fair value 284.26. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason. SEC filing delta: research/RDDT/sec-delta-2026-11-02.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:33:13] - Note: `research/ADX-ADNOCLS/2026-11-02.md`
+- Fact sheet: `research/ADX-ADNOCLS/factsheet-2026-11-02.md`
+- Check: `OK research/ADX-ADNOCLS/2026-11-02.md type=CORE 1=52 2=79 3=142 4=29 5=48 6=47 total=397`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls, because the fact sheet showed no news after 2026-08-24.
+- Cause of the fall: I found none, and the note says so. It also says nothing from the earlier AVOID has been resolved, so the evidence doesn't support a BUY.
+[15:33:13] $ bin/py scripts/check_docs.py note research/ADX-ADNOCLS/2026-11-02.md
+[15:33:13] OK research/ADX-ADNOCLS/2026-11-02.md type=CORE 1=52 2=79 3=142 4=29 5=48 6=47 total=397
+[15:33:13] $ bin/py scripts/macro_data.py --asof 2026-11-02
+[15:33:28] - Note: `research/RDDT/2026-11-02.md`
+- Fact sheet: `research/RDDT/factsheet-2026-11-02.md`
+- Check: `OK research/RDDT/2026-11-02.md type=CORE 1=51 2=136 3=119 4=68 5=79 6=92 total=545`
+- Data conflict: your brief gives a base fair value of 284.26. The fact sheet shows 316.29. The note flags this and uses neither number as an input.
+- Blocked URLs: none. I made one WebFetch, of the 10-Q.
+[15:33:28] $ bin/py scripts/check_docs.py note research/RDDT/2026-11-02.md
+[15:33:28] OK research/RDDT/2026-11-02.md type=CORE 1=51 2=136 3=119 4=68 5=79 6=92 total=545
+[15:33:28] $ bin/py scripts/macro_data.py --asof 2026-11-02
+[15:33:43] {"out": "reports/macro/2026-11-02.md", "series": 11, "unavailable": []}
+[15:33:43] $ claude -p Ticker ADX:ADNOCLS, date 2026-11-02. Research: research/ADX-ADNOCLS/factsheet-2026-11-02.md, research/ADX-ADNOCLS/2026-11-02.md. Macro snapshot: reports/macro/2026-11-02.md. Write research/ADX-ADNOCLS/2026-11-02-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:33:46] {"out": "reports/macro/2026-11-02.md", "series": 11, "unavailable": []}
+[15:33:46] $ claude -p Ticker RDDT, date 2026-11-02. Research: research/RDDT/factsheet-2026-11-02.md, research/RDDT/2026-11-02.md. Macro snapshot: reports/macro/2026-11-02.md. Write research/RDDT/2026-11-02-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:33:58] research/ADX-ADNOCLS/2026-11-02-macro.md
+OK research/ADX-ADNOCLS/2026-11-02-macro.md macro_weight=context words=70
+[15:33:58] $ bin/py scripts/check_docs.py macro research/ADX-ADNOCLS/2026-11-02-macro.md
+[15:33:58] OK research/ADX-ADNOCLS/2026-11-02-macro.md macro_weight=context words=70
+[15:33:58] $ claude -p Evaluate ADX:ADNOCLS for 2026-11-02: fact sheet research/ADX-ADNOCLS/factsheet-2026-11-02.md, note research/ADX-ADNOCLS/2026-11-02.md, state portfolio/state.json, macro overlay research/ADX-ADNOCLS/2026-11-02-macro.md. Dip radar: the close 6.8 (2026-10-29) is -8.1% over the 7 sessions since our last research (2026-10-20) vs the S&P 500 +0.0% (beta 0.44); the stock-specific part is -8.1% (-2.22 standard deviations); -7.7% since our AVOID at conviction 3 on 2026-10-20; base fair value 8.04. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:34:10] research/RDDT/2026-11-02-macro.md
+OK research/RDDT/2026-11-02-macro.md macro_weight=context words=40
+[15:34:10] $ bin/py scripts/check_docs.py macro research/RDDT/2026-11-02-macro.md
+[15:34:11] OK research/RDDT/2026-11-02-macro.md macro_weight=context words=40
+[15:34:11] $ claude -p Evaluate RDDT for 2026-11-02: fact sheet research/RDDT/factsheet-2026-11-02.md, note research/RDDT/2026-11-02.md, state portfolio/state.json, macro overlay research/RDDT/2026-11-02-macro.md. Dip radar: the close 91.73 (2026-10-30) is -42.6% over the 15 sessions since our last research (2026-10-09) vs the S&P 500 -2.9% (beta 1.82); the stock-specific part is -37.3% (-2.07 standard deviations); -41.4% since our AVOID at conviction 3 on 2026-10-09; base fair value 284.26. Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall is an overreaction to something that doesn't break the business case, or it removed the obstacle that made it an AVOID; a falling price alone is not a reason. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:34:30] Decision: AVOID at conviction 3, entry price 6.54 AED.
+
+research/ADX-ADNOCLS/2026-11-02-evaluation.md
+OK research/ADX-ADNOCLS/2026-11-02-evaluation.md Bear case=119 Bull case=92 decision=AVOID
+[15:34:30] $ bin/py scripts/check_docs.py eval research/ADX-ADNOCLS/2026-11-02-evaluation.md
+[15:34:30] OK research/ADX-ADNOCLS/2026-11-02-evaluation.md Bear case=119 Bull case=92 decision=AVOID
+[15:34:30] $ bin/py scripts/valuation.py ADX:ADNOCLS --asof 2026-11-02 --eval research/ADX-ADNOCLS/2026-11-02-evaluation.md
+[15:34:30] {"out": "research/ADX-ADNOCLS/2026-11-02-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -12.04, "base": 8.18, "bull": 11.86}, "price": 6.84}
+[15:34:31] == ADX:ADNOCLS: AVOID 3
+[15:34:53] research/RDDT/2026-11-02-evaluation.md
+OK research/RDDT/2026-11-02-evaluation.md Bear case=136 Bull case=129 decision=AVOID
+[15:34:53] $ bin/py scripts/check_docs.py eval research/RDDT/2026-11-02-evaluation.md
+[15:34:53] OK research/RDDT/2026-11-02-evaluation.md Bear case=136 Bull case=129 decision=AVOID
+[15:34:53] $ bin/py scripts/valuation.py RDDT --asof 2026-11-02 --eval research/RDDT/2026-11-02-evaluation.md
+[15:34:53] {"out": "research/RDDT/2026-11-02-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 301.25, "base": 316.29, "bull": 331.32}, "price": 91.73}
+[15:34:54] == RDDT: AVOID 3
