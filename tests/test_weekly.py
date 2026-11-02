@@ -680,3 +680,14 @@ def test_rerun_reuses_todays_checked_research(fake_repo, monkeypatch):
     ev = wr.research_and_evaluate("AAA", "CORE", "2026-10-10", "why", lambda *a: calls.append(a), lambda m: None,
                                   fake_repo / "runs" / "2026-10-10")
     assert ev == d / "2026-10-10-evaluation.md" and calls == []  # no agent called
+
+
+def test_rolling_reviews_pick_the_oldest_research_first(fake_repo):
+    for t, d in (("A", "2026-10-07"), ("B", "2026-10-17"), ("C", "2026-10-09"), ("D", "2026-10-08")):
+        (fake_repo / "research" / t).mkdir(parents=True)
+        (fake_repo / "research" / t / f"{d}-evaluation.md").write_text("x")
+    state = {"holdings": {t: {"type": "CORE", "entry_date": "2026-10-08"} for t in "ABCDE"} |
+             {"T": {"type": "TACTICAL"}}}
+    # E has no research at all (oldest); A is being re-researched anyway this week
+    assert wr.rolling_reviews(state, {"A"}, "2026-10-31", 3) == ["E", "D", "C"]
+    assert wr.rolling_reviews(state, set(), "2026-10-31", 0) == []

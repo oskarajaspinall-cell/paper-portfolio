@@ -182,6 +182,20 @@ def run_cash_strategy(asof: str, agent, log) -> None:
         log(f"!! MACRO VIEW UNAVAILABLE (the mechanical score stands): {e}")
 
 
+def rolling_reviews(state: dict, already: set[str], asof: str, n: int) -> list[str]:
+    """The `n` CORE holdings with the oldest full research (latest evaluation date; ties: oldest entry), not
+    already being re-researched this week: every holding gets a complete fresh look about every
+    holdings / n weeks, flagged or not (owner request 2026-11-02)."""
+    rows = []
+    for t, h in state["holdings"].items():
+        if h.get("type") != "CORE" or t in already:
+            continue
+        evs = sorted(p.name[:10] for p in (ROOT / "research" / Ticker(t).slug).glob("20??-??-??-evaluation.md")
+                     if p.name[:10] < asof)
+        rows.append((evs[-1] if evs else "0000-00-00", h.get("entry_date") or "", t))
+    return [t for *_, t in sorted(rows)[:max(0, n)]]
+
+
 def run_funding_queue(asof: str, dry_run: bool, agent, log, rundir: Path) -> None:
     """Funding queue (2026-10-18): resubmit waiting conviction-4 BUYs that now fit above the cash reserve, then
     the swap-reviewer weighs the best one still waiting against the weakest CORE holdings. A swap is a BUY with
@@ -274,12 +288,19 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
 
         evals = []
         fvr = {f["ticker"]: f for f in scan.get("fair_value_reached", [])}
-        for t in dict.fromkeys(reinit + list(dip_holdings)):
+        rolling = rolling_reviews(state, set(reinit) | set(dip_holdings), asof,
+                                  int(cfg["core"].get("rolling_reviews_per_week", 0)))
+        if rolling:
+            log(f"== rolling full re-check (oldest research first): {', '.join(rolling)}")
+        for t in dict.fromkeys(reinit + list(dip_holdings) + rolling):
             step(f"reinitiate {t}")
             h = state["holdings"][t]
             src = ("the price reached its base fair value" if t in fvr and t in scan["reinitiate"] else
                    "core or macro trigger fired" if t in scan["reinitiate"] else
-                   "escalated by weekly review" if t in reinit else "dip radar")
+                   "escalated by weekly review" if t in reinit else
+                   "dip radar" if t in dip_holdings else
+                   "rolling full re-check: the holding with the oldest full research, re-examined whether or not "
+                   "anything was flagged (owner request 2026-11-02)")
             why = (f"This is a full re-initiation of an existing {h['type']} holding (scan: {src}). "
                    f"Decide ADD, HOLD, TRIM or SELL.")
             if t in dip_holdings and t not in reinit:
