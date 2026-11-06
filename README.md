@@ -2,6 +2,15 @@
 
 Paper Portfolio is a hands-off, simulated stock portfolio that runs itself every week, on your own Mac or on GitHub Actions. A Python screen scores thousands of stocks on quality, valuation and momentum. Claude agents then research the best ideas, argue the bear case before the bull case, and must reach a firm decision with a conviction level. Simple scripts handle everything else: prices, position sizing, trading costs, stop-losses and returns, so no maths is left to the AI. Every decision is logged and scored against the S&P 500 at 1, 3, 6 and 12 months, building an honest track record. It's paper trading only, with no broker connection. Fork it, add your own Claude key, and choose your own stocks.
 
+**Mandate.** Beat the S&P 500 over rolling 12-month periods with a concentrated portfolio of 8–15 high-quality
+businesses bought at attractive valuations and held for their fundamentals. Every week the ~3,800 largest listed
+companies worldwide are ranked on quality and valuation (cyclicals on peak profits marked down); an AI analyst
+researches the best from stockanalysis.com figures and primary sources; the bear case is argued before the bull case
+and only conviction 4–5 out of 5 is bought, sized 7–10% by conviction and volatility, with caps of 30% per sector and
+25% in China/Hong Kong. Holdings are re-priced daily, tested against their thesis triggers, re-researched in full about
+every four weeks, and a cash reserve of 5–35% follows a macro stress score. Core positions have no price stops, and
+sell-side targets are never used. Every decision is logged and scored against the S&P 500.
+
 **📊 Live dashboard:** https://oskarajaspinall-cell.github.io/paper-portfolio/ (updated every 15 minutes while markets are open, and after every run)
 
 > **Paper trading only. Not investment advice.** There is no broker connection, no real orders and no

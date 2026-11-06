@@ -362,10 +362,16 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 .chg{display:inline-block;min-width:76px;text-align:right;padding:2px 8px;border-radius:6px;font-weight:600;font-variant-numeric:tabular-nums}
 .chg.up{color:var(--up);background:color-mix(in srgb,var(--up) 13%,transparent)}.chg.down{color:var(--down);background:color-mix(in srgb,var(--down) 13%,transparent)}
 .chg.flat{color:var(--ink2);background:color-mix(in srgb,var(--ink2) 10%,transparent)}.chg small{font-weight:400;opacity:.8;margin-left:4px}
+.mandate p{margin:6px 0 0;max-width:80ch}
+.steps{list-style:none;margin:12px 0 8px;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.steps li{border:1px solid var(--ring);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--ink2);background:var(--page)}
+.steps li b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+@media (max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:520px){.steps{grid-template-columns:1fr}}
 .toggle{background:none;border:1px solid var(--ring);border-radius:8px;color:var(--ink2);padding:4px 10px;cursor:pointer;font:inherit;font-size:13px}
 </style></head><body><main>
 <header><div><h1>Paper Portfolio</h1><div class="sub">Simulated $<span id="start"></span> portfolio · paper trading only, not investment advice · updated <span id="gen"></span></div></div>
 <button class="toggle" id="theme" type="button">Toggle dark mode</button></header>
+__MANDATE__
 <section class="card" aria-label="Summary"><div class="sub">Portfolio value</div><div class="hero" id="hero"></div><div class="sub" id="heroSub"></div>
 <div class="tiles" id="tiles"></div></section>
 <section class="card"><h2>Return vs the S&amp;P 500</h2>
@@ -619,9 +625,46 @@ if(D.repo)$('repo').append('Source and research notes: ',el('a',{href:D.repo},D.
 """
 
 
+def mandate_html(cfg: dict) -> str:
+    """The mandate / investment-process card at the top of the dashboard (owner request 2026-11-06: make the
+    process visible to outside viewers). Built from the live config so its numbers never go stale."""
+    from html import escape as e
+    p, core, cs = cfg["portfolio"], cfg["core"], cfg.get("cash_strategy", {})
+    sz = core["conviction_size_pct"]
+    lo, hi = core.get("vol_scale_clamp", [0.6, 1.4])
+    caps = "; ".join(f"{g['name']} {g['max_pct']:g}%" for g in p.get("country_group_caps", []))
+    uni = cfg.get("universe", {}).get("allworld_size")
+    roll = int(core.get("rolling_reviews_per_week", 0))
+    steps = [
+        ("Screen", f"Every week {f'the ~{uni:,} largest listed companies worldwide' if uni else 'the universe'} "
+                   "are ranked on quality and valuation; cyclicals on peak profits are marked down."),
+        ("Research", "An AI analyst writes a note from stockanalysis.com figures and primary sources (filings, "
+                     "company releases), citing every number."),
+        ("Decide", "The bear case is argued before the bull case, ending in BUY or AVOID with conviction 1-5. "
+                   f"Only conviction {core.get('min_buy_conviction', 4)}+ is bought."),
+        ("Size", f"{sz['4']:g}% (conviction 4) or {sz['5']:g}% (5), scaled {lo:g}-{hi:g}x by volatility. "
+                 f"Caps: {p['max_sector_pct']:g}% per sector" + (f"; {caps}" if caps else "")
+                 + f"; at most {p['max_holdings']} holdings."),
+        ("Monitor", "Daily re-pricing and thesis triggers, a dip radar for unusual falls"
+                    + (f", and a full re-check of {roll} holdings a week" if roll else "")
+                    + (f". A cash reserve of {cs['reserve_min_pct']:g}-{cs['reserve_max_pct']:g}% follows a "
+                       "macro stress score." if "reserve_min_pct" in cs else ".")),
+    ]
+    intro = (f"Objective: beat the S&P 500 over rolling 12-month periods with a concentrated portfolio of "
+             f"{p['min_holdings']}-{p['max_holdings']} high-quality businesses bought at attractive valuations, "
+             f"held for their fundamentals (about a 12-month horizon). Paper trading only: "
+             f"${p['starting_cash_usd']:,.0f} simulated, in US dollars, no broker.")
+    rule = ("Core positions have no price stops: they are sold when the business case breaks, not when the price "
+            "falls. Sell-side price targets are never used. Every decision is logged and scored against the "
+            "S&P 500 at 1, 3, 6 and 12 months.")
+    lis = "".join(f'<li><b>{i}. {e(t)}</b><span>{e(d)}</span></li>' for i, (t, d) in enumerate(steps, 1))
+    return (f'<section class="card mandate" aria-label="Mandate"><h2>Mandate &amp; investment process</h2>'
+            f'<p>{e(intro)}</p><ol class="steps">{lis}</ol><p class="sub">{e(rule)}</p></section>')
+
+
 def render(data: dict) -> str:
     blob = json.dumps(data).replace("</", "<\\/")  # never let data close the script tag
-    return PAGE.replace("__DATA__", blob)
+    return PAGE.replace("__DATA__", blob).replace("__MANDATE__", mandate_html(load_config()))
 
 
 def main(argv=None) -> int:
