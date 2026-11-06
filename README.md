@@ -25,7 +25,7 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 
 | Schedule | On your Mac (`bin/install-mac-schedule`) | On GitHub Actions (UTC) |
 |---|---|---|
-| Screen + review | Friday 22:00, one script (`bin/weekly-local`) | Screen Friday 21:00, review Saturday 08:00 |
+| Screen + review | Saturday 15:00, one script (`bin/weekly-local`) | Screen Friday 21:00, review Saturday 08:00 |
 | Daily update | Weekdays 21:30 UK (`bin/fill-pending`) | Weekdays 21:30 |
 | Intraday check | Weekdays 14:30 + 15:30 UK (`bin/entry-intraday`; acts once, ~10:30 New York) | – |
 | Live dashboard | Every 15 min, weekdays 08:00–21:15 UK (`bin/live-dashboard`) | – |
@@ -215,7 +215,7 @@ bin/py scripts/screen.py --limit 200
 bin/py scripts/weekly_run.py --local --dry-run
 ```
 `--local` runs on your computer even though the repository contains `PAUSED` (which then only pauses
-GitHub). Drop `--dry-run` for a real run. To run everything automatically (Friday 22:00 screen + review,
+GitHub). Drop `--dry-run` for a real run. To run everything automatically (Saturday 15:00 screen + review,
 weekday 21:30 order fills, each committing and uploading to your GitHub repo):
 ```bash
 bin/install-mac-schedule

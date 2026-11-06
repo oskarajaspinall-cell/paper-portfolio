@@ -1,6 +1,6 @@
 #!/bin/bash
 # Weekly run on this Mac: universe -> screen -> weekly review -> commit -> upload to GitHub.
-# Started by macOS launchd every Friday 22:00 (~/Library/LaunchAgents/com.paperportfolio.weekly.plist).
+# Started by macOS launchd every Saturday 15:00 (owner request 2026-11-06; was Friday 22:00, when the Mac kept sleeping) (~/Library/LaunchAgents/com.paperportfolio.weekly.plist).
 #   bin/weekly-local          real run
 #   bin/weekly-local --test   quick check: 20-stock screen, dry-run review, no commit/upload
 set -u
@@ -11,12 +11,14 @@ cd "$(dirname "$0")/.." || exit 1
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 TEST=0; [ "${1:-}" = "--test" ] && TEST=1
 
-FRIDAY=$(date +%F)
-ASOF=$(date -v+1d +%F)            # review date = next day, so Friday's closes count as completed
+RUNDAY=$(date +%F)
+# review date: on a weekend run it is the run day (Friday's closes are complete); on a weekday run (a manual
+# Friday-night run) the next day, so that day's closes count as completed
+case "$(date +%u)" in 6|7) ASOF=$RUNDAY ;; *) ASOF=$(date -v+1d +%F) ;; esac
 mkdir -p logs
-LOG="logs/weekly-local-$FRIDAY.log"
+LOG="logs/weekly-local-$RUNDAY.log"
 exec >>"$LOG" 2>&1
-echo "== start $(date) (test=$TEST, screen $FRIDAY, review asof $ASOF)"
+echo "== start $(date) (test=$TEST, screen $RUNDAY, review asof $ASOF)"
 
 LOCK=/tmp/paper-portfolio-weekly.lock
 if ! mkdir "$LOCK" 2>/dev/null; then echo "another run is in progress; exiting"; exit 0; fi
@@ -31,7 +33,7 @@ if [ $TEST = 1 ]; then SCREEN_ARGS="--limit 20"; REVIEW_ARGS="--dry-run --max-ne
 # 1-2. Universe + screen. A failure here is logged but never blocks the review (exits must still run).
 bin/with-timeout 3600 bin/py scripts/universe.py build || echo "!! universe build failed (previous list kept)"
 # shellcheck disable=SC2086
-bin/with-timeout 25200 bin/py scripts/screen.py --asof "$FRIDAY" $SCREEN_ARGS || echo "!! screen failed (no new initiations this week)"
+bin/with-timeout 25200 bin/py scripts/screen.py --asof "$RUNDAY" $SCREEN_ARGS || echo "!! screen failed (no new initiations this week)"
 
 # 3. Weekly review (restores portfolio/ itself and writes runs/$ASOF/error.log on failure).
 # shellcheck disable=SC2086

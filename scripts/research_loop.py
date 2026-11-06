@@ -5,7 +5,7 @@ researcher -> macro-overlay -> evaluator, the decision log, and the portfolio-ma
 the cash reserve blocks). Entry-price and dip-radar hits go first. Every 6 finished stocks a batch report
 (reports/research/<date>-batch-NN.md) is committed and pushed. It stops when the queue is done or `stop_after`
 stocks in a row fail (usually the usage limit); a network outage is waited out, not counted (owner request
-2026-10-09). It leaves the machine to the Friday weekly run. Run it again to continue where it stopped.
+2026-10-09). It leaves the machine to the Saturday 15:00 weekly run. Run it again to continue where it stopped.
 
     bin/py scripts/research_loop.py rank runs/<name> [--cache-date YYYY-MM-DD]   build the queue: the global core
                                                        ranking (scripts/screen.py on that day's page cache)
@@ -215,11 +215,11 @@ WEEKLY_LOCK = Path("/tmp/paper-portfolio-review.lock")
 
 
 def weekly_run_near() -> bool:
-    """Leave the machine to the Friday 22:00 weekly run: stop from 21:15 on Fridays, or while its lock exists
+    """Leave the machine to the Saturday 15:00 weekly run: stop from 14:45 on Saturdays, or while its lock exists
     over the weekend. On other days the lock is the weekday 21:30 fills job (about a minute): wait it out
     rather than stop (it stopped the loop every weekday night before 2026-10-12)."""
     now = dt.datetime.now()
-    if (now.weekday() == 4 and (now.hour, now.minute) >= (21, 15)) or (WEEKLY_LOCK.exists() and now.weekday() >= 5):
+    if (now.weekday() == 5 and (now.hour, now.minute) >= (14, 45)) or (WEEKLY_LOCK.exists() and now.weekday() >= 5):
         return True
     t0 = time.monotonic()
     while WEEKLY_LOCK.exists():
