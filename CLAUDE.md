@@ -67,6 +67,8 @@ trim_above_pct = 15
 vol_scaling = true                # design by Claude 2026-10-16 (scripts/risk.py): core target = conviction size x
 vol_scale_clamp = [0.6, 1.4]      # ...clamp(reference vol / the stock's vol), capped at trim_above_pct. Reference =
 ref_vol_pct = 30                  # ...median vol of the core holdings (this % while fewer than 5 have a vol)
+corr_flag = 0.7                   # correlation check (owner-approved 2026-11-07, inform-only, scripts/risk.py): pairs
+corr_weeks = 52                   # ...of weekly returns above this over these weeks are flagged; never blocks or sells
 vol_lookback_sessions = 126       # daily closes for the stock's annualised volatility (~6 months)
 fv_review_rearm_pct = 10          # fair value reached (owner rule 2026-10-09): one re-initiation per crossing; re-arms
 fv_review_days = 90               # ...after a further 10% rise or 90 days. Fair value is a prompt, never a sell signal.
@@ -351,6 +353,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `bin/live-dashboard` (launchd every 15 min; acts weekdays 08:00–21:15 UK) → `scripts/dashboard.py` with a live-price snapshot, uploaded if changed. Display only; the official value stays on closes.
 - `scripts/corporate_actions.py check` — dividends (stockanalysis.com dividend pages) and splits (Yahoo split column, confirmed on stockanalysis.com); log in `portfolio/corporate_actions.csv`, DIVIDEND/SPLIT rows in the ledger, receivables in `state.json`.
 - `scripts/regime.py` → `reports/regime/<date>.json/.md` (+ `-view.md` from `.claude/agents/macro-strategist.md`) — macro regime score, cash reserve, dip release; `--dip` (weekdays) → `reports/regime/dip-<date>.json`, the daily dip release applied on top of the latest weekly regime.
+- `scripts/risk.py` — correlation check (owner-approved 2026-11-07): highly correlated holding pairs in the risk report and dashboard, a warning on a new core BUY that moves with a holding, and each queued idea's correlations in the swap brief. Inform-only.
 - `scripts/risk.py` — volatility-scaled core sizing (`[core].vol_*`, used by `portfolio.py`) and `risk.py report` → `reports/risk/<date>.md/.json` (weekly: each holding's vol, marginal contribution to risk and share of portfolio variance; informational, never trades).
 - `scripts/attribution.py report` → `reports/attribution/<date>.md/.json` (weekly; design by Claude 2026-10-16): Brinson-Fachler allocation / selection / interaction by sector vs a sector-weighted S&P 500 (SPDR sector ETFs; S&P 500 members' caps from stockanalysis.com sector pages), cash as its own sector, linked daily (Carino). Rebuilt from the ledger; informational.
 - `scripts/sec_delta.py <TICKER>` → `research/<SLUG>/sec-delta-<date>.md` (design by Claude 2026-10-16; `[sec]`): run by `weekly_run.research_and_evaluate` before every CORE researcher call. US SEC filers only: added / removed / reworded Risk Factors and MD&A paragraphs vs the comparable filing; figure-only edits dropped. OFF until `SEC_CONTACT` is set in `.env`.

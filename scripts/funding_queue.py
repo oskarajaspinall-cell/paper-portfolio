@@ -392,6 +392,16 @@ def brief(state: dict, mkt, cfg: dict, today: str, watch: dict | None = None) ->
         L.append(f"| {c['ticker']} | {c['conviction']} | {f(c['weight_pct'])}% | {c['entry_date']} at {f(c['entry_price'], 2)} | "
                  f"{f(c['return_pct'])}% | {f(c['close'], 2)} {c['currency']} | {f(c['fair_value_base'], 2)} | "
                  f"{f(c['upside_pct'])}% | {c['evaluation'] or 'n/a'} |")
+    try:
+        from risk import Correlator
+        pairs = Correlator(mkt, cfg).with_holdings(best["ticker"], state)
+    except Exception:
+        pairs = []
+    if pairs:
+        flag = float(cfg.get("core", {}).get("corr_flag", 0.7))
+        L += ["", f"Correlation of {best['ticker']} with current holdings (weekly returns; above {flag} = overlapping "
+              "exposure, so selling that holding keeps the portfolio more diversified): "
+              + ", ".join(f"{t} {r:.2f}" + (" (high)" if r > flag else "") for t, r in pairs[:5]) + "."]
     others = [e["ticker"] for e in q[1:]]
     if others:
         L += ["", f"Also waiting (not in this week's comparison): {', '.join(others)}."]

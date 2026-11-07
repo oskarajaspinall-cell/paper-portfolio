@@ -9,6 +9,9 @@ Design by Claude 2026-10-16 (config [core].vol_*):
 - Risk report (inform-only, never trades): each holding's weight, volatility, marginal contribution to
   risk MCR_i = (S w)_i / sigma_p and share of portfolio variance RC_i = w_i x MCR_i / sigma_p, from a
   covariance of WEEKLY returns (weekly, so markets in different time zones line up).
+- Correlation check (owner-approved 2026-11-07, inform-only): pairs whose weekly returns over the last
+  `[core].corr_weeks` correlate above `[core].corr_flag` are listed in the report, attached as a warning to a
+  new core BUY, and shown in the funding-queue swap brief. Never blocks or sells anything.
 
 Usage:
     python scripts/risk.py report [--asof YYYY-MM-DD]   -> reports/risk/<date>.md/.json
@@ -70,6 +73,70 @@ def contributions(w: list[float], cov: list[list[float]]) -> dict:
             "rc": [wi * x / var if var else 0.0 for wi, x in zip(w, sw)]}
 
 
+MIN_CORR_WEEKS = 20      # fewer common weeks than this -> no correlation
+
+
+def correlation(a: dict[str, float], b: dict[str, float], weeks: int = 52) -> float | None:
+    """Pearson correlation of two weekly-return series over their last `weeks` common weeks."""
+    ks = sorted(set(a) & set(b))[-weeks:]
+    if len(ks) < MIN_CORR_WEEKS:
+        return None
+    x, y = [a[k] for k in ks], [b[k] for k in ks]
+    mx, my = st.mean(x), st.mean(y)
+    sxy = sum((i - mx) * (j - my) for i, j in zip(x, y))
+    sxx, syy = sum((i - mx) ** 2 for i in x), sum((j - my) ** 2 for j in y)
+    return sxy / math.sqrt(sxx * syy) if sxx > 0 and syy > 0 else None
+
+
+def corr_settings(cfg: dict) -> tuple[float, int]:
+    c = cfg.get("core", {})
+    return float(c.get("corr_flag", 0.7)), int(c.get("corr_weeks", 52))
+
+
+def correlated_pairs(series: dict[str, dict[str, float]], cfg: dict) -> list[dict]:
+    """Every pair above corr_flag, highest first."""
+    flag, weeks = corr_settings(cfg)
+    names, out = sorted(series), []
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            r = correlation(series[a], series[b], weeks)
+            if r is not None and r > flag:
+                out.append({"a": a, "b": b, "rho": round(r, 2)})
+    return sorted(out, key=lambda p: -p["rho"])
+
+
+class Correlator:
+    """Weekly-return series cached per run; used by the BUY warning and the swap brief."""
+
+    def __init__(self, mkt, cfg: dict):
+        self.mkt, self.cfg, self._s = mkt, cfg, {}
+
+    def series(self, ticker: str) -> dict[str, float]:
+        if ticker not in self._s:
+            try:
+                self._s[ticker] = weekly_returns(self.mkt.history(ticker)["rows"])
+            except (DataError, KeyError, AttributeError):
+                self._s[ticker] = {}
+        return self._s[ticker]
+
+    def with_holdings(self, ticker: str, state: dict) -> list[tuple[str, float]]:
+        """(holding, rho) for every other holding, highest first."""
+        _, weeks = corr_settings(self.cfg)
+        s, out = self.series(ticker), []
+        for t in state["holdings"]:
+            if t != ticker:
+                r = correlation(s, self.series(t), weeks)
+                if r is not None:
+                    out.append((t, round(r, 2)))
+        return sorted(out, key=lambda x: -x[1])
+
+    def warning(self, ticker: str, state: dict) -> str | None:
+        flag, weeks = corr_settings(self.cfg)
+        hi = [f"{t} {r:.2f}" for t, r in self.with_holdings(ticker, state) if r > flag]
+        return (f"{ticker} moves closely with {', '.join(hi)} (weekly-return correlation over {weeks} weeks above "
+                f"{flag}); it adds less diversification than its sector suggests") if hi else None
+
+
 class Sizer:
     """Volatility scaling for core targets; vols are cached per run."""
 
@@ -125,7 +192,8 @@ def report(state: dict, mkt, cfg: dict, asof: str) -> dict:
         rows.append({"ticker": t, "type": h["type"], "sector": h["sector"], "conviction": h.get("conviction"),
                      "weight_pct": h["market_value_usd"] / total * 100, "vol_pct": sizer.vol(t),
                      "target_pct": h.get("target_pct", base)})
-    out = {"asof": asof, "rows": rows, "failed": failed, "sigma_p_pct": None}
+    out = {"asof": asof, "rows": rows, "failed": failed, "sigma_p_pct": None,
+           "corr_flag": corr_settings(cfg)[0], "corr_pairs": correlated_pairs(series, cfg)}
     try:
         names, cov = covariance(series)
     except ValueError as e:
@@ -157,6 +225,10 @@ def report_md(res: dict) -> str:
                      f"{f(r['target_pct'])} | {f(r['vol_pct'], 0)} | {f(r.get('mcr_pct'))} | {f(r.get('risk_share_pct'))} | "
                      f"{'over budget' if r.get('flag') else ''} |")
     lines += [f"- price history failed: {x}" for x in res["failed"]]
+    pairs = res.get("corr_pairs") or []
+    lines += ["", f"## Highly correlated pairs (weekly returns, correlation above {res.get('corr_flag', 0.7)})", ""]
+    lines += (["| Holding | Holding | Correlation |", "|---|---|---|"]
+              + [f"| {p['a']} | {p['b']} | {p['rho']:.2f} |" for p in pairs]) if pairs else ["None."]
     return "\n".join(lines) + "\n"
 
 

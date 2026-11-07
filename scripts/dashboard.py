@@ -307,6 +307,7 @@ def build_data(live: bool = True) -> dict:
         "screen": {"asof": screen.get("asof"), "screened": screen.get("screened"), "picks": screen.get("picks", []),
                    "illiquid": len(screen.get("illiquid") or [])},
         "risk": risk and {"asof": risk["asof"], "sigma_p": risk.get("sigma_p_pct"),
+                          "corr_flag": risk.get("corr_flag"), "corr_pairs": risk.get("corr_pairs"),
                           "rows": sorted(({k: r.get(k) for k in ("ticker", "weight_pct", "target_pct", "vol_pct",
                                                                   "mcr_pct", "risk_share_pct", "flag")}
                                           for r in risk["rows"]), key=lambda r: -(r["risk_share_pct"] or 0))},
@@ -386,7 +387,7 @@ __MANDATE__
 <div class="sub" id="mixSub"></div><div id="sectors"></div></section></div>
 <div class="grid2"><section class="card"><h2>Risk</h2><div class="sub" id="riskSub"></div>
 <div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Share of portfolio risk</span><span><span class="sw" style="background:var(--axis)"></span>Share of invested money</span></div>
-<div id="risk"></div><details><summary>Show as a table</summary><div class="tw"><table id="riskTable"></table></div></details></section>
+<div id="risk"></div><div class="sub" id="corrPairs"></div><details><summary>Show as a table</summary><div class="tw"><table id="riskTable"></table></div></details></section>
 <section class="card"><h2>Where the excess return came from</h2><div class="sub" id="attrSub"></div><div class="tiles" id="attrTiles"></div>
 <div class="tw" style="margin-top:12px"><table id="attrTable"></table></div></section></div>
 <section class="card"><h2>Holdings</h2><div class="tw"><table id="holdings"></table></div></section>
@@ -541,6 +542,7 @@ function riskBars(){const box=$('risk');box.replaceChildren();const R=D.risk;
   hit.addEventListener('pointermove',ev=>showTip(ev,[el('div',{},el('b',{},r.ticker),el('span',{class:'muted'},` · vol ${r.vol_pct==null?'n/a':r.vol_pct.toFixed(0)+'%'}`)),
    el('div',{},`${r.risk_share_pct.toFixed(1)}% of risk on ${ws.toFixed(1)}% of invested money`),r.flag?el('div',{class:'down'},'over its risk budget (more than 2x)'):'']));
   hit.addEventListener('pointerleave',hideTip);svg.append(hit);});box.append(svg);}
+{const R=D.risk,P=R&&R.corr_pairs;$('corrPairs').textContent=!P?'':P.length?`Moving closely together (weekly-return correlation above ${R.corr_flag}): `+P.map(p=>`${p.a} & ${p.b} ${p.rho.toFixed(2)}`).join(', ')+'. Overlapping exposure, informational only.':`No two holdings move closely together (correlation above ${R.corr_flag}).`;}
 {const R=D.risk;$('riskSub').textContent=R?`${R.asof}: portfolio volatility ${R.sigma_p==null?'n/a':R.sigma_p.toFixed(1)+'%'} a year (cash included). How much of the portfolio's ups and downs each holding drives, next to how much money it holds. Red = more than twice its share. Informational; never trades.`:'No risk report yet.';
  table('riskTable',[{h:'Ticker',f:r=>r.ticker},{h:'Weight',n:1,f:r=>r.weight_pct==null?'':r.weight_pct.toFixed(1)+'%'},{h:'Target',n:1,f:r=>r.target_pct==null?'':r.target_pct.toFixed(1)+'%'},
   {h:'Volatility',n:1,f:r=>r.vol_pct==null?'n/a':r.vol_pct.toFixed(0)+'%'},{h:'MCR',n:1,f:r=>r.mcr_pct==null?'n/a':r.mcr_pct.toFixed(1)+'%'},

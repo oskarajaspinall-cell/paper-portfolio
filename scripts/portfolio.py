@@ -932,6 +932,22 @@ def target_warnings(state: dict, cfg: dict) -> list[str]:
     return out
 
 
+def corr_warnings(requests, state: dict, mkt, cfg: dict) -> list[str]:
+    """Inform-only: a new core BUY that moves closely with a current holding (scripts/risk.py). Never rejects."""
+    out = []
+    try:
+        from risk import Correlator
+        c = Correlator(mkt, cfg)
+        for r in requests or []:
+            if r.get("action") == "BUY" and r.get("position_type") == "CORE" and r.get("ticker") not in state["holdings"]:
+                w = c.warning(r["ticker"], state)
+                if w:
+                    out.append(w)
+    except Exception as e:  # a warning must never stop a trade
+        out.append(f"correlation check unavailable: {e}")
+    return out
+
+
 def investable() -> dict:
     """Tickers a BUY may target: the universe (S&P 500, FTSE 100, All-World proxy) plus the watchlist."""
     names = dict(read_watchlist())
@@ -955,7 +971,8 @@ def run_submit(requests, state_path, mkt, cfg, watch, today, dry_run=False, port
                                                      "fill_close_date", "gross_usd", "costs_usd", "cash_change_usd",
                                                      "reason")}
                            for r in eng.ledger],
-               "rejected": eng.rejections, "warnings": target_warnings(state, cfg)}
+               "rejected": eng.rejections,
+               "warnings": target_warnings(state, cfg) + corr_warnings(requests, state, mkt, cfg)}
     if not dry_run:
         append_csv(port_dir / "rejections.csv", REJECT_COLS, eng.rejections)
         if eng.applied:  # nothing applied -> state.json, ledger and valuations are left byte-for-byte untouched
@@ -1118,7 +1135,8 @@ def place_orders(requests, state_path, mkt, cfg, watch, today, dry_run=False, po
                            "type": o["request"]["position_type"], **{f"est_{k}": v for k, v in o["estimate"].items()},
                            "replaces": o["request"].get("replaces"), "reason": o["request"].get("reason", "")}
                           for o in orders],
-               "applied": [], "rejected": eng.rejections, "warnings": target_warnings(state, cfg)}
+               "applied": [], "rejected": eng.rejections,
+               "warnings": target_warnings(state, cfg) + corr_warnings(requests, state, mkt, cfg)}
     if not dry_run:
         append_csv(port_dir / "rejections.csv", REJECT_COLS, eng.rejections)
         import funding_queue  # a BUY stopped only by the cash reserve waits for room (2026-10-18)
