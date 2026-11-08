@@ -435,9 +435,16 @@ def check_macro(md: str, cfg: dict) -> tuple[list[str], dict]:
             errs.append("sources (URL + date for every figure) are required")
         if counts["words"] > 250:
             errs.append(f"Assessment has {counts['words']} words (limit 250)")
-    elif counts["words"] > 80:
-        errs.append(f"a {w} assessment should be ~2 sentences (got {counts['words']} words)")
-    official = {d_.lower() for d_ in cfg.get("macro", {}).get("official_sources", [])}
+    elif counts["words"] > (140 if d.get("country_risk") else 80):
+        errs.append(f"a {w} assessment should be ~2 sentences, plus the country risk when there is one "
+                    f"(got {counts['words']} words)")
+    cr = d.get("country_risk")
+    if cr is not None:  # owner request 2026-11-08
+        if not isinstance(cr, dict) or not all(str(cr.get(k, "")).strip() for k in ("country", "exposure", "assessment")):
+            errs.append("country_risk needs country, exposure and assessment (plus currency, policy_rate, politics "
+                        "where they apply)")
+    official = {d_.lower() for d_ in cfg.get("macro", {}).get("official_sources", [])
+                + cfg.get("macro", {}).get("event_sources", [])}
     for u in re.findall(r"https?://[^\s)\]>|\"]+", md):
         h = (urlparse(u).hostname or "").lower()
         if not any(h == x or h.endswith("." + x) for x in official | allowed_hosts()):

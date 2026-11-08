@@ -28,6 +28,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 ## Investment approach
 - **Position size** (design by Claude 2026-10-16): a core position's target is its conviction size scaled by its own volatility (x0.6–1.4 against the core holdings' median, `[core].vol_*`), set at entry and stored as `target_pct`; existing positions keep their size until an ADD/TRIM. A scale-up stops at the room above the cash reserve and never goes below the plain conviction size (2026-10-17).
 - **Only high conviction is bought**: a BUY or ADD (core or tactical) needs conviction >= `min_buy_conviction` (4). Anything less is AVOID (new names) or HOLD (holdings).
+- **Country risk** (owner request 2026-11-08): when a company earns a material share of its business in a country other than its home market (especially an emerging market), the `macro-overlay` must check that country: its currency against the reporting currency (FRED, `[macro].fred_series`), the local policy rate's direction (central bank) and any recent or coming election, regulation or court ruling (official sources, or `[macro].event_sources` wire reports for dated events). It records this as `country_risk` in the overlay; the evaluator weighs it in the bear case. The researcher states the revenue mix by country/region in "1. Business" when one foreign country is ~10%+.
 - **Recent direction** (owner request 2026-11-08): fact sheets add a rolling-12-month table (ROIC, ROCE, operating and FCF margin: latest TTM vs a year earlier, and the 2-year high) from the site's `?p=trailing` statements, plus a **Direction change** line when the last year contradicts the 5-year trend, falls 2pp+, or sits 2pp+ below the 2-year high. The evaluator must address it rather than call a metric "rising" on fiscal-year endpoints alone.
 - **A downgrade resizes** (owner request 2026-11-08): a CORE holding below the buy bar is held at no more than its conviction size (`conviction_size_pct`, vol-scaled like a new buy: 3 -> ~5%, 2 -> ~3%, 1 -> sold). A re-initiation that lowers conviction gets the TRIM (or SELL) with the same run (`portfolio.py` `size_down_requests`, via `apply_holds`); the weekly scan re-applies it mechanically while it stays above that size by more than `[core].downgrade_trim_gap_pp`. If a conviction-4+ idea is waiting in the funding queue with upside (to the expected 12-month value, else base fair value) at least `[funding_queue].auto_swap_min_gap_pp` (15pp) above the holding's, and the rules accept it as the replacement, the holding is **swapped automatically** (no model call; `funding_queue.py auto-swap`, every weekday in bin/fill-pending and in the weekly run before the swap-reviewer). The new buy is capped at the money the sale frees plus any room above the reserve; a swap that leaves cash no lower than it found it is not blocked by the reserve. Holdings at conviction 4+ keep their size (winners may run to `trim_above_pct`).
 - **Top-up to size** (owner request 2026-11-08, the mirror rule): a CORE holding still at conviction 4+ that drifted more than `[core].topup_band_pp` (2pp) below its size (`target_pct`, else the plain conviction size it was bought at) joins the funding queue as a top-up (`funding_queue.py` `underweight_topups`, checked in every daily `review`): ADD steps of 1%+ from cash above the reserve only, while its latest evaluation is under `topup_max_eval_days` (35) old and the price is no more than `topup_max_fall_pct` (10%) below that evaluation's close (a bigger fall is re-checked first via the dip radar / weekly scan). An automatic swap capped below the idea's full size also leaves the rest as a top-up. Winners are not trimmed back to size: only the 15% cap trims.
@@ -326,9 +327,24 @@ fred_series = [
   { id = "DEXCHUS", label = "Chinese yuan per US dollar" },
   { id = "DEXHKUS", label = "Hong Kong dollars per US dollar" },
   { id = "VIXCLS", label = "VIX (S&P 500 implied volatility)" },
+  # country context (owner request 2026-11-08): euro / UK policy rates and the main foreign currencies, for the
+  # macro overlay's country-risk check. Context only: the cash-strategy stress score does not use them.
+  { id = "ECBDFR", label = "ECB deposit facility rate, %" },
+  { id = "IUDSOIA", label = "UK SONIA overnight rate, %" },
+  { id = "IRSTCI01BRM156N", label = "Brazil overnight (Selic) rate, % (monthly)" },
+  { id = "DEXUSEU", label = "US dollars per euro" },
+  { id = "DEXUSUK", label = "US dollars per pound" },
+  { id = "DEXJPUS", label = "Japanese yen per US dollar" },
+  { id = "DEXBZUS", label = "Brazilian reais per US dollar" },
+  { id = "DEXMXUS", label = "Mexican pesos per US dollar" },
+  { id = "DEXINUS", label = "Indian rupees per US dollar" },
 ]
 official_sources = ["fred.stlouisfed.org", "federalreserve.gov", "ecb.europa.eu", "bankofengland.co.uk", "ons.gov.uk",
-                    "bls.gov", "bea.gov", "pbc.gov.cn", "stats.gov.cn", "hkma.gov.hk"]
+                    "bls.gov", "bea.gov", "pbc.gov.cn", "stats.gov.cn", "hkma.gov.hk",
+                    "bcb.gov.br", "ibge.gov.br", "tse.jus.br", "gov.br", "banxico.org.mx", "rbi.org.in", "boj.or.jp"]
+# dated political / regulatory EVENTS only (an election result, a decree, a court ruling): wire services, cited as
+# reporting, never for numbers or opinions (owner request 2026-11-08)
+event_sources = ["reuters.com"]  # already on the [data] allowlist
 max_fetches = 3                   # official pages the macro-overlay agent may read per stock
 
 [agents]

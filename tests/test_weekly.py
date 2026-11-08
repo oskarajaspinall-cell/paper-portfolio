@@ -691,3 +691,16 @@ def test_rolling_reviews_pick_the_oldest_research_first(fake_repo):
     # E has no research at all (oldest); A is being re-researched anyway this week
     assert wr.rolling_reviews(state, {"A"}, "2026-10-31", 3) == ["E", "D", "C"]
     assert wr.rolling_reviews(state, set(), "2026-10-31", 0) == []
+
+
+def test_check_macro_country_risk(real_cfg):
+    from check_docs import check_macro
+    ok = {"country": "Brazil", "exposure": "meal vouchers ~10% of revenue", "currency": "BRL -7% on 26 Oct",
+          "policy_rate": "Selic held at 13.75%", "politics": "Lula re-elected", "assessment": "toward bear, small"}
+    assert check_macro(macro_md(country_risk=ok), real_cfg)[0] == []
+    errs = check_macro(macro_md(country_risk={"country": "Brazil"}), real_cfg)[0]
+    assert any("country_risk needs" in e for e in errs)
+    # a wire report of a dated event is an allowed source; a random site is not
+    md = macro_md(country_risk=ok).replace("2026-10-05).", "2026-10-05; https://www.reuters.com/world/x).", 1)
+    assert check_macro(md, real_cfg)[0] == []
+    assert any("allowlist" in e for e in check_macro(md.replace("reuters.com", "example.com"), real_cfg)[0])

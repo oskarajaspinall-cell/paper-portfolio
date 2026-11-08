@@ -35,7 +35,7 @@ The caller gives you: ticker (stockanalysis.com format, e.g. `AAPL`, `LON:SHEL`)
 ```
 # <Company> (<TICKER>) — Core initiation — <YYYY-MM-DD>
 ## 1. Business
-How it makes money. ≤80 words.
+How it makes money. ≤80 words. Where one foreign country or emerging-market region is ~10%+ of revenue, name it and its share (`[company-reported]` with the URL) so the macro overlay can check its country risk.
 ## 2. Quality
 Is it a good business; is there a durable reason competitors can't take its returns away. ≤150 words.
 ## 3. Valuation

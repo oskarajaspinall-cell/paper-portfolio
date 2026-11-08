@@ -53,3 +53,8 @@ OK research/EPA-EDEN/2026-11-08-evaluation.md Bear case=142 Bull case=142 decisi
 [04:18:49] $ bin/py scripts/valuation.py EPA:EDEN --asof 2026-11-08 --eval research/EPA-EDEN/2026-11-08-evaluation.md
 [04:18:49] {"out": "research/EPA-EDEN/2026-11-08-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 21.15, "base": 38.59, "bull": 55.24}, "price": 24.6}
 [04:18:49] == RESULT BUY 4 /Users/oskaraspinall/paper-portfolio/research/EPA-EDEN/2026-11-08-evaluation.md
+[04:27:10] $ claude -p Ticker EPA:EDEN, date 2026-11-08. Research: research/EPA-EDEN/factsheet-2026-11-08.md, research/EPA-EDEN/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/EPA-EDEN/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:28:00] research/EPA-EDEN/2026-11-08-macro.md
+OK research/EPA-EDEN/2026-11-08-macro.md macro_weight=secondary words=232
+[04:28:00] $ bin/py scripts/check_docs.py macro research/EPA-EDEN/2026-11-08-macro.md
+[04:28:00] OK research/EPA-EDEN/2026-11-08-macro.md macro_weight=secondary words=232
