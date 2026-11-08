@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 12.06291468603161,
+    "base": 19.47373757451324,
+    "bull": 22.89456412726847
+   },
+   "cost_of_equity": 0.097571,
+   "assumptions": {
+    "roe": {
+     "bear": 0.10808,
+     "base": 0.15912,
+     "bull": 0.18268
+    },
+    "justified_pb": {
+     "bear": 1.1448099102947458,
+     "base": 1.8481211503217543,
+     "bull": 2.172768736823249
+    },
+    "bvps": 10.537046
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 23.831932628828277,
+    "base": 36.16527939027528,
+    "bull": 47.89303562871375
+   },
+   "implied_growth": -0.03660402924052292,
+   "discount_rate": 0.097571,
+   "cost_of_equity": 0.097571,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.03883141908337247,
+     "base": 0.07619347075477632,
+     "bull": 0.14211104485236037
+    },
+    "cash_flow_margin": {
+     "bear": 0.25016129032258067,
+     "base": 0.32616275800011246,
+     "bull": 0.3321220930232558
+    },
+    "cagr_3y": 0.11266283816674494,
+    "cagr_5y": 0.14211104485236037,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 11.309055237310918,
+    "base": 12.994171225420622,
+    "bull": 15.217912451455145
+   },
+   "cost_of_equity": 0.097571,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 0.92
+   }
+  }
+ ],
+ "price": 22.73,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 15.98592066696383,
+  "base": 25.03758484643392,
+  "bull": 31.227387961083565
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.29670388618724897,
+  "base": 0.10152155065701352,
+  "bull": 0.37384020946254126
+ },
+ "implied_growth": -0.03660402924052292,
+ "ticker": "BME:BBVA",
+ "asof": "2026-11-08",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bme/BBVA/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bme/BBVA/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bme/BBVA/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bme/BBVA/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bme/BBVA/statistics/"
+ }
+}

@@ -1603,3 +1603,154 @@ OK research/KRX-000270/2026-11-08-evaluation.md Bear case=147 Bull case=120 deci
 [15:56:37] $ bin/py scripts/valuation.py KRX:000270 --asof 2026-11-08 --eval research/KRX-000270/2026-11-08-evaluation.md
 [15:56:37] {"out": "research/KRX-000270/2026-11-08-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 175113.26, "base": 322382.8, "bull": 430736.36}, "price": 100300}
 [15:56:38] == done KRX:000270
+[15:56:42] - Note: `research/BIT-AZM/2026-11-08.md`
+- Fact sheet: `research/BIT-AZM/factsheet-2026-11-08.md`
+- check_docs: `OK research/BIT-AZM/2026-11-08.md type=CORE 1=53 2=114 3=140 4=34 5=65 6=52 total=458`
+- Blocked URL: `https://www.azimut-group.com/en/investor-relations` is not on the allowlist, so I took nothing from it. Revenue by country is therefore marked `[data unavailable]`.
+- Data conflicts: none.
+- Data gaps in the fact sheet: peer EV/EBITDA and EV/Sales, and short interest, are `[data unavailable]`.
+- Stale data: the fact sheet lists a next-earnings date of Nov 5, 2026, but the latest results it shows are Q2 2026. The Q3 release may not be in the fact sheet yet.
+[15:56:42] $ bin/py scripts/check_docs.py note research/BIT-AZM/2026-11-08.md
+[15:56:42] OK research/BIT-AZM/2026-11-08.md type=CORE 1=53 2=114 3=140 4=34 5=65 6=52 total=458
+[15:56:42] $ claude -p Ticker BIT:AZM, date 2026-11-08. Research: research/BIT-AZM/factsheet-2026-11-08.md, research/BIT-AZM/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/BIT-AZM/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:56:42] == Research batch 05: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-08-batch-05.md; uploaded to GitHub
+[15:56:52] research/JSE-VOD/2026-11-08-macro.md
+OK research/JSE-VOD/2026-11-08-macro.md macro_weight=context words=101
+[15:56:52] $ bin/py scripts/check_docs.py macro research/JSE-VOD/2026-11-08-macro.md
+[15:56:52] OK research/JSE-VOD/2026-11-08-macro.md macro_weight=context words=101
+[15:56:52] $ claude -p Evaluate JSE:VOD for 2026-11-08: fact sheet research/JSE-VOD/factsheet-2026-11-08.md, note research/JSE-VOD/2026-11-08.md, state portfolio/state.json, macro overlay research/JSE-VOD/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:57:03] == initiate GLPI
+[15:57:03] $ bin/py scripts/sec_delta.py GLPI --asof 2026-11-08
+[15:57:10] research/BIT-AZM/2026-11-08-macro.md
+OK research/BIT-AZM/2026-11-08-macro.md macro_weight=context words=56
+[15:57:10] $ bin/py scripts/check_docs.py macro research/BIT-AZM/2026-11-08-macro.md
+[15:57:10] OK research/BIT-AZM/2026-11-08-macro.md macro_weight=context words=56
+[15:57:10] $ claude -p Evaluate BIT:AZM for 2026-11-08: fact sheet research/BIT-AZM/factsheet-2026-11-08.md, note research/BIT-AZM/2026-11-08.md, state portfolio/state.json, macro overlay research/BIT-AZM/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:57:14] OK research/GLPI/sec-delta-2026-11-08.md
+[15:57:14] $ claude -p Ticker GLPI, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. SEC filing delta: research/GLPI/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:57:34] research/JSE-VOD/2026-11-08-evaluation.md
+OK research/JSE-VOD/2026-11-08-evaluation.md Bear case=136 Bull case=109 decision=AVOID
+[15:57:34] $ bin/py scripts/check_docs.py eval research/JSE-VOD/2026-11-08-evaluation.md
+[15:57:34] OK research/JSE-VOD/2026-11-08-evaluation.md Bear case=136 Bull case=109 decision=AVOID
+[15:57:34] $ bin/py scripts/valuation.py JSE:VOD --asof 2026-11-08 --eval research/JSE-VOD/2026-11-08-evaluation.md
+[15:57:35] {"out": "research/JSE-VOD/2026-11-08-valuation.md", "used": null, "fair_value": {}, "price": 16267}
+[15:57:37] == done JSE:VOD
+[15:57:59] == screened out SHA:600489: price above base fair value (-39.4%; floor +0%) (no AI research)
+[15:58:04] research/BIT-AZM/2026-11-08-evaluation.md
+OK research/BIT-AZM/2026-11-08-evaluation.md Bear case=145 Bull case=130 decision=AVOID
+[15:58:04] $ bin/py scripts/check_docs.py eval research/BIT-AZM/2026-11-08-evaluation.md
+[15:58:04] OK research/BIT-AZM/2026-11-08-evaluation.md Bear case=145 Bull case=130 decision=AVOID
+[15:58:04] $ bin/py scripts/valuation.py BIT:AZM --asof 2026-11-08 --eval research/BIT-AZM/2026-11-08-evaluation.md
+[15:58:05] {"out": "research/BIT-AZM/2026-11-08-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 30.31, "base": 38.65, "bull": 51.85}, "price": 35.82}
+[15:58:05] == done BIT:AZM
+[15:58:23] Note: research/GLPI/2026-11-08.md
+Fact sheet: research/GLPI/factsheet-2026-11-08.md
+check_docs: OK research/GLPI/2026-11-08.md type=CORE 1=60 2=143 3=148 4=81 5=71 6=58 total=561
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+[15:58:23] $ bin/py scripts/check_docs.py note research/GLPI/2026-11-08.md
+[15:58:23] OK research/GLPI/2026-11-08.md type=CORE 1=60 2=143 3=148 4=81 5=71 6=58 total=561
+[15:58:23] $ claude -p Ticker GLPI, date 2026-11-08. Research: research/GLPI/factsheet-2026-11-08.md, research/GLPI/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/GLPI/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:58:40] == initiate SHE:000999
+[15:58:40] $ bin/py scripts/sec_delta.py SHE:000999 --asof 2026-11-08
+[15:58:41] SKIP SHE:000999: not a US listing (SEC filers only)
+[15:58:41] $ claude -p Ticker SHE:000999, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:58:47] == initiate SHA:601117
+[15:58:47] $ bin/py scripts/sec_delta.py SHA:601117 --asof 2026-11-08
+[15:58:47] SKIP SHA:601117: not a US listing (SEC filers only)
+[15:58:47] $ claude -p Ticker SHA:601117, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:58:58] research/GLPI/2026-11-08-macro.md
+OK research/GLPI/2026-11-08-macro.md macro_weight=secondary words=205
+[15:58:58] $ bin/py scripts/check_docs.py macro research/GLPI/2026-11-08-macro.md
+[15:58:58] OK research/GLPI/2026-11-08-macro.md macro_weight=secondary words=205
+[15:58:58] $ claude -p Evaluate GLPI for 2026-11-08: fact sheet research/GLPI/factsheet-2026-11-08.md, note research/GLPI/2026-11-08.md, state portfolio/state.json, macro overlay research/GLPI/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:59:47] I wrote the evaluation to research/GLPI/2026-11-08-evaluation.md.
+
+OK research/GLPI/2026-11-08-evaluation.md Bear case=146 Bull case=124 decision=AVOID
+[15:59:47] $ bin/py scripts/check_docs.py eval research/GLPI/2026-11-08-evaluation.md
+[15:59:47] OK research/GLPI/2026-11-08-evaluation.md Bear case=146 Bull case=124 decision=AVOID
+[15:59:47] $ bin/py scripts/valuation.py GLPI --asof 2026-11-08 --eval research/GLPI/2026-11-08-evaluation.md
+[15:59:47] {"out": "research/GLPI/2026-11-08-valuation.md", "used": ["p_ffo"], "fair_value": {"bear": 48.64, "base": 55.54, "bull": 60.85}, "price": 38.89}
+[15:59:48] == done GLPI
+[16:00:02] Note: research/SHE-000999/2026-11-08.md
+Fact sheet: research/SHE-000999/factsheet-2026-11-08.md
+check_docs: OK research/SHE-000999/2026-11-08.md type=CORE 1=52 2=129 3=143 4=44 5=46 6=65 total=479
+Data conflicts: none.
+Blocked URLs: none. I made no WebFetch calls, so the business description and moat are [Likely] or [Guessing] and not from a primary source. The Q3 2026 report was not read.
+[16:00:02] $ bin/py scripts/check_docs.py note research/SHE-000999/2026-11-08.md
+[16:00:03] OK research/SHE-000999/2026-11-08.md type=CORE 1=52 2=129 3=143 4=44 5=46 6=65 total=479
+[16:00:03] $ claude -p Ticker SHE:000999, date 2026-11-08. Research: research/SHE-000999/factsheet-2026-11-08.md, research/SHE-000999/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/SHE-000999/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:00:05] == initiate BME:BBVA
+[16:00:05] $ bin/py scripts/sec_delta.py BME:BBVA --asof 2026-11-08
+[16:00:05] SKIP BME:BBVA: not a US listing (SEC filers only)
+[16:00:05] $ claude -p Ticker BME:BBVA, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:00:16] Note: research/SHA-601117/2026-11-08.md
+Fact sheet: research/SHA-601117/factsheet-2026-11-08.md
+Check: OK research/SHA-601117/2026-11-08.md type=CORE 1=63 2=144 3=141 4=37 5=70 6=45 total=500
+
+Data conflicts and gaps:
+- **Peers:** SHA:601800 and SHA:601618 returned 404 on stockanalysis.com, so I used three peers: SHA:601669, SHA:601186 and SHA:601390.
+- **Overseas revenue mix:** I did not fetch any primary source, so the note marks it [data unavailable].
+- **Blocked URLs:** none.
+- **Data conflicts:** none.
+[16:00:16] $ bin/py scripts/check_docs.py note research/SHA-601117/2026-11-08.md
+[16:00:16] OK research/SHA-601117/2026-11-08.md type=CORE 1=63 2=144 3=141 4=37 5=70 6=45 total=500
+[16:00:16] $ claude -p Ticker SHA:601117, date 2026-11-08. Research: research/SHA-601117/factsheet-2026-11-08.md, research/SHA-601117/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/SHA-601117/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:00:26] research/SHE-000999/2026-11-08-macro.md
+OK research/SHE-000999/2026-11-08-macro.md macro_weight=context words=52
+[16:00:26] $ bin/py scripts/check_docs.py macro research/SHE-000999/2026-11-08-macro.md
+[16:00:26] OK research/SHE-000999/2026-11-08-macro.md macro_weight=context words=52
+[16:00:26] $ claude -p Evaluate SHE:000999 for 2026-11-08: fact sheet research/SHE-000999/factsheet-2026-11-08.md, note research/SHE-000999/2026-11-08.md, state portfolio/state.json, macro overlay research/SHE-000999/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:00:44] research/SHA-601117/2026-11-08-macro.md
+OK research/SHA-601117/2026-11-08-macro.md macro_weight=context words=83
+[16:00:44] $ bin/py scripts/check_docs.py macro research/SHA-601117/2026-11-08-macro.md
+[16:00:44] OK research/SHA-601117/2026-11-08-macro.md macro_weight=context words=83
+[16:00:44] $ claude -p Evaluate SHA:601117 for 2026-11-08: fact sheet research/SHA-601117/factsheet-2026-11-08.md, note research/SHA-601117/2026-11-08.md, state portfolio/state.json, macro overlay research/SHA-601117/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:01:15] Decision: AVOID at conviction 3.
+
+research/SHE-000999/2026-11-08-evaluation.md
+OK research/SHE-000999/2026-11-08-evaluation.md Bear case=149 Bull case=128 decision=AVOID
+[16:01:15] $ bin/py scripts/check_docs.py eval research/SHE-000999/2026-11-08-evaluation.md
+[16:01:16] OK research/SHE-000999/2026-11-08-evaluation.md Bear case=149 Bull case=128 decision=AVOID
+[16:01:16] $ bin/py scripts/valuation.py SHE:000999 --asof 2026-11-08 --eval research/SHE-000999/2026-11-08-evaluation.md
+[16:01:16] {"out": "research/SHE-000999/2026-11-08-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 20.8, "base": 34.55, "bull": 50.08}, "price": 25.95}
+[16:01:17] == done SHE:000999
+[16:01:24] I rated SHA:601117 AVOID at conviction 2, and the evaluation file passed the checker. The stock is cheap: P/E is 6.8x, below its 5-year low, and P/B is 0.6x. But return on capital has fallen from 35.3% to 12.4% and cash flow swings from year to year, so I don't trust the cheapness. I set no entry price because the problem is the business trend, not the price.
+
+research/SHA-601117/2026-11-08-evaluation.md
+OK research/SHA-601117/2026-11-08-evaluation.md Bear case=146 Bull case=122 decision=AVOID
+[16:01:24] $ bin/py scripts/check_docs.py eval research/SHA-601117/2026-11-08-evaluation.md
+[16:01:24] OK research/SHA-601117/2026-11-08-evaluation.md Bear case=146 Bull case=122 decision=AVOID
+[16:01:24] $ bin/py scripts/valuation.py SHA:601117 --asof 2026-11-08 --eval research/SHA-601117/2026-11-08-evaluation.md
+[16:01:24] {"out": "research/SHA-601117/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 0.84, "base": 14.14, "bull": 15.89}, "price": 7.3}
+[16:01:25] == done SHA:601117
+[16:01:44] - Note: `research/BME-BBVA/2026-11-08.md`
+- Fact sheet: `research/BME-BBVA/factsheet-2026-11-08.md`
+- check_docs: `OK research/BME-BBVA/2026-11-08.md type=CORE 1=73 2=123 3=133 4=57 5=77 6=59 total=522`
+- Blocked URLs: `https://shareholdersandinvestors.bbva.com/financials/results-and-presentations/` and `https://www.bbva.com/en/` were both off the allowlist. As a result, Mexico's share of revenue is marked `[data unavailable]` in the note. The Mexico weighting rests on a Reuters headline, tagged [Likely].
+- Data conflicts: none.
+- Fact-sheet gaps: ROIC, ROCE, operating margin, EV/EBITDA, short interest and dividend per share are `[data unavailable]`.
+[16:01:44] $ bin/py scripts/check_docs.py note research/BME-BBVA/2026-11-08.md
+[16:01:45] OK research/BME-BBVA/2026-11-08.md type=CORE 1=73 2=123 3=133 4=57 5=77 6=59 total=522
+[16:01:45] $ claude -p Ticker BME:BBVA, date 2026-11-08. Research: research/BME-BBVA/factsheet-2026-11-08.md, research/BME-BBVA/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/BME-BBVA/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:01:48] == screened out SHE:000895: price above base fair value (-38.1%; floor +0%) (no AI research)
+[16:02:12] == screened out SHA:600690: price above base fair value (-20.2%; floor +0%) (no AI research)
+[16:02:35] == screened out CBC: price above base fair value (-33.6%; floor +0%) (no AI research)
+[16:02:40] research/BME-BBVA/2026-11-08-macro.md
+OK research/BME-BBVA/2026-11-08-macro.md macro_weight=secondary words=209
+[16:02:40] $ bin/py scripts/check_docs.py macro research/BME-BBVA/2026-11-08-macro.md
+[16:02:40] OK research/BME-BBVA/2026-11-08-macro.md macro_weight=secondary words=209
+[16:02:40] $ claude -p Evaluate BME:BBVA for 2026-11-08: fact sheet research/BME-BBVA/factsheet-2026-11-08.md, note research/BME-BBVA/2026-11-08.md, state portfolio/state.json, macro overlay research/BME-BBVA/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:02:59] == screened out SHA:601318: price above base fair value (-10.3%; floor +0%) (no AI research)
+[16:03:22] == initiate HKG:2333
+[16:03:22] $ bin/py scripts/sec_delta.py HKG:2333 --asof 2026-11-08
+[16:03:22] SKIP HKG:2333: not a US listing (SEC filers only)
+[16:03:22] $ claude -p Ticker HKG:2333, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:03:39] == initiate OTEX
+[16:03:39] $ bin/py scripts/sec_delta.py OTEX --asof 2026-11-08
+[16:03:40] research/BME-BBVA/2026-11-08-evaluation.md
+OK research/BME-BBVA/2026-11-08-evaluation.md Bear case=149 Bull case=126 decision=AVOID
+[16:03:40] $ bin/py scripts/check_docs.py eval research/BME-BBVA/2026-11-08-evaluation.md
+[16:03:40] OK research/BME-BBVA/2026-11-08-evaluation.md Bear case=149 Bull case=126 decision=AVOID
+[16:03:40] $ bin/py scripts/valuation.py BME:BBVA --asof 2026-11-08 --eval research/BME-BBVA/2026-11-08-evaluation.md
+[16:03:41] {"out": "research/BME-BBVA/2026-11-08-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 15.99, "base": 25.04, "bull": 31.23}, "price": 22.73}
+[16:03:42] == done BME:BBVA
