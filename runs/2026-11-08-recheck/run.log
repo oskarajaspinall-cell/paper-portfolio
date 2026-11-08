@@ -1,0 +1,55 @@
+[04:15:51] $ bin/py scripts/sec_delta.py EPA:EDEN --asof 2026-11-08
+[04:15:51] SKIP EPA:EDEN: not a US listing (SEC filers only)
+[04:15:51] $ claude -p Ticker EPA:EDEN, note type CORE, date 2026-11-08. Owner-requested re-check before a queued swap (sell JKHY, buy EDEN at Monday's open) fills: the new fact sheet's Recent direction table shows the operating margin down 4.6pp and ROCE down 1.4pp over the last 12 months, and ROIC 1.8pp below its 2-year high, which the 2026-10-25 evaluation ('quality is rising') missed. Decide whether conviction 4 still holds. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:16:55] Note: research/EPA-EDEN/2026-11-08.md
+Fact sheet: research/EPA-EDEN/factsheet-2026-11-08.md
+Check: OK research/EPA-EDEN/2026-11-08.md type=CORE 1=34 2=147 3=107 4=39 5=49 6=94 total=470
+Data conflicts: none.
+Blocked URLs: none. I made 2 WebFetch calls, both to stockanalysis.com transcripts.
+[04:16:55] $ bin/py scripts/check_docs.py note research/EPA-EDEN/2026-11-08.md
+[04:16:56] OK research/EPA-EDEN/2026-11-08.md type=CORE 1=34 2=147 3=107 4=39 5=49 6=94 total=470
+[04:16:56] $ bin/py scripts/macro_data.py --asof 2026-11-08
+[04:17:19] {"out": "reports/macro/2026-11-08.md", "series": 11, "unavailable": []}
+[04:17:19] $ claude -p Ticker EPA:EDEN, date 2026-11-08. Research: research/EPA-EDEN/factsheet-2026-11-08.md, research/EPA-EDEN/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/EPA-EDEN/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:17:46] research/EPA-EDEN/2026-11-08-macro.md
+OK research/EPA-EDEN/2026-11-08-macro.md macro_weight=context words=50
+[04:17:46] $ bin/py scripts/check_docs.py macro research/EPA-EDEN/2026-11-08-macro.md
+[04:17:46] OK research/EPA-EDEN/2026-11-08-macro.md macro_weight=context words=50
+[04:17:46] $ claude -p Evaluate EPA:EDEN for 2026-11-08: fact sheet research/EPA-EDEN/factsheet-2026-11-08.md, note research/EPA-EDEN/2026-11-08.md, state portfolio/state.json, macro overlay research/EPA-EDEN/2026-11-08-macro.md. Owner-requested re-check before a queued swap (sell JKHY, buy EDEN at Monday's open) fills: the new fact sheet's Recent direction table shows the operating margin down 4.6pp and ROCE down 1.4pp over the last 12 months, and ROIC 1.8pp below its 2-year high, which the 2026-10-25 evaluation ('quality is rising') missed. Decide whether conviction 4 still holds. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:18:49] Conviction 4 still holds, so the decision is BUY, CORE, conviction 4, and the queued swap (sell JKHY, buy EDEN at Monday's open) stands.
+
+You were right that the 2026-10-25 "quality is rising" call was wrong. The evaluation now says returns are stable and high, not rising, and the bear case names what is driving the drop:
+- **Regulation:** new meal-voucher rules in Italy and Brazil.
+- **Float income:** less interest earned on client money held in Brazil.
+- **Spending:** money going into data and AI.
+
+Management has guided FY2026 core earnings (EBITDA) down on a like-for-like basis and calls 2026 a "rebasing year". Q3 then reaffirmed that guidance.
+
+Why it is still a 4:
+- **Valuation:** P/E is 11.9x against a 5-year median of 32.3x, and the price implies revenue falling 2.9% in year 1.
+- **Returns:** ROIC of 18.5% is still above every fiscal year except FY2025.
+
+Why it is not a 5:
+- **Regulation:** it could spread, and the Italian antitrust case has no quantified impact.
+- **Leverage:** net debt/EBITDA is up from 1.13x to 1.65x.
+- **Cash flow:** the 38.2% FCF margin is inflated by float; a year earlier it was 23.6%.
+
+**12-month scenarios (EUR, from 24.60):**
+
+| Scenario | Probability | Target |
+|---|---|---|
+| Bull | 25% | 45.00 |
+| Base | 50% | 33.00 |
+| Bear | 25% | 21.15 |
+
+I set the base and bull below the model's fair values (38.59 and 55.24) because those extrapolate the float-inflated FCF.
+
+I dropped the old FCF-margin trigger: last year's swing would have tripped it. The triggers now watch operating margin below 26%, ROIC below 14%, a cut to guidance or a new country fee cap, and net debt/EBITDA above 2.5x or ROCE below 22%.
+
+research/EPA-EDEN/2026-11-08-evaluation.md
+OK research/EPA-EDEN/2026-11-08-evaluation.md Bear case=142 Bull case=142 decision=BUY
+[04:18:49] $ bin/py scripts/check_docs.py eval research/EPA-EDEN/2026-11-08-evaluation.md
+[04:18:49] OK research/EPA-EDEN/2026-11-08-evaluation.md Bear case=142 Bull case=142 decision=BUY
+[04:18:49] $ bin/py scripts/valuation.py EPA:EDEN --asof 2026-11-08 --eval research/EPA-EDEN/2026-11-08-evaluation.md
+[04:18:49] {"out": "research/EPA-EDEN/2026-11-08-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 21.15, "base": 38.59, "bull": 55.24}, "price": 24.6}
+[04:18:49] == RESULT BUY 4 /Users/oskaraspinall/paper-portfolio/research/EPA-EDEN/2026-11-08-evaluation.md
