@@ -142,9 +142,68 @@ def _request(e: dict, today: str) -> dict:
         req.pop("replacement_reason", None)
     req["funding_stage"] = stage
     req["reason"] = (f"{req.get('reason', '')} [funding queue: decided {e['added']} at {e['decision_price']:g}; "
-                     + ("top-up of the starter position" if stage == "topup" else "resubmitted")
+                     + (("top-up to size" if e.get("kind") == "underweight" else "top-up of the starter position")
+                        if stage == "topup" else "resubmitted")
                      + f" {today} with room above the cash reserve]").strip()
     return req
+
+
+def topup_settings(cfg: dict) -> dict:
+    c = cfg.get("core", {})
+    return {"band": float(c.get("topup_band_pp", 2)), "max_eval_days": int(c.get("topup_max_eval_days", 35)),
+            "max_fall": float(c.get("topup_max_fall_pct", 10)), "bar": int(c.get("min_buy_conviction", 4))}
+
+
+def _latest_eval_date(ticker: str, today: str) -> str | None:
+    d = ROOT / "research" / Ticker(ticker).slug
+    evs = sorted(p.name[:10] for p in d.glob("20??-??-??-evaluation.md") if p.name[:10] <= today)
+    return evs[-1] if evs else None
+
+
+def underweight_topups(state: dict, mkt, cfg: dict, today: str) -> list[dict]:
+    """Owner request 2026-11-08: a CORE holding still at conviction 4+ that drifted more than `topup_band_pp` below
+    its size (target_pct, else the plain conviction size it was bought at) is brought back to it as a
+    funding-queue top-up -- only while its latest evaluation is under `topup_max_eval_days` old and the price is
+    no more than `topup_max_fall_pct` below that evaluation's close (a bigger fall needs a re-check first: the
+    dip radar / weekly scan route it to research). Cash above the reserve only; winners are never trimmed to size."""
+    from portfolio import totals
+    ts, tt = topup_settings(cfg), totals(state)
+    if not tt["total"]:
+        return []
+    queued = {e["ticker"] for e in state.get("funding_queue") or []}
+    ordered = {o["request"]["ticker"] for o in state.get("pending", [])}
+    out = []
+    for t, h in state["holdings"].items():
+        conv = h.get("conviction")
+        if h["type"] != "CORE" or not conv or conv < ts["bar"] or t in queued or t in ordered:
+            continue
+        w = h["market_value_usd"] / tt["total"] * 100
+        # the size it was bought at: target_pct (vol-scaled entries since 2026-10-16), else the plain conviction size
+        size = float(h.get("target_pct") or cfg["core"]["conviction_size_pct"][str(conv)])
+        if size - w <= ts["band"]:
+            continue
+        ev = _latest_eval_date(t, today) or h.get("entry_date")
+        if not ev or (dt.date.fromisoformat(today) - dt.date.fromisoformat(ev)).days > ts["max_eval_days"]:
+            continue
+        try:
+            rows = [r for r in mkt.history(t)["rows"] if r["date"] <= ev and r.get("close")]
+            qt = mkt.quote(t)
+        except (DataError, KeyError, AttributeError):
+            continue
+        if not rows:
+            continue
+        ev_close = rows[-1]["close"]
+        if qt["close"] < ev_close * (1 - ts["max_fall"] / 100):
+            continue
+        val, vpath = latest_valuation(t, today)
+        out.append({"ticker": t, "stage": "topup", "kind": "underweight", "added": ev, "target_pct": round(size, 2),
+                    "expires": (dt.date.fromisoformat(ev) + dt.timedelta(days=ts["max_eval_days"])).isoformat(),
+                    "decision_price": ev_close, "currency": qt["currency"], "price_date": rows[-1]["date"],
+                    "fair_value_base": ((val or {}).get("fair_value") or {}).get("base"), "valuation": vpath,
+                    "request": {"ticker": t, "action": "ADD", "position_type": "CORE", "conviction": int(conv),
+                                "reason": f"top-up to size: {w:.1f}% vs its {size:.1f}% size, conviction {conv} "
+                                          f"(evaluation {ev})"}})
+    return out
 
 
 def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.datetime | None = None,
@@ -155,13 +214,20 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
     from portfolio import atomic_write, load_state, place_orders
     st = settings(cfg)
     state = load_state(state_path, cfg)
-    out = {"resubmitted": [], "started": [], "topped_up": [], "dropped": [], "waiting": []}
+    out = {"resubmitted": [], "started": [], "topped_up": [], "dropped": [], "waiting": [], "added_topups": []}
+    events = []
+    new = underweight_topups(state, mkt, cfg, today)
+    if new:
+        state.setdefault("funding_queue", []).extend(new)
+        out["added_topups"] = [e["ticker"] for e in new]
+        events += [{"date": today, "ticker": e["ticker"], "event": "ADDED", "detail": e["request"]["reason"]} for e in new]
     q = state.get("funding_queue") or []
     if not q:
         return out
     held = set(state["holdings"])
     ordered = {o["request"]["ticker"] for o in state.get("pending", [])}
-    keep, events = [], []
+    keep = []
+    ts = topup_settings(cfg)
 
     def drop(e, why):
         out["dropped"].append({"ticker": e["ticker"], "reason": why})
@@ -191,6 +257,15 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
                     f"(> {st['max_rise_pct']:g}%): the research is too stale to act on"
                     + ("; the position stays at its starter size" if topup else ""))
             continue
+        if e.get("kind") == "underweight":
+            h = state["holdings"].get(t) or {}
+            if (h.get("conviction") or 0) < ts["bar"]:
+                drop(e, f"conviction now {h.get('conviction')}: no top-up below the buy bar")
+                continue
+            if c < e["decision_price"] * (1 - ts["max_fall"] / 100):
+                drop(e, f"close {c:g} is {(c / e['decision_price'] - 1) * 100:+.1f}% since its evaluation: "
+                        "re-check before adding")
+                continue
         e["last_close"] = c
         e.pop("note", None)
         keep.append(e)
@@ -241,7 +316,7 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
             from portfolio import totals
             pv = totals(r["state"])["total"]
             now_pct = h["market_value_usd"] / pv * 100
-            target = r["engine"].core_size(int(req["conviction"]), t, r["state"])
+            target = e.get("target_pct") or r["engine"].core_size(int(req["conviction"]), t, r["state"])
             if target - now_pct < st["min_step_pct"]:
                 save_entry(t)
                 events.append({"date": today, "ticker": t, "event": "COMPLETE", "detail": f"at {now_pct:.2f}% of {target:.2f}%"})
@@ -450,6 +525,13 @@ def auto_swaps(state: dict, mkt, cfg: dict, watch: dict, today: str) -> list[dic
     return out
 
 
+def keep_as_topup(state: dict, tickers: set[str]) -> None:
+    """A swapped-in idea stays queued as a top-up of the position the swap started (in place)."""
+    for e in state.get("funding_queue") or []:
+        if e["ticker"] in tickers:
+            e["stage"] = "topup"
+
+
 def current_reserve_pct(cfg: dict, today: str) -> float:
     from portfolio import current_reserve
     return float(current_reserve(cfg, today)["pct"])
@@ -535,9 +617,11 @@ def main(argv=None) -> int:
                                + (["--dry-run"] if a.dry_run else []), capture_output=True, text=True)
             print(p.stdout[-3000:], p.stderr[-1500:])
             if not a.dry_run and p.returncode == 0:
+                # the swap may be capped below the idea's full size: the rest waits as a top-up, exactly like a
+                # starter position (review() completes it at once if it is already within min_step_pct)
                 st2 = load_state(sp, cfg)
-                if drop_ordered(st2, {r["ticker"] for r in reqs}, today):
-                    atomic_write(sp, json.dumps(st2, indent=1, sort_keys=True))
+                keep_as_topup(st2, {r["ticker"] for r in reqs})
+                atomic_write(sp, json.dumps(st2, indent=1, sort_keys=True))
             return p.returncode
         elif a.cmd == "brief":
             mark(state, mkt)

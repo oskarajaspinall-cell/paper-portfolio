@@ -21,6 +21,7 @@ def fair_values(monkeypatch):
     fv = {"AAPL": 300.0, "NVDA": 180.0, "LON:ULVR": 4200.0, "MSFT": 380.0}
     monkeypatch.setattr(FQ, "latest_valuation", lambda t, d: ({"fair_value": {"base": fv[t]}}, f"research/{t}/v.json")
                         if t in fv else (None, None))
+    monkeypatch.setattr(FQ, "_latest_eval_date", lambda t, d: None)  # no research/ files read
 
 
 def state_file(tmp_path, cfg, holdings, cash):
@@ -270,3 +271,56 @@ def test_no_auto_swap_for_high_conviction_or_small_gap(cfg, tmp_path, reserve20)
     cfg.setdefault("funding_queue", {})["auto_swap_min_gap_pp"] = 10_000
     s = _queued(cfg, tmp_path, conv_held=3)
     assert FQ.auto_swaps(s, OpenMarket(cfg), cfg, WATCH, TODAY) == []
+
+
+# ---- top-up to size (2026-11-08)
+@pytest.fixture
+def fresh_eval(monkeypatch):
+    monkeypatch.setattr(FQ, "_latest_eval_date", lambda t, d: "2026-10-09")
+
+
+def _held(cfg, tmp_path, weight, conv=4, cash=None, other=None):
+    hs = {"AAPL": holding("AAPL", "CORE", weight, conv=conv)}
+    if other:
+        hs["LON:ULVR"] = holding("LON:ULVR", "CORE", other, conv=4)
+    used = sum(h["market_value_usd"] for h in hs.values())
+    return state_file(tmp_path, cfg, hs, 100000 - used if cash is None else cash)
+
+
+def test_underweight_conviction4_holding_is_topped_up(cfg, tmp_path, reserve20, fresh_eval):
+    sp = _held(cfg, tmp_path, 4)
+    s = json.loads(sp.read_text())
+    new = FQ.underweight_topups(s, OpenMarket(cfg), cfg, TODAY)
+    assert [(e["ticker"], e["stage"], e["kind"], e["request"]["action"]) for e in new] == [("AAPL", "topup", "underweight", "ADD")]
+    out = FQ.review(sp, OpenMarket(cfg), cfg, WATCH, TODAY, port_dir=tmp_path)
+    assert out["added_topups"] == ["AAPL"] and out["topped_up"] and out["topped_up"][0]["ticker"] == "AAPL"
+
+
+def test_no_topup_small_gap_low_conviction_or_stale(cfg, tmp_path, reserve20, fresh_eval, monkeypatch):
+    for w, conv in ((6, 4), (4, 3)):
+        s = json.loads(_held(cfg, tmp_path, w, conv=conv).read_text())
+        assert FQ.underweight_topups(s, OpenMarket(cfg), cfg, TODAY) == []
+    monkeypatch.setattr(FQ, "_latest_eval_date", lambda t, d: "2026-08-01")
+    s = json.loads(_held(cfg, tmp_path, 4).read_text())
+    assert FQ.underweight_topups(s, OpenMarket(cfg), cfg, TODAY) == []
+
+
+def test_no_topup_after_a_big_fall_since_the_evaluation(cfg, tmp_path, reserve20, fresh_eval, monkeypatch):
+    mkt = OpenMarket(cfg)
+    orig = mkt.quote
+    monkeypatch.setattr(mkt, "quote", lambda t, *a, **k: {**orig(t, *a, **k), "close": orig(t, *a, **k)["close"] * 0.85})
+    s = json.loads(_held(cfg, tmp_path, 4).read_text())
+    assert FQ.underweight_topups(s, mkt, cfg, TODAY) == []
+
+
+def test_topup_waits_without_room_above_the_reserve(cfg, tmp_path, reserve20, fresh_eval):
+    sp = _held(cfg, tmp_path, 4, other=76)   # cash 20% = the reserve
+    out = FQ.review(sp, OpenMarket(cfg), cfg, WATCH, TODAY, port_dir=tmp_path)
+    assert out["added_topups"] == ["AAPL"] and not out["topped_up"]
+    assert any(w["ticker"] == "AAPL" for w in out["waiting"])
+
+
+def test_swapped_idea_stays_as_topup():
+    s = {"funding_queue": [{"ticker": "X"}, {"ticker": "Y"}]}
+    FQ.keep_as_topup(s, {"X"})
+    assert [e.get("stage") for e in s["funding_queue"]] == ["topup", None]
