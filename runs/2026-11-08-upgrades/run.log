@@ -1,0 +1,167 @@
+[04:47:41] == re-research OKE
+[04:47:41] == re-research GL
+[04:47:41] == re-research CBSH
+[04:47:41] $ bin/py scripts/sec_delta.py OKE --asof 2026-11-08
+[04:47:41] $ bin/py scripts/sec_delta.py GL --asof 2026-11-08
+[04:47:41] $ bin/py scripts/sec_delta.py CBSH --asof 2026-11-08
+[04:47:56] OK research/OKE/sec-delta-2026-11-08.md
+[04:47:56] $ claude -p Ticker OKE, note type CORE, date 2026-11-08. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. SEC filing delta: research/OKE/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:47:57] OK research/GL/sec-delta-2026-11-08.md
+[04:47:57] $ claude -p Ticker GL, note type CORE, date 2026-11-08. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. SEC filing delta: research/GL/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:47:57] OK research/CBSH/sec-delta-2026-11-08.md
+[04:47:57] $ claude -p Ticker CBSH, note type CORE, date 2026-11-08. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. SEC filing delta: research/CBSH/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:50:38] Note: research/GL/2026-11-08.md
+Fact sheet: research/GL/factsheet-2026-11-08.md
+check_docs: OK research/GL/2026-11-08.md type=CORE 1=53 2=145 3=115 4=51 5=40 6=73 total=477
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+[04:50:38] $ bin/py scripts/check_docs.py note research/GL/2026-11-08.md
+[04:50:38] OK research/GL/2026-11-08.md type=CORE 1=53 2=145 3=115 4=51 5=40 6=73 total=477
+[04:50:38] $ claude -p Ticker GL, date 2026-11-08. Research: research/GL/factsheet-2026-11-08.md, research/GL/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/GL/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:50:43] Note: research/CBSH/2026-11-08.md
+Fact sheet: research/CBSH/factsheet-2026-11-08.md
+Check: OK research/CBSH/2026-11-08.md type=CORE 1=41 2=145 3=139 4=50 5=58 6=59 total=492
+
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+[04:50:43] $ bin/py scripts/check_docs.py note research/CBSH/2026-11-08.md
+[04:50:43] OK research/CBSH/2026-11-08.md type=CORE 1=41 2=145 3=139 4=50 5=58 6=59 total=492
+[04:50:43] $ claude -p Ticker CBSH, date 2026-11-08. Research: research/CBSH/factsheet-2026-11-08.md, research/CBSH/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/CBSH/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:50:58] research/GL/2026-11-08-macro.md
+OK research/GL/2026-11-08-macro.md macro_weight=context words=43
+[04:50:58] $ bin/py scripts/check_docs.py macro research/GL/2026-11-08-macro.md
+[04:50:58] OK research/GL/2026-11-08-macro.md macro_weight=context words=43
+[04:50:58] $ claude -p Evaluate GL for 2026-11-08: fact sheet research/GL/factsheet-2026-11-08.md, note research/GL/2026-11-08.md, state portfolio/state.json, macro overlay research/GL/2026-11-08-macro.md. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:51:04] Note: research/OKE/2026-11-08.md
+Fact sheet: research/OKE/factsheet-2026-11-08.md
+check_docs: OK research/OKE/2026-11-08.md type=CORE 1=64 2=145 3=145 4=74 5=87 6=73 total=588
+
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls. The note cites the globenewswire.com headline URLs exactly as the fact sheet lists them.
+[04:51:04] $ bin/py scripts/check_docs.py note research/OKE/2026-11-08.md
+[04:51:04] OK research/OKE/2026-11-08.md type=CORE 1=64 2=145 3=145 4=74 5=87 6=73 total=588
+[04:51:04] $ claude -p Ticker OKE, date 2026-11-08. Research: research/OKE/factsheet-2026-11-08.md, research/OKE/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/OKE/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:51:10] research/CBSH/2026-11-08-macro.md
+OK research/CBSH/2026-11-08-macro.md macro_weight=secondary words=228
+[04:51:10] $ bin/py scripts/check_docs.py macro research/CBSH/2026-11-08-macro.md
+[04:51:10] OK research/CBSH/2026-11-08-macro.md macro_weight=secondary words=228
+[04:51:10] $ claude -p Evaluate CBSH for 2026-11-08: fact sheet research/CBSH/factsheet-2026-11-08.md, note research/CBSH/2026-11-08.md, state portfolio/state.json, macro overlay research/CBSH/2026-11-08-macro.md. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:51:21] research/OKE/2026-11-08-macro.md
+OK research/OKE/2026-11-08-macro.md macro_weight=context words=95
+[04:51:21] $ bin/py scripts/check_docs.py macro research/OKE/2026-11-08-macro.md
+[04:51:21] OK research/OKE/2026-11-08-macro.md macro_weight=context words=95
+[04:51:21] $ claude -p Evaluate OKE for 2026-11-08: fact sheet research/OKE/factsheet-2026-11-08.md, note research/OKE/2026-11-08.md, state portfolio/state.json, macro overlay research/OKE/2026-11-08-macro.md. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:51:51] I kept CBSH at AVOID with conviction 3, so this upgrade check does not support a buy.
+
+- **Last quarter:** net income rose, but per-share growth lagged because of the shares issued for the FineMark deal. ROE has slipped from 17.8% to 15.1%, and loan yields fell.
+- **Valuation:** the stock trades at no discount to peers on earnings and at a premium on book value.
+- **Macro:** the overlay tilts the scenario probabilities slightly towards the bear case.
+- **Entry price:** $54.34 (base fair value $67.93 less the 20% margin of safety), just under the $55.04 close.
+
+The file is research/CBSH/2026-11-08-evaluation.md, and the checker printed:
+
+OK research/CBSH/2026-11-08-evaluation.md Bear case=143 Bull case=123 decision=AVOID
+[04:51:51] $ bin/py scripts/check_docs.py eval research/CBSH/2026-11-08-evaluation.md
+[04:51:51] OK research/CBSH/2026-11-08-evaluation.md Bear case=143 Bull case=123 decision=AVOID
+[04:51:51] $ bin/py scripts/valuation.py CBSH --asof 2026-11-08 --eval research/CBSH/2026-11-08-evaluation.md
+[04:51:51] {"out": "research/CBSH/2026-11-08-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 61.12, "base": 67.93, "bull": 73.22}, "price": 55.04}
+[04:51:52] == CBSH: AVOID 3
+[04:51:52] == re-research HKG:1208
+[04:51:52] $ bin/py scripts/sec_delta.py HKG:1208 --asof 2026-11-08
+[04:51:52] SKIP HKG:1208: not a US listing (SEC filers only)
+[04:51:52] $ claude -p Ticker HKG:1208, note type CORE, date 2026-11-08. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:52:01] research/GL/2026-11-08-evaluation.md
+OK research/GL/2026-11-08-evaluation.md Bear case=146 Bull case=116 decision=AVOID
+[04:52:01] $ bin/py scripts/check_docs.py eval research/GL/2026-11-08-evaluation.md
+[04:52:01] OK research/GL/2026-11-08-evaluation.md Bear case=146 Bull case=116 decision=AVOID
+[04:52:01] $ bin/py scripts/valuation.py GL --asof 2026-11-08 --eval research/GL/2026-11-08-evaluation.md
+[04:52:01] {"out": "research/GL/2026-11-08-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 128.97, "base": 213.21, "bull": 235.93}, "price": 157.18}
+[04:52:02] == GL: AVOID 3
+[04:52:02] == re-research SHE:000933
+[04:52:02] $ bin/py scripts/sec_delta.py SHE:000933 --asof 2026-11-08
+[04:52:02] SKIP SHE:000933: not a US listing (SEC filers only)
+[04:52:02] $ claude -p Ticker SHE:000933, note type CORE, date 2026-11-08. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:52:18] research/OKE/2026-11-08-evaluation.md
+OK research/OKE/2026-11-08-evaluation.md Bear case=145 Bull case=112 decision=AVOID
+[04:52:18] $ bin/py scripts/check_docs.py eval research/OKE/2026-11-08-evaluation.md
+[04:52:19] OK research/OKE/2026-11-08-evaluation.md Bear case=145 Bull case=112 decision=AVOID
+[04:52:19] $ bin/py scripts/valuation.py OKE --asof 2026-11-08 --eval research/OKE/2026-11-08-evaluation.md
+[04:52:19] {"out": "research/OKE/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 77.94, "base": 101.12, "bull": 381.97}, "price": 85.19}
+[04:52:20] == OKE: AVOID 3
+[04:52:20] == re-research DVA
+[04:52:20] $ bin/py scripts/sec_delta.py DVA --asof 2026-11-08
+[04:52:31] OK research/DVA/sec-delta-2026-11-08.md
+[04:52:31] $ claude -p Ticker DVA, note type CORE, date 2026-11-08. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. SEC filing delta: research/DVA/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:54:40] I've finished the note for HKG:1208 and `check_docs.py note` passes.
+
+- **Note:** `research/HKG-1208/2026-11-08.md`
+- **Fact sheet:** `research/HKG-1208/factsheet-2026-11-08.md`
+- **check_docs:** `OK research/HKG-1208/2026-11-08.md type=CORE 1=80 2=134 3=137 4=52 5=53 6=82 total=538`
+
+**Data conflicts and blocked URLs:**
+- **Blocked fetch:** `https://www.mmg.com/en/investors/` was blocked by the allowlist hook. I didn't retry it, so the revenue split by country is written as [data unavailable].
+- **Peers:** `HKG:2899` and `HKG:3993` returned 404 on stockanalysis.com, so I swapped them out. The final peers are FCX, SCCO, LON:ANTO and LON:GLEN.
+- **Conflicts:** none.
+[04:54:40] $ bin/py scripts/check_docs.py note research/HKG-1208/2026-11-08.md
+[04:54:40] OK research/HKG-1208/2026-11-08.md type=CORE 1=80 2=134 3=137 4=52 5=53 6=82 total=538
+[04:54:40] $ claude -p Ticker HKG:1208, date 2026-11-08. Research: research/HKG-1208/factsheet-2026-11-08.md, research/HKG-1208/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/HKG-1208/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:54:41] Note is written and passed the check. I'm finishing with the result summary.
+
+- Note: `research/SHE-000933/2026-11-08.md`
+- Fact sheet: `research/SHE-000933/factsheet-2026-11-08.md`
+- check_docs: `OK research/SHE-000933/2026-11-08.md type=CORE 1=53 2=145 3=137 4=43 5=53 6=84 total=515`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- Peer swap: `SHA:601600` returned a 404 on stockanalysis.com, so I replaced it with `SHA:600219`. The peers used were `SHE:000807`, `SHE:002532`, `HKG:1378` and `SHA:600219`.
+[04:54:41] $ bin/py scripts/check_docs.py note research/SHE-000933/2026-11-08.md
+[04:54:41] OK research/SHE-000933/2026-11-08.md type=CORE 1=53 2=145 3=137 4=43 5=53 6=84 total=515
+[04:54:41] $ claude -p Ticker SHE:000933, date 2026-11-08. Research: research/SHE-000933/factsheet-2026-11-08.md, research/SHE-000933/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/SHE-000933/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:55:03] research/SHE-000933/2026-11-08-macro.md
+OK research/SHE-000933/2026-11-08-macro.md macro_weight=context words=56
+[04:55:03] $ bin/py scripts/check_docs.py macro research/SHE-000933/2026-11-08-macro.md
+[04:55:03] OK research/SHE-000933/2026-11-08-macro.md macro_weight=context words=56
+[04:55:03] $ claude -p Evaluate SHE:000933 for 2026-11-08: fact sheet research/SHE-000933/factsheet-2026-11-08.md, note research/SHE-000933/2026-11-08.md, state portfolio/state.json, macro overlay research/SHE-000933/2026-11-08-macro.md. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:55:15] Note: research/DVA/2026-11-08.md
+Fact sheet: research/DVA/factsheet-2026-11-08.md
+check_docs: OK research/DVA/2026-11-08.md type=CORE 1=51 2=117 3=137 4=57 5=57 6=103 total=522
+
+Data conflicts: none.
+
+Blocked URLs: none. I made no WebFetch calls. Peers used were EHC, UHS, DGX and SEM.
+[04:55:15] $ bin/py scripts/check_docs.py note research/DVA/2026-11-08.md
+[04:55:15] OK research/DVA/2026-11-08.md type=CORE 1=51 2=117 3=137 4=57 5=57 6=103 total=522
+[04:55:15] $ claude -p Ticker DVA, date 2026-11-08. Research: research/DVA/factsheet-2026-11-08.md, research/DVA/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/DVA/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:55:31] I'm finishing up. The macro overlay file is written and the check passed, so I'm sending the path and the OK line.
+
+research/HKG-1208/2026-11-08-macro.md
+OK research/HKG-1208/2026-11-08-macro.md macro_weight=secondary words=216
+[04:55:31] $ bin/py scripts/check_docs.py macro research/HKG-1208/2026-11-08-macro.md
+[04:55:31] OK research/HKG-1208/2026-11-08-macro.md macro_weight=secondary words=216
+[04:55:31] $ claude -p Evaluate HKG:1208 for 2026-11-08: fact sheet research/HKG-1208/factsheet-2026-11-08.md, note research/HKG-1208/2026-11-08.md, state portfolio/state.json, macro overlay research/HKG-1208/2026-11-08-macro.md. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:55:36] research/DVA/2026-11-08-macro.md
+OK research/DVA/2026-11-08-macro.md macro_weight=context words=43
+[04:55:36] $ bin/py scripts/check_docs.py macro research/DVA/2026-11-08-macro.md
+[04:55:36] OK research/DVA/2026-11-08-macro.md macro_weight=context words=43
+[04:55:36] $ claude -p Evaluate DVA for 2026-11-08: fact sheet research/DVA/factsheet-2026-11-08.md, note research/DVA/2026-11-08.md, state portfolio/state.json, macro overlay research/DVA/2026-11-08-macro.md. Owner-requested upgrade check: this conviction-3 AVOID is among the few closest to its entry price or with the largest value upside since it was researched (a quarter of results and the new Recent direction / country-risk inputs may have arrived since). Decide afresh whether the evidence now supports conviction 4 or 5; keep 3 or lower it if not. Judge the business on its merits, not on wanting a buy. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:55:47] I kept SHE:000933 at AVOID, conviction 3. The rise in returns and margins over the last 12 months looks like a high point in the aluminum price cycle, not a lasting improvement. The upside the fair-value model shows depends on earnings staying near that peak.
+
+`research/SHE-000933/2026-11-08-evaluation.md`
+OK research/SHE-000933/2026-11-08-evaluation.md Bear case=148 Bull case=130 decision=AVOID
+
+There is no entry price: the stock is already cheap, so a lower price wouldn't change the verdict.
+[04:55:47] $ bin/py scripts/check_docs.py eval research/SHE-000933/2026-11-08-evaluation.md
+[04:55:47] OK research/SHE-000933/2026-11-08-evaluation.md Bear case=148 Bull case=130 decision=AVOID
+[04:55:47] $ bin/py scripts/valuation.py SHE:000933 --asof 2026-11-08 --eval research/SHE-000933/2026-11-08-evaluation.md
+[04:55:47] {"out": "research/SHE-000933/2026-11-08-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 28.92, "base": 55.52, "bull": 82.15}, "price": 25.26}
+[04:55:48] == SHE:000933: AVOID 3
+[04:56:18] research/DVA/2026-11-08-evaluation.md
+OK research/DVA/2026-11-08-evaluation.md Bear case=136 Bull case=123 decision=AVOID
+[04:56:18] $ bin/py scripts/check_docs.py eval research/DVA/2026-11-08-evaluation.md
+[04:56:18] OK research/DVA/2026-11-08-evaluation.md Bear case=136 Bull case=123 decision=AVOID
+[04:56:18] $ bin/py scripts/valuation.py DVA --asof 2026-11-08 --eval research/DVA/2026-11-08-evaluation.md
+[04:56:18] {"out": "research/DVA/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 249.5, "base": 380.01, "bull": 550.96}, "price": 191.35}
+[04:56:19] == DVA: AVOID 3
+[04:56:25] research/HKG-1208/2026-11-08-evaluation.md
+OK research/HKG-1208/2026-11-08-evaluation.md Bear case=143 Bull case=123 decision=AVOID
+[04:56:25] $ bin/py scripts/check_docs.py eval research/HKG-1208/2026-11-08-evaluation.md
+[04:56:25] OK research/HKG-1208/2026-11-08-evaluation.md Bear case=143 Bull case=123 decision=AVOID
+[04:56:25] $ bin/py scripts/valuation.py HKG:1208 --asof 2026-11-08 --eval research/HKG-1208/2026-11-08-evaluation.md
+[04:56:25] {"out": "research/HKG-1208/2026-11-08-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 5.18, "base": 8.13, "bull": 17.87}, "price": 6.825}
+[04:56:26] == HKG:1208: AVOID 3

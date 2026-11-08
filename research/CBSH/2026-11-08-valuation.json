@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 61.799366891167196,
+    "base": 66.80861789905363,
+    "bull": 67.32024056466877
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "roe": {
+     "bear": 0.15787,
+     "base": 0.16864,
+     "bull": 0.16974
+    },
+    "justified_pb": {
+     "bear": 2.0957413249211356,
+     "base": 2.265615141955836,
+     "bull": 2.2829652996845424
+    },
+    "bvps": 29.48807
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 59.77367242076971,
+    "base": 70.1799730417127,
+    "bull": 85.03175856342344
+   },
+   "implied_growth": -0.023944834435673273,
+   "discount_rate": 0.0884,
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -5.101575746073103e-05,
+     "base": 0.03357329742219471,
+     "bull": 0.049395221203700324
+    },
+    "cash_flow_margin": {
+     "bear": 0.30764012309216177,
+     "base": 0.31356792523085697,
+     "bull": 0.35569245986803394
+    },
+    "cagr_3y": 0.049395221203700324,
+    "cagr_5y": 0.034897968485078534,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 15.21117166212534,
+    "base": 17.783911671924287,
+    "bull": 21.320224719101123
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 1.1
+   }
+  }
+ ],
+ "price": 55.04,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 61.1241354010347,
+  "base": 67.93240294660666,
+  "bull": 73.22407989758699
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.1105402507455433,
+  "base": 0.23423697214038253,
+  "bull": 0.3303793586044148
+ },
+ "implied_growth": -0.023944834435673273,
+ "ticker": "CBSH",
+ "asof": "2026-11-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/cbsh/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/cbsh/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/cbsh/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/cbsh/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/cbsh/statistics/"
+ }
+}
