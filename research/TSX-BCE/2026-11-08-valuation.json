@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Telecom Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 65.18642017270048,
+    "base": 82.12391055608681,
+    "bull": 108.64247931265194
+   },
+   "implied_growth": -0.09684642313234776,
+   "discount_rate": 0.057021321411891715,
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.015481191023810886,
+     "base": 0.016182234709382338,
+     "bull": 0.016182234709382338
+    },
+    "cash_flow_margin": {
+     "bear": 0.1531408969113518,
+     "base": 0.1531408969113518,
+     "bull": 0.18538631355239496
+    },
+    "cagr_3y": 0.004037617952378225,
+    "cagr_5y": 0.010691320885151123,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 33.91561704067133,
+    "base": 48.636849245288076,
+    "bull": 53.32812783184536
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.285,
+     "base": 9.854,
+     "bull": 10.354
+    },
+    "ttm_ebitda": 8749000000
+   }
+  }
+ ],
+ "price": 30.57,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "CAD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 54.76281912869076,
+  "base": 70.96155678582056,
+  "bull": 90.20436215238307
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.7913908776150067,
+  "base": 1.3212808892973689,
+  "bull": 1.9507478623612386
+ },
+ "implied_growth": -0.09684642313234776,
+ "ticker": "TSX:BCE",
+ "asof": "2026-11-08",
+ "quote_currency": "CAD",
+ "financials_currency": "CAD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tsx/BCE/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tsx/BCE/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tsx/BCE/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tsx/BCE/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tsx/BCE/statistics/"
+ }
+}

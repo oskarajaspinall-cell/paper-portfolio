@@ -2348,3 +2348,181 @@ OK research/TYO-8729/2026-11-08-evaluation.md Bear case=135 Bull case=119 decisi
 [21:26:28] $ bin/py scripts/valuation.py TYO:8729 --asof 2026-11-08 --eval research/TYO-8729/2026-11-08-evaluation.md
 [21:26:28] {"out": "research/TYO-8729/2026-11-08-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 102.38, "base": 814.24, "bull": 2006.13}, "price": 141.2}
 [21:26:29] == done TYO:8729
+[21:26:33] == Research batch 09: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-08-batch-09.md; uploaded to GitHub
+[21:26:36] == initiate ADX:ALDAR
+[21:26:36] $ bin/py scripts/sec_delta.py ADX:ALDAR --asof 2026-11-08
+[21:26:36] SKIP ADX:ALDAR: not a US listing (SEC filers only)
+[21:26:36] $ claude -p Ticker ADX:ALDAR, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:26:50] research/ZMSE-DLTA/2026-11-08-evaluation.md
+OK research/ZMSE-DLTA/2026-11-08-evaluation.md Bear case=146 Bull case=129 decision=AVOID
+
+I created an empty stray file by mistake, research/ZMSE-DLTA/scratch-unused.txt. My permissions don't let me delete it, so please remove it.
+[21:26:50] $ bin/py scripts/check_docs.py eval research/ZMSE-DLTA/2026-11-08-evaluation.md
+[21:26:50] OK research/ZMSE-DLTA/2026-11-08-evaluation.md Bear case=146 Bull case=129 decision=AVOID
+[21:26:50] $ bin/py scripts/valuation.py ZMSE:DLTA --asof 2026-11-08 --eval research/ZMSE-DLTA/2026-11-08-evaluation.md
+[21:26:50] {"out": "research/ZMSE-DLTA/2026-11-08-valuation.md", "used": ["dcf"], "fair_value": {"bear": 12.47, "base": 58.21, "bull": 113.52}, "price": 34.952}
+[21:26:51] == done ZMSE:DLTA
+[21:27:27] == initiate MSM:OQEP
+[21:27:27] $ bin/py scripts/sec_delta.py MSM:OQEP --asof 2026-11-08
+[21:27:27] SKIP MSM:OQEP: not a US listing (SEC filers only)
+[21:27:27] $ claude -p Ticker MSM:OQEP, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:27:50] == screened out SHE:002555: price above base fair value (-35.8%; floor +0%) (no AI research)
+[21:27:58] - Note: `research/ADX-ALDAR/2026-11-08.md`
+- Fact sheet: `research/ADX-ALDAR/factsheet-2026-11-08.md`
+- Check: `OK research/ADX-ALDAR/2026-11-08.md type=CORE 1=59 2=123 3=138 4=38 5=63 6=50 total=471`
+- Data conflicts: none. The fact sheet's "Next earnings date" (Oct 26, 2026) is stale, because Q3 results came out on 27 October.
+- Blocked URLs: none. I made no WebFetch calls.
+- Gaps: I did not verify Aldar's segment or country mix. The note marks it [Guessing]. Short interest and share-count change are [data unavailable].
+- Peers: DFM:EMAAR, DFM:EMAARDEV and DFM:DEYAAR.
+[21:27:58] $ bin/py scripts/check_docs.py note research/ADX-ALDAR/2026-11-08.md
+[21:27:58] OK research/ADX-ALDAR/2026-11-08.md type=CORE 1=59 2=123 3=138 4=38 5=63 6=50 total=471
+[21:27:58] $ claude -p Ticker ADX:ALDAR, date 2026-11-08. Research: research/ADX-ALDAR/factsheet-2026-11-08.md, research/ADX-ALDAR/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/ADX-ALDAR/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:28:17] research/ADX-ALDAR/2026-11-08-macro.md
+OK research/ADX-ALDAR/2026-11-08-macro.md macro_weight=context words=122
+[21:28:17] $ bin/py scripts/check_docs.py macro research/ADX-ALDAR/2026-11-08-macro.md
+[21:28:17] OK research/ADX-ALDAR/2026-11-08-macro.md macro_weight=context words=122
+[21:28:17] $ claude -p Evaluate ADX:ALDAR for 2026-11-08: fact sheet research/ADX-ALDAR/factsheet-2026-11-08.md, note research/ADX-ALDAR/2026-11-08.md, state portfolio/state.json, macro overlay research/ADX-ALDAR/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:28:26] == initiate HKG:0288
+[21:28:26] $ bin/py scripts/sec_delta.py HKG:0288 --asof 2026-11-08
+[21:28:26] SKIP HKG:0288: not a US listing (SEC filers only)
+[21:28:26] $ claude -p Ticker HKG:0288, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:28:37] - Note: `research/MSM-OQEP/2026-11-08.md`
+- Fact sheet: `research/MSM-OQEP/factsheet-2026-11-08.md`
+- check_docs: `OK research/MSM-OQEP/2026-11-08.md type=CORE 1=62 2=119 3=137 4=31 5=36 6=43 total=428`
+- Data gaps:
+  - The fair value is `[data unavailable]`: neither the DCF nor the EV/EBITDA method could be computed.
+  - The fact sheet shows no sector (shown as Unknown), no short interest and no news.
+  - No company website or IR domain was found in `universe/` for OQEP, so I made no WebFetch calls.
+- Blocked URLs: none.
+[21:28:37] $ bin/py scripts/check_docs.py note research/MSM-OQEP/2026-11-08.md
+[21:28:37] OK research/MSM-OQEP/2026-11-08.md type=CORE 1=62 2=119 3=137 4=31 5=36 6=43 total=428
+[21:28:37] $ claude -p Ticker MSM:OQEP, date 2026-11-08. Research: research/MSM-OQEP/factsheet-2026-11-08.md, research/MSM-OQEP/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/MSM-OQEP/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:28:55] research/MSM-OQEP/2026-11-08-macro.md
+OK research/MSM-OQEP/2026-11-08-macro.md macro_weight=context words=130
+[21:28:55] $ bin/py scripts/check_docs.py macro research/MSM-OQEP/2026-11-08-macro.md
+[21:28:55] OK research/MSM-OQEP/2026-11-08-macro.md macro_weight=context words=130
+[21:28:55] $ claude -p Evaluate MSM:OQEP for 2026-11-08: fact sheet research/MSM-OQEP/factsheet-2026-11-08.md, note research/MSM-OQEP/2026-11-08.md, state portfolio/state.json, macro overlay research/MSM-OQEP/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:28:57] research/ADX-ALDAR/2026-11-08-evaluation.md
+OK research/ADX-ALDAR/2026-11-08-evaluation.md Bear case=147 Bull case=137 decision=AVOID
+[21:28:57] $ bin/py scripts/check_docs.py eval research/ADX-ALDAR/2026-11-08-evaluation.md
+[21:28:57] OK research/ADX-ALDAR/2026-11-08-evaluation.md Bear case=147 Bull case=137 decision=AVOID
+[21:28:57] $ bin/py scripts/valuation.py ADX:ALDAR --asof 2026-11-08 --eval research/ADX-ALDAR/2026-11-08-evaluation.md
+[21:28:57] {"out": "research/ADX-ALDAR/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 8.73, "base": 10.42, "bull": 101.1}, "price": 7.98}
+[21:28:58] == done ADX:ALDAR
+[21:29:19] == screened out SGX:BS6: price above base fair value (-50.8%; floor +0%) (no AI research)
+[21:29:26] Note: research/HKG-0288/2026-11-08.md
+Fact sheet: research/HKG-0288/factsheet-2026-11-08.md
+check_docs: OK research/HKG-0288/2026-11-08.md type=CORE 1=65 2=116 3=119 4=35 5=71 6=73 total=479
+
+Blocked URL: https://www.wh-group.com/en/ir/ (not on the allowlist). Because of that, the China/US revenue split and the segment mix are [data unavailable] in the note. No data conflicts.
+[21:29:26] $ bin/py scripts/check_docs.py note research/HKG-0288/2026-11-08.md
+[21:29:26] OK research/HKG-0288/2026-11-08.md type=CORE 1=65 2=116 3=119 4=35 5=71 6=73 total=479
+[21:29:26] $ claude -p Ticker HKG:0288, date 2026-11-08. Research: research/HKG-0288/factsheet-2026-11-08.md, research/HKG-0288/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/HKG-0288/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:29:34] I wrote research/MSM-OQEP/2026-11-08-evaluation.md and the checker printed:
+
+OK research/MSM-OQEP/2026-11-08-evaluation.md Bear case=149 Bull case=112 decision=AVOID
+
+The decision is AVOID at conviction 2, so there is no entry price. Margins and cash conversion fell over the last 12 months, the stock trades above its own 5-year multiple range, fair value can't be computed and the Oman country risk is unverified.
+[21:29:34] $ bin/py scripts/check_docs.py eval research/MSM-OQEP/2026-11-08-evaluation.md
+[21:29:34] OK research/MSM-OQEP/2026-11-08-evaluation.md Bear case=149 Bull case=112 decision=AVOID
+[21:29:34] $ bin/py scripts/valuation.py MSM:OQEP --asof 2026-11-08 --eval research/MSM-OQEP/2026-11-08-evaluation.md
+[21:29:34] {"out": "research/MSM-OQEP/2026-11-08-valuation.md", "used": null, "fair_value": {}, "price": 0.444}
+[21:29:35] == done MSM:OQEP
+[21:29:49] research/HKG-0288/2026-11-08-macro.md
+OK research/HKG-0288/2026-11-08-macro.md macro_weight=context words=56
+[21:29:49] $ bin/py scripts/check_docs.py macro research/HKG-0288/2026-11-08-macro.md
+[21:29:49] OK research/HKG-0288/2026-11-08-macro.md macro_weight=context words=56
+[21:29:49] $ claude -p Evaluate HKG:0288 for 2026-11-08: fact sheet research/HKG-0288/factsheet-2026-11-08.md, note research/HKG-0288/2026-11-08.md, state portfolio/state.json, macro overlay research/HKG-0288/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:29:49] == screened out TYO:5929: price above base fair value (-1.9%; floor +0%) (no AI research)
+[21:30:20] == screened out SHE:002415: price above base fair value (-12.1%; floor +0%) (no AI research)
+[21:30:37] == initiate TSX:BCE
+[21:30:37] $ bin/py scripts/sec_delta.py TSX:BCE --asof 2026-11-08
+[21:30:37] SKIP TSX:BCE: not a US listing (SEC filers only)
+[21:30:37] $ claude -p Ticker TSX:BCE, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:30:37] research/HKG-0288/2026-11-08-evaluation.md
+OK research/HKG-0288/2026-11-08-evaluation.md Bear case=146 Bull case=138 decision=AVOID
+[21:30:37] $ bin/py scripts/check_docs.py eval research/HKG-0288/2026-11-08-evaluation.md
+[21:30:37] OK research/HKG-0288/2026-11-08-evaluation.md Bear case=146 Bull case=138 decision=AVOID
+[21:30:37] $ bin/py scripts/valuation.py HKG:0288 --asof 2026-11-08 --eval research/HKG-0288/2026-11-08-evaluation.md
+[21:30:37] {"out": "research/HKG-0288/2026-11-08-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 8.3, "base": 17.64, "bull": 19.85}, "price": 6.59}
+[21:30:39] == done HKG:0288
+[21:31:17] == screened out MGY: price above base fair value (-24.2%; floor +0%) (no AI research)
+[21:31:34] == screened out NSE:RECLTD: price above base fair value (-4.8%; floor +0%) (no AI research)
+[21:32:18] == initiate SHA:601877
+[21:32:18] $ bin/py scripts/sec_delta.py SHA:601877 --asof 2026-11-08
+[21:32:18] SKIP SHA:601877: not a US listing (SEC filers only)
+[21:32:18] $ claude -p Ticker SHA:601877, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:32:25] == initiate DBX
+[21:32:25] $ bin/py scripts/sec_delta.py DBX --asof 2026-11-08
+[21:32:30] Note: research/TSX-BCE/2026-11-08.md
+Fact sheet: research/TSX-BCE/factsheet-2026-11-08.md
+Check: OK research/TSX-BCE/2026-11-08.md type=CORE 1=47 2=114 3=138 4=37 5=87 6=38 total=461
+
+Blocked URL: https://www.bce.ca/investors was not on the allowlist, so I fetched nothing from it. I also left it out of Sources, because check_docs rejects non-allowlisted URLs.
+
+Data conflicts: none.
+
+Gaps from the blocked fetch:
+- I took the Q3 results, the reaffirmed guidance and the leverage target from the fact sheet's headline list, and left the numbers out because headline numbers are barred.
+- The geographic revenue split and the CRTC and dividend risks are tagged [Guessing] because no primary source confirmed them.
+[21:32:30] $ bin/py scripts/check_docs.py note research/TSX-BCE/2026-11-08.md
+[21:32:30] OK research/TSX-BCE/2026-11-08.md type=CORE 1=47 2=114 3=138 4=37 5=87 6=38 total=461
+[21:32:30] $ claude -p Ticker TSX:BCE, date 2026-11-08. Research: research/TSX-BCE/factsheet-2026-11-08.md, research/TSX-BCE/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/TSX-BCE/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:32:36] OK research/DBX/sec-delta-2026-11-08.md
+[21:32:36] $ claude -p Ticker DBX, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. SEC filing delta: research/DBX/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:32:49] research/TSX-BCE/2026-11-08-macro.md
+OK research/TSX-BCE/2026-11-08-macro.md macro_weight=context words=43
+[21:32:49] $ bin/py scripts/check_docs.py macro research/TSX-BCE/2026-11-08-macro.md
+[21:32:49] OK research/TSX-BCE/2026-11-08-macro.md macro_weight=context words=43
+[21:32:49] $ claude -p Evaluate TSX:BCE for 2026-11-08: fact sheet research/TSX-BCE/factsheet-2026-11-08.md, note research/TSX-BCE/2026-11-08.md, state portfolio/state.json, macro overlay research/TSX-BCE/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:33:18] Note: research/SHA-601877/2026-11-08.md
+Fact sheet: research/SHA-601877/factsheet-2026-11-08.md
+Check: OK research/SHA-601877/2026-11-08.md type=CORE 1=60 2=118 3=133 4=51 5=44 6=54 total=460
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls because no company or IR domain was recorded for this ticker. Revenue mix by country and segment is therefore marked [data unavailable] in the note.
+[21:33:18] $ bin/py scripts/check_docs.py note research/SHA-601877/2026-11-08.md
+[21:33:18] OK research/SHA-601877/2026-11-08.md type=CORE 1=60 2=118 3=133 4=51 5=44 6=54 total=460
+[21:33:18] $ claude -p Ticker SHA:601877, date 2026-11-08. Research: research/SHA-601877/factsheet-2026-11-08.md, research/SHA-601877/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/SHA-601877/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:33:28] research/TSX-BCE/2026-11-08-evaluation.md
+OK research/TSX-BCE/2026-11-08-evaluation.md Bear case=144 Bull case=120 decision=AVOID
+[21:33:28] $ bin/py scripts/check_docs.py eval research/TSX-BCE/2026-11-08-evaluation.md
+[21:33:28] OK research/TSX-BCE/2026-11-08-evaluation.md Bear case=144 Bull case=120 decision=AVOID
+[21:33:28] $ bin/py scripts/valuation.py TSX:BCE --asof 2026-11-08 --eval research/TSX-BCE/2026-11-08-evaluation.md
+[21:33:28] {"out": "research/TSX-BCE/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 54.76, "base": 70.96, "bull": 90.2}, "price": 30.57}
+[21:33:29] == done TSX:BCE
+[21:33:35] research/SHA-601877/2026-11-08-macro.md
+OK research/SHA-601877/2026-11-08-macro.md macro_weight=context words=43
+[21:33:35] $ bin/py scripts/check_docs.py macro research/SHA-601877/2026-11-08-macro.md
+[21:33:35] OK research/SHA-601877/2026-11-08-macro.md macro_weight=context words=43
+[21:33:35] $ claude -p Evaluate SHA:601877 for 2026-11-08: fact sheet research/SHA-601877/factsheet-2026-11-08.md, note research/SHA-601877/2026-11-08.md, state portfolio/state.json, macro overlay research/SHA-601877/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:33:40] - Note: `research/DBX/2026-11-08.md`
+- Fact sheet: `research/DBX/factsheet-2026-11-08.md`
+- check_docs: `OK research/DBX/2026-11-08.md type=CORE 1=67 2=114 3=117 4=46 5=72 6=57 total=473`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls and used only the SEC delta file and the fact sheet.
+[21:33:40] $ bin/py scripts/check_docs.py note research/DBX/2026-11-08.md
+[21:33:40] OK research/DBX/2026-11-08.md type=CORE 1=67 2=114 3=117 4=46 5=72 6=57 total=473
+[21:33:40] $ claude -p Ticker DBX, date 2026-11-08. Research: research/DBX/factsheet-2026-11-08.md, research/DBX/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/DBX/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:33:46] == screened out JAZZ: price above base fair value (-21.0%; floor +0%) (no AI research)
+[21:33:58] research/DBX/2026-11-08-macro.md
+OK research/DBX/2026-11-08-macro.md macro_weight=context words=54
+[21:33:58] $ bin/py scripts/check_docs.py macro research/DBX/2026-11-08-macro.md
+[21:33:59] OK research/DBX/2026-11-08-macro.md macro_weight=context words=54
+[21:33:59] $ claude -p Evaluate DBX for 2026-11-08: fact sheet research/DBX/factsheet-2026-11-08.md, note research/DBX/2026-11-08.md, state portfolio/state.json, macro overlay research/DBX/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:34:10] == initiate WSE:PZU
+[21:34:10] $ bin/py scripts/sec_delta.py WSE:PZU --asof 2026-11-08
+[21:34:10] SKIP WSE:PZU: not a US listing (SEC filers only)
+[21:34:10] $ claude -p Ticker WSE:PZU, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:34:41] research/DBX/2026-11-08-evaluation.md
+OK research/DBX/2026-11-08-evaluation.md Bear case=142 Bull case=109 decision=AVOID
+[21:34:41] $ bin/py scripts/check_docs.py eval research/DBX/2026-11-08-evaluation.md
+[21:34:42] research/SHA-601877/2026-11-08-evaluation.md
+OK research/SHA-601877/2026-11-08-evaluation.md Bear case=147 Bull case=129 decision=AVOID
+[21:34:42] $ bin/py scripts/check_docs.py eval research/SHA-601877/2026-11-08-evaluation.md
+[21:34:42] OK research/DBX/2026-11-08-evaluation.md Bear case=142 Bull case=109 decision=AVOID
+[21:34:42] $ bin/py scripts/valuation.py DBX --asof 2026-11-08 --eval research/DBX/2026-11-08-evaluation.md
+[21:34:42] OK research/SHA-601877/2026-11-08-evaluation.md Bear case=147 Bull case=129 decision=AVOID
+[21:34:42] $ bin/py scripts/valuation.py SHA:601877 --asof 2026-11-08 --eval research/SHA-601877/2026-11-08-evaluation.md
+[21:34:42] {"out": "research/DBX/2026-11-08-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 23.69, "base": 49.4, "bull": 52.84}, "price": 34.66}
+[21:34:42] {"out": "research/SHA-601877/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -62.67, "base": 164.55, "bull": 202.91}, "price": 24.73}
+[21:34:43] == done DBX
+[21:34:43] == done SHA:601877
