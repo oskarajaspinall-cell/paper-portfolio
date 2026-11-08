@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Specialty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 60.0800341214511,
+    "base": 68.50647761072554,
+    "bull": 77.61584116845424
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "roe": {
+     "bear": 0.13145,
+     "base": 0.14638,
+     "bull": 0.16252
+    },
+    "justified_pb": {
+     "bear": 1.6790220820189274,
+     "base": 1.9145110410094637,
+     "bull": 2.169085173501577
+    },
+    "bvps": 35.782754
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 16.386289108,
+    "base": 29.471743,
+    "bull": 31.772571488
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.031,
+     "base": 7.25,
+     "bull": 7.816
+    },
+    "ttm_eps": 4.065068
+   }
+  }
+ ],
+ "price": 35.97,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 45.515452450300735,
+  "base": 55.49489940715036,
+  "bull": 62.3347512749695
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.26537260078678715,
+  "base": 0.542810659081189,
+  "bull": 0.7329650062543647
+ },
+ "implied_growth": null,
+ "ticker": "RDN",
+ "asof": "2026-11-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/rdn/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/rdn/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/rdn/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/rdn/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/rdn/statistics/"
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 6.493461839563882,
+    "base": 24.34517793154176,
+    "bull": 39.543113720289156
+   },
+   "implied_growth": 0.06490383775297107,
+   "discount_rate": 0.09884400000000002,
+   "cost_of_equity": 0.09884400000000002,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.16696407616111894,
+     "base": 0.19696407616111894,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.1442412345735922,
+     "base": 0.48150904125920235,
+     "bull": 0.6390286770158792
+    },
+    "cagr_3y": null,
+    "cagr_5y": 0.36892815232223786,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 5.977990245333333,
+    "base": 26.325165091499997,
+    "bull": 77.591619534
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 12.848,
+     "base": 56.5785,
+     "bull": 100.309
+    },
+    "ttm_eps": 0.773526,
+    "peak_earnings": "TTM EPS is 2.0x its 5y median: bear/base use the 5y average (0.4653), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 14.46,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 6.321637974820366,
+  "base": 25.005173651527837,
+  "bull": 52.2259489915261
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5628189505656732,
+  "base": 0.7292651211291725,
+  "bull": 2.611753042290878
+ },
+ "implied_growth": 0.06490383775297107,
+ "ticker": "AMS:CVC",
+ "asof": "2026-11-08",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/ams/CVC/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/ams/CVC/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/ams/CVC/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/ams/CVC/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/ams/CVC/statistics/"
+ }
+}
