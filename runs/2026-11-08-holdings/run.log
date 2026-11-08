@@ -1,0 +1,334 @@
+[04:59:06] == re-research LDOS
+[04:59:06] == re-research CI
+[04:59:06] == re-research ZTS
+[04:59:06] $ bin/py scripts/sec_delta.py LDOS --asof 2026-11-08
+[04:59:06] $ bin/py scripts/sec_delta.py CI --asof 2026-11-08
+[04:59:06] $ bin/py scripts/sec_delta.py ZTS --asof 2026-11-08
+[04:59:17] OK research/ZTS/sec-delta-2026-11-08.md
+[04:59:17] $ claude -p Ticker ZTS, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. SEC filing delta: research/ZTS/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:59:17] OK research/LDOS/sec-delta-2026-11-08.md
+[04:59:17] $ claude -p Ticker LDOS, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. SEC filing delta: research/LDOS/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:59:17] OK research/CI/sec-delta-2026-11-08.md
+[04:59:17] $ claude -p Ticker CI, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. SEC filing delta: research/CI/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:01:41] Note: research/CI/2026-11-08.md
+Fact sheet: research/CI/factsheet-2026-11-08.md
+check_docs: OK research/CI/2026-11-08.md type=CORE 1=55 2=114 3=119 4=35 5=53 6=54 total=430
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+[05:01:41] $ bin/py scripts/check_docs.py note research/CI/2026-11-08.md
+[05:01:41] OK research/CI/2026-11-08.md type=CORE 1=55 2=114 3=119 4=35 5=53 6=54 total=430
+[05:01:41] $ claude -p Ticker CI, date 2026-11-08. Research: research/CI/factsheet-2026-11-08.md, research/CI/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/CI/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:01:51] I've written the LDOS core note, and `check_docs.py` printed OK.
+
+- **Note:** `research/LDOS/2026-11-08.md`
+- **Fact sheet:** `research/LDOS/factsheet-2026-11-08.md`
+- **Check:** `OK research/LDOS/2026-11-08.md type=CORE 1=62 2=138 3=148 4=35 5=49 6=61 total=493`
+- **Data conflicts:** none.
+- **Blocked URLs:** none. I made no WebFetch calls.
+- **Notes:**
+  - The fact sheet command ran in the background after timing out in the foreground, then exited 0.
+  - The peers were CACI, SAIC, BAH and PSN.
+[05:01:51] $ bin/py scripts/check_docs.py note research/LDOS/2026-11-08.md
+[05:01:51] OK research/LDOS/2026-11-08.md type=CORE 1=62 2=138 3=148 4=35 5=49 6=61 total=493
+[05:01:51] $ claude -p Ticker LDOS, date 2026-11-08. Research: research/LDOS/factsheet-2026-11-08.md, research/LDOS/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/LDOS/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:01:54] research/CI/2026-11-08-macro.md
+OK research/CI/2026-11-08-macro.md macro_weight=context words=61
+[05:01:54] $ bin/py scripts/check_docs.py macro research/CI/2026-11-08-macro.md
+[05:01:54] OK research/CI/2026-11-08-macro.md macro_weight=context words=61
+[05:01:54] $ claude -p Evaluate CI for 2026-11-08: fact sheet research/CI/factsheet-2026-11-08.md, note research/CI/2026-11-08.md, state portfolio/state.json, macro overlay research/CI/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:02:09] research/LDOS/2026-11-08-macro.md
+OK research/LDOS/2026-11-08-macro.md macro_weight=context words=58
+[05:02:09] $ bin/py scripts/check_docs.py macro research/LDOS/2026-11-08-macro.md
+[05:02:10] OK research/LDOS/2026-11-08-macro.md macro_weight=context words=58
+[05:02:10] $ claude -p Evaluate LDOS for 2026-11-08: fact sheet research/LDOS/factsheet-2026-11-08.md, note research/LDOS/2026-11-08.md, state portfolio/state.json, macro overlay research/LDOS/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:02:12] Note: research/ZTS/2026-11-08.md
+Fact sheet: research/ZTS/factsheet-2026-11-08.md
+Check: OK research/ZTS/2026-11-08.md type=CORE 1=52 2=148 3=119 4=44 5=51 6=70 total=484
+
+Data conflicts: none. Blocked URLs: none. I used 1 of 6 WebFetch calls, on the Q3 10-Q at sec.gov.
+
+The first check_docs run failed on a made-up URL in Sources and on an uncited US-share figure. I rewrote the note and the second run passed.
+[05:02:12] $ bin/py scripts/check_docs.py note research/ZTS/2026-11-08.md
+[05:02:12] OK research/ZTS/2026-11-08.md type=CORE 1=52 2=148 3=119 4=44 5=51 6=70 total=484
+[05:02:12] $ claude -p Ticker ZTS, date 2026-11-08. Research: research/ZTS/factsheet-2026-11-08.md, research/ZTS/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/ZTS/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:02:29] research/ZTS/2026-11-08-macro.md
+OK research/ZTS/2026-11-08-macro.md macro_weight=context words=43
+[05:02:29] $ bin/py scripts/check_docs.py macro research/ZTS/2026-11-08-macro.md
+[05:02:29] OK research/ZTS/2026-11-08-macro.md macro_weight=context words=43
+[05:02:29] $ claude -p Evaluate ZTS for 2026-11-08: fact sheet research/ZTS/factsheet-2026-11-08.md, note research/ZTS/2026-11-08.md, state portfolio/state.json, macro overlay research/ZTS/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:02:40] I've written the CI evaluation and the checker passes. The decision is **HOLD at conviction 4**, so the position keeps its current size.
+
+research/CI/2026-11-08-evaluation.md
+OK research/CI/2026-11-08-evaluation.md Bear case=137 Bull case=110 decision=HOLD
+
+- **For holding:** Q3 beat, 2026 guidance went up and debt keeps falling. The valuation is still near the bottom of its own five-year range, and the price is well below the base fair value of 421.42.
+- **Against adding:** Returns and margins have been flat over the last year, and the cash-flow margin is at a five-year low. Management has also warned of 2027 headwinds: drug-rebate changes, weight-loss-drug costs and leaving the individual health plan market.
+- **Direction change:** The fact sheet printed no Direction change line. The bear case still says plainly that the last 12 months show no improvement, and that return on capital is 1.6pp below its March 2026 peak.
+- **Macro and country risk:** The macro overlay rates it as context only. Revenue is US-based with no material foreign country, so it doesn't change the decision.
+- **Scenarios over 12 months:** bull 421.42 (25%), base 342.42 (50%), bear 268.11 (25%).
+- **Entry price:** I left it blank (null) because the stock is already at conviction 4, so no lower price is needed to reach the buy bar. The checker accepted that.
+[05:02:40] $ bin/py scripts/check_docs.py eval research/CI/2026-11-08-evaluation.md
+[05:02:40] OK research/CI/2026-11-08-evaluation.md Bear case=137 Bull case=110 decision=HOLD
+[05:02:40] $ bin/py scripts/valuation.py CI --asof 2026-11-08 --eval research/CI/2026-11-08-evaluation.md
+[05:02:40] {"out": "research/CI/2026-11-08-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 268.11, "base": 421.42, "bull": 852.56}, "price": 293.59}
+[05:02:41] == CI: HOLD 4
+[05:02:41] == re-research INTU
+[05:02:41] $ bin/py scripts/sec_delta.py INTU --asof 2026-11-08
+[05:02:53] OK research/INTU/sec-delta-2026-11-08.md
+[05:02:53] $ claude -p Ticker INTU, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. SEC filing delta: research/INTU/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:03:11] I held ZTS at conviction 4. The checker passed:
+
+research/ZTS/2026-11-08-evaluation.md
+OK research/ZTS/2026-11-08-evaluation.md Bear case=132 Bull case=117 decision=HOLD
+[05:03:11] $ bin/py scripts/check_docs.py eval research/ZTS/2026-11-08-evaluation.md
+[05:03:11] OK research/ZTS/2026-11-08-evaluation.md Bear case=132 Bull case=117 decision=HOLD
+[05:03:11] $ bin/py scripts/valuation.py ZTS --asof 2026-11-08 --eval research/ZTS/2026-11-08-evaluation.md
+[05:03:11] {"out": "research/ZTS/2026-11-08-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 76.01, "base": 125.91, "bull": 147.48}, "price": 79.4}
+[05:03:11] research/LDOS/2026-11-08-evaluation.md
+OK research/LDOS/2026-11-08-evaluation.md Bear case=139 Bull case=130 decision=HOLD
+[05:03:11] $ bin/py scripts/check_docs.py eval research/LDOS/2026-11-08-evaluation.md
+[05:03:12] OK research/LDOS/2026-11-08-evaluation.md Bear case=139 Bull case=130 decision=HOLD
+[05:03:12] $ bin/py scripts/valuation.py LDOS --asof 2026-11-08 --eval research/LDOS/2026-11-08-evaluation.md
+[05:03:12] {"out": "research/LDOS/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 145.5, "base": 270.01, "bull": 290.19}, "price": 132.68}
+[05:03:12] == ZTS: HOLD 4
+[05:03:12] == re-research HKG:2076
+[05:03:12] $ bin/py scripts/sec_delta.py HKG:2076 --asof 2026-11-08
+[05:03:13] SKIP HKG:2076: not a US listing (SEC filers only)
+[05:03:13] $ claude -p Ticker HKG:2076, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:03:13] == LDOS: HOLD 4
+[05:03:13] == re-research HRB
+[05:03:13] $ bin/py scripts/sec_delta.py HRB --asof 2026-11-08
+[05:03:24] OK research/HRB/sec-delta-2026-11-08.md
+[05:03:24] $ claude -p Ticker HRB, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. SEC filing delta: research/HRB/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:05:12] Note: `research/INTU/2026-11-08.md`
+Fact sheet: `research/INTU/factsheet-2026-11-08.md`
+check_docs: `OK research/INTU/2026-11-08.md type=CORE 1=54 2=128 3=120 4=63 5=68 6=76 total=509`
+
+Data conflicts: none. Blocked URLs: none. I used one of the six WebFetch calls, on the 10-K.
+
+The first check failed on word limits in sections 2 and 3. I trimmed both and the second run passed.
+[05:05:12] $ bin/py scripts/check_docs.py note research/INTU/2026-11-08.md
+[05:05:12] OK research/INTU/2026-11-08.md type=CORE 1=54 2=128 3=120 4=63 5=68 6=76 total=509
+[05:05:12] $ claude -p Ticker INTU, date 2026-11-08. Research: research/INTU/factsheet-2026-11-08.md, research/INTU/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/INTU/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:05:30] research/INTU/2026-11-08-macro.md
+OK research/INTU/2026-11-08-macro.md macro_weight=context words=52
+[05:05:30] $ bin/py scripts/check_docs.py macro research/INTU/2026-11-08-macro.md
+[05:05:30] OK research/INTU/2026-11-08-macro.md macro_weight=context words=52
+[05:05:30] $ claude -p Evaluate INTU for 2026-11-08: fact sheet research/INTU/factsheet-2026-11-08.md, note research/INTU/2026-11-08.md, state portfolio/state.json, macro overlay research/INTU/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:05:38] Note: research/HKG-2076/2026-11-08.md
+Fact sheet: research/HKG-2076/factsheet-2026-11-08.md
+Check: OK research/HKG-2076/2026-11-08.md type=CORE 1=61 2=139 3=138 4=53 5=53 6=66 total=510
+
+Data conflicts and blocked URLs:
+- No data conflicts and no blocked URLs. I made no WebFetch calls.
+- The globenewswire.com headline URLs in the note come from the fact sheet's news list. That domain isn't on the allowlist, so I cited the headlines only and did not fetch the pages.
+[05:05:38] $ bin/py scripts/check_docs.py note research/HKG-2076/2026-11-08.md
+[05:05:38] OK research/HKG-2076/2026-11-08.md type=CORE 1=61 2=139 3=138 4=53 5=53 6=66 total=510
+[05:05:38] $ claude -p Ticker HKG:2076, date 2026-11-08. Research: research/HKG-2076/factsheet-2026-11-08.md, research/HKG-2076/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/HKG-2076/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:05:51] - Note: `research/HRB/2026-11-08.md`
+- Fact sheet: `research/HRB/factsheet-2026-11-08.md`
+- check_docs: `OK research/HRB/2026-11-08.md type=CORE 1=77 2=132 3=137 4=36 5=81 6=63 total=526`
+- Data conflicts: none.
+- Blocked URLs: none. I used one WebFetch, on the 10-K, and it covered only the first 100,000 of 203,458 characters. The 10-K gave no revenue split by segment or country, so section 1 says only that no foreign country appears to reach about 10%, tagged [Likely].
+[05:05:51] $ bin/py scripts/check_docs.py note research/HRB/2026-11-08.md
+[05:05:51] OK research/HRB/2026-11-08.md type=CORE 1=77 2=132 3=137 4=36 5=81 6=63 total=526
+[05:05:51] $ claude -p Ticker HRB, date 2026-11-08. Research: research/HRB/factsheet-2026-11-08.md, research/HRB/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/HRB/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:06:00] research/HKG-2076/2026-11-08-macro.md
+OK research/HKG-2076/2026-11-08-macro.md macro_weight=context words=71
+[05:06:00] $ bin/py scripts/check_docs.py macro research/HKG-2076/2026-11-08-macro.md
+[05:06:00] OK research/HKG-2076/2026-11-08-macro.md macro_weight=context words=71
+[05:06:00] $ claude -p Evaluate HKG:2076 for 2026-11-08: fact sheet research/HKG-2076/factsheet-2026-11-08.md, note research/HKG-2076/2026-11-08.md, state portfolio/state.json, macro overlay research/HKG-2076/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:06:09] research/HRB/2026-11-08-macro.md
+OK research/HRB/2026-11-08-macro.md macro_weight=context words=52
+[05:06:09] $ bin/py scripts/check_docs.py macro research/HRB/2026-11-08-macro.md
+[05:06:09] OK research/HRB/2026-11-08-macro.md macro_weight=context words=52
+[05:06:09] $ claude -p Evaluate HRB for 2026-11-08: fact sheet research/HRB/factsheet-2026-11-08.md, note research/HRB/2026-11-08.md, state portfolio/state.json, macro overlay research/HRB/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:06:28] research/INTU/2026-11-08-evaluation.md
+OK research/INTU/2026-11-08-evaluation.md Bear case=146 Bull case=134 decision=HOLD
+[05:06:28] $ bin/py scripts/check_docs.py eval research/INTU/2026-11-08-evaluation.md
+[05:06:28] OK research/INTU/2026-11-08-evaluation.md Bear case=146 Bull case=134 decision=HOLD
+[05:06:28] $ bin/py scripts/valuation.py INTU --asof 2026-11-08 --eval research/INTU/2026-11-08-evaluation.md
+[05:06:28] {"out": "research/INTU/2026-11-08-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 255.95, "base": 581.05, "bull": 689.35}, "price": 341.5}
+[05:06:29] == INTU: HOLD 4
+[05:06:29] == re-research HKG:3998
+[05:06:29] $ bin/py scripts/sec_delta.py HKG:3998 --asof 2026-11-08
+[05:06:29] SKIP HKG:3998: not a US listing (SEC filers only)
+[05:06:29] $ claude -p Ticker HKG:3998, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:06:53] I've written the evaluation and it passes the checker: HOLD at conviction 4, keeping the current size.
+
+research/HKG-2076/2026-11-08-evaluation.md
+OK research/HKG-2076/2026-11-08-evaluation.md Bear case=142 Bull case=137 decision=HOLD
+[05:06:53] $ bin/py scripts/check_docs.py eval research/HKG-2076/2026-11-08-evaluation.md
+[05:06:53] OK research/HKG-2076/2026-11-08-evaluation.md Bear case=142 Bull case=137 decision=HOLD
+[05:06:53] $ bin/py scripts/valuation.py HKG:2076 --asof 2026-11-08 --eval research/HKG-2076/2026-11-08-evaluation.md
+[05:06:53] {"out": "research/HKG-2076/2026-11-08-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 35.8, "base": 66.74, "bull": 121.28}, "price": 68.55}
+[05:06:54] == HKG:2076: HOLD 4
+[05:06:54] == re-research OTIS
+[05:06:54] $ bin/py scripts/sec_delta.py OTIS --asof 2026-11-08
+[05:07:05] OK research/OTIS/sec-delta-2026-11-08.md
+[05:07:05] $ claude -p Ticker OTIS, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. SEC filing delta: research/OTIS/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:07:35] research/HRB/2026-11-08-evaluation.md
+OK research/HRB/2026-11-08-evaluation.md Bear case=149 Bull case=116 decision=HOLD
+[05:07:35] $ bin/py scripts/check_docs.py eval research/HRB/2026-11-08-evaluation.md
+[05:07:35] OK research/HRB/2026-11-08-evaluation.md Bear case=149 Bull case=116 decision=HOLD
+[05:07:35] $ bin/py scripts/valuation.py HRB --asof 2026-11-08 --eval research/HRB/2026-11-08-evaluation.md
+[05:07:36] {"out": "research/HRB/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 67.22, "base": 95.54, "bull": 114.26}, "price": 52.69}
+[05:07:37] == HRB: HOLD 3
+[05:07:37] == re-research HKG:9999
+[05:07:37] $ bin/py scripts/sec_delta.py HKG:9999 --asof 2026-11-08
+[05:07:37] SKIP HKG:9999: not a US listing (SEC filers only)
+[05:07:37] $ claude -p Ticker HKG:9999, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:07:52] Note: research/HKG-3998/2026-11-08.md
+Fact sheet: research/HKG-3998/factsheet-2026-11-08.md
+check_docs: OK research/HKG-3998/2026-11-08.md type=CORE 1=61 2=125 3=124 4=51 5=44 6=70 total=475
+
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls, and there was no SEC delta (HKG filer). Section 1's China-revenue share comes only from the stockanalysis.com description, not a company-reported figure.
+[05:07:52] $ bin/py scripts/check_docs.py note research/HKG-3998/2026-11-08.md
+[05:07:52] OK research/HKG-3998/2026-11-08.md type=CORE 1=61 2=125 3=124 4=51 5=44 6=70 total=475
+[05:07:52] $ claude -p Ticker HKG:3998, date 2026-11-08. Research: research/HKG-3998/factsheet-2026-11-08.md, research/HKG-3998/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/HKG-3998/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:08:12] research/HKG-3998/2026-11-08-macro.md
+OK research/HKG-3998/2026-11-08-macro.md macro_weight=context words=45
+[05:08:12] $ bin/py scripts/check_docs.py macro research/HKG-3998/2026-11-08-macro.md
+[05:08:12] OK research/HKG-3998/2026-11-08-macro.md macro_weight=context words=45
+[05:08:12] $ claude -p Evaluate HKG:3998 for 2026-11-08: fact sheet research/HKG-3998/factsheet-2026-11-08.md, note research/HKG-3998/2026-11-08.md, state portfolio/state.json, macro overlay research/HKG-3998/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:08:54] - Note: `research/HKG-9999/2026-11-08.md`
+- Fact sheet: `research/HKG-9999/factsheet-2026-11-08.md`
+- Check: `OK research/HKG-9999/2026-11-08.md type=CORE 1=65 2=135 3=122 4=49 5=52 6=46 total=469`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- Peers: the first two peer sets failed with 404s (`NASDAQ:NTES`, then `HKG:700`; Hong Kong tickers need zero-padding). The final peers are `HKG:0700`, `HKG:1024`, `EA` and `TTWO`.
+- Gap: the geographic revenue split is marked `[data unavailable]` because the fact sheet doesn't show it and I fetched no primary source.
+- Gap: the `2026-11-08-macro.md` country_risk overlay file didn't exist when I wrote the note, so the note only refers to it.
+[05:08:54] $ bin/py scripts/check_docs.py note research/HKG-9999/2026-11-08.md
+[05:08:54] OK research/HKG-9999/2026-11-08.md type=CORE 1=65 2=135 3=122 4=49 5=52 6=46 total=469
+[05:08:54] $ claude -p Ticker HKG:9999, date 2026-11-08. Research: research/HKG-9999/factsheet-2026-11-08.md, research/HKG-9999/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/HKG-9999/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:08:55] research/HKG-3998/2026-11-08-evaluation.md
+OK research/HKG-3998/2026-11-08-evaluation.md Bear case=145 Bull case=127 decision=HOLD
+[05:08:55] $ bin/py scripts/check_docs.py eval research/HKG-3998/2026-11-08-evaluation.md
+[05:08:55] OK research/HKG-3998/2026-11-08-evaluation.md Bear case=145 Bull case=127 decision=HOLD
+[05:08:55] $ bin/py scripts/valuation.py HKG:3998 --asof 2026-11-08 --eval research/HKG-3998/2026-11-08-evaluation.md
+[05:08:55] {"out": "research/HKG-3998/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 5.02, "base": 7.77, "bull": 13.45}, "price": 4.49}
+[05:08:56] == HKG:3998: HOLD 4
+[05:08:56] == re-research DECK
+[05:08:56] $ bin/py scripts/sec_delta.py DECK --asof 2026-11-08
+[05:09:10] OK research/DECK/sec-delta-2026-11-08.md
+[05:09:10] $ claude -p Ticker DECK, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. SEC filing delta: research/DECK/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:09:13] Note: research/OTIS/2026-11-08.md
+Fact sheet: research/OTIS/factsheet-2026-11-08.md
+check_docs: OK research/OTIS/2026-11-08.md type=CORE 1=68 2=107 3=102 4=40 5=48 6=63 total=428
+
+Data conflicts and blocked URLs:
+- No data conflicts and no blocked URLs.
+- China's total share of sales is not given in the 10-K text I read. It states only China's share of New Equipment sales, which the note says.
+- I made 4 WebFetch calls, all on sec.gov.
+[05:09:13] $ bin/py scripts/check_docs.py note research/OTIS/2026-11-08.md
+[05:09:13] OK research/OTIS/2026-11-08.md type=CORE 1=68 2=107 3=102 4=40 5=48 6=63 total=428
+[05:09:13] $ claude -p Ticker OTIS, date 2026-11-08. Research: research/OTIS/factsheet-2026-11-08.md, research/OTIS/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/OTIS/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:09:15] research/HKG-9999/2026-11-08-macro.md
+OK research/HKG-9999/2026-11-08-macro.md macro_weight=context words=70
+[05:09:15] $ bin/py scripts/check_docs.py macro research/HKG-9999/2026-11-08-macro.md
+[05:09:15] OK research/HKG-9999/2026-11-08-macro.md macro_weight=context words=70
+[05:09:15] $ claude -p Evaluate HKG:9999 for 2026-11-08: fact sheet research/HKG-9999/factsheet-2026-11-08.md, note research/HKG-9999/2026-11-08.md, state portfolio/state.json, macro overlay research/HKG-9999/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:09:37] research/OTIS/2026-11-08-macro.md
+OK research/OTIS/2026-11-08-macro.md macro_weight=context words=70
+[05:09:37] $ bin/py scripts/check_docs.py macro research/OTIS/2026-11-08-macro.md
+[05:09:37] OK research/OTIS/2026-11-08-macro.md macro_weight=context words=70
+[05:09:37] $ claude -p Evaluate OTIS for 2026-11-08: fact sheet research/OTIS/factsheet-2026-11-08.md, note research/OTIS/2026-11-08.md, state portfolio/state.json, macro overlay research/OTIS/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:09:52] research/HKG-9999/2026-11-08-evaluation.md
+OK research/HKG-9999/2026-11-08-evaluation.md Bear case=146 Bull case=127 decision=HOLD
+[05:09:52] $ bin/py scripts/check_docs.py eval research/HKG-9999/2026-11-08-evaluation.md
+[05:09:52] OK research/HKG-9999/2026-11-08-evaluation.md Bear case=146 Bull case=127 decision=HOLD
+[05:09:52] $ bin/py scripts/valuation.py HKG:9999 --asof 2026-11-08 --eval research/HKG-9999/2026-11-08-evaluation.md
+[05:09:52] {"out": "research/HKG-9999/2026-11-08-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 145.25, "base": 220.11, "bull": 247.35}, "price": 200.4}
+[05:09:54] == HKG:9999: HOLD 4
+[05:09:54] == re-research GDDY
+[05:09:54] $ bin/py scripts/sec_delta.py GDDY --asof 2026-11-08
+[05:10:05] OK research/GDDY/sec-delta-2026-11-08.md
+[05:10:05] $ claude -p Ticker GDDY, note type CORE, date 2026-11-08. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. SEC filing delta: research/GDDY/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:10:22] Note: research/DECK/2026-11-08.md
+Fact sheet: research/DECK/factsheet-2026-11-08.md
+check_docs: OK research/DECK/2026-11-08.md type=CORE 1=54 2=128 3=110 4=46 5=75 6=73 total=486
+
+Data conflicts: none.
+
+Blocked URLs: none. I used 1 WebFetch, the sec.gov 10-Q.
+
+The 10-Q fetch did not show six-month net sales by brand, so section 1 gives no HOKA or UGG split. The 10-Q gave no country or region split. I named international as a whole, about 46% of net sales.
+
+Peers used: NKE, ONON, SKX, CROX.
+[05:10:22] $ bin/py scripts/check_docs.py note research/DECK/2026-11-08.md
+[05:10:22] OK research/DECK/2026-11-08.md type=CORE 1=54 2=128 3=110 4=46 5=75 6=73 total=486
+[05:10:22] $ claude -p Ticker DECK, date 2026-11-08. Research: research/DECK/factsheet-2026-11-08.md, research/DECK/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/DECK/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:10:23] I've written the evaluation: TRIM at conviction 3, which brings OTIS down to the conviction-3 size of about 5% from roughly 7.7% of the portfolio now.
+
+The business case still holds. But the price, 78.96 USD, is now above the base fair value of 70.99, the operating margin is falling and leverage is rising. The checker printed this line:
+
+research/OTIS/2026-11-08-evaluation.md
+OK research/OTIS/2026-11-08-evaluation.md Bear case=147 Bull case=100 decision=TRIM
+[05:10:23] $ bin/py scripts/check_docs.py eval research/OTIS/2026-11-08-evaluation.md
+[05:10:23] OK research/OTIS/2026-11-08-evaluation.md Bear case=147 Bull case=100 decision=TRIM
+[05:10:23] $ bin/py scripts/valuation.py OTIS --asof 2026-11-08 --eval research/OTIS/2026-11-08-evaluation.md
+[05:10:23] {"out": "research/OTIS/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 56.96, "base": 70.99, "bull": 71.64}, "price": 78.96}
+[05:10:24] == OTIS: TRIM 3
+[05:10:41] research/DECK/2026-11-08-macro.md
+OK research/DECK/2026-11-08-macro.md macro_weight=context words=58
+[05:10:41] $ bin/py scripts/check_docs.py macro research/DECK/2026-11-08-macro.md
+[05:10:41] OK research/DECK/2026-11-08-macro.md macro_weight=context words=58
+[05:10:41] $ claude -p Evaluate DECK for 2026-11-08: fact sheet research/DECK/factsheet-2026-11-08.md, note research/DECK/2026-11-08.md, state portfolio/state.json, macro overlay research/DECK/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:11:16] Note: research/GDDY/2026-11-08.md
+Fact sheet: research/GDDY/factsheet-2026-11-08.md
+Check: OK research/GDDY/2026-11-08.md type=CORE 1=67 2=140 3=131 4=34 5=71 6=93 total=536
+
+Data conflicts: none. Blocked URLs: none.
+
+Two things the note leaves open:
+- **Class action:** the 10-Q excerpt I fetched cut off before Legal Proceedings, so the status of the securities class action is unknown. The note cites only a law-firm notice for it and tags it [Guessing].
+- **Revenue by country:** the 10-Q gives only a US/International split (about 33% international), not country detail. Section 1 says so.
+
+I used one WebFetch, on the 10-Q, out of the CORE cap of 6.
+[05:11:16] $ bin/py scripts/check_docs.py note research/GDDY/2026-11-08.md
+[05:11:16] OK research/GDDY/2026-11-08.md type=CORE 1=67 2=140 3=131 4=34 5=71 6=93 total=536
+[05:11:16] $ claude -p Ticker GDDY, date 2026-11-08. Research: research/GDDY/factsheet-2026-11-08.md, research/GDDY/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/GDDY/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:11:27] research/DECK/2026-11-08-evaluation.md
+OK research/DECK/2026-11-08-evaluation.md Bear case=143 Bull case=117 decision=HOLD
+[05:11:27] $ bin/py scripts/check_docs.py eval research/DECK/2026-11-08-evaluation.md
+[05:11:27] OK research/DECK/2026-11-08-evaluation.md Bear case=143 Bull case=117 decision=HOLD
+[05:11:27] $ bin/py scripts/valuation.py DECK --asof 2026-11-08 --eval research/DECK/2026-11-08-evaluation.md
+[05:11:27] {"out": "research/DECK/2026-11-08-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 38.06, "base": 112.86, "bull": 182.96}, "price": 86.71}
+[05:11:28] == DECK: HOLD 4
+[05:11:34] research/GDDY/2026-11-08-macro.md
+OK research/GDDY/2026-11-08-macro.md macro_weight=context words=53
+[05:11:34] $ bin/py scripts/check_docs.py macro research/GDDY/2026-11-08-macro.md
+[05:11:35] OK research/GDDY/2026-11-08-macro.md macro_weight=context words=53
+[05:11:35] $ claude -p Evaluate GDDY for 2026-11-08: fact sheet research/GDDY/factsheet-2026-11-08.md, note research/GDDY/2026-11-08.md, state portfolio/state.json, macro overlay research/GDDY/2026-11-08-macro.md. Owner-requested full re-check of every holding (core re-initiation): decide HOLD, ADD, TRIM or SELL afresh on the whole evidence, using the new inputs (the fact sheet's Recent direction table and the macro overlay's country_risk). Address any Direction change line. Judge the business on its merits. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:12:15] research/GDDY/2026-11-08-evaluation.md
+OK research/GDDY/2026-11-08-evaluation.md Bear case=149 Bull case=143 decision=HOLD
+[05:12:15] $ bin/py scripts/check_docs.py eval research/GDDY/2026-11-08-evaluation.md
+[05:12:15] OK research/GDDY/2026-11-08-evaluation.md Bear case=149 Bull case=143 decision=HOLD
+[05:12:15] $ bin/py scripts/valuation.py GDDY --asof 2026-11-08 --eval research/GDDY/2026-11-08-evaluation.md
+[05:12:15] {"out": "research/GDDY/2026-11-08-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 102.86, "base": 187.26, "bull": 203.79}, "price": 114.38}
+[05:12:16] == GDDY: HOLD 4
+[05:12:16] $ claude -p Evaluation files: research/LDOS/2026-11-08-evaluation.md research/CI/2026-11-08-evaluation.md research/ZTS/2026-11-08-evaluation.md research/INTU/2026-11-08-evaluation.md research/HKG-2076/2026-11-08-evaluation.md research/HRB/2026-11-08-evaluation.md research/HKG-3998/2026-11-08-evaluation.md research/OTIS/2026-11-08-evaluation.md research/HKG-9999/2026-11-08-evaluation.md research/DECK/2026-11-08-evaluation.md research/GDDY/2026-11-08-evaluation.md. Date 2026-11-08. Write the requests to runs/2026-11-08-holdings/requests.json and submit with --at-market --save runs/2026-11-08-holdings/submit.json (decided trades fill now at the live price where the market is open, else at the next open). Cash strategy: the latest reports/regime/*.md (new buys can't take cash below the reserve). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[05:13:06] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| LDOS | HOLD | CORE | 4 |
+| CI | HOLD | CORE | 4 |
+| ZTS | HOLD | CORE | 4 |
+| INTU | HOLD | CORE | 4 |
+| HKG:2076 | HOLD | CORE | 4 |
+| HRB | HOLD | CORE | 3 |
+| HKG:3998 | HOLD | CORE | 4 |
+| OTIS | TRIM | CORE | 3 |
+| HKG:9999 | HOLD | CORE | 4 |
+| DECK | HOLD | CORE | 4 |
+| GDDY | HOLD | CORE | 4 |
+
+There were no AVOID decisions, so none were left out of the requests. The requests are in `runs/2026-11-08-holdings/requests.json`, and the submit output is saved to `runs/2026-11-08-holdings/submit.json`.
+
+**Submit result (live run, not a dry run):**
+- **Filled now:** none.
+- **Queued for the next open:**
+  - **OTIS TRIM** (order 2026-11-08-3): 9 shares at about $78.96, about $710.64. The fill price will be the next open, not this estimate.
+  - **HRB TRIM** (order 2026-11-08-4): 76 shares at about $52.69, about $4,004.44. The portfolio script added this one itself, because HRB is below the buy bar at conviction 3. It holds HRB at its conviction size of 4.1%, and it is now 7.8%.
+- **HOLDs recorded, no trade:** LDOS, CI, ZTS, INTU, HKG:2076, HRB, HKG:3998, HKG:9999, DECK and GDDY. Each records its refreshed thesis, triggers and conviction.
+- **Rejected:** none.
+- **Warning:** cash is 13.3% against a 15% reserve (neutral regime).
