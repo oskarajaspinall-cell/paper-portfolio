@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Airlines",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -44753.08703412025,
+    "base": 14317.078235506917,
+    "bull": 36462.944076835025
+   },
+   "implied_growth": -0.24931405085068314,
+   "discount_rate": 0.0728046309049489,
+   "cost_of_equity": 0.09340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.05011450048731021,
+     "base": 0.12388564245476129,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.38199587009475433,
+     "base": 0.08334801432525554,
+     "bull": 0.13188361057699646
+    },
+    "cagr_3y": 0.13522900097462043,
+    "cagr_5y": 0.31031356884442474,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 3197.8107232739912,
+    "base": 4436.85333575109,
+    "bull": 4757.795975715076
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.11,
+     "base": 4.689,
+     "bull": 5.098
+    },
+    "ttm_ebitda": 338336000000
+   }
+  }
+ ],
+ "price": 3277,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "JPY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -28769.454448322173,
+  "base": 11023.669935588308,
+  "bull": 25894.561376461712
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -9.779204897260351,
+  "base": 2.3639517655136735,
+  "bull": 6.9019107038332965
+ },
+ "implied_growth": -0.24931405085068314,
+ "ticker": "TYO:9201",
+ "asof": "2026-11-08",
+ "quote_currency": "JPY",
+ "financials_currency": "JPY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tyo/9201/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tyo/9201/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tyo/9201/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tyo/9201/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tyo/9201/statistics/"
+ }
+}

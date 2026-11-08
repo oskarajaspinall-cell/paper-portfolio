@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 52.48801589897959,
+    "base": 86.13000515102041,
+    "bull": 90.48535040204082
+   },
+   "cost_of_equity": 0.1034,
+   "assumptions": {
+    "roe": {
+     "bear": 0.12816,
+     "base": 0.19428,
+     "bull": 0.20284
+    },
+    "justified_pb": {
+     "bear": 1.3158163265306122,
+     "base": 2.159183673469388,
+     "bull": 2.2683673469387755
+    },
+    "bvps": 39.890078
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 52.982446513,
+    "base": 60.68857490399999,
+    "bull": 64.552894399
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.061,
+     "base": 8.088,
+     "bull": 8.603
+    },
+    "ttm_eps": 7.503533
+   }
+  }
+ ],
+ "price": 73,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "PLN",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 52.65282610365306,
+  "base": 77.64952840201362,
+  "bull": 81.84119840102721
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.27872840953899913,
+  "base": 0.06369216989059745,
+  "bull": 0.12111230686338659
+ },
+ "implied_growth": null,
+ "ticker": "WSE:PZU",
+ "asof": "2026-11-08",
+ "quote_currency": "PLN",
+ "financials_currency": "PLN",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/wse/PZU/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/wse/PZU/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/wse/PZU/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/wse/PZU/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/wse/PZU/statistics/"
+ }
+}

@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Utilities - Renewable",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -66.63174083543872,
+    "base": 33.406699105303325,
+    "bull": 34.73743695552579
+   },
+   "implied_growth": -0.00661053479744699,
+   "discount_rate": 0.08035017888470314,
+   "cost_of_equity": 0.1184,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.014346302214426492,
+     "base": 0.02057950132414742,
+     "bull": 0.026010609725442668
+    },
+    "cash_flow_margin": {
+     "bear": -0.23140453361750338,
+     "base": 0.2605572336766933,
+     "bull": 0.2605572336766933
+    },
+    "cagr_3y": 0.026010609725442668,
+    "cagr_5y": 0.006307395571147012,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 23.214177694495255,
+    "base": 26.365776256880277,
+    "bull": 32.008576172519845
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.114,
+     "base": 7.596,
+     "bull": 8.459
+    },
+    "ttm_ebitda": 7469018000
+   }
+  }
+ ],
+ "price": 27.15,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.03,
+ "reporting_currency": "BRL",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -36.68310132546073,
+  "base": 31.059724822495642,
+  "bull": 33.82781669452381
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -2.3511271206431212,
+  "base": 0.1440045975136517,
+  "bull": 0.24596009924581264
+ },
+ "implied_growth": -0.00661053479744699,
+ "ticker": "BVMF:EGIE3",
+ "asof": "2026-11-08",
+ "quote_currency": "BRL",
+ "financials_currency": "BRL",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bvmf/EGIE3/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bvmf/EGIE3/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bvmf/EGIE3/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bvmf/EGIE3/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bvmf/EGIE3/statistics/"
+ }
+}

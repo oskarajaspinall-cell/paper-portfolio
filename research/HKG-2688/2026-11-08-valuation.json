@@ -1,0 +1,126 @@
+{
+ "industry": {
+  "industry": "Utilities - Regulated Gas",
+  "known": true,
+  "best": "DCF / DDM",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "ddm"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 27.41267613993018,
+    "base": 60.063004561443314,
+    "bull": 70.45982642442476
+   },
+   "implied_growth": -0.016102088689531967,
+   "discount_rate": 0.09827208982107512,
+   "cost_of_equity": 0.123685,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.014707832309269569,
+     "base": 0.025653986209074654,
+     "bull": 0.04703160945483775
+    },
+    "cash_flow_margin": {
+     "bear": 0.02737620544889248,
+     "base": 0.04261255772474019,
+     "bull": 0.04471985651842385
+    },
+    "cagr_3y": 0.005584335381460859,
+    "cagr_5y": 0.04703160945483775,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "best",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 28.016745641072824,
+    "base": 31.15975072199422,
+    "bull": 35.0115577606134
+   },
+   "cost_of_equity": 0.123685,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 3.0
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 56.065274065439624,
+    "base": 75.9755177713913,
+    "bull": 112.79876419530189
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.642,
+     "base": 11.711,
+     "bull": 17.387
+    },
+    "ttm_eps": 5.519851
+   }
+  }
+ ],
+ "price": 48.72,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 27.614032640311063,
+  "base": 50.42858661496029,
+  "bull": 58.64373686982098
+ },
+ "used": [
+  "dcf",
+  "ddm"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.4332095106668501,
+  "base": 0.035069511801319564,
+  "bull": 0.2036891804150447
+ },
+ "implied_growth": -0.016102088689531967,
+ "ticker": "HKG:2688",
+ "asof": "2026-11-08",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.175309733187518,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/2688/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/2688/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/2688/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/2688/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/2688/statistics/"
+ }
+}
