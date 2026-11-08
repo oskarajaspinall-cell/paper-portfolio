@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Electrical Equipment & Parts",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 18.228058690796054,
+    "base": 99.27964740142586,
+    "bull": 136.40633729250817
+   },
+   "implied_growth": 0.09409728709992948,
+   "discount_rate": 0.1222708791948834,
+   "cost_of_equity": 0.12340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.11792581054503168,
+     "base": 0.15737347988363787,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.040626510219392814,
+     "base": 0.3216807881997964,
+     "bull": 0.3216807881997964
+    },
+    "cagr_3y": 0.27085162109006333,
+    "cagr_5y": 0.3086422984444881,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 35.20306676957251,
+    "base": 44.91573334531758,
+    "bull": 219.08036911323023
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 15.286,
+     "base": 20.811,
+     "bull": 45.401
+    },
+    "ttm_ebitda": 5904499573,
+    "peak_earnings": "TTM EBITDA is 2.9x its 5y median: bear/base use the 5y average (2.236e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 79.89,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 23.886394717054873,
+  "base": 81.15834271605644,
+  "bull": 163.96434789941551
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7010089533476671,
+  "base": 0.015876113606914988,
+  "bull": 1.0523763662462824
+ },
+ "implied_growth": 0.09409728709992948,
+ "ticker": "SHA:605117",
+ "asof": "2026-11-08",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/605117/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/605117/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/605117/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/605117/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/605117/statistics/"
+ }
+}

@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Auto Manufacturers",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 217468.19638964164,
+    "base": 433711.84353939124,
+    "bull": 585755.6684912938
+   },
+   "implied_growth": null,
+   "discount_rate": 0.10579155957713983,
+   "cost_of_equity": 0.10987400000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.03079337790025112,
+     "base": 0.06929053071073248,
+     "bull": 0.13057536704242767
+    },
+    "cash_flow_margin": {
+     "bear": 0.04074970744015124,
+     "base": 0.08136842767915203,
+     "bull": 0.08957311484605494
+    },
+    "cagr_3y": 0.09658675580050224,
+    "cagr_5y": 0.13057536704242767,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 90403.37732410851,
+    "base": 99724.72445745465,
+    "bull": 120697.75550748344
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 1.236,
+     "base": 1.56,
+     "bull": 2.289
+    },
+    "ttm_ebitda": 11170457000000
+   }
+  }
+ ],
+ "price": 100300,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.01,
+ "reporting_currency": "KRW",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 175113.25670113062,
+  "base": 322382.8038454124,
+  "bull": 430736.364163357
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.7458948823642135,
+  "base": 2.2141854820080997,
+  "bull": 3.2944802010304786
+ },
+ "implied_growth": null,
+ "ticker": "KRX:000270",
+ "asof": "2026-11-08",
+ "quote_currency": "KRW",
+ "financials_currency": "KRW",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/krx/000270/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/krx/000270/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/krx/000270/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/krx/000270/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/krx/000270/statistics/"
+ }
+}
