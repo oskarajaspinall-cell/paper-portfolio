@@ -198,6 +198,12 @@ def build_queue() -> list[str]:
     global hits, hit_rows
     st = json.loads((ROOT / "portfolio" / "state.json").read_text())
     ranked = json.loads((run / "loop-queue.json").read_text())
+    # 2026-11-08: only names still in the current universe (a queue ranked weeks ago kept OTC:LKNCY, a Russian
+    # company, after sanctioned markets were dropped from universe.csv)
+    import csv
+    with (ROOT / "universe" / "universe.csv").open() as fh:
+        current = {r["ticker"] for r in csv.DictReader(fh)}
+    ranked = [t for t in ranked if t in current]
     queue = [t for t in ranked if not (ROOT / "research" / Ticker(t).slug / f"{dt.date.today()}.md").exists()
              and not list((ROOT / "research" / Ticker(t).slug).glob("*-evaluation.md"))]
     def researched_since(h):  # 2026-10-25: a hit the weekly run already re-researched is not repeated
