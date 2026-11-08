@@ -1,0 +1,113 @@
+{
+ "industry": {
+  "industry": "Drug Manufacturers - Specialty & Generic",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 57.766133167975305,
+    "base": 193.12688446190492,
+    "bull": 297.90512831426025
+   },
+   "implied_growth": 0.09838376374188829,
+   "discount_rate": 0.08702939264437838,
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.1041056103655946,
+     "base": 0.13840041989719876,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.06756728525250384,
+     "base": 0.20349436015884595,
+     "bull": 0.20349436015884595
+    },
+    "cagr_3y": 0.24321122073118917,
+    "cagr_5y": 0.2603904588576058,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 76.290354,
+    "base": 133.86379,
+    "bull": 500.50821716700005
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 29.547,
+     "base": 51.845,
+     "bull": 74.319
+    },
+    "ttm_eps": 6.734593,
+    "peak_earnings": "TTM EPS is 2.7x its 5y median: bear/base use the 5y average (2.582), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 164.63,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 63.94087344531687,
+  "base": 173.37251964126995,
+  "bull": 365.4394912651735
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6116086166232347,
+  "base": 0.05310404933043755,
+  "bull": 1.2197624446648456
+ },
+ "implied_growth": 0.09838376374188829,
+ "ticker": "NBIX",
+ "asof": "2026-11-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/nbix/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/nbix/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/nbix/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/nbix/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/nbix/statistics/"
+ }
+}

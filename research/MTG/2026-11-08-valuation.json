@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Specialty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 40.92195805173502,
+    "base": 46.211758638170345,
+    "bull": 47.03900148454258
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "roe": {
+     "bear": 0.13284,
+     "base": 0.14678,
+     "bull": 0.14896
+    },
+    "justified_pb": {
+     "bear": 1.7009463722397475,
+     "base": 1.9208201892744476,
+     "bull": 1.9552050473186118
+    },
+    "bvps": 24.058347
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 14.342438623999998,
+    "base": 24.117283055999998,
+    "bull": 25.306593296
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.462,
+     "base": 7.503,
+     "bull": 7.873
+    },
+    "ttm_eps": 3.214352
+   }
+  }
+ ],
+ "price": 28.6,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 32.06211824249001,
+  "base": 38.84693344411357,
+  "bull": 39.79486542169506
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.12105308540174842,
+  "base": 0.3582843861578169,
+  "bull": 0.39142886089842843
+ },
+ "implied_growth": null,
+ "ticker": "MTG",
+ "asof": "2026-11-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/mtg/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/mtg/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/mtg/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/mtg/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/mtg/statistics/"
+ }
+}
