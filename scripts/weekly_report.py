@@ -139,7 +139,8 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
         out.append(f"- **{e['ticker']}**: mechanical exit, {e['why']} — filled at close {e['close']} on {e['fill_date']} "
                    f"(no model call; {e['source_url']}).")
     for t in scan.get("trims", []):
-        out.append(f"- **{t['ticker']}**: mechanical trim, core weight {t['weight_pct']}% above cap (no model call).")
+        out.append(f"- **{t['ticker']}**: mechanical trim, " + (t.get("why") or f"core weight {t['weight_pct']}% above cap")
+                   + " (no model call).")
     for f in scan.get("flagged", []):
         out.append(f"- **{f['ticker']}** flagged: " + " | ".join(f["reasons"]))
     for d in decisions:

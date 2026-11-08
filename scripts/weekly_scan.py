@@ -295,6 +295,13 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> 
             out["mechanical_requests"].append({
                 "ticker": t, "action": "TRIM", "position_type": "CORE", "conviction": h["conviction"],
                 "target_weight_pct": cap, "reason": f"mechanical trim: core weight {w:.2f}% above {cap}%"})
+    # conviction below the buy bar: held at no more than its conviction size (owner request 2026-11-08)
+    from portfolio import Engine, size_down_requests
+    for q in size_down_requests(work, Engine(work, mkt, cfg, {}, asof), cfg):
+        if q["ticker"] not in exited and q["ticker"] not in {x["ticker"] for x in out["trims"]}:
+            out["trims"].append({"ticker": q["ticker"], "weight_pct": None, "why": q["reason"]})
+            q["reason"] = "mechanical " + q["reason"]
+            out["mechanical_requests"].append(q)
     trimmed = {x["ticker"] for x in out["trims"]}
     out["unflagged"] = [u for u in out["unflagged"] if u["ticker"] not in trimmed]  # reported as trims instead
     # buy the dip (owner rule 2026-10-09): while the reserve is released, core holdings that have fallen well

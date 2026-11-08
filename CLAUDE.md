@@ -28,6 +28,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
 ## Investment approach
 - **Position size** (design by Claude 2026-10-16): a core position's target is its conviction size scaled by its own volatility (x0.6–1.4 against the core holdings' median, `[core].vol_*`), set at entry and stored as `target_pct`; existing positions keep their size until an ADD/TRIM. A scale-up stops at the room above the cash reserve and never goes below the plain conviction size (2026-10-17).
 - **Only high conviction is bought**: a BUY or ADD (core or tactical) needs conviction >= `min_buy_conviction` (4). Anything less is AVOID (new names) or HOLD (holdings).
+- **A downgrade resizes** (owner request 2026-11-08): a CORE holding below the buy bar is held at no more than its conviction size (`conviction_size_pct`, vol-scaled like a new buy: 3 -> ~5%, 2 -> ~3%, 1 -> sold). A re-initiation that lowers conviction gets the TRIM (or SELL) with the same run (`portfolio.py` `size_down_requests`, via `apply_holds`); the weekly scan re-applies it mechanically while it stays above that size by more than `[core].downgrade_trim_gap_pp`. It also stays first in line for a funding-queue swap. Holdings at conviction 4+ keep their size (winners may run to `trim_above_pct`).
 - **CORE**: good business + attractive valuation, ~12-month horizon. Judged purely against thesis (invalidation) triggers on business fundamentals. No price stops, price levels, moving averages or valuation multiples as triggers.
 - **TACTICAL**: weeks to ~3 months, two setups only (owner rule 2026-10-08): **post-earnings drift** (a real results beat the price is still digesting) and **pullback in an uptrend** (a dip to around the 50-day average). MUST have target, stop and time limit at entry; these execute mechanically. The stop comes from the stock's own volatility (ATR), the target must be ≥2× the stop distance (checked at the decision and again at the fill-day open), and the size is set so a stop-out costs ~1% of the portfolio (max 5%).
 - The label is fixed at entry. A tactical position can NEVER be relabelled core; it can only become core by passing a full core initiation, which records a new entry decision.
@@ -67,6 +68,8 @@ trim_above_pct = 15
 vol_scaling = true                # design by Claude 2026-10-16 (scripts/risk.py): core target = conviction size x
 vol_scale_clamp = [0.6, 1.4]      # ...clamp(reference vol / the stock's vol), capped at trim_above_pct. Reference =
 ref_vol_pct = 30                  # ...median vol of the core holdings (this % while fewer than 5 have a vol)
+downgrade_trim_gap_pp = 1.0       # owner request 2026-11-08: a core holding below min_buy_conviction is held at no
+                                  # ...more than its (vol-scaled) conviction size; above it by this much -> TRIM (size 0 -> SELL)
 corr_flag = 0.7                   # correlation check (owner-approved 2026-11-07, inform-only, scripts/risk.py): pairs
 corr_weeks = 52                   # ...of weekly returns above this over these weeks are flagged; never blocks or sells
 vol_lookback_sessions = 126       # daily closes for the stock's annualised volatility (~6 months)

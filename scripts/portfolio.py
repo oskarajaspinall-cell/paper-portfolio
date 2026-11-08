@@ -982,6 +982,30 @@ def run_submit(requests, state_path, mkt, cfg, watch, today, dry_run=False, port
     return summary
 
 
+def size_down_requests(state: dict, eng, cfg: dict, only=None) -> list[dict]:
+    """Owner request 2026-11-08: a CORE holding whose conviction is below the buy bar (`min_buy_conviction`) is held
+    at no more than its conviction size (vol-scaled, as a new buy at that conviction would be). Above it by more
+    than `[core].downgrade_trim_gap_pp` -> a TRIM to that size; a conviction with size 0 -> SELL. Holdings at the
+    buy bar or above keep their size (winners may run to `trim_above_pct`)."""
+    c, out = cfg["core"], []
+    bar, gap = int(c["min_buy_conviction"]), float(c.get("downgrade_trim_gap_pp", 1.0))
+    pv = eng.pv(state)
+    for t, h in state["holdings"].items():
+        conv = h.get("conviction")
+        if h["type"] != "CORE" or conv is None or conv >= bar or (only is not None and t not in only) or not pv:
+            continue
+        w = h["market_value_usd"] / pv * 100
+        base = float(c["conviction_size_pct"][str(conv)])
+        size = eng.sizer.target(conv, t, state)[0] if base else 0.0
+        if w <= size + gap:
+            continue
+        why = (f"conviction {conv} sizing: below the buy bar ({bar}), so held at no more than its conviction size "
+               f"{size:.1f}% (now {w:.1f}%)")
+        out.append({"ticker": t, "position_type": "CORE", "conviction": conv, "reason": why,
+                    **({"action": "TRIM", "target_weight_pct": round(size, 2)} if size > 0 else {"action": "SELL"})})
+    return out
+
+
 def apply_holds(requests, state_path, mkt, cfg, watch, today, dry_run=False, port_dir=PORT) -> tuple[list, dict]:
     """HOLD requests record a re-initiation's refreshed thesis, triggers and conviction. No trade and no price is
     involved, so they apply at once, whatever the market hours (2026-10-17: they used to wait in the order queue
@@ -991,12 +1015,17 @@ def apply_holds(requests, state_path, mkt, cfg, watch, today, dry_run=False, por
     if not holds:
         return rest, {"applied": [], "rejected": []}
     state = load_state(state_path, cfg)
+    before = {t: h.get("conviction") for t, h in state["holdings"].items()}
     eng = Engine(state, mkt, cfg, watch, today)
     eng.process(holds)
     if not dry_run:
         append_csv(port_dir / "rejections.csv", REJECT_COLS, eng.rejections)
         if eng.applied:
             atomic_write(state_path, json.dumps(state, indent=1, sort_keys=True))
+    # a downgrade below the buy bar resizes the holding to its new conviction size, as a trade with this run
+    down = {r["ticker"] for r in eng.applied
+            if (r.get("conviction") or 99) < (before.get(r["ticker"]) or 0)}
+    rest += [q for q in size_down_requests(state, eng, cfg, only=down) if q["ticker"] not in {x["ticker"] for x in rest}]
     return rest, {"applied": [{"side": "HOLD", "ticker": r["ticker"], "type": r["position_type"], "shares": 0,
                                "reason": r.get("reason", "")} for r in eng.applied],
                   "rejected": eng.rejections}
