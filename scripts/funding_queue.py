@@ -41,7 +41,8 @@ def settings(cfg: dict) -> dict:
             "swap_candidates": int(fq.get("swap_candidates", 3)),
             "starter_min_fraction": float(fq.get("starter_min_fraction", 0.5)),
             "min_step_pct": float(fq.get("min_step_pct", 1.0)),
-            "auto_swap_min_gap_pp": float(fq.get("auto_swap_min_gap_pp", 15))}
+            "auto_swap_min_gap_pp": float(fq.get("auto_swap_min_gap_pp", 15)),
+            "fair_value_weight": float(fq.get("fair_value_weight", 0.5))}
 
 
 def queueable(rej: dict, req: dict | None, cfg: dict) -> bool:
@@ -130,11 +131,29 @@ def expected_value(ticker: str, on_or_before: str | None = None) -> tuple[float 
     return None, None
 
 
-def value_and_basis(ticker: str, today: str | None, fair_value_base: float | None) -> tuple[float | None, str]:
+FV_WEIGHT = 0.5  # default for [funding_queue].fair_value_weight
+
+
+def value_and_basis(ticker: str, today: str | None, fair_value_base: float | None,
+                    fv_weight: float | None = None) -> tuple[float | None, str]:
+    """Owner rule 2026-11-08: the mechanical base fair value counts as much as the analyst's expected 12-month
+    value: value = w x base fair value + (1 - w) x expected value (w = `[funding_queue].fair_value_weight`, 0.5).
+    Either alone when the other is missing."""
+    w = FV_WEIGHT if fv_weight is None else fv_weight
     ev, _ = expected_value(ticker, today)
+    if ev and fair_value_base:
+        return w * fair_value_base + (1 - w) * ev, f"blend ({w:.0%} base fair value, {1 - w:.0%} expected 12-month value)"
     if ev:
         return ev, "expected 12-month value"
     return (fair_value_base, "base fair value") if fair_value_base else (None, "n/a")
+
+
+def disagreement(ticker: str, today: str | None, fair_value_base: float | None, close: float | None) -> float | None:
+    """Gap in pp between the base-fair-value upside and the expected-value upside (flagged when large)."""
+    ev, _ = expected_value(ticker, today)
+    if not (ev and fair_value_base and close):
+        return None
+    return (fair_value_base / close - 1) * 100 - (ev / close - 1) * 100
 
 
 def _upside(e: dict) -> float | None:
@@ -485,7 +504,8 @@ def brief(state: dict, mkt, cfg: dict, today: str, watch: dict | None = None) ->
     L = [f"# Funding-queue swap brief — {today}", "",
          "The best idea waiting for cash (conviction-4+ CORE BUY rejected only by the cash reserve) against the "
          "weakest CORE holdings. All figures are computed by scripts/funding_queue.py. Upside is to the expected 12-month "
-         "value (probability-weighted scenario targets of the latest evaluation), else to the base fair value.", "",
+         "value blend: half the base fair value, half the expected 12-month value (probability-weighted scenario targets of "
+         "the latest evaluation); either alone when the other is missing.", "",
          "## Waiting idea", "",
          "| Ticker | Conviction | Decided | Decision price | Latest close | Expected 12m value | Base fair value | Upside | Evaluation |",
          "|---|---|---|---|---|---|---|---|---|",
@@ -510,6 +530,15 @@ def brief(state: dict, mkt, cfg: dict, today: str, watch: dict | None = None) ->
         L += ["", f"Correlation of {best['ticker']} with current holdings (weekly returns; above {flag} = overlapping "
               "exposure, so selling that holding keeps the portfolio more diversified): "
               + ", ".join(f"{t} {r:.2f}" + (" (high)" if r > flag else "") for t, r in pairs[:5]) + "."]
+    flags = []
+    for t_, fv_, c_ in [(best["ticker"], best.get("fair_value_base"), best.get("last_close") or best["decision_price"])] + \
+            [(c["ticker"], c["fair_value_base"], c["close"]) for c in cands]:
+        g = disagreement(t_, today, fv_, c_)
+        if g is not None and abs(g) >= 40:
+            flags.append(f"{t_} ({g:+.0f}pp: base fair value {'far above' if g > 0 else 'far below'} the expected value)")
+    if flags:
+        L += ["", "Model and analyst disagree sharply (check which assumption drives the gap before relying on the "
+              "blend): " + ", ".join(flags) + "."]
     others = [e["ticker"] for e in q[1:]]
     if others:
         L += ["", f"Also waiting (not in this week's comparison): {', '.join(others)}."]
@@ -606,6 +635,8 @@ def main(argv=None) -> int:
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args(argv)
     cfg = load_config()
+    global FV_WEIGHT
+    FV_WEIGHT = settings(cfg)["fair_value_weight"]
     from portfolio import Market, atomic_write, investable, load_state, mark, place_orders, price_provider
     from fetch_data import Fetcher
     sp = PORT / "state.json"

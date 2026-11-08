@@ -339,5 +339,9 @@ def test_expected_value_weights_the_scenarios(tmp_path, monkeypatch):
     v, path = FQ.expected_value("X")
     assert v == 30 and path.endswith("2026-10-25-evaluation.md")
     assert FQ.expected_value("X", "2026-10-01") == (None, None)
-    assert FQ.value_and_basis("X", None, 99.0) == (30, "expected 12-month value")
+    v, basis = FQ.value_and_basis("X", None, 90.0)
+    assert v == 60 and basis.startswith("blend")              # 50/50: base fair value 90, expected 30
+    assert FQ.value_and_basis("X", None, 90.0, fv_weight=0.25)[0] == 45
+    assert FQ.value_and_basis("X", None, None) == (30, "expected 12-month value")
+    assert round(FQ.disagreement("X", None, 90.0, 20.0)) == 300
     assert FQ.value_and_basis("NONE", None, 99.0) == (99.0, "base fair value")
