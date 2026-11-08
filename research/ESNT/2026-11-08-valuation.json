@@ -1,0 +1,99 @@
+{
+ "industry": {
+  "industry": "Insurance - Specialty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 95.22058264164036,
+    "base": 119.04793689652995,
+    "bull": 141.51316402334382
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "roe": {
+     "bear": 0.12147,
+     "base": 0.14561,
+     "bull": 0.16837
+    },
+    "justified_pb": {
+     "bear": 1.5216088328075708,
+     "base": 1.9023659305993688,
+     "bull": 2.261356466876971
+    },
+    "bvps": 62.578884
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 36.786309066,
+    "base": 57.892609086,
+    "bull": 59.04651753000001
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 5.037,
+     "base": 7.927,
+     "bull": 8.085
+    },
+    "ttm_eps": 7.303218
+   }
+  }
+ ],
+ "price": 63.41,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 75.74249144976024,
+  "base": 98.6628276263533,
+  "bull": 114.02428185889589
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.19448811622394335,
+  "base": 0.5559506012672024,
+  "bull": 0.7982066213356867
+ },
+ "implied_growth": null,
+ "ticker": "ESNT",
+ "asof": "2026-11-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/esnt/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/esnt/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/esnt/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/esnt/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/esnt/statistics/"
+ }
+}

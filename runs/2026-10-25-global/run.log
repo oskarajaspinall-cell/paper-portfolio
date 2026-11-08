@@ -2826,3 +2826,110 @@ OK research/ETR-DTE/2026-11-08-evaluation.md Bear case=139 Bull case=123 decisio
 [21:45:36] $ bin/py scripts/valuation.py ETR:DTE --asof 2026-11-08 --eval research/ETR-DTE/2026-11-08-evaluation.md
 [21:45:36] {"out": "research/ETR-DTE/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 72.82, "base": 120.67, "bull": 126.92}, "price": 25.91}
 [21:45:37] == done ETR:DTE
+[21:45:41] == Research batch 12: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-08-batch-12.md; uploaded to GitHub
+[21:46:00] - Note: `research/JSE-MTN/2026-11-08.md`
+- Fact sheet: `research/JSE-MTN/factsheet-2026-11-08.md`
+- Check: `OK research/JSE-MTN/2026-11-08.md type=CORE 1=56 2=116 3=123 4=30 5=55 6=48 total=428`
+- Blocked URL: `https://www.mtn.com/investors/` is not on the allowlist, so I didn't retry it. As a result, the country revenue mix (Nigeria and South Africa shares) is `[data unavailable]`. The note says so and flags Nigeria as a likely ~10%+ exposure for the macro overlay to check.
+- Data gap: the fact sheet has no fair value, because there is no ZAR FX rate for the valuation model. The note says `[data unavailable]`.
+- Conflicts: none.
+[21:46:00] $ bin/py scripts/check_docs.py note research/JSE-MTN/2026-11-08.md
+[21:46:00] OK research/JSE-MTN/2026-11-08.md type=CORE 1=56 2=116 3=123 4=30 5=55 6=48 total=428
+[21:46:00] $ claude -p Ticker JSE:MTN, date 2026-11-08. Research: research/JSE-MTN/factsheet-2026-11-08.md, research/JSE-MTN/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/JSE-MTN/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:46:13] == initiate ESNT
+[21:46:13] $ bin/py scripts/sec_delta.py ESNT --asof 2026-11-08
+[21:46:24] OK research/ESNT/sec-delta-2026-11-08.md
+[21:46:24] $ claude -p Ticker ESNT, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. SEC filing delta: research/ESNT/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:46:33] research/JSE-MTN/2026-11-08-macro.md
+OK research/JSE-MTN/2026-11-08-macro.md macro_weight=context words=90
+[21:46:33] $ bin/py scripts/check_docs.py macro research/JSE-MTN/2026-11-08-macro.md
+[21:46:33] OK research/JSE-MTN/2026-11-08-macro.md macro_weight=context words=90
+[21:46:33] $ claude -p Evaluate JSE:MTN for 2026-11-08: fact sheet research/JSE-MTN/factsheet-2026-11-08.md, note research/JSE-MTN/2026-11-08.md, state portfolio/state.json, macro overlay research/JSE-MTN/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:46:41] Note: research/BIT-REY/2026-11-08.md
+Fact sheet: research/BIT-REY/factsheet-2026-11-08.md
+Check: OK research/BIT-REY/2026-11-08.md type=CORE 1=65 2=115 3=128 4=44 5=82 6=52 total=486
+
+Blocked URL: https://www.reply.com/en/investors isn't on the allowlist. The revenue split by country is therefore marked [data unavailable] in the note.
+
+Data conflicts: none.
+[21:46:41] $ bin/py scripts/check_docs.py note research/BIT-REY/2026-11-08.md
+[21:46:41] OK research/BIT-REY/2026-11-08.md type=CORE 1=65 2=115 3=128 4=44 5=82 6=52 total=486
+[21:46:41] $ claude -p Ticker BIT:REY, date 2026-11-08. Research: research/BIT-REY/factsheet-2026-11-08.md, research/BIT-REY/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/BIT-REY/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:46:59] research/BIT-REY/2026-11-08-macro.md
+OK research/BIT-REY/2026-11-08-macro.md macro_weight=context words=48
+[21:46:59] $ bin/py scripts/check_docs.py macro research/BIT-REY/2026-11-08-macro.md
+[21:46:59] OK research/BIT-REY/2026-11-08-macro.md macro_weight=context words=48
+[21:46:59] $ claude -p Evaluate BIT:REY for 2026-11-08: fact sheet research/BIT-REY/factsheet-2026-11-08.md, note research/BIT-REY/2026-11-08.md, state portfolio/state.json, macro overlay research/BIT-REY/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:47:13] research/JSE-MTN/2026-11-08-evaluation.md
+OK research/JSE-MTN/2026-11-08-evaluation.md Bear case=147 Bull case=116 decision=AVOID
+[21:47:13] $ bin/py scripts/check_docs.py eval research/JSE-MTN/2026-11-08-evaluation.md
+[21:47:13] OK research/JSE-MTN/2026-11-08-evaluation.md Bear case=147 Bull case=116 decision=AVOID
+[21:47:13] $ bin/py scripts/valuation.py JSE:MTN --asof 2026-11-08 --eval research/JSE-MTN/2026-11-08-evaluation.md
+[21:47:14] {"out": "research/JSE-MTN/2026-11-08-valuation.md", "used": null, "fair_value": {}, "price": 21317}
+[21:47:15] == done JSE:MTN
+[21:47:22] Note: research/ESNT/2026-11-08.md
+Fact sheet: research/ESNT/factsheet-2026-11-08.md
+check_docs: OK research/ESNT/2026-11-08.md type=CORE 1=74 2=127 3=127 4=53 5=58 6=111 total=550
+
+Data conflicts: none.
+Blocked URLs: none. I made no WebFetch calls.
+Not on stockanalysis.com: the fact sheet shows no operating margin, ROCE or FCF margin for ESNT (insurer), so the note leaves them out. The note's section 4 triggers use ROE, FCF/NI and net debt/EBITDA instead.
+[21:47:22] $ bin/py scripts/check_docs.py note research/ESNT/2026-11-08.md
+[21:47:22] OK research/ESNT/2026-11-08.md type=CORE 1=74 2=127 3=127 4=53 5=58 6=111 total=550
+[21:47:22] $ claude -p Ticker ESNT, date 2026-11-08. Research: research/ESNT/factsheet-2026-11-08.md, research/ESNT/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/ESNT/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:47:36] == initiate CHRD
+[21:47:36] $ bin/py scripts/sec_delta.py CHRD --asof 2026-11-08
+[21:47:42] research/ESNT/2026-11-08-macro.md
+OK research/ESNT/2026-11-08-macro.md macro_weight=context words=56
+[21:47:42] $ bin/py scripts/check_docs.py macro research/ESNT/2026-11-08-macro.md
+[21:47:42] OK research/ESNT/2026-11-08-macro.md macro_weight=context words=56
+[21:47:42] $ claude -p Evaluate ESNT for 2026-11-08: fact sheet research/ESNT/factsheet-2026-11-08.md, note research/ESNT/2026-11-08.md, state portfolio/state.json, macro overlay research/ESNT/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:47:47] OK research/CHRD/sec-delta-2026-11-08.md
+[21:47:47] $ claude -p Ticker CHRD, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. SEC filing delta: research/CHRD/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:48:00] research/BIT-REY/2026-11-08-evaluation.md
+OK research/BIT-REY/2026-11-08-evaluation.md Bear case=138 Bull case=120 decision=AVOID
+[21:48:00] $ bin/py scripts/check_docs.py eval research/BIT-REY/2026-11-08-evaluation.md
+[21:48:00] OK research/BIT-REY/2026-11-08-evaluation.md Bear case=138 Bull case=120 decision=AVOID
+[21:48:00] $ bin/py scripts/valuation.py BIT:REY --asof 2026-11-08 --eval research/BIT-REY/2026-11-08-evaluation.md
+[21:48:00] {"out": "research/BIT-REY/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 96.55, "base": 139.2, "bull": 191.85}, "price": 130.6}
+[21:48:01] == done BIT:REY
+[21:48:23] Decision: AVOID ESNT at conviction 3.
+
+research/ESNT/2026-11-08-evaluation.md
+OK research/ESNT/2026-11-08-evaluation.md Bear case=139 Bull case=126 decision=AVOID
+[21:48:23] $ bin/py scripts/check_docs.py eval research/ESNT/2026-11-08-evaluation.md
+[21:48:23] OK research/ESNT/2026-11-08-evaluation.md Bear case=139 Bull case=126 decision=AVOID
+[21:48:23] $ bin/py scripts/valuation.py ESNT --asof 2026-11-08 --eval research/ESNT/2026-11-08-evaluation.md
+[21:48:23] {"out": "research/ESNT/2026-11-08-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 75.74, "base": 98.66, "bull": 114.02}, "price": 63.41}
+[21:48:24] == done ESNT
+[21:48:40] == initiate NSE:ONGC
+[21:48:40] $ bin/py scripts/sec_delta.py NSE:ONGC --asof 2026-11-08
+[21:48:40] SKIP NSE:ONGC: not a US listing (SEC filers only)
+[21:48:40] $ claude -p Ticker NSE:ONGC, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:48:41] Note: research/CHRD/2026-11-08.md
+Fact sheet: research/CHRD/factsheet-2026-11-08.md
+Check: OK research/CHRD/2026-11-08.md type=CORE 1=52 2=106 3=120 4=32 5=67 6=81 total=458
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+[21:48:41] $ bin/py scripts/check_docs.py note research/CHRD/2026-11-08.md
+[21:48:41] OK research/CHRD/2026-11-08.md type=CORE 1=52 2=106 3=120 4=32 5=67 6=81 total=458
+[21:48:41] $ claude -p Ticker CHRD, date 2026-11-08. Research: research/CHRD/factsheet-2026-11-08.md, research/CHRD/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/CHRD/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:49:07] == initiate JSE:BVT
+[21:49:07] $ bin/py scripts/sec_delta.py JSE:BVT --asof 2026-11-08
+[21:49:07] SKIP JSE:BVT: not a US listing (SEC filers only)
+[21:49:07] $ claude -p Ticker JSE:BVT, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:49:10] You've hit your session limit · resets 2am (Europe/London)
+[21:49:10] !! MACRO OVERLAY UNAVAILABLE for CHRD: claude -p Ticker CHRD, date 2026-11-08. Research: research/CHRD/factsheet-2026-11-08.md, research/CHRD/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/CHRD/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text exited 1: 
+[21:49:10] $ claude -p Evaluate CHRD for 2026-11-08: fact sheet research/CHRD/factsheet-2026-11-08.md, note research/CHRD/2026-11-08.md, state portfolio/state.json. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:49:13] You've hit your session limit · resets 2am (Europe/London)
+[21:49:13] !! FAILED CHRD: claude -p Evaluate CHRD for 2026-11-08: fact sheet research/CHRD/factsheet-2026-11-08.md, note research/CHRD/2026-11-08.md, state portfolio/state.json. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/
+[21:49:21] You've hit your session limit · resets 2am (Europe/London)
+[21:49:21] !! FAILED NSE:ONGC: claude -p Ticker NSE:ONGC, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**)
+[21:49:44] You've hit your session limit · resets 2am (Europe/London)
+[21:49:44] !! FAILED JSE:BVT: claude -p Ticker JSE:BVT, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),
+[21:50:07] == screened out BVMF:PSSA3: price above base fair value (-3.6%; floor +0%) (no AI research)
+[21:50:14] == initiate TYO:9022
+[21:50:14] $ bin/py scripts/sec_delta.py TYO:9022 --asof 2026-11-08
+[21:50:14] SKIP TYO:9022: not a US listing (SEC filers only)
+[21:50:14] $ claude -p Ticker TYO:9022, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:50:17] You've hit your session limit · resets 2am (Europe/London)
+[21:50:17] !! FAILED TYO:9022: claude -p Ticker TYO:9022, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**)

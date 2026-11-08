@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Information Technology Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 85.43857202366368,
+    "base": 130.70096011496963,
+    "bull": 201.7640761097349
+   },
+   "implied_growth": 0.06645507521205873,
+   "discount_rate": 0.09697354918070487,
+   "cost_of_equity": 0.09931300000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.025713830840262755,
+     "base": 0.06666293851755077,
+     "bull": 0.13022409238967758
+    },
+    "cash_flow_margin": {
+     "bear": 0.07619620816553838,
+     "base": 0.1035755144456553,
+     "bull": 0.12789200433548292
+    },
+    "cagr_3y": 0.08642766168052551,
+    "cagr_5y": 0.13022409238967758,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 118.7873837706011,
+    "base": 156.20843293478157,
+    "bull": 172.0196478733484
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.196,
+     "base": 12.384,
+     "bull": 13.731
+    },
+    "ttm_ebitda": 434206000
+   }
+  }
+ ],
+ "price": 130.6,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 96.55484260597615,
+  "base": 139.20345105490694,
+  "bull": 191.84926669760605
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.2606826752988044,
+  "base": 0.06587634804676057,
+  "bull": 0.46898366537217506
+ },
+ "implied_growth": 0.06645507521205873,
+ "ticker": "BIT:REY",
+ "asof": "2026-11-08",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bit/REY/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bit/REY/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bit/REY/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bit/REY/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bit/REY/statistics/"
+ }
+}
