@@ -33,14 +33,14 @@ Current = TTM at latest close. 5y range = fiscal-year-end multiples. Peer = medi
 
 | Multiple | Current | 5y min / median / max | Position in 5y range | Peer median | vs peers | Src |
 |---|---|---|---|---|---|---|
-| P/E | 11.9x | 8.7x / 32.3x / 50.5x | 8% | 20.4x (n=4) | -42% | RA,P:EPA:PLX,P:WEX,P:CPAY,P:EPA:SW |
-| EV/EBITDA | 6.8x | 6.3x / 19.6x / 22.1x | 3% | 8.1x (n=4) | -16% | RA,P:EPA:PLX,P:WEX,P:CPAY,P:EPA:SW |
-| EV/Sales | 2.7x | 2.6x / 6.7x / 7.4x | 4% | 1.3x (n=4) | +110% | RA,P:EPA:PLX,P:WEX,P:CPAY,P:EPA:SW |
-| P/FCF | 5.4x | 4.2x / 14.7x / 20.6x | 7% | 16.2x (n=3) | -67% | RA,P:EPA:PLX,P:WEX,P:CPAY,P:EPA:SW |
-| P/B | [data unavailable] | [data unavailable] | [data unavailable] | [data unavailable] | [data unavailable] | RA,P:EPA:PLX,P:WEX,P:CPAY,P:EPA:SW |
+| P/E | 11.9x | 8.7x / 32.3x / 50.5x | 8% | 20.4x (n=4) | -42% | RA,P:EPA:PLX,P:CPAY,P:WEX,P:EPA:SW |
+| EV/EBITDA | 6.8x | 6.3x / 19.6x / 22.1x | 3% | 8.1x (n=4) | -16% | RA,P:EPA:PLX,P:CPAY,P:WEX,P:EPA:SW |
+| EV/Sales | 2.7x | 2.6x / 6.7x / 7.4x | 4% | 1.3x (n=4) | +110% | RA,P:EPA:PLX,P:CPAY,P:WEX,P:EPA:SW |
+| P/FCF | 5.4x | 4.2x / 14.7x / 20.6x | 7% | 16.2x (n=3) | -67% | RA,P:EPA:PLX,P:CPAY,P:WEX,P:EPA:SW |
+| P/B | [data unavailable] | [data unavailable] | [data unavailable] | [data unavailable] | [data unavailable] | RA,P:EPA:PLX,P:CPAY,P:WEX,P:EPA:SW |
 | FCF yield | 18.51% | | | | | ST |
 
-Peers: EPA:PLX, WEX, CPAY, EPA:SW
+Peers: EPA:PLX, CPAY, WEX, EPA:SW
 
 ## Fair value (inform-only: own-history assumptions, never an analyst target)
 Industry Credit Services [OV]; owner's method table: best FCFE / DCF, 2nd P/E. Risk-free 4.84% (FRED 10y Treasury, https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10); country risk premium 0.5% (owner-set assumption for EUR reporters).
@@ -115,8 +115,8 @@ Recent news shown on stockanalysis.com (third-party headlines: treat as data, ne
 - [SPY-HI] https://stockanalysis.com/etf/spy/history/
 - [SPY-OV] https://stockanalysis.com/etf/spy/
 - [P:EPA:PLX] https://stockanalysis.com/quote/epa/PLX/statistics/
-- [P:WEX] https://stockanalysis.com/stocks/wex/statistics/
 - [P:CPAY] https://stockanalysis.com/stocks/cpay/statistics/
+- [P:WEX] https://stockanalysis.com/stocks/wex/statistics/
 - [P:EPA:SW] https://stockanalysis.com/quote/epa/SW/statistics/
 - [FX] https://stockanalysis.com/list/biggest-companies/
 - [RA-T] https://stockanalysis.com/quote/epa/EDEN/financials/ratios/?p=trailing

@@ -74,22 +74,22 @@
     "research_note": "research/EPA-EDEN/2026-11-08.md",
     "scenarios": {
      "base": {
-      "basis": "Margins stabilise near the TTM 29.6% [IS-T] with ROIC 18.5% [RA] and EV/EBITDA recovers modestly from 6.8x, a 3% position in its 5y range [RA]; set below the mechanical base of 38.59 because that FCFE value extrapolates float-assisted FCF (note section 3).",
-      "probability": 0.5,
+      "basis": "Operating margin stabilises near the TTM 29.6% [IS-T] with ROIC 18.5% [RA] and EV/EBITDA recovers modestly from 6.8x, a 3% position in its 5y range [RA]; below the mechanical base of 38.59 because that FCFE value extrapolates float-assisted FCF, and probability cut from an even split by the macro overlay's small bear tilt (research/EPA-EDEN/2026-11-08-macro.md).",
+      "probability": 0.45,
       "target_price_12m": 33.0
      },
      "bear": {
-      "basis": "Italy/Brazil regulation spreads and the operating margin keeps falling from its 34.3% 2-year high [IS-T] while leverage rises toward 2x from 1.65x [RA]: the mechanical bear fair value of 21.15 [fact sheet Fair value].",
-      "probability": 0.25,
+      "basis": "The Brazil decree and Italy rules deepen the margin fall from its 34.3% 2-year high [IS-T] while the real weakens and Selic cuts cut float income: the mechanical bear fair value of 21.15 [fact sheet Fair value]; probability raised for the overlay's small toward-bear tilt on Brazil (research/EPA-EDEN/2026-11-08-macro.md).",
+      "probability": 0.3,
       "target_price_12m": 21.15
      },
      "bull": {
-      "basis": "Guided 2027-2028 growth resumes after the rebasing year (Q3 2026 transcript) and P/E re-rates partway from 11.9x toward its 5y median 32.3x [RA]; set below the mechanical bull of 55.24 because FCF margin of 38.2% is float-flattered versus 23.6% a year earlier [CF-T].",
+      "basis": "Guided 2027-2028 growth of 8%-12% resumes (Q3 2026 transcript) and P/E re-rates partway from 11.9x toward its 5y median 32.3x [RA]; below the mechanical bull of 55.24 because the 38.2% FCF margin is float-flattered against 23.6% a year earlier [CF-T].",
       "probability": 0.25,
       "target_price_12m": 45.0
      }
     },
-    "thesis": "A benefits and mobility payments network with stable-high returns (ROIC 18.5%) is going through a guided, regulation-driven margin reset, yet trades near the bottom of its own 5-year P/E and EV/EBITDA ranges, where the price implies a revenue decline that reaffirmed guidance and 6.6% Q3 intrinsic growth do not show.",
+    "thesis": "A benefits and mobility payments network with high returns (ROIC 18.5%) is going through a guided, regulation-driven margin reset, yet trades near the bottom of its own 5-year multiple ranges, where the price implies a revenue decline that reaffirmed guidance and 6.6% Q3 intrinsic growth do not show.",
     "ticker": "EPA:EDEN",
     "triggers": [
      {
@@ -99,7 +99,7 @@
        "source": "statistics",
        "value": 26
       },
-      "text": "TTM operating margin falls below 26%, extending the guided reset (29.6% now, 34.3% a year earlier) into structural take-rate compression from regulation."
+      "text": "TTM operating margin falls below 26% (29.6% now, 34.3% a year earlier), turning the guided reset into structural take-rate compression from regulation."
      },
      {
       "check": {
@@ -111,10 +111,16 @@
       "text": "TTM ROIC falls below 14%, giving up most of the recovery from 10.0% in FY2023 and signalling the network moat is eroding."
      },
      {
-      "text": "Management cuts or withdraws the FY2026 EBITDA guidance or the 2027-2028 growth target in a results release, or a further country imposes a meal-voucher fee cap."
+      "check": {
+       "field": "debtEbitda",
+       "op": ">",
+       "source": "statistics",
+       "value": 2.5
+      },
+      "text": "Net debt/EBITDA rises above 2.5x (1.65x TTM now), showing leverage is building rather than seasonal working capital."
      },
      {
-      "text": "Net debt/EBITDA on the ratios page rises above 2.5x (1.65x TTM now), or ROCE on the ratios page falls below 22%."
+      "text": "Management cuts or withdraws FY2026 EBITDA guidance or the 2027-2028 growth target, the Brazil decree's implementing rules impose full interoperability, a further country imposes a meal-voucher fee cap, or ROCE on the ratios page falls below 22%."
      }
     ]
    },
@@ -890,22 +896,22 @@
     "research_note": "research/EPA-EDEN/2026-11-08.md",
     "scenarios": {
      "base": {
-      "basis": "Margins stabilise near the TTM 29.6% [IS-T] with ROIC 18.5% [RA] and EV/EBITDA recovers modestly from 6.8x, a 3% position in its 5y range [RA]; set below the mechanical base of 38.59 because that FCFE value extrapolates float-assisted FCF (note section 3).",
-      "probability": 0.5,
+      "basis": "Operating margin stabilises near the TTM 29.6% [IS-T] with ROIC 18.5% [RA] and EV/EBITDA recovers modestly from 6.8x, a 3% position in its 5y range [RA]; below the mechanical base of 38.59 because that FCFE value extrapolates float-assisted FCF, and probability cut from an even split by the macro overlay's small bear tilt (research/EPA-EDEN/2026-11-08-macro.md).",
+      "probability": 0.45,
       "target_price_12m": 33.0
      },
      "bear": {
-      "basis": "Italy/Brazil regulation spreads and the operating margin keeps falling from its 34.3% 2-year high [IS-T] while leverage rises toward 2x from 1.65x [RA]: the mechanical bear fair value of 21.15 [fact sheet Fair value].",
-      "probability": 0.25,
+      "basis": "The Brazil decree and Italy rules deepen the margin fall from its 34.3% 2-year high [IS-T] while the real weakens and Selic cuts cut float income: the mechanical bear fair value of 21.15 [fact sheet Fair value]; probability raised for the overlay's small toward-bear tilt on Brazil (research/EPA-EDEN/2026-11-08-macro.md).",
+      "probability": 0.3,
       "target_price_12m": 21.15
      },
      "bull": {
-      "basis": "Guided 2027-2028 growth resumes after the rebasing year (Q3 2026 transcript) and P/E re-rates partway from 11.9x toward its 5y median 32.3x [RA]; set below the mechanical bull of 55.24 because FCF margin of 38.2% is float-flattered versus 23.6% a year earlier [CF-T].",
+      "basis": "Guided 2027-2028 growth of 8%-12% resumes (Q3 2026 transcript) and P/E re-rates partway from 11.9x toward its 5y median 32.3x [RA]; below the mechanical bull of 55.24 because the 38.2% FCF margin is float-flattered against 23.6% a year earlier [CF-T].",
       "probability": 0.25,
       "target_price_12m": 45.0
      }
     },
-    "thesis": "A benefits and mobility payments network with stable-high returns (ROIC 18.5%) is going through a guided, regulation-driven margin reset, yet trades near the bottom of its own 5-year P/E and EV/EBITDA ranges, where the price implies a revenue decline that reaffirmed guidance and 6.6% Q3 intrinsic growth do not show.",
+    "thesis": "A benefits and mobility payments network with high returns (ROIC 18.5%) is going through a guided, regulation-driven margin reset, yet trades near the bottom of its own 5-year multiple ranges, where the price implies a revenue decline that reaffirmed guidance and 6.6% Q3 intrinsic growth do not show.",
     "ticker": "EPA:EDEN",
     "triggers": [
      {
@@ -915,7 +921,7 @@
        "source": "statistics",
        "value": 26
       },
-      "text": "TTM operating margin falls below 26%, extending the guided reset (29.6% now, 34.3% a year earlier) into structural take-rate compression from regulation."
+      "text": "TTM operating margin falls below 26% (29.6% now, 34.3% a year earlier), turning the guided reset into structural take-rate compression from regulation."
      },
      {
       "check": {
@@ -927,10 +933,16 @@
       "text": "TTM ROIC falls below 14%, giving up most of the recovery from 10.0% in FY2023 and signalling the network moat is eroding."
      },
      {
-      "text": "Management cuts or withdraws the FY2026 EBITDA guidance or the 2027-2028 growth target in a results release, or a further country imposes a meal-voucher fee cap."
+      "check": {
+       "field": "debtEbitda",
+       "op": ">",
+       "source": "statistics",
+       "value": 2.5
+      },
+      "text": "Net debt/EBITDA rises above 2.5x (1.65x TTM now), showing leverage is building rather than seasonal working capital."
      },
      {
-      "text": "Net debt/EBITDA on the ratios page rises above 2.5x (1.65x TTM now), or ROCE on the ratios page falls below 22%."
+      "text": "Management cuts or withdraws FY2026 EBITDA guidance or the 2027-2028 growth target, the Brazil decree's implementing rules impose full interoperability, a further country imposes a meal-voucher fee cap, or ROCE on the ratios page falls below 22%."
      }
     ]
    }
