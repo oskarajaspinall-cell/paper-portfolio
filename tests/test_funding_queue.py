@@ -241,3 +241,32 @@ def test_swap_brief_offers_only_swaps_the_rules_accept(cfg, tmp_path):
     assert allowed == {"buy": "NVDA", "candidates": ["MSFT"]}
     _, unchecked = FQ.brief(s, mkt, cfg, TODAY)
     assert unchecked["candidates"] == ["LON:ULVR", "MSFT"]
+
+
+def _queued(cfg, tmp_path, conv_held):
+    sp = state_file(tmp_path, cfg, {"LON:ULVR": holding("LON:ULVR", "CORE", 78, conv=conv_held)}, 22000)
+    place_orders([core_buy("AAPL", conv=4)], sp, OpenMarket(cfg), cfg, WATCH, TODAY, port_dir=tmp_path)
+    return json.loads(sp.read_text())
+
+
+def test_auto_swap_replaces_downgraded_holding(cfg, tmp_path, reserve20):
+    cfg["core"]["min_buy_conviction"] = 4
+    cfg.setdefault("funding_queue", {})["auto_swap_min_gap_pp"] = 15
+    s = _queued(cfg, tmp_path, conv_held=3)
+    assert s["funding_queue"]
+    reqs = FQ.auto_swaps(s, OpenMarket(cfg), cfg, WATCH, TODAY)
+    assert [(r["ticker"], r["replaces"]) for r in reqs] == [("AAPL", "LON:ULVR")]
+    assert "automatic downgrade swap" in reqs[0]["replacement_reason"] and reqs[0]["cap_pct"] > 0
+    # the swap passes the engine although cash already sits at the reserve (it spends none of it)
+    eng = P.Engine(s, OpenMarket(cfg), cfg, WATCH, TODAY)
+    eng.process(reqs)
+    assert not eng.rejections and "AAPL" in s["holdings"] and "LON:ULVR" not in s["holdings"]
+
+
+def test_no_auto_swap_for_high_conviction_or_small_gap(cfg, tmp_path, reserve20):
+    cfg["core"]["min_buy_conviction"] = 4
+    s = _queued(cfg, tmp_path, conv_held=4)
+    assert FQ.auto_swaps(s, OpenMarket(cfg), cfg, WATCH, TODAY) == []
+    cfg.setdefault("funding_queue", {})["auto_swap_min_gap_pp"] = 10_000
+    s = _queued(cfg, tmp_path, conv_held=3)
+    assert FQ.auto_swaps(s, OpenMarket(cfg), cfg, WATCH, TODAY) == []

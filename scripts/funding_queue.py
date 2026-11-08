@@ -40,7 +40,8 @@ def settings(cfg: dict) -> dict:
     return {"max_days": int(fq.get("max_days", 30)), "max_rise_pct": float(fq.get("max_rise_pct", 10)),
             "swap_candidates": int(fq.get("swap_candidates", 3)),
             "starter_min_fraction": float(fq.get("starter_min_fraction", 0.5)),
-            "min_step_pct": float(fq.get("min_step_pct", 1.0))}
+            "min_step_pct": float(fq.get("min_step_pct", 1.0)),
+            "auto_swap_min_gap_pp": float(fq.get("auto_swap_min_gap_pp", 15))}
 
 
 def queueable(rej: dict, req: dict | None, cfg: dict) -> bool:
@@ -408,6 +409,52 @@ def brief(state: dict, mkt, cfg: dict, today: str, watch: dict | None = None) ->
     return "\n".join(L) + "\n", {"buy": best["ticker"], "candidates": [c["ticker"] for c in cands]}
 
 
+def auto_swaps(state: dict, mkt, cfg: dict, watch: dict, today: str) -> list[dict]:
+    """Owner request 2026-11-08: a CORE holding below the buy bar is swapped at once (no model call) for the best
+    waiting conviction-4+ idea whose base-fair-value upside beats the holding's by `auto_swap_min_gap_pp` and
+    that the rules accept as its replacement. The new buy is sized to its target, capped at the money the sale
+    frees plus any room above the reserve, so a swap never spends the reserve. One idea per holding."""
+    from portfolio import Engine, totals
+    bar = int(cfg["core"]["min_buy_conviction"])
+    gap = settings(cfg)["auto_swap_min_gap_pp"]
+    q = _rank([e for e in state.get("funding_queue") or [] if e.get("stage") != "topup"])
+    weak = [c for c in swap_candidates(state, mkt, cfg, today) if (c["conviction"] or 0) < bar]
+    res_pct = current_reserve_pct(cfg, today)
+    out, used = [], set()
+    for c in weak:
+        for idea in q:
+            u = _upside(idea)
+            if idea["ticker"] in used or u is None or u - (c["upside_pct"] or 0) < gap:
+                continue
+            req = copy.deepcopy(idea["request"])
+            why = (f"automatic downgrade swap: {c['ticker']} is conviction {c['conviction']} (below the buy bar {bar}) "
+                   f"with {c['upside_pct'] or 0:+.0f}% base-fair-value upside; {idea['ticker']} is conviction "
+                   f"{req.get('conviction')} with {u:+.0f}%")
+            work = copy.deepcopy(state)
+            eng = Engine(work, mkt, cfg, watch, today)
+            eng.process([copy.deepcopy(o["request"]) for o in state.get("pending", [])])  # after waiting orders
+            tt = totals(work)
+            if c["ticker"] not in work["holdings"] or not tt["total"]:
+                continue
+            cash_pct = tt["cash"] / tt["total"] * 100
+            freed = work["holdings"][c["ticker"]]["market_value_usd"] / tt["total"] * 100
+            cap = freed + max(0.0, cash_pct - res_pct) - 0.1  # 0.1pp margin for costs
+            req.update(replaces=c["ticker"], replacement_reason=why, cap_pct=round(cap, 2),
+                       reason=f"{req.get('reason', '')} [funding queue: decided {idea['added']}; {why}]".strip())
+            n = len(eng.rejections)
+            eng.process([copy.deepcopy(req)])
+            if len(eng.rejections) == n:
+                out.append(req)
+                used.add(idea["ticker"])
+                break
+    return out
+
+
+def current_reserve_pct(cfg: dict, today: str) -> float:
+    from portfolio import current_reserve
+    return float(current_reserve(cfg, today)["pct"])
+
+
 def parse_swap(text: str, allowed: dict) -> dict | None:
     """The swap-reviewer's final ```json block -> a validated {"buy", "replaces", "replacement_reason"} or None
     (no swap). Raises ValueError on a malformed or out-of-brief answer."""
@@ -437,7 +484,7 @@ def swap_request(state: dict, swap: dict) -> dict:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["list", "review", "add", "brief"])
+    ap.add_argument("cmd", choices=["list", "review", "add", "brief", "auto-swap"])
     ap.add_argument("requests", nargs="?")
     ap.add_argument("--asof", default=dt.date.today().isoformat())
     ap.add_argument("--out")
@@ -472,6 +519,26 @@ def main(argv=None) -> int:
             print(json.dumps({"placeable_now": [p["ticker"] for p in trial["placed"]],
                               "queue": [e["ticker"] for e in state.get("funding_queue", [])],
                               "rejected": trial["rejected"]}, indent=1, default=str))
+        elif a.cmd == "auto-swap":
+            today = min(a.asof, dt.date.today().isoformat())
+            mark(state, mkt)
+            reqs = auto_swaps(state, mkt, cfg, investable(), today)
+            if not reqs:
+                print(json.dumps({"auto_swaps": []}))
+                return 0
+            out = Path(a.out or ROOT / "runs" / today / "requests-auto-swap.json")
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(json.dumps(reqs, indent=1))
+            import subprocess
+            p = subprocess.run([sys.executable, str(ROOT / "scripts" / "portfolio.py"), "submit", str(out), "--asof",
+                                today, "--at-market", "--save", str(out.with_name("submit-auto-swap.json"))]
+                               + (["--dry-run"] if a.dry_run else []), capture_output=True, text=True)
+            print(p.stdout[-3000:], p.stderr[-1500:])
+            if not a.dry_run and p.returncode == 0:
+                st2 = load_state(sp, cfg)
+                if drop_ordered(st2, {r["ticker"] for r in reqs}, today):
+                    atomic_write(sp, json.dumps(st2, indent=1, sort_keys=True))
+            return p.returncode
         elif a.cmd == "brief":
             mark(state, mkt)
             md, allowed = brief(state, mkt, cfg, a.asof, investable())

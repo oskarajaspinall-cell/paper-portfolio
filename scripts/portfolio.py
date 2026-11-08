@@ -814,6 +814,8 @@ class Engine:
         if tt["cash"] / pv * 100 < p["min_cash_pct"] - 1e-9:
             out.append(("CASH_MIN", f"cash would be {tt['cash'] / pv * 100:.2f}% (< {p['min_cash_pct']}%)"))
         res = self.reserve["pct"]
+        if r.get("replaces") and r.get("_cash_before_pct") is not None:  # 2026-11-08: a swap spends no reserve
+            res = min(res, r["_cash_before_pct"])  # if it leaves cash no lower than it found it
         if r["action"] in ("BUY", "ADD") and res > 0 and tt["cash"] / pv * 100 < res - 1e-9:
             out.append(("CASH_RESERVE", f"cash would be {tt['cash'] / pv * 100:.2f}%, below the {res:g}% reserve "
                                         f"({self.reserve['regime']} regime)"))
@@ -862,6 +864,8 @@ class Engine:
                     if not r.get("replacement_reason"):
                         raise Reject("REPLACEMENT_INVALID", "replacement_reason missing (why the new idea is better)")
                     rh = work["holdings"][rep]
+                    t0 = totals(work)
+                    r["_cash_before_pct"] = t0["cash"] / t0["total"] * 100 if t0["total"] else None
                     rows.append(self._execute(work, rep, rh["type"], "SELL", rh["shares"], self.quote(rep),
                                               f"replaced by {r['ticker']}: {r['replacement_reason']}"))
                 rows += self._apply(work, r)

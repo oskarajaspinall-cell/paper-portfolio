@@ -202,6 +202,9 @@ def run_funding_queue(asof: str, dry_run: bool, agent, log, rundir: Path) -> Non
     `replaces`, validated by portfolio.py like any other trade."""
     dry = ["--dry-run"] if dry_run else []
     sh(PY + ["scripts/funding_queue.py", "review", "--asof", asof] + dry, log)
+    # a holding downgraded below the buy bar is swapped automatically for a clearly better waiting idea (2026-11-08)
+    sh(PY + ["scripts/funding_queue.py", "auto-swap", "--asof", asof,
+             "--out", str(rundir / "requests-auto-swap.json")] + dry, log)
     brief = rundir / "funding-queue.md"
     if not sh(PY + ["scripts/funding_queue.py", "brief", "--asof", asof, "--out", str(brief)], log).strip().startswith("OK "):
         return  # nothing waiting
