@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Restaurants",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -50.96949358261387,
+    "base": 53.76262902587294,
+    "bull": 64.60996937994294
+   },
+   "implied_growth": 0.07826129658870767,
+   "discount_rate": 0.11108347946092556,
+   "cost_of_equity": 0.12340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.17,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.09034907489907079,
+     "base": 0.08211579298785593,
+     "bull": 0.08211579298785593
+    },
+    "cagr_3y": 0.5477704067628462,
+    "cagr_5y": 0.5771923443352456,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 18.83347503254181,
+    "base": 27.735249049892705,
+    "bull": 96.11671629039421
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.263,
+     "base": 16.861,
+     "bull": 24.596
+    },
+    "ttm_ebitda": 8271859000,
+    "peak_earnings": "TTM EBITDA is 2.3x its 5y median: bear/base use the 5y average (3.399e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 34,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -27.701837377561976,
+  "base": 45.086835700546196,
+  "bull": 75.11221835009336
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.8147599228694697,
+  "base": 0.32608340295724103,
+  "bull": 1.2091828926498045
+ },
+ "implied_growth": 0.07826129658870767,
+ "ticker": "OTC:LKNCY",
+ "asof": "2026-11-08",
+ "quote_currency": "USD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 0.14981048973049094,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/otc/LKNCY/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/otc/LKNCY/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/otc/LKNCY/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/otc/LKNCY/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/otc/LKNCY/statistics/"
+ }
+}

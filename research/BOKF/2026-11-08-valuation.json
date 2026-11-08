@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 107.45707851007118,
+    "base": 115.69805901317581,
+    "bull": 122.40583384128423
+   },
+   "cost_of_equity": 0.09103,
+   "assumptions": {
+    "roe": {
+     "bear": 0.09789,
+     "base": 0.10348,
+     "bull": 0.10803
+    },
+    "justified_pb": {
+     "bear": 1.103892170225655,
+     "base": 1.1885506587914583,
+     "bull": 1.2574587308799028
+    },
+    "bvps": 97.343818
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 134.12829583542086,
+    "base": 178.7375701787232,
+    "bull": 214.1457017727884
+   },
+   "implied_growth": -0.04282413348438546,
+   "discount_rate": 0.09103,
+   "cost_of_equity": 0.09103,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.00525215982090314,
+     "base": 0.03367505003310854,
+     "bull": 0.06020451977424046
+    },
+    "cash_flow_margin": {
+     "bear": 0.2576113253352319,
+     "base": 0.2916792473299584,
+     "bull": 0.31316166516702737
+    },
+    "cagr_3y": 0.06020451977424046,
+    "cagr_5y": 0.024495680358193717,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 35.644482441141655,
+    "base": 41.44706951385733,
+    "bull": 49.3208995181153
+   },
+   "cost_of_equity": 0.09103,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 2.67
+   }
+  }
+ ],
+ "price": 129.48,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 116.34748428518775,
+  "base": 136.7112294016916,
+  "bull": 152.9857898184523
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.10142505185984119,
+  "base": 0.05584823448943177,
+  "bull": 0.18153992754442627
+ },
+ "implied_growth": -0.04282413348438546,
+ "ticker": "BOKF",
+ "asof": "2026-11-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/bokf/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/bokf/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/bokf/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/bokf/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/bokf/statistics/"
+ }
+}

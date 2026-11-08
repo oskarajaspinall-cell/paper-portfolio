@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Auto Manufacturers",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -9.296024475559014,
+    "base": 35.976325285032495,
+    "bull": 111.28744421752322
+   },
+   "implied_growth": null,
+   "discount_rate": 0.11077180634380779,
+   "cost_of_equity": 0.12340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.04776657765966437,
+     "base": 0.08889497585452992,
+     "bull": 0.17504674809879095
+    },
+    "cash_flow_margin": {
+     "bear": -0.03513519442526747,
+     "base": 0.06265807383531422,
+     "bull": 0.15532303276555529
+    },
+    "cagr_3y": 0.17504674809879095,
+    "cagr_5y": 0.13053315531932874,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 19.188594940748118,
+    "base": 25.939176862146844,
+    "bull": 34.95910995408482
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.928,
+     "base": 13.274,
+     "bull": 19.081
+    },
+    "ttm_ebitda": 11193032307
+   }
+  }
+ ],
+ "price": 6.4,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 0.19884866321003022,
+  "base": 32.63060914407061,
+  "bull": 85.84466612971043
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.9689298963734327,
+  "base": 4.098532678761033,
+  "bull": 12.413229082767254
+ },
+ "implied_growth": null,
+ "ticker": "HKG:2333",
+ "asof": "2026-11-08",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.175309733187518,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/2333/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/2333/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/2333/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/2333/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/2333/statistics/"
+ }
+}
