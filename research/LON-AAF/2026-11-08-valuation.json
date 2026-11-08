@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Telecom Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 894.589046892493,
+    "base": 1444.6067441194543,
+    "bull": 1815.195596849645
+   },
+   "implied_growth": -0.24787990967501233,
+   "discount_rate": 0.07081407243197742,
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.0171812923204004,
+     "base": 0.04999857402160539,
+     "bull": 0.08063171144562076
+    },
+    "cash_flow_margin": {
+     "bear": 0.31396062658763757,
+     "base": 0.41998487556716624,
+     "bull": 0.4556581806892269
+    },
+    "cagr_3y": 0.0693625846408008,
+    "cagr_5y": 0.08063171144562076,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 129.85793234810592,
+    "base": 186.88953384760475,
+    "bull": 321.8211183043734
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.839,
+     "base": 4.719,
+     "bull": 6.801
+    },
+    "ttm_ebitda": 3157000000
+   }
+  }
+ ],
+ "price": 277.6,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 639.6786753776973,
+  "base": 1025.3676740288377,
+  "bull": 1317.404104001221
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 1.3043179948764312,
+  "base": 2.6936875865592134,
+  "bull": 3.7456920172954637
+ },
+ "implied_growth": -0.24787990967501233,
+ "ticker": "LON:AAF",
+ "asof": "2026-11-08",
+ "quote_currency": "GBX",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 74.9036,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/lon/AAF/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/lon/AAF/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/lon/AAF/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/lon/AAF/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/lon/AAF/statistics/"
+ }
+}

@@ -1,0 +1,100 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 72.33071972339181,
+    "base": 115.40836061461987,
+    "bull": 190.35505409780697
+   },
+   "cost_of_equity": 0.09340000000000001,
+   "assumptions": {
+    "roe": {
+     "bear": 0.06288,
+     "base": 0.08544,
+     "bull": 0.12469
+    },
+    "justified_pb": {
+     "bear": 0.5538011695906432,
+     "base": 0.8836257309941519,
+     "bull": 1.4574561403508768
+    },
+    "bvps": 130.607741
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 162.48052271999998,
+    "base": 2211.903393264,
+    "bull": 5637.690387072
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 17.31,
+     "base": 235.647,
+     "bull": 445.912
+    },
+    "ttm_eps": 12.643056,
+    "peak_earnings": "TTM EPS is 1.6x its 5y median: bear/base use the 5y average (9.387), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 141.2,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "JPY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 102.38065405559455,
+  "base": 814.2400381644132,
+  "bull": 2006.133498422538
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.2749245463484805,
+  "base": 4.766572508246553,
+  "bull": 13.207744323105794
+ },
+ "implied_growth": null,
+ "ticker": "TYO:8729",
+ "asof": "2026-11-08",
+ "quote_currency": "JPY",
+ "financials_currency": "JPY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tyo/8729/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tyo/8729/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tyo/8729/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tyo/8729/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tyo/8729/statistics/"
+ }
+}

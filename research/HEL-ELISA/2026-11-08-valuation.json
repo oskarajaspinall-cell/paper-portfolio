@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Telecom Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 25.375422218777963,
+    "base": 36.781572712153135,
+    "bull": 42.12771346375047
+   },
+   "implied_growth": 0.010632739090189473,
+   "discount_rate": 0.080707352867411,
+   "cost_of_equity": 0.09340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.00770638732660826,
+     "base": 0.025138259127083163,
+     "bull": 0.030965811161549173
+    },
+    "cash_flow_margin": {
+     "bear": 0.15568912890349848,
+     "base": 0.17948763565201922,
+     "bull": 0.19533029108147623
+    },
+    "cagr_3y": 0.019587225346783477,
+    "cagr_5y": 0.030965811161549173,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 36.62217651610289,
+    "base": 39.08304010857607,
+    "bull": 48.30025320583225
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.449,
+     "base": 11.007,
+     "bull": 13.097
+    },
+    "ttm_ebitda": 708600000
+   }
+  }
+ ],
+ "price": 34,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 29.124340317886276,
+  "base": 37.54872851096078,
+  "bull": 44.185226711111056
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.14340175535628596,
+  "base": 0.10437436796943467,
+  "bull": 0.2995654915032664
+ },
+ "implied_growth": 0.010632739090189473,
+ "ticker": "HEL:ELISA",
+ "asof": "2026-11-08",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hel/ELISA/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hel/ELISA/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hel/ELISA/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hel/ELISA/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hel/ELISA/statistics/"
+ }
+}
