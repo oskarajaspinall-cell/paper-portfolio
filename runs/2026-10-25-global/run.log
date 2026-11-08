@@ -2672,3 +2672,157 @@ OK research/TYO-9201/2026-11-08-evaluation.md Bear case=133 Bull case=124 decisi
 [21:40:27] $ bin/py scripts/valuation.py TYO:9201 --asof 2026-11-08 --eval research/TYO-9201/2026-11-08-evaluation.md
 [21:40:27] {"out": "research/TYO-9201/2026-11-08-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": -28769.45, "base": 11023.67, "bull": 25894.56}, "price": 3277}
 [21:40:29] == done TYO:9201
+[21:40:32] == Research batch 11: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-08-batch-11.md; uploaded to GitHub
+[21:40:39] research/CHDN/2026-11-08-macro.md
+OK research/CHDN/2026-11-08-macro.md macro_weight=context words=55
+[21:40:39] $ bin/py scripts/check_docs.py macro research/CHDN/2026-11-08-macro.md
+[21:40:39] OK research/CHDN/2026-11-08-macro.md macro_weight=context words=55
+[21:40:39] $ claude -p Evaluate CHDN for 2026-11-08: fact sheet research/CHDN/factsheet-2026-11-08.md, note research/CHDN/2026-11-08.md, state portfolio/state.json, macro overlay research/CHDN/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:40:49] == initiate WTFC
+[21:40:49] $ bin/py scripts/sec_delta.py WTFC --asof 2026-11-08
+[21:41:01] OK research/WTFC/sec-delta-2026-11-08.md
+[21:41:01] $ claude -p Ticker WTFC, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. SEC filing delta: research/WTFC/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:41:06] Note: research/BMV-AMX.B/2026-11-08.md
+Fact sheet: research/BMV-AMX.B/factsheet-2026-11-08.md
+Check: OK research/BMV-AMX.B/2026-11-08.md type=CORE 1=65 2=127 3=147 4=36 5=54 6=45 total=474
+
+Blocked URL: https://www.americamovil.com/ was not on the allowlist, so I couldn't get a revenue-by-country split. Section 1 marks it [data unavailable] and asks the macro overlay to check Brazil and other Latin American currency exposure.
+
+Data conflict: the fact sheet shows "Next earnings date Oct 20, 2026", which is stale. The Q3 results came out on 21 October. I noted this in section 6.
+
+I used 0 of the 6 WebFetch calls successfully; the one attempt was blocked.
+[21:41:06] $ bin/py scripts/check_docs.py note research/BMV-AMX.B/2026-11-08.md
+[21:41:06] OK research/BMV-AMX.B/2026-11-08.md type=CORE 1=65 2=127 3=147 4=36 5=54 6=45 total=474
+[21:41:06] $ claude -p Ticker BMV:AMX.B, date 2026-11-08. Research: research/BMV-AMX.B/factsheet-2026-11-08.md, research/BMV-AMX.B/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/BMV-AMX.B/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:41:29] research/BMV-AMX.B/2026-11-08-macro.md
+OK research/BMV-AMX.B/2026-11-08-macro.md macro_weight=context words=133
+[21:41:29] $ bin/py scripts/check_docs.py macro research/BMV-AMX.B/2026-11-08-macro.md
+[21:41:29] OK research/BMV-AMX.B/2026-11-08-macro.md macro_weight=context words=133
+[21:41:29] $ claude -p Evaluate BMV:AMX.B for 2026-11-08: fact sheet research/BMV-AMX.B/factsheet-2026-11-08.md, note research/BMV-AMX.B/2026-11-08.md, state portfolio/state.json, macro overlay research/BMV-AMX.B/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:41:37] research/CHDN/2026-11-08-evaluation.md
+OK research/CHDN/2026-11-08-evaluation.md Bear case=148 Bull case=125 decision=AVOID
+[21:41:37] $ bin/py scripts/check_docs.py eval research/CHDN/2026-11-08-evaluation.md
+[21:41:37] OK research/CHDN/2026-11-08-evaluation.md Bear case=148 Bull case=125 decision=AVOID
+[21:41:37] $ bin/py scripts/valuation.py CHDN --asof 2026-11-08 --eval research/CHDN/2026-11-08-evaluation.md
+[21:41:37] {"out": "research/CHDN/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 25.89, "base": 231.67, "bull": 319.76}, "price": 97.94}
+[21:41:38] == done CHDN
+[21:41:55] - Note: `research/WTFC/2026-11-08.md`
+- Fact sheet: `research/WTFC/factsheet-2026-11-08.md`
+- Check: `OK research/WTFC/2026-11-08.md type=CORE 1=63 2=141 3=114 4=64 5=50 6=43 total=475`
+- Data conflicts: none. One oddity: the fact sheet shows the next earnings date as Oct 19, 2026, which has already passed. The note says so.
+- Blocked URLs: none. I made no WebFetch calls. I used the SEC delta and the fact sheet only.
+[21:41:55] $ bin/py scripts/check_docs.py note research/WTFC/2026-11-08.md
+[21:41:55] OK research/WTFC/2026-11-08.md type=CORE 1=63 2=141 3=114 4=64 5=50 6=43 total=475
+[21:41:55] $ claude -p Ticker WTFC, date 2026-11-08. Research: research/WTFC/factsheet-2026-11-08.md, research/WTFC/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/WTFC/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:41:59] == initiate SHA:601958
+[21:41:59] $ bin/py scripts/sec_delta.py SHA:601958 --asof 2026-11-08
+[21:41:59] SKIP SHA:601958: not a US listing (SEC filers only)
+[21:41:59] $ claude -p Ticker SHA:601958, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:42:22] I wrote `research/BMV-AMX.B/2026-11-08-evaluation.md`, and the checker returned OK:
+
+`OK research/BMV-AMX.B/2026-11-08-evaluation.md Bear case=140 Bull case=84 decision=AVOID`
+
+**Decision: AVOID, CORE, conviction 3, entry price 20.55 MXN.**
+
+- **Case for:** the business is improving. Returns on capital and free-cash-flow margin rose over the last 12 months, debt is falling, and the stock trades cheaply on its cash flow.
+- **Why AVOID:** the 40.00 MXN base fair value comes almost entirely from the DCF. That model assumes the free-cash-flow margin stays at its current five-year high. The second method, based on its own history of EV/EBITDA (value of the business relative to its operating earnings), values it at 21.89, below the 23.95 close. The stock has also just risen 16.2% in three months.
+- **Entry price:** the default (base fair value × 0.8 = 32.00) is above the current price, so the rules don't allow it. I used the 50-day average of 20.55 instead. At that price both valuation methods would show upside.
+- **Macro:** the overlay rates macro as context only, so it doesn't change the decision. The company's revenue split by country is still unconfirmed.
+
+I left out `valuation_overrides` and `replaces` because neither applies.
+[21:42:22] $ bin/py scripts/check_docs.py eval research/BMV-AMX.B/2026-11-08-evaluation.md
+[21:42:22] OK research/BMV-AMX.B/2026-11-08-evaluation.md Bear case=140 Bull case=84 decision=AVOID
+[21:42:22] $ bin/py scripts/valuation.py BMV:AMX.B --asof 2026-11-08 --eval research/BMV-AMX.B/2026-11-08-evaluation.md
+[21:42:22] {"out": "research/BMV-AMX.B/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 18.72, "base": 40.0, "bull": 41.44}, "price": 23.95}
+[21:42:23] == done BMV:AMX.B
+[21:42:30] research/WTFC/2026-11-08-macro.md
+OK research/WTFC/2026-11-08-macro.md macro_weight=secondary words=203
+[21:42:30] $ bin/py scripts/check_docs.py macro research/WTFC/2026-11-08-macro.md
+[21:42:30] OK research/WTFC/2026-11-08-macro.md macro_weight=secondary words=203
+[21:42:30] $ claude -p Evaluate WTFC for 2026-11-08: fact sheet research/WTFC/factsheet-2026-11-08.md, note research/WTFC/2026-11-08.md, state portfolio/state.json, macro overlay research/WTFC/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:42:46] == initiate KRX:064400
+[21:42:46] $ bin/py scripts/sec_delta.py KRX:064400 --asof 2026-11-08
+[21:42:46] SKIP KRX:064400: not a US listing (SEC filers only)
+[21:42:46] $ claude -p Ticker KRX:064400, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:42:54] Note: research/SHA-601958/2026-11-08.md
+Fact sheet: research/SHA-601958/factsheet-2026-11-08.md
+OK research/SHA-601958/2026-11-08.md type=CORE 1=58 2=117 3=129 4=41 5=65 6=41 total=451
+Issues:
+- SHA:600362 returned a 404 from stockanalysis.com, so I dropped it. The peers used are SHA:603993, SHA:601899 and SHA:600549.
+- I made no WebFetch calls. The geographic revenue split and the Q3 2026 filing are therefore not covered in the note, and no URL was blocked.
+- There were no data conflicts.
+[21:42:54] $ bin/py scripts/check_docs.py note research/SHA-601958/2026-11-08.md
+[21:42:54] OK research/SHA-601958/2026-11-08.md type=CORE 1=58 2=117 3=129 4=41 5=65 6=41 total=451
+[21:42:54] $ claude -p Ticker SHA:601958, date 2026-11-08. Research: research/SHA-601958/factsheet-2026-11-08.md, research/SHA-601958/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/SHA-601958/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:43:10] research/WTFC/2026-11-08-evaluation.md
+OK research/WTFC/2026-11-08-evaluation.md Bear case=150 Bull case=104 decision=AVOID
+[21:43:10] $ bin/py scripts/check_docs.py eval research/WTFC/2026-11-08-evaluation.md
+[21:43:10] OK research/WTFC/2026-11-08-evaluation.md Bear case=150 Bull case=104 decision=AVOID
+[21:43:10] $ bin/py scripts/valuation.py WTFC --asof 2026-11-08 --eval research/WTFC/2026-11-08-evaluation.md
+[21:43:10] {"out": "research/WTFC/2026-11-08-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 138.33, "base": 172.52, "bull": 193.44}, "price": 151.27}
+[21:43:11] == done WTFC
+[21:43:12] research/SHA-601958/2026-11-08-macro.md
+OK research/SHA-601958/2026-11-08-macro.md macro_weight=context words=44
+[21:43:12] $ bin/py scripts/check_docs.py macro research/SHA-601958/2026-11-08-macro.md
+[21:43:13] OK research/SHA-601958/2026-11-08-macro.md macro_weight=context words=44
+[21:43:13] $ claude -p Evaluate SHA:601958 for 2026-11-08: fact sheet research/SHA-601958/factsheet-2026-11-08.md, note research/SHA-601958/2026-11-08.md, state portfolio/state.json, macro overlay research/SHA-601958/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:43:36] == initiate ETR:DTE
+[21:43:36] $ bin/py scripts/sec_delta.py ETR:DTE --asof 2026-11-08
+[21:43:36] SKIP ETR:DTE: not a US listing (SEC filers only)
+[21:43:36] $ claude -p Ticker ETR:DTE, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:43:47] Note: research/KRX-064400/2026-11-08.md
+Fact sheet: research/KRX-064400/factsheet-2026-11-08.md
+check_docs: OK research/KRX-064400/2026-11-08.md type=CORE 1=47 2=115 3=132 4=37 5=52 6=69 total=452
+Blocked URL: https://www.lgcns.com/en/ (not on the allowlist). The note has no segment or revenue-by-country figures as a result.
+Data conflicts: none. The fact sheet's next earnings date (Oct 30, 2026) is already past. The fact sheet also shows no 5-year multiple history, beta, short interest or news.
+[21:43:47] $ bin/py scripts/check_docs.py note research/KRX-064400/2026-11-08.md
+[21:43:47] OK research/KRX-064400/2026-11-08.md type=CORE 1=47 2=115 3=132 4=37 5=52 6=69 total=452
+[21:43:47] $ claude -p Ticker KRX:064400, date 2026-11-08. Research: research/KRX-064400/factsheet-2026-11-08.md, research/KRX-064400/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/KRX-064400/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:44:07] research/KRX-064400/2026-11-08-macro.md
+OK research/KRX-064400/2026-11-08-macro.md macro_weight=context words=55
+[21:44:07] $ bin/py scripts/check_docs.py macro research/KRX-064400/2026-11-08-macro.md
+[21:44:07] OK research/KRX-064400/2026-11-08-macro.md macro_weight=context words=55
+[21:44:07] $ claude -p Evaluate KRX:064400 for 2026-11-08: fact sheet research/KRX-064400/factsheet-2026-11-08.md, note research/KRX-064400/2026-11-08.md, state portfolio/state.json, macro overlay research/KRX-064400/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:44:14] research/SHA-601958/2026-11-08-evaluation.md
+OK research/SHA-601958/2026-11-08-evaluation.md Bear case=148 Bull case=118 decision=AVOID
+[21:44:14] $ bin/py scripts/check_docs.py eval research/SHA-601958/2026-11-08-evaluation.md
+[21:44:14] OK research/SHA-601958/2026-11-08-evaluation.md Bear case=148 Bull case=118 decision=AVOID
+[21:44:14] $ bin/py scripts/valuation.py SHA:601958 --asof 2026-11-08 --eval research/SHA-601958/2026-11-08-evaluation.md
+[21:44:14] {"out": "research/SHA-601958/2026-11-08-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 13.49, "base": 19.55, "bull": 27.26}, "price": 16.65}
+[21:44:15] == done SHA:601958
+[21:44:33] - Note: `research/ETR-DTE/2026-11-08.md`
+- Fact sheet: `research/ETR-DTE/factsheet-2026-11-08.md`
+- check_docs: `OK research/ETR-DTE/2026-11-08.md type=CORE 1=64 2=94 3=135 4=31 5=55 6=46 total=425`
+- Blocked URL: `https://www.telekom.com/en/investor-relations` is not on the allowlist, so I fetched nothing from it. The US revenue share is therefore `[data unavailable]` in the note.
+- Data conflict: the fact sheet's fair value (base 120.67 EUR against a 25.91 EUR close) and its 23.64% FCF yield look overstated. FCF is 327.4% of net income, so I flagged them in the note as not decision-grade.
+[21:44:33] $ bin/py scripts/check_docs.py note research/ETR-DTE/2026-11-08.md
+[21:44:33] OK research/ETR-DTE/2026-11-08.md type=CORE 1=64 2=94 3=135 4=31 5=55 6=46 total=425
+[21:44:33] $ claude -p Ticker ETR:DTE, date 2026-11-08. Research: research/ETR-DTE/factsheet-2026-11-08.md, research/ETR-DTE/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/ETR-DTE/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:44:36] == screened out GGG: price above base fair value (-5.7%; floor +0%) (no AI research)
+[21:44:50] research/KRX-064400/2026-11-08-evaluation.md
+OK research/KRX-064400/2026-11-08-evaluation.md Bear case=142 Bull case=131 decision=AVOID
+[21:44:50] $ bin/py scripts/check_docs.py eval research/KRX-064400/2026-11-08-evaluation.md
+[21:44:51] OK research/KRX-064400/2026-11-08-evaluation.md Bear case=142 Bull case=131 decision=AVOID
+[21:44:51] $ bin/py scripts/valuation.py KRX:064400 --asof 2026-11-08 --eval research/KRX-064400/2026-11-08-evaluation.md
+[21:44:51] {"out": "research/KRX-064400/2026-11-08-valuation.md", "used": ["dcf"], "fair_value": {"bear": 25975.74, "base": 91859.42, "bull": 143371.74}, "price": 74100}
+[21:44:51] research/ETR-DTE/2026-11-08-macro.md
+OK research/ETR-DTE/2026-11-08-macro.md macro_weight=context words=136
+[21:44:51] $ bin/py scripts/check_docs.py macro research/ETR-DTE/2026-11-08-macro.md
+[21:44:51] OK research/ETR-DTE/2026-11-08-macro.md macro_weight=context words=136
+[21:44:51] $ claude -p Evaluate ETR:DTE for 2026-11-08: fact sheet research/ETR-DTE/factsheet-2026-11-08.md, note research/ETR-DTE/2026-11-08.md, state portfolio/state.json, macro overlay research/ETR-DTE/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:44:52] == done KRX:064400
+[21:45:01] == initiate JSE:MTN
+[21:45:01] $ bin/py scripts/sec_delta.py JSE:MTN --asof 2026-11-08
+[21:45:01] SKIP JSE:MTN: not a US listing (SEC filers only)
+[21:45:01] $ claude -p Ticker JSE:MTN, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:45:30] == initiate BIT:REY
+[21:45:30] $ bin/py scripts/sec_delta.py BIT:REY --asof 2026-11-08
+[21:45:30] SKIP BIT:REY: not a US listing (SEC filers only)
+[21:45:30] $ claude -p Ticker BIT:REY, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:45:36] research/ETR-DTE/2026-11-08-evaluation.md
+OK research/ETR-DTE/2026-11-08-evaluation.md Bear case=139 Bull case=123 decision=AVOID
+[21:45:36] $ bin/py scripts/check_docs.py eval research/ETR-DTE/2026-11-08-evaluation.md
+[21:45:36] OK research/ETR-DTE/2026-11-08-evaluation.md Bear case=139 Bull case=123 decision=AVOID
+[21:45:36] $ bin/py scripts/valuation.py ETR:DTE --asof 2026-11-08 --eval research/ETR-DTE/2026-11-08-evaluation.md
+[21:45:36] {"out": "research/ETR-DTE/2026-11-08-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 72.82, "base": 120.67, "bull": 126.92}, "price": 25.91}
+[21:45:37] == done ETR:DTE

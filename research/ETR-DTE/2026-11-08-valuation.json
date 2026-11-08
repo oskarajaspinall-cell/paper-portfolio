@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Telecom Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 91.14984678798498,
+    "base": 162.14459492437157,
+    "bull": 170.27515484876747
+   },
+   "implied_growth": -0.241648174598672,
+   "discount_rate": 0.062374990028873076,
+   "cost_of_equity": 0.09340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.010467078198597862,
+     "base": 0.022431043862379752,
+     "bull": 0.025658331846714733
+    },
+    "cash_flow_margin": {
+     "bear": 0.20106479360035678,
+     "base": 0.276369660367514,
+     "bull": 0.28404684708645644
+    },
+    "cagr_3y": 0.014065843602804273,
+    "cagr_5y": 0.025658331846714733,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 36.16764528341026,
+    "base": 37.723574132655706,
+    "bull": 40.19850189285899
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.109,
+     "base": 7.28,
+     "bull": 7.552
+    },
+    "ttm_ebitda": 43864000000
+   }
+  }
+ ],
+ "price": 25.91,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 72.82244628646008,
+  "base": 120.67092132713294,
+  "bull": 126.91627053013131
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 1.8105922920285633,
+  "base": 3.6573107420738307,
+  "bull": 3.8983508502559365
+ },
+ "implied_growth": -0.241648174598672,
+ "ticker": "ETR:DTE",
+ "asof": "2026-11-08",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/etr/DTE/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/etr/DTE/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/etr/DTE/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/etr/DTE/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/etr/DTE/statistics/"
+ }
+}

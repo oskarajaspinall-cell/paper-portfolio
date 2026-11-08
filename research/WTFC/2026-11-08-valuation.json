@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 123.22335862843836,
+    "base": 138.25240321001314,
+    "bull": 142.33911878096347
+   },
+   "cost_of_equity": 0.09371,
+   "assumptions": {
+    "roe": {
+     "bear": 0.10822,
+     "base": 0.11837,
+     "bull": 0.12113
+    },
+    "justified_pb": {
+     "bear": 1.2111774123126182,
+     "base": 1.358899723475477,
+     "bull": 1.3990685489739485
+    },
+    "bvps": 101.738488
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 168.53308534795895,
+    "base": 241.04032302358863,
+    "bull": 295.65642331378416
+   },
+   "implied_growth": -0.04374685154516024,
+   "discount_rate": 0.09371,
+   "cost_of_equity": 0.09371,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.03445809064510137,
+     "base": 0.06815788587100823,
+     "bull": 0.11871536219383017
+    },
+    "cash_flow_margin": {
+     "bear": 0.2634009873772347,
+     "base": 0.3280609782706808,
+     "bull": 0.3280609782706808
+    },
+    "cagr_3y": 0.11871536219383017,
+    "cagr_5y": 0.10391618129020275,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 28.3699656968619,
+    "base": 32.81909474603406,
+    "bull": 38.783852835973434
+   },
+   "cost_of_equity": 0.09371,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 2.2
+   }
+  }
+ ],
+ "price": 151.27,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 138.32660086827855,
+  "base": 172.51504314787164,
+  "bull": 193.44488695857035
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.08556487824235781,
+  "base": 0.1404445240158103,
+  "bull": 0.27880536100066333
+ },
+ "implied_growth": -0.04374685154516024,
+ "ticker": "WTFC",
+ "asof": "2026-11-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/wtfc/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/wtfc/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/wtfc/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/wtfc/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/wtfc/statistics/"
+ }
+}

@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Telecom Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 18.03357679236242,
+    "base": 49.05942220196492,
+    "bull": 51.003153039568524
+   },
+   "implied_growth": -0.09757166656353941,
+   "discount_rate": 0.08588577956402604,
+   "cost_of_equity": 0.1034,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.0013071390706660795,
+     "base": 0.03001939665904151,
+     "bull": 0.037691864777498196
+    },
+    "cash_flow_margin": {
+     "bear": 0.11600659799524286,
+     "base": 0.21293561487588347,
+     "bull": 0.21293561487588347
+    },
+    "cagr_3y": 0.037691864777498196,
+    "cagr_5y": 0.03238572185866784,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 20.079537641232147,
+    "base": 21.885352930277033,
+    "bull": 22.307070273227637
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 5.615,
+     "base": 5.949,
+     "bull": 6.027
+    },
+    "ttm_ebitda": 324744375000
+   }
+  }
+ ],
+ "price": 23.95,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "MXN",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 18.71556374198566,
+  "base": 40.00139911140229,
+  "bull": 41.4377921174549
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.21855683749537946,
+  "base": 0.6702045557996783,
+  "bull": 0.7301792115847556
+ },
+ "implied_growth": -0.09757166656353941,
+ "ticker": "BMV:AMX.B",
+ "asof": "2026-11-08",
+ "quote_currency": "MXN",
+ "financials_currency": "MXN",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bmv/AMX.B/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bmv/AMX.B/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bmv/AMX.B/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bmv/AMX.B/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bmv/AMX.B/statistics/"
+ }
+}
