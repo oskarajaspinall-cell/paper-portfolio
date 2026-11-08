@@ -98,6 +98,32 @@ def parse_csv(text: str, url: str) -> list[dict]:
     return rows
 
 
+BCB = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.{code}/dados"
+
+
+def bcb_series(fetcher: "FredFetcher", code: str, asof: str) -> dict:
+    """Owner request 2026-11-08: Banco Central do Brasil's official SGS time-series API (JSON; dates dd/mm/yyyy). FRED's
+    Brazil rate is monthly and lags a Copom decision by weeks. The Selic target series is filled forward to the next
+    meeting, so rows after `asof` are dropped by summarise()."""
+    start = (dt.date.fromisoformat(asof) - dt.timedelta(days=400)).strftime("%d/%m/%Y")
+    url = BCB.format(code=code) + f"?formato=json&dataInicial={start}"
+    cached = fetcher.dir / f"bcb__{code}.json"
+    if cached.exists():
+        text = cached.read_text()
+    else:
+        text = fetcher._get(url)
+        cached.parent.mkdir(parents=True, exist_ok=True)
+        cached.write_text(text)
+    try:
+        rows = [{"date": dt.datetime.strptime(r["data"], "%d/%m/%Y").date().isoformat(), "value": float(r["valor"])}
+                for r in json.loads(text)]
+    except (ValueError, KeyError, TypeError) as e:
+        raise DataError(url, "json", f"unexpected BCB format: {e}") from e
+    if not rows:
+        raise DataError(url, "data", "no rows")
+    return {"id": f"BCB{code}", "source_url": url, "rows": sorted(rows, key=lambda r: r["date"])}
+
+
 def value_on_or_before(rows: list[dict], day: str) -> dict | None:
     prior = [r for r in rows if r["date"] <= day]
     return prior[-1] if prior else None
@@ -132,6 +158,15 @@ def snapshot(fetcher, cfg: dict, asof: str) -> dict:
             out["series"].append(summarise(s["id"], s["label"], got["rows"], got["source_url"], asof))
         except DataError as e:
             out["series"].append({"id": s["id"], "label": s["label"], "value": "[data unavailable]", "error": str(e)})
+    for s in cfg["macro"].get("bcb_series", []):
+        try:
+            got = bcb_series(fetcher, str(s["code"]), asof)
+            out["series"].append(summarise(got["id"], s["label"], got["rows"], got["source_url"], asof))
+        except DataError as e:
+            out["series"].append({"id": f"BCB{s['code']}", "label": s["label"], "value": "[data unavailable]",
+                                  "error": str(e)})
+    if cfg["macro"].get("bcb_series"):
+        out["source"] += "; Banco Central do Brasil SGS API, official data"
     return out
 
 

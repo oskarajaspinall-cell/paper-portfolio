@@ -443,8 +443,7 @@ def check_macro(md: str, cfg: dict) -> tuple[list[str], dict]:
         if not isinstance(cr, dict) or not all(str(cr.get(k, "")).strip() for k in ("country", "exposure", "assessment")):
             errs.append("country_risk needs country, exposure and assessment (plus currency, policy_rate, politics "
                         "where they apply)")
-    official = {d_.lower() for d_ in cfg.get("macro", {}).get("official_sources", [])
-                + cfg.get("macro", {}).get("event_sources", [])}
+    official = {d_.lower() for d_ in cfg.get("macro", {}).get("official_sources", [])}
     for u in re.findall(r"https?://[^\s)\]>|\"]+", md):
         h = (urlparse(u).hostname or "").lower()
         if not any(h == x or h.endswith("." + x) for x in official | allowed_hosts()):

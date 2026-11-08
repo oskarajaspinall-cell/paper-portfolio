@@ -704,3 +704,19 @@ def test_check_macro_country_risk(real_cfg):
     md = macro_md(country_risk=ok).replace("2026-10-05).", "2026-10-05; https://www.reuters.com/world/x).", 1)
     assert check_macro(md, real_cfg)[0] == []
     assert any("allowlist" in e for e in check_macro(md.replace("reuters.com", "example.com"), real_cfg)[0])
+
+
+def test_bcb_series_parses_and_drops_forward_filled_dates(tmp_path):
+    import macro_data as M
+
+    class F:
+        dir = tmp_path
+
+        def _get(self, url):
+            assert "bcdata.sgs.432" in url
+            return '[{"data":"03/11/2026","valor":"14.00"},{"data":"05/11/2026","valor":"13.75"},{"data":"05/12/2026","valor":"13.75"}]'
+
+    got = M.bcb_series(F(), "432", "2026-11-08")
+    assert got["id"] == "BCB432" and got["rows"][0] == {"date": "2026-11-03", "value": 14.0}
+    s = M.summarise(got["id"], "Selic", got["rows"], got["source_url"], "2026-11-08")
+    assert s["value"] == 13.75 and s["date"] == "2026-11-05"
