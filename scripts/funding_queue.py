@@ -111,9 +111,37 @@ def drop_ordered(state: dict, tickers: set[str], today: str, port_dir: Path = PO
     return True
 
 
+def expected_value(ticker: str, on_or_before: str | None = None) -> tuple[float | None, str | None]:
+    """Owner-approved 2026-11-08: the analyst's own probability-weighted 12-month value from the latest evaluation's
+    Decision block (bear/base/bull `target_price_12m` x `probability`, quote currency). It weighs the research,
+    where the mechanical base fair value can be fragile (e.g. a DCF on net income when float distorts cash flow).
+    (None, None) when no evaluation has scenarios."""
+    from check_docs import decision_block
+    d = ROOT / "research" / Ticker(ticker).slug
+    for p in sorted((p for p in d.glob("20??-??-??-evaluation.md")
+                     if on_or_before is None or p.name[:10] <= on_or_before), reverse=True):
+        blk, _ = decision_block(p.read_text())
+        sc = (blk or {}).get("scenarios") or {}
+        pts = [(float(v["probability"]), float(v["target_price_12m"])) for v in sc.values()
+               if isinstance(v, dict) and v.get("probability") is not None and v.get("target_price_12m")]
+        w = sum(pr for pr, _ in pts)
+        if pts and w > 0:
+            return sum(pr * t for pr, t in pts) / w, str(p.relative_to(ROOT))
+    return None, None
+
+
+def value_and_basis(ticker: str, today: str | None, fair_value_base: float | None) -> tuple[float | None, str]:
+    ev, _ = expected_value(ticker, today)
+    if ev:
+        return ev, "expected 12-month value"
+    return (fair_value_base, "base fair value") if fair_value_base else (None, "n/a")
+
+
 def _upside(e: dict) -> float | None:
-    fv, c = e.get("fair_value_base"), e.get("last_close") or e.get("decision_price")
-    return (fv / c - 1) * 100 if fv and c else None
+    """Upside to the expected 12-month value (else the base fair value) at the latest close."""
+    v, _ = value_and_basis(e["ticker"], None, e.get("fair_value_base"))
+    c = e.get("last_close") or e.get("decision_price")
+    return (v / c - 1) * 100 if v and c else None
 
 
 def _rank(q: list[dict]) -> list[dict]:
@@ -391,7 +419,8 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
 
 # ------------------------------------------------------------------ weekly swap brief
 def swap_candidates(state: dict, mkt, cfg: dict, today: str) -> list[dict]:
-    """CORE holdings, weakest first: lowest conviction, then least base-fair-value upside at the latest close."""
+    """CORE holdings, weakest first: lowest conviction, then least upside to the expected 12-month value (else the
+    base fair value) at the latest close."""
     from portfolio import totals
     pv = totals(state)["total"]
     rows = []
@@ -404,13 +433,15 @@ def swap_candidates(state: dict, mkt, cfg: dict, today: str) -> list[dict]:
             continue
         val, vpath = latest_valuation(t, today)
         fv = ((val or {}).get("fair_value") or {}).get("base")
+        v, basis = value_and_basis(t, today, fv)
         d = ROOT / "research" / Ticker(t).slug
         evs = sorted(p for p in d.glob("20??-??-??-evaluation.md") if p.name[:10] <= today)
         rows.append({"ticker": t, "conviction": h.get("conviction"), "weight_pct": h["market_value_usd"] / pv * 100,
                      "close": c, "currency": h["currency"], "entry_date": h.get("entry_date"),
                      "entry_price": h.get("entry_price"),
                      "return_pct": (c / h["entry_price"] - 1) * 100 if h.get("entry_price") else None,
-                     "fair_value_base": fv, "upside_pct": (fv / c - 1) * 100 if fv else None,
+                     "fair_value_base": fv, "value": v, "value_basis": basis,
+                     "upside_pct": (v / c - 1) * 100 if v else None,
                      "evaluation": str(evs[-1].relative_to(ROOT)) if evs else None, "valuation": vpath})
     return sorted(rows, key=lambda r: (int(r["conviction"] or 0), r["upside_pct"] if r["upside_pct"] is not None
                                        else float("inf")))
@@ -453,20 +484,21 @@ def brief(state: dict, mkt, cfg: dict, today: str, watch: dict | None = None) ->
     f = lambda x, n=1: "n/a" if x is None else f"{x:,.{n}f}"  # noqa: E731
     L = [f"# Funding-queue swap brief — {today}", "",
          "The best idea waiting for cash (conviction-4+ CORE BUY rejected only by the cash reserve) against the "
-         "weakest CORE holdings. All figures are computed by scripts/funding_queue.py.", "",
+         "weakest CORE holdings. All figures are computed by scripts/funding_queue.py. Upside is to the expected 12-month "
+         "value (probability-weighted scenario targets of the latest evaluation), else to the base fair value.", "",
          "## Waiting idea", "",
-         "| Ticker | Conviction | Decided | Decision price | Latest close | Base fair value | Upside | Evaluation |",
-         "|---|---|---|---|---|---|---|---|",
+         "| Ticker | Conviction | Decided | Decision price | Latest close | Expected 12m value | Base fair value | Upside | Evaluation |",
+         "|---|---|---|---|---|---|---|---|---|",
          f"| {best['ticker']} | {best['request'].get('conviction')} | {best['added']} | {f(best['decision_price'], 2)} "
-         f"{best['currency']} | {f(best.get('last_close') or best['decision_price'], 2)} | {f(best.get('fair_value_base'), 2)} | "
+         f"{best['currency']} | {f(best.get('last_close') or best['decision_price'], 2)} | {f(expected_value(best['ticker'])[0], 2)} | {f(best.get('fair_value_base'), 2)} | "
          f"{f(_upside(best))}% | {str(evs[-1].relative_to(ROOT)) if evs else 'n/a'} |", "",
          f"Thesis: {best['request'].get('thesis', '')}", "",
          "## Weakest CORE holdings whose sale the rules would accept for this buy (lowest conviction, then least upside)", "",
-         "| Ticker | Conviction | Weight | Entry | Return since entry | Latest close | Base fair value | Upside | Latest evaluation |",
-         "|---|---|---|---|---|---|---|---|---|"]
+         "| Ticker | Conviction | Weight | Entry | Return since entry | Latest close | Expected 12m value | Base fair value | Upside | Latest evaluation |",
+         "|---|---|---|---|---|---|---|---|---|---|"]
     for c in cands:
         L.append(f"| {c['ticker']} | {c['conviction']} | {f(c['weight_pct'])}% | {c['entry_date']} at {f(c['entry_price'], 2)} | "
-                 f"{f(c['return_pct'])}% | {f(c['close'], 2)} {c['currency']} | {f(c['fair_value_base'], 2)} | "
+                 f"{f(c['return_pct'])}% | {f(c['close'], 2)} {c['currency']} | {f(c['value'] if c['value_basis'].startswith('expected') else None, 2)} | {f(c['fair_value_base'], 2)} | "
                  f"{f(c['upside_pct'])}% | {c['evaluation'] or 'n/a'} |")
     try:
         from risk import Correlator
@@ -503,8 +535,9 @@ def auto_swaps(state: dict, mkt, cfg: dict, watch: dict, today: str) -> list[dic
                 continue
             req = copy.deepcopy(idea["request"])
             why = (f"automatic downgrade swap: {c['ticker']} is conviction {c['conviction']} (below the buy bar {bar}) "
-                   f"with {c['upside_pct'] or 0:+.0f}% base-fair-value upside; {idea['ticker']} is conviction "
-                   f"{req.get('conviction')} with {u:+.0f}%")
+                   f"with {c['upside_pct'] or 0:+.0f}% upside to its {c['value_basis']}; {idea['ticker']} is conviction "
+                   f"{req.get('conviction')} with {u:+.0f}% to its "
+                   f"{value_and_basis(idea['ticker'], None, idea.get('fair_value_base'))[1]}")
             work = copy.deepcopy(state)
             eng = Engine(work, mkt, cfg, watch, today)
             eng.process([copy.deepcopy(o["request"]) for o in state.get("pending", [])])  # after waiting orders

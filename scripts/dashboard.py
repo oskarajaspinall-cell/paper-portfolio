@@ -249,7 +249,8 @@ def build_data(live: bool = True) -> dict:
         fq.append({"ticker": e["ticker"], "name": names.get(e["ticker"], ""), "stage": e.get("stage", "full"),
                    "conviction": e["request"].get("conviction"), "added": e["added"], "expires": e["expires"],
                    "decision_price": e["decision_price"], "close": c, "ccy": e.get("currency", ""),
-                   "upside": (fv / c - 1) * 100 if fv and c else None,
+                   "upside": (lambda v: (v / c - 1) * 100 if v and c else None)(
+                       __import__("funding_queue").value_and_basis(e["ticker"], None, fv)[0]),
                    "weight": h.get("market_value_usd", 0) / total * 100 if h and total else None,
                    "target": h.get("target_pct"), "ordered": e["ticker"] in {o["request"]["ticker"] for o in state.get("pending", [])},
                    "evaluation": next((str(p_.relative_to(ROOT)) for p_ in sorted((ROOT / "research" / Ticker(e["ticker"]).slug).glob("20??-??-??-evaluation.md"))[-1:]), "")})

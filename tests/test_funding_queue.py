@@ -22,6 +22,7 @@ def fair_values(monkeypatch):
     monkeypatch.setattr(FQ, "latest_valuation", lambda t, d: ({"fair_value": {"base": fv[t]}}, f"research/{t}/v.json")
                         if t in fv else (None, None))
     monkeypatch.setattr(FQ, "_latest_eval_date", lambda t, d: None)  # no research/ files read
+    monkeypatch.setattr(FQ, "expected_value", lambda t, d=None: (None, None))
 
 
 def state_file(tmp_path, cfg, holdings, cash):
@@ -324,3 +325,19 @@ def test_swapped_idea_stays_as_topup():
     s = {"funding_queue": [{"ticker": "X"}, {"ticker": "Y"}]}
     FQ.keep_as_topup(s, {"X"})
     assert [e.get("stage") for e in s["funding_queue"]] == ["topup", None]
+
+
+def test_expected_value_weights_the_scenarios(tmp_path, monkeypatch):
+    monkeypatch.undo()
+    d = tmp_path / "research" / "X"
+    d.mkdir(parents=True)
+    blk = {"scenarios": {"bull": {"probability": 0.25, "target_price_12m": 40},
+                         "base": {"probability": 0.5, "target_price_12m": 30},
+                         "bear": {"probability": 0.25, "target_price_12m": 20}}}
+    (d / "2026-10-25-evaluation.md").write_text("# E\n\n```json\n" + json.dumps(blk) + "\n```\n")
+    monkeypatch.setattr(FQ, "ROOT", tmp_path)
+    v, path = FQ.expected_value("X")
+    assert v == 30 and path.endswith("2026-10-25-evaluation.md")
+    assert FQ.expected_value("X", "2026-10-01") == (None, None)
+    assert FQ.value_and_basis("X", None, 99.0) == (30, "expected 12-month value")
+    assert FQ.value_and_basis("NONE", None, 99.0) == (99.0, "base fair value")
