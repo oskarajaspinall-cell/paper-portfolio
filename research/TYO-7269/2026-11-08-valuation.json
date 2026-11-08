@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Auto Manufacturers",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -165.30894108769698,
+    "base": 2308.3538678755626,
+    "bull": 5401.307216651048
+   },
+   "implied_growth": 0.06457630921973817,
+   "discount_rate": 0.08469184066265827,
+   "cost_of_equity": 0.09340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.035889880248875475,
+     "base": 0.0772901902882308,
+     "bull": 0.15238100065517224
+    },
+    "cash_flow_margin": {
+     "bear": -0.004829925484393476,
+     "base": 0.029772481304724756,
+     "bull": 0.05307470720551758
+    },
+    "cagr_3y": 0.10677976049775095,
+    "cagr_5y": 0.15238100065517224,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 2320.788195879781,
+    "base": 2392.8142218069665,
+    "bull": 2832.9732691397658
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.65,
+     "base": 4.803,
+     "bull": 5.738
+    },
+    "ttm_ebitda": 908326000000
+   }
+  }
+ ],
+ "price": 2196.5,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "JPY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 663.390104568129,
+  "base": 2336.5073191860306,
+  "bull": 4545.195900813954
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.69797855471517,
+  "base": 0.06374109682951534,
+  "bull": 1.0692901893075137
+ },
+ "implied_growth": 0.06457630921973817,
+ "ticker": "TYO:7269",
+ "asof": "2026-11-08",
+ "quote_currency": "JPY",
+ "financials_currency": "JPY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tyo/7269/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tyo/7269/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tyo/7269/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tyo/7269/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tyo/7269/statistics/"
+ }
+}

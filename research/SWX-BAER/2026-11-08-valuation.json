@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 35.85557148757953,
+    "base": 78.46736098758224,
+    "bull": 81.54019455402933
+   },
+   "implied_growth": -0.02553368218043761,
+   "discount_rate": 0.092772,
+   "cost_of_equity": 0.092772,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.021555222499865617,
+     "base": 0.008877643207874503,
+     "bull": 0.008877643207874503
+    },
+    "cash_flow_margin": {
+     "bear": 0.14014508411791943,
+     "base": 0.26989422872151625,
+     "bull": 0.2804634645791752
+    },
+    "cagr_3y": -0.008110444999731237,
+    "cagr_5y": -0.006378982168770753,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 63.491809004000004,
+    "base": 65.20585487000001,
+    "bull": 92.846924612
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.446,
+     "base": 11.755,
+     "bull": 16.738
+    },
+    "ttm_eps": 5.547074
+   }
+  }
+ ],
+ "price": 67.9,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "CHF",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 45.067650659719696,
+  "base": 74.04685894838816,
+  "bull": 85.30910457335288
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.33626434963593976,
+  "base": 0.0905281141147003,
+  "bull": 0.2563932926856094
+ },
+ "implied_growth": -0.02553368218043761,
+ "ticker": "SWX:BAER",
+ "asof": "2026-11-08",
+ "quote_currency": "CHF",
+ "financials_currency": "CHF",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/swx/BAER/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/swx/BAER/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/swx/BAER/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/swx/BAER/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/swx/BAER/statistics/"
+ }
+}

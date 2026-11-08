@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 24.199640832807564,
+    "base": 32.571932668769705,
+    "bull": 41.94227280757097
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "roe": {
+     "bear": 0.08489,
+     "base": 0.10561,
+     "bull": 0.1288
+    },
+    "justified_pb": {
+     "bear": 0.9446372239747631,
+     "base": 1.271451104100946,
+     "bull": 1.6372239747634068
+    },
+    "bvps": 25.61792
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 31.923555587075118,
+    "base": 63.6631524036048,
+    "bull": 103.84361697618048
+   },
+   "implied_growth": -0.0749133366302179,
+   "discount_rate": 0.0884,
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.04756775005948606,
+     "base": 0.09995174238011222,
+     "bull": 0.21967146940147675
+    },
+    "cash_flow_margin": {
+     "bear": 0.19562780269058297,
+     "base": 0.3145009416195857,
+     "bull": 0.31874328841755295
+    },
+    "cagr_3y": 0.21967146940147675,
+    "cagr_5y": 0.13013550011897212,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 20.465940054495906,
+    "base": 23.927444794952674,
+    "bull": 28.685393258426963
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 1.48
+   }
+  }
+ ],
+ "price": 30.48,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 26.774279084230084,
+  "base": 42.9356725803814,
+  "bull": 62.576054197107474
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.12157877020242502,
+  "base": 0.4086506752093635,
+  "bull": 1.0530201508237358
+ },
+ "implied_growth": -0.0749133366302179,
+ "ticker": "COLB",
+ "asof": "2026-11-08",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/colb/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/colb/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/colb/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/colb/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/colb/statistics/"
+ }
+}

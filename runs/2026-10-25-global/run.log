@@ -1086,3 +1086,179 @@ OK research/BIT-UCG/2026-11-08-macro.md macro_weight=secondary words=220
 [06:00:22] !! FAILED COLB: claude -p Evaluate COLB for 2026-11-08: fact sheet research/COLB/factsheet-2026-11-08.md, note research/COLB/2026-11-08.md, state portfolio/state.json, macro overlay research/COLB/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mod
 [06:00:50] == screened out SHA:601878: price above base fair value (-46.7%; floor +0%) (no AI research)
 [06:00:56] == screened out STO:AZA: price above base fair value (-49.3%; floor +0%) (no AI research)
+[06:01:00] == Research batch 02: 5 researched, 0 BUY, 5 AVOID -> reports/research/2026-11-08-batch-02.md; uploaded to GitHub
+[06:01:00] == pre-screen: 16 names skipped without AI research (reports/prescreen/)
+[06:01:00] == research loop stopped (repeated failures: usage limit?)
+[15:34:09] == research loop: 2751 names queued, best first: ['NSE:ITC', 'PRI', 'SHA:600600', 'CDE', 'ATH:HTO', 'KRX:323410', 'SHA:601555', 'TSX:AG', 'OSL:HAFNI', 'HKG:0700']
+[15:34:09] == screened out NSE:ITC: price above base fair value (-17.9%; floor +0%) (no AI research)
+[15:34:09] == screened out PRI: price above base fair value (-7.5%; floor +0%) (no AI research)
+[15:34:09] == screened out SHA:600600: price above base fair value (-10.9%; floor +0%) (no AI research)
+[15:34:09] == screened out CDE: price above base fair value (-66.9%; floor +0%) (no AI research)
+[15:34:09] == screened out ATH:HTO: price above base fair value (-4.3%; floor +0%) (no AI research)
+[15:34:09] == screened out KRX:323410: price above base fair value (-75.8%; floor +0%) (no AI research)
+[15:34:09] == screened out SHA:601555: price above base fair value (-16.5%; floor +0%) (no AI research)
+[15:34:09] == screened out TSX:AG: price above base fair value (-37.4%; floor +0%) (no AI research)
+[15:34:09] == screened out OSL:HAFNI: price above base fair value (-40.8%; floor +0%) (no AI research)
+[15:34:09] == screened out HKG:0700: price above base fair value (-19.7%; floor +0%) (no AI research)
+[15:34:09] == screened out CACC: price above base fair value (-32.4%; floor +0%) (no AI research)
+[15:34:09] == screened out SHA:600660: price above base fair value (-41.5%; floor +0%) (no AI research)
+[15:34:09] == screened out NSE:IOC: price above base fair value (-11.2%; floor +0%) (no AI research)
+[15:34:10] == initiate COLB
+[15:34:10] $ bin/py scripts/sec_delta.py COLB --asof 2026-11-08
+[15:34:10] == initiate TYO:7269
+[15:34:10] $ bin/py scripts/sec_delta.py TYO:7269 --asof 2026-11-08
+[15:34:10] SKIP TYO:7269: not a US listing (SEC filers only)
+[15:34:10] $ claude -p Ticker TYO:7269, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:34:10] == screened out TLV:MZTF: price above base fair value (-99.4%; floor +0%) (no AI research)
+[15:34:10] == initiate BIT:UCG
+[15:34:10] $ bin/py scripts/sec_delta.py BIT:UCG --asof 2026-11-08
+[15:34:10] SKIP BIT:UCG: not a US listing (SEC filers only)
+[15:34:10] $ claude -p Ticker BIT:UCG, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:34:11] OK research/COLB/sec-delta-2026-11-08.md
+[15:34:11] $ claude -p Ticker COLB, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. SEC filing delta: research/COLB/sec-delta-2026-11-08.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:34:39] Note: research/BIT-UCG/2026-11-08.md
+Fact sheet: research/BIT-UCG/factsheet-2026-11-08.md
+Check: OK research/BIT-UCG/2026-11-08.md type=CORE 1=59 2=106 3=123 4=41 5=43 6=36 total=408
+Data conflicts: none. Blocked URLs: none (no WebFetch calls made).
+Data gaps: the fact sheet has no country or segment revenue mix, ROIC, operating margin or leverage figures.
+[15:34:39] $ bin/py scripts/check_docs.py note research/BIT-UCG/2026-11-08.md
+[15:34:39] OK research/BIT-UCG/2026-11-08.md type=CORE 1=59 2=106 3=123 4=41 5=43 6=36 total=408
+[15:34:39] $ claude -p Ticker BIT:UCG, date 2026-11-08. Research: research/BIT-UCG/factsheet-2026-11-08.md, research/BIT-UCG/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/BIT-UCG/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:34:41] - Note: `research/COLB/2026-11-08.md`
+- Fact sheet: `research/COLB/factsheet-2026-11-08.md`
+- check_docs: `OK research/COLB/2026-11-08.md type=CORE 1=60 2=112 3=146 4=43 5=62 6=73 total=496`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls and used only the fact sheet and the SEC delta.
+[15:34:41] $ bin/py scripts/check_docs.py note research/COLB/2026-11-08.md
+[15:34:42] OK research/COLB/2026-11-08.md type=CORE 1=60 2=112 3=146 4=43 5=62 6=73 total=496
+[15:34:42] $ claude -p Ticker COLB, date 2026-11-08. Research: research/COLB/factsheet-2026-11-08.md, research/COLB/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/COLB/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:34:58] - Note: `research/TYO-7269/2026-11-08.md`
+- Fact sheet: `research/TYO-7269/factsheet-2026-11-08.md`
+- Check: `OK research/TYO-7269/2026-11-08.md type=CORE 1=56 2=100 3=111 4=37 5=37 6=38 total=379`
+- Peers used: TYO:7203, TYO:7267, TYO:7270, TYO:7261.
+- Blocked URL: `https://www.suzuki.co.jp/corporate/ir/` is not on the allowlist (logged by the hook). I made no other fetches, so India's share of revenue and the dividend and buyback policy are marked [data unavailable].
+- Data conflicts: none.
+- Unfetched headline URLs: the note cites the CNBC and Reuters headline URLs as listed in the fact sheet. I did not fetch them.
+[15:34:58] $ bin/py scripts/check_docs.py note research/TYO-7269/2026-11-08.md
+[15:34:58] OK research/TYO-7269/2026-11-08.md type=CORE 1=56 2=100 3=111 4=37 5=37 6=38 total=379
+[15:34:58] $ claude -p Ticker TYO:7269, date 2026-11-08. Research: research/TYO-7269/factsheet-2026-11-08.md, research/TYO-7269/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/TYO-7269/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:35:17] research/COLB/2026-11-08-macro.md
+OK research/COLB/2026-11-08-macro.md macro_weight=secondary words=194
+[15:35:17] $ bin/py scripts/check_docs.py macro research/COLB/2026-11-08-macro.md
+[15:35:17] OK research/COLB/2026-11-08-macro.md macro_weight=secondary words=194
+[15:35:17] $ claude -p Evaluate COLB for 2026-11-08: fact sheet research/COLB/factsheet-2026-11-08.md, note research/COLB/2026-11-08.md, state portfolio/state.json, macro overlay research/COLB/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:35:21] research/BIT-UCG/2026-11-08-macro.md
+OK research/BIT-UCG/2026-11-08-macro.md macro_weight=secondary words=203
+[15:35:21] $ bin/py scripts/check_docs.py macro research/BIT-UCG/2026-11-08-macro.md
+[15:35:21] OK research/BIT-UCG/2026-11-08-macro.md macro_weight=secondary words=203
+[15:35:21] $ claude -p Evaluate BIT:UCG for 2026-11-08: fact sheet research/BIT-UCG/factsheet-2026-11-08.md, note research/BIT-UCG/2026-11-08.md, state portfolio/state.json, macro overlay research/BIT-UCG/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:35:23] research/TYO-7269/2026-11-08-macro.md
+OK research/TYO-7269/2026-11-08-macro.md macro_weight=context words=121
+[15:35:23] $ bin/py scripts/check_docs.py macro research/TYO-7269/2026-11-08-macro.md
+[15:35:23] OK research/TYO-7269/2026-11-08-macro.md macro_weight=context words=121
+[15:35:23] $ claude -p Evaluate TYO:7269 for 2026-11-08: fact sheet research/TYO-7269/factsheet-2026-11-08.md, note research/TYO-7269/2026-11-08.md, state portfolio/state.json, macro overlay research/TYO-7269/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:36:07] research/TYO-7269/2026-11-08-evaluation.md
+OK research/TYO-7269/2026-11-08-evaluation.md Bear case=147 Bull case=112 decision=AVOID
+[15:36:07] $ bin/py scripts/check_docs.py eval research/TYO-7269/2026-11-08-evaluation.md
+[15:36:07] OK research/TYO-7269/2026-11-08-evaluation.md Bear case=147 Bull case=112 decision=AVOID
+[15:36:07] $ bin/py scripts/valuation.py TYO:7269 --asof 2026-11-08 --eval research/TYO-7269/2026-11-08-evaluation.md
+[15:36:07] {"out": "research/TYO-7269/2026-11-08-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 663.39, "base": 2336.51, "bull": 4545.2}, "price": 2196.5}
+[15:36:08] == done TYO:7269
+[15:36:08] == screened out SHA:601878: price above base fair value (-46.7%; floor +0%) (no AI research)
+[15:36:08] == screened out STO:AZA: price above base fair value (-49.3%; floor +0%) (no AI research)
+[15:36:23] research/BIT-UCG/2026-11-08-evaluation.md
+OK research/BIT-UCG/2026-11-08-evaluation.md Bear case=142 Bull case=121 decision=AVOID
+[15:36:23] $ bin/py scripts/check_docs.py eval research/BIT-UCG/2026-11-08-evaluation.md
+[15:36:23] OK research/BIT-UCG/2026-11-08-evaluation.md Bear case=142 Bull case=121 decision=AVOID
+[15:36:23] $ bin/py scripts/valuation.py BIT:UCG --asof 2026-11-08 --eval research/BIT-UCG/2026-11-08-evaluation.md
+[15:36:23] {"out": "research/BIT-UCG/2026-11-08-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 14.32, "base": 84.89, "bull": 98.69}, "price": 76.8}
+[15:36:24] == done BIT:UCG
+[15:36:25] research/COLB/2026-11-08-evaluation.md
+OK research/COLB/2026-11-08-evaluation.md Bear case=143 Bull case=125 decision=AVOID
+[15:36:25] $ bin/py scripts/check_docs.py eval research/COLB/2026-11-08-evaluation.md
+[15:36:25] OK research/COLB/2026-11-08-evaluation.md Bear case=143 Bull case=125 decision=AVOID
+[15:36:25] $ bin/py scripts/valuation.py COLB --asof 2026-11-08 --eval research/COLB/2026-11-08-evaluation.md
+[15:36:25] {"out": "research/COLB/2026-11-08-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 26.77, "base": 42.94, "bull": 62.58}, "price": 30.48}
+[15:36:26] == done COLB
+[15:36:32] == initiate BVMF:PETR4
+[15:36:32] $ bin/py scripts/sec_delta.py BVMF:PETR4 --asof 2026-11-08
+[15:36:33] SKIP BVMF:PETR4: not a US listing (SEC filers only)
+[15:36:33] $ claude -p Ticker BVMF:PETR4, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:30] == initiate TLV:NICE
+[15:37:30] $ bin/py scripts/sec_delta.py TLV:NICE --asof 2026-11-08
+[15:37:30] SKIP TLV:NICE: not a US listing (SEC filers only)
+[15:37:30] $ claude -p Ticker TLV:NICE, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:33] == screened out OSL:WAWI: price above base fair value (-75.0%; floor +0%) (no AI research)
+[15:38:28] == screened out SHA:600233: price above base fair value (-22.8%; floor +0%) (no AI research)
+[15:38:40] Note: research/BVMF-PETR4/2026-11-08.md
+Fact sheet: research/BVMF-PETR4/factsheet-2026-11-08.md
+check_docs: OK research/BVMF-PETR4/2026-11-08.md type=CORE 1=73 2=135 3=116 4=31 5=61 6=94 total=510
+
+Data conflicts: none.
+Blocked URLs: none. I made no WebFetch calls. The watchlist and `ir_domains.txt` list no Petrobras domain. As a result, I have no `[company-reported]` revenue split by country. The note says this in section 1.
+
+Peers: XOM, CVX, LON:SHEL, LON:BP, EPA:TTE.
+[15:38:40] $ bin/py scripts/check_docs.py note research/BVMF-PETR4/2026-11-08.md
+[15:38:40] OK research/BVMF-PETR4/2026-11-08.md type=CORE 1=73 2=135 3=116 4=31 5=61 6=94 total=510
+[15:38:40] $ claude -p Ticker BVMF:PETR4, date 2026-11-08. Research: research/BVMF-PETR4/factsheet-2026-11-08.md, research/BVMF-PETR4/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/BVMF-PETR4/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:38:52] == initiate SWX:BAER
+[15:38:52] $ bin/py scripts/sec_delta.py SWX:BAER --asof 2026-11-08
+[15:38:52] SKIP SWX:BAER: not a US listing (SEC filers only)
+[15:38:52] $ claude -p Ticker SWX:BAER, note type CORE, date 2026-11-08. New initiation from the global core screen. Decide BUY or AVOID. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:39:12] Note: research/TLV-NICE/2026-11-08.md
+Fact sheet: research/TLV-NICE/factsheet-2026-11-08.md
+Check: OK research/TLV-NICE/2026-11-08.md type=CORE 1=76 2=124 3=148 4=32 5=50 6=46 total=476
+
+Data conflicts and blocked URLs:
+- Blocked: https://www.nice.com/press-releases, because it isn't on the allowlist. Revenue by country or region is therefore [data unavailable], and the note says so.
+- No data conflicts.
+[15:39:12] $ bin/py scripts/check_docs.py note research/TLV-NICE/2026-11-08.md
+[15:39:12] OK research/TLV-NICE/2026-11-08.md type=CORE 1=76 2=124 3=148 4=32 5=50 6=46 total=476
+[15:39:12] $ claude -p Ticker TLV:NICE, date 2026-11-08. Research: research/TLV-NICE/factsheet-2026-11-08.md, research/TLV-NICE/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/TLV-NICE/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:39:27] research/BVMF-PETR4/2026-11-08-macro.md
+OK research/BVMF-PETR4/2026-11-08-macro.md macro_weight=secondary words=249
+[15:39:27] $ bin/py scripts/check_docs.py macro research/BVMF-PETR4/2026-11-08-macro.md
+[15:39:27] OK research/BVMF-PETR4/2026-11-08-macro.md macro_weight=secondary words=249
+[15:39:27] $ claude -p Evaluate BVMF:PETR4 for 2026-11-08: fact sheet research/BVMF-PETR4/factsheet-2026-11-08.md, note research/BVMF-PETR4/2026-11-08.md, state portfolio/state.json, macro overlay research/BVMF-PETR4/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:39:31] research/TLV-NICE/2026-11-08-macro.md
+OK research/TLV-NICE/2026-11-08-macro.md macro_weight=context words=131
+[15:39:31] $ bin/py scripts/check_docs.py macro research/TLV-NICE/2026-11-08-macro.md
+[15:39:31] OK research/TLV-NICE/2026-11-08-macro.md macro_weight=context words=131
+[15:39:31] $ claude -p Evaluate TLV:NICE for 2026-11-08: fact sheet research/TLV-NICE/factsheet-2026-11-08.md, note research/TLV-NICE/2026-11-08.md, state portfolio/state.json, macro overlay research/TLV-NICE/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:39:38] Note: research/SWX-BAER/2026-11-08.md
+Fact sheet: research/SWX-BAER/factsheet-2026-11-08.md
+Check: OK research/SWX-BAER/2026-11-08.md type=CORE 1=50 2=125 3=113 4=48 5=57 6=43 total=436
+Data conflicts: none.
+Blocked URLs: https://www.reuters.com/business/finance/julius-baer-seriously-breached-risk-money-laundering-rules-swiss-regulator-says-2026-09-29/ (WebFetch refused it). The note cites that URL only as a headline link from the fact sheet.
+Data gaps: the fact sheet has no ROIC, ROCE, operating margin, EV/EBITDA or short-interest figures for this stock. Regional revenue mix is also unavailable, because I didn't fetch a primary source for it.
+[15:39:38] $ bin/py scripts/check_docs.py note research/SWX-BAER/2026-11-08.md
+[15:39:38] OK research/SWX-BAER/2026-11-08.md type=CORE 1=50 2=125 3=113 4=48 5=57 6=43 total=436
+[15:39:38] $ claude -p Ticker SWX:BAER, date 2026-11-08. Research: research/SWX-BAER/factsheet-2026-11-08.md, research/SWX-BAER/2026-11-08.md. Macro snapshot: reports/macro/2026-11-08.md. Write research/SWX-BAER/2026-11-08-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:40:12] research/SWX-BAER/2026-11-08-macro.md
+OK research/SWX-BAER/2026-11-08-macro.md macro_weight=secondary words=186
+[15:40:12] $ bin/py scripts/check_docs.py macro research/SWX-BAER/2026-11-08-macro.md
+[15:40:12] OK research/SWX-BAER/2026-11-08-macro.md macro_weight=secondary words=186
+[15:40:12] $ claude -p Evaluate SWX:BAER for 2026-11-08: fact sheet research/SWX-BAER/factsheet-2026-11-08.md, note research/SWX-BAER/2026-11-08.md, state portfolio/state.json, macro overlay research/SWX-BAER/2026-11-08-macro.md. New initiation from the global core screen. Decide BUY or AVOID. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:40:14] I recommend AVOID on BVMF:PETR4 at conviction 3; the evaluation file passes the checker.
+
+research/BVMF-PETR4/2026-11-08-evaluation.md
+OK research/BVMF-PETR4/2026-11-08-evaluation.md Bear case=148 Bull case=140 decision=AVOID
+[15:40:14] $ bin/py scripts/check_docs.py eval research/BVMF-PETR4/2026-11-08-evaluation.md
+[15:40:14] OK research/BVMF-PETR4/2026-11-08-evaluation.md Bear case=148 Bull case=140 decision=AVOID
+[15:40:14] $ bin/py scripts/valuation.py BVMF:PETR4 --asof 2026-11-08 --eval research/BVMF-PETR4/2026-11-08-evaluation.md
+[15:40:14] {"out": "research/BVMF-PETR4/2026-11-08-valuation.md", "used": ["dcf"], "fair_value": {"bear": 61.44, "base": 88.94, "bull": 250.33}, "price": 45.3}
+[15:40:15] research/TLV-NICE/2026-11-08-evaluation.md
+OK research/TLV-NICE/2026-11-08-evaluation.md Bear case=143 Bull case=118 decision=AVOID
+[15:40:15] $ bin/py scripts/check_docs.py eval research/TLV-NICE/2026-11-08-evaluation.md
+[15:40:15] OK research/TLV-NICE/2026-11-08-evaluation.md Bear case=143 Bull case=118 decision=AVOID
+[15:40:15] $ bin/py scripts/valuation.py TLV:NICE --asof 2026-11-08 --eval research/TLV-NICE/2026-11-08-evaluation.md
+[15:40:15] {"out": "research/TLV-NICE/2026-11-08-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 59072.04, "base": 82023.6, "bull": 144666.23}, "price": 31520}
+[15:40:16] == done BVMF:PETR4
+[15:40:16] == done TLV:NICE
+[15:40:47] research/SWX-BAER/2026-11-08-evaluation.md
+OK research/SWX-BAER/2026-11-08-evaluation.md Bear case=144 Bull case=102 decision=AVOID
+[15:40:47] $ bin/py scripts/check_docs.py eval research/SWX-BAER/2026-11-08-evaluation.md
+[15:40:47] OK research/SWX-BAER/2026-11-08-evaluation.md Bear case=144 Bull case=102 decision=AVOID
+[15:40:47] $ bin/py scripts/valuation.py SWX:BAER --asof 2026-11-08 --eval research/SWX-BAER/2026-11-08-evaluation.md
+[15:40:47] {"out": "research/SWX-BAER/2026-11-08-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 45.07, "base": 74.05, "bull": 85.31}, "price": 67.9}
+[15:40:48] == done SWX:BAER
