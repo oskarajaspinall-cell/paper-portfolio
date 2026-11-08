@@ -285,6 +285,8 @@ sp500 = true                          # S&P 500 (from stockanalysis.com)
 ftse100 = true                        # universe/ftse100.txt
 allworld_size = 3800                  # largest N primary-listed stocks worldwide; 0 = none
 custom_file = "universe/custom.txt"   # your own tickers, one per line (optional)
+excluded_countries = ["Russia"]       # owner rule 2026-11-08: sanctioned / untradeable markets are dropped
+excluded_exchanges = ["MOEX"]          # ...from the universe entirely (not investable, not screened, not researched)
 
 [screen]
 # Weekly Python screen over universe/universe.csv (one statistics page per stock, no model calls).

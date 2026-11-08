@@ -720,3 +720,10 @@ def test_bcb_series_parses_and_drops_forward_filled_dates(tmp_path):
     assert got["id"] == "BCB432" and got["rows"][0] == {"date": "2026-11-03", "value": 14.0}
     s = M.summarise(got["id"], "Selic", got["rows"], got["source_url"], "2026-11-08")
     assert s["value"] == 13.75 and s["date"] == "2026-11-05"
+
+
+def test_universe_excludes_sanctioned_markets():
+    from universe import excluded
+    assert excluded("MOEX:GMKN", "Russia", {"russia"}, {"MOEX"})
+    assert excluded("LON:XYZ", "Russia", {"russia"}, set())
+    assert not excluded("LON:SHEL", "United Kingdom", {"russia"}, {"MOEX"})

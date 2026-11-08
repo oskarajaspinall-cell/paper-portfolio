@@ -158,6 +158,11 @@ def build(fetcher, cfg: dict, allworld_size: int | None = None, ftse_path: Path 
         if not fx_available(ccy, seen):
             row["screen"] = False
             row["note"].append(f"no FX rate for {ccy}")
+    # owner rule 2026-11-08: sanctioned markets are not investable at all (dropped, not just unscreened)
+    ex_c = {c.lower() for c in ucfg.get("excluded_countries", [])}
+    ex_x = {x.upper() for x in ucfg.get("excluded_exchanges", [])}
+    for t in [t for t, r in uni.items() if excluded(t, r.get("country"), ex_c, ex_x)]:
+        del uni[t]
     dedupe_share_classes(uni)
     out = []
     for t in sorted(uni, key=lambda k: -(uni[k].get("market_cap_usd") or 0)):
@@ -167,6 +172,10 @@ def build(fetcher, cfg: dict, allworld_size: int | None = None, ftse_path: Path 
                     "indexes": ";".join(sorted(r["indexes"])), "screen": "yes" if r["screen"] else "no",
                     "note": "; ".join(r["note"])})
     return out
+
+
+def excluded(ticker: str, country: str | None, countries: set[str], exchanges: set[str]) -> bool:
+    return (":" in ticker and ticker.split(":")[0].upper() in exchanges) or (country or "").lower() in countries
 
 
 def dedupe_share_classes(uni: dict[str, dict]) -> None:
