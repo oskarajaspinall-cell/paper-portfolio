@@ -1,0 +1,11 @@
+FAILED: /Users/oskaraspinall/paper-portfolio/bin/py scripts/weekly_report.py --asof 2026-11-07 --run /Users/oskaraspinall/paper-portfolio/runs/2026-11-07 exited 1: Traceback (most recent call last):
+  File "/Users/oskaraspinall/paper-portfolio/scripts/weekly_report.py", line 185, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/Users/oskaraspinall/paper-portfolio/scripts/weekly_report.py", line 179, in main
+    path.write_text(build(run, a.asof))
+                    ^^^^^^^^^^^^^^^^^^
+  File "/Users/oskaraspinall/paper-portfolio/scripts/weekly_report.py", line 110, in build
+    out += [f"| {a['side']} | {a['ticker']} | {a['type']} | {a['shares']} | {a['fill_price']} {a['currency']} ({a['fill_close_date']}) | "
+                                                                             ~^^^^^^^^^^^^^^
+KeyError: 'fill_price' (see runs/2026-11-07/error.log)

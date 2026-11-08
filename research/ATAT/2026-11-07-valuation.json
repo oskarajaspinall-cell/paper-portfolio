@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Lodging",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 13.054763131828574,
+    "base": 53.52821044171758,
+    "bull": 126.02996283189803
+   },
+   "implied_growth": 0.08153836211644427,
+   "discount_rate": 0.11999375460532521,
+   "cost_of_equity": 0.12340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.17,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.0347256227510326,
+     "base": 0.1829383472872443,
+     "bull": 0.37849910922216123
+    },
+    "cagr_3y": 0.6294316629814025,
+    "cagr_5y": 0.46120197402310126,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 22.17754586609941,
+    "base": 22.825086743467065,
+    "bull": 51.59975555110374
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 13.956,
+     "base": 14.4755,
+     "bull": 14.926
+    },
+    "ttm_ebitda": 2904066000,
+    "peak_earnings": "TTM EBITDA is 2.7x its 5y median: bear/base use the 5y average (1.154e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 35.91,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 16.095690709918852,
+  "base": 43.29383587563407,
+  "bull": 101.21989373829994
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5517769225864981,
+  "base": 0.20562060360997148,
+  "bull": 1.8187104911807284
+ },
+ "implied_growth": 0.08153836211644427,
+ "ticker": "ATAT",
+ "asof": "2026-11-07",
+ "quote_currency": "USD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 0.14981048973049094,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/atat/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/atat/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/atat/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/atat/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/atat/statistics/"
+ }
+}

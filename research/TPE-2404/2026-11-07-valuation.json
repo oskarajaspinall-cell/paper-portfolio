@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Engineering & Construction",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 712.2341465976529,
+    "base": 2952.9145363551493,
+    "bull": 6313.975134341782
+   },
+   "implied_growth": -0.2674755446655124,
+   "discount_rate": 0.10489284638101781,
+   "cost_of_equity": 0.10494949999999999,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.03798496035187078,
+     "base": 0.10712126129029519,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.06090956911312798,
+     "base": 0.3237734426017701,
+     "bull": 0.4278261952948771
+    },
+    "cagr_3y": 0.11096992070374156,
+    "cagr_5y": 0.2675151244574392,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 483.90887594928716,
+    "base": 587.4691909247359,
+    "bull": 1160.993685291904
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.22,
+     "base": 7.232,
+     "bull": 10.228
+    },
+    "ttm_ebitda": 15274062000,
+    "peak_earnings": "TTM EBITDA is 2.5x its 5y median: bear/base use the 5y average (6.533e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 886,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.01,
+ "reporting_currency": "TWD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 636.1257230481976,
+  "base": 2164.4327545450114,
+  "bull": 4596.314651325156
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.28202514328645867,
+  "base": 1.4429263595316155,
+  "bull": 4.187714053414397
+ },
+ "implied_growth": -0.2674755446655124,
+ "ticker": "TPE:2404",
+ "asof": "2026-11-07",
+ "quote_currency": "TWD",
+ "financials_currency": "TWD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tpe/2404/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tpe/2404/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tpe/2404/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tpe/2404/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tpe/2404/statistics/"
+ }
+}

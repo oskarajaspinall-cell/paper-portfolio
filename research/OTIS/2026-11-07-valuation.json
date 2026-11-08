@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Specialty Industrial Machinery",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 42.34380574495461,
+    "base": 60.39790404954534,
+    "bull": 60.50418922334752
+   },
+   "implied_growth": 0.0665201030363734,
+   "discount_rate": 0.08118449338283865,
+   "cost_of_equity": 0.0939445,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.01634128405940131,
+     "base": 0.01754191305028634,
+     "bull": 0.017850220319947985
+    },
+    "cash_flow_margin": {
+     "bear": 0.1047205806044457,
+     "base": 0.11662891311529568,
+     "bull": 0.11662891311529568
+    },
+    "cagr_3y": 0.017850220319947985,
+    "cagr_5y": 0.0023174318811973738,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 86.1837957996769,
+    "base": 92.1809886914378,
+    "bull": 93.9139437802908
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 16.396,
+     "base": 17.32,
+     "bull": 17.587
+    },
+    "ttm_ebitda": 2511000000
+   }
+  }
+ ],
+ "price": 78.96,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 56.95713576319537,
+  "base": 70.99226559684283,
+  "bull": 71.64077407566195
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.27865836166165947,
+  "base": -0.10090849041485772,
+  "bull": -0.09269536378340981
+ },
+ "implied_growth": 0.0665201030363734,
+ "ticker": "OTIS",
+ "asof": "2026-11-07",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/otis/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/otis/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/otis/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/otis/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/otis/statistics/"
+ }
+}

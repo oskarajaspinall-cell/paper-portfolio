@@ -54,6 +54,9 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     cash = state.get("cash_usd")
     wk, inc = rt.get("week", {}), rt.get("inception", {})
     applied, rejected = sub.get("applied", []), sub.get("rejected", [])
+    # HOLD decisions come back from an at-market submit as zero-share rows: report them, not as trades
+    holds = [a for a in applied if a.get("side") == "HOLD" or "fill_price" not in a]
+    applied = [a for a in applied if a not in holds]
     mech = sum(1 for a in applied if str(a.get("reason", "")).startswith("mechanical"))
     decisions = manifest.get("decisions", [])
     dry = " (DRY RUN: nothing written to the portfolio)" if sub.get("dry_run") else ""
@@ -111,6 +114,8 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
                 f"{a['gross_usd']:,.2f} | {a['costs_usd']:,.2f} | {str(a.get('reason', ''))[:120]} |" for a in applied]
     else:
         out.append("None.")
+    if holds:
+        out += ["", "**Held (decision recorded, no trade):** " + ", ".join(a["ticker"] for a in holds) + "."]
     out += ["", "**Orders placed (fill at the next market open)**", ""]
     if placed:
         out += ["| Action | Ticker | Type | Est. shares | Latest close | Replaces |", "|---|---|---|---|---|---|"]
