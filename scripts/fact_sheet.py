@@ -19,6 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import ROOT, DataError, Ticker, company_domain, load_config, record_ir_domain  # noqa: E402
+from common import page_url  # noqa: E402
 from fetch_data import Fetcher, completed_closes  # noqa: E402
 
 NA = "[data unavailable]"
@@ -48,6 +49,55 @@ def trend(values: list) -> tuple[float | None, str]:
         return None, NA
     d = pts[-1] - pts[0]
     return d, "flat" if abs(d) < 1 else ("rising" if d > 0 else "falling")
+
+
+def recent_direction(fetcher: Fetcher, ticker: str) -> tuple[list[dict], dict]:
+    """Owner request 2026-11-08: the last year's direction, which fiscal-year endpoints can hide (Edenred: ROIC
+    10% -> 18.5% over FY2023-TTM, but down from a 20.3% peak a year earlier). From the site's rolling-12-month
+    ("trailing") statements: latest TTM vs the TTM ending about a year before, and the high of the last 2 years.
+    Returns (rows, sources); rows empty when the trailing pages are unavailable."""
+    from fetch_data import page_nodes, parse_statement
+    data, srcs = {}, {}
+    for tag, page in (("RA-T", "financials/ratios/"), ("IS-T", "financials/income-statement/"),
+                      ("CF-T", "financials/cash-flow-statement/")):
+        url = page_url(ticker, page) + "?p=trailing"
+        try:
+            st = parse_statement(page_nodes(fetcher.html(url), url), url)
+        except DataError:
+            continue
+        data[tag] = {d: {k: v[i] for k, v in st["rows"].items()} for i, d in enumerate(st["periods"]) if d != "TTM"}
+        srcs[tag] = url
+
+    def series(fn, tags):
+        if not all(t in data for t in tags):
+            return []
+        dates = sorted(set.intersection(*(set(data[t]) for t in tags)))
+        return [(d, fn(*(data[t][d] for t in tags))) for d in dates]
+
+    metrics = [
+        ("ROIC", series(lambda r: pct(r.get("roic")), ["RA-T"]), "RA-T"),
+        ("ROCE", series(lambda r: pct(r.get("roce")), ["RA-T"]), "RA-T"),
+        ("Operating margin", series(lambda i: pct(ratio(i.get("opinc"), i.get("revenue"))), ["IS-T"]), "IS-T"),
+        ("FCF margin", series(lambda c, i: pct(ratio(c.get("fcf"), i.get("revenue"))), ["CF-T", "IS-T"]), "CF-T,IS-T"),
+    ]
+    rows = []
+    for label, ser, src in metrics:
+        ser = [(d, v) for d, v in ser if v is not None]
+        if len(ser) < 2:
+            continue
+        d1, v1 = ser[-1]
+        cut = (dt.date.fromisoformat(d1) - dt.timedelta(days=350)).isoformat()
+        prior = [(d, v) for d, v in ser if d <= cut]
+        if not prior:
+            continue
+        d0, v0 = prior[-1]
+        two = [(d, v) for d, v in ser if d >= (dt.date.fromisoformat(d1) - dt.timedelta(days=730)).isoformat()]
+        hd, hv = max(two, key=lambda x: x[1])
+        ch = v1 - v0
+        rows.append({"label": label, "latest": v1, "latest_date": d1, "prior": v0, "prior_date": d0, "change": ch,
+                     "high": hv, "high_date": hd, "src": src,
+                     "direction": "flat" if abs(ch) < 1 else ("rising" if ch > 0 else "falling")})
+    return rows, srcs
 
 
 def range_position(current, history: list) -> dict | None:
@@ -269,6 +319,32 @@ def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str, fv_out: di
         if unit == "x" and d is not None:
             tr = f"{'falling' if d < -0.1 else 'rising' if d > 0.1 else 'flat'} ({d:+.2f}x)"
         w(f"| {label} | " + " | ".join(cells) + f" | {tr} | {s} |")
+
+    # ---- the last year's direction (rolling 12 months), which FY endpoints can hide (2026-11-08)
+    rec, rsrc = recent_direction(fetcher, ticker)
+    src.update(rsrc)
+    w("\n### Recent direction (rolling 12 months)")
+    if not rec:
+        w(f"{NA}: no rolling-12-month statements on the site.")
+    else:
+        w("| Metric | Latest TTM | TTM a year earlier | Change | 2-year high | Last year | Src |")
+        w("|---|---|---|---|---|---|---|")
+        for r in rec:
+            w(f"| {r['label']} | {r['latest']:.1f}% ({r['latest_date']}) | {r['prior']:.1f}% ({r['prior_date']}) | "
+              f"{r['change']:+.1f}pp | {r['high']:.1f}% ({r['high_date']}) | {r['direction']} | {r['src']} |")
+        five = {label: trend([vals[i] for i in fy_idx])[1] for label, vals, _, _ in q_rows}
+        for r in rec:
+            why = []
+            if {five.get(r["label"]), r["direction"]} == {"rising", "falling"}:
+                why.append(f"{five[r['label']]} over 5 fiscal years but {r['direction']} over the last 12 months "
+                           f"({r['prior']:.1f}% -> {r['latest']:.1f}%)")
+            elif r["change"] <= -2:
+                why.append(f"down {-r['change']:.1f}pp in the last 12 months ({r['prior']:.1f}% -> {r['latest']:.1f}%) "
+                           f"although the 5-year trend reads {five.get(r['label'], NA)}")
+            if r["high"] - r["latest"] >= 2 and r["high_date"] != r["latest_date"]:
+                why.append(f"{r['high'] - r['latest']:.1f}pp below its 2-year high of {r['high']:.1f}% ({r['high_date']})")
+            if why:
+                w(f"\n**Direction change:** {r['label']} is " + "; ".join(why) + ". The evaluation must address it.")
 
     own = q_rows[-2][1][0] if periods and periods[0] == "TTM" else None
     site = q_rows[-1][1][0] if periods and periods[0] == "TTM" else None
