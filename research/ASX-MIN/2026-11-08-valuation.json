@@ -1,0 +1,80 @@
+{
+ "industry": {
+  "industry": "Other Industrial Metals & Mining",
+  "known": true,
+  "best": "NAV",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 27.78966402013156,
+    "base": 50.841487375134705,
+    "bull": 139.88451140195585
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.204,
+     "base": 10.587,
+     "bull": 13.132
+    },
+    "ttm_ebitda": 2440000000,
+    "peak_earnings": "TTM EBITDA is 2.5x its 5y median: bear/base use the 5y average (1.355e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 46.59,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "AUD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 27.78966402013156,
+  "base": 50.841487375134705,
+  "bull": 139.88451140195585
+ },
+ "used": [
+  "ev_ebitda"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.40352728010020267,
+  "base": 0.09125321689492805,
+  "bull": 2.0024578536586355
+ },
+ "implied_growth": null,
+ "ticker": "ASX:MIN",
+ "asof": "2026-11-08",
+ "quote_currency": "AUD",
+ "financials_currency": "AUD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/asx/MIN/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/asx/MIN/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/asx/MIN/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/asx/MIN/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/asx/MIN/statistics/"
+ }
+}
