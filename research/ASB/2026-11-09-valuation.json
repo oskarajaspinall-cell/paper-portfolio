@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 1.3125063025963724,
+    "base": 26.465291019566216,
+    "bull": 28.431898823784387
+   },
+   "cost_of_equity": 0.09190100000000001,
+   "assumptions": {
+    "roe": {
+     "bear": 0.02805,
+     "base": 0.0865,
+     "bull": 0.09107
+    },
+    "justified_pb": {
+     "bear": 0.04558975202164387,
+     "base": 0.9192687702724919,
+     "bull": 0.9875786610065616
+    },
+    "bvps": 28.789503
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 17.186491226143108,
+    "base": 48.6063651750934,
+    "bull": 53.703496992503645
+   },
+   "implied_growth": -0.06985978300529361,
+   "discount_rate": 0.09190100000000001,
+   "cost_of_equity": 0.09190100000000001,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.011255864377633998,
+     "base": 0.04165398986133505,
+     "bull": 0.0591042306900722
+    },
+    "cash_flow_margin": {
+     "bear": 0.1292379218244119,
+     "base": 0.3221066646615769,
+     "bull": 0.3311899349097938
+    },
+    "cagr_3y": 0.0591042306900722,
+    "cagr_5y": 0.057511728755268,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 13.19878805217097,
+    "base": 15.321146171208198,
+    "bull": 18.18948700374334
+   },
+   "cost_of_equity": 0.09190100000000001,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 1.0
+   }
+  }
+ ],
+ "price": 30.36,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 6.603834610445284,
+  "base": 33.84564907140861,
+  "bull": 36.85576488002414
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7824823909603003,
+  "base": 0.11481057547459184,
+  "bull": 0.21395800000079523
+ },
+ "implied_growth": -0.06985978300529361,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.2x (base 15.32-48.61)"
+  ]
+ },
+ "ticker": "ASB",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/asb/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/asb/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/asb/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/asb/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/asb/statistics/"
+ }
+}

@@ -1,0 +1,182 @@
+{
+ "ticker": "ETR:NDX1",
+ "asof": "2026-11-09",
+ "sector": "Industrials",
+ "industry": "Specialty Industrial Machinery",
+ "quality": {
+  "ROIC": {
+   "ttm": null,
+   "fy_5y_change": 30.901000000000003,
+   "fy_5y_label": "rising"
+  },
+  "ROCE": {
+   "ttm": 27.200000000000003,
+   "fy_5y_change": 30.1,
+   "fy_5y_label": "rising"
+  },
+  "ROE": {
+   "ttm": 36.991,
+   "fy_5y_change": 49.138000000000005,
+   "fy_5y_label": "rising"
+  },
+  "Gross margin": {
+   "ttm": 27.093775589242913,
+   "fy_5y_change": 11.90914082647306,
+   "fy_5y_label": "rising"
+  },
+  "Operating margin": {
+   "ttm": 10.058360842444095,
+   "fy_5y_change": 9.604443573914542,
+   "fy_5y_label": "rising"
+  },
+  "Net margin": {
+   "ttm": 5.843914832405399,
+   "fy_5y_change": 7.861156930557746,
+   "fy_5y_label": "rising"
+  },
+  "FCF margin": {
+   "ttm": 11.722849467366938,
+   "fy_5y_change": 11.948629262618871,
+   "fy_5y_label": "rising"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": 200.5992524456713,
+   "fy_5y_change": 289.2843735835932,
+   "fy_5y_label": "rising"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": -2.4090035762013997,
+   "fy_5y_change": -11.660146661948964,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": -2.409,
+   "fy_5y_change": -11.66,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {
+  "ROIC": {
+   "latest": 102.989,
+   "change": 89.82000000000001,
+   "direction": "rising",
+   "change_3y": 157.152,
+   "direction_3y": "rising",
+   "high": 102.989
+  },
+  "ROCE": {
+   "latest": 27.200000000000003,
+   "change": 13.200000000000001,
+   "direction": "rising",
+   "change_3y": 57.3,
+   "direction_3y": "rising",
+   "high": 27.200000000000003
+  },
+  "Operating margin": {
+   "latest": 10.058360842444095,
+   "change": 5.76665795433872,
+   "direction": "rising",
+   "change_3y": 17.843283520932772,
+   "direction_3y": "rising",
+   "high": 10.058360842444095
+  },
+  "FCF margin": {
+   "latest": 11.722849467366938,
+   "change": 4.072548647913827,
+   "direction": "rising",
+   "change_3y": 17.206183155369104,
+   "direction_3y": "rising",
+   "high": 11.722849467366938
+  }
+ },
+ "valuation": {
+  "P/E": {
+   "current": 22.36102,
+   "pos_pct": -0.9862638157514036,
+   "peer_premium_pct": -13.953053449801821
+  },
+  "EV/EBITDA": {
+   "current": 8.37458,
+   "pos_pct": 29.915981735159786,
+   "peer_premium_pct": -54.48597826086956
+  },
+  "EV/Sales": {
+   "current": 0.98722,
+   "pos_pct": 141.0762886597938,
+   "peer_premium_pct": -56.51013215859031
+  },
+  "P/FCF": {
+   "current": 10.29838,
+   "pos_pct": 2.721493569213563,
+   "peer_premium_pct": -21.88136236061594
+  },
+  "P/B": {
+   "current": 6.38363,
+   "pos_pct": 131.15076452599385,
+   "peer_premium_pct": -30.567435283880794
+  }
+ },
+ "fair_value": {
+  "price": 42.98,
+  "fair_value": {
+   "bear": -4.228892579449005,
+   "base": 55.80724414596994,
+   "bull": 62.80565002560055
+  },
+  "methods": [
+   {
+    "model": "dcf",
+    "label": "DCF",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": -25.25149178001438,
+     "base": 63.8126396491639,
+     "bull": 73.32017480965969
+    },
+    "implied_growth": -0.05860688253263398,
+    "discount_rate": 0.1077183020724344,
+    "cost_of_equity": 0.10775499999999999,
+    "assumptions": {
+     "cash_flow": "FCFF - stock-based pay",
+     "growth": {
+      "bear": 0.02516178008753374,
+      "base": 0.058533234722607394,
+      "bull": 0.0988093787153621
+     },
+     "cash_flow_margin": {
+      "bear": -0.08568532074741976,
+      "base": 0.12163304547463843,
+      "bull": 0.12163304547463843
+     },
+     "cagr_3y": 0.0988093787153621,
+     "cagr_5y": 0.08532356017506748,
+     "terminal_growth": 0.025
+    }
+   },
+   {
+    "model": "ev_ebitda",
+    "label": "EV/EBITDA",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 37.816305821681745,
+     "base": 39.79645313958201,
+     "bull": 41.776600457482274
+    },
+    "assumptions": {
+     "multiple": {
+      "bear": 8.047,
+      "base": 8.5945,
+      "bull": 9.142
+     },
+     "ttm_ebitda": 960796000
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": true,
+   "reasons": []
+  }
+ }
+}

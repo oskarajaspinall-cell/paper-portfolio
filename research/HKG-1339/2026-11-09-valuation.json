@@ -1,0 +1,103 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 6.498660487708098,
+    "base": 8.421400165654687,
+    "bull": 12.116254327334019
+   },
+   "cost_of_equity": 0.12340000000000001,
+   "assumptions": {
+    "roe": {
+     "bear": 0.09662,
+     "base": 0.11781,
+     "bull": 0.15853
+    },
+    "justified_pb": {
+     "bear": 0.7278455284552844,
+     "base": 0.943191056910569,
+     "bull": 1.3570121951219511
+    },
+    "bvps": 7.597075
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 5.525191330807771,
+    "base": 6.232600764794036,
+    "bull": 6.587076080299138
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.17,
+     "base": 8.088,
+     "bull": 8.548
+    },
+    "ttm_eps": 0.655677
+   }
+  }
+ ],
+ "price": 5.365,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 6.174170768741322,
+  "base": 7.691800365367803,
+  "bull": 10.273194911655725
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.15082400162932386,
+  "base": 0.43369997490546197,
+  "bull": 0.9148545967671435
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "HKG:1339",
+ "asof": "2026-11-09",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.1752715315126365,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/1339/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/1339/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/1339/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/1339/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/1339/statistics/"
+ }
+}

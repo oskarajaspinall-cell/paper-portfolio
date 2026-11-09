@@ -4487,3 +4487,207 @@ The decision is AVOID at conviction 3, which is what the scorecard gave. Returns
 [20:25:48] $ bin/py scripts/valuation.py HKG:0270 --asof 2026-11-09 --eval research/HKG-0270/2026-11-09-evaluation.md
 [20:25:48] {"out": "research/HKG-0270/2026-11-09-valuation.md", "used": ["dcf", "ddm"], "fair_value": {"bear": -3.2, "base": 13.08, "bull": 17.16}, "price": 8.165}
 [20:25:49] == done HKG:0270
+[20:25:51] == Research batch 09: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-09-batch-09.md; !! upload failed: karajaspinall-cell/paper-portfolio.git/': Could not resolve host: github.com
+fatal: unable to access 'https://github.com/oskarajaspinall-cell/paper-portfolio.git/': Could not resolve host: github.com
+
+[20:30:46] == screened out BKK:TTB: price above base fair value (-14.6%; floor +0%) (no AI research)
+[20:30:54] research/ASB/2026-11-09-evaluation.md
+OK research/ASB/2026-11-09-evaluation.md Bear case=146 Bull case=110 decision=AVOID scorecard=4->2
+[20:30:54] $ bin/py scripts/check_docs.py eval research/ASB/2026-11-09-evaluation.md
+[20:30:54] OK research/ASB/2026-11-09-evaluation.md Bear case=146 Bull case=110 decision=AVOID scorecard=4->2
+[20:30:54] $ bin/py scripts/valuation.py ASB --asof 2026-11-09 --eval research/ASB/2026-11-09-evaluation.md
+[20:30:54] {"out": "research/ASB/2026-11-09-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 6.6, "base": 33.85, "bull": 36.86}, "price": 30.36}
+[20:30:57] == done ASB
+[20:31:04] == initiate HKG:1339
+[20:31:04] $ bin/py scripts/sec_delta.py HKG:1339 --asof 2026-11-09
+[20:31:04] SKIP HKG:1339: not a US listing (SEC filers only)
+[20:31:04] $ claude -p Ticker HKG:1339, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:55:05] == initiate ETR:NDX1
+[20:55:05] $ bin/py scripts/sec_delta.py ETR:NDX1 --asof 2026-11-09
+[20:55:06] SKIP ETR:NDX1: not a US listing (SEC filers only)
+[20:55:06] $ claude -p Ticker ETR:NDX1, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:55:09] == initiate SHE:000568
+[20:55:09] $ bin/py scripts/sec_delta.py SHE:000568 --asof 2026-11-09
+[20:55:09] SKIP SHE:000568: not a US listing (SEC filers only)
+[20:55:09] $ claude -p Ticker SHE:000568, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:29:58] The fact sheet isn't done, so I haven't written the note.
+
+**What happened**
+- My first peer set included HKG:2318, HKG:1336 and HKG:2601. The script exited with code 2 each time because stockanalysis.com returned a 404 for that peer's statistics page.
+- The latest set is HKG:2328, HKG:2628 and HKG:1299. The first run of it hit the 10-minute limit with no output and moved to the background (ID `bbpxsnxmc`). I then started a second identical run in the background (ID `b9hsv29lt`), so the two may be overlapping.
+- `research/HKG-1339/` is still empty: no fact sheet exists yet.
+
+**No files yet**
+- Note path: none written
+- Fact sheet path: `research/HKG-1339/factsheet-2026-11-09.md` is expected but not created
+- `check_docs.py` was not run
+
+**Open items**
+- Peer pages for HKG:2318, HKG:1336 and HKG:2601 returned 404.
+- The slow runs may be a hang, or just the 3-second request limit across several pages.
+- I can't write the note without a fact sheet, because it is my only source of numbers. I haven't estimated any figures.
+
+The fact sheet still doesn't exist, so I haven't written the note.
+
+- **Stopped run:** the first background run (`bbpxsnxmc`, peers HKG:2328, HKG:2628, HKG:1299) hit its time limit with no output and was killed. I won't restart that one, per the notice.
+- **Still running:** the second run (`b9hsv29lt`), started with the same peers, has produced no output yet. `research/HKG-1339/` is empty.
+- **Peer 404s:** stockanalysis.com returned a 404 on the statistics page for HKG:2318, HKG:1336 and HKG:2601, so those peers were dropped.
+
+I have no numbers to work from and haven't estimated any. If `b9hsv29lt` fails or is stopped, I'll return its error. If it completes, the remaining work is to write the note and run `check_docs.py`.
+
+- Note path: none
+- Fact sheet path: `research/HKG-1339/factsheet-2026-11-09.md` (not created)
+- `check_docs.py`: not run
+
+Note: `research/HKG-1339/2026-11-09.md`
+Fact sheet: `research/HKG-1339/factsheet-2026-11-09.md`
+Check: `OK research/HKG-1339/2026-11-09.md type=CORE 1=63 2=116 3=142 4=39 5=69 6=83 total=512`
+
+Issues:
+- Peers HKG:2318, HKG:1336 and HKG:2601 returned a 404 on stockanalysis.com, so I used HKG:2328, HKG:2628 and HKG:1299.
+- I made no WebFetch calls. Segment mix, Q3 2026 results content and the dividend/payout record are therefore marked [data unavailable] or unverified.
+- No data conflicts.
+[21:29:58] $ bin/py scripts/check_docs.py note research/HKG-1339/2026-11-09.md
+[21:29:58] OK research/HKG-1339/2026-11-09.md type=CORE 1=63 2=116 3=142 4=39 5=69 6=83 total=512
+[21:29:58] $ claude -p Ticker HKG:1339, date 2026-11-09. Research: research/HKG-1339/factsheet-2026-11-09.md, research/HKG-1339/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/HKG-1339/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:29:59] The fact sheet script is still running in the background. I'm waiting for it to finish before I write the note.
+
+Note: research/SHE-000568/2026-11-09.md
+Fact sheet: research/SHE-000568/factsheet-2026-11-09.md
+Check: OK research/SHE-000568/2026-11-09.md type=CORE 1=53 2=99 3=100 4=54 5=62 6=66 total=434
+
+Data conflicts: none. Blocked URLs: none, and I made no WebFetch calls.
+- The first fact-sheet run hit the time limit and was stopped. I reran it with a longer limit and it completed.
+- Segment mix and geographic mix are marked [data unavailable] in the note. I did not read the Q3 filing, so the cause of the 2026-10-30 price jump is unverified.
+[21:29:59] $ bin/py scripts/check_docs.py note research/SHE-000568/2026-11-09.md
+[21:29:59] OK research/SHE-000568/2026-11-09.md type=CORE 1=53 2=99 3=100 4=54 5=62 6=66 total=434
+[21:29:59] $ claude -p Ticker SHE:000568, date 2026-11-09. Research: research/SHE-000568/factsheet-2026-11-09.md, research/SHE-000568/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/SHE-000568/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:47:49] research/SHE-000568/2026-11-09-macro.md
+OK research/SHE-000568/2026-11-09-macro.md macro_weight=context words=45
+[21:47:49] $ bin/py scripts/check_docs.py macro research/SHE-000568/2026-11-09-macro.md
+[21:47:49] OK research/SHE-000568/2026-11-09-macro.md macro_weight=context words=45
+[21:47:49] $ claude -p Evaluate SHE:000568 for 2026-11-09: fact sheet research/SHE-000568/factsheet-2026-11-09.md, note research/SHE-000568/2026-11-09.md, state portfolio/state.json, macro overlay research/SHE-000568/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:47:59] research/HKG-1339/2026-11-09-macro.md
+OK research/HKG-1339/2026-11-09-macro.md macro_weight=context words=65
+[21:47:59] $ bin/py scripts/check_docs.py macro research/HKG-1339/2026-11-09-macro.md
+[21:47:59] OK research/HKG-1339/2026-11-09-macro.md macro_weight=context words=65
+[21:47:59] $ claude -p Evaluate HKG:1339 for 2026-11-09: fact sheet research/HKG-1339/factsheet-2026-11-09.md, note research/HKG-1339/2026-11-09.md, state portfolio/state.json, macro overlay research/HKG-1339/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:48:32] The fact sheet for ETR:NDX1 is still running, so I haven't written the note yet. The first attempt hit the timeout and was killed with no output. I restarted it in the background (peers CPH:VWS, ETR:ENR, GEV), and its output file is still empty. No research files exist yet.
+
+I'll pick this up when the run finishes. If it exits non-zero, I'll return its error as it is. If it's killed again, I'll report that instead of estimating any numbers.
+
+Note: research/ETR-NDX1/2026-11-09.md
+Fact sheet: research/ETR-NDX1/factsheet-2026-11-09.md
+Check: OK research/ETR-NDX1/2026-11-09.md type=CORE 1=63 2=129 3=134 4=37 5=57 6=44 total=464
+
+Data conflicts: none.
+
+Blocked URLs:
+- https://www.nordex-online.com/en/investor-relations/ is not on the allowlist. Revenue by country is therefore marked [data unavailable] in section 1.
+
+Other issues:
+- The first fact-sheet run timed out and was killed with no output. I reran it once and it finished with exit code 0.
+- The fact sheet's trailing-ROIC row shows 103.0% as of 2025-09-30, a stale date. I did not use it.
+[21:48:32] $ bin/py scripts/check_docs.py note research/ETR-NDX1/2026-11-09.md
+[21:48:33] OK research/ETR-NDX1/2026-11-09.md type=CORE 1=63 2=129 3=134 4=37 5=57 6=44 total=464
+[21:48:33] $ claude -p Ticker ETR:NDX1, date 2026-11-09. Research: research/ETR-NDX1/factsheet-2026-11-09.md, research/ETR-NDX1/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/ETR-NDX1/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:48:37] research/SHE-000568/2026-11-09-evaluation.md
+OK research/SHE-000568/2026-11-09-evaluation.md Bear case=142 Bull case=117 decision=AVOID scorecard=4->2
+[21:48:37] $ bin/py scripts/check_docs.py eval research/SHE-000568/2026-11-09-evaluation.md
+[21:48:37] OK research/SHE-000568/2026-11-09-evaluation.md Bear case=142 Bull case=117 decision=AVOID scorecard=4->2
+[21:48:37] $ bin/py scripts/valuation.py SHE:000568 --asof 2026-11-09 --eval research/SHE-000568/2026-11-09-evaluation.md
+[21:48:37] {"out": "research/SHE-000568/2026-11-09-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 58.07, "base": 84.0, "bull": 129.63}, "price": 81.17}
+[21:48:39] == done SHE:000568
+[21:49:04] research/ETR-NDX1/2026-11-09-macro.md
+OK research/ETR-NDX1/2026-11-09-macro.md macro_weight=context words=73
+[21:49:04] $ bin/py scripts/check_docs.py macro research/ETR-NDX1/2026-11-09-macro.md
+[21:49:04] OK research/ETR-NDX1/2026-11-09-macro.md macro_weight=context words=73
+[21:49:04] $ claude -p Evaluate ETR:NDX1 for 2026-11-09: fact sheet research/ETR-NDX1/factsheet-2026-11-09.md, note research/ETR-NDX1/2026-11-09.md, state portfolio/state.json, macro overlay research/ETR-NDX1/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[21:49:12] research/HKG-1339/2026-11-09-evaluation.md
+OK research/HKG-1339/2026-11-09-evaluation.md Bear case=134 Bull case=121 decision=AVOID scorecard=3->2
+[21:49:12] $ bin/py scripts/check_docs.py eval research/HKG-1339/2026-11-09-evaluation.md
+[21:49:12] OK research/HKG-1339/2026-11-09-evaluation.md Bear case=134 Bull case=121 decision=AVOID scorecard=3->2
+[21:49:12] $ bin/py scripts/valuation.py HKG:1339 --asof 2026-11-09 --eval research/HKG-1339/2026-11-09-evaluation.md
+[21:49:12] {"out": "research/HKG-1339/2026-11-09-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 6.17, "base": 7.69, "bull": 10.27}, "price": 5.365}
+[21:49:13] == done HKG:1339
+[22:25:18] research/ETR-NDX1/2026-11-09-evaluation.md
+OK research/ETR-NDX1/2026-11-09-evaluation.md Bear case=143 Bull case=135 decision=BUY scorecard=9->4
+[22:25:18] $ bin/py scripts/check_docs.py eval research/ETR-NDX1/2026-11-09-evaluation.md
+[22:25:18] OK research/ETR-NDX1/2026-11-09-evaluation.md Bear case=143 Bull case=135 decision=BUY scorecard=9->4
+[22:25:18] $ bin/py scripts/valuation.py ETR:NDX1 --asof 2026-11-09 --eval research/ETR-NDX1/2026-11-09-evaluation.md
+[22:25:18] {"out": "research/ETR-NDX1/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -4.23, "base": 55.81, "bull": 62.81}, "price": 42.98}
+[22:25:18] $ claude -p Independent second evaluation of ETR:NDX1 for 2026-11-09: fact sheet research/ETR-NDX1/factsheet-2026-11-09.md, note research/ETR-NDX1/2026-11-09.md, state portfolio/state.json, macro overlay research/ETR-NDX1/2026-11-09-macro.md. Write it to research/ETR-NDX1/2026-11-09-evaluation-2.md (not the usual file). Do not read research/ETR-NDX1/2026-11-09-evaluation.md or any other evaluation of this stock dated 2026-11-09. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:29:35] research/ETR-NDX1/2026-11-09-evaluation-2.md
+OK research/ETR-NDX1/2026-11-09-evaluation-2.md Bear case=148 Bull case=124 decision=AVOID scorecard=8->3
+[22:29:35] $ bin/py scripts/check_docs.py eval research/ETR-NDX1/2026-11-09-evaluation-2.md
+[22:29:36] OK research/ETR-NDX1/2026-11-09-evaluation-2.md Bear case=148 Bull case=124 decision=AVOID scorecard=8->3
+[22:29:36] == ETR:NDX1: second opinion conviction 3 -> AVOID 3
+[22:29:36] $ bin/py scripts/check_docs.py eval research/ETR-NDX1/2026-11-09-evaluation.md
+[22:29:36] OK research/ETR-NDX1/2026-11-09-evaluation.md Bear case=143 Bull case=135 decision=AVOID scorecard=9->3
+[22:29:37] == done ETR:NDX1
+[22:34:37] == screened out BIT:UNI: fair value unreliable (methods disagree 2.2x (base 8.27-18.47)) but every method's base is below the price (best -26.9%; floor +0%) (no AI research)
+[22:34:51] == initiate CFR
+[22:34:51] $ bin/py scripts/sec_delta.py CFR --asof 2026-11-09
+[22:35:01] == initiate NSE:INDUSTOWER
+[22:35:01] $ bin/py scripts/sec_delta.py NSE:INDUSTOWER --asof 2026-11-09
+[22:35:01] SKIP NSE:INDUSTOWER: not a US listing (SEC filers only)
+[22:35:01] $ claude -p Ticker NSE:INDUSTOWER, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:35:11] OK research/CFR/sec-delta-2026-11-09.md
+[22:35:11] $ claude -p Ticker CFR, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/CFR/sec-delta-2026-11-09.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:35:25] == initiate TSX:GMIN
+[22:35:25] $ bin/py scripts/sec_delta.py TSX:GMIN --asof 2026-11-09
+[22:35:25] SKIP TSX:GMIN: not a US listing (SEC filers only)
+[22:35:25] $ claude -p Ticker TSX:GMIN, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:36:30] Note: research/CFR/2026-11-09.md
+Fact sheet: research/CFR/factsheet-2026-11-09.md
+Check: OK research/CFR/2026-11-09.md type=CORE 1=47 2=102 3=126 4=42 5=55 6=90 total=462
+Data conflicts: none. Blocked URLs: none.
+[22:36:30] $ bin/py scripts/check_docs.py note research/CFR/2026-11-09.md
+[22:36:30] OK research/CFR/2026-11-09.md type=CORE 1=47 2=102 3=126 4=42 5=55 6=90 total=462
+[22:36:30] $ claude -p Ticker CFR, date 2026-11-09. Research: research/CFR/factsheet-2026-11-09.md, research/CFR/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/CFR/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:36:58] Note: research/TSX-GMIN/2026-11-09.md
+Fact sheet: research/TSX-GMIN/factsheet-2026-11-09.md
+Check: OK research/TSX-GMIN/2026-11-09.md type=CORE 1=69 2=92 3=102 4=37 5=54 6=36 total=390
+Blocked URL: the globenewswire.com Q3 2026 preliminary production release was not on the allowlist. As a result, the country revenue split for GMIN is [data unavailable] and is flagged as such for the macro overlay. The note cites two other globenewswire.com headline URLs, taken from the fact sheet's news list. Those pages were not fetched.
+Data conflicts: none.
+[22:36:58] $ bin/py scripts/check_docs.py note research/TSX-GMIN/2026-11-09.md
+[22:36:58] OK research/TSX-GMIN/2026-11-09.md type=CORE 1=69 2=92 3=102 4=37 5=54 6=36 total=390
+[22:36:58] $ claude -p Ticker TSX:GMIN, date 2026-11-09. Research: research/TSX-GMIN/factsheet-2026-11-09.md, research/TSX-GMIN/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/TSX-GMIN/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:37:02] - Note: `research/NSE-INDUSTOWER/2026-11-09.md`
+- Fact sheet: `research/NSE-INDUSTOWER/factsheet-2026-11-09.md`
+- Check: `OK research/NSE-INDUSTOWER/2026-11-09.md type=CORE 1=62 2=95 3=95 4=39 5=59 6=59 total=409`
+- Peers: the first run failed because the site has no `NYSE:AMT` page (404). I swapped to plain `AMT` and `CCI`, alongside `NSE:BHARTIARTL` and `NSE:TATACOMM`, and the rerun succeeded.
+- Blocked URL: `https://www.industowers.com/` is not on the allowlist, so I did not retry it. The note says customer concentration and the revenue mix by country are unverified.
+- Data conflicts: none.
+[22:37:02] $ bin/py scripts/check_docs.py note research/NSE-INDUSTOWER/2026-11-09.md
+[22:37:02] OK research/NSE-INDUSTOWER/2026-11-09.md type=CORE 1=62 2=95 3=95 4=39 5=59 6=59 total=409
+[22:37:02] $ claude -p Ticker NSE:INDUSTOWER, date 2026-11-09. Research: research/NSE-INDUSTOWER/factsheet-2026-11-09.md, research/NSE-INDUSTOWER/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/NSE-INDUSTOWER/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:37:10] research/CFR/2026-11-09-macro.md
+OK research/CFR/2026-11-09-macro.md macro_weight=secondary words=210
+[22:37:10] $ bin/py scripts/check_docs.py macro research/CFR/2026-11-09-macro.md
+[22:37:10] OK research/CFR/2026-11-09-macro.md macro_weight=secondary words=210
+[22:37:10] $ claude -p Evaluate CFR for 2026-11-09: fact sheet research/CFR/factsheet-2026-11-09.md, note research/CFR/2026-11-09.md, state portfolio/state.json, macro overlay research/CFR/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:37:24] research/NSE-INDUSTOWER/2026-11-09-macro.md
+OK research/NSE-INDUSTOWER/2026-11-09-macro.md macro_weight=context words=52
+[22:37:24] $ bin/py scripts/check_docs.py macro research/NSE-INDUSTOWER/2026-11-09-macro.md
+[22:37:24] OK research/NSE-INDUSTOWER/2026-11-09-macro.md macro_weight=context words=52
+[22:37:24] $ claude -p Evaluate NSE:INDUSTOWER for 2026-11-09: fact sheet research/NSE-INDUSTOWER/factsheet-2026-11-09.md, note research/NSE-INDUSTOWER/2026-11-09.md, state portfolio/state.json, macro overlay research/NSE-INDUSTOWER/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:37:40] research/TSX-GMIN/2026-11-09-macro.md
+OK research/TSX-GMIN/2026-11-09-macro.md macro_weight=secondary words=232
+[22:37:40] $ bin/py scripts/check_docs.py macro research/TSX-GMIN/2026-11-09-macro.md
+[22:37:40] OK research/TSX-GMIN/2026-11-09-macro.md macro_weight=secondary words=232
+[22:37:40] $ claude -p Evaluate TSX:GMIN for 2026-11-09: fact sheet research/TSX-GMIN/factsheet-2026-11-09.md, note research/TSX-GMIN/2026-11-09.md, state portfolio/state.json, macro overlay research/TSX-GMIN/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:38:19] research/CFR/2026-11-09-evaluation.md
+OK research/CFR/2026-11-09-evaluation.md Bear case=150 Bull case=98 decision=AVOID scorecard=5->3
+[22:38:19] $ bin/py scripts/check_docs.py eval research/CFR/2026-11-09-evaluation.md
+[22:38:19] OK research/CFR/2026-11-09-evaluation.md Bear case=150 Bull case=98 decision=AVOID scorecard=5->3
+[22:38:19] $ bin/py scripts/valuation.py CFR --asof 2026-11-09 --eval research/CFR/2026-11-09-evaluation.md
+[22:38:19] {"out": "research/CFR/2026-11-09-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 107.59, "base": 153.19, "bull": 184.44}, "price": 155.23}
+[22:38:22] == done CFR
+[22:38:29] research/TSX-GMIN/2026-11-09-evaluation.md
+OK research/TSX-GMIN/2026-11-09-evaluation.md Bear case=149 Bull case=113 decision=AVOID scorecard=5->3
+[22:38:29] $ bin/py scripts/check_docs.py eval research/TSX-GMIN/2026-11-09-evaluation.md
+[22:38:29] OK research/TSX-GMIN/2026-11-09-evaluation.md Bear case=149 Bull case=113 decision=AVOID scorecard=5->3
+[22:38:29] $ bin/py scripts/valuation.py TSX:GMIN --asof 2026-11-09 --eval research/TSX-GMIN/2026-11-09-evaluation.md
+[22:38:29] {"out": "research/TSX-GMIN/2026-11-09-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 47.55, "base": 49.78, "bull": 52.02}, "price": 47.21}
+[22:38:31] == done TSX:GMIN

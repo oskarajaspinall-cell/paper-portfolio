@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 74.42632984731858,
+    "base": 124.56289514195582,
+    "bull": 124.66994137996844
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "roe": {
+     "bear": 0.10148,
+     "base": 0.153,
+     "bull": 0.15311
+    },
+    "justified_pb": {
+     "bear": 1.206309148264984,
+     "base": 2.0189274447949526,
+     "bull": 2.020662460567823
+    },
+    "bvps": 61.697559
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 173.9304110014338,
+    "base": 210.45684880286132,
+    "bull": 303.9775762701433
+   },
+   "implied_growth": -0.0067350844899165836,
+   "discount_rate": 0.0884,
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.027369648366674396,
+     "base": 0.06599621959881623,
+     "bull": 0.12424558166191613
+    },
+    "cash_flow_margin": {
+     "bear": 0.29145680371236665,
+     "base": 0.3003445542139285,
+     "bull": 0.34206464942138715
+    },
+    "cagr_3y": 0.0897392967333488,
+    "cagr_5y": 0.12424558166191613,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 56.97275204359673,
+    "base": 66.60883280757096,
+    "bull": 79.85393258426966
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 4.12
+   }
+  }
+ ],
+ "price": 155.23,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 107.59435689869032,
+  "base": 153.1942130289243,
+  "bull": 184.43915301002673
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.3068713721658808,
+  "base": -0.013114649043842519,
+  "bull": 0.1881669330028135
+ },
+ "implied_growth": -0.0067350844899165836,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.2x (base 66.61-210.46)"
+  ]
+ },
+ "ticker": "CFR",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/cfr/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/cfr/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/cfr/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/cfr/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/cfr/statistics/"
+ }
+}

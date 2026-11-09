@@ -1,0 +1,108 @@
+{
+ "industry": {
+  "industry": "Specialty Industrial Machinery",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -25.25149178001438,
+    "base": 63.8126396491639,
+    "bull": 73.32017480965969
+   },
+   "implied_growth": -0.05860688253263398,
+   "discount_rate": 0.1077183020724344,
+   "cost_of_equity": 0.10775499999999999,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.02516178008753374,
+     "base": 0.058533234722607394,
+     "bull": 0.0988093787153621
+    },
+    "cash_flow_margin": {
+     "bear": -0.08568532074741976,
+     "base": 0.12163304547463843,
+     "bull": 0.12163304547463843
+    },
+    "cagr_3y": 0.0988093787153621,
+    "cagr_5y": 0.08532356017506748,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 37.816305821681745,
+    "base": 39.79645313958201,
+    "bull": 41.776600457482274
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.047,
+     "base": 8.5945,
+     "bull": 9.142
+    },
+    "ttm_ebitda": 960796000
+   }
+  }
+ ],
+ "price": 42.98,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -4.228892579449005,
+  "base": 55.80724414596994,
+  "bull": 62.80565002560055
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.0983921028257098,
+  "base": 0.2984468158671463,
+  "bull": 0.46127617556073885
+ },
+ "implied_growth": -0.05860688253263398,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "ETR:NDX1",
+ "asof": "2026-11-09",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/etr/NDX1/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/etr/NDX1/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/etr/NDX1/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/etr/NDX1/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/etr/NDX1/statistics/"
+ }
+}
