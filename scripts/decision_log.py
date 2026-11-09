@@ -78,9 +78,12 @@ def record(eval_paths: list[str], mkt, asof: str, rows: list[dict], live=None) -
     spy = mkt.cfg["portfolio"]["benchmark"]
     for p in eval_paths:
         rel = str(Path(p).resolve().relative_to(ROOT)) if Path(p).is_absolute() else p
-        if rel in seen:
-            continue
         d = decision_from_eval(Path(p if Path(p).is_absolute() else ROOT / p).read_text())
+        if rel in seen:
+            old = next(r for r in rows if r["evaluation"] == rel)
+            if (old["decision"], str(old["conviction"])) == (d["decision"], str(d["conviction"])) or old.get("ret_1m"):
+                continue  # unchanged (or already scored): idempotent
+            rows.remove(old)  # the same evaluation file was redone the same day (2026-11-09): the new verdict replaces it
         q = mkt.quote(d["ticker"], d["price_date"])
         s = mkt.quote(spy, d["price_date"])
         price, price_date, live_note = d["price_at_decision"], d["price_date"], ""
