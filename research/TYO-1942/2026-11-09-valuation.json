@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Engineering & Construction",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 533.8507568550584,
+    "base": 8399.73804793755,
+    "bull": 9947.760455043011
+   },
+   "implied_growth": -0.12028296632144181,
+   "discount_rate": 0.09278914533448536,
+   "cost_of_equity": 0.09340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.03559356422504374,
+     "base": 0.06671424832804888,
+     "bull": 0.11066986486210806
+    },
+    "cash_flow_margin": {
+     "bear": 0.0011788809662665622,
+     "base": 0.11800426022488504,
+     "bull": 0.11800426022488504
+    },
+    "cagr_3y": 0.11066986486210806,
+    "cagr_5y": 0.10618712845008749,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 1355.4773487960595,
+    "base": 2414.0290024703877,
+    "bull": 4294.979894824533
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.082,
+     "base": 6.742,
+     "bull": 7.62
+    },
+    "ttm_ebitda": 101069000000,
+    "peak_earnings": "TTM EBITDA is 2.0x its 5y median: bear/base use the 5y average (5.814e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 4062,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "JPY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 807.7262875020588,
+  "base": 6404.501699448495,
+  "bull": 8063.500268303519
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8011505939187448,
+  "base": 0.5766867797756019,
+  "bull": 0.9851059252347414
+ },
+ "implied_growth": -0.12028296632144181,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.5x (base 2414.03-8399.74)"
+  ]
+ },
+ "ticker": "TYO:1942",
+ "asof": "2026-11-09",
+ "quote_currency": "JPY",
+ "financials_currency": "JPY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tyo/1942/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tyo/1942/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tyo/1942/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tyo/1942/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tyo/1942/statistics/"
+ }
+}

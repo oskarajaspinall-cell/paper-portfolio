@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Information Technology Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 75.27629182850065,
+    "base": 86.90837385051029,
+    "bull": 179.37517993639543
+   },
+   "implied_growth": 0.22737180045422029,
+   "discount_rate": 0.10602462726667913,
+   "cost_of_equity": 0.10731099999999999,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.0034540633796015935,
+     "base": 0.047409983601719705,
+     "bull": 0.09773180764767564
+    },
+    "cash_flow_margin": {
+     "bear": 0.048769469873810506,
+     "base": 0.048769469873810506,
+     "bull": 0.09153759591170536
+    },
+    "cagr_3y": 0.04190812675920319,
+    "cagr_5y": 0.09773180764767564,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 225.19423753869242,
+    "base": 332.9089537754432,
+    "bull": 357.5286318169027
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 14.472,
+     "base": 21.901,
+     "bull": 23.599
+    },
+    "ttm_ebitda": 772881000
+   }
+  }
+ ],
+ "price": 159.31,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 125.24894039856457,
+  "base": 168.90856715882126,
+  "bull": 238.75966389656455
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.21380365075284313,
+  "base": 0.06025087664817819,
+  "bull": 0.4987110909331778
+ },
+ "implied_growth": 0.22737180045422029,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.8x (base 86.91-332.91)"
+  ]
+ },
+ "ticker": "EPAM",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/epam/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/epam/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/epam/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/epam/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/epam/statistics/"
+ }
+}

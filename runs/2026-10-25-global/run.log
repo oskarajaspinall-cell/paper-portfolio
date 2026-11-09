@@ -4127,3 +4127,202 @@ OK research/TYO-2503/2026-11-09-evaluation.md Bear case=137 Bull case=128 decisi
 [15:42:06] $ bin/py scripts/valuation.py TYO:2503 --asof 2026-11-09 --eval research/TYO-2503/2026-11-09-evaluation.md
 [15:42:07] {"out": "research/TYO-2503/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 1370.6, "base": 4053.05, "bull": 4466.52}, "price": 2967}
 [15:42:08] == done TYO:2503
+[15:42:22] == Research batch 07: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-09-batch-07.md; uploaded to GitHub
+[15:58:43] == initiate EWBC
+[15:58:43] $ bin/py scripts/sec_delta.py EWBC --asof 2026-11-09
+[15:58:57] == initiate HKG:0291
+[15:58:57] $ bin/py scripts/sec_delta.py HKG:0291 --asof 2026-11-09
+[15:58:57] SKIP HKG:0291: not a US listing (SEC filers only)
+[15:58:57] $ claude -p Ticker HKG:0291, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:59:00] OK research/EWBC/sec-delta-2026-11-09.md
+[15:59:00] $ claude -p Ticker EWBC, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/EWBC/sec-delta-2026-11-09.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:59:54] research/HKG-2382/2026-11-09-evaluation.md
+OK research/HKG-2382/2026-11-09-evaluation.md Bear case=140 Bull case=127 decision=BUY scorecard=9->4
+[15:59:54] $ bin/py scripts/check_docs.py eval research/HKG-2382/2026-11-09-evaluation.md
+[15:59:54] OK research/HKG-2382/2026-11-09-evaluation.md Bear case=140 Bull case=127 decision=BUY scorecard=9->4
+[15:59:54] $ bin/py scripts/valuation.py HKG:2382 --asof 2026-11-09 --eval research/HKG-2382/2026-11-09-evaluation.md
+[15:59:54] {"out": "research/HKG-2382/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 31.38, "base": 85.5, "bull": 113.33}, "price": 64.05}
+[15:59:54] $ claude -p Independent second evaluation of HKG:2382 for 2026-11-09: fact sheet research/HKG-2382/factsheet-2026-11-09.md, note research/HKG-2382/2026-11-09.md, state portfolio/state.json, macro overlay research/HKG-2382/2026-11-09-macro.md. Write it to research/HKG-2382/2026-11-09-evaluation-2.md (not the usual file). Do not read research/HKG-2382/2026-11-09-evaluation.md or any other evaluation of this stock dated 2026-11-09. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:00:02] Note: research/HKG-0291/2026-11-09.md
+Fact sheet: research/HKG-0291/factsheet-2026-11-09.md
+Check: OK research/HKG-0291/2026-11-09.md type=CORE 1=62 2=116 3=119 4=34 5=54 6=46 total=431
+Data conflicts: none. Blocked URLs: none.
+Other: the peer HKG:0168 (Tsingtao) returned a 404 on stockanalysis.com, so I swapped it for BUD and TAP. The peers used are HKG:1876, BUD and TAP. I made no WebFetch calls.
+[16:00:02] $ bin/py scripts/check_docs.py note research/HKG-0291/2026-11-09.md
+[16:00:02] OK research/HKG-0291/2026-11-09.md type=CORE 1=62 2=116 3=119 4=34 5=54 6=46 total=431
+[16:00:02] $ claude -p Ticker HKG:0291, date 2026-11-09. Research: research/HKG-0291/factsheet-2026-11-09.md, research/HKG-0291/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/HKG-0291/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:16:59] Note: research/EWBC/2026-11-09.md
+Fact sheet: research/EWBC/factsheet-2026-11-09.md
+check_docs: OK research/EWBC/2026-11-09.md type=CORE 1=67 2=97 3=103 4=52 5=73 6=59 total=451
+
+Data gaps and flags:
+- **Fetch:** The sec.gov 10-Q fetch returned only XBRL metadata, with no usable figures. I did no further fetches. The note's company-reported figures come from the SEC delta file.
+- **China revenue share:** [data unavailable]. I put it in the note that the macro overlay should check China.
+- **Fair value:** The fact sheet flags it as unreliable. The methods disagree 3.8x.
+- **Fact-sheet gaps:** ROIC, ROCE, operating margin, EV/EBITDA and net debt/EBITDA are [data unavailable], as banks usually are on this site.
+[16:16:59] $ bin/py scripts/check_docs.py note research/EWBC/2026-11-09.md
+[16:16:59] OK research/EWBC/2026-11-09.md type=CORE 1=67 2=97 3=103 4=52 5=73 6=59 total=451
+[16:16:59] $ claude -p Ticker EWBC, date 2026-11-09. Research: research/EWBC/factsheet-2026-11-09.md, research/EWBC/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/EWBC/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:17:13] research/HKG-0291/2026-11-09-macro.md
+OK research/HKG-0291/2026-11-09-macro.md macro_weight=context words=57
+[16:17:13] $ bin/py scripts/check_docs.py macro research/HKG-0291/2026-11-09-macro.md
+[16:17:13] OK research/HKG-0291/2026-11-09-macro.md macro_weight=context words=57
+[16:17:13] $ claude -p Evaluate HKG:0291 for 2026-11-09: fact sheet research/HKG-0291/factsheet-2026-11-09.md, note research/HKG-0291/2026-11-09.md, state portfolio/state.json, macro overlay research/HKG-0291/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:42:44] research/EWBC/2026-11-09-macro.md
+OK research/EWBC/2026-11-09-macro.md macro_weight=secondary words=206
+[16:42:44] $ bin/py scripts/check_docs.py macro research/EWBC/2026-11-09-macro.md
+[16:42:44] OK research/EWBC/2026-11-09-macro.md macro_weight=secondary words=206
+[16:42:44] $ claude -p Evaluate EWBC for 2026-11-09: fact sheet research/EWBC/factsheet-2026-11-09.md, note research/EWBC/2026-11-09.md, state portfolio/state.json, macro overlay research/EWBC/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:17:26] research/HKG-2382/2026-11-09-evaluation-2.md
+OK research/HKG-2382/2026-11-09-evaluation-2.md Bear case=132 Bull case=116 decision=AVOID scorecard=8->3
+[17:17:26] $ bin/py scripts/check_docs.py eval research/HKG-2382/2026-11-09-evaluation-2.md
+[17:17:26] OK research/HKG-2382/2026-11-09-evaluation-2.md Bear case=132 Bull case=116 decision=AVOID scorecard=8->3
+[17:17:26] == HKG:2382: second opinion conviction 3 -> AVOID 3
+[17:17:26] $ bin/py scripts/check_docs.py eval research/HKG-2382/2026-11-09-evaluation.md
+[17:17:27] OK research/HKG-2382/2026-11-09-evaluation.md Bear case=140 Bull case=127 decision=AVOID scorecard=9->3
+[17:17:28] == done HKG:2382
+[17:17:50] == initiate TYO:1942
+[17:17:50] $ bin/py scripts/sec_delta.py TYO:1942 --asof 2026-11-09
+[17:17:50] SKIP TYO:1942: not a US listing (SEC filers only)
+[17:17:50] $ claude -p Ticker TYO:1942, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:42:09] research/EWBC/2026-11-09-evaluation.md
+OK research/EWBC/2026-11-09-evaluation.md Bear case=150 Bull case=125 decision=AVOID scorecard=5->3
+[17:42:09] $ bin/py scripts/check_docs.py eval research/EWBC/2026-11-09-evaluation.md
+[17:42:09] OK research/EWBC/2026-11-09-evaluation.md Bear case=150 Bull case=125 decision=AVOID scorecard=5->3
+[17:42:09] $ bin/py scripts/valuation.py EWBC --asof 2026-11-09 --eval research/EWBC/2026-11-09-evaluation.md
+[17:42:10] {"out": "research/EWBC/2026-11-09-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 127.26, "base": 138.43, "bull": 168.23}, "price": 128.84}
+[17:42:12] == done EWBC
+[17:42:32] == screened out TYO:4732: price above base fair value (-14.9%; floor +0%) (no AI research)
+[17:42:36] Note is written and the check passed, so I'm sending the final report now.
+
+- Note: `research/TYO-1942/2026-11-09.md`
+- Fact sheet: `research/TYO-1942/factsheet-2026-11-09.md`
+- Check: `OK research/TYO-1942/2026-11-09.md type=CORE 1=44 2=101 3=128 4=39 5=38 6=82 total=432`
+- Blocked URLs: `https://www.kandenko.co.jp/ir/` and `https://www.kandenko.co.jp/` were both blocked as not on the allowlist. I did not retry them.
+- Data conflicts: none.
+- Data gaps: segment mix, foreign revenue share, dividend policy and the reason for the share-price fall are all [data unavailable] or unverified in the note.
+[17:42:36] $ bin/py scripts/check_docs.py note research/TYO-1942/2026-11-09.md
+[17:42:36] OK research/TYO-1942/2026-11-09.md type=CORE 1=44 2=101 3=128 4=39 5=38 6=82 total=432
+[17:42:36] $ claude -p Ticker TYO:1942, date 2026-11-09. Research: research/TYO-1942/factsheet-2026-11-09.md, research/TYO-1942/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/TYO-1942/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:42:47] research/HKG-0291/2026-11-09-evaluation.md
+OK research/HKG-0291/2026-11-09-evaluation.md Bear case=125 Bull case=125 decision=BUY scorecard=9->4
+[17:42:47] $ bin/py scripts/check_docs.py eval research/HKG-0291/2026-11-09-evaluation.md
+[17:42:47] OK research/HKG-0291/2026-11-09-evaluation.md Bear case=125 Bull case=125 decision=BUY scorecard=9->4
+[17:42:47] $ bin/py scripts/valuation.py HKG:0291 --asof 2026-11-09 --eval research/HKG-0291/2026-11-09-evaluation.md
+[17:42:47] {"out": "research/HKG-0291/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 16.82, "base": 34.56, "bull": 47.72}, "price": 20.92}
+[17:42:47] $ claude -p Independent second evaluation of HKG:0291 for 2026-11-09: fact sheet research/HKG-0291/factsheet-2026-11-09.md, note research/HKG-0291/2026-11-09.md, state portfolio/state.json, macro overlay research/HKG-0291/2026-11-09-macro.md. Write it to research/HKG-0291/2026-11-09-evaluation-2.md (not the usual file). Do not read research/HKG-0291/2026-11-09-evaluation.md or any other evaluation of this stock dated 2026-11-09. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:42:52] == initiate TYO:9202
+[17:42:52] $ bin/py scripts/sec_delta.py TYO:9202 --asof 2026-11-09
+[17:42:52] SKIP TYO:9202: not a US listing (SEC filers only)
+[17:42:52] $ claude -p Ticker TYO:9202, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:42:59] research/TYO-1942/2026-11-09-macro.md
+OK research/TYO-1942/2026-11-09-macro.md macro_weight=context words=47
+[17:42:59] $ bin/py scripts/check_docs.py macro research/TYO-1942/2026-11-09-macro.md
+[17:42:59] OK research/TYO-1942/2026-11-09-macro.md macro_weight=context words=47
+[17:42:59] $ claude -p Evaluate TYO:1942 for 2026-11-09: fact sheet research/TYO-1942/factsheet-2026-11-09.md, note research/TYO-1942/2026-11-09.md, state portfolio/state.json, macro overlay research/TYO-1942/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:43:29] Note: research/TYO-9202/2026-11-09.md
+Fact sheet: research/TYO-9202/factsheet-2026-11-09.md
+Check: OK research/TYO-9202/2026-11-09.md type=CORE 1=59 2=113 3=128 4=37 5=49 6=49 total=435
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls. The revenue split by country or region is therefore [data unavailable] in section 1.
+[17:43:29] $ bin/py scripts/check_docs.py note research/TYO-9202/2026-11-09.md
+[17:43:29] OK research/TYO-9202/2026-11-09.md type=CORE 1=59 2=113 3=128 4=37 5=49 6=49 total=435
+[17:43:29] $ claude -p Ticker TYO:9202, date 2026-11-09. Research: research/TYO-9202/factsheet-2026-11-09.md, research/TYO-9202/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/TYO-9202/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:43:48] research/TYO-9202/2026-11-09-macro.md
+OK research/TYO-9202/2026-11-09-macro.md macro_weight=context words=137
+[17:43:48] $ bin/py scripts/check_docs.py macro research/TYO-9202/2026-11-09-macro.md
+[17:43:48] OK research/TYO-9202/2026-11-09-macro.md macro_weight=context words=137
+[17:43:48] $ claude -p Evaluate TYO:9202 for 2026-11-09: fact sheet research/TYO-9202/factsheet-2026-11-09.md, note research/TYO-9202/2026-11-09.md, state portfolio/state.json, macro overlay research/TYO-9202/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:43:58] research/TYO-1942/2026-11-09-evaluation.md
+OK research/TYO-1942/2026-11-09-evaluation.md Bear case=136 Bull case=110 decision=AVOID scorecard=4->2
+[17:43:58] $ bin/py scripts/check_docs.py eval research/TYO-1942/2026-11-09-evaluation.md
+[17:43:58] OK research/TYO-1942/2026-11-09-evaluation.md Bear case=136 Bull case=110 decision=AVOID scorecard=4->2
+[17:43:58] $ bin/py scripts/valuation.py TYO:1942 --asof 2026-11-09 --eval research/TYO-1942/2026-11-09-evaluation.md
+[17:43:58] {"out": "research/TYO-1942/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 807.73, "base": 6404.5, "bull": 8063.5}, "price": 4062}
+[17:43:59] == done TYO:1942
+[17:44:20] == screened out EPA:CS: price above base fair value (-31.0%; floor +0%) (no AI research)
+[17:44:34] research/HKG-0291/2026-11-09-evaluation-2.md
+OK research/HKG-0291/2026-11-09-evaluation-2.md Bear case=141 Bull case=134 decision=BUY scorecard=9->4
+[17:44:34] $ bin/py scripts/check_docs.py eval research/HKG-0291/2026-11-09-evaluation-2.md
+[17:44:34] OK research/HKG-0291/2026-11-09-evaluation-2.md Bear case=141 Bull case=134 decision=BUY scorecard=9->4
+[17:44:34] == HKG:0291: second opinion conviction 4 -> BUY 4
+[17:44:34] $ bin/py scripts/check_docs.py eval research/HKG-0291/2026-11-09-evaluation.md
+[17:44:34] OK research/HKG-0291/2026-11-09-evaluation.md Bear case=125 Bull case=125 decision=BUY scorecard=9->4
+[17:44:35] == portfolio-manager HKG:0291 (BUY 4)
+[17:44:35] $ claude -p Evaluation files: research/HKG-0291/2026-11-09-evaluation.md. Date 2026-11-09. Write the requests to runs/2026-10-25-global/requests-HKG-0291.json and submit with --at-market --save runs/2026-10-25-global/submit-HKG-0291.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[17:44:44] == initiate TYO:2670
+[17:44:44] $ bin/py scripts/sec_delta.py TYO:2670 --asof 2026-11-09
+[17:44:44] SKIP TYO:2670: not a US listing (SEC filers only)
+[17:44:44] $ claude -p Ticker TYO:2670, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:47:06] research/TYO-9202/2026-11-09-evaluation.md
+OK research/TYO-9202/2026-11-09-evaluation.md Bear case=145 Bull case=118 decision=AVOID scorecard=4->2
+[17:47:06] $ bin/py scripts/check_docs.py eval research/TYO-9202/2026-11-09-evaluation.md
+[17:47:07] OK research/TYO-9202/2026-11-09-evaluation.md Bear case=145 Bull case=118 decision=AVOID scorecard=4->2
+[17:47:07] $ bin/py scripts/valuation.py TYO:9202 --asof 2026-11-09 --eval research/TYO-9202/2026-11-09-evaluation.md
+[17:47:07] {"out": "research/TYO-9202/2026-11-09-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": -15863.44, "base": 11337.22, "bull": 48148.42}, "price": 3237}
+[17:47:09] == done TYO:9202
+[17:47:30] == initiate EPAM
+[17:47:30] $ bin/py scripts/sec_delta.py EPAM --asof 2026-11-09
+[17:47:42] OK research/EPAM/sec-delta-2026-11-09.md
+[17:47:42] $ claude -p Ticker EPAM, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/EPAM/sec-delta-2026-11-09.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:48:29] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| HKG:0291 | BUY (replaces HKG:2076) | CORE | 4 |
+
+Submit output:
+```json
+{
+ "mode": "at_market",
+ "placed": [{"id": "2026-11-09-4", "ticker": "HKG:0291", "action": "BUY", "type": "CORE", "est_shares": 3701, "est_price": 20.92, "est_currency": "HKD", "est_close_date": "2026-11-06", "est_usd": 9869.26, "replaces": "HKG:2076"}],
+ "applied": [],
+ "rejected": [],
+ "warnings": ["cash 13.3% vs a 15% reserve (neutral regime)"],
+ "filled_now": [],
+ "queued_for_next_open": [{"id": "2026-11-09-4", "ticker": "HKG:0291", "action": "BUY", "type": "CORE", "est_shares": 3701, "est_price": 20.92, "est_usd": 9869.26, "replaces": "HKG:2076"}],
+ "dry_run": false
+}
+```
+
+The Hong Kong market is not open now, so the buy was validated and queued. It fills at the next open. Nothing was rejected. The requests file is `runs/2026-10-25-global/requests-HKG-0291.json`, and the submit result is saved to `runs/2026-10-25-global/submit-HKG-0291.json`.
+[17:48:29] == done HKG:0291
+[17:49:10] == initiate OBDC
+[17:49:10] $ bin/py scripts/sec_delta.py OBDC --asof 2026-11-09
+[17:49:12] Note: research/TYO-2670/2026-11-09.md
+Fact sheet: research/TYO-2670/factsheet-2026-11-09.md
+Check: OK research/TYO-2670/2026-11-09.md type=CORE 1=54 2=99 3=113 4=38 5=45 6=38 total=387
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls, so the country and segment revenue mix is marked [data unavailable] in the note.
+[17:49:12] $ bin/py scripts/check_docs.py note research/TYO-2670/2026-11-09.md
+[17:49:12] OK research/TYO-2670/2026-11-09.md type=CORE 1=54 2=99 3=113 4=38 5=45 6=38 total=387
+[17:49:12] $ claude -p Ticker TYO:2670, date 2026-11-09. Research: research/TYO-2670/factsheet-2026-11-09.md, research/TYO-2670/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/TYO-2670/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[18:05:08] Note: `research/EPAM/2026-11-09.md`
+Fact sheet: `research/EPAM/factsheet-2026-11-09.md`
+Check: OK research/EPAM/2026-11-09.md type=CORE 1=62 2=98 3=107 4=44 5=50 6=46 total=407
+Data conflicts: none. Blocked URLs: none. I used one WebFetch (the 10-Q) and did not fetch the headline URLs.
+[18:05:08] $ bin/py scripts/check_docs.py note research/EPAM/2026-11-09.md
+[18:05:08] OK research/EPAM/2026-11-09.md type=CORE 1=62 2=98 3=107 4=44 5=50 6=46 total=407
+[18:05:08] $ claude -p Ticker EPAM, date 2026-11-09. Research: research/EPAM/factsheet-2026-11-09.md, research/EPAM/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/EPAM/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[18:05:11] OK research/OBDC/sec-delta-2026-11-09.md
+[18:05:11] $ claude -p Ticker OBDC, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/OBDC/sec-delta-2026-11-09.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[18:05:25] research/TYO-2670/2026-11-09-macro.md
+OK research/TYO-2670/2026-11-09-macro.md macro_weight=context words=44
+[18:05:25] $ bin/py scripts/check_docs.py macro research/TYO-2670/2026-11-09-macro.md
+[18:05:25] OK research/TYO-2670/2026-11-09-macro.md macro_weight=context words=44
+[18:05:25] $ claude -p Evaluate TYO:2670 for 2026-11-09: fact sheet research/TYO-2670/factsheet-2026-11-09.md, note research/TYO-2670/2026-11-09.md, state portfolio/state.json, macro overlay research/TYO-2670/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[18:05:31] research/EPAM/2026-11-09-macro.md
+OK research/EPAM/2026-11-09-macro.md macro_weight=context words=46
+[18:05:31] $ bin/py scripts/check_docs.py macro research/EPAM/2026-11-09-macro.md
+[18:05:31] OK research/EPAM/2026-11-09-macro.md macro_weight=context words=46
+[18:05:31] $ claude -p Evaluate EPAM for 2026-11-09: fact sheet research/EPAM/factsheet-2026-11-09.md, note research/EPAM/2026-11-09.md, state portfolio/state.json, macro overlay research/EPAM/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[18:22:00] The decision is **AVOID** at conviction 3. The scorecard gave 6 points, which maps to 3, so the stock stays below the buy bar of 4.
+
+- **Why not:** EPAM's returns have been falling for five years, and the cause looks structural: pressure from AI on what IT services can charge. Organic growth is low. The shares trade at a premium to peers on P/E and P/FCF, and they have already jumped after the earnings beat.
+- **What's good:** it has net cash and is buying back shares, and every valuation multiple is below its own 5-year minimum.
+- **Fair value:** the mechanical estimate is flagged unreliable, so the scorecard ignored it.
+- **Entry price:** $135.13, which is the base fair value less a 20% margin of safety. The last close was $159.31.
+
+research/EPAM/2026-11-09-evaluation.md
+OK research/EPAM/2026-11-09-evaluation.md Bear case=146 Bull case=106 decision=AVOID scorecard=6->3
+[18:22:00] $ bin/py scripts/check_docs.py eval research/EPAM/2026-11-09-evaluation.md
+[18:22:00] OK research/EPAM/2026-11-09-evaluation.md Bear case=146 Bull case=106 decision=AVOID scorecard=6->3
+[18:22:00] $ bin/py scripts/valuation.py EPAM --asof 2026-11-09 --eval research/EPAM/2026-11-09-evaluation.md
+[18:22:00] {"out": "research/EPAM/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 125.25, "base": 168.91, "bull": 238.76}, "price": 159.31}
+[18:22:02] == done EPAM

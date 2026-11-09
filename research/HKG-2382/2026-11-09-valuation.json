@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Electronic Components",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 11.524963179077165,
+    "base": 56.87322688510883,
+    "bull": 88.1446265379254
+   },
+   "implied_growth": 0.0866633919656504,
+   "discount_rate": 0.1324106178813036,
+   "cost_of_equity": 0.140904,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.0006021755910981703,
+     "base": 0.04455329332006695,
+     "bull": 0.09200882209807149
+    },
+    "cash_flow_margin": {
+     "bear": -0.008954826942021024,
+     "base": 0.08204524973170693,
+     "bull": 0.1201999838744159
+    },
+    "cagr_3y": 0.09200882209807149,
+    "cagr_5y": 0.03620435118219634,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 71.08834338496744,
+    "base": 142.75101344694698,
+    "bull": 163.70748393056442
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.17,
+     "base": 18.675,
+     "bull": 21.747
+    },
+    "ttm_ebitda": 6304501000
+   }
+  }
+ ],
+ "price": 64.05,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 31.379423247707262,
+  "base": 85.49915573905487,
+  "bull": 113.33224566880507
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5100792623308781,
+  "base": 0.334881432303745,
+  "bull": 0.7694339682873548
+ },
+ "implied_growth": 0.0866633919656504,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.5x (base 56.87-142.75)"
+  ]
+ },
+ "ticker": "HKG:2382",
+ "asof": "2026-11-09",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.1752715315126365,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/2382/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/2382/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/2382/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/2382/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/2382/statistics/"
+ }
+}

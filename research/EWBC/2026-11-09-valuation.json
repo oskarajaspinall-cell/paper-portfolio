@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 119.75432037951134,
+    "base": 121.79249905465431,
+    "bull": 139.9821114088191
+   },
+   "cost_of_equity": 0.09783049999999999,
+   "assumptions": {
+    "roe": {
+     "bear": 0.1572,
+     "base": 0.15945,
+     "bull": 0.17953
+    },
+    "justified_pb": {
+     "bear": 1.815173587988549,
+     "base": 1.846067238313619,
+     "bull": 2.1217759043257978
+    },
+    "bvps": 65.974032
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 142.2815385385545,
+    "base": 171.70032735366217,
+    "bull": 224.7289397496113
+   },
+   "implied_growth": -0.008789339676563368,
+   "discount_rate": 0.09783049999999999,
+   "cost_of_equity": 0.09783049999999999,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.02110532753979695,
+     "base": 0.06115390818230941,
+     "bull": 0.11740497764964375
+    },
+    "cash_flow_margin": {
+     "bear": 0.4885735459564772,
+     "base": 0.5006285447799579,
+     "bull": 0.5228200171572456
+    },
+    "cagr_3y": 0.0772106550795939,
+    "cagr_5y": 0.11740497764964375,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 39.21260888199396,
+    "base": 45.036076918324056,
+    "bull": 52.71325232172274
+   },
+   "cost_of_equity": 0.09783049999999999,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 3.2
+   }
+  }
+ ],
+ "price": 128.84,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 127.2633930991924,
+  "base": 138.4284418209903,
+  "bull": 168.23105418908315
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.012236936516668795,
+  "base": 0.07442131186735712,
+  "bull": 0.30573621692861797
+ },
+ "implied_growth": -0.008789339676563368,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.8x (base 45.04-171.70)"
+  ]
+ },
+ "ticker": "EWBC",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/ewbc/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/ewbc/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/ewbc/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/ewbc/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/ewbc/statistics/"
+ }
+}

@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Airlines",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -24950.78238531772,
+    "base": 15350.905950911882,
+    "bull": 70417.53324809464
+   },
+   "implied_growth": -0.2241874196369863,
+   "discount_rate": 0.06823163256787639,
+   "cost_of_equity": 0.09340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.053214151170676585,
+     "base": 0.11185814089690437,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.17442784752686402,
+     "base": 0.0845026352668823,
+     "bull": 0.21932791800684515
+    },
+    "cagr_3y": 0.14142830234135317,
+    "cagr_5y": 0.2560042612462643,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 2311.252502397444,
+    "base": 3309.8338514655534,
+    "bull": 3610.1957217635468
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.228,
+     "base": 4.5595,
+     "bull": 4.96
+    },
+    "ttm_ebitda": 387940000000
+   }
+  }
+ ],
+ "price": 3237,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "JPY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -15863.437422746,
+  "base": 11337.215251096439,
+  "bull": 48148.420739317604
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -5.9006603097763355,
+  "base": 2.502383457243262,
+  "bull": 13.87439627411727
+ },
+ "implied_growth": -0.2241874196369863,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 4.6x (base 3309.83-15350.91)",
+   "base +250% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "TYO:9202",
+ "asof": "2026-11-09",
+ "quote_currency": "JPY",
+ "financials_currency": "JPY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tyo/9202/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tyo/9202/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tyo/9202/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tyo/9202/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tyo/9202/statistics/"
+ }
+}

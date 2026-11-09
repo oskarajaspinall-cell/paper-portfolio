@@ -251,16 +251,16 @@
    "entry_price": 61.3,
    "entry_url": "https://stockanalysis.com/quote/hkg/2076/history/",
    "exit_plan": null,
-   "last_close": 68.55000305175781,
+   "last_close": 68.55,
    "last_close_date": "2026-11-06",
    "last_decision": {
     "action": "HOLD",
     "conviction": 4,
     "date": "2026-11-08"
    },
-   "last_price_usd": 8.737989,
+   "last_price_usd": 8.737988,
    "market_value_usd": 7977.78,
-   "prev_close": 69.9000015258789,
+   "prev_close": 69.9,
    "prev_close_date": "2026-11-05",
    "reporting_currency": "CNY",
    "research_note": "research/HKG-2076/2026-11-08.md",
@@ -310,7 +310,7 @@
    "entry_price": 4.5,
    "entry_url": "https://finance.yahoo.com/quote/3998.HK/history",
    "exit_plan": null,
-   "last_close": 4.489999771118164,
+   "last_close": 4.49,
    "last_close_date": "2026-11-06",
    "last_decision": {
     "action": "HOLD",
@@ -319,7 +319,7 @@
    },
    "last_price_usd": 0.572335,
    "market_value_usd": 8674.88,
-   "prev_close": 4.46999979019165,
+   "prev_close": 4.47,
    "prev_close_date": "2026-11-05",
    "reporting_currency": "CNY",
    "research_note": "research/HKG-3998/2026-11-08.md",
@@ -376,16 +376,16 @@
    "entry_price": 185.6,
    "entry_url": "https://stockanalysis.com/quote/hkg/9999/history/",
    "exit_plan": null,
-   "last_close": 200.39999389648438,
+   "last_close": 200.4,
    "last_close_date": "2026-11-06",
    "last_decision": {
     "action": "HOLD",
     "conviction": 4,
     "date": "2026-11-08"
    },
-   "last_price_usd": 25.544753,
+   "last_price_usd": 25.544754,
    "market_value_usd": 7535.7,
-   "prev_close": 199.60000610351562,
+   "prev_close": 199.6,
    "prev_close_date": "2026-11-05",
    "reporting_currency": "CNY",
    "research_note": "research/HKG-9999/2026-11-08.md",
@@ -868,6 +868,69 @@
     "reason": "conviction 3 sizing: below the buy bar (4), so held at no more than its conviction size 4.1% (now 7.8%)",
     "target_weight_pct": 4.09,
     "ticker": "HRB"
+   }
+  },
+  {
+   "estimate": {
+    "close_date": "2026-11-06",
+    "currency": "HKD",
+    "price": 20.92,
+    "shares": 3701,
+    "side": "BUY",
+    "usd": 9869.26
+   },
+   "id": "2026-11-09-4",
+   "placed": "2026-11-09",
+   "placed_at": "2026-11-09T17:47:53+00:00",
+   "request": {
+    "_cash_before_pct": 21.649296987129514,
+    "action": "BUY",
+    "conviction": 4,
+    "position_type": "CORE",
+    "reason": "Scorecard conviction 4: net cash, rising operating and FCF margins and cash multiples below their 5y minimums outweigh unexplained net-margin erosion and results due within days. Python sizes it; it would breach the China/HK cap, so it replaces HKG:2076.",
+    "replacement_reason": "Adding this name would take China/HK combined above the 25% country cap. HKG:2076 has risen the most of the China/HK holdings since entry, while this idea trades below its own 5y minimum cash multiples with net cash and a low-beta (0.38) staples profile, a better skew from here.",
+    "replaces": "HKG:2076",
+    "research_note": "research/HKG-0291/2026-11-09.md",
+    "thesis": "A net-cash Chinese brewer with rising operating and FCF margins trades below its own 5-year minimum cash multiples, pricing shrinkage that its improving operations do not show.",
+    "ticker": "HKG:0291",
+    "triggers": [
+     {
+      "check": {
+       "field": "operatingMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 12.0
+      },
+      "text": "TTM operating margin falls below 12.0% (14.9% now), reversing the mix and pricing gains."
+     },
+     {
+      "check": {
+       "field": "fcfMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 10.0
+      },
+      "text": "TTM FCF margin falls below 10.0% (15.3% now), showing the cash step-up was transitory."
+     },
+     {
+      "check": {
+       "field": "roic",
+       "op": "<",
+       "source": "statistics",
+       "value": 10.0
+      },
+      "text": "TTM ROIC falls below 10.0% (11.9% now), below the FY2025 low of 10.4%."
+     },
+     {
+      "check": {
+       "field": "debtEbitda",
+       "op": ">",
+       "source": "statistics",
+       "value": 0.0
+      },
+      "text": "Net debt/EBITDA rises above 0.0x (net cash lost)."
+     }
+    ]
    }
   }
  ],

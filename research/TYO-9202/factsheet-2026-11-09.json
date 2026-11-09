@@ -1,0 +1,185 @@
+{
+ "ticker": "TYO:9202",
+ "asof": "2026-11-09",
+ "sector": "Industrials",
+ "industry": "Airlines",
+ "quality": {
+  "ROIC": {
+   "ttm": 11.396,
+   "fy_5y_change": 22.845,
+   "fy_5y_label": "rising"
+  },
+  "ROCE": {
+   "ttm": 7.6,
+   "fy_5y_change": 14.8,
+   "fy_5y_label": "rising"
+  },
+  "ROE": {
+   "ttm": 12.413,
+   "fy_5y_change": 28.607,
+   "fy_5y_label": "rising"
+  },
+  "Gross margin": {
+   "ttm": 17.06437004083977,
+   "fy_5y_change": 21.142996067895396,
+   "fy_5y_label": "rising"
+  },
+  "Operating margin": {
+   "ttm": 7.569205773689959,
+   "fy_5y_change": 25.53094310469148,
+   "fy_5y_label": "rising"
+  },
+  "Net margin": {
+   "ttm": 5.826099964077309,
+   "fy_5y_change": 20.73521176893776,
+   "fy_5y_label": "rising"
+  },
+  "FCF margin": {
+   "ttm": 5.238198013005689,
+   "fy_5y_change": 28.30400812496619,
+   "fy_5y_label": "rising"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": 89.90916814513106,
+   "fy_5y_change": -2.0569479188480386,
+   "fy_5y_label": "falling"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": 0.14619528793112338,
+   "fy_5y_change": 58.94827989379472,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": 0.146,
+   "fy_5y_change": 58.949,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {
+  "ROIC": {
+   "latest": 11.396,
+   "change": 0.15100000000000158,
+   "direction": "flat",
+   "change_3y": -2.2159999999999975,
+   "direction_3y": "falling",
+   "high": 12.413
+  },
+  "ROCE": {
+   "latest": 7.6,
+   "change": -0.10000000000000053,
+   "direction": "flat",
+   "change_3y": -1.0999999999999996,
+   "direction_3y": "falling",
+   "high": 8.4
+  },
+  "Operating margin": {
+   "latest": 7.569205773689959,
+   "change": -0.3321607168788372,
+   "direction": "flat",
+   "change_3y": -3.80460726170421,
+   "direction_3y": "falling",
+   "high": 8.69370110210376
+  },
+  "FCF margin": {
+   "latest": 5.238198013005689,
+   "change": -1.0894664395798648,
+   "direction": "falling",
+   "change_3y": -14.954331592406561,
+   "direction_3y": "falling",
+   "high": 8.996023602402772
+  }
+ },
+ "valuation": {
+  "P/E": {
+   "current": 10.93708,
+   "pos_pct": 43.66096213448322,
+   "peer_premium_pct": -10.027311615663049
+  },
+  "EV/EBITDA": {
+   "current": 3.83168,
+   "pos_pct": 15.890497499341926,
+   "peer_premium_pct": -35.05627118644068
+  },
+  "EV/Sales": {
+   "current": 0.54334,
+   "pos_pct": 3.3382949932341033,
+   "peer_premium_pct": -34.92934131736526
+  },
+  "P/FCF": {
+   "current": 9.90725,
+   "pos_pct": 135.5645519077196,
+   "peer_premium_pct": -29.31975458371977
+  },
+  "P/B": {
+   "current": 0.991,
+   "pos_pct": 19.45636623748212,
+   "peer_premium_pct": -56.89430187037843
+  }
+ },
+ "fair_value": {
+  "price": 3237,
+  "fair_value": {
+   "bear": -15863.437422746,
+   "base": 11337.215251096439,
+   "bull": 48148.420739317604
+  },
+  "methods": [
+   {
+    "model": "dcf_norm",
+    "label": "through-cycle DCF",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": -24950.78238531772,
+     "base": 15350.905950911882,
+     "bull": 70417.53324809464
+    },
+    "implied_growth": -0.2241874196369863,
+    "discount_rate": 0.06823163256787639,
+    "cost_of_equity": 0.09340000000000001,
+    "assumptions": {
+     "cash_flow": "FCFF - stock-based pay",
+     "growth": {
+      "bear": 0.053214151170676585,
+      "base": 0.11185814089690437,
+      "bull": 0.25
+     },
+     "cash_flow_margin": {
+      "bear": -0.17442784752686402,
+      "base": 0.0845026352668823,
+      "bull": 0.21932791800684515
+     },
+     "cagr_3y": 0.14142830234135317,
+     "cagr_5y": 0.2560042612462643,
+     "terminal_growth": 0.025
+    }
+   },
+   {
+    "model": "ev_ebitda",
+    "label": "EV/EBITDA",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 2311.252502397444,
+     "base": 3309.8338514655534,
+     "bull": 3610.1957217635468
+    },
+    "assumptions": {
+     "multiple": {
+      "bear": 3.228,
+      "base": 4.5595,
+      "bull": 4.96
+     },
+     "ttm_ebitda": 387940000000
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": false,
+   "reasons": [
+    "methods disagree 4.6x (base 3309.83-15350.91)",
+    "base +250% from the price (outside -80% to +100%)"
+   ]
+  }
+ }
+}

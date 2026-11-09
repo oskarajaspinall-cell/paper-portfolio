@@ -1,0 +1,31 @@
+[
+ {
+  "ticker": "HKG:0291",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "A net-cash Chinese brewer with rising operating and FCF margins trades below its own 5-year minimum cash multiples, pricing shrinkage that its improving operations do not show.",
+  "reason": "Scorecard conviction 4: net cash, rising operating and FCF margins and cash multiples below their 5y minimums outweigh unexplained net-margin erosion and results due within days. Python sizes it; it would breach the China/HK cap, so it replaces HKG:2076.",
+  "research_note": "research/HKG-0291/2026-11-09.md",
+  "triggers": [
+   {
+    "text": "TTM operating margin falls below 12.0% (14.9% now), reversing the mix and pricing gains.",
+    "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 12.0}
+   },
+   {
+    "text": "TTM FCF margin falls below 10.0% (15.3% now), showing the cash step-up was transitory.",
+    "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 10.0}
+   },
+   {
+    "text": "TTM ROIC falls below 10.0% (11.9% now), below the FY2025 low of 10.4%.",
+    "check": {"source": "statistics", "field": "roic", "op": "<", "value": 10.0}
+   },
+   {
+    "text": "Net debt/EBITDA rises above 0.0x (net cash lost).",
+    "check": {"source": "statistics", "field": "debtEbitda", "op": ">", "value": 0.0}
+   }
+  ],
+  "replaces": "HKG:2076",
+  "replacement_reason": "Adding this name would take China/HK combined above the 25% country cap. HKG:2076 has risen the most of the China/HK holdings since entry, while this idea trades below its own 5y minimum cash multiples with net cash and a low-beta (0.38) staples profile, a better skew from here."
+ }
+]
