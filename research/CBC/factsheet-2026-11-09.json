@@ -1,0 +1,187 @@
+{
+ "ticker": "CBC",
+ "asof": "2026-11-09",
+ "sector": "Financials",
+ "industry": "Banks - Regional",
+ "quality": {
+  "ROIC": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROCE": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROE": {
+   "ttm": 12.598,
+   "fy_5y_change": 1.1310000000000002,
+   "fy_5y_label": "rising"
+  },
+  "Gross margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Operating margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Net margin": {
+   "ttm": 40.78305976111551,
+   "fy_5y_change": 6.361604383093415,
+   "fy_5y_label": "rising"
+  },
+  "FCF margin": {
+   "ttm": null,
+   "fy_5y_change": -9.73697509178351,
+   "fy_5y_label": "falling"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": null,
+   "fy_5y_change": -41.85940635823776,
+   "fy_5y_label": "falling"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {
+  "FCF margin": {
+   "latest": 44.6355285023433,
+   "change": 16.57908622903593,
+   "direction": "rising",
+   "change_3y": 7.540654396390821,
+   "direction_3y": "rising",
+   "high": 44.6355285023433
+  }
+ },
+ "valuation": {
+  "P/E": {
+   "current": 19.99832,
+   "pos_pct": 1.4541789672637573,
+   "peer_premium_pct": 60.19802138823247
+  },
+  "EV/EBITDA": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "EV/Sales": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "P/FCF": {
+   "current": 18.90086,
+   "pos_pct": -1.9361025937351455,
+   "peer_premium_pct": 90.70588235294119
+  },
+  "P/B": {
+   "current": 2.35408,
+   "pos_pct": 2.15275984718746,
+   "peer_premium_pct": 46.489110143123824
+  }
+ },
+ "fair_value": {
+  "price": 37.75,
+  "fair_value": {
+   "bear": 20.843961002267985,
+   "base": 25.080852122366,
+   "bull": 27.31519950556274
+  },
+  "methods": [
+   {
+    "model": "pb_roe",
+    "label": "P/B + ROE",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": 19.493584966561507,
+     "base": 20.371264217034696,
+     "bull": 20.657079073817027
+    },
+    "cost_of_equity": 0.0884,
+    "assumptions": {
+     "roe": {
+      "bear": 0.10207,
+      "base": 0.10554,
+      "bull": 0.10667
+     },
+     "justified_pb": {
+      "bear": 1.2156151419558356,
+      "base": 1.2703470031545738,
+      "bull": 1.2881703470031542
+     },
+     "bvps": 16.035984
+    }
+   },
+   {
+    "model": "fcfe",
+    "label": "FCFE DCF",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 23.544713073680946,
+     "base": 34.50002793302861,
+     "bull": 40.63144036905417
+    },
+    "implied_growth": 0.07586926065379684,
+    "discount_rate": 0.0884,
+    "cost_of_equity": 0.0884,
+    "assumptions": {
+     "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+     "growth": {
+      "bear": 0.01870580080247948,
+      "base": 0.05406009713308661,
+      "bull": 0.0938287869273875
+     },
+     "cash_flow_margin": {
+      "bear": 0.3225840178262205,
+      "base": 0.4078305976111551,
+      "bull": 0.4078305976111551
+     },
+     "cagr_3y": 0.0938287869273875,
+     "cagr_5y": 0.07241160160495896,
+     "terminal_growth": 0.025
+    }
+   },
+   {
+    "model": "ddm",
+    "label": "dividend discount",
+    "slot": "second",
+    "status": "ok",
+    "quote_ccy": true,
+    "values": {
+     "bear": 7.743869209809263,
+     "base": 9.053627760252363,
+     "bull": 10.853932584269662
+    },
+    "cost_of_equity": 0.0884,
+    "assumptions": {
+     "dividend_growth": {
+      "bear": 0.015000000000000001,
+      "base": 0.025,
+      "bull": 0.035
+     },
+     "dps": 0.56
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": false,
+   "reasons": [
+    "methods disagree 3.8x (base 9.05-34.50)"
+   ]
+  }
+ }
+}

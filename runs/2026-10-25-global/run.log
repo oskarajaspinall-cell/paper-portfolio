@@ -3133,3 +3133,110 @@ OK research/SHE-000895/2026-11-09-evaluation.md Bear case=135 Bull case=112 deci
 [05:12:01] $ bin/py scripts/valuation.py SHE:000895 --asof 2026-11-09 --eval research/SHE-000895/2026-11-09-evaluation.md
 [05:12:01] {"out": "research/SHE-000895/2026-11-09-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 7.77, "base": 15.17, "bull": 21.37}, "price": 24.52}
 [05:12:02] == done SHE:000895
+[05:12:06] == Research batch 01: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-09-batch-01.md; uploaded to GitHub
+[05:12:09] == screened out HKG:1929: price above base fair value (-56.9%; floor +0%) (no AI research)
+[05:12:25] research/CBC/2026-11-09-macro.md
+OK research/CBC/2026-11-09-macro.md macro_weight=secondary words=177
+[05:12:25] $ bin/py scripts/check_docs.py macro research/CBC/2026-11-09-macro.md
+[05:12:25] OK research/CBC/2026-11-09-macro.md macro_weight=secondary words=177
+[05:12:25] $ claude -p Evaluate CBC for 2026-11-09: fact sheet research/CBC/factsheet-2026-11-09.md, note research/CBC/2026-11-09.md, state portfolio/state.json, macro overlay research/CBC/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:12:53] == screened out SHA:600741: price above base fair value (-20.3%; floor +0%) (no AI research)
+[05:12:56] == initiate PNFP
+[05:12:56] $ bin/py scripts/sec_delta.py PNFP --asof 2026-11-09
+[05:13:00] SKIP PNFP: no 10-K/10-Q with a comparable earlier filing
+[05:13:00] $ claude -p Ticker PNFP, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:13:14] research/CBC/2026-11-09-evaluation.md
+OK research/CBC/2026-11-09-evaluation.md Bear case=145 Bull case=103 decision=AVOID scorecard=4->2
+[05:13:14] $ bin/py scripts/check_docs.py eval research/CBC/2026-11-09-evaluation.md
+[05:13:14] OK research/CBC/2026-11-09-evaluation.md Bear case=145 Bull case=103 decision=AVOID scorecard=4->2
+[05:13:14] $ bin/py scripts/valuation.py CBC --asof 2026-11-09 --eval research/CBC/2026-11-09-evaluation.md
+[05:13:14] {"out": "research/CBC/2026-11-09-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 20.84, "base": 25.08, "bull": 27.32}, "price": 37.75}
+[05:13:15] == done CBC
+[05:13:39] == initiate EPA:RMS
+[05:13:39] $ bin/py scripts/sec_delta.py EPA:RMS --asof 2026-11-09
+[05:13:40] SKIP EPA:RMS: not a US listing (SEC filers only)
+[05:13:40] $ claude -p Ticker EPA:RMS, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:14:16] == screened out RRC: price above base fair value (-4.9%; floor +0%) (no AI research)
+[05:14:29] Note: research/PNFP/2026-11-09.md
+Fact sheet: research/PNFP/factsheet-2026-11-09.md
+check_docs: OK research/PNFP/2026-11-09.md type=CORE 1=55 2=94 3=92 4=48 5=54 6=36 total=379
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls, and no SEC delta file existed.
+[05:14:29] $ bin/py scripts/check_docs.py note research/PNFP/2026-11-09.md
+[05:14:29] OK research/PNFP/2026-11-09.md type=CORE 1=55 2=94 3=92 4=48 5=54 6=36 total=379
+[05:14:29] $ claude -p Ticker PNFP, date 2026-11-09. Research: research/PNFP/factsheet-2026-11-09.md, research/PNFP/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/PNFP/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:14:53] == initiate PB
+[05:14:53] $ bin/py scripts/sec_delta.py PB --asof 2026-11-09
+[05:14:53] research/PNFP/2026-11-09-macro.md
+OK research/PNFP/2026-11-09-macro.md macro_weight=secondary words=212
+[05:14:53] $ bin/py scripts/check_docs.py macro research/PNFP/2026-11-09-macro.md
+[05:14:53] OK research/PNFP/2026-11-09-macro.md macro_weight=secondary words=212
+[05:14:53] $ claude -p Evaluate PNFP for 2026-11-09: fact sheet research/PNFP/factsheet-2026-11-09.md, note research/PNFP/2026-11-09.md, state portfolio/state.json, macro overlay research/PNFP/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:15:04] Note: research/EPA-RMS/2026-11-09.md
+Fact sheet: research/EPA-RMS/factsheet-2026-11-09.md
+Check: OK research/EPA-RMS/2026-11-09.md type=CORE 1=56 2=116 3=108 4=47 5=45 6=48 total=420
+Blocked URL: https://finance.hermes.com/en/ (not on the allowlist). The regional revenue mix is therefore marked [data unavailable].
+Data conflicts: none. The fact sheet flags its own fair value as unreliable, because the DCF and P/E methods disagree 2.6x. The note says so.
+[05:15:04] $ bin/py scripts/check_docs.py note research/EPA-RMS/2026-11-09.md
+[05:15:04] OK research/EPA-RMS/2026-11-09.md type=CORE 1=56 2=116 3=108 4=47 5=45 6=48 total=420
+[05:15:04] $ claude -p Ticker EPA:RMS, date 2026-11-09. Research: research/EPA-RMS/factsheet-2026-11-09.md, research/EPA-RMS/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/EPA-RMS/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:15:04] OK research/PB/sec-delta-2026-11-09.md
+[05:15:04] $ claude -p Ticker PB, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/PB/sec-delta-2026-11-09.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:15:31] research/EPA-RMS/2026-11-09-macro.md
+OK research/EPA-RMS/2026-11-09-macro.md macro_weight=context words=83
+[05:15:31] $ bin/py scripts/check_docs.py macro research/EPA-RMS/2026-11-09-macro.md
+[05:15:31] OK research/EPA-RMS/2026-11-09-macro.md macro_weight=context words=83
+[05:15:31] $ claude -p Evaluate EPA:RMS for 2026-11-09: fact sheet research/EPA-RMS/factsheet-2026-11-09.md, note research/EPA-RMS/2026-11-09.md, state portfolio/state.json, macro overlay research/EPA-RMS/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:15:36] research/PNFP/2026-11-09-evaluation.md
+OK research/PNFP/2026-11-09-evaluation.md Bear case=147 Bull case=112 decision=AVOID scorecard=3->2
+[05:15:36] $ bin/py scripts/check_docs.py eval research/PNFP/2026-11-09-evaluation.md
+[05:15:36] OK research/PNFP/2026-11-09-evaluation.md Bear case=147 Bull case=112 decision=AVOID scorecard=3->2
+[05:15:36] $ bin/py scripts/valuation.py PNFP --asof 2026-11-09 --eval research/PNFP/2026-11-09-evaluation.md
+[05:15:37] {"out": "research/PNFP/2026-11-09-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 78.13, "base": 100.44, "bull": 140.47}, "price": 100.64}
+[05:15:38] == done PNFP
+[05:15:44] - Note: `research/PB/2026-11-09.md`
+- Fact sheet: `research/PB/factsheet-2026-11-09.md`
+- check_docs: `OK research/PB/2026-11-09.md type=CORE 1=62 2=113 3=119 4=63 5=43 6=77 total=477`
+- Data conflicts: none. The fact sheet's "Next earnings date" still shows Oct 28, 2026, although Q3 results were already reported on that date. I did not use it.
+- Blocked URLs: none. I made no WebFetch calls.
+[05:15:44] $ bin/py scripts/check_docs.py note research/PB/2026-11-09.md
+[05:15:44] OK research/PB/2026-11-09.md type=CORE 1=62 2=113 3=119 4=63 5=43 6=77 total=477
+[05:15:44] $ claude -p Ticker PB, date 2026-11-09. Research: research/PB/factsheet-2026-11-09.md, research/PB/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/PB/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:15:58] == screened out SHE:000617: price above base fair value (-49.9%; floor +0%) (no AI research)
+[05:16:20] research/EPA-RMS/2026-11-09-evaluation.md
+OK research/EPA-RMS/2026-11-09-evaluation.md Bear case=146 Bull case=102 decision=AVOID scorecard=8->3
+[05:16:20] $ bin/py scripts/check_docs.py eval research/EPA-RMS/2026-11-09-evaluation.md
+[05:16:20] OK research/EPA-RMS/2026-11-09-evaluation.md Bear case=146 Bull case=102 decision=AVOID scorecard=8->3
+[05:16:20] $ bin/py scripts/valuation.py EPA:RMS --asof 2026-11-09 --eval research/EPA-RMS/2026-11-09-evaluation.md
+[05:16:20] {"out": "research/EPA-RMS/2026-11-09-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 1037.22, "base": 1241.13, "bull": 1525.08}, "price": 1362.5}
+[05:16:21] == screened out BKK:PTTEP: price above base fair value (-0.1%; floor +0%) (no AI research)
+[05:16:21] == done EPA:RMS
+[05:16:29] research/PB/2026-11-09-macro.md
+OK research/PB/2026-11-09-macro.md macro_weight=secondary words=225
+[05:16:29] $ bin/py scripts/check_docs.py macro research/PB/2026-11-09-macro.md
+[05:16:29] OK research/PB/2026-11-09-macro.md macro_weight=secondary words=225
+[05:16:29] $ claude -p Evaluate PB for 2026-11-09: fact sheet research/PB/factsheet-2026-11-09.md, note research/PB/2026-11-09.md, state portfolio/state.json, macro overlay research/PB/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:17:05] == screened out CPA: price above base fair value (-23.8%; floor +0%) (no AI research)
+[05:17:08] == initiate SHA:603198
+[05:17:08] $ bin/py scripts/sec_delta.py SHA:603198 --asof 2026-11-09
+[05:17:08] SKIP SHA:603198: not a US listing (SEC filers only)
+[05:17:08] $ claude -p Ticker SHA:603198, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:17:10] You've hit your session limit · resets 7am (Europe/London)
+[05:17:10] !! FAILED PB: claude -p Evaluate PB for 2026-11-09: fact sheet research/PB/factsheet-2026-11-09.md, note research/PB/2026-11-09.md, state portfolio/state.json, macro overlay research/PB/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk 
+[05:17:11] You've hit your session limit · resets 7am (Europe/London)
+[05:17:11] !! FAILED SHA:603198: claude -p Ticker SHA:603198, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**)
+[05:18:12] == screened out HKG:0388: price above base fair value (-45.0%; floor +0%) (no AI research)
+[05:18:15] == screened out SHE:002736: price above base fair value (-49.6%; floor +0%) (no AI research)
+[05:18:19] == screened out SHE:000893: price above base fair value (-29.8%; floor +0%) (no AI research)
+[05:19:22] == initiate SHE:300628
+[05:19:22] $ bin/py scripts/sec_delta.py SHE:300628 --asof 2026-11-09
+[05:19:22] SKIP SHE:300628: not a US listing (SEC filers only)
+[05:19:22] $ claude -p Ticker SHE:300628, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:19:24] You've hit your session limit · resets 7am (Europe/London)
+[05:19:25] !! FAILED SHE:300628: claude -p Ticker SHE:300628, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**)
+[05:19:25] == initiate SHE:002555
+[05:19:25] $ bin/py scripts/sec_delta.py SHE:002555 --asof 2026-11-09
+[05:19:25] SKIP SHE:002555: not a US listing (SEC filers only)
+[05:19:25] $ claude -p Ticker SHE:002555, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:19:28] You've hit your session limit · resets 7am (Europe/London)
+[05:19:28] !! FAILED SHE:002555: claude -p Ticker SHE:002555, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**)
+[05:19:28] == screened out SGX:BS6: price above base fair value (-50.8%; floor +0%) (no AI research)

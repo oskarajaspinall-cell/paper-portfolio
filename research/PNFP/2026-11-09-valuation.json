@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 63.10612574796338,
+    "base": 89.09535035301215,
+    "bull": 96.41521731147539
+   },
+   "cost_of_equity": 0.09957250000000001,
+   "assumptions": {
+    "roe": {
+     "bear": 0.07621,
+     "base": 0.0973,
+     "bull": 0.10324
+    },
+    "justified_pb": {
+     "bear": 0.686714271346676,
+     "base": 0.9695262999094839,
+     "bull": 1.0491803278688523
+    },
+    "bvps": 91.895754
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 108.18898031043861,
+    "base": 123.12299784328485,
+    "bull": 228.58308210383336
+   },
+   "implied_growth": 0.013074152354222948,
+   "discount_rate": 0.09957250000000001,
+   "cost_of_equity": 0.09957250000000001,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.030728984824774555,
+     "base": 0.0625649261846639,
+     "bull": 0.1038017350891065
+    },
+    "cash_flow_margin": {
+     "bear": 0.25540593227217206,
+     "base": 0.25540593227217206,
+     "bull": 0.4019202612177203
+    },
+    "cagr_3y": 0.09645796964954911,
+    "cagr_5y": 0.1038017350891065,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 24.003074285376446,
+    "base": 27.4900264842938,
+    "bull": 32.05699020480854
+   },
+   "cost_of_equity": 0.09957250000000001,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 2.0
+   }
+  }
+ ],
+ "price": 100.64,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 78.13374393545513,
+  "base": 100.43789951643639,
+  "bull": 140.47117224226136
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.22363132019619303,
+  "base": -0.0020081526586209764,
+  "bull": 0.3957787384962377
+ },
+ "implied_growth": 0.013074152354222948,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 4.5x (base 27.49-123.12)"
+  ]
+ },
+ "ticker": "PNFP",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/pnfp/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/pnfp/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/pnfp/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/pnfp/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/pnfp/statistics/"
+ }
+}
