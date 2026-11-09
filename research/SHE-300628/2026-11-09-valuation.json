@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Communication Equipment",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 13.858570434366456,
+    "base": 19.70480895122501,
+    "bull": 37.0784842068634
+   },
+   "implied_growth": 0.28440242303566277,
+   "discount_rate": 0.1233853571075603,
+   "cost_of_equity": 0.12340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.02170465053556754,
+     "base": 0.06490889257318465,
+     "bull": 0.13122626922160352
+    },
+    "cash_flow_margin": {
+     "bear": 0.1794607070670161,
+     "base": 0.24158381650668298,
+     "bull": 0.39480738719193176
+    },
+    "cagr_3y": 0.07840930107113508,
+    "cagr_5y": 0.13122626922160352,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 40.504515473107915,
+    "base": 45.467986142621946,
+    "bull": 61.1914983848742
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 14.557,
+     "base": 16.535,
+     "bull": 22.801
+    },
+    "ttm_ebitda": 3182019314
+   }
+  }
+ ],
+ "price": 39.59,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 22.740552113946944,
+  "base": 28.292534681690654,
+  "bull": 45.11615559953367
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.42559858262321437,
+  "base": -0.28536158924752075,
+  "bull": 0.13958463247117114
+ },
+ "implied_growth": 0.28440242303566277,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.3x (base 19.70-45.47)"
+  ]
+ },
+ "ticker": "SHE:300628",
+ "asof": "2026-11-09",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/she/300628/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/she/300628/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/she/300628/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/she/300628/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/she/300628/statistics/"
+ }
+}

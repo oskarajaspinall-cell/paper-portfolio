@@ -1,0 +1,142 @@
+{
+ "industry": {
+  "industry": "Capital Markets",
+  "known": true,
+  "best": "FCFE / DCF",
+  "second": "P/E",
+  "best_models": [
+   "fcfe",
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 1.9611741171240638,
+    "base": 5.708832818859064,
+    "bull": 5.708832818859064
+   },
+   "implied_growth": 0.06365311312445035,
+   "discount_rate": 0.1253265,
+   "cost_of_equity": 0.1253265,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.07434385108940099,
+     "base": -0.03496340295924465,
+     "bull": -0.03496340295924465
+    },
+    "cash_flow_margin": {
+     "bear": 0.1593388195721182,
+     "base": 0.3968062525358116,
+     "bull": 0.3968062525358116
+    },
+    "cagr_3y": -0.0761659096581766,
+    "cagr_5y": -0.11368770217880197,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 1.9611741171240638,
+    "base": 5.708832818859064,
+    "bull": 5.708832818859064
+   },
+   "implied_growth": 0.06365311312445035,
+   "discount_rate": 0.1253265,
+   "cost_of_equity": 0.1253265,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.07434385108940099,
+     "base": -0.03496340295924465,
+     "bull": -0.03496340295924465
+    },
+    "cash_flow_margin": {
+     "bear": 0.1593388195721182,
+     "base": 0.3968062525358116,
+     "bull": 0.3968062525358116
+    },
+    "cagr_3y": -0.0761659096581766,
+    "cagr_5y": -0.11368770217880197,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 7.5968414816,
+    "base": 12.046222854400002,
+    "bull": 18.356282306
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 15.959,
+     "base": 25.306,
+     "bull": 26.791
+    },
+    "ttm_eps": 0.685166,
+    "peak_earnings": "TTM EPS is 1.9x its 5y median: bear/base use the 5y average (0.476), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 8.38,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 1.9611741171240638,
+  "base": 5.708832818859064,
+  "bull": 5.708832818859064
+ },
+ "used": [
+  "fcfe",
+  "dcf"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7659696757608516,
+  "base": -0.3187550335490378,
+  "bull": -0.3187550335490378
+ },
+ "implied_growth": 0.06365311312445035,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.1x (base 5.71-12.05)"
+  ]
+ },
+ "ticker": "SHA:600958",
+ "asof": "2026-11-09",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/600958/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/600958/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/600958/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/600958/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/600958/statistics/"
+ }
+}
