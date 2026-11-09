@@ -1,0 +1,132 @@
+{
+ "industry": {
+  "industry": "Utilities - Regulated Water",
+  "known": true,
+  "best": "DCF / DDM",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "ddm"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -7.449268575132698,
+    "base": 16.627414859756065,
+    "bull": 22.306708642065523
+   },
+   "implied_growth": -0.18003846517138666,
+   "discount_rate": 0.08616972898065967,
+   "cost_of_equity": 0.10840000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.07142540626275849,
+     "base": -0.031271707092324116,
+     "bull": -0.031271707092324116
+    },
+    "cash_flow_margin": {
+     "bear": -0.19014577006296918,
+     "base": 0.4296449838596821,
+     "bull": 0.5686733250805593
+    },
+    "cagr_3y": -0.06723601584377947,
+    "cagr_5y": -0.10785081252551698,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "best",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 5.303211991434688,
+    "base": 5.997601918465228,
+    "bull": 6.881198910081743
+   },
+   "cost_of_equity": 0.10840000000000001,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 0.488
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 7.2204986280000005,
+    "base": 9.007825748,
+    "bull": 10.446775548
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.534,
+     "base": 11.894,
+     "bull": 13.794
+    },
+    "ttm_eps": 0.757342
+   }
+  }
+ ],
+ "price": 8.165,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.02,
+ "reporting_currency": "HKD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -3.1984417196102357,
+  "base": 13.084143879325786,
+  "bull": 17.164872064737597
+ },
+ "used": [
+  "dcf",
+  "ddm"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.3917258689051115,
+  "base": 0.6024671009584552,
+  "bull": 1.1022500997841518
+ },
+ "implied_growth": -0.18003846517138666,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.8x (base 6.00-16.63)"
+  ]
+ },
+ "ticker": "HKG:0270",
+ "asof": "2026-11-09",
+ "quote_currency": "HKD",
+ "financials_currency": "HKD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/0270/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/0270/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/0270/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/0270/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/0270/statistics/"
+ }
+}

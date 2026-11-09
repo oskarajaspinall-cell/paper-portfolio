@@ -1,0 +1,176 @@
+{
+ "ticker": "OBDC",
+ "asof": "2026-11-09",
+ "sector": "Financials",
+ "industry": "Asset Management",
+ "quality": {
+  "ROIC": {
+   "ttm": 8.118,
+   "fy_5y_change": 3.3899999999999997,
+   "fy_5y_label": "rising"
+  },
+  "ROCE": {
+   "ttm": 8.1,
+   "fy_5y_change": 3.8000000000000007,
+   "fy_5y_label": "rising"
+  },
+  "ROE": {
+   "ttm": 4.656,
+   "fy_5y_change": -1.2969999999999988,
+   "fy_5y_label": "falling"
+  },
+  "Gross margin": {
+   "ttm": 100.0,
+   "fy_5y_change": 0.0,
+   "fy_5y_label": "flat"
+  },
+  "Operating margin": {
+   "ttm": 75.07738463736369,
+   "fy_5y_change": 6.227334878905907,
+   "fy_5y_label": "rising"
+  },
+  "Net margin": {
+   "ttm": 20.788657823754733,
+   "fy_5y_change": -27.28878633134712,
+   "fy_5y_label": "falling"
+  },
+  "FCF margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {
+  "ROIC": {
+   "latest": 8.118,
+   "change": 0.05900000000000105,
+   "direction": "flat",
+   "change_3y": -0.8069999999999986,
+   "direction_3y": "flat",
+   "high": 9.110999999999999
+  },
+  "ROCE": {
+   "latest": 8.1,
+   "change": -0.10000000000000142,
+   "direction": "flat",
+   "change_3y": -0.6999999999999993,
+   "direction_3y": "flat",
+   "high": 9.700000000000001
+  },
+  "Operating margin": {
+   "latest": 75.07738463736369,
+   "change": -1.032409538879648,
+   "direction": "falling",
+   "change_3y": -0.47160959350540566,
+   "direction_3y": "flat",
+   "high": 76.39609244710407
+  }
+ },
+ "valuation": {
+  "P/E": {
+   "current": 16.27627,
+   "pos_pct": 314.03166318719553,
+   "peer_premium_pct": -8.046269879381951
+  },
+  "EV/EBITDA": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "EV/Sales": {
+   "current": 8.03241,
+   "pos_pct": 4.024804905239703,
+   "peer_premium_pct": -15.180464625131995
+  },
+  "P/FCF": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "P/B": {
+   "current": 0.76422,
+   "pos_pct": -4.027522935779822,
+   "peer_premium_pct": -19.893081761006282
+  }
+ },
+ "fair_value": {
+  "price": 10.94,
+  "fair_value": {
+   "bear": 10.162295782106318,
+   "base": 11.902539906195514,
+   "bull": 39.90054275289044
+  },
+  "methods": [
+   {
+    "model": "dcf",
+    "label": "DCF",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": 12.773158491159476,
+     "base": 14.530797631293273,
+     "bull": 56.47261141733566
+    },
+    "implied_growth": 0.022736606888413793,
+    "discount_rate": 0.0884,
+    "cost_of_equity": 0.0884,
+    "assumptions": {
+     "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+     "growth": {
+      "bear": 0.059922824176224146,
+      "base": 0.09128631881428549,
+      "bull": 0.16029962690469368
+     },
+     "cash_flow_margin": {
+      "bear": 0.20788657823754733,
+      "base": 0.20788657823754733,
+      "bull": 0.6117879035013604
+     },
+     "cagr_3y": 0.1548456483524483,
+     "cagr_5y": 0.16029962690469368,
+     "terminal_growth": 0.025
+    }
+   },
+   {
+    "model": "pe",
+    "label": "P/E",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 4.940570364,
+     "base": 6.646024455999999,
+     "bull": 6.7564054239999995
+    },
+    "assumptions": {
+     "multiple": {
+      "bear": 7.251,
+      "base": 9.754,
+      "bull": 9.916
+     },
+     "ttm_eps": 0.681364
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": false,
+   "reasons": [
+    "methods disagree 2.2x (base 6.65-14.53)"
+   ]
+  }
+ }
+}

@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 13.888210211894531,
+    "base": 15.539661734406547,
+    "bull": 15.98428329815978
+   },
+   "cost_of_equity": 0.09531800000000001,
+   "assumptions": {
+    "roe": {
+     "bear": 0.07529,
+     "base": 0.08127,
+     "bull": 0.08288
+    },
+    "justified_pb": {
+     "bear": 0.7151796126169684,
+     "base": 0.8002218493131201,
+     "bull": 0.8231178361159301
+    },
+    "bvps": 19.419192
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 21.248811572392544,
+    "base": 27.33869118859342,
+    "bull": 30.997573704881248
+   },
+   "implied_growth": -0.05182817401656076,
+   "discount_rate": 0.09531800000000001,
+   "cost_of_equity": 0.09531800000000001,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.016729867197253404,
+     "base": 0.04977461222273659,
+     "bull": 0.08063871449643956
+    },
+    "cash_flow_margin": {
+     "bear": 0.3067484662576687,
+     "base": 0.34445579389399616,
+     "bull": 0.34445579389399616
+    },
+    "cagr_3y": 0.06845973439450681,
+    "cagr_5y": 0.08063871449643956,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 6.571378769391666,
+    "base": 7.5798515316135235,
+    "bull": 8.922709638913755
+   },
+   "cost_of_equity": 0.09531800000000001,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 0.52
+   }
+  }
+ ],
+ "price": 17.9,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 16.3417439987272,
+  "base": 19.47267155246884,
+  "bull": 20.988713433733604
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.08705340789233518,
+  "base": 0.08785874594797982,
+  "bull": 0.17255382311360923
+ },
+ "implied_growth": -0.05182817401656076,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.6x (base 7.58-27.34)"
+  ]
+ },
+ "ticker": "FNB",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/fnb/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/fnb/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/fnb/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/fnb/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/fnb/statistics/"
+ }
+}

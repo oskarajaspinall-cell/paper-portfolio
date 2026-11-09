@@ -1,0 +1,103 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 27.08483868359621,
+    "base": 45.091197791324916,
+    "bull": 53.34330789495267
+   },
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "roe": {
+     "bear": 0.09514,
+     "base": 0.14177,
+     "bull": 0.16314
+    },
+    "justified_pb": {
+     "bear": 1.106309148264984,
+     "base": 1.8417981072555203,
+     "bull": 2.1788643533123024
+    },
+    "bvps": 24.482161
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 21.284702139999997,
+    "base": 47.28212939,
+    "bull": 52.552416343999994
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.81,
+     "base": 10.685,
+     "bull": 11.876
+    },
+    "ttm_eps": 4.425094
+   }
+  }
+ ],
+ "price": 39.61,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 25.151459835730805,
+  "base": 45.82150832421661,
+  "bull": 53.079677377968444
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.3650224732206311,
+  "base": 0.15681667064419624,
+  "bull": 0.3400574950257118
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "ORI",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/ori/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/ori/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/ori/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/ori/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/ori/statistics/"
+ }
+}

@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 12.773158491159476,
+    "base": 14.530797631293273,
+    "bull": 56.47261141733566
+   },
+   "implied_growth": 0.022736606888413793,
+   "discount_rate": 0.0884,
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.059922824176224146,
+     "base": 0.09128631881428549,
+     "bull": 0.16029962690469368
+    },
+    "cash_flow_margin": {
+     "bear": 0.20788657823754733,
+     "base": 0.20788657823754733,
+     "bull": 0.6117879035013604
+    },
+    "cagr_3y": 0.1548456483524483,
+    "cagr_5y": 0.16029962690469368,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 4.940570364,
+    "base": 6.646024455999999,
+    "bull": 6.7564054239999995
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.251,
+     "base": 9.754,
+     "bull": 9.916
+    },
+    "ttm_eps": 0.681364
+   }
+  }
+ ],
+ "price": 10.94,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 10.162295782106318,
+  "base": 11.902539906195514,
+  "bull": 39.90054275289044
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.07108813691898375,
+  "base": 0.0879835380434657,
+  "bull": 2.6472159737559817
+ },
+ "implied_growth": 0.022736606888413793,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.2x (base 6.65-14.53)"
+  ]
+ },
+ "ticker": "OBDC",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/obdc/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/obdc/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/obdc/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/obdc/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/obdc/statistics/"
+ }
+}
