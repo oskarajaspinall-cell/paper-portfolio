@@ -304,6 +304,19 @@ thresholds = { "5" = 11, "4" = 9, "3" = 5, "2" = 3 }  # total -> conviction (bel
 hold_4 = 8                        # hold band: a holding keeps conviction 4 from this total (an ADD needs the buy threshold)
 # 4+ also needs quality level >= 1, direction >= 1 and valuation >= 2 (the mandate: good business, attractive price)
 
+[calibration]
+# Calibration loop (owner-approved 2026-11-09, scripts/calibration.py, weekly): outcomes vs the SECTOR benchmark by
+# conviction; a scorecard offset (+/-1, shrunk) only once >= min_n decisions are resolved at `horizon` in both the
+# 4+ and 3 groups. No per-sector penalties (too few decisions, and anti-value).
+window = 50                       # recent new-name verdicts for the 4+ share
+band_lo = 2                       # alert when the 4+ share leaves this band (%)
+band_hi = 10
+min_n = 30
+horizon = "3m"
+shrink_k = 30                     # mean x n / (n + shrink_k)
+tighten_pp = 5                    # 4+ trail their sector by more than this (shrunk) -> offset -1
+loosen_pp = 5                     # 4+ and 3 both beat their sector by more than this -> offset +1
+
 [screen]
 # Weekly Python screen over universe/universe.csv (one statistics page per stock, no model calls).
 # Percentile scores within the screened set. Core score = quality + valuation. Tactical = the two setups in

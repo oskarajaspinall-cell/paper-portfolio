@@ -460,6 +460,10 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
         except StepFailed as e:
             log(f"attribution not written: {e}")
         step("report")
+        try:  # calibration loop (2026-11-09): inform-only until its gate is met; never blocks the week
+            sh(PY + ["scripts/calibration.py", "--asof", asof], log, timeout=1800)
+        except StepFailed as e:
+            log(f"!! calibration not updated: {e}")
         sh(PY + ["scripts/weekly_report.py", "--asof", asof, "--run", str(rundir)], log)
         if not dry_run:
             try:  # cosmetic: a dashboard problem is logged, never cancels the week

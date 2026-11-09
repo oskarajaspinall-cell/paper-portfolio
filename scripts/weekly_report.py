@@ -134,6 +134,10 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     out += ["", "## 3. Returns", "", "All USD. Baseline = first-week picks held unchanged. SPY priced from "
             "https://stockanalysis.com/etf/spy/history/.", "", format_returns(rt) if rt else "No valuations yet."]
 
+    cal = ROOT / "reports" / "calibration" / f"{asof}.md"
+    if cal.exists():  # calibration loop (2026-11-09)
+        out += ["", "**Calibration** (how our verdicts have done; scorecard feedback once enough are resolved):", ""]
+        out += [l for l in cal.read_text().splitlines()[2:] if l.startswith("- ")]
     out += ["", "## 4. Review notes", ""]
     for e in scan.get("exits", []):
         out.append(f"- **{e['ticker']}**: mechanical exit, {e['why']} — filled at close {e['close']} on {e['fill_date']} "

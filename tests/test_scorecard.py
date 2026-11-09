@@ -83,3 +83,19 @@ def test_consistency_needs_new_evidence(tmp_path):
     assert consistency_problems(p, dict(new, price_at_decision=70.0, new_evidence={"type": "price_move", "text": "fell 18%"})) == []
     assert any("cite the dated source" in e for e in consistency_problems(p, dict(new, new_evidence={"type": "guidance", "text": "raised"})))
     assert consistency_problems(p, dict(old)) == []          # same verdict: nothing to explain
+
+
+def test_calibration_shrinks_and_gates():
+    import calibration as C
+    assert C.shrunk([10.0] * 10, 30) == 2.5          # 10 decisions barely move it
+    assert round(C.shrunk([10.0] * 90, 30), 2) == 7.5
+    assert C.shrunk([], 30) is None
+
+
+def test_calibration_offset_only_when_gate_met(tmp_path):
+    import json
+    p = tmp_path / "latest.json"
+    p.write_text(json.dumps({"gate_met": False, "score_offset": -1}))
+    assert S.calibration_offset(p) == 0.0
+    p.write_text(json.dumps({"gate_met": True, "score_offset": -1}))
+    assert S.calibration_offset(p) == -1.0
