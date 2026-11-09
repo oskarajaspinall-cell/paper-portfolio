@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Engineering & Construction",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 343.22794093863047,
+    "base": 1313.6939447536465,
+    "bull": 1777.931587713836
+   },
+   "implied_growth": 0.09516460222805717,
+   "discount_rate": 0.11908176023641324,
+   "cost_of_equity": 0.1199405,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.13262529455978464,
+     "base": 0.16551203580231283,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.04945919766686751,
+     "base": 0.18944781224515894,
+     "bull": 0.18944781224515894
+    },
+    "cagr_3y": 0.30025058911956926,
+    "cagr_5y": 0.311797554089682,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 317.4690134203433,
+    "base": 347.79885697262023,
+    "bull": 1131.994724358065
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 13.63,
+     "base": 15.19,
+     "bull": 16.745
+    },
+    "ttm_ebitda": 2272188000,
+    "peak_earnings": "TTM EBITDA is 4.6x its 5y median: bear/base use the 5y average (6.852e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 1017.5,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 334.6416317658681,
+  "base": 991.7289154933045,
+  "bull": 1562.6192999285788
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6711138754143802,
+  "base": -0.02532784718102754,
+  "bull": 0.535743783713591
+ },
+ "implied_growth": 0.09516460222805717,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.8x (base 347.80-1313.69)"
+  ]
+ },
+ "ticker": "FIX",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/fix/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/fix/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/fix/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/fix/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/fix/statistics/"
+ }
+}

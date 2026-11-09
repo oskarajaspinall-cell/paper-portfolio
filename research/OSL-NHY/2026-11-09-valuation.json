@@ -1,0 +1,116 @@
+{
+ "industry": {
+  "industry": "Aluminum",
+  "known": true,
+  "best": "NAV / normalized DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "nav",
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 8.805922628135928,
+    "base": 78.63583342890854,
+    "bull": 187.18461027279292
+   },
+   "implied_growth": 0.003632982938542119,
+   "discount_rate": 0.09313320129090785,
+   "cost_of_equity": 0.106499,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.01746633692876824,
+     "base": 0.03395401913154571,
+     "bull": 0.08574875038371932
+    },
+    "cash_flow_margin": {
+     "bear": 0.012663961627610049,
+     "base": 0.05284908314647543,
+     "bull": 0.09634875433441223
+    },
+    "cagr_3y": 6.732614246351964e-05,
+    "cagr_5y": 0.08574875038371932,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 68.14547526440437,
+    "base": 84.02157707001567,
+    "bull": 88.8522059112248
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 2.693,
+     "base": 3.255,
+     "bull": 3.426
+    },
+    "ttm_ebitda": 55527000000
+   }
+  }
+ ],
+ "price": 68.38,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "NOK",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 28.58577350689207,
+  "base": 80.43108130927759,
+  "bull": 154.4071421522702
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5819570999284576,
+  "base": 0.1762369305246796,
+  "bull": 1.2580746146866075
+ },
+ "implied_growth": 0.003632982938542119,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "OSL:NHY",
+ "asof": "2026-11-09",
+ "quote_currency": "NOK",
+ "financials_currency": "NOK",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/osl/NHY/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/osl/NHY/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/osl/NHY/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/osl/NHY/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/osl/NHY/statistics/"
+ }
+}
