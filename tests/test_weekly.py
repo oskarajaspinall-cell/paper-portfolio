@@ -739,3 +739,15 @@ def test_reason_codes_are_neutral_and_enforced():
         wr.reason_text("buy_this")
     with pytest.raises(wr.StepFailed):
         wr.check_reason("A temporary dip can be conviction 4. Decide BUY.")
+
+
+def test_fair_value_reliability_flag():
+    import valuation as V
+    ok = {"price": 100, "fair_value": {"base": 130}, "methods": [
+        {"status": "ok", "values": {"base": 120}}, {"status": "ok", "values": {"base": 140}}]}
+    assert V.reliability(ok)["reliable"]
+    wide = dict(ok, methods=[{"status": "ok", "values": {"base": 50}}, {"status": "ok", "values": {"base": 160}}])
+    assert not V.reliability(wide)["reliable"]
+    assert not V.reliability(dict(ok, fair_value={"base": 211}))["reliable"]   # > +100%
+    assert not V.reliability(dict(ok, fair_value={"base": 1}))["reliable"]     # Mizrahi-style -99%
+    assert not V.is_reliable(None)

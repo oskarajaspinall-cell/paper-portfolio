@@ -141,11 +141,19 @@ def value_and_basis(ticker: str, today: str | None, fair_value_base: float | Non
     Either alone when the other is missing."""
     w = FV_WEIGHT if fv_weight is None else fv_weight
     ev, _ = expected_value(ticker, today)
+    if fair_value_base and not fv_reliable(ticker, today):  # 2026-11-09 sanity flag: an unreliable model is ignored
+        fair_value_base = None
     if ev and fair_value_base:
         return w * fair_value_base + (1 - w) * ev, f"blend ({w:.0%} base fair value, {1 - w:.0%} expected 12-month value)"
     if ev:
         return ev, "expected 12-month value"
     return (fair_value_base, "base fair value") if fair_value_base else (None, "n/a")
+
+
+def fv_reliable(ticker: str, today: str | None) -> bool:
+    import valuation
+    val, _ = latest_valuation(ticker, today or dt.date.today().isoformat())
+    return valuation.is_reliable(val) if val else True
 
 
 def disagreement(ticker: str, today: str | None, fair_value_base: float | None, close: float | None) -> float | None:

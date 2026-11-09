@@ -23,6 +23,7 @@ def fair_values(monkeypatch):
                         if t in fv else (None, None))
     monkeypatch.setattr(FQ, "_latest_eval_date", lambda t, d: None)  # no research/ files read
     monkeypatch.setattr(FQ, "expected_value", lambda t, d=None: (None, None))
+    monkeypatch.setattr(FQ, "fv_reliable", lambda t, d=None: True)
 
 
 def state_file(tmp_path, cfg, holdings, cash):
@@ -336,6 +337,7 @@ def test_expected_value_weights_the_scenarios(tmp_path, monkeypatch):
                          "bear": {"probability": 0.25, "target_price_12m": 20}}}
     (d / "2026-10-25-evaluation.md").write_text("# E\n\n```json\n" + json.dumps(blk) + "\n```\n")
     monkeypatch.setattr(FQ, "ROOT", tmp_path)
+    monkeypatch.setattr(FQ, "fv_reliable", lambda t, d=None: True)
     v, path = FQ.expected_value("X")
     assert v == 30 and path.endswith("2026-10-25-evaluation.md")
     assert FQ.expected_value("X", "2026-10-01") == (None, None)

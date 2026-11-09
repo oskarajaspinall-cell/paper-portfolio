@@ -93,8 +93,13 @@ def recent_direction(fetcher: Fetcher, ticker: str) -> tuple[list[dict], dict]:
         d0, v0 = prior[-1]
         two = [(d, v) for d, v in ser if d >= (dt.date.fromisoformat(d1) - dt.timedelta(days=730)).isoformat()]
         hd, hv = max(two, key=lambda x: x[1])
+        cut3 = (dt.date.fromisoformat(d1) - dt.timedelta(days=1080)).isoformat()
+        p3 = [(d, v) for d, v in ser if d <= cut3]
+        ch3 = (v1 - p3[-1][1]) if p3 else None
         ch = v1 - v0
         rows.append({"label": label, "latest": v1, "latest_date": d1, "prior": v0, "prior_date": d0, "change": ch,
+                     "change_3y": ch3, "prior_3y_date": p3[-1][0] if p3 else None,
+                     "direction_3y": None if ch3 is None else ("flat" if abs(ch3) < 1 else ("rising" if ch3 > 0 else "falling")),
                      "high": hv, "high_date": hd, "src": src,
                      "direction": "flat" if abs(ch) < 1 else ("rising" if ch > 0 else "falling")})
     return rows, srcs
@@ -320,18 +325,28 @@ def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str, fv_out: di
             tr = f"{'falling' if d < -0.1 else 'rising' if d > 0.1 else 'flat'} ({d:+.2f}x)"
         w(f"| {label} | " + " | ".join(cells) + f" | {tr} | {s} |")
 
+    # machine-readable trends for scripts/scorecard.py (2026-11-09): Python computes every direction; the
+    # evaluator only explains causes
+    trends = {"ticker": ticker, "asof": asof, "sector": ov.get("sector"), "industry": ov.get("industry"),
+              "quality": {label: {"ttm": vals[cols[-1]] if cols else None,
+                                  "fy_5y_change": trend([vals[i] for i in fy_idx])[0],
+                                  "fy_5y_label": trend([vals[i] for i in fy_idx])[1] if unit == "%" else None}
+                          for label, vals, unit, _ in q_rows}}
     # ---- the last year's direction (rolling 12 months), which FY endpoints can hide (2026-11-08)
     rec, rsrc = recent_direction(fetcher, ticker)
+    trends["recent"] = {r["label"]: {k: r[k] for k in ("latest", "change", "direction", "change_3y", "direction_3y",
+                                                        "high")} for r in rec}
     src.update(rsrc)
     w("\n### Recent direction (rolling 12 months)")
     if not rec:
         w(f"{NA}: no rolling-12-month statements on the site.")
     else:
-        w("| Metric | Latest TTM | TTM a year earlier | Change | 2-year high | Last year | Src |")
-        w("|---|---|---|---|---|---|---|")
+        w("| Metric | Latest TTM | TTM a year earlier | Change | 3-year change | 2-year high | Last year | Src |")
+        w("|---|---|---|---|---|---|---|---|")
         for r in rec:
+            c3 = NA if r["change_3y"] is None else f"{r['change_3y']:+.1f}pp ({r['direction_3y']})"
             w(f"| {r['label']} | {r['latest']:.1f}% ({r['latest_date']}) | {r['prior']:.1f}% ({r['prior_date']}) | "
-              f"{r['change']:+.1f}pp | {r['high']:.1f}% ({r['high_date']}) | {r['direction']} | {r['src']} |")
+              f"{r['change']:+.1f}pp | {c3} | {r['high']:.1f}% ({r['high_date']}) | {r['direction']} | {r['src']} |")
         five = {label: trend([vals[i] for i in fy_idx])[1] for label, vals, _, _ in q_rows}
         for r in rec:
             why = []
@@ -369,6 +384,8 @@ def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str, fv_out: di
         pm = NA if not pp else f"{fx_multiple(pp['median'])} (n={pp['n']})"
         prem = NA if not pp else f"{pp['premium_pct']:+.0f}%"
         w(f"| {label} | {fx_multiple(cur)} | {rng} | {pos} | {pm} | {prem} | RA{(',' + peer_codes) if peer_codes else ''} |")
+        trends.setdefault("valuation", {})[label] = {"current": cur, "pos_pct": rp["pos_pct"] if rp else None,
+                                                     "peer_premium_pct": pp["premium_pct"] if pp else None}
     fy = sv("fcfYield")
     w(f"| FCF yield | {f(fy, 2, '%')} | | | | | ST |")
     if not peers:
@@ -469,6 +486,8 @@ def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str, fv_out: di
     if dropped:
         w(f"\n({dropped} analyst price-target/rating headline(s) removed: never an input, per house rules.)")
 
+    if fv_out is not None:
+        fv_out["trends"] = trends
     w("\n## Sources")
     for k, u in src.items():
         w(f"- [{k}] {u}")
@@ -499,6 +518,9 @@ def main(argv=None) -> int:
     path = ROOT / "research" / Ticker(args.ticker).slug / f"factsheet-{args.asof}.md"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(md)
+    if fvo.get("trends"):  # factsheet-<date>.json: the scorecard's Python inputs
+        import json as _json
+        path.with_suffix(".json").write_text(_json.dumps(fvo["trends"], indent=1, default=str))
     if fvo.get("fv"):  # research/<SLUG>/<date>-valuation.json/.md (re-written with any evaluator overrides later)
         import json as _json
         import valuation

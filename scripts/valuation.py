@@ -415,7 +415,32 @@ def fair_value(inp: dict, industry: str | None, vc: dict, decision: dict | None 
     out.update(fair_value=fv, used=[u["model"] for u in used], weights=w,
                upside={s: fv[s] / inp["price"] - 1 for s in SCEN} if inp["price"] else None,
                implied_growth=next((t.get("implied_growth") for t in tried if t.get("implied_growth") is not None), None))
+    out["reliability"] = reliability(out)
     return out
+
+
+def reliability(doc: dict, disagree_x: float = 2.0, max_up: float = 1.0, min_up: float = -0.8) -> dict:
+    """Fair-value sanity flag (2026-11-09): the mechanical value is marked unreliable when its methods disagree by
+    more than `disagree_x` (base values) or the base sits more than +100% above or 80% below the price. Then the
+    prescreen and the funding-queue ranking use the analyst's expected value instead (e.g. Leidos +111%, Mizrahi -99%)."""
+    reasons = []
+    bases = [m["values"]["base"] for m in doc.get("methods", []) if m.get("status") == "ok" and m.get("values")
+             and (m["values"].get("base") or 0) > 0]
+    if len(bases) >= 2 and max(bases) / min(bases) > disagree_x:
+        reasons.append(f"methods disagree {max(bases) / min(bases):.1f}x (base {min(bases):.2f}-{max(bases):.2f})")
+    fv, price = (doc.get("fair_value") or {}).get("base"), doc.get("price")
+    if fv is not None and price:
+        up = fv / price - 1
+        if up > max_up or up < min_up:
+            reasons.append(f"base {up * 100:+.0f}% from the price (outside {min_up * 100:+.0f}% to {max_up * 100:+.0f}%)")
+    return {"reliable": not reasons, "reasons": reasons}
+
+
+def is_reliable(doc: dict | None) -> bool:
+    """For files written before the flag existed: recompute."""
+    if not doc or not (doc.get("fair_value") or {}).get("base"):
+        return False
+    return (doc.get("reliability") or reliability(doc))["reliable"]
 
 
 def render_md(fv: dict, ccy: str, ticker: str, asof: str) -> str:
@@ -474,6 +499,10 @@ def fact_sheet_section(fv: dict, ccy: str) -> list[str]:
               f"{f(fv['fair_value']['bull'])} | {src},HI |",
               f"| vs last close {f(fv['price'])} | {p(fv['upside']['bear'])} | {p(fv['upside']['base'])} | "
               f"{p(fv['upside']['bull'])} | {src},HI |"]
+        rel = fv.get("reliability") or reliability(fv)
+        if not rel["reliable"]:
+            L += ["", "**Fair value unreliable:** " + "; ".join(rel["reasons"]) + ". Weigh it lightly; the prescreen "
+                  "and the funding-queue ranking ignore it.", "", "| Item | Bear | Base | Bull | Src |", "|---|---|---|---|---|"]
     for m in fv["methods"]:
         v = m.get("values") or {}
         if m["status"] == "ok":

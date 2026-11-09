@@ -34,6 +34,9 @@ def check(ticker: str, asof: str, fetcher, cfg: dict) -> dict:
     if base is None or up is None:
         return row | {"verdict": "PASS", "reason": "no base fair value: full research decides"}
     row |= {"price": round(fv["price"], 4), "base_fair_value": round(base, 4), "base_upside_pct": round(up * 100, 1)}
+    if not valuation.is_reliable(fv):  # 2026-11-09: a broken model can't skip a stock (Mizrahi -99%)
+        return row | {"verdict": "PASS", "reason": "fair value unreliable (" + "; ".join(valuation.reliability(fv)["reasons"])
+                      + "): full research decides"}
     if up * 100 >= floor:
         return row | {"verdict": "PASS", "reason": f"base fair value {up * 100:+.1f}% vs price (floor {floor:+.0f}%)"}
     return row | {"verdict": "SKIP", "reason": f"price above base fair value ({up * 100:+.1f}%; floor {floor:+.0f}%)"}
