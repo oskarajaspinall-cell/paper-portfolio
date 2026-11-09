@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 135.1126492346939,
+    "base": 135.1126492346939,
+    "bull": 135.1126492346939
+   },
+   "cost_of_equity": 0.1034,
+   "assumptions": {
+    "roe": {
+     "bear": 0.25,
+     "base": 0.25,
+     "bull": 0.25
+    },
+    "justified_pb": {
+     "bear": 2.8698979591836737,
+     "base": 2.8698979591836737,
+     "bull": 2.8698979591836737
+    },
+    "bvps": 47.079252
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 224.93936377943146,
+    "base": 290.203411046625,
+    "bull": 402.8764765128858
+   },
+   "implied_growth": 0.1272618609728413,
+   "discount_rate": 0.1034,
+   "cost_of_equity": 0.1034,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.018966473158906608,
+     "base": 0.06694065750041821,
+     "bull": 0.14482968368385962
+    },
+    "cash_flow_margin": {
+     "bear": 0.5040847201210288,
+     "base": 0.5358886277345869,
+     "bull": 0.5470336718332443
+    },
+    "cagr_3y": 0.14482968368385962,
+    "cagr_5y": 0.07293294631781322,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 146.39423076923075,
+    "base": 166.69323979591837,
+    "bull": 192.92763157894734
+   },
+   "cost_of_equity": 0.1034,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 12.75
+   }
+  }
+ ],
+ "price": 368.5,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "SEK",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 165.0548874162731,
+  "base": 186.8095698386709,
+  "bull": 224.36725832742454
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5520898577577392,
+  "base": -0.4930540845626298,
+  "bull": -0.3911336273339904
+ },
+ "implied_growth": 0.1272618609728413,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.1x (base 135.11-290.20)"
+  ]
+ },
+ "ticker": "STO:AZA",
+ "asof": "2026-11-09",
+ "quote_currency": "SEK",
+ "financials_currency": "SEK",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sto/AZA/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sto/AZA/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sto/AZA/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sto/AZA/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sto/AZA/statistics/"
+ }
+}

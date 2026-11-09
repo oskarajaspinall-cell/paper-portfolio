@@ -1,0 +1,95 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 no FX rate for ILS]"
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 no FX rate for ILS]"
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 118.68840497737554,
+    "base": 135.14572704081633,
+    "bull": 156.41513157894735
+   },
+   "cost_of_equity": 0.1034,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 10.337
+   }
+  }
+ ],
+ "price": 22450,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "ILS",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 118.68840497737554,
+  "base": 135.14572704081633,
+  "bull": 156.41513157894735
+ },
+ "used": [
+  "ddm"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.9947132113595823,
+  "base": -0.9939801457888278,
+  "bull": -0.9930327335599578
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "base -99% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "TLV:MZTF",
+ "asof": "2026-11-09",
+ "quote_currency": "ILA",
+ "financials_currency": "ILS",
+ "fx_fin_to_quote": null,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tlv/MZTF/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tlv/MZTF/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tlv/MZTF/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tlv/MZTF/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tlv/MZTF/statistics/"
+ }
+}

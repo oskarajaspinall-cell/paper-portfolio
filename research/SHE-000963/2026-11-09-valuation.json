@@ -1,0 +1,118 @@
+{
+ "industry": {
+  "industry": "Drug Manufacturers - Specialty & Generic",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 9.212348613817735,
+    "base": 15.779744190967417,
+    "bull": 22.15533280853861
+   },
+   "implied_growth": 0.19645914688724747,
+   "discount_rate": 0.11997277369336143,
+   "cost_of_equity": 0.12340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.007310180550623449,
+     "base": 0.039869614118079696,
+     "bull": 0.059858095371071895
+    },
+    "cash_flow_margin": {
+     "bear": 0.03189275310731235,
+     "base": 0.050967388475166096,
+     "bull": 0.06771674438429927
+    },
+    "cagr_3y": 0.0496203611012469,
+    "cagr_5y": 0.059858095371071895,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 33.800566716,
+    "base": 50.111727036000005,
+    "bull": 59.916067512000005
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 17.241,
+     "base": 25.561,
+     "bull": 30.562
+    },
+    "ttm_eps": 1.960476
+   }
+  }
+ ],
+ "price": 27.72,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 17.408421314545155,
+  "base": 27.223738472644943,
+  "bull": 34.742244376359075
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.3719905730683566,
+  "base": -0.017902652501986194,
+  "bull": 0.25332771920487285
+ },
+ "implied_growth": 0.19645914688724747,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.2x (base 15.78-50.11)"
+  ]
+ },
+ "ticker": "SHE:000963",
+ "asof": "2026-11-09",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/she/000963/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/she/000963/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/she/000963/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/she/000963/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/she/000963/statistics/"
+ }
+}

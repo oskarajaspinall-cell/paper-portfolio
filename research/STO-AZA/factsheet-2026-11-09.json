@@ -1,0 +1,203 @@
+{
+ "ticker": "STO:AZA",
+ "asof": "2026-11-09",
+ "sector": "Financials",
+ "industry": "Banks - Regional",
+ "quality": {
+  "ROIC": {
+   "ttm": 34.207,
+   "fy_5y_change": -14.663000000000004,
+   "fy_5y_label": "falling"
+  },
+  "ROCE": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROE": {
+   "ttm": 36.925000000000004,
+   "fy_5y_change": -15.08100000000001,
+   "fy_5y_label": "falling"
+  },
+  "Gross margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Operating margin": {
+   "ttm": 62.84577834026397,
+   "fy_5y_change": -2.8076027810731077,
+   "fy_5y_label": "falling"
+  },
+  "Net margin": {
+   "ttm": 53.588862773458686,
+   "fy_5y_change": -1.6483157616668294,
+   "fy_5y_label": "falling"
+  },
+  "FCF margin": {
+   "ttm": 200.01807991321644,
+   "fy_5y_change": 513.3197510877275,
+   "fy_5y_label": "rising"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": 373.2456140350877,
+   "fy_5y_change": 974.3617723891441,
+   "fy_5y_label": "rising"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {
+  "ROIC": {
+   "latest": 34.207,
+   "change": -1.6649999999999991,
+   "direction": "falling",
+   "change_3y": -4.717999999999996,
+   "direction_3y": "falling",
+   "high": 38.824999999999996
+  },
+  "Operating margin": {
+   "latest": 62.84577834026397,
+   "change": -0.464168007239131,
+   "direction": "flat",
+   "change_3y": 1.515663027847772,
+   "direction_3y": "rising",
+   "high": 63.3099463475031
+  },
+  "FCF margin": {
+   "latest": 200.01807991321644,
+   "change": -309.0203022576461,
+   "direction": "falling",
+   "change_3y": 96.58552426827141,
+   "direction_3y": "rising",
+   "high": 763.6506687647521
+  }
+ },
+ "valuation": {
+  "P/E": {
+   "current": 19.99376,
+   "pos_pct": 21.86166889781349,
+   "peer_premium_pct": 40.79616914897364
+  },
+  "EV/EBITDA": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "EV/Sales": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "P/FCF": {
+   "current": 5.26815,
+   "pos_pct": 36.0473391089109,
+   "peer_premium_pct": -30.47182262109014
+  },
+  "P/B": {
+   "current": 6.66379,
+   "pos_pct": 7.844926611359279,
+   "peer_premium_pct": 244.3819121447028
+  }
+ },
+ "fair_value": {
+  "price": 368.5,
+  "fair_value": {
+   "bear": 165.0548874162731,
+   "base": 186.8095698386709,
+   "bull": 224.36725832742454
+  },
+  "methods": [
+   {
+    "model": "pb_roe",
+    "label": "P/B + ROE",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": 135.1126492346939,
+     "base": 135.1126492346939,
+     "bull": 135.1126492346939
+    },
+    "cost_of_equity": 0.1034,
+    "assumptions": {
+     "roe": {
+      "bear": 0.25,
+      "base": 0.25,
+      "bull": 0.25
+     },
+     "justified_pb": {
+      "bear": 2.8698979591836737,
+      "base": 2.8698979591836737,
+      "bull": 2.8698979591836737
+     },
+     "bvps": 47.079252
+    }
+   },
+   {
+    "model": "fcfe",
+    "label": "FCFE DCF",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 224.93936377943146,
+     "base": 290.203411046625,
+     "bull": 402.8764765128858
+    },
+    "implied_growth": 0.1272618609728413,
+    "discount_rate": 0.1034,
+    "cost_of_equity": 0.1034,
+    "assumptions": {
+     "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+     "growth": {
+      "bear": 0.018966473158906608,
+      "base": 0.06694065750041821,
+      "bull": 0.14482968368385962
+     },
+     "cash_flow_margin": {
+      "bear": 0.5040847201210288,
+      "base": 0.5358886277345869,
+      "bull": 0.5470336718332443
+     },
+     "cagr_3y": 0.14482968368385962,
+     "cagr_5y": 0.07293294631781322,
+     "terminal_growth": 0.025
+    }
+   },
+   {
+    "model": "ddm",
+    "label": "dividend discount",
+    "slot": "second",
+    "status": "ok",
+    "quote_ccy": true,
+    "values": {
+     "bear": 146.39423076923075,
+     "base": 166.69323979591837,
+     "bull": 192.92763157894734
+    },
+    "cost_of_equity": 0.1034,
+    "assumptions": {
+     "dividend_growth": {
+      "bear": 0.015000000000000001,
+      "base": 0.025,
+      "bull": 0.035
+     },
+     "dps": 12.75
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": false,
+   "reasons": [
+    "methods disagree 2.1x (base 135.11-290.20)"
+   ]
+  }
+ }
+}
