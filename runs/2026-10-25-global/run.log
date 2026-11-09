@@ -4691,3 +4691,109 @@ OK research/TSX-GMIN/2026-11-09-evaluation.md Bear case=149 Bull case=113 decisi
 [22:38:29] $ bin/py scripts/valuation.py TSX:GMIN --asof 2026-11-09 --eval research/TSX-GMIN/2026-11-09-evaluation.md
 [22:38:29] {"out": "research/TSX-GMIN/2026-11-09-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 47.55, "base": 49.78, "bull": 52.02}, "price": 47.21}
 [22:38:31] == done TSX:GMIN
+[22:38:35] == Research batch 10: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-09-batch-10.md; uploaded to GitHub
+[22:38:46] research/NSE-INDUSTOWER/2026-11-09-evaluation.md
+OK research/NSE-INDUSTOWER/2026-11-09-evaluation.md Bear case=143 Bull case=114 decision=AVOID scorecard=4->2
+[22:38:46] $ bin/py scripts/check_docs.py eval research/NSE-INDUSTOWER/2026-11-09-evaluation.md
+[22:38:46] OK research/NSE-INDUSTOWER/2026-11-09-evaluation.md Bear case=143 Bull case=114 decision=AVOID scorecard=4->2
+[22:38:46] $ bin/py scripts/valuation.py NSE:INDUSTOWER --asof 2026-11-09 --eval research/NSE-INDUSTOWER/2026-11-09-evaluation.md
+[22:38:46] {"out": "research/NSE-INDUSTOWER/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 160.22, "base": 397.09, "bull": 659.45}, "price": 381.9}
+[22:38:48] == done NSE:INDUSTOWER
+[22:38:50] == initiate TPEX:3293
+[22:38:50] $ bin/py scripts/sec_delta.py TPEX:3293 --asof 2026-11-09
+[22:38:50] SKIP TPEX:3293: not a US listing (SEC filers only)
+[22:38:50] $ claude -p Ticker TPEX:3293, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:39:28] == initiate SM
+[22:39:28] $ bin/py scripts/sec_delta.py SM --asof 2026-11-09
+[22:39:42] OK research/SM/sec-delta-2026-11-09.md
+[22:39:42] $ claude -p Ticker SM, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/SM/sec-delta-2026-11-09.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:39:45] == initiate TYO:4528
+[22:39:45] $ bin/py scripts/sec_delta.py TYO:4528 --asof 2026-11-09
+[22:39:45] SKIP TYO:4528: not a US listing (SEC filers only)
+[22:39:45] $ claude -p Ticker TYO:4528, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:40:45] - Note: `research/TPEX-3293/2026-11-09.md`
+- Fact sheet: `research/TPEX-3293/factsheet-2026-11-09.md`
+- Check: `OK research/TPEX-3293/2026-11-09.md type=CORE 1=66 2=120 3=108 4=36 5=36 6=36 total=402`
+- Peer swap: LNW returned a 404 on stockanalysis.com, so I replaced it. The peers used are ASX:ALL, EVRI and TYO:6460.
+- Blocked URL: `https://www.igs.com.tw` is not on the allowlist, so I couldn't read the company's own site. Revenue by country or region is therefore marked [data unavailable].
+- Data conflicts: none.
+[22:40:45] $ bin/py scripts/check_docs.py note research/TPEX-3293/2026-11-09.md
+[22:40:45] OK research/TPEX-3293/2026-11-09.md type=CORE 1=66 2=120 3=108 4=36 5=36 6=36 total=402
+[22:40:45] $ claude -p Ticker TPEX:3293, date 2026-11-09. Research: research/TPEX-3293/factsheet-2026-11-09.md, research/TPEX-3293/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/TPEX-3293/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:41:03] Note: research/SM/2026-11-09.md
+Fact sheet: research/SM/factsheet-2026-11-09.md
+Check: OK research/SM/2026-11-09.md type=CORE 1=66 2=115 3=129 4=44 5=77 6=37 total=468
+Data conflicts / blocked URLs: no blocked URLs and no WebFetch calls. Peer CIVI was acquired by SM (merger closed 2026-01-30), so its figures in the peer median may be stale. The fair value is negative and flagged unreliable by the fact sheet, so I did not use it.
+[22:41:03] $ bin/py scripts/check_docs.py note research/SM/2026-11-09.md
+[22:41:03] OK research/SM/2026-11-09.md type=CORE 1=66 2=115 3=129 4=44 5=77 6=37 total=468
+[22:41:03] $ claude -p Ticker SM, date 2026-11-09. Research: research/SM/factsheet-2026-11-09.md, research/SM/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/SM/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:41:04] research/TPEX-3293/2026-11-09-macro.md
+OK research/TPEX-3293/2026-11-09-macro.md macro_weight=context words=115
+[22:41:04] $ bin/py scripts/check_docs.py macro research/TPEX-3293/2026-11-09-macro.md
+[22:41:04] OK research/TPEX-3293/2026-11-09-macro.md macro_weight=context words=115
+[22:41:04] $ claude -p Evaluate TPEX:3293 for 2026-11-09: fact sheet research/TPEX-3293/factsheet-2026-11-09.md, note research/TPEX-3293/2026-11-09.md, state portfolio/state.json, macro overlay research/TPEX-3293/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:41:13] Note: research/TYO-4528/2026-11-09.md
+Fact sheet: research/TYO-4528/factsheet-2026-11-09.md
+Check: OK research/TYO-4528/2026-11-09.md type=CORE 1=63 2=116 3=122 4=34 5=47 6=56 total=438
+Blocked URL: https://www.ono-pharma.com/en/company/profile was not on the allowlist. The revenue split by region and product is therefore marked [data unavailable].
+Data conflicts: none.
+[22:41:13] $ bin/py scripts/check_docs.py note research/TYO-4528/2026-11-09.md
+[22:41:13] OK research/TYO-4528/2026-11-09.md type=CORE 1=63 2=116 3=122 4=34 5=47 6=56 total=438
+[22:41:13] $ claude -p Ticker TYO:4528, date 2026-11-09. Research: research/TYO-4528/factsheet-2026-11-09.md, research/TYO-4528/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/TYO-4528/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:41:24] research/SM/2026-11-09-macro.md
+OK research/SM/2026-11-09-macro.md macro_weight=context words=47
+[22:41:24] $ bin/py scripts/check_docs.py macro research/SM/2026-11-09-macro.md
+[22:41:25] OK research/SM/2026-11-09-macro.md macro_weight=context words=47
+[22:41:25] $ claude -p Evaluate SM for 2026-11-09: fact sheet research/SM/factsheet-2026-11-09.md, note research/SM/2026-11-09.md, state portfolio/state.json, macro overlay research/SM/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:41:32] research/TYO-4528/2026-11-09-macro.md
+OK research/TYO-4528/2026-11-09-macro.md macro_weight=context words=83
+[22:41:32] $ bin/py scripts/check_docs.py macro research/TYO-4528/2026-11-09-macro.md
+[22:41:32] OK research/TYO-4528/2026-11-09-macro.md macro_weight=context words=83
+[22:41:32] $ claude -p Evaluate TYO:4528 for 2026-11-09: fact sheet research/TYO-4528/factsheet-2026-11-09.md, note research/TYO-4528/2026-11-09.md, state portfolio/state.json, macro overlay research/TYO-4528/2026-11-09-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:42:18] research/TPEX-3293/2026-11-09-evaluation.md
+OK research/TPEX-3293/2026-11-09-evaluation.md Bear case=140 Bull case=119 decision=BUY scorecard=9->4
+[22:42:18] $ bin/py scripts/check_docs.py eval research/TPEX-3293/2026-11-09-evaluation.md
+[22:42:18] OK research/TPEX-3293/2026-11-09-evaluation.md Bear case=140 Bull case=119 decision=BUY scorecard=9->4
+[22:42:18] $ bin/py scripts/valuation.py TPEX:3293 --asof 2026-11-09 --eval research/TPEX-3293/2026-11-09-evaluation.md
+[22:42:18] {"out": "research/TPEX-3293/2026-11-09-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 576.22, "base": 865.5, "bull": 1260.26}, "price": 736}
+[22:42:18] $ claude -p Independent second evaluation of TPEX:3293 for 2026-11-09: fact sheet research/TPEX-3293/factsheet-2026-11-09.md, note research/TPEX-3293/2026-11-09.md, state portfolio/state.json, macro overlay research/TPEX-3293/2026-11-09-macro.md. Write it to research/TPEX-3293/2026-11-09-evaluation-2.md (not the usual file). Do not read research/TPEX-3293/2026-11-09-evaluation.md or any other evaluation of this stock dated 2026-11-09. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:42:33] research/SM/2026-11-09-evaluation.md
+OK research/SM/2026-11-09-evaluation.md Bear case=147 Bull case=108 decision=AVOID scorecard=0->1
+[22:42:33] $ bin/py scripts/check_docs.py eval research/SM/2026-11-09-evaluation.md
+[22:42:33] OK research/SM/2026-11-09-evaluation.md Bear case=147 Bull case=108 decision=AVOID scorecard=0->1
+[22:42:33] $ bin/py scripts/valuation.py SM --asof 2026-11-09 --eval research/SM/2026-11-09-evaluation.md
+[22:42:33] {"out": "research/SM/2026-11-09-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": -14.11, "base": -7.44, "bull": 28.26}, "price": 29.92}
+[22:42:36] == done SM
+[22:42:39] research/TYO-4528/2026-11-09-evaluation.md
+OK research/TYO-4528/2026-11-09-evaluation.md Bear case=139 Bull case=101 decision=AVOID scorecard=4->2
+[22:42:39] $ bin/py scripts/check_docs.py eval research/TYO-4528/2026-11-09-evaluation.md
+[22:42:39] OK research/TYO-4528/2026-11-09-evaluation.md Bear case=139 Bull case=101 decision=AVOID scorecard=4->2
+[22:42:39] $ bin/py scripts/valuation.py TYO:4528 --asof 2026-11-09 --eval research/TYO-4528/2026-11-09-evaluation.md
+[22:42:39] {"out": "research/TYO-4528/2026-11-09-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 2262.63, "base": 4197.11, "bull": 6190.51}, "price": 2352.5}
+[22:42:41] == done TYO:4528
+[22:43:14] == initiate LON:IMI
+[22:43:14] $ bin/py scripts/sec_delta.py LON:IMI --asof 2026-11-09
+[22:43:14] SKIP LON:IMI: not a US listing (SEC filers only)
+[22:43:14] $ claude -p Ticker LON:IMI, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:43:22] == initiate SHE:000708
+[22:43:22] $ bin/py scripts/sec_delta.py SHE:000708 --asof 2026-11-09
+[22:43:23] SKIP SHE:000708: not a US listing (SEC filers only)
+[22:43:23] $ claude -p Ticker SHE:000708, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:43:24] You've hit your weekly limit · resets Nov 14 at 2pm (Europe/London)
+[22:43:24] !! FAILED TPEX:3293: claude -p Independent second evaluation of TPEX:3293 for 2026-11-09: fact sheet research/TPEX-3293/factsheet-2026-11-09.md, note research/TPEX-3293/2026-11-09.md, state portfolio/state.json, macro overlay research/TPEX-3293/2026-11-09-macro.md. Write it to research/TPEX-3293/2026-11-09-evaluation-2.
+[22:43:26] You've hit your weekly limit · resets Nov 14 at 2pm (Europe/London)
+[22:43:26] !! FAILED SHE:000708: claude -p Ticker SHE:000708, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**)
+[22:44:25] == initiate HKG:3908
+[22:44:25] $ bin/py scripts/sec_delta.py HKG:3908 --asof 2026-11-09
+[22:44:26] SKIP HKG:3908: not a US listing (SEC filers only)
+[22:44:26] $ claude -p Ticker HKG:3908, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:44:29] You've hit your weekly limit · resets Nov 14 at 2pm (Europe/London)
+[22:44:30] !! FAILED HKG:3908: claude -p Ticker HKG:3908, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),E
+[22:44:35] You've hit your weekly limit · resets Nov 14 at 2pm (Europe/London)
+[22:44:35] !! FAILED LON:IMI: claude -p Ticker LON:IMI, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Ed
+[22:44:36] == initiate KRX:316140
+[22:44:36] $ bin/py scripts/sec_delta.py KRX:316140 --asof 2026-11-09
+[22:44:36] SKIP KRX:316140: not a US listing (SEC filers only)
+[22:44:36] $ claude -p Ticker KRX:316140, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:44:40] You've hit your weekly limit · resets Nov 14 at 2pm (Europe/London)
+[22:44:40] !! FAILED KRX:316140: claude -p Ticker KRX:316140, note type CORE, date 2026-11-09. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**)
