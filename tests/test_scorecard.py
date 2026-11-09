@@ -62,3 +62,24 @@ def test_conviction_must_match_and_fields_are_closed_sets():
     r = S.score(decision(), trends(), VAL, CFG)
     errs = S.problems(decision(conv=r["conviction"] + 1 if r["conviction"] < 5 else 3, moat="huge"), r)
     assert any("conviction must be" in e for e in errs) and any("moat" in e for e in errs)
+
+
+def test_invented_owner_rule_fails_real_ones_pass():
+    from check_docs import owner_rule_problems
+    assert owner_rule_problems("Good but not compelling: conviction 3, so AVOID under the owner rule.") == []
+    errs = owner_rule_problems("Cheap, but the owner rule buys quality on a stable or improving trend.")
+    assert errs and "doesn't exist" in errs[0]
+
+
+def test_consistency_needs_new_evidence(tmp_path):
+    import json
+    from check_docs import consistency_problems
+    old = {"decision": "AVOID", "conviction": 3, "price_at_decision": 85.0}
+    (tmp_path / "2026-11-08-evaluation.md").write_text("x\n```json\n" + json.dumps(old) + "\n```\n")
+    p = tmp_path / "2026-11-09-evaluation.md"
+    new = {"decision": "BUY", "conviction": 4, "price_at_decision": 85.2}
+    assert any("verdict differs" in e for e in consistency_problems(p, new))
+    assert any("needs more than 10%" in e for e in consistency_problems(p, dict(new, new_evidence={"type": "price_move", "text": "fell"})))
+    assert consistency_problems(p, dict(new, price_at_decision=70.0, new_evidence={"type": "price_move", "text": "fell 18%"})) == []
+    assert any("cite the dated source" in e for e in consistency_problems(p, dict(new, new_evidence={"type": "guidance", "text": "raised"})))
+    assert consistency_problems(p, dict(old)) == []          # same verdict: nothing to explain

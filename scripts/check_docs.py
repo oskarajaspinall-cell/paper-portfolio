@@ -267,7 +267,71 @@ def scenario_problems(sc) -> list[str]:
     return errs
 
 
-SCORECARD_FROM = "2026-11-09"  # evaluations dated before this were written before the scorecard existed
+SCORECARD_FROM = "2026-11-09"
+# The owner's actual rules an evaluation may cite as "owner rule" (2026-11-09: an evaluator invented "the owner rule
+# buys quality on a stable or improving trend"). A sentence citing an owner rule must match one of these.
+OWNER_RULES = {
+    "only_high_conviction": r"conviction|avoid|no position|no buy|good but not compelling|good, not compelling",
+    "tactical_2_to_1": r"2:1|reward|target|stop",
+    "fair_value_not_verdict": r"fair value",
+    "no_price_stops_core": r"price stop|price level|moving average",
+    "cash_reserve": r"cash|reserve",
+    "caps": r"\bcap\b|caps|sector|country|holdings",
+    "sizing": r"size|sizing|conviction size",
+    "funding_queue_swaps": r"funding queue|swap|replace",
+    "entry_price": r"entry price",
+}
+
+
+def owner_rule_problems(md: str) -> list[str]:
+    errs = []
+    for m in re.finditer(r"[^.\n]*owner rules?[^.\n]*", md, re.I):
+        sent = m.group(0)
+        if not any(re.search(pat, sent, re.I) for pat in OWNER_RULES.values()):
+            errs.append(f"cites an owner rule that doesn't exist: \"{sent.strip()[:140]}\" (actual rules: "
+                        + ", ".join(OWNER_RULES) + "; judge everything else on the evidence)")
+    return errs
+
+
+CONSISTENCY_DAYS = 30
+EVIDENCE_TYPES = ("new_results", "guidance", "price_move", "trigger_fired", "new_information")
+
+
+def consistency_problems(path: Path, d: dict) -> list[str]:
+    """A verdict that differs from one on this stock in the last 30 days must name new evidence (2026-11-09: OKE
+    went AVOID 3 -> BUY 4 on the same fact sheet). Python verifies a price move (>10%) or a newer reporting period
+    in the fact sheet; guidance / trigger / new information need a cited URL."""
+    import datetime as _dt
+    date = path.name[:10]
+    lo = (_dt.date.fromisoformat(date) - _dt.timedelta(days=CONSISTENCY_DAYS)).isoformat()
+    prev = sorted(p for p in path.parent.glob("20??-??-??-evaluation.md") if lo <= p.name[:10] < date)
+    if not prev:
+        return []
+    pd_, _ = decision_block(prev[-1].read_text())
+    if not pd_ or (pd_.get("decision"), pd_.get("conviction")) == (d.get("decision"), d.get("conviction")):
+        return []
+    was = f"{pd_.get('decision')} {pd_.get('conviction')} on {prev[-1].name[:10]}"
+    ne = d.get("new_evidence")
+    if not isinstance(ne, dict) or ne.get("type") not in EVIDENCE_TYPES or not str(ne.get("text", "")).strip():
+        return [f"verdict differs from {was}: add \"new_evidence\": {{\"type\": one of {EVIDENCE_TYPES}, \"text\": ...}} "
+                "naming what changed since then, or keep the earlier verdict (same evidence, same decision)"]
+    t = ne["type"]
+    if t == "price_move":
+        p0, p1 = pd_.get("price_at_decision"), d.get("price_at_decision")
+        if not (p0 and p1 and abs(p1 / p0 - 1) > 0.10):
+            return [f"new_evidence price_move: the price moved {((p1 or 0) / (p0 or 1) - 1) * 100:+.1f}% since {was} "
+                    "(needs more than 10%)"]
+    elif t == "new_results":
+        def period(dd):
+            sheets = sorted(path.parent.glob(f"factsheet-{dd}*.md")) or sorted(
+                p for p in path.parent.glob("factsheet-*.md") if p.name[10:20] <= dd)
+            m = re.findall(r"\(20\d\d-\d\d-\d\d\)", sheets[-1].read_text()) if sheets else []
+            return max(m) if m else None
+        if period(date) is None or period(date) == period(prev[-1].name[:10]):
+            return [f"new_evidence new_results: the fact sheet shows no newer reporting period than at {was}"]
+    elif not re.search(r"https?://", ne["text"]):
+        return [f"new_evidence {t}: cite the dated source URL"]
+    return []  # evaluations dated before this were written before the scorecard existed
 
 
 def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
@@ -514,6 +578,10 @@ def main(argv=None) -> int:
         if src:  # the evaluator also reads the config block (limits, sizes, cash rate)
             cfg_block = re.search(r"<!-- CONFIG:START -->(.*?)<!-- CONFIG:END -->", (ROOT / "CLAUDE.md").read_text(), re.S)
             errs += eval_number_problems(md, src + [cfg_block.group(1) if cfg_block else ""])
+        errs += owner_rule_problems(md)
+        dblk, _ = decision_block(md)
+        if dblk and Path(a.path).name[:10] >= SCORECARD_FROM:
+            errs += consistency_problems(Path(a.path), dblk)
         if Path(a.path).name[:10] >= SCORECARD_FROM:  # 2026-11-09: Python sets a CORE conviction
             import scorecard
             res, sc_errs = scorecard.evaluate_file(Path(a.path))
