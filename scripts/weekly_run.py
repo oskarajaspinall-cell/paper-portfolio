@@ -160,7 +160,45 @@ def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, l
         sh(PY + ["scripts/valuation.py", ticker, "--asof", asof, "--eval", str(ev)], log)
     except StepFailed as e:
         log(f"!! FAIR VALUE NOT UPDATED for {ticker}: {e}")
+    if ptype == "CORE":
+        second_opinion(ticker, slug, asof, ev, macro, agent, log)
     return ev
+
+
+def second_opinion(ticker: str, slug: str, asof: str, ev: Path, macro: bool, agent, log) -> None:
+    """Owner-approved 2026-11-09: a CORE BUY or ADD needs a second, independent evaluation at 4+ as well. The second
+    evaluator gets the same fact sheet, note and macro overlay, but neither the first evaluation nor the reason for
+    review. The lower conviction stands; below 4 the first evaluation becomes AVOID (new name) or HOLD (holding)."""
+    from decision_log import decision_from_eval
+    d = decision_from_eval(ev.read_text())
+    if d.get("decision") not in ("BUY", "ADD"):
+        return
+    ev2 = ev.with_name(f"{asof}-evaluation-2.md")
+    agent("evaluator", f"Independent second evaluation of {ticker} for {asof}: fact sheet research/{slug}/factsheet-{asof}.md, "
+                       f"note research/{slug}/{asof}.md, state portfolio/state.json"
+                       + (f", macro overlay research/{slug}/{asof}-macro.md" if macro else "")
+                       + f". Write it to research/{slug}/{asof}-evaluation-2.md (not the usual file). Do not read "
+                         f"research/{slug}/{asof}-evaluation.md or any other evaluation of this stock dated {asof}.", log)
+    if not ev2.exists():
+        raise StepFailed(f"second evaluator wrote no file at {ev2}")
+    check_doc("eval", ev2, log)
+    import scorecard
+    r2, _ = scorecard.evaluate_file(ev2)
+    c2 = (r2 or {}).get("conviction", decision_from_eval(ev2.read_text()).get("conviction"))
+    d["second_opinion"] = {"file": str(ev2.relative_to(ROOT)), "conviction": c2}
+    if c2 < 4:
+        held = d.get("decision") == "ADD"
+        d["conviction"] = min(int(d["conviction"]), c2)
+        d["decision"] = "HOLD" if held else "AVOID"
+        d["rationale"] = (f"{d.get('rationale', '')} [Second opinion: conviction {c2}; a "
+                          f"{'n ADD' if held else ' BUY'} needs both evaluations at 4+.]").strip()
+        if not held:
+            d["entry_price"], d["entry_basis"] = None, f"Second opinion at conviction {c2}: no entry price set."
+    md = ev.read_text()
+    m = re.search(r"```json\s*(\{.*?\})\s*```\s*$", md.strip(), re.S)
+    ev.write_text(md.strip()[:m.start()] + "```json\n" + json.dumps(d, indent=1, ensure_ascii=False) + "\n```\n")
+    log(f"== {ticker}: second opinion conviction {c2} -> {d['decision']} {d['conviction']}")
+    check_doc("eval", ev, log)
 
 
 def run_macro(ticker: str, slug: str, asof: str, agent, log) -> bool:

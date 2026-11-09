@@ -520,6 +520,11 @@ def main(argv=None) -> int:
     path.write_text(md)
     if fvo.get("trends"):  # factsheet-<date>.json: the scorecard's Python inputs
         import json as _json
+        if fvo.get("fv"):  # the MECHANICAL fair value, before any evaluator override (the scorecard uses this one)
+            import valuation as _v
+            fvo["trends"]["fair_value"] = {"price": fvo["fv"].get("price"), "fair_value": fvo["fv"].get("fair_value"),
+                                           "methods": fvo["fv"].get("methods"),
+                                           "reliability": fvo["fv"].get("reliability") or _v.reliability(fvo["fv"])}
         path.with_suffix(".json").write_text(_json.dumps(fvo["trends"], indent=1, default=str))
     if fvo.get("fv"):  # research/<SLUG>/<date>-valuation.json/.md (re-written with any evaluator overrides later)
         import json as _json

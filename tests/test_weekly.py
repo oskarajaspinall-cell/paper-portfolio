@@ -535,9 +535,16 @@ def test_no_monte_carlo_step(tmp_path, monkeypatch, decision, held):
         if name == "researcher":
             (d / "2026-10-10.md").write_text("note")
         if name == "evaluator":
-            (d / "2026-10-10-evaluation.md").write_text("# E\n```json\n" + json.dumps({"decision": decision}) + "\n```\n")
-    wr.research_and_evaluate("XYZ", "CORE", "2026-10-10", wr.reason_text("screen"), agent, lambda m: None, tmp_path)
-    assert names == ["researcher", "evaluator"] and not hasattr(wr, "run_montecarlo")
+            f = "2026-10-10-evaluation-2.md" if "Independent second" in prompt else "2026-10-10-evaluation.md"
+            c = 3 if "Independent second" in prompt else 4
+            (d / f).write_text("# E\n```json\n" + json.dumps({"decision": decision, "conviction": c}) + "\n```\n")
+    ev = wr.research_and_evaluate("XYZ", "CORE", "2026-10-10", wr.reason_text("screen"), agent, lambda m: None, tmp_path)
+    # a BUY gets an independent second opinion (2026-11-09); below 4 there it becomes AVOID
+    assert names == ["researcher", "evaluator"] + (["evaluator"] if decision == "BUY" else [])
+    assert not hasattr(wr, "run_montecarlo")
+    if decision == "BUY":
+        d = json.loads(ev.read_text().split("```json")[1].split("```")[0])
+        assert d["decision"] == "AVOID" and d["conviction"] == 3 and d["second_opinion"]["conviction"] == 3
 
 
 def test_fair_value_reached_fires_once_per_crossing(cfg):

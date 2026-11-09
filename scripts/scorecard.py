@@ -147,6 +147,9 @@ def score(decision: dict, trends: dict, valuation: dict | None, cfg: dict, offse
     if held and conv == 3 and not gated and total >= s["hold_4"]:
         conv = 4
     final = min(conv, 3) if isinstance(j.get("veto"), dict) and j["veto"].get("code") in VETO_CODES else conv
+    so = decision.get("second_opinion")
+    if isinstance(so, dict) and isinstance(so.get("conviction"), int):  # a buy needs both evaluations at 4+
+        final = min(final, so["conviction"])
     return {"parts": parts, "offset": offset, "total": total, "conviction_score": conv, "conviction": final,
             "falling": falling, "upside_pct": up, "notes": notes, "vetoed": final < conv, "gated": gated,
             "add_allowed": add_ok and final >= 4}
@@ -208,11 +211,20 @@ def evaluate_file(eval_path: Path, cfg: dict | None = None) -> tuple[dict | None
     if d.get("position_type") != "CORE" or d.get("decision") == "SELL":
         return None, []
     trends, val = inputs_for(eval_path)
+    if trends and trends.get("fair_value"):  # mechanical value from the fact sheet: evaluator overrides can't move it
+        val = trends["fair_value"]
     if trends is None:
         return None, ["no fact-sheet trends file (factsheet-<date>.json): rebuild the fact sheet with "
                       "scripts/fact_sheet.py before evaluating"]
     res = score(d, trends, val, cfg, calibration_offset())
-    return res, problems(d, res)
+    errs = problems(d, res)
+    so = d.get("second_opinion")
+    if isinstance(so, dict) and so.get("file"):  # verify the recorded second-opinion conviction
+        other = ROOT / so["file"]
+        r2 = evaluate_file(other, cfg)[0] if other.exists() and other != eval_path else None
+        if r2 is None or r2["conviction"] != so.get("conviction"):
+            errs.append(f"second_opinion conviction {so.get('conviction')} doesn't match {so['file']}")
+    return res, errs
 
 
 def main(argv=None) -> int:
