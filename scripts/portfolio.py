@@ -557,13 +557,17 @@ class Engine:
         t = target_pct / 100
         return math.floor((t * pv - current_mv) / (q["price_usd"] * (1 + t * self.cost_rate(q["currency"]))))
 
-    def core_size(self, conviction: int, ticker: str, s: dict) -> float:
+    def core_size(self, conviction: int, ticker: str, s: dict, for_trim: bool = False) -> float:
         """Conviction size scaled by the stock's volatility (scripts/risk.py; design by Claude 2026-10-16).
         A scale-UP is capped at the room above the cash reserve: a steadier stock's bigger size never turns a buy
-        that fits at its plain conviction size into a reserve breach (it never goes below that size either)."""
+        that fits at its plain conviction size into a reserve breach (it never goes below that size either).
+        2026-11-08 (owner-approved): below the buy bar there is no scale-UP (a downgrade always means smaller:
+        conviction 3 <= 5%), and the cash-room cap applies to buys/adds only, never to a trim's target."""
         target = self.sizer.target(conviction, ticker, s)[0]
         base = float(self.cfg["core"]["conviction_size_pct"][str(conviction)])
-        if target <= base:
+        if conviction < int(self.cfg["core"]["min_buy_conviction"]):
+            return min(target, base)
+        if target <= base or for_trim:
             return target
         pv = self.pv(s)
         held = (s["holdings"].get(ticker) or {}).get("market_value_usd", 0.0)
@@ -683,7 +687,7 @@ class Engine:
                     self._min_conviction(r)
                 if ptype == "CORE":
                     target_pct = r.get("target_weight_pct") if act == "TRIM" and r.get("target_weight_pct") is not None \
-                        else self.core_size(r["conviction"], t, s)
+                        else self.core_size(r["conviction"], t, s, for_trim=act == "TRIM")
                     full_pct = target_pct
                     if act == "ADD" and r.get("cap_pct") is not None:  # a funding-queue top-up step (2026-10-19)
                         target_pct = min(target_pct, float(r["cap_pct"]))
@@ -1000,7 +1004,7 @@ def size_down_requests(state: dict, eng, cfg: dict, only=None) -> list[dict]:
             continue
         w = h["market_value_usd"] / pv * 100
         base = float(c["conviction_size_pct"][str(conv)])
-        size = eng.sizer.target(conv, t, state)[0] if base else 0.0
+        size = eng.core_size(conv, t, state, for_trim=True) if base else 0.0
         if w <= size + gap:
             continue
         why = (f"conviction {conv} sizing: below the buy bar ({bar}), so held at no more than its conviction size "

@@ -19,6 +19,9 @@ class Eng:
     def pv(self, s):
         return 100_000.0
 
+    def core_size(self, conv, t, s, for_trim=False):
+        return self.sizer.target(conv, t, s)[0]
+
 
 def state(**h):
     return {"cash_usd": 0, "holdings": {t: {"type": "CORE", "conviction": c, "market_value_usd": v}
@@ -39,3 +42,16 @@ def test_conviction_1_sells_and_only_filter():
     acts = {q["ticker"]: q["action"] for q in size_down_requests(s, Eng(), CFG)}
     assert acts == {"X": "SELL", "Y": "TRIM"}
     assert [q["ticker"] for q in size_down_requests(s, Eng(), CFG, only={"Y"})] == ["Y"]
+
+
+def test_below_bar_never_scaled_up_and_trim_ignores_cash_room(cfg):
+    from test_portfolio import engine, holding
+    cfg["core"]["min_buy_conviction"] = 4
+    eng = engine(cfg, {"AAPL": holding("AAPL", "CORE", 8, conv=3)}, cash=10000)
+    s = eng.s
+    eng.sizer.target = lambda c, t, st: (float(cfg["core"]["conviction_size_pct"][str(c)]) * 1.4, "")
+    assert eng.core_size(3, "AAPL", s) == float(cfg["core"]["conviction_size_pct"]["3"])   # no scale-up below the bar
+    four = float(cfg["core"]["conviction_size_pct"]["4"]) * 1.4
+    assert eng.core_size(4, "AAPL", s, for_trim=True) == four                             # trim: no cash-room cap
+    eng.sizer.target = lambda c, t, st: (float(cfg["core"]["conviction_size_pct"][str(c)]) * 0.8, "")
+    assert eng.core_size(3, "AAPL", s) == float(cfg["core"]["conviction_size_pct"]["3"]) * 0.8  # scale-down kept
