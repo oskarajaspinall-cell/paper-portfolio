@@ -294,7 +294,7 @@ def owner_rule_problems(md: str) -> list[str]:
 
 
 CONSISTENCY_DAYS = 30
-EVIDENCE_TYPES = ("new_results", "guidance", "price_move", "trigger_fired", "new_information")
+EVIDENCE_TYPES = ("new_results", "guidance", "price_move", "trigger_fired", "new_information", "method_change")
 
 
 def consistency_problems(path: Path, d: dict) -> list[str]:
@@ -308,14 +308,26 @@ def consistency_problems(path: Path, d: dict) -> list[str]:
     if not prev:
         return []
     pd_, _ = decision_block(prev[-1].read_text())
-    if not pd_ or (pd_.get("decision"), pd_.get("conviction")) == (d.get("decision"), d.get("conviction")):
+    if not pd_:
         return []
+    # what must not flip on the same evidence: the decision, or conviction across the buy line (4). A conviction
+    # move on the same side (e.g. 3 -> 2 because the Python scorecard now sets it) is a method change, not a flip.
+    c0, c1 = int(pd_.get("conviction") or 0), int(d.get("conviction") or 0)
+    if pd_.get("decision") == d.get("decision") and (c0 >= 4) == (c1 >= 4):
+        return []
+    so = d.get("second_opinion")
+    if isinstance(so, dict) and isinstance(so.get("conviction"), int) and so["conviction"] < 4 and c1 < 4:
+        return []  # lowered by the independent second opinion: the conservative direction needs no new evidence
     was = f"{pd_.get('decision')} {pd_.get('conviction')} on {prev[-1].name[:10]}"
     ne = d.get("new_evidence")
     if not isinstance(ne, dict) or ne.get("type") not in EVIDENCE_TYPES or not str(ne.get("text", "")).strip():
         return [f"verdict differs from {was}: add \"new_evidence\": {{\"type\": one of {EVIDENCE_TYPES}, \"text\": ...}} "
                 "naming what changed since then, or keep the earlier verdict (same evidence, same decision)"]
     t = ne["type"]
+    if t == "method_change":  # the earlier verdict predates the Python scorecard (2026-11-09)
+        if prev[-1].name[:10] >= SCORECARD_FROM:
+            return [f"new_evidence method_change: {was} was already set by the scorecard"]
+        return []
     if t == "price_move":
         p0, p1 = pd_.get("price_at_decision"), d.get("price_at_decision")
         if not (p0 and p1 and abs(p1 / p0 - 1) > 0.10):

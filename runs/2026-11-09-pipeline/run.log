@@ -1,0 +1,154 @@
+[03:08:15] $ bin/py scripts/sec_delta.py TLV:NICE --asof 2026-11-09
+[03:08:15] $ bin/py scripts/sec_delta.py OTEX --asof 2026-11-09
+[03:08:15] $ bin/py scripts/sec_delta.py LEA --asof 2026-11-09
+[03:08:15] SKIP TLV:NICE: not a US listing (SEC filers only)
+[03:08:15] $ claude -p Ticker TLV:NICE, note type CORE, date 2026-11-09. Reason for review: owner_request. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:08:29] OK research/OTEX/sec-delta-2026-11-09.md
+[03:08:29] $ claude -p Ticker OTEX, note type CORE, date 2026-11-09. Reason for review: owner_request. SEC filing delta: research/OTEX/sec-delta-2026-11-09.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:08:29] OK research/LEA/sec-delta-2026-11-09.md
+[03:08:29] $ claude -p Ticker LEA, note type CORE, date 2026-11-09. Reason for review: owner_request. SEC filing delta: research/LEA/sec-delta-2026-11-09.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:09:17] - Note: `research/TLV-NICE/2026-11-09.md`
+- Fact sheet: `research/TLV-NICE/factsheet-2026-11-09.md`
+- Check: `OK research/TLV-NICE/2026-11-09.md type=CORE 1=61 2=106 3=103 4=37 5=46 6=41 total=394`
+- Blocked URL: the WebFetch to the nice.com press release was blocked because the domain isn't on the allowlist. The note therefore shows the revenue split by country as [data unavailable].
+- Data conflicts: none.
+[03:09:17] $ bin/py scripts/check_docs.py note research/TLV-NICE/2026-11-09.md
+[03:09:17] OK research/TLV-NICE/2026-11-09.md type=CORE 1=61 2=106 3=103 4=37 5=46 6=41 total=394
+[03:09:17] $ bin/py scripts/macro_data.py --asof 2026-11-09
+[03:10:11] {"out": "reports/macro/2026-11-09.md", "series": 20, "unavailable": []}
+[03:10:11] $ claude -p Ticker TLV:NICE, date 2026-11-09. Research: research/TLV-NICE/factsheet-2026-11-09.md, research/TLV-NICE/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/TLV-NICE/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:10:23] - Note: `research/OTEX/2026-11-09.md`
+- Fact sheet: `research/OTEX/factsheet-2026-11-09.md`
+- Check: `OK research/OTEX/2026-11-09.md type=CORE 1=49 2=79 3=97 4=41 5=60 6=30 total=356`
+- Data conflicts: none.
+- Blocked URLs: none. I made one WebFetch, of the 10-Q, so I stayed under the CORE cap of 6.
+- Gap: the 10-Q gives revenue by region only (Americas, EMEA, Asia Pacific). No single foreign country can be named in section 1.
+[03:10:23] $ bin/py scripts/check_docs.py note research/OTEX/2026-11-09.md
+[03:10:23] OK research/OTEX/2026-11-09.md type=CORE 1=49 2=79 3=97 4=41 5=60 6=30 total=356
+[03:10:23] $ claude -p Ticker OTEX, date 2026-11-09. Research: research/OTEX/factsheet-2026-11-09.md, research/OTEX/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/OTEX/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:10:24] Note: research/LEA/2026-11-09.md
+Fact sheet: research/LEA/factsheet-2026-11-09.md
+Check: OK research/LEA/2026-11-09.md type=CORE 1=68 2=109 3=119 4=33 5=50 6=84 total=463
+Data conflicts: none. Blocked URLs: none. The first check failed on a bad Sources entry, which I fixed before the run above passed.
+I used one WebFetch (the 10-Q on sec.gov). It returned nine-month sales by region but no segment totals, South America, top-customer shares or guidance. Section 1 therefore gives regional sales only, as `[company-reported]` figures.
+[03:10:24] $ bin/py scripts/check_docs.py note research/LEA/2026-11-09.md
+[03:10:24] OK research/LEA/2026-11-09.md type=CORE 1=68 2=109 3=119 4=33 5=50 6=84 total=463
+[03:10:24] $ claude -p Ticker LEA, date 2026-11-09. Research: research/LEA/factsheet-2026-11-09.md, research/LEA/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/LEA/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:10:32] research/TLV-NICE/2026-11-09-macro.md
+OK research/TLV-NICE/2026-11-09-macro.md macro_weight=context words=122
+[03:10:32] $ bin/py scripts/check_docs.py macro research/TLV-NICE/2026-11-09-macro.md
+[03:10:32] OK research/TLV-NICE/2026-11-09-macro.md macro_weight=context words=122
+[03:10:32] $ claude -p Evaluate TLV:NICE for 2026-11-09: fact sheet research/TLV-NICE/factsheet-2026-11-09.md, note research/TLV-NICE/2026-11-09.md, state portfolio/state.json, macro overlay research/TLV-NICE/2026-11-09-macro.md. Reason for review: owner_request. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:10:41] research/OTEX/2026-11-09-macro.md
+OK research/OTEX/2026-11-09-macro.md macro_weight=context words=77
+[03:10:41] $ bin/py scripts/check_docs.py macro research/OTEX/2026-11-09-macro.md
+[03:10:41] OK research/OTEX/2026-11-09-macro.md macro_weight=context words=77
+[03:10:41] $ claude -p Evaluate OTEX for 2026-11-09: fact sheet research/OTEX/factsheet-2026-11-09.md, note research/OTEX/2026-11-09.md, state portfolio/state.json, macro overlay research/OTEX/2026-11-09-macro.md. Reason for review: owner_request. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:10:48] research/LEA/2026-11-09-macro.md
+OK research/LEA/2026-11-09-macro.md macro_weight=context words=126
+[03:10:48] $ bin/py scripts/check_docs.py macro research/LEA/2026-11-09-macro.md
+[03:10:48] OK research/LEA/2026-11-09-macro.md macro_weight=context words=126
+[03:10:48] $ claude -p Evaluate LEA for 2026-11-09: fact sheet research/LEA/factsheet-2026-11-09.md, note research/LEA/2026-11-09.md, state portfolio/state.json, macro overlay research/LEA/2026-11-09-macro.md. Reason for review: owner_request. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:11:56] research/TLV-NICE/2026-11-09-evaluation.md
+OK research/TLV-NICE/2026-11-09-evaluation.md Bear case=134 Bull case=136 decision=AVOID scorecard=6->3
+
+**This AVOID clashes with an open order:** a CORE BUY for NICE (54 shares) placed on 2026-11-08 is still pending in `portfolio/state.json`. That conviction-4 BUY was decided before today's scorecard rule.
+[03:11:56] $ bin/py scripts/check_docs.py eval research/TLV-NICE/2026-11-09-evaluation.md
+[03:11:56] OK research/TLV-NICE/2026-11-09-evaluation.md Bear case=134 Bull case=136 decision=AVOID scorecard=6->3
+[03:11:56] $ bin/py scripts/valuation.py TLV:NICE --asof 2026-11-09 --eval research/TLV-NICE/2026-11-09-evaluation.md
+[03:11:56] {"out": "research/TLV-NICE/2026-11-09-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 59072.04, "base": 82023.6, "bull": 144666.23}, "price": 31520}
+[03:11:57] == TLV:NICE: AVOID 3
+[03:11:57] $ bin/py scripts/sec_delta.py OKE --asof 2026-11-09
+[03:12:07] research/OTEX/2026-11-09-evaluation.md
+OK research/OTEX/2026-11-09-evaluation.md Bear case=137 Bull case=141 decision=AVOID scorecard=5->3
+[03:12:07] $ bin/py scripts/check_docs.py eval research/OTEX/2026-11-09-evaluation.md
+[03:12:07] research/LEA/2026-11-09-evaluation.md
+OK research/LEA/2026-11-09-evaluation.md Bear case=144 Bull case=138 decision=AVOID scorecard=8->3
+[03:12:07] $ bin/py scripts/check_docs.py eval research/LEA/2026-11-09-evaluation.md
+[03:12:07] OK research/OTEX/2026-11-09-evaluation.md Bear case=137 Bull case=141 decision=AVOID scorecard=5->3
+[03:12:07] $ bin/py scripts/valuation.py OTEX --asof 2026-11-09 --eval research/OTEX/2026-11-09-evaluation.md
+[03:12:07] OK research/LEA/2026-11-09-evaluation.md Bear case=144 Bull case=138 decision=AVOID scorecard=8->3
+[03:12:07] $ bin/py scripts/valuation.py LEA --asof 2026-11-09 --eval research/LEA/2026-11-09-evaluation.md
+[03:12:07] {"out": "research/OTEX/2026-11-09-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 42.63, "base": 68.5, "bull": 132.27}, "price": 24.85}
+[03:12:07] {"out": "research/LEA/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 31.11, "base": 200.42, "bull": 219.36}, "price": 110.28}
+[03:12:08] == OTEX: AVOID 3
+[03:12:08] == LEA: AVOID 3
+[03:12:08] OK research/OKE/sec-delta-2026-11-09.md
+[03:12:08] $ claude -p Ticker OKE, note type CORE, date 2026-11-09. Reason for review: owner_request. SEC filing delta: research/OKE/sec-delta-2026-11-09.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:13:12] Note: research/OKE/2026-11-09.md
+Fact sheet: research/OKE/factsheet-2026-11-09.md
+Check: OK research/OKE/2026-11-09.md type=CORE 1=68 2=104 3=107 4=43 5=90 6=63 total=475
+
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls. The fact sheet flags its fair value as unreliable (DCF and EV/EBITDA methods differ 2.5x), and the note says to weigh it lightly.
+[03:13:12] $ bin/py scripts/check_docs.py note research/OKE/2026-11-09.md
+[03:13:12] OK research/OKE/2026-11-09.md type=CORE 1=68 2=104 3=107 4=43 5=90 6=63 total=475
+[03:13:12] $ claude -p Ticker OKE, date 2026-11-09. Research: research/OKE/factsheet-2026-11-09.md, research/OKE/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/OKE/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:13:34] research/OKE/2026-11-09-macro.md
+OK research/OKE/2026-11-09-macro.md macro_weight=context words=62
+[03:13:34] $ bin/py scripts/check_docs.py macro research/OKE/2026-11-09-macro.md
+[03:13:34] OK research/OKE/2026-11-09-macro.md macro_weight=context words=62
+[03:13:34] $ claude -p Evaluate OKE for 2026-11-09: fact sheet research/OKE/factsheet-2026-11-09.md, note research/OKE/2026-11-09.md, state portfolio/state.json, macro overlay research/OKE/2026-11-09-macro.md. Reason for review: owner_request. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:15:07] I couldn't get `check_docs.py eval` to print OK for `research/OKE/2026-11-09-evaluation.md`. Two of the checker's rules contradict each other here, and the only way to pass would be to cite evidence that doesn't exist.
+
+- **The scorecard sets conviction 2.** The total is 3, made up of:
+  - quality 0 (ROIC TTM 8.8%)
+  - quality direction 1
+  - balance sheet 0 (net debt/EBITDA 3.68x)
+  - valuation 2 (upside +9%, because the unreliable fair value is ignored)
+  - moat 1
+  - key risk −1
+
+  `check_docs.py` rejects any other conviction, so the decision is AVOID 2.
+- **The consistency check blocks that.** It compares this verdict with the AVOID 3 from 2026-11-08 and wants a `new_evidence` entry with a dated source URL. Nothing about the company has changed since then: the guidance raise, the Q3 beat and Brazos all predate it. The only difference is that the new scorecard now sets the conviction. I wrote that in `new_evidence` as `new_information`, but there is no URL to cite, and citing an older release as "new" would be false.
+
+The file is written and complete apart from that error. The decision is AVOID at conviction 2, with no entry price because a lower price wouldn't fix the quality problem, and four business triggers that would make me look again. To clear the block you could do one of two things:
+1. Have the consistency check accept a scorecard-only conviction change when the decision (AVOID) stays the same.
+2. Accept the earlier AVOID 3, which the scorecard check would then reject instead.
+
+The funding queue in `state.json` also still holds an OKE BUY 4 from the 2026-11-08 note, which conflicts with this verdict. You may want to remove it.
+[03:15:07] $ bin/py scripts/check_docs.py eval research/OKE/2026-11-09-evaluation.md
+[03:15:07] FAIL research/OKE/2026-11-09-evaluation.md
+- new_evidence new_information: cite the dated source URL
+[03:15:07] !! FAILED OKE: /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/OKE/2026-11-09-evaluation.md exited 1: 
+[03:26:39] $ bin/py scripts/sec_delta.py EPA:EDEN --asof 2026-11-09
+[03:26:39] SKIP EPA:EDEN: not a US listing (SEC filers only)
+[03:26:39] $ claude -p Ticker EPA:EDEN, note type CORE, date 2026-11-09. Reason for review: owner_request. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:28:08] Note is written and passed the check; I'm just sending the final report now.
+
+- Note: `research/EPA-EDEN/2026-11-09.md`
+- Fact sheet: `research/EPA-EDEN/factsheet-2026-11-09.md`
+- Check: `OK research/EPA-EDEN/2026-11-09.md type=CORE 1=67 2=91 3=97 4=30 5=48 6=42 total=375`
+- Data conflicts: none.
+- Blocked URLs: none. Two fetches returned nothing usable: `https://www.edenred.com/en/investors` returned 404, and `https://www.edenred.com` had no revenue split. The revenue split in the note comes from `https://www.edenred.com/fr/investisseurs-actionnaires/chiffres-et-indicateurs-cles`.
+- Peer swap: EPA:PLUX has no stockanalysis.com page (404), so I replaced it. The peers used are WEX, CPAY, EPA:SW and FI.
+- Gap: the company page gives Europe, Latin America and rest of world only, with no Brazil share. The note states Latin America at 30% for the macro overlay.
+[03:28:08] $ bin/py scripts/check_docs.py note research/EPA-EDEN/2026-11-09.md
+[03:28:08] OK research/EPA-EDEN/2026-11-09.md type=CORE 1=67 2=91 3=97 4=30 5=48 6=42 total=375
+[03:28:08] $ claude -p Ticker EPA:EDEN, date 2026-11-09. Research: research/EPA-EDEN/factsheet-2026-11-09.md, research/EPA-EDEN/2026-11-09.md. Macro snapshot: reports/macro/2026-11-09.md. Write research/EPA-EDEN/2026-11-09-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:28:57] research/EPA-EDEN/2026-11-09-macro.md
+OK research/EPA-EDEN/2026-11-09-macro.md macro_weight=secondary words=203
+[03:28:57] $ bin/py scripts/check_docs.py macro research/EPA-EDEN/2026-11-09-macro.md
+[03:28:57] OK research/EPA-EDEN/2026-11-09-macro.md macro_weight=secondary words=203
+[03:28:57] $ claude -p Evaluate EPA:EDEN for 2026-11-09: fact sheet research/EPA-EDEN/factsheet-2026-11-09.md, note research/EPA-EDEN/2026-11-09.md, state portfolio/state.json, macro overlay research/EPA-EDEN/2026-11-09-macro.md. Reason for review: owner_request. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:29:51] I've written the evaluation, and the checker passed it. The decision is **BUY at conviction 4 (CORE)**, the same as the 2026-11-08 BUY 4. The evidence hasn't changed since then, so no new-evidence entry was needed. Python will set the position size.
+
+The scorecard totals 9, which maps to conviction 4. It credits high returns and a sound balance sheet, multiples at their 5-year lows, and a moderate key risk: further fee caps in Italy, Brazil or another country. I classed the 12-month operating-margin fall as temporary, a one-time regulatory step-down with guidance reaffirmed. Calling it structural would have scored lower.
+
+I set `replaces` to null. The BUY breaches no cap I could check, but I didn't have the current cash-reserve level. A BUY order for EDEN from 2026-11-08 is still pending, and it already names JKHY as the holding it replaces.
+
+research/EPA-EDEN/2026-11-09-evaluation.md
+OK research/EPA-EDEN/2026-11-09-evaluation.md Bear case=145 Bull case=147 decision=BUY scorecard=9->4
+[03:29:51] $ bin/py scripts/check_docs.py eval research/EPA-EDEN/2026-11-09-evaluation.md
+[03:29:51] OK research/EPA-EDEN/2026-11-09-evaluation.md Bear case=145 Bull case=147 decision=BUY scorecard=9->4
+[03:29:51] $ bin/py scripts/valuation.py EPA:EDEN --asof 2026-11-09 --eval research/EPA-EDEN/2026-11-09-evaluation.md
+[03:29:51] {"out": "research/EPA-EDEN/2026-11-09-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 21.15, "base": 38.59, "bull": 55.24}, "price": 24.6}
+[03:29:51] $ claude -p Independent second evaluation of EPA:EDEN for 2026-11-09: fact sheet research/EPA-EDEN/factsheet-2026-11-09.md, note research/EPA-EDEN/2026-11-09.md, state portfolio/state.json, macro overlay research/EPA-EDEN/2026-11-09-macro.md. Write it to research/EPA-EDEN/2026-11-09-evaluation-2.md (not the usual file). Do not read research/EPA-EDEN/2026-11-09-evaluation.md or any other evaluation of this stock dated 2026-11-09. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:31:11] research/EPA-EDEN/2026-11-09-evaluation-2.md
+OK research/EPA-EDEN/2026-11-09-evaluation-2.md Bear case=143 Bull case=119 decision=AVOID scorecard=8->3
+[03:31:11] $ bin/py scripts/check_docs.py eval research/EPA-EDEN/2026-11-09-evaluation-2.md
+[03:31:12] OK research/EPA-EDEN/2026-11-09-evaluation-2.md Bear case=143 Bull case=119 decision=AVOID scorecard=8->3
+[03:31:12] == EPA:EDEN: second opinion conviction 3 -> AVOID 3
+[03:31:12] $ bin/py scripts/check_docs.py eval research/EPA-EDEN/2026-11-09-evaluation.md
+[03:31:12] FAIL research/EPA-EDEN/2026-11-09-evaluation.md
+- verdict differs from BUY 4 on 2026-11-08: add "new_evidence": {"type": one of ('new_results', 'guidance', 'price_move', 'trigger_fired', 'new_information', 'method_change'), "text": ...} naming what changed since then, or keep the earlier verdict (same evidence, same decision)
+[03:31:12] !! FAILED EPA:EDEN: /Users/oskaraspinall/paper-portfolio/bin/py scripts/check_docs.py eval /Users/oskaraspinall/paper-portfolio/research/EPA-EDEN/2026-11-09-evaluation.md exited 1: 

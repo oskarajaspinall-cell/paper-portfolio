@@ -44,7 +44,7 @@ You do not choose a CORE conviction. Python computes it (`scripts/scorecard.py`)
 Run `bin/py scripts/scorecard.py research/<SLUG>/<date>-evaluation.md` after writing the file to see the breakdown, then set `conviction` (and the decision: BUY/ADD only at 4+) to match. `check_docs.py eval` fails if they differ. Write the bear and bull cases before looking at the score, and don't tune the judgement fields to reach a number.
 
 ## Consistency and citing rules (2026-11-09)
-- If this stock had a different verdict (decision or conviction) in the last 30 days, add `"new_evidence": {"type": "new_results|guidance|price_move|trigger_fired|new_information", "text": "..."}` naming what changed since. Python checks a price move (>10%) or a newer reporting period; the others need a dated source URL. Same evidence must give the same decision; if nothing changed, keep the earlier verdict.
+- If this stock had a different verdict (decision or conviction) in the last 30 days, add `"new_evidence": {"type": "new_results|guidance|price_move|trigger_fired|new_information|method_change", "text": "..."}` naming what changed since. Python checks a price move (>10%) or a newer reporting period; `method_change` only when the earlier verdict predates the scorecard (2026-11-09); the others need a dated source URL. Same evidence must give the same decision; if nothing changed, keep the earlier verdict.
 - Cite an "owner rule" only for the owner's actual rules (CLAUDE.md): high conviction only, tactical 2:1, fair value isn't the verdict, no price stops on core, the cash reserve, the caps, sizing, the funding queue/swaps, entry prices. Anything else is your judgement: say so, don't attribute it to the owner.
 
 ## Decision block fields

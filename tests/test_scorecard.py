@@ -83,6 +83,7 @@ def test_consistency_needs_new_evidence(tmp_path):
     assert consistency_problems(p, dict(new, price_at_decision=70.0, new_evidence={"type": "price_move", "text": "fell 18%"})) == []
     assert any("cite the dated source" in e for e in consistency_problems(p, dict(new, new_evidence={"type": "guidance", "text": "raised"})))
     assert consistency_problems(p, dict(old)) == []          # same verdict: nothing to explain
+    assert consistency_problems(p, dict(old, conviction=2)) == []   # same side of the buy line: method change, fine
 
 
 def test_calibration_shrinks_and_gates():
@@ -99,3 +100,13 @@ def test_calibration_offset_only_when_gate_met(tmp_path):
     assert S.calibration_offset(p) == 0.0
     p.write_text(json.dumps({"gate_met": True, "score_offset": -1}))
     assert S.calibration_offset(p) == -1.0
+
+
+def test_method_change_only_for_pre_scorecard_verdicts(tmp_path):
+    import json
+    from check_docs import consistency_problems
+    (tmp_path / "2026-11-08-evaluation.md").write_text("x\n```json\n" + json.dumps({"decision": "BUY", "conviction": 4}) + "\n```\n")
+    new = {"decision": "AVOID", "conviction": 3, "new_evidence": {"type": "method_change", "text": "scorecard"}}
+    assert consistency_problems(tmp_path / "2026-11-09-evaluation.md", new) == []
+    (tmp_path / "2026-11-10-evaluation.md").write_text("x\n```json\n" + json.dumps({"decision": "BUY", "conviction": 4}) + "\n```\n")
+    assert consistency_problems(tmp_path / "2026-11-11-evaluation.md", new)
