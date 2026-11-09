@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import re
 import os
 import shutil
 import subprocess
@@ -85,14 +86,34 @@ def check_doc(kind: str, path: Path, log) -> None:
     sh(PY + ["scripts/check_docs.py", kind, str(path)], log)
 
 
+# Neutral prompts (2026-11-09): a caller states only WHY a stock is being reviewed, as a fixed reason code plus
+# plain facts. No free-text instructions or hints reach the researcher/evaluator (a re-evaluation prompt that said
+# "a temporary dip can be conviction 4" flipped OKE from AVOID 3 to BUY 4 on the same fact sheet). How each reason
+# is handled is written once in .claude/agents/*.md and applies to every stock alike.
+REASONS = ("screen", "recheck", "entry_hit", "dip", "tripwire", "owner_request")
+_REASON_RE = re.compile(r"^Reason for review: (" + "|".join(REASONS) + r")(\.|;| \()")
+
+
+def reason_text(code: str, **facts) -> str:
+    if code not in REASONS:
+        raise ValueError(f"unknown reason code {code!r} (allowed: {', '.join(REASONS)})")
+    parts = [f"{k.replace('_', ' ')}: {' '.join(str(v).split())[:220]}" for k, v in facts.items() if v not in (None, "")]
+    return f"Reason for review: {code}." + (" Facts: " + "; ".join(parts) + "." if parts else "")
+
+
+def check_reason(why: str) -> str:
+    if not _REASON_RE.match(why or ""):
+        raise StepFailed(f"research prompt must come from reason_text() (neutral reason code); got {why[:80]!r}")
+    return why
+
+
 def entry_hit_reason(h: dict) -> str:
-    """The re-research instruction for a stock that reached its entry price (daily close or intraday check), or
-    for a dip-radar signal (scripts/dip_radar.py writes its own)."""
+    """Neutral reason for a stock that reached its entry price (daily close or intraday check), or a dip-radar signal."""
     if h.get("kind") == "dip":
-        return h["reason"]
+        old = h.get("reason", "")  # dip hits saved before 2026-11-09 carried instructions: keep only the facts
+        return reason_text("dip", detail=old.split(" This is a full")[0].split(" Find out")[0])
     how = f"traded at {h['close']} at {h['time']}" if h.get("intraday") else f"closed at {h['close']} on {h['hit_date']}"
-    return (f"Re-research: the price reached the entry price we set ({h['entry_price']}; it {how}). "
-            "Find out why it fell; decide BUY or AVOID.")
+    return reason_text("entry_hit", entry_price=h["entry_price"], price=how)
 
 
 def discard_partial(ticker: str, asof: str) -> None:
@@ -104,6 +125,7 @@ def discard_partial(ticker: str, asof: str) -> None:
 
 
 def research_and_evaluate(ticker: str, ptype: str, asof: str, why: str, agent, log, run: Path) -> Path:
+    check_reason(why)
     slug = Ticker(ticker).slug
     note, ev = ROOT / "research" / slug / f"{asof}.md", ROOT / "research" / slug / f"{asof}-evaluation.md"
     if note.exists() and ev.exists():  # a re-run (2026-10-24: the usage limit stopped the first): today's research
@@ -304,18 +326,14 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
                    "dip radar" if t in dip_holdings else
                    "rolling full re-check: the holding with the oldest full research, re-examined whether or not "
                    "anything was flagged (owner request 2026-11-02)")
-            why = (f"This is a full re-initiation of an existing {h['type']} holding (scan: {src}). "
-                   f"Decide ADD, HOLD, TRIM or SELL.")
+            fv = fvr.get(t)
             if t in dip_holdings and t not in reinit:
-                why = dip_holdings[t]["reason"]
-            if t in fvr:
-                f = fvr[t]
-                why += (f" The close {f['close']} reached the base fair value {f['base']:.2f} from {f['file']}. "
-                        "Owner rule: fair value is ONE model estimate, not a sell signal and not the thesis. Re-examine "
-                        "whether the original thesis has played out or still has room: has the business improved so the "
-                        "old fair value is stale, does the evidence (quality trend, cash returns, peers, own history) "
-                        "still support holding, and is there a better use of the capital? SELL or TRIM only if the "
-                        "whole evidence says the opportunity is spent; HOLD is right when the thesis is still running.")
+                why = entry_hit_reason({**dip_holdings[t], "kind": "dip"})
+            else:
+                why = reason_text("tripwire" if t in scan["reinitiate"] and t not in fvr else "recheck",
+                                  holding=f"{h['type']} holding", flagged_by=src,
+                                  fair_value=(f"close {fv['close']} reached the base fair value {fv['base']:.2f} "
+                                              f"({fv['file']})") if fv else None)
             evals.append(("reinitiation", research_and_evaluate(t, h["type"], asof, why, agent, log, rundir)))
         if fvr and not dry_run:
             from weekly_scan import record_fv_reviews
@@ -341,8 +359,8 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
             try:
                 step(f"initiate {p['ticker']}")
                 return research_and_evaluate(p["ticker"], p["type"], asof,
-                                             (entry_hit_reason(p["entry_hit"]) if p.get("entry_hit") else "New initiation from this week's screen. Decide BUY or AVOID.")
-                                             + (f" Screen setup: {p['setup_detail']}." if p.get("setup_detail") else ""),
+                                             entry_hit_reason(p["entry_hit"]) if p.get("entry_hit")
+                                             else reason_text("screen", source="weekly screen", setup=p.get("setup_detail")),
                                              agent, log, rundir)
             except Exception as e:  # noqa: BLE001
                 log(f"SKIPPED initiation {p['ticker']}: {e}")

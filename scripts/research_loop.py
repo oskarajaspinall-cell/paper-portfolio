@@ -174,7 +174,7 @@ def batch_add(t: str | None, flush: bool = False) -> None:
 
 
 cfg = load_config()
-OPTS = {"no_prescreen": False, "why": "New initiation from the global core screen. Decide BUY or AVOID."}
+OPTS = {"no_prescreen": False, "reason": "screen"}
 hits: list[str] = []
 hit_rows: dict[str, dict] = {}
 
@@ -271,7 +271,7 @@ def attempt(t):
     try:
         log(f"== initiate {t}")
         why = (wr.entry_hit_reason(hit_rows[t]) if t in hit_rows else
-               OPTS["why"])
+               wr.reason_text(OPTS["reason"], source="global core ranking"))
         ev = wr.research_and_evaluate(t, "CORE", asof, why, agent, log, run)
         rec = subprocess.run([str(ROOT / "bin" / "py"), "scripts/decision_log.py", "record", str(ev.relative_to(ROOT)),
                               "--asof", asof], cwd=ROOT, capture_output=True, text=True)
@@ -328,12 +328,13 @@ def main(argv=None) -> int:
     ap.add_argument("run_dir", help="runs/<name>")
     ap.add_argument("--cache-date", default=dt.date.today().isoformat(), help="rank: the page-cache day to screen")
     ap.add_argument("--no-prescreen", action="store_true", help="run: research every name (owner requests)")
-    ap.add_argument("--why", help="run: the reason given to the researcher (default: the global core screen)")
+    ap.add_argument("--reason", choices=["screen", "owner_request"], default="screen",
+                    help="run: the neutral reason code given to the researcher (no free text, 2026-11-09)")
     a = ap.parse_args(argv)
     run = (ROOT / a.run_dir).resolve()
     OPTS["no_prescreen"] = a.no_prescreen
-    if a.why:
-        OPTS["why"] = a.why
+    if a.reason:
+        OPTS["reason"] = a.reason
     if a.cmd == "rank":
         rank(run, a.cache_date)
         return 0

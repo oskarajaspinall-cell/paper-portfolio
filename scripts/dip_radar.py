@@ -163,7 +163,7 @@ def rank_key(a: dict):
 
 
 def hit_reason(a: dict) -> str:
-    """The re-research instruction for a dip-radar signal (used by entry_research / weekly run / research loop)."""
+    """The facts of a dip-radar signal (used, via weekly_run.reason_text("dip"), by entry_research / weekly run / loop)."""
     fv = (f"; base fair value {a['fair_value_base']:.2f}" if a.get("fair_value_base") else "; no mechanical fair value")
     head = (f"Dip radar: the close {a['close']:g} ({a['close_date']}) is {a['ret_pct']:+.1f}% over the "
             f"{a['sessions']} sessions since our last research ({a.get('last_research') or 'n/a'}) vs the S&P 500 "
@@ -171,13 +171,7 @@ def hit_reason(a: dict) -> str:
             f"part is {a['specific_pct']:+.1f}% ({a['z']} standard deviations)"
             + (f"; {a['from_decision_pct']:+.1f}% since our {a['decision']} at conviction {a['conviction']} on {a['date']}"
                if a.get("from_decision_pct") is not None else "") + fv + ". ")
-    if a["kind"] == "holding":
-        return head + ("This is a full re-initiation of an existing CORE holding. Find out why it fell (results, "
-                       "guidance, filings, news): if the thesis is intact and the fall is an overreaction, ADD is the "
-                       "question; if the fall reveals a thesis problem, say so. Decide ADD, HOLD, TRIM or SELL.")
-    return head + ("Find out why it fell (results, guidance, filings, news). Decide BUY or AVOID: BUY only if the fall "
-                   "is an overreaction to something that doesn't break the business case, or it removed the "
-                   "obstacle that made it an AVOID; a falling price alone is not a reason.")
+    return head.strip()  # facts only (2026-11-09): how a dip is handled lives in the agent files
 
 
 def render(asof: str, assessed: list[dict], hits: list[dict], dip_released: bool, failed: list[str]) -> str:

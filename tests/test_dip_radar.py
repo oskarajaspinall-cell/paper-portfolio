@@ -87,9 +87,10 @@ def test_watch_list_holdings_and_recent_conviction3_avoids(real_cfg):
 
 def test_hit_reason_asks_the_right_question():
     a = {**watch_row(), **stats(), "fair_value_base": 90.0, "from_decision_pct": -20.0, "last_research": "2026-10-01"}
-    assert "Decide BUY or AVOID" in D.hit_reason(a) and "a falling price alone is not a reason" in D.hit_reason(a)
-    h = dict(a, kind="holding")
-    assert "ADD is the question" in D.hit_reason(h) and "Decide ADD, HOLD, TRIM or SELL" in D.hit_reason(h)
+    # facts only since 2026-11-09 (neutral prompts): no instructions, no verdict hints
+    r = D.hit_reason(a)
+    assert "-20.0%" in r and "base fair value 90.00" in r
+    assert "Decide" not in r and "BUY" not in r and "ADD" not in r
 
 
 def test_entry_research_takes_dip_hits_including_holdings(tmp_path):
@@ -102,4 +103,4 @@ def test_entry_research_takes_dip_hits_including_holdings(tmp_path):
 
 def test_weekly_reason_for_a_dip_hit():
     import weekly_run as wr
-    assert wr.entry_hit_reason({"kind": "dip", "reason": "Dip radar: x"}) == "Dip radar: x"
+    assert wr.entry_hit_reason({"kind": "dip", "reason": "Dip radar: x. Find out why"}) == "Reason for review: dip. Facts: detail: Dip radar: x.."

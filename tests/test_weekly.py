@@ -267,9 +267,9 @@ def test_run_reinitiates_fired_core_trigger(fake_repo, monkeypatch):
 
     assert wr.run("2026-10-10", False, 0, agent=agent) == 0
     assert seen == ["macro-strategist", "researcher", "macro-overlay", "evaluator", "portfolio-manager"]  # no Monte Carlo (owner 2026-10-11)
-    assert "full re-initiation of an existing CORE holding (scan: core or macro trigger fired)" in prompts[1]
+    assert "Reason for review: tripwire." in prompts[1] and "flagged by: core or macro trigger fired" in prompts[1]
     assert "SEC filing delta: research/TRIG/sec-delta-2026-10-10.md" in prompts[1]
-    assert "Decide ADD, HOLD, TRIM or SELL" in prompts[3]
+    assert "Reason for review: tripwire." in prompts[3]  # handling lives in evaluator.md (neutral prompts)
 
 
 def test_failed_run_applies_no_trades_and_logs_error(fake_repo, monkeypatch):
@@ -502,7 +502,7 @@ def test_macro_failure_never_blocks_research(fake_repo, monkeypatch):
             (d / "2026-10-10-evaluation.md").write_text(EVAL.replace("AAA", "N0") % ("AVOID", 1))
     (fake_repo / "runs" / "2026-10-10").mkdir(parents=True, exist_ok=True)
     monkeypatch.setattr(wr, "sh", lambda args, log, timeout=None: "")
-    ev = wr.research_and_evaluate("N0", "CORE", "2026-10-10", "x", agent, lambda m: None, fake_repo / "runs" / "2026-10-10")
+    ev = wr.research_and_evaluate("N0", "CORE", "2026-10-10", wr.reason_text("screen"), agent, lambda m: None, fake_repo / "runs" / "2026-10-10")
     assert ev.name == "2026-10-10-evaluation.md"
     evaluator_prompt = next(p for n, p in seen if n == "evaluator")
     assert "macro overlay" not in evaluator_prompt                      # evaluated without it, not blocked
@@ -536,7 +536,7 @@ def test_no_monte_carlo_step(tmp_path, monkeypatch, decision, held):
             (d / "2026-10-10.md").write_text("note")
         if name == "evaluator":
             (d / "2026-10-10-evaluation.md").write_text("# E\n```json\n" + json.dumps({"decision": decision}) + "\n```\n")
-    wr.research_and_evaluate("XYZ", "CORE", "2026-10-10", "why", agent, lambda m: None, tmp_path)
+    wr.research_and_evaluate("XYZ", "CORE", "2026-10-10", wr.reason_text("screen"), agent, lambda m: None, tmp_path)
     assert names == ["researcher", "evaluator"] and not hasattr(wr, "run_montecarlo")
 
 
@@ -677,7 +677,7 @@ def test_rerun_reuses_todays_checked_research(fake_repo, monkeypatch):
     (d / "2026-10-10-evaluation.md").write_text("eval")
     monkeypatch.setattr(wr, "check_doc", lambda kind, path, log: None)
     calls = []
-    ev = wr.research_and_evaluate("AAA", "CORE", "2026-10-10", "why", lambda *a: calls.append(a), lambda m: None,
+    ev = wr.research_and_evaluate("AAA", "CORE", "2026-10-10", wr.reason_text("screen"), lambda *a: calls.append(a), lambda m: None,
                                   fake_repo / "runs" / "2026-10-10")
     assert ev == d / "2026-10-10-evaluation.md" and calls == []  # no agent called
 
@@ -727,3 +727,15 @@ def test_universe_excludes_sanctioned_markets():
     assert excluded("MOEX:GMKN", "Russia", {"russia"}, {"MOEX"})
     assert excluded("LON:XYZ", "Russia", {"russia"}, set())
     assert not excluded("LON:SHEL", "United Kingdom", {"russia"}, {"MOEX"})
+
+
+def test_reason_codes_are_neutral_and_enforced():
+    import weekly_run as wr
+    t = wr.reason_text("entry_hit", entry_price=50, price="closed at 49.5 on 2026-10-09")
+    assert t.startswith("Reason for review: entry_hit.") and "49.5" in t
+    assert wr.check_reason(t) == t
+    import pytest
+    with pytest.raises(ValueError):
+        wr.reason_text("buy_this")
+    with pytest.raises(wr.StepFailed):
+        wr.check_reason("A temporary dip can be conviction 4. Decide BUY.")
