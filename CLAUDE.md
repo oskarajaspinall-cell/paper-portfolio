@@ -288,6 +288,22 @@ custom_file = "universe/custom.txt"   # your own tickers, one per line (optional
 excluded_countries = ["Russia"]       # owner rule 2026-11-08: sanctioned / untradeable markets are dropped
 excluded_exchanges = ["MOEX"]          # ...from the universe entirely (not investable, not screened, not researched)
 
+[scorecard]
+# Conviction scorecard (owner-approved 2026-11-09, scripts/scorecard.py): Python sets a CORE conviction from
+# quality level (0-2), quality direction (0-2), balance sheet (0-2), valuation (0-4), plus the evaluator's
+# judgement fields only: moat (0-2), key risk (0/-1/-2), whether a Python-found decline is temporary (+1 direction),
+# and a DOWNWARD-only veto (conviction at most 3). No upward override.
+quality_hi = 15                   # ROIC TTM % (ROE for financials) for 2 points; quality_lo for 1
+quality_lo = 10
+balance_good = 1.5                # net debt / EBITDA for 2 points; balance_ok for 1
+balance_ok = 3.0
+upside_bands = [30, 15, 5]        # value-blend upside % for 3 / 2 / 1 points
+cheap_history_pos = 33            # median position of P/E and EV/EBITDA in the 5y range at or below this: +1
+thresholds = { "5" = 11, "4" = 9, "3" = 5, "2" = 3 }  # total -> conviction (below the "2" threshold: 1); tuned on the
+                                  # 2026-11-08/09 replay: ~3-5% of new names at 4+ (the October hit rate was 4-5%)
+hold_4 = 8                        # hold band: a holding keeps conviction 4 from this total (an ADD needs the buy threshold)
+# 4+ also needs quality level >= 1, direction >= 1 and valuation >= 2 (the mandate: good business, attractive price)
+
 [screen]
 # Weekly Python screen over universe/universe.csv (one statistics page per stock, no model calls).
 # Percentile scores within the screened set. Core score = quality + valuation. Tactical = the two setups in

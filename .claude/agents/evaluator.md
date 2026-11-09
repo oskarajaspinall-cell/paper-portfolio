@@ -34,6 +34,15 @@ The caller states only a reason code and plain facts ("Reason for review: <code>
 - `entry_hit` / `dip`: the price fell to the level we set, or fell unusually for stock-specific reasons. Find out why it fell (results, guidance, filings, news). A falling price alone is never a reason to buy: BUY/ADD only if the fall is an overreaction that doesn't break the business case, or it removed the obstacle that made it an AVOID.
 - `owner_request`: the owner asked for a review; judge it exactly as any other.
 
+## Conviction comes from the scorecard (CORE, 2026-11-09)
+You do not choose a CORE conviction. Python computes it (`scripts/scorecard.py`) from the fact sheet's trends file, the fair-value file and your judgement fields. Fill the Decision block's `"scorecard"` object honestly, then set `conviction` to the number Python gives:
+`"scorecard": {"decline_cause": "structural|temporary|none", "decline_evidence": "...", "moat": "none|narrow|wide", "key_risk": "low|medium|high", "key_risk_text": "...", "veto": null}`
+- `decline_cause`: Python lists which of ROIC (ROE for financials), operating margin and FCF margin are falling over the last 1 or 3 years. If any are, say whether the cause is `structural` (lost share, a permanent price cap, a broken model) or `temporary` (a guided reset, a cyclical trough with the balance sheet intact, heavy investment, a one-off), with cited evidence. `none` only when nothing is falling.
+- `moat`: a durable reason competitors can't take the returns away. `wide` is rare.
+- `key_risk`: the single risk most likely to break the thesis, and how likely it is.
+- `veto`: null, or `{"code": "fraud_flag|binary_event|governance|data_conflict", "reason": "..."}` when something the score can't see should stop a buy. It can only lower the conviction (to at most 3). There is no way to raise it.
+Run `bin/py scripts/scorecard.py research/<SLUG>/<date>-evaluation.md` after writing the file to see the breakdown, then set `conviction` (and the decision: BUY/ADD only at 4+) to match. `check_docs.py eval` fails if they differ. Write the bear and bull cases before looking at the score, and don't tune the judgement fields to reach a number.
+
 ## Decision block fields
 - `ticker`, `decision`: BUY or AVOID for a name not held; ADD, HOLD, TRIM or SELL for a holding. "No consensus", "needs more research" or anything else is NOT allowed. If evidence is thin, that lowers conviction; it does not defer the decision.
 - `position_type`: CORE or TACTICAL. A held position's label is fixed. A TACTICAL holding becomes CORE only via a full core initiation: then set `"core_initiation": true` with decision BUY.

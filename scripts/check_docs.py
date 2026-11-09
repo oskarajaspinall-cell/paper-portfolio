@@ -267,6 +267,9 @@ def scenario_problems(sc) -> list[str]:
     return errs
 
 
+SCORECARD_FROM = "2026-11-09"  # evaluations dated before this were written before the scorecard existed
+
+
 def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
     errs, counts = [], {}
     heads = [h for h, _ in sections(md)]
@@ -511,6 +514,12 @@ def main(argv=None) -> int:
         if src:  # the evaluator also reads the config block (limits, sizes, cash rate)
             cfg_block = re.search(r"<!-- CONFIG:START -->(.*?)<!-- CONFIG:END -->", (ROOT / "CLAUDE.md").read_text(), re.S)
             errs += eval_number_problems(md, src + [cfg_block.group(1) if cfg_block else ""])
+        if Path(a.path).name[:10] >= SCORECARD_FROM:  # 2026-11-09: Python sets a CORE conviction
+            import scorecard
+            res, sc_errs = scorecard.evaluate_file(Path(a.path))
+            errs += sc_errs
+            if res:
+                counts["scorecard"] = f"{res['total']:g}->{res['conviction']}"
     if errs:
         print(f"FAIL {a.path}\n" + "\n".join(f"- {e}" for e in errs))
         return 1
