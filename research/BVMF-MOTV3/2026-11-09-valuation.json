@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Infrastructure Operations",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 27.53788797951672,
+    "base": 40.21032365649576,
+    "bull": 114.00675579137415
+   },
+   "implied_growth": -0.09856999840073538,
+   "discount_rate": 0.0773628544648662,
+   "cost_of_equity": 0.1184,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.02039311404755188,
+     "base": 0.039529936533098206,
+     "bull": 0.1139059742274966
+    },
+    "cash_flow_margin": {
+     "bear": 0.26902216747298346,
+     "base": 0.26902216747298346,
+     "bull": 0.45845232455699403
+    },
+    "cagr_3y": -0.005786228095103763,
+    "cagr_5y": 0.1139059742274966,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 1.2866861331683168,
+    "base": 13.294388111881188,
+    "bull": 15.982433841089108
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.029,
+     "base": 6.946,
+     "bull": 7.599
+    },
+    "ttm_ebitda": 8315241000
+   }
+  }
+ ],
+ "price": 14.95,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.03,
+ "reporting_currency": "BRL",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 18.787487364067253,
+  "base": 31.238345141624237,
+  "bull": 81.33198180794581
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.25668811799780955,
+  "base": 1.0895214141554672,
+  "bull": 4.440266341668616
+ },
+ "implied_growth": -0.09856999840073538,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.0x (base 13.29-40.21)",
+   "base +109% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "BVMF:MOTV3",
+ "asof": "2026-11-09",
+ "quote_currency": "BRL",
+ "financials_currency": "BRL",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bvmf/MOTV3/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bvmf/MOTV3/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bvmf/MOTV3/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bvmf/MOTV3/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bvmf/MOTV3/statistics/"
+ }
+}

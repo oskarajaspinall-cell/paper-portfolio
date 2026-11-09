@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 25.476962149390243,
+    "base": 29.141287123257833,
+    "bull": 31.885993860440514
+   },
+   "cost_of_equity": 0.089288,
+   "assumptions": {
+    "roe": {
+     "bear": 0.09703,
+     "base": 0.10739,
+     "bull": 0.11515
+    },
+    "justified_pb": {
+     "bear": 1.1204268292682926,
+     "base": 1.2815766550522645,
+     "bull": 1.4022834743653558
+    },
+    "bvps": 22.738622
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 31.448681513663754,
+    "base": 44.72890505847403,
+    "bull": 55.71184322171155
+   },
+   "implied_growth": -0.0376155339422605,
+   "discount_rate": 0.089288,
+   "cost_of_equity": 0.089288,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.021345961647108183,
+     "base": 0.05843073493317723,
+     "bull": 0.10603101643849255
+    },
+    "cash_flow_margin": {
+     "bear": 0.35694724755087104,
+     "base": 0.43509318134741043,
+     "bull": 0.4460010736873892
+    },
+    "cagr_3y": 0.07769192329421637,
+    "cagr_5y": 0.10603101643849255,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 12.569997846220115,
+    "base": 14.668367346938773,
+    "bull": 17.539787798408486
+   },
+   "cost_of_equity": 0.089288,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 0.92
+   }
+  }
+ ],
+ "price": 29.86,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 27.467535270814746,
+  "base": 34.3371597683299,
+  "bull": 39.82794364753086
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.08012273038128781,
+  "base": 0.14993837134393506,
+  "bull": 0.3338226271778586
+ },
+ "implied_growth": -0.0376155339422605,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.0x (base 14.67-44.73)"
+  ]
+ },
+ "ticker": "HOMB",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/homb/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/homb/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/homb/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/homb/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/homb/statistics/"
+ }
+}
