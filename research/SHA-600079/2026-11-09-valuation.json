@@ -1,0 +1,118 @@
+{
+ "industry": {
+  "industry": "Drug Manufacturers - Specialty & Generic",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -9.534678025399444,
+    "base": 10.515657922419352,
+    "bull": 14.528280157089393
+   },
+   "implied_growth": 0.17142930058259914,
+   "discount_rate": 0.10687005265907665,
+   "cost_of_equity": 0.12340000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.005663236550213651,
+     "base": 0.028209031665291418,
+     "bull": 0.039162599761592976
+    },
+    "cash_flow_margin": {
+     "bear": -0.04878886193654031,
+     "base": 0.06214221446763233,
+     "bull": 0.07951331529843349
+    },
+    "cagr_3y": 0.023673526899572694,
+    "cagr_5y": 0.039162599761592976,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 24.636662252000004,
+    "base": 29.829528126,
+    "bull": 43.808239113
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 15.476,
+     "base": 18.738,
+     "bull": 27.519
+    },
+    "ttm_eps": 1.591927
+   }
+  }
+ ],
+ "price": 19.51,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 1.8557687337337054,
+  "base": 16.953614656946232,
+  "bull": 24.28826647572626
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.9048811515256943,
+  "base": -0.13102948964909122,
+  "bull": 0.24491370967330894
+ },
+ "implied_growth": 0.17142930058259914,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.8x (base 10.52-29.83)"
+  ]
+ },
+ "ticker": "SHA:600079",
+ "asof": "2026-11-09",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/600079/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/600079/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/600079/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/600079/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/600079/statistics/"
+ }
+}

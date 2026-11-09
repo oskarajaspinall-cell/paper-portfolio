@@ -1,0 +1,186 @@
+{
+ "ticker": "SNSE:LTM",
+ "asof": "2026-11-09",
+ "sector": "Industrials",
+ "industry": "Airlines",
+ "quality": {
+  "ROIC": {
+   "ttm": 25.395,
+   "fy_5y_change": 55.893,
+   "fy_5y_label": "rising"
+  },
+  "ROCE": {
+   "ttm": 18.9,
+   "fy_5y_change": 134.1,
+   "fy_5y_label": "rising"
+  },
+  "ROE": {
+   "ttm": 98.02,
+   "fy_5y_change": -105.10899999999998,
+   "fy_5y_label": "falling"
+  },
+  "Gross margin": {
+   "ttm": 24.986108415588873,
+   "fy_5y_change": 30.7905214553746,
+   "fy_5y_label": "rising"
+  },
+  "Operating margin": {
+   "ttm": 13.73833315237942,
+   "fy_5y_change": 38.661542119427054,
+   "fy_5y_label": "rising"
+  },
+  "Net margin": {
+   "ttm": 9.819203489580497,
+   "fy_5y_change": 105.39186930856886,
+   "fy_5y_label": "rising"
+  },
+  "FCF margin": {
+   "ttm": 13.003923942352552,
+   "fy_5y_change": 29.54206359331753,
+   "fy_5y_label": "rising"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": 132.43359256330186,
+   "fy_5y_change": 117.73858350848558,
+   "fy_5y_label": "rising"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": 1.7525274944224087,
+   "fy_5y_change": 24.739341058468074,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": 1.753,
+   "fy_5y_change": 24.740000000000002,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {
+  "ROIC": {
+   "latest": 25.395,
+   "change": -4.667000000000002,
+   "direction": "falling",
+   "change_3y": 7.927,
+   "direction_3y": "rising",
+   "high": 30.721999999999998
+  },
+  "ROCE": {
+   "latest": 18.9,
+   "change": -3.200000000000003,
+   "direction": "falling",
+   "change_3y": 7.999999999999998,
+   "direction_3y": "rising",
+   "high": 23.1
+  },
+  "Operating margin": {
+   "latest": 13.73833315237942,
+   "change": -1.7742333171338753,
+   "direction": "falling",
+   "change_3y": 5.185701514378101,
+   "direction_3y": "rising",
+   "high": 17.260334349189964
+  },
+  "FCF margin": {
+   "latest": 13.003923942352552,
+   "change": 0.6475839756778186,
+   "direction": "flat",
+   "change_3y": 8.961967744595722,
+   "direction_3y": "rising",
+   "high": 15.112012613025302
+  }
+ },
+ "valuation": {
+  "P/E": {
+   "current": 8.7139,
+   "pos_pct": 68.96720333929636,
+   "peer_premium_pct": -15.562984496124022
+  },
+  "EV/EBITDA": {
+   "current": 4.85021,
+   "pos_pct": -0.5291760041372184,
+   "peer_premium_pct": -39.29649561952441
+  },
+  "EV/Sales": {
+   "current": 1.21612,
+   "pos_pct": 24.661971830985923,
+   "peer_premium_pct": 19.227450980392156
+  },
+  "P/FCF": {
+   "current": 6.40242,
+   "pos_pct": 55.69369369369371,
+   "peer_premium_pct": -74.62679824039948
+  },
+  "P/B": {
+   "current": 6.24127,
+   "pos_pct": -4.637194124433883,
+   "peer_premium_pct": 202.5336888027145
+  }
+ },
+ "fair_value": {
+  "price": 23.36,
+  "fair_value": {
+   "bear": -10.205778318652863,
+   "base": 85.9058321644743,
+   "bull": 171.8849849994566
+  },
+  "methods": [
+   {
+    "model": "dcf_norm",
+    "label": "through-cycle DCF",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": -18.945415979473406,
+     "base": 122.92341336980925,
+     "bull": 243.39013154819287
+    },
+    "implied_growth": -0.18449866903955625,
+    "discount_rate": 0.07874696015431872,
+    "cost_of_equity": 0.0884,
+    "assumptions": {
+     "cash_flow": "FCFF - stock-based pay",
+     "growth": {
+      "bear": 0.057847499146301454,
+      "base": 0.12699789300765835,
+      "bull": 0.25
+     },
+     "cash_flow_margin": {
+      "bear": -0.013125880219450594,
+      "base": 0.16232527795264717,
+      "bull": 0.1887563446674339
+     },
+     "cagr_3y": 0.1506949982926029,
+     "cagr_5y": 0.30729657373803043,
+     "terminal_growth": 0.025
+    }
+   },
+   {
+    "model": "ev_ebitda",
+    "label": "EV/EBITDA",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 7.273497002988222,
+     "base": 11.870669753804433,
+     "bull": 28.874691901984036
+    },
+    "assumptions": {
+     "multiple": {
+      "bear": 4.973,
+      "base": 6.2355,
+      "bull": 6.423
+     },
+     "ttm_ebitda": 3633737000,
+     "peak_earnings": "TTM EBITDA is 1.6x its 5y median: bear/base use the 5y average (2.14e+09), bull the TTM figure"
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": false,
+   "reasons": [
+    "methods disagree 10.4x (base 11.87-122.92)",
+    "base +268% from the price (outside -80% to +100%)"
+   ]
+  }
+ }
+}

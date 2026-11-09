@@ -1,0 +1,112 @@
+{
+ "industry": {
+  "industry": "Airlines",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -18.945415979473406,
+    "base": 122.92341336980925,
+    "bull": 243.39013154819287
+   },
+   "implied_growth": -0.18449866903955625,
+   "discount_rate": 0.07874696015431872,
+   "cost_of_equity": 0.0884,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.057847499146301454,
+     "base": 0.12699789300765835,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.013125880219450594,
+     "base": 0.16232527795264717,
+     "bull": 0.1887563446674339
+    },
+    "cagr_3y": 0.1506949982926029,
+    "cagr_5y": 0.30729657373803043,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 7.273497002988222,
+    "base": 11.870669753804433,
+    "bull": 28.874691901984036
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.973,
+     "base": 6.2355,
+     "bull": 6.423
+    },
+    "ttm_ebitda": 3633737000,
+    "peak_earnings": "TTM EBITDA is 1.6x its 5y median: bear/base use the 5y average (2.14e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 23.36,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -10.205778318652863,
+  "base": 85.9058321644743,
+  "bull": 171.8849849994566
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.436891195147811,
+  "base": 2.6774756919723592,
+  "bull": 6.358090111278108
+ },
+ "implied_growth": -0.18449866903955625,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 10.4x (base 11.87-122.92)",
+   "base +268% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "SNSE:LTM",
+ "asof": "2026-11-09",
+ "quote_currency": "CLP",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 976.64,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/snse/LTM/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/snse/LTM/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/snse/LTM/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/snse/LTM/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/snse/LTM/statistics/"
+ }
+}
