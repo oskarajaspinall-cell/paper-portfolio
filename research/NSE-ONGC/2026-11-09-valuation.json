@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Integrated",
+  "known": true,
+  "best": "SOTP / NAV",
+  "second": "DCF",
+  "best_models": [
+   "sotp",
+   "nav"
+  ],
+  "second_models": [
+   "dcf"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "sotp",
+   "label": "sum of the parts",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs segment-level profits, not on stockanalysis.com]"
+  },
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 356.7934086671684,
+    "base": 704.9351748401339,
+    "bull": 1022.2593781626058
+   },
+   "implied_growth": -0.17490279903274386,
+   "discount_rate": 0.0804600994785239,
+   "cost_of_equity": 0.10840000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.02381654382327662,
+     "base": 0.023094715051056248,
+     "bull": 0.05501194785077823
+    },
+    "cash_flow_margin": {
+     "bear": 0.055380462088408175,
+     "base": 0.07982191241951801,
+     "bull": 0.09724393748746443
+    },
+    "cagr_3y": -0.012633087646553243,
+    "cagr_5y": 0.05501194785077823,
+    "terminal_growth": 0.025
+   }
+  }
+ ],
+ "price": 234.8,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.02,
+ "reporting_currency": "INR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 356.7934086671684,
+  "base": 704.9351748401339,
+  "bull": 1022.2593781626058
+ },
+ "used": [
+  "dcf"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": 0.5195630692809556,
+  "base": 2.00227927955764,
+  "bull": 3.353745222157605
+ },
+ "implied_growth": -0.17490279903274386,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "base +200% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "NSE:ONGC",
+ "asof": "2026-11-09",
+ "quote_currency": "INR",
+ "financials_currency": "INR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-08",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/nse/ONGC/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/nse/ONGC/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/nse/ONGC/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/nse/ONGC/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/nse/ONGC/statistics/"
+ }
+}
