@@ -1,0 +1,133 @@
+[02:00:51] $ claude -p Evaluate KRX:000270 for 2026-11-09: fact sheet research/KRX-000270/factsheet-2026-11-08.md, note research/KRX-000270/2026-11-08.md, state portfolio/state.json, macro overlay research/KRX-000270/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/KRX-000270/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:00:51] $ claude -p Evaluate OTEX for 2026-11-09: fact sheet research/OTEX/factsheet-2026-11-08.md, note research/OTEX/2026-11-08.md, state portfolio/state.json, macro overlay research/OTEX/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/OTEX/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:00:51] $ claude -p Evaluate TLV:NICE for 2026-11-09: fact sheet research/TLV-NICE/factsheet-2026-11-08.md, note research/TLV-NICE/2026-11-08.md, state portfolio/state.json, macro overlay research/TLV-NICE/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/TLV-NICE/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:02:04] research/TLV-NICE/2026-11-09-evaluation.md
+OK research/TLV-NICE/2026-11-09-evaluation.md Bear case=137 Bull case=141 decision=BUY
+[02:02:04] $ bin/py scripts/check_docs.py eval research/TLV-NICE/2026-11-09-evaluation.md
+[02:02:04] OK research/TLV-NICE/2026-11-09-evaluation.md Bear case=137 Bull case=141 decision=BUY
+[02:02:04] $ bin/py scripts/valuation.py TLV:NICE --asof 2026-11-09 --eval research/TLV-NICE/2026-11-09-evaluation.md
+[02:02:08] research/KRX-000270/2026-11-09-evaluation.md
+
+OK research/KRX-000270/2026-11-09-evaluation.md Bear case=142 Bull case=142 decision=AVOID
+[02:02:08] $ bin/py scripts/check_docs.py eval research/KRX-000270/2026-11-09-evaluation.md
+[02:02:08] OK research/KRX-000270/2026-11-09-evaluation.md Bear case=142 Bull case=142 decision=AVOID
+[02:02:08] $ bin/py scripts/valuation.py KRX:000270 --asof 2026-11-09 --eval research/KRX-000270/2026-11-09-evaluation.md
+[02:02:30] research/OTEX/2026-11-09-evaluation.md
+OK research/OTEX/2026-11-09-evaluation.md Bear case=136 Bull case=149 decision=BUY
+[02:02:30] $ bin/py scripts/check_docs.py eval research/OTEX/2026-11-09-evaluation.md
+[02:02:30] OK research/OTEX/2026-11-09-evaluation.md Bear case=136 Bull case=149 decision=BUY
+[02:02:30] $ bin/py scripts/valuation.py OTEX --asof 2026-11-09 --eval research/OTEX/2026-11-09-evaluation.md
+[02:03:10] {"out": "research/KRX-000270/2026-11-09-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 175268.03, "base": 322752.42, "bull": 431272.79}, "price": 100300}
+[02:03:11] == KRX:000270: AVOID 3
+[02:03:11] $ claude -p Evaluate IDX:ASII for 2026-11-09: fact sheet research/IDX-ASII/factsheet-2026-11-08.md, note research/IDX-ASII/2026-11-08.md, state portfolio/state.json, macro overlay research/IDX-ASII/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/IDX-ASII/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:03:31] {"out": "research/OTEX/2026-11-09-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 42.63, "base": 54.11, "bull": 132.27}, "price": 24.85}
+[02:03:32] == OTEX: BUY 4
+[02:03:32] $ claude -p Evaluate LEA for 2026-11-09: fact sheet research/LEA/factsheet-2026-11-08.md, note research/LEA/2026-11-08.md, state portfolio/state.json, macro overlay research/LEA/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/LEA/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:03:46] {"out": "research/TLV-NICE/2026-11-09-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 59072.04, "base": 82023.6, "bull": 144666.23}, "price": 31520}
+[02:03:47] == TLV:NICE: BUY 4
+[02:03:47] $ claude -p Evaluate RNR for 2026-11-09: fact sheet research/RNR/factsheet-2026-11-08.md, note research/RNR/2026-11-08.md, state portfolio/state.json, macro overlay research/RNR/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/RNR/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:04:43] research/IDX-ASII/2026-11-09-evaluation.md
+OK research/IDX-ASII/2026-11-09-evaluation.md Bear case=149 Bull case=130 decision=AVOID
+[02:04:43] $ bin/py scripts/check_docs.py eval research/IDX-ASII/2026-11-09-evaluation.md
+[02:04:43] OK research/IDX-ASII/2026-11-09-evaluation.md Bear case=149 Bull case=130 decision=AVOID
+[02:04:43] $ bin/py scripts/valuation.py IDX:ASII --asof 2026-11-09 --eval research/IDX-ASII/2026-11-09-evaluation.md
+[02:05:10] research/RNR/2026-11-09-evaluation.md
+OK research/RNR/2026-11-09-evaluation.md Bear case=143 Bull case=122 decision=AVOID
+[02:05:10] $ bin/py scripts/check_docs.py eval research/RNR/2026-11-09-evaluation.md
+[02:05:10] OK research/RNR/2026-11-09-evaluation.md Bear case=143 Bull case=122 decision=AVOID
+[02:05:10] $ bin/py scripts/valuation.py RNR --asof 2026-11-09 --eval research/RNR/2026-11-09-evaluation.md
+[02:05:17] {"out": "research/IDX-ASII/2026-11-09-valuation.md", "used": ["dcf"], "fair_value": {"bear": 3917.79, "base": 12232.38, "bull": 24959.99}, "price": 5000}
+[02:05:18] research/LEA/2026-11-09-evaluation.md
+OK research/LEA/2026-11-09-evaluation.md Bear case=150 Bull case=143 decision=BUY
+[02:05:18] $ bin/py scripts/check_docs.py eval research/LEA/2026-11-09-evaluation.md
+[02:05:18] OK research/LEA/2026-11-09-evaluation.md Bear case=150 Bull case=143 decision=BUY
+[02:05:18] $ bin/py scripts/valuation.py LEA --asof 2026-11-09 --eval research/LEA/2026-11-09-evaluation.md
+[02:05:18] == IDX:ASII: AVOID 3
+[02:05:18] $ claude -p Evaluate TPE:5871 for 2026-11-09: fact sheet research/TPE-5871/factsheet-2026-11-08.md, note research/TPE-5871/2026-11-08.md, state portfolio/state.json, macro overlay research/TPE-5871/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/TPE-5871/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:05:55] {"out": "research/RNR/2026-11-09-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 469.06, "base": 528.15, "bull": 699.12}, "price": 347.35}
+[02:05:56] == RNR: AVOID 3
+[02:05:56] $ claude -p Evaluate KRX:064400 for 2026-11-09: fact sheet research/KRX-064400/factsheet-2026-11-08.md, note research/KRX-064400/2026-11-08.md, state portfolio/state.json, macro overlay research/KRX-064400/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/KRX-064400/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:06:01] {"out": "research/LEA/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 31.11, "base": 200.42, "bull": 219.36}, "price": 110.28}
+[02:06:03] == LEA: BUY 4
+[02:06:03] $ claude -p Evaluate OKE for 2026-11-09: fact sheet research/OKE/factsheet-2026-11-08.md, note research/OKE/2026-11-08.md, state portfolio/state.json, macro overlay research/OKE/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/OKE/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:06:16] Decision: AVOID at conviction 3, no entry price. The checker passed.
+
+research/TPE-5871/2026-11-09-evaluation.md
+OK research/TPE-5871/2026-11-09-evaluation.md Bear case=138 Bull case=124 decision=AVOID
+
+The recent trend is not what blocks it this time. ROIC is flat year on year and ROE has stopped falling (11.3% TTM against 11.0% in FY2025), so it looks more like a trough than a continuing slide. The stock is also cheap: P/E and P/B sit below their 5-year lows, and the price is under even the mechanical bear fair value of 104.79 TWD.
+
+What blocks it is missing evidence. ROE halved over five years, and the fact sheet has no credit costs, margins or leverage for this lender. China exposure is also unsized, so I can't tell a temporary credit-cycle dip from a business that now earns permanently lower returns. Calling that conviction 4 would be inflating it.
+
+A lower price wouldn't change that, which is why the entry price is null. The Nov 12 results, or any credit-cost disclosure, should trigger a re-research.
+[02:06:16] $ bin/py scripts/check_docs.py eval research/TPE-5871/2026-11-09-evaluation.md
+[02:06:17] OK research/TPE-5871/2026-11-09-evaluation.md Bear case=138 Bull case=124 decision=AVOID
+[02:06:17] $ bin/py scripts/valuation.py TPE:5871 --asof 2026-11-09 --eval research/TPE-5871/2026-11-09-evaluation.md
+[02:06:37] {"out": "research/TPE-5871/2026-11-09-valuation.md", "used": ["pe"], "fair_value": {"bear": 104.79, "base": 142.28, "bull": 143.95}, "price": 102}
+[02:06:38] == TPE:5871: AVOID 3
+[02:06:38] $ claude -p Evaluate SWX:SQN for 2026-11-09: fact sheet research/SWX-SQN/factsheet-2026-11-08.md, note research/SWX-SQN/2026-11-08.md, state portfolio/state.json, macro overlay research/SWX-SQN/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/SWX-SQN/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:07:07] research/KRX-064400/2026-11-09-evaluation.md
+OK research/KRX-064400/2026-11-09-evaluation.md Bear case=145 Bull case=146 decision=AVOID
+[02:07:07] $ bin/py scripts/check_docs.py eval research/KRX-064400/2026-11-09-evaluation.md
+[02:07:07] OK research/KRX-064400/2026-11-09-evaluation.md Bear case=145 Bull case=146 decision=AVOID
+[02:07:07] $ bin/py scripts/valuation.py KRX:064400 --asof 2026-11-09 --eval research/KRX-064400/2026-11-09-evaluation.md
+[02:07:10] I wrote the evaluation to `research/OKE/2026-11-09-evaluation.md`.
+
+**Decision: BUY OKE as a CORE position at conviction 4**, at the 85.19 USD close on 2026-11-06. Python sets the size (the 7% conviction size, adjusted for the stock's volatility). The checker printed:
+
+`OK research/OKE/2026-11-09-evaluation.md Bear case=136 Bull case=138 decision=BUY`
+
+- **Why the falling last 12 months looks temporary:** operating margin fell from 18.0% to 14.2% and FCF margin from 9.3% to 5.9%. But return on invested capital rose to 8.8%, its 2-year high, and return on capital employed was flat. The company's 10-Q puts the cash gap down to a build-up of NGL inventory and ongoing spending on new Permian plants and NGL expansion. Debt fell to 3.68x EBITDA, S&P and Fitch upgraded it to BBB+, and 2026 guidance was raised again.
+- **Valuation:** EV/EBITDA of 10.7x is at its 5-year low and 19% below peers. The mechanical base fair value is 101.12.
+- **Why 4 and not 5:**
+  - Cash conversion is weak (62.2%).
+  - P/FCF is above its 5-year high, so the stock is cheap on EBITDA, not on cash.
+  - Apollo's $9 billion Class B units rank ahead of common shareholders.
+  - The mechanical bear value of 77.94 is below the price.
+- **Scenarios (12 months):** bull 112 (25%), base 98 (50%), bear 76 (25%).
+- **What would change my mind:** operating margin below 12%, ROIC below 7%, net debt/EBITDA above 4.5x, or FCF conversion below 50%.
+- **Portfolio fit:** no replacement is needed. This would be the first Energy holding and the 13th position. I didn't check the cash reserve, which isn't in my inputs. If the buy would go below it, the funding queue holds it until there is room.
+
+As instructed, I read only the fact sheet, note, macro overlay and state. I did not open the rejected 2026-11-08 evaluation.
+[02:07:10] $ bin/py scripts/check_docs.py eval research/OKE/2026-11-09-evaluation.md
+[02:07:11] OK research/OKE/2026-11-09-evaluation.md Bear case=136 Bull case=138 decision=BUY
+[02:07:11] $ bin/py scripts/valuation.py OKE --asof 2026-11-09 --eval research/OKE/2026-11-09-evaluation.md
+[02:07:44] {"out": "research/KRX-064400/2026-11-09-valuation.md", "used": ["dcf"], "fair_value": {"bear": 25934.08, "base": 91631.92, "bull": 142989.46}, "price": 74100}
+[02:07:46] == KRX:064400: AVOID 3
+[02:07:46] $ claude -p Evaluate INGR for 2026-11-09: fact sheet research/INGR/factsheet-2026-11-08.md, note research/INGR/2026-11-08.md, state portfolio/state.json, macro overlay research/INGR/2026-11-08-macro.md. Re-evaluation (owner-approved 2026-11-09) under the clarified Recent-direction rule: a falling last 12 months is evidence to weigh, not a rule against buying; there is no owner rule requiring a stable or improving trend. The 2026-11-08 evaluation (research/INGR/2026-11-08-evaluation.md) rejected this mainly on that direction. Decide afresh from the same fact sheet and note: is the decline structural (argues against) or temporary/explained (a guided reset, cyclical trough with the balance sheet intact, heavy investment, a one-off)? A cheap stock with a temporary dip can be conviction 4. Don't inflate conviction either. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:07:51] {"out": "research/OKE/2026-11-09-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 77.94, "base": 101.12, "bull": 381.97}, "price": 85.19}
+[02:07:52] == OKE: BUY 4
+[02:07:56] research/SWX-SQN/2026-11-09-evaluation.md
+OK research/SWX-SQN/2026-11-09-evaluation.md Bear case=148 Bull case=117 decision=AVOID
+[02:07:56] $ bin/py scripts/check_docs.py eval research/SWX-SQN/2026-11-09-evaluation.md
+[02:07:56] OK research/SWX-SQN/2026-11-09-evaluation.md Bear case=148 Bull case=117 decision=AVOID
+[02:07:56] $ bin/py scripts/valuation.py SWX:SQN --asof 2026-11-09 --eval research/SWX-SQN/2026-11-09-evaluation.md
+[02:08:17] {"out": "research/SWX-SQN/2026-11-09-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 25.98, "base": 41.49, "bull": 67.08}, "price": 33.8}
+[02:08:18] == SWX:SQN: AVOID 3
+[02:09:01] research/INGR/2026-11-09-evaluation.md
+OK research/INGR/2026-11-09-evaluation.md Bear case=146 Bull case=127 decision=AVOID
+[02:09:01] $ bin/py scripts/check_docs.py eval research/INGR/2026-11-09-evaluation.md
+[02:09:02] OK research/INGR/2026-11-09-evaluation.md Bear case=146 Bull case=127 decision=AVOID
+[02:09:02] $ bin/py scripts/valuation.py INGR --asof 2026-11-09 --eval research/INGR/2026-11-09-evaluation.md
+[02:09:22] {"out": "research/INGR/2026-11-09-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 9.03, "base": 108.91, "bull": 256.79}, "price": 91.72}
+[02:09:23] == INGR: AVOID 3
+[02:09:23] $ claude -p Evaluation files: research/OTEX/2026-11-09-evaluation.md research/TLV-NICE/2026-11-09-evaluation.md research/LEA/2026-11-09-evaluation.md research/OKE/2026-11-09-evaluation.md. Date 2026-11-09. Write the requests to runs/2026-11-09-reeval/requests.json and submit with --at-market --save runs/2026-11-09-reeval/submit.json (decided trades fill now at the live price where the market is open, else at the next open). Cash strategy: the latest reports/regime/*.md (new buys can't take cash below the reserve). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[02:10:02] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| OTEX | BUY | CORE | 4 |
+| TLV:NICE | BUY | CORE | 4 |
+| LEA | BUY | CORE | 4 |
+| OKE | BUY | CORE | 4 |
+
+This was a live run, not a dry run, so the results below are written to the portfolio. The requests file is `runs/2026-11-09-reeval/requests.json`. The script output was also saved with `--save` to `runs/2026-11-09-reeval/submit.json`.
+
+- **Filled now at the live price:** none.
+- **Queued for the next open:** TLV:NICE BUY (order 2026-11-09-5). It is about 54 shares at an estimated 31,520 ILA, roughly $5,342.53. The Tel Aviv market is not open now, so it fills at the next open.
+- **Rejected:**
+  - **OTEX:** `REPLACEMENT_REQUIRED` (breach: `CASH_RESERVE`). Cash would be 14.73%, below the 15% reserve (neutral regime).
+  - **LEA:** `REPLACEMENT_REQUIRED` (breach: `CASH_RESERVE`). Cash would be 9.55%, below the 15% reserve.
+  - **OKE:** `REPLACEMENT_REQUIRED` (breach: `CASH_RESERVE`). Cash would be 9.58%, below the 15% reserve.
+  - **Why:** none of these three evaluations named a holding to replace, so the rules rejected them.
+- **Warnings:** cash is 13.3% against a 15% reserve (neutral regime).
+
+I did not check whether the funding queue picked up the three rejected buys.

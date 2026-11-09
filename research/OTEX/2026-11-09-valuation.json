@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Software - Application",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 52.89300139502739,
+    "base": 62.87588489156393,
+    "bull": 169.37621966608768
+   },
+   "implied_growth": -0.13366804250661396,
+   "discount_rate": 0.0681265439863191,
+   "cost_of_equity": 0.09793099999999999,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.009329794399727434,
+     "base": 0.0,
+     "bull": 0.10697928270600765
+    },
+    "cash_flow_margin": {
+     "bear": 0.1563700784149075,
+     "base": 0.1852189434695567,
+     "bull": 0.2658933523877998
+    },
+    "cagr_3y": 0.05365958879945487,
+    "cagr_5y": 0.10697928270600765,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 22.104270714247313,
+    "base": 36.564307618022596,
+    "bull": 58.04357526371795
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 2.008,
+     "base": 2.694,
+     "bull": 3.713
+    },
+    "ttm_revenue": 5194900000
+   }
+  }
+ ],
+ "price": 24.85,
+ "risk_free": 0.0484,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [
+  {
+   "method": "dcf",
+   "scenario": "base",
+   "field": "growth",
+   "value": 0.0
+  }
+ ],
+ "fair_value": {
+  "bear": 42.6300911681007,
+  "base": 54.10535913371681,
+  "bull": 132.2653381986311
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.7154966264829254,
+  "base": 1.177278033549972,
+  "bull": 4.322548820870466
+ },
+ "implied_growth": -0.13366804250661396,
+ "ticker": "OTEX",
+ "asof": "2026-11-09",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-06",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/otex/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/otex/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/otex/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/otex/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/otex/statistics/"
+ }
+}
