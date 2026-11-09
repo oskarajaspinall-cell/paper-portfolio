@@ -46,3 +46,17 @@ def test_record_appends_csv(tmp_path, monkeypatch):
                           "base_upside_pct": 100.0, "verdict": "PASS", "reason": "r"})
     rows = list(csv.DictReader((tmp_path / "reports" / "prescreen" / "2026-10-12.csv").open()))
     assert [r["ticker"] for r in rows] == ["A", "B"]
+
+
+def test_unreliable_model_still_skips_when_every_method_is_below_price(cfg, monkeypatch):
+    def compute(ticker, asof, fetcher, cfg):
+        m = [{"status": "ok", "values": {"base": 40.0}}, {"status": "ok", "values": {"base": 90.0}}]
+        return {"price": 100.0, "fair_value": {"base": 65.0}, "upside": {"base": -0.35}, "methods": m}, "USD"
+    monkeypatch.setattr(prescreen.valuation, "compute", compute)
+    assert prescreen.check("X", "2026-11-09", None, cfg)["verdict"] == "SKIP"
+
+    def compute2(ticker, asof, fetcher, cfg):
+        m = [{"status": "ok", "values": {"base": 40.0}}, {"status": "ok", "values": {"base": 130.0}}]
+        return {"price": 100.0, "fair_value": {"base": 85.0}, "upside": {"base": -0.15}, "methods": m}, "USD"
+    monkeypatch.setattr(prescreen.valuation, "compute", compute2)
+    assert prescreen.check("X", "2026-11-09", None, cfg)["verdict"] == "PASS"   # one method sees value: research it

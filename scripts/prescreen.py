@@ -34,9 +34,14 @@ def check(ticker: str, asof: str, fetcher, cfg: dict) -> dict:
     if base is None or up is None:
         return row | {"verdict": "PASS", "reason": "no base fair value: full research decides"}
     row |= {"price": round(fv["price"], 4), "base_fair_value": round(base, 4), "base_upside_pct": round(up * 100, 1)}
-    if not valuation.is_reliable(fv):  # 2026-11-09: a broken model can't skip a stock (Mizrahi -99%)
-        return row | {"verdict": "PASS", "reason": "fair value unreliable (" + "; ".join(valuation.reliability(fv)["reasons"])
-                      + "): full research decides"}
+    if not valuation.is_reliable(fv):  # 2026-11-09: a broken blend can't skip a stock on its own (Mizrahi -99%)...
+        why = "; ".join(valuation.reliability(fv)["reasons"])
+        bases = [m["values"]["base"] for m in fv.get("methods", []) if m.get("status") == "ok" and m.get("values")
+                 and (m["values"].get("base") or 0) > 0]
+        if bases and max(bases) / fv["price"] - 1 < floor / 100:  # ...but if EVERY method says it's above value, skip
+            return row | {"verdict": "SKIP", "reason": f"fair value unreliable ({why}) but every method's base is below "
+                          f"the price (best {max(bases) / fv['price'] * 100 - 100:+.1f}%; floor {floor:+.0f}%)"}
+        return row | {"verdict": "PASS", "reason": f"fair value unreliable ({why}): full research decides"}
     if up * 100 >= floor:
         return row | {"verdict": "PASS", "reason": f"base fair value {up * 100:+.1f}% vs price (floor {floor:+.0f}%)"}
     return row | {"verdict": "SKIP", "reason": f"price above base fair value ({up * 100:+.1f}%; floor {floor:+.0f}%)"}
