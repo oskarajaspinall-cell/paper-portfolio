@@ -1,0 +1,103 @@
+{
+ "industry": {
+  "industry": "Insurance - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 7.612409273750001,
+    "base": 10.777021874999999,
+    "bull": 10.777021874999999
+   },
+   "cost_of_equity": 0.121,
+   "assumptions": {
+    "roe": {
+     "bear": 0.18393,
+     "base": 0.25,
+     "bull": 0.25
+    },
+    "justified_pb": {
+     "bear": 1.6555208333333336,
+     "base": 2.34375,
+     "bull": 2.34375
+    },
+    "bvps": 4.598196
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 12.551211224999998,
+    "base": 17.117892161999997,
+    "bull": 17.515912554
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.325,
+     "base": 11.354,
+     "bull": 11.618
+    },
+    "ttm_eps": 1.507653
+   }
+  }
+ ],
+ "price": 21.28,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.03,
+ "reporting_currency": "BRL",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 9.258676590833334,
+  "base": 12.890645303999998,
+  "bull": 13.023318768000001
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5649118143405388,
+  "base": -0.39423659285714296,
+  "bull": -0.38800193759398494
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "BVMF:CXSE3",
+ "asof": "2026-11-15",
+ "quote_currency": "BRL",
+ "financials_currency": "BRL",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bvmf/CXSE3/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bvmf/CXSE3/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bvmf/CXSE3/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bvmf/CXSE3/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bvmf/CXSE3/statistics/"
+ }
+}
