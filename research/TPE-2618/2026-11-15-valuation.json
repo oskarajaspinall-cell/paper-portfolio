@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Airlines",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 125.62173724643095,
+    "base": 233.4244521053187,
+    "bull": 765.0281222617919
+   },
+   "implied_growth": -0.2422618674693155,
+   "discount_rate": 0.08304716267834789,
+   "cost_of_equity": 0.10099999999999999,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.06679448465503963,
+     "base": 0.10635403126439667,
+     "bull": 0.20682715574750743
+    },
+    "cash_flow_margin": {
+     "bear": 0.13240106449718692,
+     "base": 0.20634413816363856,
+     "bull": 0.4471327489939114
+    },
+    "cagr_3y": 0.16858896931007927,
+    "cagr_5y": 0.20682715574750743,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 41.449578603084746,
+    "base": 46.76318501472123,
+    "bull": 68.24252521837347
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.785,
+     "base": 5.352,
+     "bull": 7.644
+    },
+    "ttm_ebitda": 51026963000
+   }
+  }
+ ],
+ "price": 47.75,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.01,
+ "reporting_currency": "TWD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 97.56435103198221,
+  "base": 171.20402974178623,
+  "bull": 532.7662565806523
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 1.0432324823451773,
+  "base": 2.5854247066342664,
+  "bull": 10.157408514778059
+ },
+ "implied_growth": -0.2422618674693155,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 5.0x (base 46.76-233.42)",
+   "base +259% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "TPE:2618",
+ "asof": "2026-11-15",
+ "quote_currency": "TWD",
+ "financials_currency": "TWD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tpe/2618/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tpe/2618/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tpe/2618/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tpe/2618/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tpe/2618/statistics/"
+ }
+}

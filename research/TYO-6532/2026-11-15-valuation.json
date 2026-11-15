@@ -1,0 +1,108 @@
+{
+ "industry": {
+  "industry": "Consulting Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 6250.384629277045,
+    "base": 7181.743501141145,
+    "bull": 10659.032700994841
+   },
+   "implied_growth": 0.34978830672537364,
+   "discount_rate": 0.10030080538527546,
+   "cost_of_equity": 0.1006065,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.17,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.2138328711838056,
+     "base": 0.2203000908654208,
+     "bull": 0.2742922390914731
+    },
+    "cagr_3y": 0.6507077093927189,
+    "cagr_5y": 0.5719327286377356,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 4997.838442583606,
+    "base": 5862.655114807749,
+    "bull": 8536.312639777341
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.618,
+     "base": 13.758,
+     "bull": 20.374
+    },
+    "ttm_ebitda": 60877000000
+   }
+  }
+ ],
+ "price": 12325,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "JPY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 5832.869233712565,
+  "base": 6742.047372363347,
+  "bull": 9951.459347255675
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5267448897596296,
+  "base": -0.4529779008224465,
+  "bull": -0.1925793633058276
+ },
+ "implied_growth": 0.34978830672537364,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "TYO:6532",
+ "asof": "2026-11-15",
+ "quote_currency": "JPY",
+ "financials_currency": "JPY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tyo/6532/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tyo/6532/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tyo/6532/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tyo/6532/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tyo/6532/statistics/"
+ }
+}

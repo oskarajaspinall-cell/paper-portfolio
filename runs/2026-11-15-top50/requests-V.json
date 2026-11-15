@@ -1,0 +1,28 @@
+[
+ {
+  "ticker": "V",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "Visa is a wide-moat, unlevered network with ROIC at a 2-year high, flat margins and a strong uptrend, a good business that is working, bought on trend strength rather than a discount.",
+  "reason": "The scorecard reaches 4 on quality, balance sheet, moat and trend strength, not on value: every multiple is above its 5y range, so the bear case's de-rating and interchange-regulation risks are real. Conviction 4 gives the standard core size, volatility-scaled by Python; no cap is breached, so nothing is replaced.",
+  "research_note": "research/V/2026-11-15.md",
+  "triggers": [
+   {
+    "text": "TTM ROIC falls below 45%, giving up most of the rise from 40.1% (FY2022) to 56.4% and signalling network pricing erosion.",
+    "check": {"source": "statistics", "field": "roic", "op": "<", "value": 45}
+   },
+   {
+    "text": "TTM FCF margin falls below 42%, extending the slide from 53.9% a year earlier to 48.1% and showing the cash gap is structural.",
+    "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 42}
+   },
+   {
+    "text": "TTM operating margin falls below 62%, under the flat five-year band around 66.3%-67.2%, showing client incentives or regulation compressing network economics.",
+    "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 62}
+   },
+   {
+    "text": "A final US rule or court decision materially lowers the Reg II debit interchange cap, or the Credit Card Competition Act is enacted."
+   }
+  ]
+ }
+]

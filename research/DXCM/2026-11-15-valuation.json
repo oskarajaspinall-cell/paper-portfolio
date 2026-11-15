@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Medical Devices",
+  "known": true,
+  "best": "DCF",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -2.3553828591876838,
+    "base": 36.89084137380415,
+    "bull": 50.46964675772217
+   },
+   "implied_growth": 0.32074159239205124,
+   "discount_rate": 0.112620766130676,
+   "cost_of_equity": 0.115874,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.06756804801506995,
+     "base": 0.09870298648328084,
+     "bull": 0.17467584990298346
+    },
+    "cash_flow_margin": {
+     "bear": -0.019063234225035735,
+     "base": 0.1756271828226628,
+     "bull": 0.18092987044187045
+    },
+    "cagr_3y": 0.1701360960301399,
+    "cagr_5y": 0.17467584990298346,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 38.20753260480001,
+    "base": 109.29610830840001,
+    "bull": 326.907263012
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 30.952,
+     "base": 88.541,
+     "bull": 128.194
+    },
+    "ttm_eps": 2.550098,
+    "peak_earnings": "TTM EPS is 2.0x its 5y median: bear/base use the 5y average (1.234), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 83.33,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 11.165588962141547,
+  "base": 61.025930352002774,
+  "bull": 142.61551884248144
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8660075727572117,
+  "base": -0.267659542157653,
+  "bull": 0.7114546842971492
+ },
+ "implied_growth": 0.32074159239205124,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.0x (base 36.89-109.30)"
+  ]
+ },
+ "ticker": "DXCM",
+ "asof": "2026-11-15",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/dxcm/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/dxcm/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/dxcm/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/dxcm/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/dxcm/statistics/"
+ }
+}

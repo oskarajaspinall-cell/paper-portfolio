@@ -80,7 +80,59 @@
    "out": 0.0
   }
  },
- "funding_queue": [],
+ "funding_queue": [
+  {
+   "added": "2026-11-15",
+   "currency": "USD",
+   "decision_price": 425.760009765625,
+   "expires": "2026-12-15",
+   "fair_value_base": 222.82928940296583,
+   "price_date": "2026-11-13",
+   "request": {
+    "action": "BUY",
+    "conviction": 4,
+    "position_type": "CORE",
+    "reason": "The scorecard reaches 4 on quality, balance sheet, moat and trend strength, not on value: every multiple is above its 5y range, so the bear case's de-rating and interchange-regulation risks are real. Conviction 4 gives the standard core size, volatility-scaled by Python; no cap is breached, so nothing is replaced.",
+    "research_note": "research/V/2026-11-15.md",
+    "thesis": "Visa is a wide-moat, unlevered network with ROIC at a 2-year high, flat margins and a strong uptrend, a good business that is working, bought on trend strength rather than a discount.",
+    "ticker": "V",
+    "triggers": [
+     {
+      "check": {
+       "field": "roic",
+       "op": "<",
+       "source": "statistics",
+       "value": 45
+      },
+      "text": "TTM ROIC falls below 45%, giving up most of the rise from 40.1% (FY2022) to 56.4% and signalling network pricing erosion."
+     },
+     {
+      "check": {
+       "field": "fcfMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 42
+      },
+      "text": "TTM FCF margin falls below 42%, extending the slide from 53.9% a year earlier to 48.1% and showing the cash gap is structural."
+     },
+     {
+      "check": {
+       "field": "operatingMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 62
+      },
+      "text": "TTM operating margin falls below 62%, under the flat five-year band around 66.3%-67.2%, showing client incentives or regulation compressing network economics."
+     },
+     {
+      "text": "A final US rule or court decision materially lowers the Reg II debit interchange cap, or the Credit Card Competition Act is enacted."
+     }
+    ]
+   },
+   "ticker": "V",
+   "valuation": "research/V/2026-11-15-valuation.json"
+  }
+ ],
  "holdings": {
   "CI": {
    "conviction": 4,
