@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Water Transportation",
+  "known": false,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": ""
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 5.209092001692471,
+    "base": 8.42477108370825,
+    "bull": 13.012005294055415
+   },
+   "implied_growth": 0.046370452977107735,
+   "discount_rate": 0.09798914641865121,
+   "cost_of_equity": 0.106,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.03998678650039185,
+     "base": 0.07807953537415295,
+     "bull": 0.1473445684958281
+    },
+    "cash_flow_margin": {
+     "bear": 0.3501233719524101,
+     "base": 0.46221114367724836,
+     "bull": 0.5265786135158022
+    },
+    "cagr_3y": 0.1473445684958281,
+    "cagr_5y": 0.1149735730007837,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 3.4126010788728425,
+    "base": 3.8324938724592155,
+    "bull": 7.041615997539968
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.388,
+     "base": 11.439,
+     "bull": 12.953
+    },
+    "ttm_ebitda": 2055068000,
+    "peak_earnings": "TTM EBITDA is 1.5x its 5y median: bear/base use the 5y average (1.367e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 7.32,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "MYR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 4.610261694085929,
+  "base": 6.894012013291906,
+  "bull": 11.021875528550266
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.37018282867678576,
+  "base": -0.058195080151378975,
+  "bull": 0.5057207006216211
+ },
+ "implied_growth": 0.046370452977107735,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.2x (base 3.83-8.42)"
+  ]
+ },
+ "ticker": "KLSE:WPRTS",
+ "asof": "2026-11-15",
+ "quote_currency": "MYR",
+ "financials_currency": "MYR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/klse/WPRTS/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/klse/WPRTS/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/klse/WPRTS/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/klse/WPRTS/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/klse/WPRTS/statistics/"
+ }
+}

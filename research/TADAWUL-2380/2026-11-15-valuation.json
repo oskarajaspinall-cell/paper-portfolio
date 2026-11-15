@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Refining & Marketing",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -13.984109992256016,
+    "base": 45.339543727854185,
+    "bull": 109.74438219558313
+   },
+   "implied_growth": -0.2320417871106652,
+   "discount_rate": 0.0816465556558042,
+   "cost_of_equity": 0.106,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.08985044255427908,
+     "base": -0.03970986532402658,
+     "bull": -0.03970986532402658
+    },
+    "cash_flow_margin": {
+     "bear": -0.015602807823505847,
+     "base": 0.1030146472281952,
+     "bull": 0.22843107047074973
+    },
+    "cagr_3y": -0.14470088510855816,
+    "cagr_5y": -0.06413857618754815,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 62.99079839736684,
+    "base": 90.82488404907241,
+    "bull": 118.65896970077797
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 12.258,
+     "base": 17.094,
+     "bull": 21.93
+    },
+    "ttm_ebitda": 9617609000
+   }
+  }
+ ],
+ "price": 14.58,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "SAR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 11.674192804284935,
+  "base": 60.50132383492693,
+  "bull": 112.71591136398142
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.19930090505590292,
+  "base": 3.149610688266593,
+  "bull": 6.730858118242896
+ },
+ "implied_growth": -0.2320417871106652,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.0x (base 45.34-90.82)",
+   "base +315% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "TADAWUL:2380",
+ "asof": "2026-11-15",
+ "quote_currency": "SAR",
+ "financials_currency": "SAR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-12",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tadawul/2380/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tadawul/2380/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tadawul/2380/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tadawul/2380/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tadawul/2380/statistics/"
+ }
+}
