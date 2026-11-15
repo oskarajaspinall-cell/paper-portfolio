@@ -1,0 +1,92 @@
+{
+ "industry": {
+  "industry": "Drug Manufacturers - Specialty & Generic",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "n/m",
+   "why": "free cash flow negative or too short a history"
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 6.721331439999999,
+    "base": 62.702449003999995,
+    "bull": 115.955925344
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 5.68,
+     "base": 52.988,
+     "bull": 87.598
+    },
+    "ttm_eps": 1.323728,
+    "peak_earnings": "TTM EPS is 1.8x its 5y median: bear/base use the 5y average (1.183), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 96.33,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 6.721331439999999,
+  "base": 62.702449003999995,
+  "bull": 115.955925344
+ },
+ "used": [
+  "pe"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.9302259790304163,
+  "base": -0.3490870029689609,
+  "bull": 0.20373637853212911
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "KNSA",
+ "asof": "2026-11-15",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/knsa/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/knsa/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/knsa/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/knsa/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/knsa/statistics/"
+ }
+}
