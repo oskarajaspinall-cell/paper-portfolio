@@ -1,0 +1,62 @@
+[
+  {
+    "ticker": "DECK",
+    "action": "HOLD",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A net-cash, very high-return footwear brand owner with flat margins and ROCE at its 2-year high trades below its own 5-year minimum P/E, EV/EBITDA and P/FCF at a 9.08% FCF yield, pricing a revenue decline its slowed-but-positive outlook does not show.",
+    "reason": "Evidence is unchanged from the last review: quality and balance sheet intact, multiples below 5-year floors, the ROIC dip explained by inventory timing while margins hold. The guidance cut and discounting keep the score in the hold band, not at the buy threshold, so no ADD; the position stays at its current size.",
+    "research_note": "research/DECK/2026-11-15.md",
+    "triggers": [
+      {"text": "TTM gross margin falls below 55%, under the FY2024 level of 55.6%, showing rival discounting or markdowns are eroding full-price discipline.", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 55}},
+      {"text": "TTM operating margin falls below 20%, reversing most of the five-year expansion from 18.0%.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 20}},
+      {"text": "TTM FCF margin falls below 14%, showing the inventory build is turning into cash and margin stress rather than a seasonal swing.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 14}},
+      {"text": "TTM ROIC falls below 55%, showing the decline from 78.5% is no longer inventory timing but eroding returns.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 55}}
+    ]
+  },
+  {
+    "ticker": "JKHY",
+    "action": "HOLD",
+    "position_type": "CORE",
+    "conviction": 3,
+    "thesis": "A high-return, unlevered core-banking franchise with rising rolling returns and cash margins and raised guidance, trading below its own 5-year median multiples, but whose price now implies growth above the company's framework.",
+    "reason": "Fundamentals are improving and the franchise is sound, but the price has run ahead: the reverse DCF needs above-framework growth and the mechanical fair value sits below the price. The skew is balanced, not compelling, so hold at the conviction-3 size rather than add.",
+    "research_note": "research/JKHY/2026-11-15.md",
+    "triggers": [
+      {"text": "TTM ROIC falls below 19%, the FY2024 trough, evidencing moat erosion.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 19}},
+      {"text": "TTM operating margin falls below 22%, under the FY2024 low of 22.1%, showing cloud/AI/security investment or renewal pricing is compressing profitability structurally.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 22}},
+      {"text": "TTM FCF margin falls below 20%, reversing the rising trend (TTM 27.6%).", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 20}},
+      {"text": "Processing revenue growth in the 10-Q MD&A falls below 5% year on year for two consecutive quarters, or core client losses outnumber wins."}
+    ]
+  },
+  {
+    "ticker": "HKG:0291",
+    "action": "HOLD",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A net-cash Chinese brewer with rising operating and FCF margins trades below its own 5-year minimum cash multiples, pricing shrinkage that its improving operations do not show.",
+    "reason": "No thesis threshold is breached on fact-sheet figures: operating margin 14.9%, FCF margin 15.3%, ROIC 11.9% and net cash. The net-cash trigger's statistics check likely read a gross debt ratio, so it is restated as a text trigger on the balance sheet. Evidence is unchanged since the BUY; hold at current size.",
+    "research_note": "research/HKG-0291/2026-11-15.md",
+    "triggers": [
+      {"text": "TTM operating margin falls below 12.0% (14.9% now), reversing the mix and pricing gains.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 12.0}},
+      {"text": "TTM FCF margin falls below 10.0% (15.3% now), showing the cash step-up was transitory.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 10.0}},
+      {"text": "TTM ROIC falls below 10.0% (11.9% now), below the FY2025 low of 10.4%.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 10.0}},
+      {"text": "Net debt/EBITDA (debt minus cash and short-term investments, balance sheet / ratios page) turns positive from -1.55x TTM, i.e. net cash is gone."}
+    ]
+  },
+  {
+    "ticker": "HKG:9999",
+    "action": "HOLD",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A net-cash games franchise with operating margin rising to 35.2% and a 43.5% FCF margin trades below its own 5-year minimum EV/EBITDA and P/FCF, where the price implies a revenue decline its improving fundamentals do not show.",
+    "reason": "Fundamentals keep improving and the stock still trades below its own 5-year minimum cash multiples with modest upside to base fair value; no new evidence since the 2026-11-08 HOLD. Not an ADD: discount is moderate, there is no trend strength, and the position is at its conviction size.",
+    "research_note": "research/HKG-9999/2026-11-15.md",
+    "triggers": [
+      {"text": "TTM operating margin falls below the FY2024 level of 28.1%, reversing the five-year expansion.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 28.1}},
+      {"text": "TTM FCF margin falls below the FY2024 level of 36.5%, signalling cash generation is no longer keeping pace.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 36.5}},
+      {"text": "TTM gross margin falls below the FY2024 level of 62.5%, indicating game-portfolio mix or monetization is deteriorating.", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 62.5}},
+      {"text": "A new PRC regulation materially restricts game monetization, or a VIE-related regulatory action forces deconsolidation, as disclosed in a company filing or release."}
+    ]
+  }
+]

@@ -1,0 +1,138 @@
+{
+ "asof": "2026-11-15",
+ "indicators": [
+  {
+   "key": "hy_spread",
+   "name": "High-yield credit spread, %",
+   "value": 3.2,
+   "date": "2026-11-12",
+   "score": 0.05,
+   "weight": 1,
+   "rule": "calm 3.0 -> stressed 7.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2"
+  },
+  {
+   "key": "hy_widening_3m",
+   "name": "High-yield spread, 3m change, pp",
+   "value": 0.49,
+   "date": "2026-11-12",
+   "score": 0.245,
+   "weight": 1,
+   "rule": "calm 0.0 -> stressed 2.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2"
+  },
+  {
+   "key": "vix",
+   "name": "VIX",
+   "value": 18.7,
+   "date": "2026-11-12",
+   "score": 0.224,
+   "weight": 1,
+   "rule": "calm 14 -> stressed 35",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
+  },
+  {
+   "key": "curve_10y_2y",
+   "name": "Yield curve, 10y - 2y, pp",
+   "value": 0.24,
+   "date": "2026-11-12",
+   "score": 0.507,
+   "weight": 1,
+   "rule": "calm 1.0 -> stressed -0.5",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10, https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2"
+  },
+  {
+   "key": "real_yield_3m",
+   "name": "Real 10y yield, 3m change, pp",
+   "value": 0.47,
+   "date": "2026-11-12",
+   "score": 0.47,
+   "weight": 1,
+   "rule": "calm 0.0 -> stressed 1.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10"
+  },
+  {
+   "key": "spy_vs_40w",
+   "name": "S&P 500 vs its 40-week (~200-day) average, %",
+   "value": 3.03,
+   "date": "2026-11-09",
+   "score": 0.131,
+   "weight": 1,
+   "rule": "calm 5.0 -> stressed -10.0",
+   "source": "https://stockanalysis.com/api/symbol/e/spy/history?range=5Y&period=Weekly"
+  },
+  {
+   "key": "spy_50_200",
+   "name": "S&P 500 50-day vs 200-day average (10-week vs 40-week), %",
+   "value": 4.0,
+   "date": "2026-11-09",
+   "score": 0.0,
+   "weight": 1,
+   "rule": "calm 2.0 -> stressed -2.0",
+   "source": "https://stockanalysis.com/api/symbol/e/spy/history?range=5Y&period=Weekly"
+  },
+  {
+   "key": "core_cpi_3m_ann",
+   "name": "US core CPI, 3m annualised, %",
+   "value": 3.75,
+   "date": "2026-10-01",
+   "score": 0.5,
+   "weight": 1,
+   "rule": "calm 2.5 -> stressed 5.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPILFESL"
+  },
+  {
+   "key": "fed_funds_3m",
+   "name": "Fed funds rate, 3m change, pp",
+   "value": 0.25,
+   "date": "2026-11-12",
+   "score": 0.25,
+   "weight": 1,
+   "rule": "calm 0.0 -> stressed 1.0",
+   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFF"
+  }
+ ],
+ "stress": 26.4,
+ "unsmoothed_reserve_pct": 13.0,
+ "previous_score_reserve_pct": 15.0,
+ "score_reserve_pct": 13.0,
+ "note": null,
+ "score_regime": "risk_on",
+ "final_regime": "risk_on",
+ "view": {
+  "final_regime": "risk_on",
+  "keep_score": true,
+  "reasons": [
+   {
+    "text": "Credit calm: HY spread 3.2%, +0.49pp over 3m; no stress the score misses",
+    "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2 (2026-11-12)"
+   },
+   {
+    "text": "Rate pressure (10y 5.1%, real yield +0.47pp over 3m) is already scored; no double-count",
+    "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10 (2026-11-12)"
+   }
+  ],
+  "watch": [
+   "HY spread above ~4% or widening more than 1pp over 3m",
+   "VIX above ~25",
+   "S&P 500 below its 40-week average",
+   "Core CPI 3m annualised above 4.5%"
+  ]
+ },
+ "view_adjust_pp": 0,
+ "spy": {
+  "close": 754.37,
+  "date": "2026-11-09",
+  "avg_40w": 732.161,
+  "avg_10w": 761.414,
+  "high_52w": 778.57,
+  "drawdown_pct": 3.11,
+  "source": "https://stockanalysis.com/api/symbol/e/spy/history?range=5Y&period=Weekly"
+ },
+ "dip": {
+  "drawdown_pct": 3.11,
+  "multiplier": 1.0
+ },
+ "base_reserve_pct": 13.0,
+ "reserve_pct": 13.0
+}

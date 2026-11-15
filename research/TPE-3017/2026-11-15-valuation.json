@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Electronic Components",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 407.8814870443108,
+    "base": 2489.243132410297,
+    "bull": 3847.3834186602103
+   },
+   "implied_growth": 0.23358493982622652,
+   "discount_rate": 0.10255359521796768,
+   "cost_of_equity": 0.104702,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.137787010497839,
+     "base": 0.17912071285133296,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.028701278168584327,
+     "base": 0.19073412024001568,
+     "bull": 0.2285891013260287
+    },
+    "cagr_3y": 0.3559088304096538,
+    "cagr_5y": 0.310574020995678,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 267.2750471111758,
+    "base": 549.5377091595549,
+    "bull": 2651.9865311963404
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.999,
+     "base": 13.529,
+     "bull": 18.12
+    },
+    "ttm_ebitda": 56081532000,
+    "peak_earnings": "TTM EBITDA is 6.2x its 5y median: bear/base use the 5y average (1.319e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 3040,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.01,
+ "reporting_currency": "TWD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 361.0126737332658,
+  "base": 1842.674657993383,
+  "bull": 3448.9177895055873
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8812458310087942,
+  "base": -0.3938570203969135,
+  "bull": 0.1345124307584169
+ },
+ "implied_growth": 0.23358493982622652,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 4.5x (base 549.54-2489.24)"
+  ]
+ },
+ "ticker": "TPE:3017",
+ "asof": "2026-11-15",
+ "quote_currency": "TWD",
+ "financials_currency": "TWD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tpe/3017/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tpe/3017/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tpe/3017/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tpe/3017/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tpe/3017/statistics/"
+ }
+}

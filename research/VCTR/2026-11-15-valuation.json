@@ -1,0 +1,108 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 83.13569898142556,
+    "base": 111.62595336594364,
+    "bull": 170.2454064918656
+   },
+   "implied_growth": 0.10472205240915144,
+   "discount_rate": 0.10522099999999998,
+   "cost_of_equity": 0.10522099999999998,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.03278397237377702,
+     "base": 0.07558999735847226,
+     "bull": 0.151792044686335
+    },
+    "cash_flow_margin": {
+     "bear": 0.25270206434117254,
+     "base": 0.2858495211866666,
+     "bull": 0.32330322996562866
+    },
+    "cagr_3y": 0.151792044686335,
+    "cagr_5y": 0.10056794474755404,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 36.42721848,
+    "base": 58.211481330000005,
+    "bull": 80.459819955
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.672,
+     "base": 10.662,
+     "bull": 14.737
+    },
+    "ttm_eps": 5.459715
+   }
+  }
+ ],
+ "price": 125.26,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 67.56620548095037,
+  "base": 93.82112935396243,
+  "bull": 140.31687764624374
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.46059232411823114,
+  "base": -0.2509889082391631,
+  "bull": 0.12020499478080571
+ },
+ "implied_growth": 0.10472205240915144,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "VCTR",
+ "asof": "2026-11-15",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/vctr/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/vctr/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/vctr/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/vctr/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/vctr/statistics/"
+ }
+}

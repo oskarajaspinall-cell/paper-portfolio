@@ -1,0 +1,109 @@
+{
+ "industry": {
+  "industry": "Semiconductors",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 8.5184171613558,
+    "base": 80.48825794964164,
+    "bull": 105.02046509129754
+   },
+   "implied_growth": 0.40430493532920997,
+   "discount_rate": 0.1418295427718624,
+   "cost_of_equity": 0.14280800000000002,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.17,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.04058731556313487,
+     "base": 0.3836496512954555,
+     "bull": 0.4201164206840004
+    },
+    "cagr_3y": 1.0004509499443963,
+    "cagr_5y": 0.6830139148028267,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 75.72136491033918,
+    "base": 97.0429685828466,
+    "bull": 415.4861345629675
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 33.854,
+     "base": 43.51,
+     "bull": 50.248
+    },
+    "ttm_ebitda": 201266000000,
+    "peak_earnings": "TTM EBITDA is 5.8x its 5y median: bear/base use the 5y average (5.387e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 162.85,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 30.919399744350258,
+  "base": 86.00649482737663,
+  "bull": 208.5090215818542
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8101357092763263,
+  "base": -0.4718667803047183,
+  "bull": 0.28037471035833095
+ },
+ "implied_growth": 0.40430493532920997,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "NVDA",
+ "asof": "2026-11-15",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/nvda/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/nvda/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/nvda/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/nvda/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/nvda/statistics/"
+ }
+}
