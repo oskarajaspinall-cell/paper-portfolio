@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Integrated",
+  "known": true,
+  "best": "SOTP / NAV",
+  "second": "DCF",
+  "best_models": [
+   "sotp",
+   "nav"
+  ],
+  "second_models": [
+   "dcf"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "sotp",
+   "label": "sum of the parts",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs segment-level profits, not on stockanalysis.com]"
+  },
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 108.66425583182698,
+    "base": 168.48964033426702,
+    "bull": 428.62158979313216
+   },
+   "implied_growth": -0.22130450828118037,
+   "discount_rate": 0.07032930481134089,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.06429052319604615,
+     "base": -0.004179536339362643,
+     "bull": 0.02686290103464173
+    },
+    "cash_flow_margin": {
+     "bear": 0.17628745614261326,
+     "base": 0.1946924080423179,
+     "bull": 0.3977155151271062
+    },
+    "cagr_3y": -0.0935810463920923,
+    "cagr_5y": 0.02686290103464173,
+    "terminal_growth": 0.025
+   }
+  }
+ ],
+ "price": 45.36,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 108.66425583182698,
+  "base": 168.48964033426702,
+  "bull": 428.62158979313216
+ },
+ "used": [
+  "dcf"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": 1.3955964689556213,
+  "base": 2.7144982437007723,
+  "bull": 8.44932958097734
+ },
+ "implied_growth": -0.22130450828118037,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "base +271% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "BVMF:PETR4",
+ "asof": "2026-11-15",
+ "quote_currency": "BRL",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 5.666549999558815,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bvmf/PETR4/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bvmf/PETR4/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bvmf/PETR4/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bvmf/PETR4/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bvmf/PETR4/statistics/"
+ }
+}

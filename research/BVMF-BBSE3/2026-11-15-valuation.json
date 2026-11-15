@@ -1,0 +1,105 @@
+{
+ "industry": {
+  "industry": "Insurance - Diversified",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 16.273253906249998,
+    "base": 16.273253906249998,
+    "bull": 16.273253906249998
+   },
+   "cost_of_equity": 0.121,
+   "assumptions": {
+    "roe": {
+     "bear": 0.25,
+     "base": 0.25,
+     "bull": 0.25
+    },
+    "justified_pb": {
+     "bear": 2.34375,
+     "base": 2.34375,
+     "bull": 2.34375
+    },
+    "bvps": 6.943255
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 36.833941386,
+    "base": 39.901069889999995,
+    "bull": 49.859771082
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.782,
+     "base": 8.43,
+     "bull": 10.534
+    },
+    "ttm_eps": 4.733223
+   }
+  }
+ ],
+ "price": 37.27,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.03,
+ "reporting_currency": "BRL",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 23.1268163995,
+  "base": 24.149192567499995,
+  "bull": 27.468759631499996
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.3794790340890797,
+  "base": -0.3520474223906629,
+  "bull": -0.26297934983901283
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.5x (base 16.27-39.90)"
+  ]
+ },
+ "ticker": "BVMF:BBSE3",
+ "asof": "2026-11-15",
+ "quote_currency": "BRL",
+ "financials_currency": "BRL",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bvmf/BBSE3/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bvmf/BBSE3/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bvmf/BBSE3/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bvmf/BBSE3/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bvmf/BBSE3/statistics/"
+ }
+}

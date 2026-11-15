@@ -830,3 +830,208 @@ OK research/AMS-ASML/2026-11-15-evaluation.md Bear case=130 Bull case=130 decisi
 [20:15:55] $ bin/py scripts/valuation.py AMS:ASML --asof 2026-11-15 --eval research/AMS-ASML/2026-11-15-evaluation.md
 [20:15:55] {"out": "research/AMS-ASML/2026-11-15-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 341.04, "base": 581.45, "bull": 1100.3}, "price": 1338.8}
 [20:15:56] == done AMS:ASML
+[20:16:00] == Research batch 08: 6 researched, 1 BUY (V), 5 AVOID -> reports/research/2026-11-15-batch-08.md; uploaded to GitHub
+[20:16:00] == initiate SHA:600919
+[20:16:00] $ bin/py scripts/sec_delta.py SHA:600919 --asof 2026-11-15
+[20:16:00] SKIP SHA:600919: not a US listing (SEC filers only)
+[20:16:00] $ claude -p Ticker SHA:600919, note type CORE, date 2026-11-15. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:16:12] research/AAPL/2026-11-15-evaluation.md
+OK research/AAPL/2026-11-15-evaluation.md Bear case=144 Bull case=131 decision=BUY scorecard=9->4
+
+I did not check the cash reserve or the correlation-cluster room against AAPL, so `replaces` is null. Technology was about 27% of the portfolio before this buy, so a core-size buy should stay under the 35% sector cap. My own scenarios average out just below today's price, so this BUY comes from the scorecard's trend-strength points, not from a discount.
+[20:16:12] $ bin/py scripts/check_docs.py eval research/AAPL/2026-11-15-evaluation.md
+[20:16:12] OK research/AAPL/2026-11-15-evaluation.md Bear case=144 Bull case=131 decision=BUY scorecard=9->4
+[20:16:12] $ bin/py scripts/valuation.py AAPL --asof 2026-11-15 --eval research/AAPL/2026-11-15-evaluation.md
+[20:16:12] {"out": "research/AAPL/2026-11-15-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 127.84, "base": 180.0, "bull": 195.11}, "price": 356.27}
+[20:16:12] $ claude -p Independent second evaluation of AAPL for 2026-11-15: fact sheet research/AAPL/factsheet-2026-11-15.md, note research/AAPL/2026-11-15.md, state portfolio/state.json, macro overlay research/AAPL/2026-11-15-macro.md. Write it to research/AAPL/2026-11-15-evaluation-2.md (not the usual file). Do not read research/AAPL/2026-11-15-evaluation.md or any other evaluation of this stock dated 2026-11-15. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:16:55] Note: research/FDS/2026-11-15.md
+Fact sheet: research/FDS/factsheet-2026-11-15.md
+Check: OK research/FDS/2026-11-15.md type=CORE 1=63 2=113 3=119 4=51 5=59 6=69 total=474
+
+- **Data conflicts:** none.
+- **Blocked URLs:** none, and I made no web fetches.
+- **Investor Day link:** the globenewswire Investor Day URL is cited from the fact sheet's headline list. I did not fetch it, and globenewswire may not be on the allowlist.
+- **Foreign revenue share:** the SEC delta gave no country split, so section 1 says [data unavailable] for it.
+[20:16:55] $ bin/py scripts/check_docs.py note research/FDS/2026-11-15.md
+[20:16:55] OK research/FDS/2026-11-15.md type=CORE 1=63 2=113 3=119 4=51 5=59 6=69 total=474
+[20:16:55] $ claude -p Ticker FDS, date 2026-11-15. Research: research/FDS/factsheet-2026-11-15.md, research/FDS/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/FDS/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:17:11] Note: research/SHA-600919/2026-11-15.md
+Fact sheet: research/SHA-600919/factsheet-2026-11-15.md
+Check: OK research/SHA-600919/2026-11-15.md type=CORE 1=52 2=124 3=135 4=40 5=35 6=78 total=464
+
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls, so the note rests on the fact sheet alone.
+
+The fact sheet shows ROIC, operating margin, leverage and EV multiples as [data unavailable] for this bank. The note says so.
+[20:17:11] $ bin/py scripts/check_docs.py note research/SHA-600919/2026-11-15.md
+[20:17:11] OK research/SHA-600919/2026-11-15.md type=CORE 1=52 2=124 3=135 4=40 5=35 6=78 total=464
+[20:17:11] $ claude -p Ticker SHA:600919, date 2026-11-15. Research: research/SHA-600919/factsheet-2026-11-15.md, research/SHA-600919/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/SHA-600919/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:17:12] research/FDS/2026-11-15-macro.md
+OK research/FDS/2026-11-15-macro.md macro_weight=context words=53
+[20:17:12] $ bin/py scripts/check_docs.py macro research/FDS/2026-11-15-macro.md
+[20:17:12] OK research/FDS/2026-11-15-macro.md macro_weight=context words=53
+[20:17:12] $ claude -p Evaluate FDS for 2026-11-15: fact sheet research/FDS/factsheet-2026-11-15.md, note research/FDS/2026-11-15.md, state portfolio/state.json, macro overlay research/FDS/2026-11-15-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:17:29] research/SHA-600919/2026-11-15-macro.md
+OK research/SHA-600919/2026-11-15-macro.md macro_weight=context words=53
+[20:17:29] $ bin/py scripts/check_docs.py macro research/SHA-600919/2026-11-15-macro.md
+[20:17:29] OK research/SHA-600919/2026-11-15-macro.md macro_weight=context words=53
+[20:17:29] $ claude -p Evaluate SHA:600919 for 2026-11-15: fact sheet research/SHA-600919/factsheet-2026-11-15.md, note research/SHA-600919/2026-11-15.md, state portfolio/state.json, macro overlay research/SHA-600919/2026-11-15-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:17:45] research/AAPL/2026-11-15-evaluation-2.md
+OK research/AAPL/2026-11-15-evaluation-2.md Bear case=149 Bull case=131 decision=BUY scorecard=9->4
+
+Before I saw the score I filled in the judgement fields (wide moat, medium key risk) and picked AVOID at 3. The scorecard gave a total of 9, which means conviction 4, so the decision is now BUY. I kept my fields and did not tune them. The score rests on trend strength, not value: P/E and EV/EBITDA are both above their 5-year highs. My scenarios weight to about 347, a little below the 356.27 close. I didn't check the cash reserve or the 35% Technology sector cap; with the existing tech holdings, a 7%+ position is borderline. I left `replaces` null, so Python's rules may resize this BUY, reject it or send it to the funding queue.
+[20:17:45] $ bin/py scripts/check_docs.py eval research/AAPL/2026-11-15-evaluation-2.md
+[20:17:46] OK research/AAPL/2026-11-15-evaluation-2.md Bear case=149 Bull case=131 decision=BUY scorecard=9->4
+[20:17:46] == AAPL: second opinion conviction 4 -> BUY 4
+[20:17:46] $ bin/py scripts/check_docs.py eval research/AAPL/2026-11-15-evaluation.md
+[20:17:46] OK research/AAPL/2026-11-15-evaluation.md Bear case=144 Bull case=131 decision=BUY scorecard=9->4
+[20:17:46] == portfolio-manager AAPL (BUY 4)
+[20:17:46] $ claude -p Evaluation files: research/AAPL/2026-11-15-evaluation.md. Date 2026-11-15. Write the requests to runs/2026-11-15-top50/requests-AAPL.json and submit with --at-market --save runs/2026-11-15-top50/submit-AAPL.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[20:18:03] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| AAPL | BUY | CORE | 4 |
+
+Script output:
+
+```json
+{
+ "mode": "at_market",
+ "placed": [],
+ "applied": [],
+ "rejected": [
+  {
+   "date": "2026-11-15",
+   "ticker": "AAPL",
+   "action": "BUY",
+   "type": "CORE",
+   "rule": "REPLACEMENT_REQUIRED",
+   "detail": "BUY would breach cash would be 12.38%, below the 13% reserve (risk_on regime) -- name the holding it replaces and why the new idea is better",
+   "breaches": ["CASH_RESERVE"]
+  }
+ ],
+ "warnings": ["cash 19.3% vs a 13% reserve (risk_on regime)"],
+ "filled_now": [],
+ "queued_for_next_open": [],
+ "dry_run": false
+}
+```
+
+The AAPL BUY was rejected under `REPLACEMENT_REQUIRED` (breach: `CASH_RESERVE`). The buy would take cash to 12.38%, below the 13% reserve. The evaluation names no holding to replace.
+
+Nothing filled and nothing was queued. The portfolio did not change. The script output doesn't say whether the funding queue picked the idea up. I didn't check.
+
+The requests file is `runs/2026-11-15-top50/requests-AAPL.json`. The script output is saved to `runs/2026-11-15-top50/submit-AAPL.json`.
+[20:18:03] == done AAPL
+[20:18:03] == initiate BVMF:PETR4
+[20:18:03] $ bin/py scripts/sec_delta.py BVMF:PETR4 --asof 2026-11-15
+[20:18:04] SKIP BVMF:PETR4: not a US listing (SEC filers only)
+[20:18:04] $ claude -p Ticker BVMF:PETR4, note type CORE, date 2026-11-15. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:18:19] research/SHA-600919/2026-11-15-evaluation.md
+OK research/SHA-600919/2026-11-15-evaluation.md Bear case=148 Bull case=101 decision=AVOID scorecard=4->2
+
+To check the 30-day consistency rule, I read the decision lines of the earlier 2026-10-25 evaluation. That file isn't on the input list. It was also AVOID at conviction 2, so the verdict hasn't changed. I added a `new_evidence` field anyway (the price moved from 12.00 to 13.23, and Q3 results came out). It isn't required, but the checker accepted it.
+[20:18:19] $ bin/py scripts/check_docs.py eval research/SHA-600919/2026-11-15-evaluation.md
+[20:18:19] OK research/SHA-600919/2026-11-15-evaluation.md Bear case=148 Bull case=101 decision=AVOID scorecard=4->2
+[20:18:19] $ bin/py scripts/valuation.py SHA:600919 --asof 2026-11-15 --eval research/SHA-600919/2026-11-15-evaluation.md
+[20:18:19] {"out": "research/SHA-600919/2026-11-15-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 14.66, "base": 17.29, "bull": 20.28}, "price": 13.23}
+[20:18:20] == done SHA:600919
+[20:18:20] == initiate ZION
+[20:18:20] $ bin/py scripts/sec_delta.py ZION --asof 2026-11-15
+[20:18:21] I evaluated FDS and the decision is **AVOID at conviction 3**. The checker passes:
+
+research/FDS/2026-11-15-evaluation.md
+`OK research/FDS/2026-11-15-evaluation.md Bear case=147 Bull case=142 decision=AVOID scorecard=8->3`
+
+- **Why AVOID:** FactSet has strong returns, a solid balance sheet and a strong price trend. Against that, the price ($332.69) is above the mechanical base fair value ($247.28), and the risk that AI lets clients build their own tools is still unresolved (rated medium).
+- **Entry price:** $197.82, which is the base fair value less the 20% margin of safety. A close at or below it triggers a fresh review, not an automatic buy.
+
+I didn't read `portfolio/state.json` in full because the decision isn't a BUY. I only searched it and confirmed FDS isn't held. The last FDS evaluation (2026-10-08) is more than 30 days old, so no `new_evidence` field was needed.
+[20:18:21] $ bin/py scripts/check_docs.py eval research/FDS/2026-11-15-evaluation.md
+[20:18:21] OK research/FDS/2026-11-15-evaluation.md Bear case=147 Bull case=142 decision=AVOID scorecard=8->3
+[20:18:21] $ bin/py scripts/valuation.py FDS --asof 2026-11-15 --eval research/FDS/2026-11-15-evaluation.md
+[20:18:21] {"out": "research/FDS/2026-11-15-valuation.md", "used": ["dcf", "fcfe"], "fair_value": {"bear": 214.11, "base": 247.28, "bull": 334.1}, "price": 332.69}
+[20:18:21] == done FDS
+[20:18:21] == initiate BVMF:BBSE3
+[20:18:21] $ bin/py scripts/sec_delta.py BVMF:BBSE3 --asof 2026-11-15
+[20:18:21] SKIP BVMF:BBSE3: not a US listing (SEC filers only)
+[20:18:21] $ claude -p Ticker BVMF:BBSE3, note type CORE, date 2026-11-15. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:18:32] OK research/ZION/sec-delta-2026-11-15.md
+[20:18:32] $ claude -p Ticker ZION, note type CORE, date 2026-11-15. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/ZION/sec-delta-2026-11-15.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:19:30] Note is written and the check passed, so I'm sending the final report now.
+
+- Note: `research/BVMF-PETR4/2026-11-15.md`
+- Fact sheet: `research/BVMF-PETR4/factsheet-2026-11-15.md`
+- check_docs: `OK research/BVMF-PETR4/2026-11-15.md type=CORE 1=69 2=126 3=123 4=41 5=62 6=71 total=492`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- Fair value: the fact sheet marks it unreliable (+271% from the price, SOTP/NAV unavailable). The note weighs it lightly.
+- Revenue mix: no Brazil or foreign-country revenue split is in the note. It was not fetched, so section 1 flags the Asia export point as [Guessing].
+- Headlines: I used five headlines as listed in the fact sheet and took no numbers from them.
+- Data gap: short interest is [data unavailable].
+[20:19:30] $ bin/py scripts/check_docs.py note research/BVMF-PETR4/2026-11-15.md
+[20:19:30] OK research/BVMF-PETR4/2026-11-15.md type=CORE 1=69 2=126 3=123 4=41 5=62 6=71 total=492
+[20:19:30] $ claude -p Ticker BVMF:PETR4, date 2026-11-15. Research: research/BVMF-PETR4/factsheet-2026-11-15.md, research/BVMF-PETR4/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/BVMF-PETR4/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:19:48] - Note: `research/BVMF-BBSE3/2026-11-15.md`
+- Fact sheet: `research/BVMF-BBSE3/factsheet-2026-11-15.md`
+- check_docs: `OK research/BVMF-BBSE3/2026-11-15.md type=CORE 1=49 2=123 3=108 4=37 5=59 6=74 total=450`
+- Data conflicts: none. Fair value is flagged unreliable in the fact sheet because the two methods disagree 2.5x.
+- Blocked URLs: none. I made no WebFetch calls.
+- Short interest and the dividend record were [data unavailable].
+[20:19:48] $ bin/py scripts/check_docs.py note research/BVMF-BBSE3/2026-11-15.md
+[20:19:48] OK research/BVMF-BBSE3/2026-11-15.md type=CORE 1=49 2=123 3=108 4=37 5=59 6=74 total=450
+[20:19:48] $ claude -p Ticker BVMF:BBSE3, date 2026-11-15. Research: research/BVMF-BBSE3/factsheet-2026-11-15.md, research/BVMF-BBSE3/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/BVMF-BBSE3/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:19:58] research/BVMF-PETR4/2026-11-15-macro.md
+OK research/BVMF-PETR4/2026-11-15-macro.md macro_weight=context words=93
+[20:19:58] $ bin/py scripts/check_docs.py macro research/BVMF-PETR4/2026-11-15-macro.md
+[20:19:58] OK research/BVMF-PETR4/2026-11-15-macro.md macro_weight=context words=93
+[20:19:58] $ claude -p Evaluate BVMF:PETR4 for 2026-11-15: fact sheet research/BVMF-PETR4/factsheet-2026-11-15.md, note research/BVMF-PETR4/2026-11-15.md, state portfolio/state.json, macro overlay research/BVMF-PETR4/2026-11-15-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:19:59] Note: `research/ZION/2026-11-15.md`
+Fact sheet: `research/ZION/factsheet-2026-11-15.md`
+check_docs: `OK research/ZION/2026-11-15.md type=CORE 1=53 2=134 3=131 4=51 5=43 6=70 total=482`
+
+Data conflicts: none. Blocked URLs: none. I used no WebFetch calls.
+[20:19:59] $ bin/py scripts/check_docs.py note research/ZION/2026-11-15.md
+[20:19:59] OK research/ZION/2026-11-15.md type=CORE 1=53 2=134 3=131 4=51 5=43 6=70 total=482
+[20:19:59] $ claude -p Ticker ZION, date 2026-11-15. Research: research/ZION/factsheet-2026-11-15.md, research/ZION/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/ZION/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:20:08] research/BVMF-BBSE3/2026-11-15-macro.md
+OK research/BVMF-BBSE3/2026-11-15-macro.md macro_weight=context words=60
+[20:20:08] $ bin/py scripts/check_docs.py macro research/BVMF-BBSE3/2026-11-15-macro.md
+[20:20:08] OK research/BVMF-BBSE3/2026-11-15-macro.md macro_weight=context words=60
+[20:20:08] $ claude -p Evaluate BVMF:BBSE3 for 2026-11-15: fact sheet research/BVMF-BBSE3/factsheet-2026-11-15.md, note research/BVMF-BBSE3/2026-11-15.md, state portfolio/state.json, macro overlay research/BVMF-BBSE3/2026-11-15-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:20:20] research/ZION/2026-11-15-macro.md
+OK research/ZION/2026-11-15-macro.md macro_weight=secondary words=250
+[20:20:20] $ bin/py scripts/check_docs.py macro research/ZION/2026-11-15-macro.md
+[20:20:20] OK research/ZION/2026-11-15-macro.md macro_weight=secondary words=250
+[20:20:20] $ claude -p Evaluate ZION for 2026-11-15: fact sheet research/ZION/factsheet-2026-11-15.md, note research/ZION/2026-11-15.md, state portfolio/state.json, macro overlay research/ZION/2026-11-15-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:21:19] research/BVMF-PETR4/2026-11-15-evaluation.md
+OK research/BVMF-PETR4/2026-11-15-evaluation.md Bear case=145 Bull case=122 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3, the same verdict as 2026-11-08, so no new-evidence field was needed. I left the entry price empty on purpose: price isn't what's blocking a buy, and the mechanical fair value is flagged unreliable.
+[20:21:19] $ bin/py scripts/check_docs.py eval research/BVMF-PETR4/2026-11-15-evaluation.md
+[20:21:20] OK research/BVMF-PETR4/2026-11-15-evaluation.md Bear case=145 Bull case=122 decision=AVOID scorecard=7->3
+[20:21:20] $ bin/py scripts/valuation.py BVMF:PETR4 --asof 2026-11-15 --eval research/BVMF-PETR4/2026-11-15-evaluation.md
+[20:21:20] {"out": "research/BVMF-PETR4/2026-11-15-valuation.md", "used": ["dcf"], "fair_value": {"bear": 108.66, "base": 168.49, "bull": 428.62}, "price": 45.36}
+[20:21:20] == done BVMF:PETR4
+[20:21:20] == initiate JSE:VOD
+[20:21:20] $ bin/py scripts/sec_delta.py JSE:VOD --asof 2026-11-15
+[20:21:20] SKIP JSE:VOD: not a US listing (SEC filers only)
+[20:21:20] $ claude -p Ticker JSE:VOD, note type CORE, date 2026-11-15. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:21:23] research/BVMF-BBSE3/2026-11-15-evaluation.md
+OK research/BVMF-BBSE3/2026-11-15-evaluation.md Bear case=143 Bull case=112 decision=AVOID scorecard=5->3
+[20:21:23] $ bin/py scripts/check_docs.py eval research/BVMF-BBSE3/2026-11-15-evaluation.md
+[20:21:23] OK research/BVMF-BBSE3/2026-11-15-evaluation.md Bear case=143 Bull case=112 decision=AVOID scorecard=5->3
+[20:21:23] $ bin/py scripts/valuation.py BVMF:BBSE3 --asof 2026-11-15 --eval research/BVMF-BBSE3/2026-11-15-evaluation.md
+[20:21:23] {"out": "research/BVMF-BBSE3/2026-11-15-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 23.13, "base": 24.15, "bull": 27.47}, "price": 37.27}
+[20:21:24] == done BVMF:BBSE3
+[20:21:24] == initiate JSE:MTN
+[20:21:24] $ bin/py scripts/sec_delta.py JSE:MTN --asof 2026-11-15
+[20:21:24] SKIP JSE:MTN: not a US listing (SEC filers only)
+[20:21:24] $ claude -p Ticker JSE:MTN, note type CORE, date 2026-11-15. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[20:21:46] research/ZION/2026-11-15-evaluation.md
+OK research/ZION/2026-11-15-evaluation.md Bear case=145 Bull case=119 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3, the same as on 2026-10-18, so no `new_evidence` field was needed. To check that I wasn't flipping the earlier verdict, I read that evaluation, which is outside the listed inputs.
+[20:21:46] $ bin/py scripts/check_docs.py eval research/ZION/2026-11-15-evaluation.md
+[20:21:46] OK research/ZION/2026-11-15-evaluation.md Bear case=145 Bull case=119 decision=AVOID scorecard=7->3
+[20:21:46] $ bin/py scripts/valuation.py ZION --asof 2026-11-15 --eval research/ZION/2026-11-15-evaluation.md
+[20:21:46] {"out": "research/ZION/2026-11-15-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 75.27, "base": 94.11, "bull": 105.34}, "price": 66.34}
+[20:21:47] == done ZION

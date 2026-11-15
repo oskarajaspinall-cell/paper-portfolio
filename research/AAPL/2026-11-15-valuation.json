@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Consumer Electronics",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 85.09849834056774,
+    "base": 120.99233638344654,
+    "bull": 139.92464652171157
+   },
+   "implied_growth": 0.32985042578557255,
+   "discount_rate": 0.10290956533991498,
+   "cost_of_equity": 0.104015,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.007370114671552533,
+     "base": 0.04418837359333182,
+     "bull": 0.07701326503022221
+    },
+    "cash_flow_margin": {
+     "bear": 0.2064201114472524,
+     "base": 0.25534318782709664,
+     "bull": 0.2596949747418393
+    },
+    "cagr_3y": 0.07701326503022221,
+    "cagr_5y": 0.04974022934310507,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 213.3113005938871,
+    "base": 298.0273514694599,
+    "bull": 305.48310952231566
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 18.063,
+     "base": 25.335,
+     "bull": 25.975
+    },
+    "ttm_ebitda": 171486000000
+   }
+  }
+ ],
+ "price": 356.27,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 127.8360990916742,
+  "base": 180.00400807878432,
+  "bull": 195.11080085524625
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6411819712811233,
+  "base": -0.4947539560479851,
+  "bull": -0.4523513041927576
+ },
+ "implied_growth": 0.32985042578557255,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.5x (base 120.99-298.03)"
+  ]
+ },
+ "ticker": "AAPL",
+ "asof": "2026-11-15",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/aapl/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/aapl/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/aapl/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/aapl/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/aapl/statistics/"
+ }
+}
