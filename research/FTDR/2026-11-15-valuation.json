@@ -1,0 +1,109 @@
+{
+ "industry": {
+  "industry": "Personal Services",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 13.252167453569,
+    "base": 64.95765808669837,
+    "bull": 78.82694272405054
+   },
+   "implied_growth": 0.14169864742884208,
+   "discount_rate": 0.11023019935284677,
+   "cost_of_equity": 0.1210665,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.017060277179144337,
+     "base": 0.0497525661235214,
+     "bull": 0.07988971013579693
+    },
+    "cash_flow_margin": {
+     "bear": 0.06048134777376655,
+     "base": 0.18068649885583524,
+     "bull": 0.1907883420926899
+    },
+    "cagr_3y": 0.07988971013579693,
+    "cagr_5y": 0.06912055435828868,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 36.728410757946214,
+    "base": 42.73265246245197,
+    "bull": 73.03677261613691
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.71,
+     "base": 11.006,
+     "bull": 11.041
+    },
+    "ttm_ebitda": 527000000,
+    "peak_earnings": "TTM EBITDA is 1.7x its 5y median: bear/base use the 5y average (3.316e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 96.64,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 21.077581888361404,
+  "base": 57.54932287861624,
+  "bull": 76.89688602141267
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7818958827777173,
+  "base": -0.40449790067657043,
+  "bull": -0.20429546749366034
+ },
+ "implied_growth": 0.14169864742884208,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "FTDR",
+ "asof": "2026-11-15",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/ftdr/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/ftdr/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/ftdr/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/ftdr/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/ftdr/statistics/"
+ }
+}

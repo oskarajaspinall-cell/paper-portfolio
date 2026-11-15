@@ -1,0 +1,108 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 155.14002265766075,
+    "base": 287.78443806787874,
+    "bull": 526.2554354566399
+   },
+   "implied_growth": 0.013735253499583266,
+   "discount_rate": 0.091,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.051184895292832586,
+     "base": -0.00761337574256819,
+     "bull": -0.00761337574256819
+    },
+    "cash_flow_margin": {
+     "bear": 0.12455516014234876,
+     "base": 0.19196692262256349,
+     "bull": 0.3510392609699769
+    },
+    "cagr_3y": -0.06736979058566517,
+    "cagr_5y": -0.013083712384607593,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 111.563246868822,
+    "base": 221.04358305120002,
+    "bull": 315.9010360471141
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 5.249,
+     "base": 10.4,
+     "bull": 14.863
+    },
+    "ttm_eps": 0.280906
+   }
+  }
+ ],
+ "price": 314.8,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 140.61443072804784,
+  "base": 265.5374863956525,
+  "bull": 456.1373023201313
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5533213763403817,
+  "base": -0.15648828972156137,
+  "bull": 0.44897491207157336
+ },
+ "implied_growth": 0.013735253499583266,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "LON:EMG",
+ "asof": "2026-11-15",
+ "quote_currency": "GBX",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 75.66300000000001,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/lon/EMG/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/lon/EMG/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/lon/EMG/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/lon/EMG/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/lon/EMG/statistics/"
+ }
+}
