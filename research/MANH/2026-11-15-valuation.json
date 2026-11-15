@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Software - Application",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 47.65220542380855,
+    "base": 79.71619194299261,
+    "bull": 106.70405573384144
+   },
+   "implied_growth": 0.3874267474456884,
+   "discount_rate": 0.09503939494737143,
+   "cost_of_equity": 0.09523799999999999,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.04313913969369716,
+     "base": 0.0752764561450232,
+     "bull": 0.12982754519269846
+    },
+    "cash_flow_margin": {
+     "bear": 0.1476253570665012,
+     "base": 0.2213829884098445,
+     "bull": 0.23997107279321467
+    },
+    "cagr_3y": 0.12127827938739433,
+    "cagr_5y": 0.12982754519269846,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 186.0049565257511,
+    "base": 275.9831819878616,
+    "bull": 283.8613703720792
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.458,
+     "base": 14.095,
+     "bull": 14.501
+    },
+    "ttm_revenue": 1156585000
+   }
+  }
+ ],
+ "price": 257.15,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 93.76978912445607,
+  "base": 145.13852195794894,
+  "bull": 165.75649394658737
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6353498381316116,
+  "base": -0.435588092716512,
+  "bull": -0.35540931772666773
+ },
+ "implied_growth": 0.3874267474456884,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.5x (base 79.72-275.98)"
+  ]
+ },
+ "ticker": "MANH",
+ "asof": "2026-11-15",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/manh/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/manh/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/manh/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/manh/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/manh/statistics/"
+ }
+}

@@ -1,0 +1,108 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Refining & Marketing",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -84.20894249761953,
+    "base": 79.01257190638076,
+    "bull": 517.0092839989672
+   },
+   "implied_growth": -0.04220501827021003,
+   "discount_rate": 0.08177727578588523,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.08969775063399298,
+     "base": -0.018961959402365596,
+     "bull": 0.01854766365852356
+    },
+    "cash_flow_margin": {
+     "bear": -0.023351774255684007,
+     "base": 0.016616772634730048,
+     "bull": 0.09118684099824259
+    },
+    "cagr_3y": -0.14439550126798595,
+    "cagr_5y": 0.01854766365852356,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 34.84453251340408,
+    "base": 61.21441523509993,
+    "bull": 646.0679872145579
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 1.429,
+     "base": 2.469,
+     "bull": 25.535
+    },
+    "ttm_ebitda": 3043700000
+   }
+  }
+ ],
+ "price": 71.28,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -44.52445082727832,
+  "base": 73.07985301595382,
+  "bull": 560.0288517374975
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.6246415660392581,
+  "base": 0.025250463186781813,
+  "bull": 6.856745955913264
+ },
+ "implied_growth": -0.04220501827021003,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "PBF",
+ "asof": "2026-11-15",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/pbf/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/pbf/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/pbf/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/pbf/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/pbf/statistics/"
+ }
+}

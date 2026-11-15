@@ -1,0 +1,202 @@
+[15:28:54] == research loop: 2628 names queued, best first: ['RRC', 'BVMF:CXSE3', 'TYO:7747', 'PBF', 'SHA:688825', 'TSX:DPM', 'TSX:CNQ', 'HALO', 'ABNB', 'TPEX:3293']
+[15:29:36] == screened out BVMF:CXSE3: price above base fair value (-39.4%; floor +0%) (no AI research)
+[15:29:40] == screened out RRC: price above base fair value (-10.6%; floor +0%) (no AI research)
+[15:29:43] == screened out TYO:7747: price above base fair value (-28.9%; floor +0%) (no AI research)
+[15:30:27] == initiate PBF
+[15:30:27] $ bin/py scripts/sec_delta.py PBF --asof 2026-11-15
+[15:30:30] == initiate SHA:688825
+[15:30:30] $ bin/py scripts/sec_delta.py SHA:688825 --asof 2026-11-15
+[15:30:30] SKIP SHA:688825: not a US listing (SEC filers only)
+[15:30:30] $ claude -p Ticker SHA:688825, note type CORE, date 2026-11-15. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:33] == screened out TSX:DPM: price above base fair value (-76.2%; floor +0%) (no AI research)
+[15:30:39] OK research/PBF/sec-delta-2026-11-15.md
+[15:30:39] $ claude -p Ticker PBF, note type CORE, date 2026-11-15. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/PBF/sec-delta-2026-11-15.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:57] == screened out TSX:CNQ: price above base fair value (-14.6%; floor +0%) (no AI research)
+[15:31:21] - Note: `research/SHA-688825/2026-11-15.md`
+- Fact sheet: `research/SHA-688825/factsheet-2026-11-15.md`
+- check_docs: `OK research/SHA-688825/2026-11-15.md type=CORE 1=40 2=111 3=110 4=39 5=49 6=52 total=401`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls. The "1. Business" section cites only the stockanalysis.com overview page, and the revenue split by country is marked [data unavailable].
+- Fact sheet gaps: every valuation multiple, the fair value, the 200-day average, 6- and 12-month momentum, beta and short interest are [data unavailable].
+- Peers: MU, KRX:000660, KRX:005930 and TPE:2408 (peer multiples came back [data unavailable]).
+[15:31:21] $ bin/py scripts/check_docs.py note research/SHA-688825/2026-11-15.md
+[15:31:22] OK research/SHA-688825/2026-11-15.md type=CORE 1=40 2=111 3=110 4=39 5=49 6=52 total=401
+[15:31:22] $ claude -p Ticker SHA:688825, date 2026-11-15. Research: research/SHA-688825/factsheet-2026-11-15.md, research/SHA-688825/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/SHA-688825/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:31:27] == screened out HALO: price above base fair value (-12.9%; floor +0%) (no AI research)
+[15:31:39] Note: research/PBF/2026-11-15.md
+Fact sheet: research/PBF/factsheet-2026-11-15.md
+check_docs: OK research/PBF/2026-11-15.md type=CORE 1=56 2=113 3=138 4=34 5=76 6=65 total=482
+
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+
+Not checked: section 1 gives no foreign-revenue share, because I did not open the 10-K or IR pages.
+[15:31:39] $ bin/py scripts/check_docs.py note research/PBF/2026-11-15.md
+[15:31:39] OK research/PBF/2026-11-15.md type=CORE 1=56 2=113 3=138 4=34 5=76 6=65 total=482
+[15:31:39] $ claude -p Ticker PBF, date 2026-11-15. Research: research/PBF/factsheet-2026-11-15.md, research/PBF/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/PBF/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:31:41] research/SHA-688825/2026-11-15-macro.md
+OK research/SHA-688825/2026-11-15-macro.md macro_weight=context words=53
+[15:31:41] $ bin/py scripts/check_docs.py macro research/SHA-688825/2026-11-15-macro.md
+[15:31:41] OK research/SHA-688825/2026-11-15-macro.md macro_weight=context words=53
+[15:31:41] $ claude -p Evaluate SHA:688825 for 2026-11-15: fact sheet research/SHA-688825/factsheet-2026-11-15.md, note research/SHA-688825/2026-11-15.md, state portfolio/state.json, macro overlay research/SHA-688825/2026-11-15-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:31:44] == screened out ABNB: price above base fair value (-49.4%; floor +0%) (no AI research)
+[15:31:54] research/PBF/2026-11-15-macro.md
+OK research/PBF/2026-11-15-macro.md macro_weight=context words=106
+[15:31:54] $ bin/py scripts/check_docs.py macro research/PBF/2026-11-15-macro.md
+[15:31:54] OK research/PBF/2026-11-15-macro.md macro_weight=context words=106
+[15:31:54] $ claude -p Evaluate PBF for 2026-11-15: fact sheet research/PBF/factsheet-2026-11-15.md, note research/PBF/2026-11-15.md, state portfolio/state.json, macro overlay research/PBF/2026-11-15-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:32:01] == initiate TPEX:3293
+[15:32:01] $ bin/py scripts/sec_delta.py TPEX:3293 --asof 2026-11-15
+[15:32:01] SKIP TPEX:3293: not a US listing (SEC filers only)
+[15:32:01] $ claude -p Ticker TPEX:3293, note type CORE, date 2026-11-15. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:32:50] research/SHA-688825/2026-11-15-evaluation.md
+OK research/SHA-688825/2026-11-15-evaluation.md Bear case=140 Bull case=105 decision=AVOID scorecard=6->3
+[15:32:50] $ bin/py scripts/check_docs.py eval research/SHA-688825/2026-11-15-evaluation.md
+[15:32:50] OK research/SHA-688825/2026-11-15-evaluation.md Bear case=140 Bull case=105 decision=AVOID scorecard=6->3
+[15:32:50] $ bin/py scripts/valuation.py SHA:688825 --asof 2026-11-15 --eval research/SHA-688825/2026-11-15-evaluation.md
+[15:32:50] {"out": "research/SHA-688825/2026-11-15-valuation.md", "used": null, "fair_value": {}, "price": 39.98}
+[15:32:51] == done SHA:688825
+[15:33:05] == screened out NTAP: price above base fair value (-51.8%; floor +0%) (no AI research)
+[15:33:06] - Note: `research/TPEX-3293/2026-11-15.md`
+- Fact sheet: `research/TPEX-3293/factsheet-2026-11-15.md`
+- Check: `OK research/TPEX-3293/2026-11-15.md type=CORE 1=76 2=122 3=124 4=40 5=47 6=46 total=455`
+- Blocked URL: `https://www.igs.com.tw` was not on the allowlist, so the revenue split by division and country is `[data unavailable]` in the note.
+- Peer swap: `LNW` returned a 404 on stockanalysis.com, so I dropped it. The peers used are `ASX:ALL`, `TYO:9766` and `TYO:6460`.
+- Data conflicts: none.
+[15:33:06] $ bin/py scripts/check_docs.py note research/TPEX-3293/2026-11-15.md
+[15:33:06] OK research/TPEX-3293/2026-11-15.md type=CORE 1=76 2=122 3=124 4=40 5=47 6=46 total=455
+[15:33:06] $ claude -p Ticker TPEX:3293, date 2026-11-15. Research: research/TPEX-3293/factsheet-2026-11-15.md, research/TPEX-3293/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/TPEX-3293/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:33:16] research/PBF/2026-11-15-evaluation.md
+OK research/PBF/2026-11-15-evaluation.md Bear case=147 Bull case=121 decision=AVOID scorecard=6->3
+
+PBF gets AVOID at conviction 3. It's a cheap refiner earning at the top of its cycle, with no moat. I left the entry price empty on purpose: a lower price on the same peak earnings wouldn't make it a buy. I didn't read `portfolio/state.json` because the rules only need it for a BUY or ADD.
+[15:33:16] $ bin/py scripts/check_docs.py eval research/PBF/2026-11-15-evaluation.md
+[15:33:16] OK research/PBF/2026-11-15-evaluation.md Bear case=147 Bull case=121 decision=AVOID scorecard=6->3
+[15:33:16] $ bin/py scripts/valuation.py PBF --asof 2026-11-15 --eval research/PBF/2026-11-15-evaluation.md
+[15:33:17] {"out": "research/PBF/2026-11-15-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": -44.52, "base": 73.08, "bull": 560.03}, "price": 71.28}
+[15:33:17] == done PBF
+[15:33:18] == initiate RELY
+[15:33:18] $ bin/py scripts/sec_delta.py RELY --asof 2026-11-15
+[15:33:22] research/TPEX-3293/2026-11-15-macro.md
+OK research/TPEX-3293/2026-11-15-macro.md macro_weight=context words=124
+[15:33:22] $ bin/py scripts/check_docs.py macro research/TPEX-3293/2026-11-15-macro.md
+[15:33:22] OK research/TPEX-3293/2026-11-15-macro.md macro_weight=context words=124
+[15:33:22] $ claude -p Evaluate TPEX:3293 for 2026-11-15: fact sheet research/TPEX-3293/factsheet-2026-11-15.md, note research/TPEX-3293/2026-11-15.md, state portfolio/state.json, macro overlay research/TPEX-3293/2026-11-15-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:33:29] OK research/RELY/sec-delta-2026-11-15.md
+[15:33:29] $ claude -p Ticker RELY, note type CORE, date 2026-11-15. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/RELY/sec-delta-2026-11-15.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:33:35] == screened out TYO:6532: price above base fair value (-45.3%; floor +0%) (no AI research)
+[15:34:04] research/TPEX-3293/2026-11-15-evaluation.md
+OK research/TPEX-3293/2026-11-15-evaluation.md Bear case=149 Bull case=125 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3, with an entry price of 674.62 TWD (base fair value less 20%). I couldn't check the revenue mix by country or the moat, because neither the note nor the macro overlay had them.
+[15:34:04] $ bin/py scripts/check_docs.py eval research/TPEX-3293/2026-11-15-evaluation.md
+[15:34:04] OK research/TPEX-3293/2026-11-15-evaluation.md Bear case=149 Bull case=125 decision=AVOID scorecard=7->3
+[15:34:04] $ bin/py scripts/valuation.py TPEX:3293 --asof 2026-11-15 --eval research/TPEX-3293/2026-11-15-evaluation.md
+[15:34:04] {"out": "research/TPEX-3293/2026-11-15-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 562.38, "base": 843.28, "bull": 1224.18}, "price": 799}
+[15:34:05] == done TPEX:3293
+[15:34:09] == screened out AMS:ASML: price above base fair value (-56.6%; floor +0%) (no AI research)
+[15:34:39] == screened out TPE:2615: price above base fair value (-1.3%; floor +0%) (no AI research)
+[15:34:43] == screened out HKG:1308: price above base fair value (-29.3%; floor +0%) (no AI research)
+[15:34:43] Note: `research/RELY/2026-11-15.md`
+Fact sheet: `research/RELY/factsheet-2026-11-15.md`
+Check: `OK research/RELY/2026-11-15.md type=CORE 1=68 2=127 3=111 4=40 5=57 6=82 total=485`
+
+Data conflicts: none.
+
+Blocked URLs: none. I used one WebFetch, the 10-Q, and it returned only the first 100,000 of about 122,000 characters.
+[15:34:43] $ bin/py scripts/check_docs.py note research/RELY/2026-11-15.md
+[15:34:43] OK research/RELY/2026-11-15.md type=CORE 1=68 2=127 3=111 4=40 5=57 6=82 total=485
+[15:34:43] $ claude -p Ticker RELY, date 2026-11-15. Research: research/RELY/factsheet-2026-11-15.md, research/RELY/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/RELY/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:35:03] research/RELY/2026-11-15-macro.md
+OK research/RELY/2026-11-15-macro.md macro_weight=context words=63
+
+Skipped: no WebFetch calls, and no `country_risk` block, because no foreign sending country reaches 10% of revenue (Canada is 8.7%). I did not check payout-side corridor risk for India, Mexico or the Philippines.
+[15:35:03] $ bin/py scripts/check_docs.py macro research/RELY/2026-11-15-macro.md
+[15:35:03] OK research/RELY/2026-11-15-macro.md macro_weight=context words=63
+[15:35:03] $ claude -p Evaluate RELY for 2026-11-15: fact sheet research/RELY/factsheet-2026-11-15.md, note research/RELY/2026-11-15.md, state portfolio/state.json, macro overlay research/RELY/2026-11-15-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:35:13] == initiate MANH
+[15:35:13] $ bin/py scripts/sec_delta.py MANH --asof 2026-11-15
+[15:35:16] == initiate WSE:LPP
+[15:35:16] $ bin/py scripts/sec_delta.py WSE:LPP --asof 2026-11-15
+[15:35:16] SKIP WSE:LPP: not a US listing (SEC filers only)
+[15:35:16] $ claude -p Ticker WSE:LPP, note type CORE, date 2026-11-15. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:35:25] OK research/MANH/sec-delta-2026-11-15.md
+[15:35:25] $ claude -p Ticker MANH, note type CORE, date 2026-11-15. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/MANH/sec-delta-2026-11-15.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:36:01] Note and fact sheet are written, and `check_docs.py note` passed. The last step is the final report.
+
+- Note: `research/WSE-LPP/2026-11-15.md`
+- Fact sheet: `research/WSE-LPP/factsheet-2026-11-15.md`
+- Check: `OK research/WSE-LPP/2026-11-15.md type=CORE 1=62 2=111 3=116 4=41 5=36 6=36 total=402`
+- Blocked URL: `https://www.lppsa.com/en/investors` is not on the allowlist, so I didn't retry it. The note marks LPP's revenue split by country as [data unavailable].
+- Peers: the first run failed on `STO:HM-B` (404 on stockanalysis.com). I dropped it and used CCC, DNP and ITX. P/E has only 2 peers with data.
+- Data conflicts: none.
+[15:36:01] $ bin/py scripts/check_docs.py note research/WSE-LPP/2026-11-15.md
+[15:36:01] OK research/WSE-LPP/2026-11-15.md type=CORE 1=62 2=111 3=116 4=41 5=36 6=36 total=402
+[15:36:01] $ claude -p Ticker WSE:LPP, date 2026-11-15. Research: research/WSE-LPP/factsheet-2026-11-15.md, research/WSE-LPP/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/WSE-LPP/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:36:05] research/RELY/2026-11-15-evaluation.md
+OK research/RELY/2026-11-15-evaluation.md Bear case=140 Bull case=128 decision=AVOID scorecard=8->3
+
+The usual entry anchor, base fair value 31.39 × 0.8, came out above today's price, so I set the entry price at the recent swing low of 19.52 instead. I didn't read `portfolio/state.json` because it's only needed for a BUY.
+[15:36:05] $ bin/py scripts/check_docs.py eval research/RELY/2026-11-15-evaluation.md
+[15:36:05] OK research/RELY/2026-11-15-evaluation.md Bear case=140 Bull case=128 decision=AVOID scorecard=8->3
+[15:36:05] $ bin/py scripts/valuation.py RELY --asof 2026-11-15 --eval research/RELY/2026-11-15-evaluation.md
+[15:36:05] {"out": "research/RELY/2026-11-15-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 15.83, "base": 31.39, "bull": 33.95}, "price": 22.55}
+[15:36:06] == done RELY
+[15:36:16] == screened out PR: price above base fair value (-53.9%; floor +0%) (no AI research)
+[15:36:17] research/WSE-LPP/2026-11-15-macro.md
+OK research/WSE-LPP/2026-11-15-macro.md macro_weight=context words=104
+[15:36:17] $ bin/py scripts/check_docs.py macro research/WSE-LPP/2026-11-15-macro.md
+[15:36:17] OK research/WSE-LPP/2026-11-15-macro.md macro_weight=context words=104
+[15:36:17] $ claude -p Evaluate WSE:LPP for 2026-11-15: fact sheet research/WSE-LPP/factsheet-2026-11-15.md, note research/WSE-LPP/2026-11-15.md, state portfolio/state.json, macro overlay research/WSE-LPP/2026-11-15-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:36:26] Note: research/MANH/2026-11-15.md
+Fact sheet: research/MANH/factsheet-2026-11-15.md
+Check: OK research/MANH/2026-11-15.md type=CORE 1=62 2=94 3=124 4=53 5=47 6=102 total=482
+
+Data conflicts and gaps:
+- No conflicts between the fact sheet and the qualitative sources.
+- Foreign revenue share is `[data unavailable]`. The 10-Q fetch returned only part of the filing, without the segment note, Note 7 (the lawsuits) or RPO. Because Note 7 wasn't retrieved, the note marks the class action and derivative suit outcome as unverified.
+- Blocked URLs: none. I used 1 of 6 WebFetch calls.
+[15:36:26] $ bin/py scripts/check_docs.py note research/MANH/2026-11-15.md
+[15:36:27] OK research/MANH/2026-11-15.md type=CORE 1=62 2=94 3=124 4=53 5=47 6=102 total=482
+[15:36:27] $ claude -p Ticker MANH, date 2026-11-15. Research: research/MANH/factsheet-2026-11-15.md, research/MANH/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/MANH/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:36:33] == initiate TADAWUL:2380
+[15:36:33] $ bin/py scripts/sec_delta.py TADAWUL:2380 --asof 2026-11-15
+[15:36:33] SKIP TADAWUL:2380: not a US listing (SEC filers only)
+[15:36:33] $ claude -p Ticker TADAWUL:2380, note type CORE, date 2026-11-15. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:36:48] research/MANH/2026-11-15-macro.md
+OK research/MANH/2026-11-15-macro.md macro_weight=secondary words=213
+[15:36:48] $ bin/py scripts/check_docs.py macro research/MANH/2026-11-15-macro.md
+[15:36:48] OK research/MANH/2026-11-15-macro.md macro_weight=secondary words=213
+[15:36:48] $ claude -p Evaluate MANH for 2026-11-15: fact sheet research/MANH/factsheet-2026-11-15.md, note research/MANH/2026-11-15.md, state portfolio/state.json, macro overlay research/MANH/2026-11-15-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:18] - Note: `research/TADAWUL-2380/2026-11-15.md`
+- Fact sheet: `research/TADAWUL-2380/factsheet-2026-11-15.md`
+- Check: `OK research/TADAWUL-2380/2026-11-15.md type=CORE 1=54 2=117 3=110 4=36 5=51 6=50 total=418`
+- Data conflicts: none.
+- Blocked URLs: none.
+- Missing data: the fact sheet had no news items. Its P/E peer median rests on only one peer (n=1).
+- Fetches: 1 WebFetch used (the stockanalysis.com company page).
+[15:37:18] $ bin/py scripts/check_docs.py note research/TADAWUL-2380/2026-11-15.md
+[15:37:18] OK research/TADAWUL-2380/2026-11-15.md type=CORE 1=54 2=117 3=110 4=36 5=51 6=50 total=418
+[15:37:18] $ claude -p Ticker TADAWUL:2380, date 2026-11-15. Research: research/TADAWUL-2380/factsheet-2026-11-15.md, research/TADAWUL-2380/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/TADAWUL-2380/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:18] research/WSE-LPP/2026-11-15-evaluation.md
+OK research/WSE-LPP/2026-11-15-evaluation.md Bear case=124 Bull case=99 decision=AVOID scorecard=7->3
+[15:37:18] $ bin/py scripts/check_docs.py eval research/WSE-LPP/2026-11-15-evaluation.md
+[15:37:18] OK research/WSE-LPP/2026-11-15-evaluation.md Bear case=124 Bull case=99 decision=AVOID scorecard=7->3
+[15:37:18] $ bin/py scripts/valuation.py WSE:LPP --asof 2026-11-15 --eval research/WSE-LPP/2026-11-15-evaluation.md
+[15:37:18] {"out": "research/WSE-LPP/2026-11-15-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 1527.6, "base": 30420.97, "bull": 55680.67}, "price": 28700}
+[15:37:19] == done WSE:LPP
+[15:37:33] == screened out HEL:ORNBV: price above base fair value (-49.7%; floor +0%) (no AI research)
+[15:37:38] research/TADAWUL-2380/2026-11-15-macro.md
+OK research/TADAWUL-2380/2026-11-15-macro.md macro_weight=context words=57
+[15:37:38] $ bin/py scripts/check_docs.py macro research/TADAWUL-2380/2026-11-15-macro.md
+[15:37:38] OK research/TADAWUL-2380/2026-11-15-macro.md macro_weight=context words=57
+[15:37:38] $ claude -p Evaluate TADAWUL:2380 for 2026-11-15: fact sheet research/TADAWUL-2380/factsheet-2026-11-15.md, note research/TADAWUL-2380/2026-11-15.md, state portfolio/state.json, macro overlay research/TADAWUL-2380/2026-11-15-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:50] == screened out FTDR: price above base fair value (-40.4%; floor +0%) (no AI research)
+[15:37:58] research/MANH/2026-11-15-evaluation.md
+OK research/MANH/2026-11-15-evaluation.md Bear case=140 Bull case=128 decision=AVOID scorecard=6->3
+
+I didn't read portfolio/state.json because the decision is AVOID. I set the entry price of 205 myself, anchored to the September swing low and the P/FCF low, instead of the default fair value × 0.8, because the fact sheet flags the fair value as unreliable.
+[15:37:58] $ bin/py scripts/check_docs.py eval research/MANH/2026-11-15-evaluation.md
+[15:37:58] OK research/MANH/2026-11-15-evaluation.md Bear case=140 Bull case=128 decision=AVOID scorecard=6->3
+[15:37:58] $ bin/py scripts/valuation.py MANH --asof 2026-11-15 --eval research/MANH/2026-11-15-evaluation.md
+[15:37:58] {"out": "research/MANH/2026-11-15-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 93.77, "base": 145.14, "bull": 165.76}, "price": 257.15}
+[15:37:59] == done MANH
