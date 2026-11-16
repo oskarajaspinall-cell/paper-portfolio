@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Building Products & Equipment",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -12.381701655096771,
+    "base": 18.360562549065254,
+    "bull": 24.80015183829093
+   },
+   "implied_growth": 0.2753198919861144,
+   "discount_rate": 0.11488766338552514,
+   "cost_of_equity": 0.118085,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.019886063818488047,
+     "base": 0.016345005033349225,
+     "bull": 0.020152147770372997
+    },
+    "cash_flow_margin": {
+     "bear": -0.08775992334875449,
+     "base": 0.15028602653092582,
+     "bull": 0.19470539532368747
+    },
+    "cagr_3y": 0.020152147770372997,
+    "cagr_5y": -0.004772127636976098,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 35.607008732559265,
+    "base": 59.36775652500742,
+    "bull": 84.20839806208055
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 12.209,
+     "base": 19.91,
+     "bull": 27.961
+    },
+    "ttm_ebitda": 320712000
+   }
+  }
+ ],
+ "price": 52.76,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 3.614535140788574,
+  "base": 32.02962720771264,
+  "bull": 44.60290057955414
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.9314909942989277,
+  "base": -0.3929183622495708,
+  "bull": -0.15460764633142265
+ },
+ "implied_growth": 0.2753198919861144,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.2x (base 18.36-59.37)"
+  ]
+ },
+ "ticker": "TREX",
+ "asof": "2026-11-16",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/trex/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/trex/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/trex/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/trex/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/trex/statistics/"
+ }
+}

@@ -1131,3 +1131,99 @@ I didn't read `portfolio/state.json` because an AVOID doesn't need it. The score
 [06:39:02] $ bin/py scripts/valuation.py TYO:5108 --asof 2026-11-16 --eval research/TYO-5108/2026-11-16-evaluation.md
 [06:39:02] {"out": "research/TYO-5108/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 1482.56, "base": 5555.33, "bull": 6372.62}, "price": 4402}
 [06:39:03] == done TYO:5108
+[06:39:07] == initiate TYO:4578
+[06:39:07] $ bin/py scripts/sec_delta.py TYO:4578 --asof 2026-11-16
+[06:39:07] SKIP TYO:4578: not a US listing (SEC filers only)
+[06:39:07] $ claude -p Ticker TYO:4578, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:39:08] == Research batch 09: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-16-batch-09.md; uploaded to GitHub
+[06:39:20] research/TREX/2026-11-16-evaluation.md
+OK research/TREX/2026-11-16-evaluation.md Bear case=136 Bull case=124 decision=AVOID scorecard=6->3
+[06:39:20] $ bin/py scripts/check_docs.py eval research/TREX/2026-11-16-evaluation.md
+[06:39:20] OK research/TREX/2026-11-16-evaluation.md Bear case=136 Bull case=124 decision=AVOID scorecard=6->3
+[06:39:20] $ bin/py scripts/valuation.py TREX --asof 2026-11-16 --eval research/TREX/2026-11-16-evaluation.md
+[06:39:20] {"out": "research/TREX/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 3.61, "base": 32.03, "bull": 44.6}, "price": 52.76}
+[06:39:21] == done TREX
+[06:39:58] == initiate TSX:DSV
+[06:39:58] $ bin/py scripts/sec_delta.py TSX:DSV --asof 2026-11-16
+[06:39:58] SKIP TSX:DSV: not a US listing (SEC filers only)
+[06:39:58] $ claude -p Ticker TSX:DSV, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:40:25] == initiate WST
+[06:40:25] $ bin/py scripts/sec_delta.py WST --asof 2026-11-16
+[06:40:36] OK research/WST/sec-delta-2026-11-16.md
+[06:40:36] $ claude -p Ticker WST, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/WST/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:40:48] Note and fact sheet are written, and the check passed. This is the final report.
+
+- Note: `research/TYO-4578/2026-11-16.md`
+- Fact sheet: `research/TYO-4578/factsheet-2026-11-16.md`
+- Check: `OK research/TYO-4578/2026-11-16.md type=CORE 1=52 2=102 3=108 4=54 5=67 6=73 total=456`
+
+Data conflicts and blocked URLs:
+- **Blocked URL:** `https://www.otsuka.co.jp/en/ir/` is not on the allowlist, and no Otsuka domain is recorded in `universe/ir_domains.txt` or the watchlist. I did not retry it. Revenue by country and segment is therefore marked [data unavailable] in section 1.
+- **Stale date:** the fact sheet's next earnings date (Oct 30, 2026) is already past. The note flags it as stale.
+- **Unread filing:** I did not read the quarterly report published on 2026-10-30.
+[06:40:48] $ bin/py scripts/check_docs.py note research/TYO-4578/2026-11-16.md
+[06:40:49] OK research/TYO-4578/2026-11-16.md type=CORE 1=52 2=102 3=108 4=54 5=67 6=73 total=456
+[06:40:49] $ claude -p Ticker TYO:4578, date 2026-11-16. Research: research/TYO-4578/factsheet-2026-11-16.md, research/TYO-4578/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/TYO-4578/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:41:05] - Note: `research/TSX-DSV/2026-11-16.md`
+- Fact sheet: `research/TSX-DSV/factsheet-2026-11-16.md`
+- check_docs: `OK research/TSX-DSV/2026-11-16.md type=CORE 1=54 2=107 3=89 4=36 5=61 6=37 total=384`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls. I cited the fact sheet's headline URLs as listed. Two of them (globenewswire.com, tipranks.com) are not on the allowlist, so they were not fetched.
+- Gaps: no fair value, because the NAV and EV/EBITDA methods had no data. No country revenue split either, since I had no primary-source fetch.
+[06:41:05] $ bin/py scripts/check_docs.py note research/TSX-DSV/2026-11-16.md
+[06:41:05] OK research/TSX-DSV/2026-11-16.md type=CORE 1=54 2=107 3=89 4=36 5=61 6=37 total=384
+[06:41:05] $ claude -p Ticker TSX:DSV, date 2026-11-16. Research: research/TSX-DSV/factsheet-2026-11-16.md, research/TSX-DSV/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/TSX-DSV/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:41:15] research/TYO-4578/2026-11-16-macro.md
+OK research/TYO-4578/2026-11-16-macro.md macro_weight=context words=105
+[06:41:15] $ bin/py scripts/check_docs.py macro research/TYO-4578/2026-11-16-macro.md
+[06:41:15] OK research/TYO-4578/2026-11-16-macro.md macro_weight=context words=105
+[06:41:15] $ claude -p Evaluate TYO:4578 for 2026-11-16: fact sheet research/TYO-4578/factsheet-2026-11-16.md, note research/TYO-4578/2026-11-16.md, state portfolio/state.json, macro overlay research/TYO-4578/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:41:40] Note: research/WST/2026-11-16.md
+Fact sheet: research/WST/factsheet-2026-11-16.md
+check_docs: OK research/WST/2026-11-16.md type=CORE 1=68 2=82 3=107 4=50 5=56 6=53 total=416
+
+Data conflicts: none. Blocked URLs: none. I used 1 WebFetch (the 10-Q). It was truncated before the MD&A, so the cyber-incident and guidance details come from the SEC delta file and the Q3 press release headline.
+[06:41:40] $ bin/py scripts/check_docs.py note research/WST/2026-11-16.md
+[06:41:40] OK research/WST/2026-11-16.md type=CORE 1=68 2=82 3=107 4=50 5=56 6=53 total=416
+[06:41:40] $ claude -p Ticker WST, date 2026-11-16. Research: research/WST/factsheet-2026-11-16.md, research/WST/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/WST/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:41:42] research/TSX-DSV/2026-11-16-macro.md
+OK research/TSX-DSV/2026-11-16-macro.md macro_weight=secondary words=215
+[06:41:42] $ bin/py scripts/check_docs.py macro research/TSX-DSV/2026-11-16-macro.md
+[06:41:42] OK research/TSX-DSV/2026-11-16-macro.md macro_weight=secondary words=215
+[06:41:42] $ claude -p Evaluate TSX:DSV for 2026-11-16: fact sheet research/TSX-DSV/factsheet-2026-11-16.md, note research/TSX-DSV/2026-11-16.md, state portfolio/state.json, macro overlay research/TSX-DSV/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:42:19] research/WST/2026-11-16-macro.md
+OK research/WST/2026-11-16-macro.md macro_weight=secondary words=221
+[06:42:19] $ bin/py scripts/check_docs.py macro research/WST/2026-11-16-macro.md
+[06:42:19] OK research/WST/2026-11-16-macro.md macro_weight=secondary words=221
+[06:42:19] $ claude -p Evaluate WST for 2026-11-16: fact sheet research/WST/factsheet-2026-11-16.md, note research/WST/2026-11-16.md, state portfolio/state.json, macro overlay research/WST/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:42:25] research/TYO-4578/2026-11-16-evaluation.md
+OK research/TYO-4578/2026-11-16-evaluation.md Bear case=134 Bull case=117 decision=AVOID scorecard=4->2
+
+I left out an entry price because the rule only asks for one at conviction 3 or more. I also left out a net-debt trigger, since the statistics page's debtEbitda field may not match the net figure. The note never read the Q3 report, so that quarter's content is unchecked.
+[06:42:25] $ bin/py scripts/check_docs.py eval research/TYO-4578/2026-11-16-evaluation.md
+[06:42:25] OK research/TYO-4578/2026-11-16-evaluation.md Bear case=134 Bull case=117 decision=AVOID scorecard=4->2
+[06:42:25] $ bin/py scripts/valuation.py TYO:4578 --asof 2026-11-16 --eval research/TYO-4578/2026-11-16-evaluation.md
+[06:42:25] {"out": "research/TYO-4578/2026-11-16-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 6770.09, "base": 9960.25, "bull": 14511.31}, "price": 12300}
+[06:42:27] You've hit your session limit · resets 11am (Europe/London)
+[06:42:27] !! FAILED WST: claude -p Evaluate WST for 2026-11-16: fact sheet research/WST/factsheet-2026-11-16.md, note research/WST/2026-11-16.md, state portfolio/state.json, macro overlay research/WST/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dont
+[06:42:27] == done TYO:4578
+[06:42:27] You've hit your session limit · resets 11am (Europe/London)
+[06:42:27] !! FAILED TSX:DSV: claude -p Evaluate TSX:DSV for 2026-11-16: fact sheet research/TSX-DSV/factsheet-2026-11-16.md, note research/TSX-DSV/2026-11-16.md, state portfolio/state.json, macro overlay research/TSX-DSV/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --perm
+[06:43:31] == initiate EPA:DSY
+[06:43:31] $ bin/py scripts/sec_delta.py EPA:DSY --asof 2026-11-16
+[06:43:31] SKIP EPA:DSY: not a US listing (SEC filers only)
+[06:43:31] $ claude -p Ticker EPA:DSY, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:43:35] You've hit your session limit · resets 11am (Europe/London)
+[06:43:35] !! FAILED EPA:DSY: claude -p Ticker EPA:DSY, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Ed
+[06:44:28] == initiate NZE:FPH
+[06:44:28] $ bin/py scripts/sec_delta.py NZE:FPH --asof 2026-11-16
+[06:44:28] SKIP NZE:FPH: not a US listing (SEC filers only)
+[06:44:28] $ claude -p Ticker NZE:FPH, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:44:31] You've hit your session limit · resets 11am (Europe/London)
+[06:44:31] !! FAILED NZE:FPH: claude -p Ticker NZE:FPH, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Ed
+[06:47:04] == initiate LON:REL
+[06:47:04] $ bin/py scripts/sec_delta.py LON:REL --asof 2026-11-16
+[06:47:05] SKIP LON:REL: not a US listing (SEC filers only)
+[06:47:05] $ claude -p Ticker LON:REL, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:47:08] You've hit your session limit · resets 11am (Europe/London)
+[06:47:08] !! FAILED LON:REL: claude -p Ticker LON:REL, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Ed
