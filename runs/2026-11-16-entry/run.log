@@ -1,0 +1,28 @@
+[15:33:55] == re-research FIS (dip radar)
+[15:33:55] $ bin/py scripts/sec_delta.py FIS --asof 2026-11-16
+[15:34:09] OK research/FIS/sec-delta-2026-11-16.md
+[15:34:09] $ claude -p Ticker FIS, note type CORE, date 2026-11-16. Reason for review: dip. Facts: detail: Dip radar: the close 28.36 (2026-11-12) is -21.5% over the 20 sessions since our last research (2026-10-09) vs the S&P 500 -1.9% (beta -0.12); the stock-specific part is -21.7% (-2.18 standard deviations); -17.4% since o. SEC filing delta: research/FIS/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:35:54] - Note: `research/FIS/2026-11-16.md`
+- Fact sheet: `research/FIS/factsheet-2026-11-16.md`
+- check_docs: `OK research/FIS/2026-11-16.md type=CORE 1=68 2=127 3=100 4=33 5=62 6=126 total=516`
+- Data conflicts:
+  - The dip radar's close of 28.36 is dated 2026-11-12. The fact sheet's last close is 29.54 on 2026-11-13. I used the fact sheet figure, and I dropped 28.36 from the note because the checker rejects it.
+  - Barron's says FIS cut its 2026 outlook and its finance chief left. The 10-Q excerpt I fetched doesn't show the revised outlook or the CFO exit, so the note tags the size of the cut [Guessing].
+- Blocked URLs: none. I used 1 of the 6 WebFetch calls, on the 10-Q.
+[15:35:54] $ bin/py scripts/check_docs.py note research/FIS/2026-11-16.md
+[15:35:54] OK research/FIS/2026-11-16.md type=CORE 1=68 2=127 3=100 4=33 5=62 6=126 total=516
+[15:35:54] $ claude -p Ticker FIS, date 2026-11-16. Research: research/FIS/factsheet-2026-11-16.md, research/FIS/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/FIS/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:36:08] research/FIS/2026-11-16-macro.md
+OK research/FIS/2026-11-16-macro.md macro_weight=context words=73
+[15:36:08] $ bin/py scripts/check_docs.py macro research/FIS/2026-11-16-macro.md
+[15:36:08] OK research/FIS/2026-11-16-macro.md macro_weight=context words=73
+[15:36:08] $ claude -p Evaluate FIS for 2026-11-16: fact sheet research/FIS/factsheet-2026-11-16.md, note research/FIS/2026-11-16.md, state portfolio/state.json, macro overlay research/FIS/2026-11-16-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 28.36 (2026-11-12) is -21.5% over the 20 sessions since our last research (2026-10-09) vs the S&P 500 -1.9% (beta -0.12); the stock-specific part is -21.7% (-2.18 standard deviations); -17.4% since o. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:27] research/FIS/2026-11-16-evaluation.md
+OK research/FIS/2026-11-16-evaluation.md Bear case=136 Bull case=116 decision=AVOID scorecard=2->1
+
+FIS is not held, so the decision is AVOID. The scorecard puts conviction at 1, down from the AVOID at 3 on 2026-10-09. That earlier verdict is more than 30 days old, so no `new_evidence` field was needed. The model's own guidance cut is still unconfirmed from the filing, and the decline-cause call of "temporary" is my judgement.
+[15:37:27] $ bin/py scripts/check_docs.py eval research/FIS/2026-11-16-evaluation.md
+[15:37:27] OK research/FIS/2026-11-16-evaluation.md Bear case=136 Bull case=116 decision=AVOID scorecard=2->1
+[15:37:27] $ bin/py scripts/valuation.py FIS --asof 2026-11-16 --eval research/FIS/2026-11-16-evaluation.md
+[15:37:28] {"out": "research/FIS/2026-11-16-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": -554.94, "base": 97.84, "bull": 99.9}, "price": 29.54}
+[15:37:29] == FIS: AVOID 1
