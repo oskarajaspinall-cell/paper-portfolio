@@ -45,7 +45,7 @@ Run `bin/py scripts/scorecard.py research/<SLUG>/<date>-evaluation.md` after wri
 
 ## Consistency and citing rules (2026-11-09)
 - If this stock had a different verdict (decision or conviction) in the last 30 days, add `"new_evidence": {"type": "new_results|guidance|price_move|trigger_fired|new_information|method_change", "text": "..."}` naming what changed since. Python checks a price move (>10%) or a newer reporting period; `method_change` only when the earlier verdict predates the scorecard (2026-11-09); the others need a dated source URL. Same evidence must give the same decision; if nothing changed, keep the earlier verdict.
-- Cite an "owner rule" only for the owner's actual rules (CLAUDE.md): high conviction only, tactical 2:1, fair value isn't the verdict, no price stops on core, the cash reserve, the caps, sizing, the funding queue/swaps, entry prices. Anything else is your judgement: say so, don't attribute it to the owner.
+- Cite an "owner rule" only for the owner's actual rules (CLAUDE.md): high conviction only, tactical 2:1, fair value isn't the verdict, no price stops on core, residual cash (1.5% floor), the caps, sizing, the funding queue/swaps, entry prices. Anything else is your judgement: say so, don't attribute it to the owner.
 
 ## Decision block fields
 - `ticker`, `decision`: BUY or AVOID for a name not held; ADD, HOLD, TRIM or SELL for a holding. "No consensus", "needs more research" or anything else is NOT allowed. If evidence is thin, that lowers conviction; it does not defer the decision.

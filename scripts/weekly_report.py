@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import ROOT  # noqa: E402
+from common import ROOT, load_config  # noqa: E402
 from decision_log import hit_table, read as read_decisions  # noqa: E402
 from portfolio import format_returns, invested_return, read_csv, returns_table  # noqa: E402
 
@@ -74,13 +74,15 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
                f"{(cash / total * 100) if cash is not None and total else 0:.1f}%.")
     import regime as _rg
     rg = _rg.latest(asof)
+    from cash_policy import residual_mode
+    residual = residual_mode(load_config())
     if rg:
         out.append(f"- Cash strategy: **{_rg.LABEL[rg['final_regime']]}** regime ("
                    + (f"stress {rg['stress']:g}/100" if rg.get("stress") is not None else f"score {rg.get('points', 'n/a')}")
                    + (f", macro view moved it from {_rg.LABEL[rg['score_regime']]}" if rg["final_regime"] != rg["score_regime"] else "")
-                   + f"); cash reserve {rg['reserve_pct']:g}%"
+                   + (f"); cash is residual (1.5% floor; the stress score is information only)" if residual else f"); cash reserve {rg['reserve_pct']:g}%")
                    + (f" (dip release x{rg['dip']['multiplier']:g}: S&P 500 {rg['dip']['drawdown_pct']:.1f}% below its high)"
-                      if rg["dip"]["multiplier"] < 1 else "")
+                      if rg["dip"]["multiplier"] < 1 and not residual else "")
                    + (f"; {len(scan.get('dips') or [])} holding(s) flagged to top up in the dip" if scan.get("dips") else "")
                    + f". Details: reports/regime/{rg['asof']}.md")
     fq = state.get("funding_queue") or []
@@ -94,7 +96,7 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
                            else f"; swap review: no swap ({v.get('reason', '')})")
             except (ValueError, IndexError):
                 verdict = "; swap review: unreadable"
-        out.append("- Funding queue (conviction-4 BUYs waiting for room above the cash reserve): "
+        out.append("- Funding queue (conviction-4 BUYs waiting for cash): "
                    + (", ".join(f"{e['ticker']} ({('top-up to size, ' if e.get('kind') == 'underweight' else 'top-up of a starter, ') if e.get('stage') == 'topup' else ''}decided {e['added']})"
                               for e in fq) or "empty") + verdict + "."
                    + (f" Details: runs/{asof}/swap-review.md." if swap.exists() else ""))

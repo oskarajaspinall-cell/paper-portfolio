@@ -8,7 +8,7 @@ companies worldwide are ranked on quality (40%), value (30%) and momentum with t
 researches the best from stockanalysis.com figures and primary sources; the bear case is argued before the bull case
 and only conviction 4–5 out of 5 is bought, sized 7–10% by conviction and volatility, with caps of 35% per sector, 40% for
 groups of stocks that move together, and 25% in China/Hong Kong. Holdings are re-priced daily, tested against their thesis triggers, re-researched in full about
-every four weeks, and a cash reserve of 5–35% follows a macro stress score. Core positions have no price stops, and
+every four weeks, and cash is whatever the conviction bar and the caps leave above a 1.5% floor (a macro stress score is tracked but never sizes cash). Core positions have no price stops, and
 sell-side targets are never used. Every decision is logged and scored against the S&P 500.
 
 **📊 Live dashboard:** https://oskarajaspinall-cell.github.io/paper-portfolio/ (updated every 15 minutes while markets are open, and after every run)
@@ -41,23 +41,16 @@ This repository ships **paused** (there is a `PAUSED` file), so nothing runs unt
 
 **Only high-conviction ideas are bought** (4 or 5 out of 5); the rest are recorded as AVOID, so cash can stay
 high for a while. **Core positions are sized by conviction and volatility**: 7% (conviction 4) or 10% (5), scaled down
-for a volatile stock and up for a steady one (between 0.6× and 1.4×; never so far up that it eats into the cash reserve), so one jumpy name can't dominate the
+for a volatile stock and up for a steady one (between 0.6× and 1.4×; never so far up that it exceeds the cash available), so one jumpy name can't dominate the
 portfolio's risk; a weekly risk table (`reports/risk/`) shows each holding's share of the portfolio's volatility.
 A weekly **return attribution** (`reports/attribution/`) splits the return over the S&P 500 into sector bets
-(including the cash reserve), stock picking within sectors and their interaction, so a sector tailwind can't hide
+(including cash), stock picking within sectors and their interaction, so a sector tailwind can't hide
 weak stock picks. **Trades fill at the live price or the next open**: a decided trade fills at once at the live price when its
 market is open, otherwise it becomes a pending order filled at the next opening price (every rule is checked
 again at that price); a tactical order that opens beyond its stop or target is cancelled.
-**Cash is managed as a position**: each week nine official indicators (credit spreads and their change, VIX, the
-yield curve, real yields, the S&P 500's trend, core inflation and fed rate moves) are each scored on a sliding scale
-from calm to stressed and combined into a 0–100 stress score. That sets a cash reserve anywhere from 5% to 35%,
-moving at most 5 points a week, and an AI macro step may add or take away 5 points with cited official sources.
-New buys can't spend the reserve; nothing is sold to reach it. When the S&P 500 drops 10% (20%) below its 52-week high, half (all) of the
-reserve is released to buy the dip. The regime is set weekly, but the dip check runs every weekday evening, so
-a sell-off frees the reserve for the next morning's open.
-A high-conviction buy that the reserve blocks is not thrown away: it waits in a **funding queue** and is bought
-automatically at the next open once there is room above the reserve (it drops out after 30 days or if the price
-runs 10% above where it was decided). If there is room for at least half a position, the best idea starts with a
+**Cash is residual** (since 2026-11-16): the portfolio stays as fully invested as the conviction bar and the caps allow, keeping only a 1.5% floor for rounding, commissions and FX. Each week nine official indicators (credit spreads and their change, VIX, the yield curve, real yields, the S&P 500's trend, core inflation and fed rate moves) are scored into a 0–100 stress score, but only as information in the reports and dashboard: it never sizes cash or blocks a trade. The protection is the caps (position size, 35% per sector, 40% for names that move together, country limits) and thesis-based exits, so expect full market exposure in a sell-off. Cash builds only when fewer ideas clear the bar or winners are trimmed.
+A high-conviction buy that doesn't fit is not thrown away: it waits in a **funding queue** and is bought automatically at the next open once cash frees up (it drops out after 30 days or if the price
+runs 10% above where it was decided)
 smaller starter position straight away and is topped up as more room appears. Each week an AI step also checks whether the best waiting idea is clearly
 better than the weakest holding and, if so, swaps them.
 **Buying dips in stocks we know**: every weekday night a dip radar checks the holdings and every stock we recently
@@ -169,7 +162,7 @@ sector weights, recent trades, decisions and hit rates.
 
 | File | What it is |
 |---|---|
-| `reports/daily/<date>.md` | What each weekday 21:30 run did, in plain English: value and day's change, trades, best and worst movers, cash reserve, funding queue, watchlist hits, problems |
+| `reports/daily/<date>.md` | What each weekday 21:30 run did, in plain English: value and day's change, trades, best and worst movers, cash and deployable cash, funding queue, watchlist hits, problems |
 | `reports/weekly/<date>.md` | Weekly report: summary, trades (and rejections with the rule broken), returns vs SPY, review notes, hit rates |
 | `reports/screen/<date>.md` | The screen's rankings and the week's picks |
 | `docs/index.html` | The dashboard (also the public GitHub Pages site) |
@@ -180,9 +173,9 @@ sector weights, recent trades, decisions and hit rates.
 | `research/<TICKER>/` | Fact sheets, research notes and evaluations |
 | `runs/<date>/` | Each run's working files and log; `error.log` if it failed |
 | `reports/research/<date>-batch-NN.md` | The research loop's batch reports: every decision, its fair value and any order |
-| `reports/regime/<date>.md` | The cash strategy: the stress score, each indicator and the reserve |
+| `reports/regime/<date>.md` | The macro stress score and each indicator (information only; cash is residual) |
 | `reports/dip-radar/<date>.md` | The dip radar: unusual falls since our last research, and what was queued |
-| `portfolio/funding_queue.csv` | Conviction-4 buys waiting for room above the cash reserve (added, started, topped up, dropped) |
+| `portfolio/funding_queue.csv` | Conviction-4 buys waiting for cash (added, started, topped up, dropped) |
 
 A red ✗ in **Actions** means a run failed: read `runs/<date>/error.log`. Nothing from that run was traded.
 
