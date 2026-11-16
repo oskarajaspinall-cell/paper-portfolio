@@ -1,0 +1,183 @@
+{
+ "ticker": "VLY",
+ "asof": "2026-11-16",
+ "sector": "Financials",
+ "industry": "Banks - Regional",
+ "quality": {
+  "ROIC": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROCE": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROE": {
+   "ttm": 9.447,
+   "fy_5y_change": -1.9480000000000004,
+   "fy_5y_label": "falling"
+  },
+  "Gross margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Operating margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Net margin": {
+   "ttm": 35.83991816928098,
+   "fy_5y_change": -3.434732454050149,
+   "fy_5y_label": "falling"
+  },
+  "FCF margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {},
+ "valuation": {
+  "P/E": {
+   "current": 11.37908,
+   "pos_pct": 28.28360569319981,
+   "peer_premium_pct": -11.817420954742719
+  },
+  "EV/EBITDA": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "EV/Sales": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "P/FCF": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "P/B": {
+   "current": 1.0469,
+   "pos_pct": 79.19913419913418,
+   "peer_premium_pct": -19.09582689335395
+  }
+ },
+ "trend": {
+  "price_vs_sma200_pct": 5.736617018138923,
+  "ch1y_pct": 29.42,
+  "fcf_yield_pct": 11.852
+ },
+ "fair_value": {
+  "price": 14.34,
+  "fair_value": {
+   "bear": 6.677154713152348,
+   "base": 12.031379604382174,
+   "bull": 15.583066219183147
+  },
+  "methods": [
+   {
+    "model": "pb_roe",
+    "label": "P/B + ROE",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": 4.94440470511559,
+     "base": 9.178051233870816,
+     "bull": 12.522391638580945
+    },
+    "cost_of_equity": 0.1047855,
+    "assumptions": {
+     "roe": {
+      "bear": 0.0538,
+      "base": 0.07846,
+      "bull": 0.09794
+     },
+     "justified_pb": {
+      "bear": 0.3609678450344987,
+      "base": 0.6700465623452883,
+      "bull": 0.9142012019727895
+     },
+     "bvps": 13.697632
+    }
+   },
+   {
+    "model": "fcfe",
+    "label": "FCFE DCF",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 10.14265472922586,
+     "base": 17.73803634540489,
+     "bull": 21.704415380387548
+    },
+    "implied_growth": -0.01571192991458887,
+    "discount_rate": 0.1047855,
+    "cost_of_equity": 0.1047855,
+    "assumptions": {
+     "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+     "growth": {
+      "bear": -0.012804590887860606,
+      "base": 0.036576745393803387,
+      "bull": 0.08691616335093477
+     },
+     "cash_flow_margin": {
+      "bear": 0.2504915687316835,
+      "base": 0.35839918169280977,
+      "bull": 0.35859724483131533
+     },
+     "cagr_3y": 0.009390818224278785,
+     "cagr_5y": 0.08691616335093477,
+     "terminal_growth": 0.025
+    }
+   },
+   {
+    "model": "ddm",
+    "label": "dividend discount",
+    "slot": "second",
+    "status": "ok",
+    "quote_ccy": true,
+    "values": {
+     "bear": 4.974077105991501,
+     "base": 5.652656184394406,
+     "bull": 6.525710928488009
+    },
+    "cost_of_equity": 0.1047855,
+    "assumptions": {
+     "dividend_growth": {
+      "bear": 0.015000000000000001,
+      "base": 0.025,
+      "bull": 0.035
+     },
+     "dps": 0.44
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": false,
+   "reasons": [
+    "methods disagree 3.1x (base 5.65-17.74)"
+   ]
+  }
+ }
+}

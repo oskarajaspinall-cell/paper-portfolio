@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 33.88056820852028,
+    "base": 50.79414315376701,
+    "bull": 68.17512838174855
+   },
+   "cost_of_equity": 0.1178255,
+   "assumptions": {
+    "roe": {
+     "bear": 0.07574,
+     "base": 0.10107,
+     "bull": 0.1271
+    },
+    "justified_pb": {
+     "bear": 0.5466170394988445,
+     "base": 0.8194946431745587,
+     "bull": 1.0999132781401662
+    },
+    "bvps": 61.982276
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 35.18951674597958,
+    "base": 77.41004463135225,
+    "bull": 195.44635012928183
+   },
+   "implied_growth": -0.0036884386506595866,
+   "discount_rate": 0.1178255,
+   "cost_of_equity": 0.1178255,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.012213715254888496,
+     "base": 0.05017874906028945,
+     "bull": 0.1401424267509348
+    },
+    "cash_flow_margin": {
+     "bear": 0.13578218518953175,
+     "base": 0.23349400291447148,
+     "bull": 0.4167049632352941
+    },
+    "cagr_3y": 0.010572569490223005,
+    "cagr_5y": 0.1401424267509348,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 15.793747659870363,
+    "base": 17.66755902203597,
+    "bull": 19.993842476049043
+   },
+   "cost_of_equity": 0.1178255,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 1.6
+   }
+  }
+ ],
+ "price": 62.6,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 34.31688438767338,
+  "base": 59.6661103129621,
+  "bull": 110.59886896425964
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.4518069586633645,
+  "base": -0.046867247396771616,
+  "bull": 0.766755095275713
+ },
+ "implied_growth": -0.0036884386506595866,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 4.4x (base 17.67-77.41)"
+  ]
+ },
+ "ticker": "VIE:RBI",
+ "asof": "2026-11-16",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/vie/RBI/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/vie/RBI/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/vie/RBI/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/vie/RBI/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/vie/RBI/statistics/"
+ }
+}

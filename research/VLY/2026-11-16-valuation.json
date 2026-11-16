@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 4.94440470511559,
+    "base": 9.178051233870816,
+    "bull": 12.522391638580945
+   },
+   "cost_of_equity": 0.1047855,
+   "assumptions": {
+    "roe": {
+     "bear": 0.0538,
+     "base": 0.07846,
+     "bull": 0.09794
+    },
+    "justified_pb": {
+     "bear": 0.3609678450344987,
+     "base": 0.6700465623452883,
+     "bull": 0.9142012019727895
+    },
+    "bvps": 13.697632
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 10.14265472922586,
+    "base": 17.73803634540489,
+    "bull": 21.704415380387548
+   },
+   "implied_growth": -0.01571192991458887,
+   "discount_rate": 0.1047855,
+   "cost_of_equity": 0.1047855,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.012804590887860606,
+     "base": 0.036576745393803387,
+     "bull": 0.08691616335093477
+    },
+    "cash_flow_margin": {
+     "bear": 0.2504915687316835,
+     "base": 0.35839918169280977,
+     "bull": 0.35859724483131533
+    },
+    "cagr_3y": 0.009390818224278785,
+    "cagr_5y": 0.08691616335093477,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 4.974077105991501,
+    "base": 5.652656184394406,
+    "bull": 6.525710928488009
+   },
+   "cost_of_equity": 0.1047855,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 0.44
+   }
+  }
+ ],
+ "price": 14.34,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 6.677154713152348,
+  "base": 12.031379604382174,
+  "bull": 15.583066219183147
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.534368569515178,
+  "base": -0.16099165938757498,
+  "bull": 0.0866852314632598
+ },
+ "implied_growth": -0.01571192991458887,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.1x (base 5.65-17.74)"
+  ]
+ },
+ "ticker": "VLY",
+ "asof": "2026-11-16",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/vly/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/vly/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/vly/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/vly/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/vly/statistics/"
+ }
+}

@@ -1,0 +1,190 @@
+{
+ "ticker": "BKK:KBANK",
+ "asof": "2026-11-16",
+ "sector": "Financials",
+ "industry": "Banks - Regional",
+ "quality": {
+  "ROIC": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROCE": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROE": {
+   "ttm": 8.506,
+   "fy_5y_change": 0.23399999999999999,
+   "fy_5y_label": "flat"
+  },
+  "Gross margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Operating margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Net margin": {
+   "ttm": 32.99538427160511,
+   "fy_5y_change": 1.1502059997094207,
+   "fy_5y_label": "rising"
+  },
+  "FCF margin": {
+   "ttm": null,
+   "fy_5y_change": 62.427021351746845,
+   "fy_5y_label": "rising"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": null,
+   "fy_5y_change": 195.5536856002602,
+   "fy_5y_label": "rising"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {
+  "FCF margin": {
+   "latest": 48.53141399051629,
+   "change": 1.287959916584768,
+   "direction": "rising",
+   "change_3y": 76.93723619885687,
+   "direction_3y": "rising",
+   "high": 142.48683714839032
+  }
+ },
+ "valuation": {
+  "P/E": {
+   "current": 12.10012,
+   "pos_pct": 204.39605734767034,
+   "peer_premium_pct": 0.658181515680889
+  },
+  "EV/EBITDA": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "EV/Sales": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "P/FCF": {
+   "current": 7.88472,
+   "pos_pct": 170.8579586009992,
+   "peer_premium_pct": 65.54104555952132
+  },
+  "P/B": {
+   "current": 1.02518,
+   "pos_pct": 339.70833333333326,
+   "peer_premium_pct": -2.918560606060616
+  }
+ },
+ "trend": {
+  "price_vs_sma200_pct": 16.74242667978103,
+  "ch1y_pct": 41.76,
+  "fcf_yield_pct": 12.683
+ },
+ "fair_value": {
+  "price": 254,
+  "fair_value": {
+   "bear": 166.49042673982902,
+   "base": 216.6937126396828,
+   "bull": 236.76901099848723
+  },
+  "methods": [
+   {
+    "model": "pb_roe",
+    "label": "P/B + ROE",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": 133.8830124251852,
+     "base": 174.93190497135805,
+     "bull": 182.08946149580248
+    },
+    "cost_of_equity": 0.106,
+    "assumptions": {
+     "roe": {
+      "bear": 0.06877,
+      "base": 0.08219,
+      "bull": 0.08453
+     },
+     "justified_pb": {
+      "bear": 0.5403703703703704,
+      "base": 0.7060493827160494,
+      "bull": 0.7349382716049383
+     },
+     "bvps": 247.761572
+    }
+   },
+   {
+    "model": "fcfe",
+    "label": "FCFE DCF",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 231.7052553691167,
+     "base": 300.21732797633234,
+     "bull": 346.12811000385676
+    },
+    "implied_growth": 0.006671940953809271,
+    "discount_rate": 0.106,
+    "cost_of_equity": 0.106,
+    "assumptions": {
+     "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+     "growth": {
+      "bear": 0.011801247051474742,
+      "base": 0.04811121798062189,
+      "bull": 0.08384237781953807
+     },
+     "cash_flow_margin": {
+      "bear": 0.29479178885446816,
+      "base": 0.3299538427160511,
+      "bull": 0.3299538427160511
+     },
+     "cagr_3y": 0.08384237781953807,
+     "cagr_5y": 0.05860249410294949,
+     "terminal_growth": 0.025
+    }
+   },
+   {
+    "model": "ddm",
+    "label": "dividend discount",
+    "slot": "second",
+    "status": "ok",
+    "quote_ccy": true,
+    "values": {
+     "bear": 133.84615384615384,
+     "base": 151.85185185185185,
+     "bull": 174.92957746478874
+    },
+    "cost_of_equity": 0.106,
+    "assumptions": {
+     "dividend_growth": {
+      "bear": 0.015000000000000001,
+      "base": 0.025,
+      "bull": 0.035
+     },
+     "dps": 12.0
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": true,
+   "reasons": []
+  }
+ }
+}
