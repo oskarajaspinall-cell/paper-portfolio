@@ -1,0 +1,29 @@
+[16:06:45] == research loop: 1 names queued, best first: ['NVDA']
+[16:06:45] == initiate NVDA
+[16:06:45] $ bin/py scripts/sec_delta.py NVDA --asof 2026-11-16
+[16:06:57] OK research/NVDA/sec-delta-2026-11-16.md
+[16:06:57] $ claude -p Ticker NVDA, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/NVDA/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:08:40] Note: research/NVDA/2026-11-16.md
+Fact sheet: research/NVDA/factsheet-2026-11-16.md
+Check: OK research/NVDA/2026-11-16.md type=CORE 1=63 2=129 3=131 4=53 5=52 6=104 total=532
+
+- **Data gap:** the 10-Q fetch cut off the revenue-by-geography and customer-concentration tables, so China's share of revenue is marked [data unavailable] in the note.
+- **Headline-only governance item:** the claim that Jensen Huang is "former CEO", with a possible return, comes only from headlines. I tagged it [Guessing] and found no company or SEC source for it.
+- **Conflicts and blocked URLs:** none.
+[16:08:40] $ bin/py scripts/check_docs.py note research/NVDA/2026-11-16.md
+[16:08:40] OK research/NVDA/2026-11-16.md type=CORE 1=63 2=129 3=131 4=53 5=52 6=104 total=532
+[16:08:40] $ claude -p Ticker NVDA, date 2026-11-16. Research: research/NVDA/factsheet-2026-11-16.md, research/NVDA/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/NVDA/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:09:05] research/NVDA/2026-11-16-macro.md
+OK research/NVDA/2026-11-16-macro.md macro_weight=context words=52
+[16:09:05] $ bin/py scripts/check_docs.py macro research/NVDA/2026-11-16-macro.md
+[16:09:05] OK research/NVDA/2026-11-16-macro.md macro_weight=context words=52
+[16:09:05] $ claude -p Evaluate NVDA for 2026-11-16: fact sheet research/NVDA/factsheet-2026-11-16.md, note research/NVDA/2026-11-16.md, state portfolio/state.json, macro overlay research/NVDA/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:09:58] research/NVDA/2026-11-16-evaluation.md
+OK research/NVDA/2026-11-16-evaluation.md Bear case=145 Bull case=104 decision=AVOID scorecard=5->3
+
+I did not check NVDA's earlier verdict, which carried a 164.27 entry price. The checker raised no consistency problem. I also set a governance veto over the unconfirmed CEO-status headlines. It does not change the result, because the score already gives conviction 3.
+[16:09:58] $ bin/py scripts/check_docs.py eval research/NVDA/2026-11-16-evaluation.md
+[16:09:58] OK research/NVDA/2026-11-16-evaluation.md Bear case=145 Bull case=104 decision=AVOID scorecard=5->3
+[16:09:58] $ bin/py scripts/valuation.py NVDA --asof 2026-11-16 --eval research/NVDA/2026-11-16-evaluation.md
+[16:09:59] {"out": "research/NVDA/2026-11-16-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 30.92, "base": 86.02, "bull": 208.52}, "price": 162.85}
+[16:10:00] == done NVDA
