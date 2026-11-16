@@ -364,7 +364,7 @@ loosen_pp = 5                     # 4+ and 3 both beat their sector by more than
 # Percentile scores within the screened set. Core score = quality + valuation. Tactical = the two setups in
 # [tactical] (drift ranked by the size of the earnings reaction, pullback by the strength of the uptrend).
 # Valuation multiples are used ONLY here for ranking.
-core_picks = 10                   # new initiations per week from the core ranking
+core_picks = 20                   # new initiations per week from the core ranking (owner 2026-11-17: was 10; takes the slots tactical freed)
 tactical_picks = 0                # owner 2026-11-17: paused (63 tactical decisions, 0 buys); was 10. Existing tactical rules stay
 exclude_researched_days = 90      # skip names with a decision this recent, of the SAME kind only (a core verdict doesn't hide a new tactical setup)
 tactical_check_top = 40           # stage 2: daily history (setup check + ATR) for the top N candidates of EACH setup (~3 s each)
