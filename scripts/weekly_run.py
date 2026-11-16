@@ -195,7 +195,15 @@ def second_opinion(ticker: str, slug: str, asof: str, ev: Path, macro: bool, age
         d["rationale"] = (f"{d.get('rationale', '')} [Second opinion: conviction {c2}; a "
                           f"{'n ADD' if held else ' BUY'} needs both evaluations at 4+.]").strip()
         if not held:
-            d["entry_price"], d["entry_basis"] = None, f"Second opinion at conviction {c2}: no entry price set."
+            # 2026-11-16: a near miss keeps the second evaluator's own entry price (the price where it would score 4);
+            # without one there is nothing to watch. entry_watch still drops it when it is not below the close.
+            d2 = decision_from_eval(ev2.read_text())
+            ep = d2.get("entry_price")
+            if isinstance(ep, (int, float)) and ep > 0:
+                d["entry_price"] = ep
+                d["entry_basis"] = f"Second opinion at conviction {c2}: {d2.get('entry_basis') or 'its entry price'}"
+            else:
+                d["entry_price"], d["entry_basis"] = None, f"Second opinion at conviction {c2}: no entry price set."
     md = ev.read_text()
     m = re.search(r"```json\s*(\{.*?\})\s*```\s*$", md.strip(), re.S)
     ev.write_text(md.strip()[:m.start()] + "```json\n" + json.dumps(d, indent=1, ensure_ascii=False) + "\n```\n")

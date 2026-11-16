@@ -78,7 +78,7 @@ The quality is real and still improving: operating margin rose from 4.1% (FY2021
   "file": "research/LON-RR/2026-11-16-evaluation-2.md",
   "conviction": 3
  },
- "entry_price": null,
- "entry_basis": "Second opinion at conviction 3: no entry price set."
+ "entry_price": 1050,
+ "entry_basis": "Second opinion at conviction 3: No mechanical fair value is computable; anchored instead on EV/EBITDA back near its 5y median 15.5x [RA], our bear scenario level, where the same quality would come with a real discount."
 }
 ```

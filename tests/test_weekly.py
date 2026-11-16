@@ -517,6 +517,35 @@ def test_dashboard_week_tile_spans_seven_days():
     assert dashboard.week_change(ser[:1]) is None
 
 
+@pytest.mark.parametrize("second_ep,expected", [(1050, 1050), (None, None)])
+def test_second_opinion_downgrade_keeps_its_entry_price(tmp_path, monkeypatch, second_ep, expected):
+    """2026-11-16 (LON:RR): a BUY downgraded to AVOID by the second opinion keeps that evaluator's entry price, so the
+    near miss is watched; with no price from it, none is set."""
+    (tmp_path / "research" / "XYZ").mkdir(parents=True)
+    (tmp_path / "portfolio").mkdir()
+    (tmp_path / "portfolio" / "state.json").write_text(json.dumps({"holdings": {}}))
+    monkeypatch.setattr(wr, "ROOT", tmp_path)
+    monkeypatch.setattr(wr, "check_doc", lambda *a: None)
+    monkeypatch.setattr(wr, "sh", lambda *a, **k: "")
+    monkeypatch.setattr(wr, "run_macro", lambda *a: False)
+
+    def agent(name, prompt, log):
+        d = tmp_path / "research" / "XYZ"
+        if name == "researcher":
+            (d / "2026-10-10.md").write_text("note")
+        if name == "evaluator":
+            second = "Independent second" in prompt
+            body = {"decision": "AVOID" if second else "BUY", "conviction": 3 if second else 4}
+            if second:
+                body.update(entry_price=second_ep, entry_basis="back at the 5y median multiple")
+            (d / ("2026-10-10-evaluation-2.md" if second else "2026-10-10-evaluation.md")).write_text(
+                "# E\n```json\n" + json.dumps(body) + "\n```\n")
+    ev = wr.research_and_evaluate("XYZ", "CORE", "2026-10-10", wr.reason_text("screen"), agent, lambda m: None, tmp_path)
+    d = json.loads(ev.read_text().split("```json")[1].split("```")[0])
+    assert d["decision"] == "AVOID" and d["entry_price"] == expected
+    assert ("back at the 5y median" in d["entry_basis"]) == (expected is not None)
+
+
 @pytest.mark.parametrize("decision,held", [("AVOID", False), ("BUY", False), ("HOLD", True)])
 def test_no_monte_carlo_step(tmp_path, monkeypatch, decision, held):
     """Owner 2026-10-11: the Monte Carlo step is removed (usage). Research runs researcher -> evaluator only."""
