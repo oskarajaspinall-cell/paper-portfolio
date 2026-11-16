@@ -181,3 +181,27 @@ I didn't read the earlier CBSH evaluation. The 57.7362 entry price suggests it w
 [22:13:11] $ bin/py scripts/valuation.py CBSH --asof 2026-11-16 --eval research/CBSH/2026-11-16-evaluation.md
 [22:13:11] {"out": "research/CBSH/2026-11-16-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 58.67, "base": 65.19, "bull": 70.27}, "price": 55.74}
 [22:13:12] == done CBSH
+[22:13:17] == Research batch 21: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-16-batch-21.md; uploaded to GitHub
+[22:13:18] - Note: `research/BVMF-EGIE3/2026-11-16.md`
+- Fact sheet: `research/BVMF-EGIE3/factsheet-2026-11-16.md`
+- check_docs: `OK research/BVMF-EGIE3/2026-11-16.md type=CORE 1=51 2=101 3=104 4=44 5=64 6=65 total=429`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- Peers: BVMF:CPLE6 returned a 404 on its statistics page, so I swapped it for BVMF:AXIA3. The final peer set is TAEE11, CMIG4, ELET3 and AXIA3.
+[22:13:18] $ bin/py scripts/check_docs.py note research/BVMF-EGIE3/2026-11-16.md
+[22:13:18] OK research/BVMF-EGIE3/2026-11-16.md type=CORE 1=51 2=101 3=104 4=44 5=64 6=65 total=429
+[22:13:18] $ claude -p Ticker BVMF:EGIE3, date 2026-11-16. Research: research/BVMF-EGIE3/factsheet-2026-11-16.md, research/BVMF-EGIE3/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/BVMF-EGIE3/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:13:41] research/BVMF-EGIE3/2026-11-16-macro.md
+OK research/BVMF-EGIE3/2026-11-16-macro.md macro_weight=context words=48
+[22:13:41] $ bin/py scripts/check_docs.py macro research/BVMF-EGIE3/2026-11-16-macro.md
+[22:13:41] OK research/BVMF-EGIE3/2026-11-16-macro.md macro_weight=context words=48
+[22:13:41] $ claude -p Evaluate BVMF:EGIE3 for 2026-11-16: fact sheet research/BVMF-EGIE3/factsheet-2026-11-16.md, note research/BVMF-EGIE3/2026-11-16.md, state portfolio/state.json, macro overlay research/BVMF-EGIE3/2026-11-16-macro.md. Reason for review: entry_hit. Facts: entry price: 26.4031; price: closed at 26.25 on 2026-11-13. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:14:49] research/BVMF-EGIE3/2026-11-16-evaluation.md
+OK research/BVMF-EGIE3/2026-11-16-evaluation.md Bear case=135 Bull case=133 decision=AVOID scorecard=4->2
+
+I didn't check whether an earlier verdict on this name exists from the last 30 days. The checker didn't ask for `new_evidence`, and the old entry price suggests an earlier AVOID at conviction 3. I left out the entry price because it's only required at conviction 3 or more, so this name drops off the entry watch.
+[22:14:49] $ bin/py scripts/check_docs.py eval research/BVMF-EGIE3/2026-11-16-evaluation.md
+[22:14:49] OK research/BVMF-EGIE3/2026-11-16-evaluation.md Bear case=135 Bull case=133 decision=AVOID scorecard=4->2
+[22:14:49] $ bin/py scripts/valuation.py BVMF:EGIE3 --asof 2026-11-16 --eval research/BVMF-EGIE3/2026-11-16-evaluation.md
+[22:14:50] {"out": "research/BVMF-EGIE3/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -34.31, "base": 23.72, "bull": 26.23}, "price": 26.25}
+[22:14:51] == done BVMF:EGIE3
