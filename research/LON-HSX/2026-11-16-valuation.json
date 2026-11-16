@@ -1,0 +1,103 @@
+{
+ "industry": {
+  "industry": "Insurance - Property & Casualty",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 742.1912742465713,
+    "base": 1884.6988716282333,
+    "bull": 2186.8110490384206
+   },
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "roe": {
+     "bear": 0.07745,
+     "base": 0.15819,
+     "bull": 0.17954
+    },
+    "justified_pb": {
+     "bear": 0.7946969696969697,
+     "base": 2.018030303030303,
+     "bull": 2.3415151515151518
+    },
+    "bvps": 12.345846
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 941.873338769019,
+    "base": 1485.184326729883,
+    "bull": 2577.9933716352757
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 6.546,
+     "base": 10.322,
+     "bull": 17.917
+    },
+    "ttm_eps": 1.902055
+   }
+  }
+ ],
+ "price": 1952,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 808.7519624207206,
+  "base": 1751.5273566621165,
+  "bull": 2317.2051565707056
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5856803471205325,
+  "base": -0.10270114925096485,
+  "bull": 0.18709280562023856
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "LON:HSX",
+ "asof": "2026-11-16",
+ "quote_currency": "GBX",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 75.6473,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/lon/HSX/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/lon/HSX/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/lon/HSX/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/lon/HSX/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/lon/HSX/statistics/"
+ }
+}

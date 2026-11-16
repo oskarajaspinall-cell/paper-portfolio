@@ -1,0 +1,158 @@
+{
+ "ticker": "LON:HSX",
+ "asof": "2026-11-16",
+ "sector": "Financials",
+ "industry": "Insurance - Property & Casualty",
+ "quality": {
+  "ROIC": {
+   "ttm": 14.524999999999999,
+   "fy_5y_change": 7.0969999999999995,
+   "fy_5y_label": "rising"
+  },
+  "ROCE": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROE": {
+   "ttm": 16.512999999999998,
+   "fy_5y_change": 8.073999999999998,
+   "fy_5y_label": "rising"
+  },
+  "Gross margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Operating margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Net margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "FCF margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": 114.2924013106569,
+   "fy_5y_change": 5.925498539225581,
+   "fy_5y_label": "rising"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": 1.1022164276401565,
+   "fy_5y_change": -2.1269234746859134,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": -0.321,
+   "fy_5y_change": 1.385,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {
+  "ROIC": {
+   "latest": 14.524999999999999,
+   "change": 0.7289999999999992,
+   "direction": "flat",
+   "change_3y": null,
+   "direction_3y": null,
+   "high": 17.765
+  }
+ },
+ "valuation": {
+  "P/E": {
+   "current": 13.61627,
+   "pos_pct": 47.88858033053373,
+   "peer_premium_pct": -13.580413810611836
+  },
+  "EV/EBITDA": {
+   "current": 10.15775,
+   "pos_pct": 46.33306524580276,
+   "peer_premium_pct": 29.894501278772378
+  },
+  "EV/Sales": {
+   "current": 1.92009,
+   "pos_pct": 203.75373134328365,
+   "peer_premium_pct": 12.285964912280711
+  },
+  "P/FCF": {
+   "current": 11.12372,
+   "pos_pct": -0.5123685482200793,
+   "peer_premium_pct": -14.58404361514244
+  },
+  "P/B": {
+   "current": 2.06099,
+   "pos_pct": 170.22851153039832,
+   "peer_premium_pct": -2.3690194220748584
+  }
+ },
+ "trend": {
+  "price_vs_sma200_pct": 12.856506882974973,
+  "ch1y_pct": 43.85,
+  "fcf_yield_pct": 8.99
+ },
+ "fair_value": {
+  "price": 1952,
+  "fair_value": {
+   "bear": 808.7519624207206,
+   "base": 1751.5273566621165,
+   "bull": 2317.2051565707056
+  },
+  "methods": [
+   {
+    "model": "pb_roe",
+    "label": "P/B + ROE",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": 742.1912742465713,
+     "base": 1884.6988716282333,
+     "bull": 2186.8110490384206
+    },
+    "cost_of_equity": 0.091,
+    "assumptions": {
+     "roe": {
+      "bear": 0.07745,
+      "base": 0.15819,
+      "bull": 0.17954
+     },
+     "justified_pb": {
+      "bear": 0.7946969696969697,
+      "base": 2.018030303030303,
+      "bull": 2.3415151515151518
+     },
+     "bvps": 12.345846
+    }
+   },
+   {
+    "model": "pe",
+    "label": "P/E",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 941.873338769019,
+     "base": 1485.184326729883,
+     "bull": 2577.9933716352757
+    },
+    "assumptions": {
+     "multiple": {
+      "bear": 6.546,
+      "base": 10.322,
+      "bull": 17.917
+     },
+     "ttm_eps": 1.902055
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": true,
+   "reasons": []
+  }
+ }
+}

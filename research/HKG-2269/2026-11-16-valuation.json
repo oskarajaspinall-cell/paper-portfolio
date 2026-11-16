@@ -1,0 +1,91 @@
+{
+ "industry": {
+  "industry": "Biotechnology",
+  "known": true,
+  "best": "rNPV / probability-adjusted DCF",
+  "second": "EV/Revenue / pipeline value",
+  "best_models": [
+   "rnpv"
+  ],
+  "second_models": [
+   "ev_revenue",
+   "pipeline"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 26.68533922778964,
+    "base": 46.424382181245676,
+    "bull": 98.35662663513102
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.575,
+     "base": 6.542,
+     "bull": 14.348
+    },
+    "ttm_revenue": 23624040000
+   }
+  },
+  {
+   "model": "pipeline",
+   "label": "pipeline value",
+   "slot": "second",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline asset values, not on stockanalysis.com]"
+  }
+ ],
+ "price": 46.74,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 26.68533922778964,
+  "base": 46.424382181245676,
+  "bull": 98.35662663513102
+ },
+ "used": [
+  "ev_revenue"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.42906848036393586,
+  "base": -0.006752627701205105,
+  "bull": 1.1043351868876985
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "HKG:2269",
+ "asof": "2026-11-16",
+ "quote_currency": "HKD",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.1752715315126365,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/hkg/2269/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/hkg/2269/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/hkg/2269/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/hkg/2269/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/hkg/2269/statistics/"
+ }
+}

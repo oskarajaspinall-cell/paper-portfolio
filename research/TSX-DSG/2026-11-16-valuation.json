@@ -1,0 +1,108 @@
+{
+ "industry": {
+  "industry": "Software - Application",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 69.55804792982796,
+    "base": 92.19639747187664,
+    "bull": 127.71873340827268
+   },
+   "implied_growth": 0.185470822689353,
+   "discount_rate": 0.09099189845595626,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.054811781350361646,
+     "base": 0.08483065659506887,
+     "bull": 0.1446990636795522
+    },
+    "cash_flow_margin": {
+     "bear": 0.2838299776036866,
+     "base": 0.34096789796263255,
+     "bull": 0.37887187096470365
+    },
+    "cagr_3y": 0.1446990636795522,
+    "cagr_5y": 0.1446235627007233,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 113.48175273504165,
+    "base": 165.51047992566777,
+    "bull": 185.08927850603718
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.459,
+     "base": 12.57,
+     "bull": 14.117
+    },
+    "ttm_revenue": 775167000
+   }
+  }
+ ],
+ "price": 134.65,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 84.19928286489919,
+  "base": 116.63442495647367,
+  "bull": 146.84224844086086
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.37468040946974246,
+  "base": -0.13379558145953463,
+  "bull": 0.09054770472232354
+ },
+ "implied_growth": 0.185470822689353,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "TSX:DSG",
+ "asof": "2026-11-16",
+ "quote_currency": "CAD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.4268459829442,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tsx/DSG/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tsx/DSG/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tsx/DSG/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tsx/DSG/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tsx/DSG/statistics/"
+ }
+}
