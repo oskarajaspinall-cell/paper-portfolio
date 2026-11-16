@@ -1,0 +1,174 @@
+[19:10:48] == research loop: 12 names queued, best first: ['CI', 'GDDY', 'HKG:3998', 'HRB', 'INTU', 'LDOS', 'OTIS', 'ZTS', 'DECK', 'HKG:0291']
+[19:10:48] == initiate GDDY
+[19:10:48] == initiate CI
+[19:10:48] == initiate HKG:3998
+[19:10:48] $ bin/py scripts/sec_delta.py GDDY --asof 2026-11-16
+[19:10:48] $ bin/py scripts/sec_delta.py CI --asof 2026-11-16
+[19:10:48] $ bin/py scripts/sec_delta.py HKG:3998 --asof 2026-11-16
+[19:10:48] SKIP HKG:3998: not a US listing (SEC filers only)
+[19:10:48] $ claude -p Ticker HKG:3998, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:11:00] OK research/CI/sec-delta-2026-11-16.md
+[19:11:00] $ claude -p Ticker CI, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/CI/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:11:00] OK research/GDDY/sec-delta-2026-11-16.md
+[19:11:00] $ claude -p Ticker GDDY, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/GDDY/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:13:17] Note: research/HKG-3998/2026-11-16.md
+Fact sheet: research/HKG-3998/factsheet-2026-11-16.md
+check_docs: OK research/HKG-3998/2026-11-16.md type=CORE 1=60 2=142 3=134 4=38 5=35 6=47 total=456
+
+Data gaps:
+- The Bosideng homepage (https://www.bosideng.com/) showed no segment-mix, China-share or guidance figures. The note marks segment mix [data unavailable].
+- Nothing was blocked.
+- The fact sheet has no data on short interest or 3-year direction. The note marks both [data unavailable].
+- I found no conflicts between sources.
+[19:13:17] $ bin/py scripts/check_docs.py note research/HKG-3998/2026-11-16.md
+[19:13:17] OK research/HKG-3998/2026-11-16.md type=CORE 1=60 2=142 3=134 4=38 5=35 6=47 total=456
+[19:13:17] $ claude -p Ticker HKG:3998, date 2026-11-16. Research: research/HKG-3998/factsheet-2026-11-16.md, research/HKG-3998/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/HKG-3998/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:13:37] research/HKG-3998/2026-11-16-macro.md
+OK research/HKG-3998/2026-11-16-macro.md macro_weight=context words=42
+[19:13:37] $ bin/py scripts/check_docs.py macro research/HKG-3998/2026-11-16-macro.md
+[19:13:37] OK research/HKG-3998/2026-11-16-macro.md macro_weight=context words=42
+[19:13:37] $ claude -p Evaluate HKG:3998 for 2026-11-16: fact sheet research/HKG-3998/factsheet-2026-11-16.md, note research/HKG-3998/2026-11-16.md, state portfolio/state.json, macro overlay research/HKG-3998/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:13:46] Note: research/CI/2026-11-16.md
+Fact sheet: research/CI/factsheet-2026-11-16.md
+check_docs: OK research/CI/2026-11-16.md type=CORE 1=56 2=103 3=131 4=38 5=64 6=65 total=457
+
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls. The note's Sources section lists the fact sheet, the 10-Q delta URL, the Q3 press release and two stockanalysis.com transcript pages. The press release and transcripts are the fact sheet's headline items, which I cited without reading them.
+[19:13:46] $ bin/py scripts/check_docs.py note research/CI/2026-11-16.md
+[19:13:46] OK research/CI/2026-11-16.md type=CORE 1=56 2=103 3=131 4=38 5=64 6=65 total=457
+[19:13:46] $ claude -p Ticker CI, date 2026-11-16. Research: research/CI/factsheet-2026-11-16.md, research/CI/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/CI/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:14:03] research/CI/2026-11-16-macro.md
+OK research/CI/2026-11-16-macro.md macro_weight=context words=86
+
+Skipped: no WebFetch calls and no check of any foreign-country exposure beyond the researcher's note.
+[19:14:03] $ bin/py scripts/check_docs.py macro research/CI/2026-11-16-macro.md
+[19:14:03] OK research/CI/2026-11-16-macro.md macro_weight=context words=86
+[19:14:03] $ claude -p Evaluate CI for 2026-11-16: fact sheet research/CI/factsheet-2026-11-16.md, note research/CI/2026-11-16.md, state portfolio/state.json, macro overlay research/CI/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:14:11] Note: research/GDDY/2026-11-16.md
+Fact sheet: research/GDDY/factsheet-2026-11-16.md
+Check: OK research/GDDY/2026-11-16.md type=CORE 1=59 2=145 3=123 4=43 5=55 6=46 total=471
+
+Data conflicts: none. Blocked URLs: none. I made one WebFetch, of the 10-Q. The peers were WIX, VRSN, SHOP and NET. P/E and EV/EBITDA medians rest on only two peers, and P/B is [data unavailable].
+[19:14:11] $ bin/py scripts/check_docs.py note research/GDDY/2026-11-16.md
+[19:14:11] OK research/GDDY/2026-11-16.md type=CORE 1=59 2=145 3=123 4=43 5=55 6=46 total=471
+[19:14:11] $ claude -p Ticker GDDY, date 2026-11-16. Research: research/GDDY/factsheet-2026-11-16.md, research/GDDY/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/GDDY/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:14:31] research/GDDY/2026-11-16-macro.md
+OK research/GDDY/2026-11-16-macro.md macro_weight=context words=56
+[19:14:31] $ bin/py scripts/check_docs.py macro research/GDDY/2026-11-16-macro.md
+[19:14:31] OK research/GDDY/2026-11-16-macro.md macro_weight=context words=56
+[19:14:31] $ claude -p Evaluate GDDY for 2026-11-16: fact sheet research/GDDY/factsheet-2026-11-16.md, note research/GDDY/2026-11-16.md, state portfolio/state.json, macro overlay research/GDDY/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:14:55] research/HKG-3998/2026-11-16-evaluation.md
+OK research/HKG-3998/2026-11-16-evaluation.md Bear case=149 Bull case=145 decision=HOLD scorecard=10->4
+[19:14:55] $ bin/py scripts/check_docs.py eval research/HKG-3998/2026-11-16-evaluation.md
+[19:14:55] OK research/HKG-3998/2026-11-16-evaluation.md Bear case=149 Bull case=145 decision=HOLD scorecard=10->4
+[19:14:55] $ bin/py scripts/valuation.py HKG:3998 --asof 2026-11-16 --eval research/HKG-3998/2026-11-16-evaluation.md
+[19:14:55] {"out": "research/HKG-3998/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 4.95, "base": 7.63, "bull": 13.15}, "price": 4.57}
+[19:14:57] == done HKG:3998
+[19:14:57] == initiate HRB
+[19:14:57] $ bin/py scripts/sec_delta.py HRB --asof 2026-11-16
+[19:15:09] OK research/HRB/sec-delta-2026-11-16.md
+[19:15:09] $ claude -p Ticker HRB, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/HRB/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:15:32] research/GDDY/2026-11-16-evaluation.md
+OK research/GDDY/2026-11-16-evaluation.md Bear case=137 Bull case=134 decision=HOLD scorecard=9->4
+[19:15:32] $ bin/py scripts/check_docs.py eval research/GDDY/2026-11-16-evaluation.md
+[19:15:32] OK research/GDDY/2026-11-16-evaluation.md Bear case=137 Bull case=134 decision=HOLD scorecard=9->4
+[19:15:32] $ bin/py scripts/valuation.py GDDY --asof 2026-11-16 --eval research/GDDY/2026-11-16-evaluation.md
+[19:15:32] {"out": "research/GDDY/2026-11-16-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 99.77, "base": 181.1, "bull": 196.97}, "price": 114.12}
+[19:15:33] == done GDDY
+[19:15:33] == initiate INTU
+[19:15:33] $ bin/py scripts/sec_delta.py INTU --asof 2026-11-16
+[19:15:38] research/CI/2026-11-16-evaluation.md
+OK research/CI/2026-11-16-evaluation.md Bear case=144 Bull case=131 decision=TRIM scorecard=7->3
+
+The decision is TRIM at conviction 3, down from HOLD at 4 on 2026-11-08. The stock still looks cheap and the thesis holds, but the scorecard came to 7. A holding needs 8 to keep conviction 4, so this downgrade cuts the position toward the 5% conviction-3 size. CI is about 6.8% of the portfolio now, by my rough count from `state.json`. I logged the change as a `method_change`, because the 2026-11-08 verdict came before the scorecard existed.
+
+I didn't check whether `portfolio.py` actually sizes the trim as expected. I set `entry_price` to null because valuation already scores near its top, so a lower price wouldn't get the stock to conviction 4. That means the daily price watch won't flag CI for a re-buy.
+[19:15:38] $ bin/py scripts/check_docs.py eval research/CI/2026-11-16-evaluation.md
+[19:15:38] OK research/CI/2026-11-16-evaluation.md Bear case=144 Bull case=131 decision=TRIM scorecard=7->3
+[19:15:38] $ bin/py scripts/valuation.py CI --asof 2026-11-16 --eval research/CI/2026-11-16-evaluation.md
+[19:15:38] {"out": "research/CI/2026-11-16-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 261.15, "base": 408.94, "bull": 822.19}, "price": 297}
+[19:15:40] == done CI
+[19:15:40] == initiate LDOS
+[19:15:40] $ bin/py scripts/sec_delta.py LDOS --asof 2026-11-16
+[19:15:46] OK research/INTU/sec-delta-2026-11-16.md
+[19:15:46] $ claude -p Ticker INTU, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/INTU/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:15:51] OK research/LDOS/sec-delta-2026-11-16.md
+[19:15:51] $ claude -p Ticker LDOS, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/LDOS/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:16:16] - Note: `research/HRB/2026-11-16.md`
+- Fact sheet: `research/HRB/factsheet-2026-11-16.md`
+- check_docs: `OK research/HRB/2026-11-16.md type=CORE 1=73 2=136 3=127 4=56 5=60 6=71 total=523`
+- Data conflicts: none. The fact sheet marks the fair value as unreliable (methods disagree 2.2x), and the note says so.
+- Blocked URLs: none. I made no WebFetch calls.
+- Not checked: I did not confirm the Canada and Australia revenue shares, and the note says no foreign country was verified at ~10%.
+[19:16:16] $ bin/py scripts/check_docs.py note research/HRB/2026-11-16.md
+[19:16:16] OK research/HRB/2026-11-16.md type=CORE 1=73 2=136 3=127 4=56 5=60 6=71 total=523
+[19:16:16] $ claude -p Ticker HRB, date 2026-11-16. Research: research/HRB/factsheet-2026-11-16.md, research/HRB/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/HRB/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:16:32] research/HRB/2026-11-16-macro.md
+OK research/HRB/2026-11-16-macro.md macro_weight=context words=59
+[19:16:32] $ bin/py scripts/check_docs.py macro research/HRB/2026-11-16-macro.md
+[19:16:32] OK research/HRB/2026-11-16-macro.md macro_weight=context words=59
+[19:16:32] $ claude -p Evaluate HRB for 2026-11-16: fact sheet research/HRB/factsheet-2026-11-16.md, note research/HRB/2026-11-16.md, state portfolio/state.json, macro overlay research/HRB/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:17:24] research/HRB/2026-11-16-evaluation.md
+OK research/HRB/2026-11-16-evaluation.md Bear case=140 Bull case=126 decision=HOLD scorecard=6->3
+
+The verdict is HOLD at conviction 3, unchanged from 2026-11-08, so no new-evidence field was needed. I did not check whether the 91-share position (`target_pct` 4.09) is within the size a conviction of 3 allows. The trim rule in `portfolio.py` handles that.
+[19:17:24] $ bin/py scripts/check_docs.py eval research/HRB/2026-11-16-evaluation.md
+[19:17:24] OK research/HRB/2026-11-16-evaluation.md Bear case=140 Bull case=126 decision=HOLD scorecard=6->3
+[19:17:24] $ bin/py scripts/valuation.py HRB --asof 2026-11-16 --eval research/HRB/2026-11-16-evaluation.md
+[19:17:24] I wrote the INTU core note and it passes the check. I'm sending the final report now.
+
+- Note: `research/INTU/2026-11-16.md`
+- Fact sheet: `research/INTU/factsheet-2026-11-16.md`
+- Check: `OK research/INTU/2026-11-16.md type=CORE 1=69 2=98 3=132 4=42 5=49 6=84 total=474`
+- Peers used: ADBE, CRM, ADP, PAYX.
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- The Business Wire URLs I cited came from the fact sheet's news list, so I didn't fetch them.
+- Revenue by country: I couldn't check the foreign-country share, so section 1 says none is flagged, tagged [Likely].
+
+The first check failed on a malformed confidence tag. I fixed it by rewriting the file, because the Edit tool wasn't available.
+[19:17:24] $ bin/py scripts/check_docs.py note research/INTU/2026-11-16.md
+[19:17:24] {"out": "research/HRB/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 61.76, "base": 88.29, "bull": 108.16}, "price": 50.01}
+[19:17:24] OK research/INTU/2026-11-16.md type=CORE 1=69 2=98 3=132 4=42 5=49 6=84 total=474
+[19:17:24] $ claude -p Ticker INTU, date 2026-11-16. Research: research/INTU/factsheet-2026-11-16.md, research/INTU/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/INTU/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:17:26] == done HRB
+[19:17:26] == initiate OTIS
+[19:17:26] $ bin/py scripts/sec_delta.py OTIS --asof 2026-11-16
+[19:17:37] OK research/OTIS/sec-delta-2026-11-16.md
+[19:17:37] $ claude -p Ticker OTIS, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/OTIS/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:17:43] research/INTU/2026-11-16-macro.md
+OK research/INTU/2026-11-16-macro.md macro_weight=context words=44
+[19:17:43] $ bin/py scripts/check_docs.py macro research/INTU/2026-11-16-macro.md
+[19:17:43] OK research/INTU/2026-11-16-macro.md macro_weight=context words=44
+[19:17:43] $ claude -p Evaluate INTU for 2026-11-16: fact sheet research/INTU/factsheet-2026-11-16.md, note research/INTU/2026-11-16.md, state portfolio/state.json, macro overlay research/INTU/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:17:44] Note: research/LDOS/2026-11-16.md
+Fact sheet: research/LDOS/factsheet-2026-11-16.md
+check_docs: OK research/LDOS/2026-11-16.md type=CORE 1=80 2=133 3=127 4=40 5=63 6=82 total=525
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+
+The note cites the prnewswire.com release URL and a stockanalysis.com transcript link, both taken from the fact sheet's headline list. I did not fetch either page.
+[19:17:44] $ bin/py scripts/check_docs.py note research/LDOS/2026-11-16.md
+[19:17:44] OK research/LDOS/2026-11-16.md type=CORE 1=80 2=133 3=127 4=40 5=63 6=82 total=525
+[19:17:44] $ claude -p Ticker LDOS, date 2026-11-16. Research: research/LDOS/factsheet-2026-11-16.md, research/LDOS/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/LDOS/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:18:02] research/LDOS/2026-11-16-macro.md
+OK research/LDOS/2026-11-16-macro.md macro_weight=context words=56
+[19:18:02] $ bin/py scripts/check_docs.py macro research/LDOS/2026-11-16-macro.md
+[19:18:02] OK research/LDOS/2026-11-16-macro.md macro_weight=context words=56
+[19:18:02] $ claude -p Evaluate LDOS for 2026-11-16: fact sheet research/LDOS/factsheet-2026-11-16.md, note research/LDOS/2026-11-16.md, state portfolio/state.json, macro overlay research/LDOS/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[19:19:07] research/LDOS/2026-11-16-evaluation.md
+OK research/LDOS/2026-11-16-evaluation.md Bear case=143 Bull case=134 decision=HOLD scorecard=9->4
+[19:19:07] $ bin/py scripts/check_docs.py eval research/LDOS/2026-11-16-evaluation.md
+[19:19:07] OK research/LDOS/2026-11-16-evaluation.md Bear case=143 Bull case=134 decision=HOLD scorecard=9->4
+[19:19:07] $ bin/py scripts/valuation.py LDOS --asof 2026-11-16 --eval research/LDOS/2026-11-16-evaluation.md
+[19:19:07] {"out": "research/LDOS/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 140.15, "base": 259.21, "bull": 278.39}, "price": 130.53}
+[19:19:08] == done LDOS
+[19:19:08] == initiate ZTS
+[19:19:08] $ bin/py scripts/sec_delta.py ZTS --asof 2026-11-16
+[19:19:09] research/INTU/2026-11-16-evaluation.md
+OK research/INTU/2026-11-16-evaluation.md Bear case=141 Bull case=134 decision=HOLD scorecard=10->4
+
+I didn't read the earlier INTU evaluations. I took the previous verdict (HOLD, conviction 4, 2026-11-08) from state.json, and this one matches it, so no `new_evidence` was needed. Results are due on Nov 19, three days after this evaluation.
+[19:19:09] $ bin/py scripts/check_docs.py eval research/INTU/2026-11-16-evaluation.md
+[19:19:09] OK research/INTU/2026-11-16-evaluation.md Bear case=141 Bull case=134 decision=HOLD scorecard=10->4
+[19:19:09] $ bin/py scripts/valuation.py INTU --asof 2026-11-16 --eval research/INTU/2026-11-16-evaluation.md
+[19:19:09] {"out": "research/INTU/2026-11-16-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 249.85, "base": 568.43, "bull": 672.84}, "price": 341.7}
+[19:19:10] == done INTU
