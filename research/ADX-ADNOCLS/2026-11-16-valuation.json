@@ -1,0 +1,112 @@
+{
+ "industry": {
+  "industry": "Deep Sea Foreign Transportation of Freight",
+  "known": false,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": ""
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -27.341773141100308,
+    "base": 18.33333977834133,
+    "bull": 22.270552862875032
+   },
+   "implied_growth": -0.041697755806749615,
+   "discount_rate": 0.08732167844545914,
+   "cost_of_equity": 0.091,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.16733557429829735,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.21617760333490454,
+     "base": 0.12822446892465286,
+     "bull": 0.12822446892465286
+    },
+    "cagr_3y": 0.36967114859659467,
+    "cagr_5y": 0.43267153535421143,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 3.5584655745916787,
+    "base": 3.9568918983768087,
+    "bull": 14.483470653485279
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.084,
+     "base": 10.082,
+     "bull": 10.219
+    },
+    "ttm_ebitda": 2745900000,
+    "peak_earnings": "TTM EBITDA is 3.3x its 5y median: bear/base use the 5y average (7.698e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 6.74,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -17.04169356920298,
+  "base": 13.541190485019824,
+  "bull": 19.674858793078446
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -3.5284411823743294,
+  "base": 1.009078706976235,
+  "bull": 1.9191185152935377
+ },
+ "implied_growth": -0.041697755806749615,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 4.6x (base 3.96-18.33)",
+   "base +101% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "ADX:ADNOCLS",
+ "asof": "2026-11-16",
+ "quote_currency": "AED",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 3.6725000000000003,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/adx/ADNOCLS/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/adx/ADNOCLS/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/adx/ADNOCLS/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/adx/ADNOCLS/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/adx/ADNOCLS/statistics/"
+ }
+}

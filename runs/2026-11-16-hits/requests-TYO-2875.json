@@ -1,0 +1,17 @@
+[
+ {
+  "ticker": "TYO:2875",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "A net-cash, high-ROIC Japanese noodle and food maker trading at the low end of its own P/E range and well below peers.",
+  "reason": "High and stable returns, net cash, buybacks and a P/E near its 5y low give scorecard conviction 4 on a real own-history discount; no trend support is needed. Sized by Python at the conviction-4 core size, vol-scaled. Cash, holdings count and the staples sector have room, so no replacement.",
+  "research_note": "research/TYO-2875/2026-11-16.md",
+  "triggers": [
+   {"text": "ROIC (TTM) falls below 18%", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 18}},
+   {"text": "Operating margin (TTM) falls below 14%", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 14}},
+   {"text": "FCF margin (TTM) falls below 6%", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 6}},
+   {"text": "Balance sheet levers up: debt/EBITDA (statistics page) rises above 1x, ending the net cash position", "check": {"source": "statistics", "field": "debtEbitda", "op": ">", "value": 1}}
+  ]
+ }
+]
