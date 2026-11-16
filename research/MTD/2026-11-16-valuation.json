@@ -1,0 +1,118 @@
+{
+ "industry": {
+  "industry": "Diagnostics & Research",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 356.32582301628145,
+    "base": 475.11702004167967,
+    "bull": 540.5644972685517
+   },
+   "implied_growth": 0.32192410461469134,
+   "discount_rate": 0.1031944145963582,
+   "cost_of_equity": 0.106762,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.013004071693460444,
+     "base": 0.019779513247374304,
+     "bull": 0.020126196376418104
+    },
+    "cash_flow_margin": {
+     "bear": 0.19491757152380446,
+     "base": 0.21508363863026286,
+     "bull": 0.23933340595500524
+    },
+    "cagr_3y": 0.008991856613079108,
+    "cagr_5y": 0.020126196376418104,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 1393.3138268440703,
+    "base": 1480.0143343128327,
+    "bull": 1706.0993896739596
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.187,
+     "base": 7.605,
+     "bull": 8.695
+    },
+    "ttm_revenue": 4198470000.000001
+   }
+  }
+ ],
+ "price": 1738.91,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 701.9884909588777,
+  "base": 810.0827914653973,
+  "bull": 929.0761280703542
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5963054494143586,
+  "base": -0.5341433475767019,
+  "bull": -0.46571350554637436
+ },
+ "implied_growth": 0.32192410461469134,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.1x (base 475.12-1480.01)"
+  ]
+ },
+ "ticker": "MTD",
+ "asof": "2026-11-16",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/mtd/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/mtd/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/mtd/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/mtd/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/mtd/statistics/"
+ }
+}

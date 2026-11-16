@@ -1,0 +1,282 @@
+[04:13:20] == decision log: recorded the missing research/TXN/2026-11-16-evaluation.md
+[04:13:20] == research loop: 2591 names queued, best first: ['SHA:688617', 'FTNT', 'BIT:MB', 'BVMF:PRIO3', 'TSX:WCP', 'BIT:DLG', 'SWX:EMSN', 'MTD', 'SGX:BS6', 'BMV:GMEXICO.B']
+[04:14:21] == initiate SHA:688617
+[04:14:21] $ bin/py scripts/sec_delta.py SHA:688617 --asof 2026-11-16
+[04:14:21] SKIP SHA:688617: not a US listing (SEC filers only)
+[04:14:21] $ claude -p Ticker SHA:688617, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:14:25] == screened out FTNT: price above base fair value (-33.6%; floor +0%) (no AI research)
+[04:14:28] == initiate BIT:MB
+[04:14:28] $ bin/py scripts/sec_delta.py BIT:MB --asof 2026-11-16
+[04:14:28] SKIP BIT:MB: not a US listing (SEC filers only)
+[04:14:28] $ claude -p Ticker BIT:MB, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:15:37] == initiate BVMF:PRIO3
+[04:15:37] $ bin/py scripts/sec_delta.py BVMF:PRIO3 --asof 2026-11-16
+[04:15:37] SKIP BVMF:PRIO3: not a US listing (SEC filers only)
+[04:15:37] $ claude -p Ticker BVMF:PRIO3, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:15:39] Note: research/BIT-MB/2026-11-16.md
+Fact sheet: research/BIT-MB/factsheet-2026-11-16.md
+Check: OK research/BIT-MB/2026-11-16.md type=CORE 1=62 2=94 3=122 4=63 5=54 6=68 total=463
+
+Data conflicts: none. No URLs were blocked. I made no WebFetch calls, so the note rests on the fact sheet and the listed headlines. The revenue mix by country, dividend/payout data and short interest are marked [data unavailable].
+[04:15:39] $ bin/py scripts/check_docs.py note research/BIT-MB/2026-11-16.md
+[04:15:39] OK research/BIT-MB/2026-11-16.md type=CORE 1=62 2=94 3=122 4=63 5=54 6=68 total=463
+[04:15:39] $ claude -p Ticker BIT:MB, date 2026-11-16. Research: research/BIT-MB/factsheet-2026-11-16.md, research/BIT-MB/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/BIT-MB/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:15:53] research/BIT-MB/2026-11-16-macro.md
+OK research/BIT-MB/2026-11-16-macro.md macro_weight=context words=79
+[04:15:53] $ bin/py scripts/check_docs.py macro research/BIT-MB/2026-11-16-macro.md
+[04:15:53] OK research/BIT-MB/2026-11-16-macro.md macro_weight=context words=79
+[04:15:53] $ claude -p Evaluate BIT:MB for 2026-11-16: fact sheet research/BIT-MB/factsheet-2026-11-16.md, note research/BIT-MB/2026-11-16.md, state portfolio/state.json, macro overlay research/BIT-MB/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:15:56] - Note: `research/SHA-688617/2026-11-16.md`
+- Fact sheet: `research/SHA-688617/factsheet-2026-11-16.md`
+- check_docs: `OK research/SHA-688617/2026-11-16.md type=CORE 1=50 2=103 3=124 4=47 5=30 6=53 total=407`
+- Data conflicts: none.
+- Blocked URLs: none. The Q3 2026 filing page on stockanalysis.com only lists filings and has no results text, so I couldn't read the Q3 results or any guidance change.
+[04:15:56] $ bin/py scripts/check_docs.py note research/SHA-688617/2026-11-16.md
+[04:15:56] OK research/SHA-688617/2026-11-16.md type=CORE 1=50 2=103 3=124 4=47 5=30 6=53 total=407
+[04:15:56] $ claude -p Ticker SHA:688617, date 2026-11-16. Research: research/SHA-688617/factsheet-2026-11-16.md, research/SHA-688617/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/SHA-688617/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:16:15] research/SHA-688617/2026-11-16-macro.md
+OK research/SHA-688617/2026-11-16-macro.md macro_weight=context words=55
+[04:16:15] $ bin/py scripts/check_docs.py macro research/SHA-688617/2026-11-16-macro.md
+[04:16:15] OK research/SHA-688617/2026-11-16-macro.md macro_weight=context words=55
+[04:16:15] $ claude -p Evaluate SHA:688617 for 2026-11-16: fact sheet research/SHA-688617/factsheet-2026-11-16.md, note research/SHA-688617/2026-11-16.md, state portfolio/state.json, macro overlay research/SHA-688617/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:16:23] - Note: `research/BVMF-PRIO3/2026-11-16.md`
+- Fact sheet: `research/BVMF-PRIO3/factsheet-2026-11-16.md`
+- Check: `OK research/BVMF-PRIO3/2026-11-16.md type=CORE 1=56 2=114 3=114 4=43 5=64 6=65 total=456`
+- Data conflict: the fact sheet's "Next earnings date" is Nov 4, 2026, but its news list shows Q3 results published on 2026-11-05. I flagged this in section 6 of the note.
+- Data gaps: the fair value is [data unavailable]. The reserve-NAV method needs data stockanalysis.com doesn't show, and the EV/EBITDA fallback failed because TTM EBITDA was flagged as negative or missing. The revenue split by country or buyer is also [data unavailable], so the note gives no country share.
+- Blocked URLs: none. I made no WebFetch calls.
+[04:16:23] $ bin/py scripts/check_docs.py note research/BVMF-PRIO3/2026-11-16.md
+[04:16:23] OK research/BVMF-PRIO3/2026-11-16.md type=CORE 1=56 2=114 3=114 4=43 5=64 6=65 total=456
+[04:16:23] $ claude -p Ticker BVMF:PRIO3, date 2026-11-16. Research: research/BVMF-PRIO3/factsheet-2026-11-16.md, research/BVMF-PRIO3/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/BVMF-PRIO3/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:16:41] research/BIT-MB/2026-11-16-evaluation.md
+OK research/BIT-MB/2026-11-16-evaluation.md Bear case=134 Bull case=83 decision=AVOID scorecard=2->1
+
+I decided AVOID at conviction 1: the price reflects the Intesa takeover bid, not the bank. I set no entry price, because a lower price wouldn't change the decision while the bid is open. The base scenario target is tied to the bid rather than to fair value, and I said so in its basis.
+[04:16:41] $ bin/py scripts/check_docs.py eval research/BIT-MB/2026-11-16-evaluation.md
+[04:16:41] OK research/BIT-MB/2026-11-16-evaluation.md Bear case=134 Bull case=83 decision=AVOID scorecard=2->1
+[04:16:41] $ bin/py scripts/valuation.py BIT:MB --asof 2026-11-16 --eval research/BIT-MB/2026-11-16-evaluation.md
+[04:16:41] {"out": "research/BIT-MB/2026-11-16-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 12.28, "base": 16.74, "bull": 18.24}, "price": 27.37}
+[04:16:42] == done BIT:MB
+[04:16:51] research/BVMF-PRIO3/2026-11-16-macro.md
+OK research/BVMF-PRIO3/2026-11-16-macro.md macro_weight=context words=94
+[04:16:51] $ bin/py scripts/check_docs.py macro research/BVMF-PRIO3/2026-11-16-macro.md
+[04:16:51] OK research/BVMF-PRIO3/2026-11-16-macro.md macro_weight=context words=94
+[04:16:51] $ claude -p Evaluate BVMF:PRIO3 for 2026-11-16: fact sheet research/BVMF-PRIO3/factsheet-2026-11-16.md, note research/BVMF-PRIO3/2026-11-16.md, state portfolio/state.json, macro overlay research/BVMF-PRIO3/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:17:04] == initiate TSX:WCP
+[04:17:04] $ bin/py scripts/sec_delta.py TSX:WCP --asof 2026-11-16
+[04:17:04] SKIP TSX:WCP: not a US listing (SEC filers only)
+[04:17:04] $ claude -p Ticker TSX:WCP, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:17:25] research/SHA-688617/2026-11-16-evaluation.md
+OK research/SHA-688617/2026-11-16-evaluation.md Bear case=128 Bull case=104 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3, with an entry price of 127.08 CNY (base fair value 158.85 × 0.8). I didn't read portfolio/state.json because the verdict is not a BUY. The Q3 2026 filing had no readable content, so guidance is unverified.
+[04:17:25] $ bin/py scripts/check_docs.py eval research/SHA-688617/2026-11-16-evaluation.md
+[04:17:25] OK research/SHA-688617/2026-11-16-evaluation.md Bear case=128 Bull case=104 decision=AVOID scorecard=7->3
+[04:17:25] $ bin/py scripts/valuation.py SHA:688617 --asof 2026-11-16 --eval research/SHA-688617/2026-11-16-evaluation.md
+[04:17:25] {"out": "research/SHA-688617/2026-11-16-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 60.67, "base": 158.85, "bull": 261.96}, "price": 286.87}
+[04:17:27] == done SHA:688617
+[04:17:52] Note: research/TSX-WCP/2026-11-16.md
+Fact sheet: research/TSX-WCP/factsheet-2026-11-16.md
+check_docs: OK research/TSX-WCP/2026-11-16.md type=CORE 1=56 2=105 3=113 4=43 5=53 6=75 total=445
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+- The fact sheet's NAV fair value is [data unavailable], so the base fair value of 6.68 CAD comes from EV/EBITDA alone. The note flags it as unreliable.
+- I took no figures from the Q3 call headline and could not identify the "PMD" it mentions. The note marks that [Guessing].
+[04:17:52] $ bin/py scripts/check_docs.py note research/TSX-WCP/2026-11-16.md
+[04:17:52] OK research/TSX-WCP/2026-11-16.md type=CORE 1=56 2=105 3=113 4=43 5=53 6=75 total=445
+[04:17:52] $ claude -p Ticker TSX:WCP, date 2026-11-16. Research: research/TSX-WCP/factsheet-2026-11-16.md, research/TSX-WCP/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/TSX-WCP/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:17:52] research/BVMF-PRIO3/2026-11-16-evaluation.md
+OK research/BVMF-PRIO3/2026-11-16-evaluation.md Bear case=145 Bull case=135 decision=AVOID scorecard=3->2
+
+The decision is AVOID at conviction 2, which the scorecard set. No fair value could be computed, so I set no entry price. The macro overlay was context only, so it didn't change the scenarios.
+[04:17:52] $ bin/py scripts/check_docs.py eval research/BVMF-PRIO3/2026-11-16-evaluation.md
+[04:17:52] OK research/BVMF-PRIO3/2026-11-16-evaluation.md Bear case=145 Bull case=135 decision=AVOID scorecard=3->2
+[04:17:52] $ bin/py scripts/valuation.py BVMF:PRIO3 --asof 2026-11-16 --eval research/BVMF-PRIO3/2026-11-16-evaluation.md
+[04:17:53] {"out": "research/BVMF-PRIO3/2026-11-16-valuation.md", "used": null, "fair_value": {}, "price": 63.29}
+[04:17:54] == initiate BIT:DLG
+[04:17:54] $ bin/py scripts/sec_delta.py BIT:DLG --asof 2026-11-16
+[04:17:54] == done BVMF:PRIO3
+[04:17:54] SKIP BIT:DLG: not a US listing (SEC filers only)
+[04:17:54] $ claude -p Ticker BIT:DLG, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:18:08] == research loop: 46 names queued, best first: ['FTNT', 'BIT:DLG', 'SWX:EMSN', 'MTD', 'SGX:BS6', 'BMV:GMEXICO.B', 'LON:HSX', 'BKK:PTTEP', 'TSX:DSG', 'HKG:2269']
+[04:18:08] == initiate BIT:DLG
+[04:18:08] $ bin/py scripts/sec_delta.py BIT:DLG --asof 2026-11-16
+[04:18:08] == screened out FTNT: price above base fair value (-33.6%; floor +0%) (no AI research)
+[04:18:08] SKIP BIT:DLG: not a US listing (SEC filers only)
+[04:18:08] $ claude -p Ticker BIT:DLG, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:19:00] == initiate SWX:EMSN
+[04:19:00] $ bin/py scripts/sec_delta.py SWX:EMSN --asof 2026-11-16
+[04:19:01] SKIP SWX:EMSN: not a US listing (SEC filers only)
+[04:19:01] $ claude -p Ticker SWX:EMSN, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:19:24] == initiate MTD
+[04:19:24] $ bin/py scripts/sec_delta.py MTD --asof 2026-11-16
+[04:19:35] OK research/MTD/sec-delta-2026-11-16.md
+[04:19:35] $ claude -p Ticker MTD, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/MTD/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:19:41] Note: research/BIT-DLG/2026-11-16.md
+Fact sheet: research/BIT-DLG/factsheet-2026-11-16.md
+Check: OK research/BIT-DLG/2026-11-16.md type=CORE 1=79 2=115 3=138 4=34 5=54 6=46 total=466
+
+- **Peers:** STO:ELUX-B has no stockanalysis.com page (404), so I swapped it out. The peer set is SN, WHR and EPA:SK, which leaves the peer P/E median based on only two companies.
+- **WebFetch:** I made no calls. The note relies on the fact sheet, including its listed transcript pages.
+- **Data gaps:** Regional revenue mix, shares change and short interest are [data unavailable].
+[04:19:41] $ bin/py scripts/check_docs.py note research/BIT-DLG/2026-11-16.md
+[04:19:41] OK research/BIT-DLG/2026-11-16.md type=CORE 1=79 2=115 3=138 4=34 5=54 6=46 total=466
+[04:19:41] $ claude -p Ticker BIT:DLG, date 2026-11-16. Research: research/BIT-DLG/factsheet-2026-11-16.md, research/BIT-DLG/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/BIT-DLG/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:20:01] research/BIT-DLG/2026-11-16-macro.md
+OK research/BIT-DLG/2026-11-16-macro.md macro_weight=context words=51
+[04:20:01] $ bin/py scripts/check_docs.py macro research/BIT-DLG/2026-11-16-macro.md
+[04:20:01] OK research/BIT-DLG/2026-11-16-macro.md macro_weight=context words=51
+[04:20:01] $ claude -p Evaluate BIT:DLG for 2026-11-16: fact sheet research/BIT-DLG/factsheet-2026-11-16.md, note research/BIT-DLG/2026-11-16.md, state portfolio/state.json, macro overlay research/BIT-DLG/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:20:11] - Note: `research/SWX-EMSN/2026-11-16.md`
+- Fact sheet: `research/SWX-EMSN/factsheet-2026-11-16.md`
+- Check: `OK research/SWX-EMSN/2026-11-16.md type=CORE 1=54 2=125 3=130 4=39 5=51 6=68 total=467`
+- Blocked URL: `https://www.emsgroup.ch/investors` isn't on the allowlist. The note therefore has no revenue mix by country or region, and I marked it [data unavailable]. I didn't try another route.
+- Data conflicts: none.
+- Fair value: the fact sheet flags it as unreliable (DCF and EV/EBITDA disagree 2.0x), and the note says so.
+[04:20:11] $ bin/py scripts/check_docs.py note research/SWX-EMSN/2026-11-16.md
+[04:20:11] OK research/SWX-EMSN/2026-11-16.md type=CORE 1=54 2=125 3=130 4=39 5=51 6=68 total=467
+[04:20:11] $ claude -p Ticker SWX:EMSN, date 2026-11-16. Research: research/SWX-EMSN/factsheet-2026-11-16.md, research/SWX-EMSN/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/SWX-EMSN/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:20:36] research/SWX-EMSN/2026-11-16-macro.md
+OK research/SWX-EMSN/2026-11-16-macro.md macro_weight=context words=64
+[04:20:36] $ bin/py scripts/check_docs.py macro research/SWX-EMSN/2026-11-16-macro.md
+[04:20:36] OK research/SWX-EMSN/2026-11-16-macro.md macro_weight=context words=64
+[04:20:36] $ claude -p Evaluate SWX:EMSN for 2026-11-16: fact sheet research/SWX-EMSN/factsheet-2026-11-16.md, note research/SWX-EMSN/2026-11-16.md, state portfolio/state.json, macro overlay research/SWX-EMSN/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:20:54] Note: research/MTD/2026-11-16.md
+Fact sheet: research/MTD/factsheet-2026-11-16.md
+check_docs: OK research/MTD/2026-11-16.md type=CORE 1=58 2=108 3=114 4=39 5=41 6=71 total=431
+
+Data conflicts and blocked URLs:
+- No data conflicts, and no URLs were blocked.
+- I used one WebFetch, on the 10-Q at sec.gov.
+- The 10-Q gives no China share of sales by customer destination. The note uses the Chinese Operations segment figure instead and says so.
+[04:20:54] $ bin/py scripts/check_docs.py note research/MTD/2026-11-16.md
+[04:20:54] OK research/MTD/2026-11-16.md type=CORE 1=58 2=108 3=114 4=39 5=41 6=71 total=431
+[04:20:54] $ claude -p Ticker MTD, date 2026-11-16. Research: research/MTD/factsheet-2026-11-16.md, research/MTD/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/MTD/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:21:10] research/BIT-DLG/2026-11-16-evaluation.md
+OK research/BIT-DLG/2026-11-16-evaluation.md Bear case=136 Bull case=116 decision=AVOID scorecard=6->3
+
+The decision is AVOID at conviction 3, with an entry price of 35.35 EUR (the 44.19 base fair value less 20%). The scorecard gave zero valuation points. The price is about 5% above the value blend, and P/E is above its own 5-year high, which blocks trend-strength points. I didn't read `portfolio/state.json` because this is an AVOID, and the net-debt/EBITDA trigger is text-only because the fact sheet doesn't show the statistics-page figure.
+[04:21:10] $ bin/py scripts/check_docs.py eval research/BIT-DLG/2026-11-16-evaluation.md
+[04:21:10] OK research/BIT-DLG/2026-11-16-evaluation.md Bear case=136 Bull case=116 decision=AVOID scorecard=6->3
+[04:21:10] $ bin/py scripts/valuation.py BIT:DLG --asof 2026-11-16 --eval research/BIT-DLG/2026-11-16-evaluation.md
+[04:21:10] {"out": "research/BIT-DLG/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 17.71, "base": 44.19, "bull": 54.59}, "price": 47.4}
+[04:21:11] == done BIT:DLG
+[04:21:27] research/MTD/2026-11-16-macro.md
+OK research/MTD/2026-11-16-macro.md macro_weight=secondary words=220
+[04:21:27] $ bin/py scripts/check_docs.py macro research/MTD/2026-11-16-macro.md
+[04:21:27] OK research/MTD/2026-11-16-macro.md macro_weight=secondary words=220
+[04:21:27] $ claude -p Evaluate MTD for 2026-11-16: fact sheet research/MTD/factsheet-2026-11-16.md, note research/MTD/2026-11-16.md, state portfolio/state.json, macro overlay research/MTD/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:21:32] == initiate SGX:BS6
+[04:21:32] $ bin/py scripts/sec_delta.py SGX:BS6 --asof 2026-11-16
+[04:21:32] SKIP SGX:BS6: not a US listing (SEC filers only)
+[04:21:32] $ claude -p Ticker SGX:BS6, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:22:05] research/SWX-EMSN/2026-11-16-evaluation.md
+OK research/SWX-EMSN/2026-11-16-evaluation.md Bear case=129 Bull case=106 decision=AVOID scorecard=8->3
+[04:22:05] $ bin/py scripts/check_docs.py eval research/SWX-EMSN/2026-11-16-evaluation.md
+[04:22:05] OK research/SWX-EMSN/2026-11-16-evaluation.md Bear case=129 Bull case=106 decision=AVOID scorecard=8->3
+[04:22:05] $ bin/py scripts/valuation.py SWX:EMSN --asof 2026-11-16 --eval research/SWX-EMSN/2026-11-16-evaluation.md
+[04:22:06] {"out": "research/SWX-EMSN/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 277.45, "base": 447.49, "bull": 495.83}, "price": 846.5}
+[04:22:07] == done SWX:EMSN
+[04:22:16] Note: research/SGX-BS6/2026-11-16.md
+Fact sheet: research/SGX-BS6/factsheet-2026-11-16.md
+Check: OK research/SGX-BS6/2026-11-16.md type=CORE 1=56 2=109 3=118 4=46 5=55 6=43 total=427
+Conflicts and blocked URLs: none. I made no WebFetch calls, so revenue mix and dividend detail are marked [data unavailable] and the Q3 2026 results were not read.
+[04:22:16] $ bin/py scripts/check_docs.py note research/SGX-BS6/2026-11-16.md
+[04:22:16] OK research/SGX-BS6/2026-11-16.md type=CORE 1=56 2=109 3=118 4=46 5=55 6=43 total=427
+[04:22:16] $ claude -p Ticker SGX:BS6, date 2026-11-16. Research: research/SGX-BS6/factsheet-2026-11-16.md, research/SGX-BS6/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/SGX-BS6/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:22:27] == initiate BMV:GMEXICO.B
+[04:22:27] $ bin/py scripts/sec_delta.py BMV:GMEXICO.B --asof 2026-11-16
+[04:22:27] SKIP BMV:GMEXICO.B: not a US listing (SEC filers only)
+[04:22:27] $ claude -p Ticker BMV:GMEXICO.B, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:22:33] research/SGX-BS6/2026-11-16-macro.md
+OK research/SGX-BS6/2026-11-16-macro.md macro_weight=context words=114
+[04:22:33] $ bin/py scripts/check_docs.py macro research/SGX-BS6/2026-11-16-macro.md
+[04:22:33] OK research/SGX-BS6/2026-11-16-macro.md macro_weight=context words=114
+[04:22:33] $ claude -p Evaluate SGX:BS6 for 2026-11-16: fact sheet research/SGX-BS6/factsheet-2026-11-16.md, note research/SGX-BS6/2026-11-16.md, state portfolio/state.json, macro overlay research/SGX-BS6/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:22:34] research/MTD/2026-11-16-evaluation.md
+OK research/MTD/2026-11-16-evaluation.md Bear case=142 Bull case=141 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3. I set the re-research entry price at 1,379 USD, where P/E would be back at its 5-year low of 29.9x. I didn't use the default (base fair value × 0.8) because the fact sheet flags its fair value as unreliable.
+[04:22:34] $ bin/py scripts/check_docs.py eval research/MTD/2026-11-16-evaluation.md
+[04:22:34] OK research/MTD/2026-11-16-evaluation.md Bear case=142 Bull case=141 decision=AVOID scorecard=7->3
+[04:22:34] $ bin/py scripts/valuation.py MTD --asof 2026-11-16 --eval research/MTD/2026-11-16-evaluation.md
+[04:22:35] {"out": "research/MTD/2026-11-16-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 701.99, "base": 810.08, "bull": 929.08}, "price": 1738.91}
+[04:22:36] == done MTD
+[04:23:16] == initiate LON:HSX
+[04:23:16] $ bin/py scripts/sec_delta.py LON:HSX --asof 2026-11-16
+[04:23:16] SKIP LON:HSX: not a US listing (SEC filers only)
+[04:23:16] $ claude -p Ticker LON:HSX, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:23:44] - Note: `research/BMV-GMEXICO.B/2026-11-16.md`
+- Fact sheet: `research/BMV-GMEXICO.B/factsheet-2026-11-16.md`
+- Check: `OK research/BMV-GMEXICO.B/2026-11-16.md type=CORE 1=72 2=115 3=102 4=33 5=53 6=38 total=413`
+- Blocked URL: `https://www.grupomexico.com/en/` is not on the allowlist, so the fetch was refused. The note has no segment or country revenue shares and marks them [data unavailable]. It tells the macro overlay to check Peru and Mexico anyway.
+- Data conflicts: none.
+[04:23:44] $ bin/py scripts/check_docs.py note research/BMV-GMEXICO.B/2026-11-16.md
+[04:23:44] OK research/BMV-GMEXICO.B/2026-11-16.md type=CORE 1=72 2=115 3=102 4=33 5=53 6=38 total=413
+[04:23:44] $ claude -p Ticker BMV:GMEXICO.B, date 2026-11-16. Research: research/BMV-GMEXICO.B/factsheet-2026-11-16.md, research/BMV-GMEXICO.B/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/BMV-GMEXICO.B/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:24:02] research/SGX-BS6/2026-11-16-evaluation.md
+OK research/SGX-BS6/2026-11-16-evaluation.md Bear case=147 Bull case=123 decision=AVOID scorecard=4->2
+[04:24:02] $ bin/py scripts/check_docs.py eval research/SGX-BS6/2026-11-16-evaluation.md
+[04:24:02] OK research/SGX-BS6/2026-11-16-evaluation.md Bear case=147 Bull case=123 decision=AVOID scorecard=4->2
+[04:24:02] $ bin/py scripts/valuation.py SGX:BS6 --asof 2026-11-16 --eval research/SGX-BS6/2026-11-16-evaluation.md
+[04:24:02] {"out": "research/SGX-BS6/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 1.73, "base": 2.12, "bull": 10.01}, "price": 4.32}
+[04:24:03] == done SGX:BS6
+[04:24:03] Note: research/LON-HSX/2026-11-16.md
+Fact sheet: research/LON-HSX/factsheet-2026-11-16.md
+check_docs: OK research/LON-HSX/2026-11-16.md type=CORE 1=62 2=85 3=109 4=44 5=52 6=29 total=381
+Data conflicts:
+- TTM net debt/EBITDA is 1.10x on debt less cash and short-term investments, but -0.32x on the site's definition. The note flags this as a conflict and doesn't pick one.
+- Blocked URL: https://www.hiscoxgroup.com/investors isn't on the allowlist. Because of this, the note gives the country and segment revenue split as [data unavailable].
+[04:24:03] $ bin/py scripts/check_docs.py note research/LON-HSX/2026-11-16.md
+[04:24:03] OK research/LON-HSX/2026-11-16.md type=CORE 1=62 2=85 3=109 4=44 5=52 6=29 total=381
+[04:24:03] $ claude -p Ticker LON:HSX, date 2026-11-16. Research: research/LON-HSX/factsheet-2026-11-16.md, research/LON-HSX/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/LON-HSX/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:24:25] research/BMV-GMEXICO.B/2026-11-16-macro.md
+OK research/BMV-GMEXICO.B/2026-11-16-macro.md macro_weight=secondary words=166
+[04:24:25] $ bin/py scripts/check_docs.py macro research/BMV-GMEXICO.B/2026-11-16-macro.md
+[04:24:25] OK research/BMV-GMEXICO.B/2026-11-16-macro.md macro_weight=secondary words=166
+[04:24:25] $ claude -p Evaluate BMV:GMEXICO.B for 2026-11-16: fact sheet research/BMV-GMEXICO.B/factsheet-2026-11-16.md, note research/BMV-GMEXICO.B/2026-11-16.md, state portfolio/state.json, macro overlay research/BMV-GMEXICO.B/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:24:27] == initiate BKK:PTTEP
+[04:24:27] $ bin/py scripts/sec_delta.py BKK:PTTEP --asof 2026-11-16
+[04:24:27] SKIP BKK:PTTEP: not a US listing (SEC filers only)
+[04:24:27] $ claude -p Ticker BKK:PTTEP, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:24:28] research/LON-HSX/2026-11-16-macro.md
+OK research/LON-HSX/2026-11-16-macro.md macro_weight=context words=66
+[04:24:28] $ bin/py scripts/check_docs.py macro research/LON-HSX/2026-11-16-macro.md
+[04:24:28] OK research/LON-HSX/2026-11-16-macro.md macro_weight=context words=66
+[04:24:28] $ claude -p Evaluate LON:HSX for 2026-11-16: fact sheet research/LON-HSX/factsheet-2026-11-16.md, note research/LON-HSX/2026-11-16.md, state portfolio/state.json, macro overlay research/LON-HSX/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:25:28] Note: research/BKK-PTTEP/2026-11-16.md
+Fact sheet: research/BKK-PTTEP/factsheet-2026-11-16.md
+Check: OK research/BKK-PTTEP/2026-11-16.md type=CORE 1=67 2=103 3=120 4=36 5=47 6=65 total=438
+
+Data conflicts: none.
+
+Gaps and blocked URLs:
+- I made no WebFetch calls, so no URLs were blocked.
+- The country revenue split is marked [data unavailable] because I didn't verify it from a primary source.
+- The reserve-NAV fair value method is [data unavailable] on the fact sheet, so fair value rests on EV/EBITDA alone.
+- I didn't read the Q3 2026 filing.
+
+The shell denied one `sed` edit, so I fixed the note with Write instead.
+[04:25:28] $ bin/py scripts/check_docs.py note research/BKK-PTTEP/2026-11-16.md
+[04:25:28] OK research/BKK-PTTEP/2026-11-16.md type=CORE 1=67 2=103 3=120 4=36 5=47 6=65 total=438
+[04:25:28] $ claude -p Ticker BKK:PTTEP, date 2026-11-16. Research: research/BKK-PTTEP/factsheet-2026-11-16.md, research/BKK-PTTEP/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/BKK-PTTEP/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:25:28] You've hit your session limit · resets 6am (Europe/London)
+[04:25:28] !! FAILED LON:HSX: claude -p Evaluate LON:HSX for 2026-11-16: fact sheet research/LON-HSX/factsheet-2026-11-16.md, note research/LON-HSX/2026-11-16.md, state portfolio/state.json, macro overlay research/LON-HSX/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --perm
+[04:25:32] You've hit your session limit · resets 6am (Europe/London)
+[04:25:32] !! MACRO OVERLAY UNAVAILABLE for BKK:PTTEP: claude -p Ticker BKK:PTTEP, date 2026-11-16. Research: research/BKK-PTTEP/factsheet-2026-11-16.md, research/BKK-PTTEP/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/BKK-PTTEP/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text exited 1: You've hit your session limit · resets 6am (Europe/London)
+[04:25:32] $ claude -p Evaluate BKK:PTTEP for 2026-11-16: fact sheet research/BKK-PTTEP/factsheet-2026-11-16.md, note research/BKK-PTTEP/2026-11-16.md, state portfolio/state.json. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:25:33] You've hit your session limit · resets 6am (Europe/London)
+[04:25:33] !! FAILED BMV:GMEXICO.B: claude -p Evaluate BMV:GMEXICO.B for 2026-11-16: fact sheet research/BMV-GMEXICO.B/factsheet-2026-11-16.md, note research/BMV-GMEXICO.B/2026-11-16.md, state portfolio/state.json, macro overlay research/BMV-GMEXICO.B/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. 
+[04:25:35] You've hit your session limit · resets 6am (Europe/London)
+[04:25:35] !! FAILED BKK:PTTEP: claude -p Evaluate BKK:PTTEP for 2026-11-16: fact sheet research/BKK-PTTEP/factsheet-2026-11-16.md, note research/BKK-PTTEP/2026-11-16.md, state portfolio/state.json. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,G
+[04:26:03] == initiate TSX:DSG
+[04:26:03] $ bin/py scripts/sec_delta.py TSX:DSG --asof 2026-11-16
+[04:26:03] SKIP TSX:DSG: not a US listing (SEC filers only)
+[04:26:03] $ claude -p Ticker TSX:DSG, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:26:06] You've hit your session limit · resets 6am (Europe/London)
+[04:26:06] !! FAILED TSX:DSG: claude -p Ticker TSX:DSG, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Ed
+[04:26:13] == initiate HKG:2269
+[04:26:13] $ bin/py scripts/sec_delta.py HKG:2269 --asof 2026-11-16
+[04:26:13] SKIP HKG:2269: not a US listing (SEC filers only)
+[04:26:13] $ claude -p Ticker HKG:2269, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[04:26:16] You've hit your session limit · resets 6am (Europe/London)
+[04:26:16] !! FAILED HKG:2269: claude -p Ticker HKG:2269, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),E
