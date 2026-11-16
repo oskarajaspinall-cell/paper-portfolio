@@ -23,7 +23,37 @@ from fetch_data import DataError, Fetcher  # noqa: E402
 FIELDS = ["ticker", "asof", "price", "base_fair_value", "base_upside_pct", "verdict", "reason"]
 
 
+def trend_strong(ticker: str, fetcher, cfg: dict) -> str | None:
+    """The scorecard's trend-strength test on the statistics page (cached by the screen): above the 200-day average
+    but not overextended, with a real FCF yield. Such a name can reach conviction 4 without a discount."""
+    from fetch_data import page_nodes, parse_info, parse_statistics
+    from screen import stock_metrics
+    from common import page_url
+    sc = cfg["scorecard"]
+    url = page_url(ticker, "statistics/")
+    try:
+        nodes = page_nodes(fetcher.html(url), url)
+        m = stock_metrics(parse_statistics(nodes, url), parse_info(nodes, url))
+    except DataError:
+        return None
+    ext, fcf = m.get("price_vs_sma200"), m.get("fcfYield")
+    if ext is not None and 0 < ext <= sc["overextended_pct"] and fcf is not None and fcf >= sc["min_fcf_yield_pct"]:
+        return f"price {ext:+.0f}% vs 200-day, FCF yield {fcf:.1f}%"
+    return None
+
+
 def check(ticker: str, asof: str, fetcher, cfg: dict) -> dict:
+    """Owner request 2026-11-15: a price above fair value no longer skips a name with trend strength (the mandate is
+    a good business that is working, so the scorecard can reach 4 without a discount)."""
+    row = _check(ticker, asof, fetcher, cfg)
+    if row["verdict"] == "SKIP":
+        why = trend_strong(ticker, fetcher, cfg)
+        if why:
+            return row | {"verdict": "PASS", "reason": f"{row['reason']}; passes on trend strength ({why})"}
+    return row
+
+
+def _check(ticker: str, asof: str, fetcher, cfg: dict) -> dict:
     floor = float(cfg["screen"]["prescreen_min_base_upside_pct"])
     row = {"ticker": ticker, "asof": asof, "price": "", "base_fair_value": "", "base_upside_pct": ""}
     try:

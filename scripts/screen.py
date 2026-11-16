@@ -3,10 +3,11 @@
 For every screenable stock in universe/universe.csv (minus holdings and names researched in the
 last `exclude_researched_days`), read its stockanalysis.com statistics page and score three pillars
 by percentile rank within the screened set (config [screen]):
-    quality, valuation, momentum (price vs 50/200-day computed from the page's own quote and averages)
-Core score = mean(quality, valuation). Stage 2: the top `deep_dive_top` core candidates also get
+    quality, valuation, momentum (12-month change and price vs the 200-day average, from the page itself)
+Core score = [screen].core_weights (quality 40% / value 30% / momentum-trend 30%; owner request 2026-11-15, the
+mandate is "good businesses that are working"). Stage 2: the top `deep_dive_top` core candidates also get
 their ratios page (5-year history) read, adding a history pillar (valuation vs own 5y range,
-ROIC/ROCE trend, worst-year ROIC); they are ranked by mean(quality, valuation, history), scaled down by
+ROIC/ROCE trend, worst-year ROIC); value becomes mean(valuation, history) in the same weights, scaled down by
 peak_profit_x / ratio when today's ROIC (ROE) is more than [screen].peak_profit_x times its 5-year median.
 Tactical (owner rule 2026-10-08, scripts/setups.py): two setups. Stage 1 from the statistics page:
 post-earnings-drift candidates (results just reported, above the 50-day average) and pullback candidates
@@ -114,6 +115,17 @@ def pillar_scores(metrics: dict[str, dict], spec: list[str], min_metrics: int) -
     return out
 
 
+def core_mix(cfg: dict, quality, valuation, momentum) -> float | None:
+    """Core composite (owner request 2026-11-15, "good businesses that are working"): [screen].core_weights
+    (40% quality / 30% value / 30% momentum-trend) over percentile ranks. Quality and value are required, as
+    before; a missing momentum figure drops out and the other weights renormalise."""
+    if quality is None or valuation is None:
+        return None
+    w = cfg["screen"]["core_weights"]
+    got = [(quality, w["quality"]), (valuation, w["valuation"])] + ([(momentum, w["momentum"])] if momentum is not None else [])
+    return sum(x * k for x, k in got) / sum(k for _, k in got)
+
+
 def score(metrics: dict[str, dict], cfg: dict, asof: str) -> list[dict]:
     sc = cfg["screen"]
     q = pillar_scores(metrics, sc["quality"], sc["min_metrics_per_pillar"])
@@ -124,7 +136,7 @@ def score(metrics: dict[str, dict], cfg: dict, asof: str) -> list[dict]:
     rows = []
     for t, d in metrics.items():
         rows.append({"ticker": t, "quality": q[t], "valuation": v[t], "momentum": m[t],
-                     "core": st.mean([q[t], v[t]]) if q[t] is not None and v[t] is not None else None,
+                     "core": core_mix(cfg, q[t], v[t], m[t]),
                      "pullback_cand": trend[t] if trend[t] is not None and setups.pullback_candidate(d, tc, asof) else None,
                      "drift_cand": d.get("price_vs_sma50") if setups.drift_candidate(d, tc, asof) else None,
                      "tactical": None, "setup": None, "setup_detail": None, "setup_skipped": None,
@@ -238,7 +250,7 @@ def deep_dive(rows: list[dict], fetcher, cfg: dict) -> list[dict]:
     for r in rows:
         r["history"] = h.get(r["ticker"])
         if r["history"] is not None:
-            r["core_deep"] = st.mean([r["quality"], r["valuation"], r["history"]])
+            r["core_deep"] = core_mix(cfg, r["quality"], st.mean([r["valuation"], r["history"]]), r["momentum"])
             pk, lim = (hist.get(r["ticker"]) or {}).get("peak_ratio"), sc.get("peak_profit_x")
             if pk and lim and pk > lim:  # profits far above their own norm: scale down, keep it visible
                 r["peak_ratio"] = pk
@@ -340,7 +352,7 @@ def run(fetcher, cfg: dict, asof: str, limit: int | None = None, state: dict | N
             "deep_dived": sum(1 for r in rows if r.get("history") is not None)}
 
 
-def report_md(res: dict, top: int = 15) -> str:
+def report_md(res: dict, top: int = 25) -> str:
     def f(x):
         return "n/a" if x is None else f"{x:.0f}"
 
@@ -349,8 +361,8 @@ def report_md(res: dict, top: int = 15) -> str:
              "Scores are percentiles (0-100) within the screened set; inputs from each stock's "
              "stockanalysis.com statistics page. The top core candidates "
              f"({res.get('deep_dived', 0)} stocks) also had their ratios page read: History = valuation vs its own "
-             "5-year range plus return-on-capital trend and consistency; their core score = mean(Quality, Valuation, "
-             "History).",
+             "5-year range plus return-on-capital trend and consistency; their core score = Quality 40% + "
+             "Value (Valuation and History) 30% + Momentum 30%.",
              f"Liquidity gate: {len(res.get('illiquid', []))} stocks excluded before ranking (ADDV below the minimum "
              "or free float too low; listed below).", "",
              "## This week's picks for initiation"]

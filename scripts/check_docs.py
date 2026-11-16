@@ -346,6 +346,18 @@ def consistency_problems(path: Path, d: dict) -> list[str]:
     return []  # evaluations dated before this were written before the scorecard existed
 
 
+TRIGGERS_NOT_YET_TRUE_FROM = "2026-11-15"  # HKG:0291's "net debt/EBITDA above 0.0x" was already true when written
+
+
+def already_true_triggers(triggers, stats: dict) -> list[str]:
+    """A mechanical core trigger the stock already meets on today's statistics page is a bad threshold: the weekly
+    scan would flag it at once and spend a full re-research. Missing figures can't be judged and pass."""
+    from weekly_scan import trigger_hits
+    mech = [x for x in triggers or [] if isinstance(x, dict) and isinstance((x.get("check") or {}).get("field"), str)]
+    return [f"trigger already true: {h['field']} {h['value']} {h['threshold']} ({h['text'][:50]})"
+            for h in trigger_hits(mech, stats)[0]]
+
+
 def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
     errs, counts = [], {}
     heads = [h for h, _ in sections(md)]
@@ -594,6 +606,12 @@ def main(argv=None) -> int:
         dblk, _ = decision_block(md)
         if dblk and Path(a.path).name[:10] >= SCORECARD_FROM:
             errs += consistency_problems(Path(a.path), dblk)
+        if dblk and dblk.get("position_type") == "CORE" and Path(a.path).name[:10] >= TRIGGERS_NOT_YET_TRUE_FROM:
+            from fetch_data import DataError, Fetcher
+            try:  # the fact sheet already read this page today, so it comes from the cache
+                errs += already_true_triggers(dblk.get("triggers"), Fetcher().section(dblk["ticker"], "statistics")["data"])
+            except (DataError, KeyError):
+                pass
         if Path(a.path).name[:10] >= SCORECARD_FROM:  # 2026-11-09: Python sets a CORE conviction
             import scorecard
             res, sc_errs = scorecard.evaluate_file(Path(a.path))

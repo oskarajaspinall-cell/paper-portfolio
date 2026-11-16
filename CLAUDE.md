@@ -39,20 +39,22 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
   6. *Fair-value sanity flag* (`valuation.reliability`): methods disagreeing >2x or a base beyond +100% / -80% of the price is marked unreliable; the prescreen passes and the queue ignores it.
   7. *Calibration* (`scripts/calibration.py`, `[calibration]`, weekly): outcomes vs the sector benchmark by conviction, a 4+ share alert outside 2-10%, prescreen-skip check; a shrunk +/-1 scorecard offset only once its gate is met.
 - **A downgrade resizes** (owner request 2026-11-08): a CORE holding below the buy bar is held at no more than its conviction size (`conviction_size_pct`, scaled DOWN for a volatile stock but never up: 3 -> at most 5%, 2 -> at most 3%, 1 -> sold; 2026-11-08: a downgrade always means smaller, since volatility measures price wobble, not the risk that the thesis is wrong). A re-initiation that lowers conviction gets the TRIM (or SELL) with the same run (`portfolio.py` `size_down_requests`, via `apply_holds`); the weekly scan re-applies it mechanically while it stays above that size by more than `[core].downgrade_trim_gap_pp`. If a conviction-4+ idea is waiting in the funding queue with upside (to the fair-value / expected-value blend) at least `[funding_queue].auto_swap_min_gap_pp` (15pp) above the holding's, and the rules accept it as the replacement, the holding is **swapped automatically** (no model call; `funding_queue.py auto-swap`, every weekday in bin/fill-pending and in the weekly run before the swap-reviewer). The new buy is capped at the money the sale frees plus any room above the reserve; a swap that leaves cash no lower than it found it is not blocked by the reserve. Holdings at conviction 4+ keep their size (winners may run to `trim_above_pct`).
-- **Top-up to size** (owner request 2026-11-08, the mirror rule): a CORE holding still at conviction 4+ that drifted more than `[core].topup_band_pp` (2pp) below its size (`target_pct`, else the plain conviction size it was bought at) joins the funding queue as a top-up (`funding_queue.py` `underweight_topups`, checked in every daily `review`): ADD steps of 1%+ from cash above the reserve only, while its latest evaluation is under `topup_max_eval_days` (35) old and the price is no more than `topup_max_fall_pct` (10%) below that evaluation's close (a bigger fall is re-checked first via the dip radar / weekly scan). An automatic swap capped below the idea's full size also leaves the rest as a top-up. Winners are not trimmed back to size: only the 15% cap trims.
-- **CORE**: good business + attractive valuation, ~12-month horizon. Judged purely against thesis (invalidation) triggers on business fundamentals. No price stops, price levels, moving averages or valuation multiples as triggers.
-- **TACTICAL**: weeks to ~3 months, two setups only (owner rule 2026-10-08): **post-earnings drift** (a real results beat the price is still digesting) and **pullback in an uptrend** (a dip to around the 50-day average). MUST have target, stop and time limit at entry; these execute mechanically. The stop comes from the stock's own volatility (ATR), the target must be ≥2× the stop distance (checked at the decision and again at the fill-day open), and the size is set so a stop-out costs ~1% of the portfolio (max 5%).
+- **Top-up to size** (owner request 2026-11-08, the mirror rule): a CORE holding still at conviction 4+ that drifted more than `[core].topup_band_pp` (2pp) below its size (`target_pct`, else the plain conviction size it was bought at) joins the funding queue as a top-up (`funding_queue.py` `underweight_topups`, checked in every daily `review`): ADD steps of 1%+ from cash above the reserve only, while its latest evaluation is under `topup_max_eval_days` (35) old and the price is no more than `topup_max_fall_pct` (10%) below that evaluation's close (a bigger fall is re-checked first via the dip radar / weekly scan). An automatic swap capped below the idea's full size also leaves the rest as a top-up. Winners are not trimmed back to size: only `trim_above_pct` (20%) trims, back to `trim_to_pct` (12%); entries and adds stop at `max_entry_pct` (15%).
+- **CORE**: a good business that is working (owner request 2026-11-15; was "good business + attractive valuation"): high quality, a fair-to-attractive price OR a healthy uptrend (above its 200-day average, not severely overextended, a real FCF yield), ~12-month horizon. The screen ranks 40% quality / 30% value / 30% momentum-trend; the scorecard gives trend-strength points in place of discount points. Judged purely against thesis (invalidation) triggers on business fundamentals. No price stops, price levels, moving averages or valuation multiples as triggers.
+- **TACTICAL**: weeks to ~3 months, two setups only (owner rule 2026-10-08): **post-earnings drift** (a real results beat the price is still digesting) and **pullback in an uptrend** (a dip to around the 50-day average). MUST have target, stop and time limit at entry; these execute mechanically. The stop comes from the stock's own volatility (ATR), the target must be ≥2× the stop distance (checked at the decision and again at the fill-day open), and the size is set so a stop-out costs ~1% of the portfolio (max 8%; the whole sleeve max 40%).
 - The label is fixed at entry. A tactical position can NEVER be relabelled core; it can only become core by passing a full core initiation, which records a new entry decision.
 - When a core invalidation trigger fires, the holding gets a full core re-initiation (researcher + evaluator), not a quick review.
 - **Rolling full re-check** (owner request 2026-11-02; `[core].rolling_reviews_per_week`): every weekly run also fully re-researches the 3 CORE holdings whose latest full research is oldest, flagged or not, so each holding gets a complete fresh look about every 4 weeks.
 - **Fair value reached** (owner rule 2026-10-09): when a core holding's close reaches its latest base fair value, the weekly scan sends it to a full re-initiation (once per crossing; `[core].fv_review_*`). Fair value is one model estimate, NEVER a sell signal on its own: the re-initiation decides on the whole evidence whether the thesis has played out.
+- **Smoke alarm** (owner request 2026-11-15, V2; `[core].smoke_alarm_*`): a CORE holding that trails the benchmark (SPY) by 15pp or more over 63 trading sessions AND closes below its own 200-day average goes to a full re-initiation in the weekly scan (not again within 30 days of its last decision). Like fair value reached it is a prompt to re-examine the thesis, NEVER a sell signal and never a trigger: core exits stay thesis-based.
+- **Cluster cap and re-entry cooldown** (owner request 2026-11-15, V2; `[portfolio].cluster_*`, `reentry_cooldown_days`): a BUY/ADD whose daily returns correlate at 0.85+ with current holdings over 90 sessions may not take that group past 40% combined: a BUY or ADD is sized down to the room left (the full size stays its `target_pct`); a BUY whose room is under `min_size_pct` (7%) is rejected as `CLUSTER_MAX` (name a holding it replaces, or skip it). A fully sold name can't be re-bought for 30 days (`state.json` `last_sold`; positions sold before 2026-11-15 are not covered).
 - **Text-only triggers** (owner rule 2026-10-09): triggers no script can check (bookings, share, guidance, regulation) are tested by the weekly reviewer against every new release/filing of the holding; one that is met escalates to a re-initiation.
-- **Cash is a holding** (owner rule 2026-10-09; continuous score 2026-10-19): `scripts/regime.py` scores eight official macro indicators on sliding scales into a 0–100 stress score, which sets a cash reserve between 5% and 35% (`[cash_strategy]`), moving at most 5pp a week; the weekly `macro-strategist` may move it one notch (5pp) with cited official sources. New buys can't spend the reserve (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0 (re-checked every weekday from daily closes by `regime.py --dip` in bin/fill-pending, 2026-10-19, so a sell-off releases the reserve for the next open; the regime itself stays weekly), and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
+- **Cash is a holding** (owner rule 2026-10-09; continuous score 2026-10-19): `scripts/regime.py` scores nine official macro indicators on sliding scales into a 0–100 stress score, which sets a cash reserve between 5% and 35% (`[cash_strategy]`), moving at most 5pp a week; the weekly `macro-strategist` may move it one notch (5pp) with cited official sources. New buys can't spend the reserve (a BUY/ADD below it must name a holding to replace). Nothing is sold to reach it. When the S&P 500 falls 10% / 20% below its 52-week high the reserve halves / goes to 0 (re-checked every weekday from daily closes by `regime.py --dip` in bin/fill-pending, 2026-10-19, so a sell-off releases the reserve for the next open; the regime itself stays weekly), and core holdings that fell well below their conviction size are flagged for a thesis check (ADD eligible).
 - **Funding queue** (design by Claude, owner-approved 2026-10-18; `[funding_queue]`): a conviction-4+ CORE BUY rejected only because it would take cash below the reserve (or the cash floor) is not lost. It waits in `state.json` `funding_queue`; weekdays it is resubmitted for the next open once there is room above the reserve (best upside first — to a 50/50 blend of the base fair value and the expected 12-month value (the latest evaluation's probability-weighted scenario targets), either alone when the other is missing (`fair_value_weight`, owner rule 2026-11-08), every rule re-checked); weekly the `swap-reviewer` weighs the best waiting idea against the weakest CORE holdings and may swap (a BUY with `replaces`, only when clearly better). It drops out after 30 days or once its close is 10% above the decision price. When the best idea doesn't fit at full size but the room above the reserve is at least half its target, it starts with a **starter position** using that room (one at a time, owner-approved 2026-10-19); the rest stays queued as a top-up (an ADD in steps of 1%+ as room appears, same 30-day / 10% limits; the holding's `target_pct` is the full size). The reserve itself is never relaxed.
 - **Dip radar** (design by Claude, owner request 2026-10-19; `[dip]`): every weekday night `scripts/dip_radar.py` checks holdings and recent conviction-3+ AVOIDs for an unusual stock-specific fall since our last research (beta-adjusted, in standard deviations of the stock's own moves) with the price at or below base fair value; the best few are re-researched the next day in the intraday window (holdings as re-initiations: ADD is the question). Complements the entry prices, which only cover names with a price-based obstacle. A dip is never a buy on its own.
 - **Dividends and splits** (owner request 2026-10-16): credited / applied mechanically by `scripts/corporate_actions.py` before every re-pricing (`[corporate_actions]`). A split never reads as a price move: shares, entry prices, tactical levels, watchlist entry prices and decision scoring are all adjusted.
 - **Country exposure** (owner-approved 2026-10-19; `[portfolio].country_group_caps`): China + Hong Kong combined (companies reporting in CNY or HKD) is capped at 25%, enforced by `portfolio.py` like the sector cap. Evaluators judge each stock on its merits and do NOT lower conviction for portfolio concentration: the caps handle it.
-- When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve, sector or country limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
+- When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve, sector, correlation-cluster or country limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
 
 ## Config (edit values here; scripts read this block)
 The portfolio is kept entirely in **US dollars**: cash, holdings, costs, returns and the SPY benchmark. Percentages are percent of total portfolio value (cash + holdings, in USD).
@@ -67,7 +69,11 @@ min_holdings = 8                  # target; reported as a warning, not used to r
 max_holdings = 15
 min_cash_pct = 0                  # hard: cash can never go below this
 max_cash_pct = 20                 # (superseded by [cash_strategy]: the regime's reserve; kept for reference)
-max_sector_pct = 30               # stockanalysis.com sector classification
+max_sector_pct = 35               # stockanalysis.com sector classification (owner request 2026-11-15, V2: was 30)
+reentry_cooldown_days = 30        # owner request 2026-11-15 (V2): a fully sold name can't be re-bought for this long (state.json last_sold)
+cluster_cap_pct = 40              # owner request 2026-11-15 (V2): a BUY/ADD whose daily returns correlate >= cluster_corr with
+cluster_corr = 0.85               # ...current holdings (over cluster_days sessions) may not take that combined weight past
+cluster_days = 90                 # ...this cap; cross-sector AI/tech runs count as one exposure. Blocks like the sector cap.
 country_group_caps = [            # owner-approved 2026-10-19: combined exposure by the currency a company REPORTS in
   { name = "China/HK", currencies = ["CNY", "HKD"], max_pct = 25 },  # (valuation file; HKG/SHA/SHE listing if unknown)
 ]
@@ -75,7 +81,10 @@ country_group_caps = [            # owner-approved 2026-10-19: combined exposure
 [core]
 # conviction -> target position size (% of portfolio). 1 = no position.
 conviction_size_pct = { "1" = 0, "2" = 3, "3" = 5, "4" = 7, "5" = 10 }
-trim_above_pct = 15
+trim_above_pct = 20               # owner request 2026-11-15 (V2): drift band. A core weight above this is trimmed...
+trim_to_pct = 12                  # ...back to this. (was a single 15% cap that both trimmed and capped entries)
+max_entry_pct = 15                # cap on a BUY/ADD and on the vol-scaled target; winners may then drift up to trim_above_pct
+min_size_pct = 7                  # floor on a buy-bar core target (V2): never sized below this after vol scaling
 vol_scaling = true                # design by Claude 2026-10-16 (scripts/risk.py): core target = conviction size x
 vol_scale_clamp = [0.6, 1.4]      # ...clamp(reference vol / the stock's vol), capped at trim_above_pct. Reference =
 ref_vol_pct = 30                  # ...median vol of the core holdings (this % while fewer than 5 have a vol)
@@ -84,9 +93,12 @@ topup_max_eval_days = 35          # ...is topped back up (funding-queue top-up, 
 topup_max_fall_pct = 10           # ...evaluation is this fresh and the price no more than this below that evaluation's close
 downgrade_trim_gap_pp = 1.0       # owner request 2026-11-08: a core holding below min_buy_conviction is held at no
                                   # ...more than its (vol-scaled) conviction size; above it by this much -> TRIM (size 0 -> SELL)
+smoke_alarm_pp = 15               # owner request 2026-11-15 (V2): a core holding this many pp behind the benchmark over
+smoke_alarm_sessions = 63         # ...this many trading sessions AND closes below its own 200-day average goes to a re-initiation (never a sell: core exits
+smoke_alarm_rearm_days = 30       # ...stay thesis-based); not again until its last decision is this old
 corr_flag = 0.7                   # correlation check (owner-approved 2026-11-07, inform-only, scripts/risk.py): pairs
 corr_weeks = 52                   # ...of weekly returns above this over these weeks are flagged; never blocks or sells
-vol_lookback_sessions = 126       # daily closes for the stock's annualised volatility (~6 months)
+vol_lookback_sessions = 60        # daily closes for the stock's annualised volatility (~3 months; V2, was 126)
 fv_review_rearm_pct = 10          # fair value reached (owner rule 2026-10-09): one re-initiation per crossing; re-arms
 fv_review_days = 90               # ...after a further 10% rise or 90 days. Fair value is a prompt, never a sell signal.
 min_buy_conviction = 4            # owner rule: only buy/add with high conviction (core AND tactical); below -> AVOID/HOLD
@@ -94,8 +106,8 @@ rolling_reviews_per_week = 3      # owner request 2026-11-02: each weekly run fu
                                   # the oldest research (flagged or not), so each gets a fresh look about every 4 weeks
 
 [tactical]
-max_sleeve_pct = 25
-max_position_pct = 5
+max_sleeve_pct = 40                # owner request 2026-11-15 (was 25): "good businesses that are working" + tactical momentum
+max_position_pct = 8                # owner request 2026-11-15 (was 5)
 default_time_limit_months = 3
 # Setups (scripts/setups.py): post-earnings drift and pullback-in-uptrend. Stops from each stock's own
 # volatility; every entry needs reward:risk >= min_reward_risk; size = risk_per_trade_pct / stop distance
@@ -161,6 +173,7 @@ vix             = { calm = 14, stressed = 35, weight = 1 }
 curve_10y_2y    = { calm = 1.0, stressed = -0.5, weight = 1 }   # pp; inversion is the stressed end
 real_yield_3m   = { calm = 0.0, stressed = 1.0, weight = 1 }    # 10y TIPS yield, 3-month change, pp
 spy_vs_40w      = { calm = 5.0, stressed = -10.0, weight = 1 }  # S&P 500 vs its 40-week average, %
+spy_50_200      = { calm = 2.0, stressed = -2.0, weight = 1 }   # owner request 2026-11-15 (V2): 50-day vs 200-day average, %; the +/-2% scale is the hysteresis band
 core_cpi_3m_ann = { calm = 2.5, stressed = 5.0, weight = 1 }    # core CPI, 3-month annualised, %
 fed_funds_3m    = { calm = 0.0, stressed = 1.0, weight = 1 }    # effective fed funds, 3-month change, pp (hikes)
 
@@ -309,8 +322,13 @@ upside_bands = [30, 15, 5]        # value-blend upside % for 3 / 2 / 1 points
 cheap_history_pos = 33            # median position of P/E and EV/EBITDA in the 5y range at or below this: +1
 thresholds = { "5" = 11, "4" = 9, "3" = 5, "2" = 3 }  # total -> conviction (below the "2" threshold: 1); tuned on the
                                   # 2026-11-08/09 replay: ~3-5% of new names at 4+ (the October hit rate was 4-5%)
+overextended_pct = 50             # owner request 2026-11-15: trend strength (valuation points = max(discount points, strength)):
+min_fcf_yield_pct = 1.0           # ...price above its 200-day average but no more than this % above it, FCF yield at least this
+max_strength_hist_pos = 100       # ...and no strength points while P/E and EV/EBITDA sit above their own 5-year max (V, AAPL: 9 at ~2x fair value; 2026-11-16)
+max_strength_overvalue_pct = 20   # ...nor while the value blend (fair value + expected value) is more than this % BELOW the price (MA: -23%)
+strong_ch1y_pct = 15              # ...= 1 point; 2 if the 12-month change is also at least this %. A business that is working, fairly priced.
 hold_4 = 8                        # hold band: a holding keeps conviction 4 from this total (an ADD needs the buy threshold)
-# 4+ also needs quality level >= 1, direction >= 1 and valuation >= 2 (the mandate: good business, attractive price)
+# 4+ also needs quality level >= 1, direction >= 1 and valuation points >= 2 (a real discount OR trend strength: the mandate is a good business that is working)
 
 [calibration]
 # Calibration loop (owner-approved 2026-11-09, scripts/calibration.py, weekly): outcomes vs the SECTOR benchmark by
@@ -337,7 +355,8 @@ tactical_check_top = 40           # stage 2: daily history (setup check + ATR) f
 min_metrics_per_pillar = 2
 quality = ["roic", "roce", "fcfMargin", "operatingMargin", "fScore", "-debtEbitda"]   # "-" = lower is better
 valuation = ["fcfYield", "earningsYield", "-evEbitda", "-pe"]
-momentum = ["ch1y", "price_vs_sma200", "price_vs_sma50"]
+momentum = ["ch1y", "price_vs_sma200"]   # owner request 2026-11-15: 12-month change + trend; the tactical setups keep their own SMA50 logic
+core_weights = { quality = 0.40, valuation = 0.30, momentum = 0.30 }   # core score (both stages); the report lists the top 25, core_picks are researched
 min_addv_usd = 10_000_000        # liquidity gate before ranking (design by Claude 2026-10-16): 20-day avg volume x price, USD
 min_float_pct = 20                # ...and free float >= this % of shares outstanding (a missing float figure doesn't fail)...
 float_check_below_addv_usd = 100_000_000  # ...checked only for names trading less than this a day (heavy trading = tradable)

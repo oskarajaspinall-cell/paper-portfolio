@@ -1,7 +1,8 @@
 """Portfolio risk: volatility-scaled core sizing and risk contributions. No model calls.
 
 Design by Claude 2026-10-16 (config [core].vol_*):
-- Core sizing: target = conviction size x clamp(ref_vol / vol, vol_scale_clamp), capped at trim_above_pct.
+- Core sizing: target = conviction size x clamp(ref_vol / vol, vol_scale_clamp), capped at max_entry_pct and (for a
+  buy-bar conviction) floored at min_size_pct (V2, 2026-11-15; winners may drift to trim_above_pct before a trim).
   vol = annualised volatility of the stock's last `vol_lookback_sessions` daily closes (its own currency);
   ref_vol = the median vol of the current core holdings (`ref_vol_pct` while fewer than 5 have a vol).
   A high-volatility name gets a smaller position than a defensive one at the same conviction; conviction
@@ -88,6 +89,34 @@ def correlation(a: dict[str, float], b: dict[str, float], weeks: int = 52) -> fl
     return sxy / math.sqrt(sxx * syy) if sxx > 0 and syy > 0 else None
 
 
+MIN_CLUSTER_OBS = 40     # fewer common daily returns than this -> no cluster link
+
+
+def daily_returns(rows: list[dict], days: int) -> dict[str, float]:
+    """Date -> simple return, over the last `days` sessions."""
+    c = [(r["date"], r["close"]) for r in sorted(rows, key=lambda r: r["date"]) if r.get("close")][-(days + 1):]
+    return {d1: p1 / p0 - 1 for (_, p0), (d1, p1) in zip(c, c[1:]) if p0}
+
+
+def pearson(a: dict[str, float], b: dict[str, float], min_obs: int = MIN_CLUSTER_OBS) -> float | None:
+    """Pearson correlation over the dates both series have."""
+    ks = sorted(set(a) & set(b))
+    if len(ks) < min_obs:
+        return None
+    x, y = [a[k] for k in ks], [b[k] for k in ks]
+    mx, my = st.mean(x), st.mean(y)
+    sxy = sum((i - mx) * (j - my) for i, j in zip(x, y))
+    sxx, syy = sum((i - mx) ** 2 for i in x), sum((j - my) ** 2 for j in y)
+    return sxy / math.sqrt(sxx * syy) if sxx > 0 and syy > 0 else None
+
+
+def cluster_settings(cfg: dict) -> tuple[float | None, float, int]:
+    """(cap %, correlation threshold, days). Cap None = the check is off (owner request 2026-11-15, V2)."""
+    p = cfg.get("portfolio", {})
+    cap = p.get("cluster_cap_pct")
+    return (float(cap) if cap else None), float(p.get("cluster_corr", 0.85)), int(p.get("cluster_days", 90))
+
+
 def corr_settings(cfg: dict) -> tuple[float, int]:
     c = cfg.get("core", {})
     return float(c.get("corr_flag", 0.7)), int(c.get("corr_weeks", 52))
@@ -118,6 +147,29 @@ class Correlator:
             except (DataError, KeyError, AttributeError):
                 self._s[ticker] = {}
         return self._s[ticker]
+
+    def daily(self, ticker: str, days: int) -> dict[str, float]:
+        k = (ticker, "d", days)
+        if k not in self._s:
+            try:
+                self._s[k] = daily_returns(self.mkt.history(ticker)["rows"], days)
+            except (DataError, KeyError, AttributeError):
+                self._s[k] = {}
+        return self._s[k]
+
+    def cluster(self, ticker: str, state: dict) -> list[tuple[str, float]]:
+        """Holdings whose daily returns over `cluster_days` correlate with `ticker` at or above `cluster_corr`
+        (the names that move with it: the exposure a new buy adds to). Direct links only, no chaining, so A~B and
+        B~C never pull an uncorrelated A into C's cluster. Dates are matched exactly, so pairs trading in different
+        time zones read slightly low. A missing history means no link (the check can't block on data it lacks)."""
+        _, thr, days = cluster_settings(self.cfg)
+        s, out = self.daily(ticker, days), []
+        for t in state["holdings"]:
+            if t != ticker:
+                r = pearson(s, self.daily(t, days))
+                if r is not None and r >= thr:
+                    out.append((t, round(r, 2)))
+        return sorted(out, key=lambda x: -x[1])
 
     def with_holdings(self, ticker: str, state: dict) -> list[tuple[str, float]]:
         """(holding, rho) for every other holding, highest first."""
@@ -173,7 +225,12 @@ class Sizer:
         c = self.cfg["core"]
         base = float(c["conviction_size_pct"][str(conviction)])
         k, why = self.scale(ticker, state) if base else (1.0, "")
-        return round(min(base * k, float(c["trim_above_pct"])), 2), why
+        cap = float(c.get("max_entry_pct", c["trim_above_pct"]))  # entry cap; winners may drift up to trim_above_pct
+        size = min(base * k, cap)
+        # floor (owner request 2026-11-15, V2): a buy-bar core position is never sized below min_size_pct
+        if base and conviction >= int(c.get("min_buy_conviction", 4)):
+            size = max(size, min(float(c.get("min_size_pct", 0)), cap))
+        return round(size, 2), why
 
 
 def report(state: dict, mkt, cfg: dict, asof: str) -> dict:

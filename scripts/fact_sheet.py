@@ -405,6 +405,8 @@ def build(ticker: str, peers: list[str], fetcher: Fetcher, asof: str, fv_out: di
     m3, m6 = momentum(rows, 3), momentum(rows, 6)
     s3, s6 = momentum(spy_rows, 3), momentum(spy_rows, 6)
     m12, s12 = sv("ch1y"), spy_o["data"].get("ch1y_pct")
+    # the scorecard's trend-strength inputs (owner request 2026-11-15); the numbers the tables below already show
+    trends["trend"] = {"price_vs_sma200_pct": pct_diff(last["close"], sma200), "ch1y_pct": m12, "fcf_yield_pct": fy}
     sw = swing_points(rows)
     hi6, lo6 = max(rows, key=lambda r: r["high"] or 0), min(rows, key=lambda r: r["low"] or float("inf"))
 

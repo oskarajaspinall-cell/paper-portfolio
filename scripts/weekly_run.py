@@ -71,7 +71,9 @@ def sh(args: list[str], log, timeout: int | None = None) -> str:
         raise StepFailed(f"{args[0]} timed out after {timeout}s") from e
     log(p.stdout.strip()[-4000:].replace(f"{ROOT}/", ""))
     if p.returncode != 0:
-        raise StepFailed(f"{' '.join(args)} exited {p.returncode}: {p.stderr.strip()[-2000:]}")
+        # `claude -p` prints usage-limit and similar errors on stdout, leaving stderr empty: keep both
+        detail = p.stderr.strip()[-2000:] or p.stdout.strip()[-500:]
+        raise StepFailed(f"{' '.join(args)} exited {p.returncode}: {detail}")
     return p.stdout
 
 

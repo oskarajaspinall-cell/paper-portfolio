@@ -110,3 +110,46 @@ def test_method_change_only_for_pre_scorecard_verdicts(tmp_path):
     assert consistency_problems(tmp_path / "2026-11-09-evaluation.md", new) == []
     (tmp_path / "2026-11-10-evaluation.md").write_text("x\n```json\n" + json.dumps({"decision": "BUY", "conviction": 4}) + "\n```\n")
     assert consistency_problems(tmp_path / "2026-11-11-evaluation.md", new)
+
+
+# ---- trend strength (owner request 2026-11-15): a business that is working can reach 4 without a discount
+EXPENSIVE = dict(VAL, fair_value={"base": 102})
+
+
+def with_trend(ext=20.0, ch1y=30.0, fcf=2.5, **kw):
+    t = trends(**kw)
+    t["trend"] = {"price_vs_sma200_pct": ext, "ch1y_pct": ch1y, "fcf_yield_pct": fcf}
+    return t
+
+
+def test_a_leader_above_its_200_day_reaches_4_without_a_discount():
+    flat = S.score(decision(ev=101), trends(), EXPENSIVE, CFG)                      # no trend data: as before
+    assert flat["conviction"] <= 3 and flat["trend_strength"] == 0
+    r = S.score(decision(ev=101), with_trend(), EXPENSIVE, CFG)
+    assert r["conviction"] >= 4 and r["trend_strength"] == 2 and r["parts"]["valuation"] == 2
+    assert S.score(decision(ev=101), with_trend(ch1y=5.0), EXPENSIVE, CFG)["trend_strength"] == 1   # up, not yet strong
+
+
+def test_no_strength_when_below_the_200_day_overextended_or_no_fcf():
+    for bad in (with_trend(ext=-4.0), with_trend(ext=80.0), with_trend(fcf=0.4), with_trend(fcf=None)):
+        r = S.score(decision(ev=101), bad, EXPENSIVE, CFG)
+        assert r["trend_strength"] == 0 and r["conviction"] <= 3
+
+
+def test_strength_never_lowers_a_cheap_names_valuation_points():
+    cheap = S.score(decision(), trends(), VAL, CFG)
+    both = S.score(decision(), with_trend(), VAL, CFG)
+    assert both["parts"]["valuation"] == cheap["parts"]["valuation"] >= 3 and both["total"] == cheap["total"]
+    assert S.score(decision(), with_trend(roic=5.0), VAL, CFG)["conviction"] <= 3         # the quality gate still holds
+
+
+def test_no_strength_when_multiples_are_above_their_own_5y_maximum():
+    rich = S.score(decision(ev=101), with_trend(pe_pos=120.0), EXPENSIVE, CFG)   # V / AAPL on 2026-11-15
+    assert rich["trend_strength"] == 0 and rich["conviction"] <= 3
+    assert S.score(decision(ev=101), with_trend(pe_pos=80.0), EXPENSIVE, CFG)["trend_strength"] == 2
+
+
+def test_no_strength_when_the_value_blend_is_far_below_the_price():
+    far = S.score(decision(ev=70), with_trend(), dict(VAL, fair_value={"base": 70}), CFG)      # blend ~ -30%
+    assert far["trend_strength"] == 0 and far["conviction"] <= 3
+    assert S.score(decision(ev=90), with_trend(), dict(VAL, fair_value={"base": 90}), CFG)["trend_strength"] == 2  # -10%

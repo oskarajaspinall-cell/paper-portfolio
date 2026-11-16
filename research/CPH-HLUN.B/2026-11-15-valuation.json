@@ -1,0 +1,119 @@
+{
+ "industry": {
+  "industry": "Drug Manufacturers - Specialty & Generic",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "P/E",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 42.39291871389532,
+    "base": 81.28834021007162,
+    "bull": 105.72480057008727
+   },
+   "implied_growth": -0.005431351931667954,
+   "discount_rate": 0.09706355772187918,
+   "cost_of_equity": 0.106,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.03508902031691492,
+     "base": 0.0659770511333052,
+     "bull": 0.10873016389939094
+    },
+    "cash_flow_margin": {
+     "bear": 0.12066471071844899,
+     "base": 0.19364869958910363,
+     "bull": 0.20921332927324401
+    },
+    "cagr_3y": 0.10517804063382985,
+    "cagr_5y": 0.10873016389939094,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 29.97825722,
+    "base": 31.365896029999995,
+    "bull": 55.20908805999999
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 12.541,
+     "base": 13.1215,
+     "bull": 13.274
+    },
+    "ttm_eps": 4.15919,
+    "peak_earnings": "TTM EPS is 1.8x its 5y median: bear/base use the 5y average (2.39), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 59.35,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "DKK",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 38.25469821593021,
+  "base": 64.64752548338107,
+  "bull": 88.88622973339152
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.35543895171136963,
+  "base": 0.08925906458940314,
+  "bull": 0.49766183207062364
+ },
+ "implied_growth": -0.005431351931667954,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.6x (base 31.37-81.29)"
+  ]
+ },
+ "ticker": "CPH:HLUN.B",
+ "asof": "2026-11-15",
+ "quote_currency": "DKK",
+ "financials_currency": "DKK",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/cph/HLUN.B/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/cph/HLUN.B/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/cph/HLUN.B/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/cph/HLUN.B/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/cph/HLUN.B/statistics/"
+ }
+}

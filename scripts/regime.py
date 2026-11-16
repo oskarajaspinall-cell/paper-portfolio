@@ -52,6 +52,10 @@ INDICATORS = [
     ("curve_10y_2y", "Yield curve, 10y - 2y, pp", "DGS10, DGS2"),
     ("real_yield_3m", "Real 10y yield, 3m change, pp", "DFII10"),
     ("spy_vs_40w", "S&P 500 vs its 40-week (~200-day) average, %", None),
+    # owner request 2026-11-15 (V2): the 50/200-day trend, from the 10-week and 40-week averages of the weekly closes
+    # already read. Its +/-2% sliding scale is the hysteresis band (no flip at a crossover) and the weekly cap on the
+    # reserve's move does the rest, so no separate regime flag is stored.
+    ("spy_50_200", "S&P 500 50-day vs 200-day average (10-week vs 40-week), %", None),
     ("core_cpi_3m_ann", "US core CPI, 3m annualised, %", "CPILFESL"),
     ("fed_funds_3m", "Fed funds rate, 3m change, pp", "DFF"),
 ]
@@ -76,6 +80,8 @@ def indicator_values(snap: dict, spy: dict | None) -> dict[str, tuple]:
         v["real_yield_3m"] = (ry["chg_3m"], ry["date"])
     if spy and spy.get("avg_40w"):
         v["spy_vs_40w"] = (round((spy["close"] / spy["avg_40w"] - 1) * 100, 2), spy["date"])
+        if spy.get("avg_10w"):
+            v["spy_50_200"] = (round((spy["avg_10w"] / spy["avg_40w"] - 1) * 100, 2), spy["date"])
     cpi = _series(snap, "CPILFESL")
     if cpi and cpi.get("chg_3m") is not None and cpi["value"] - cpi["chg_3m"] > 0:
         v["core_cpi_3m_ann"] = (round(((cpi["value"] / (cpi["value"] - cpi["chg_3m"])) ** 4 - 1) * 100, 2), cpi["date"])
@@ -145,6 +151,7 @@ def spy_trend(fetcher, asof: str) -> dict:
     last = rows[-1]
     hi = max(r["close"] for r in rows[-52:])
     return {"close": last["close"], "date": last["date"], "avg_40w": sum(r["close"] for r in rows[-40:]) / 40,
+            "avg_10w": sum(r["close"] for r in rows[-10:]) / 10,
             "high_52w": hi, "drawdown_pct": round((1 - last["close"] / hi) * 100, 2), "source": h["source_url"]}
 
 

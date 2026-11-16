@@ -66,7 +66,7 @@ def price_provider(cfg: dict):
     """The primary portfolio-price source per config [prices] (owner-approved 2026-10-08), or None."""
     if (cfg.get("prices") or {}).get("source") == "yfinance":
         from prices import YahooPrices
-        return YahooPrices()
+        return YahooPrices(period="1y")  # 2026-11-15: >= 200 closes for the smoke alarm's 200-day average
     return None
 
 
@@ -533,8 +533,9 @@ class Engine:
         self.applied: list[dict] = []
         self.applied_rows: list[tuple[dict, list[dict]]] = []
         self.override: dict[str, dict] = {}  # ticker -> quote (fills at the next open)
-        from risk import Sizer
+        from risk import Correlator, Sizer
         self.sizer = Sizer(mkt, cfg)
+        self.correlator = Correlator(mkt, cfg)
 
     def quote(self, ticker: str, on_or_before: str | None = None) -> dict:
         return self.override.get(ticker) or self.mkt.quote(ticker, on_or_before)
@@ -556,6 +557,19 @@ class Engine:
         have reduced the portfolio: n*p + cur <= t*(pv - n*p*c)."""
         t = target_pct / 100
         return math.floor((t * pv - current_mv) / (q["price_usd"] * (1 + t * self.cost_rate(q["currency"]))))
+
+    def cluster_room(self, ticker: str, s: dict) -> tuple[float | None, list]:
+        """(room %, mates): how much total weight `ticker` may take before the group of holdings it moves with
+        (daily-return correlation >= cluster_corr) passes cluster_cap_pct; None when the check is off or it has no
+        mates. Shaved 0.5% so a fill's own costs can't tip it over the cap (limit_breaches stays the backstop)."""
+        from risk import cluster_settings
+        ccap, _, _ = cluster_settings(self.cfg)
+        mates = self.correlator.cluster(ticker, s) if ccap else []
+        if not mates:
+            return None, []
+        pv = self.pv(s)
+        used = sum(s["holdings"][t]["market_value_usd"] for t, _ in mates) / pv * 100
+        return max(0.0, ccap - used) * 0.995, mates
 
     def core_size(self, conviction: int, ticker: str, s: dict, for_trim: bool = False) -> float:
         """Conviction size scaled by the stock's volatility (scripts/risk.py; design by Claude 2026-10-16).
@@ -595,6 +609,7 @@ class Engine:
         h["market_value_usd"] = round(h["shares"] * q["price_usd"], 2)
         if h["shares"] == 0:
             del s["holdings"][ticker]
+            s.setdefault("last_sold", {})[ticker] = self.today  # re-entry cooldown (owner request 2026-11-15, V2)
         return {"date": self.today, "ticker": ticker, "type": ptype, "side": side, "shares": shares,
                 "fill_price": q["close"], "currency": q["currency"], "fill_close_date": q["date"],
                 "fx_usd_per_unit": round(q["fx"]["rate"], 8) if q["fx"] else "", "gross_usd": gross, **cost,
@@ -631,6 +646,10 @@ class Engine:
                 raise Reject("LABEL_FIXED", "core re-initiation of a tactical holding needs research_note")
             if t not in self.watch and not held:
                 raise Reject("WATCHLIST", f"{t} is not in universe/universe.csv or universe/watchlist.txt")
+            cd, sold = self.cfg["portfolio"].get("reentry_cooldown_days"), (s.get("last_sold") or {}).get(t)
+            if cd and sold and not held and self.today < _add_days(sold, int(cd)):
+                raise Reject("COOLDOWN", f"{t} was sold on {sold}; no re-entry before {_add_days(sold, int(cd))} "
+                                         f"({cd}-day cooldown)")
             if r["conviction"] == 1:
                 raise Reject("CONVICTION_NO_POSITION", "conviction 1 means no position")
             self._min_conviction(r)
@@ -654,8 +673,18 @@ class Engine:
                 buy_pct = target_pct
                 if ptype == "CORE" and r.get("cap_pct") is not None:  # a starter position (funding queue,
                     buy_pct = min(target_pct, float(r["cap_pct"]))     # 2026-10-19): the target stays the full size
+                room, mates = self.cluster_room(t, s)
+                if room is not None and room < buy_pct:  # V2 cluster cap: size down to the room, or skip under the floor
+                    # shortcut: a tactical position under 1% isn't worth a trade; make it a config key if that ever matters
+                    floor = float(self.cfg["core"].get("min_size_pct", 0)) if ptype == "CORE" else 1.0
+                    if room < floor:
+                        raise Reject("CLUSTER_MAX", f"{t} moves with {', '.join(m for m, _ in mates)} (correlation >= "
+                                                    f"{self.cfg['portfolio']['cluster_corr']}); only {room:.1f}% of room under the "
+                                                    f"{self.cfg['portfolio']['cluster_cap_pct']:g}% cluster cap, below the "
+                                                    f"{floor:g}% minimum position -- name a holding it replaces or skip it")
+                    buy_pct = room
                 shares = math.floor(buy_pct / 100 * pv / q["price_usd"]) if ptype == "CORE" \
-                    else self.capped_shares(target_pct, pv, 0.0, q)
+                    else self.capped_shares(buy_pct, pv, 0.0, q)
                 if shares < 1:
                     raise Reject("MIN_SHARES", f"{target_pct}% of ${pv:,.0f} buys <1 share at ${q['price_usd']:,.2f}")
                 s["holdings"][t] = self._new_holding(t, ptype, r, q)
@@ -691,6 +720,13 @@ class Engine:
                     full_pct = target_pct
                     if act == "ADD" and r.get("cap_pct") is not None:  # a funding-queue top-up step (2026-10-19)
                         target_pct = min(target_pct, float(r["cap_pct"]))
+                    room, mates = self.cluster_room(t, s) if act == "ADD" else (None, [])
+                    if room is not None and room < target_pct:  # V2 cluster cap: an ADD stops at the cluster's room
+                        if room <= cur / pv * 100:
+                            raise Reject("CLUSTER_MAX", f"{t} is already {cur / pv * 100:.2f}% and its cluster "
+                                                        f"({', '.join(m for m, _ in mates)}) is at the "
+                                                        f"{self.cfg['portfolio']['cluster_cap_pct']:g}% cap")
+                        target_pct = room
                 else:
                     target_pct = r.get("target_weight_pct")
                     if target_pct is None:
@@ -832,6 +868,16 @@ class Engine:
             sec = tt["sectors"][h["sector"]] / pv * 100
             if sec > p["max_sector_pct"] + 1e-9:
                 out.append(("SECTOR_MAX", f"{h['sector']} would be {sec:.2f}% (> {p['max_sector_pct']}%)"))
+            from risk import cluster_settings
+            ccap, cthr, cdays = cluster_settings(self.cfg)
+            if ccap:  # owner request 2026-11-15 (V2): names that move together are one exposure, capped combined
+                mates = self.correlator.cluster(r["ticker"], s)
+                cw = (h["market_value_usd"] + sum(s["holdings"][t]["market_value_usd"] for t, _ in mates)) / pv * 100
+                if mates and cw > ccap + 1e-9:
+                    room = max(0.0, ccap - sum(s["holdings"][t]["market_value_usd"] for t, _ in mates) / pv * 100)
+                    out.append(("CLUSTER_MAX", f"{r['ticker']} with {', '.join(f'{t} {x:.2f}' for t, x in mates)} "
+                                               f"(daily-return correlation >= {cthr} over {cdays} sessions) would be "
+                                               f"{cw:.2f}% (> {ccap:g}%); room for {r['ticker']}: {room:.1f}%"))
             ccy = h.get("reporting_currency") or self.mkt.reporting_currency(r["ticker"])
             for g in p.get("country_group_caps", []):  # owner-approved 2026-10-19: e.g. China/HK combined
                 if ccy in g["currencies"]:
@@ -842,8 +888,9 @@ class Engine:
             w = h["market_value_usd"] / pv * 100
             if h["type"] == "TACTICAL" and w > tc["max_position_pct"] + 1e-9:
                 out.append(("TACTICAL_POSITION_MAX", f"{w:.2f}% (> {tc['max_position_pct']}%)"))
-            if h["type"] == "CORE" and w > cc["trim_above_pct"] + 1e-9:
-                out.append(("CORE_POSITION_MAX", f"{w:.2f}% (> {cc['trim_above_pct']}%)"))
+            entry_cap = cc.get("max_entry_pct", cc["trim_above_pct"])  # a BUY/ADD never takes a core past the entry cap
+            if h["type"] == "CORE" and w > entry_cap + 1e-9:
+                out.append(("CORE_POSITION_MAX", f"{w:.2f}% (> {entry_cap}%)"))
         return out
 
     def _reject(self, r, rule, detail, breaches=None):
@@ -877,7 +924,7 @@ class Engine:
                 if breaches:
                     if r["action"] == "BUY" and not r.get("replaces") and any(
                             b[0] in ("CASH_MIN", "CASH_RESERVE", "MAX_HOLDINGS", "TACTICAL_SLEEVE_MAX", "SECTOR_MAX",
-                                     "COUNTRY_MAX")
+                                     "COUNTRY_MAX", "CLUSTER_MAX")
                             for b in breaches):
                         raise Reject("REPLACEMENT_REQUIRED", "BUY would breach " + "; ".join(d for _, d in breaches)
                                      + " -- name the holding it replaces and why the new idea is better",

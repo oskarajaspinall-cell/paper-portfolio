@@ -50,6 +50,10 @@ def settings(cfg: dict) -> dict:
             "cheap_history_pos": float(c.get("cheap_history_pos", 33)),
             "thresholds": {int(k): float(v) for k, v in (c.get("thresholds") or {"5": 11, "4": 9, "3": 5, "2": 3}).items()},
             "hold_4": float(c.get("hold_4", 8)),
+            "overextended_pct": float(c.get("overextended_pct", 50)), "min_fcf_yield_pct": float(c.get("min_fcf_yield_pct", 1.0)),
+            "strong_ch1y_pct": float(c.get("strong_ch1y_pct", 15)),
+            "max_strength_hist_pos": float(c.get("max_strength_hist_pos", 100)),
+            "max_strength_overvalue_pct": float(c.get("max_strength_overvalue_pct", 20)),
             "fv_weight": float((cfg.get("funding_queue") or {}).get("fair_value_weight", 0.5))}
 
 
@@ -123,9 +127,23 @@ def score(decision: dict, trends: dict, valuation: dict | None, cfg: dict, offse
     pos = [x.get("pos_pct") for k, x in (trends.get("valuation") or {}).items()
            if k in ("P/E", "EV/EBITDA") and x.get("pos_pct") is not None]
     cheap_hist = bool(pos) and sorted(pos)[len(pos) // 2] <= s["cheap_history_pos"]
-    parts["valuation"] = v + (1 if cheap_hist else 0)
+    # trend strength (owner request 2026-11-15, "good businesses that are working"): a leader above its 200-day average,
+    # not severely overextended and with a real FCF yield earns up to 2 points in place of the valuation points
+    # (it never lowers them), so a strong, fairly priced business can reach conviction 4 without a deep discount.
+    tr = trends.get("trend") or {}
+    ext, fcf, ch1y = tr.get("price_vs_sma200_pct"), tr.get("fcf_yield_pct"), tr.get("ch1y_pct")
+    ok = ext is not None and 0 < ext <= s["overextended_pct"] and fcf is not None and fcf >= s["min_fcf_yield_pct"]
+    # guardrail (owner pick 2026-11-16, after V and AAPL reached 9 at 2x their fair value): no strength points while P/E and
+    # EV/EBITDA sit above their own 5-year maximum (median position over max_strength_hist_pos)
+    rich = bool(pos) and sorted(pos)[len(pos) // 2] > s["max_strength_hist_pos"]
+    ok = ok and not rich and not (up is not None and up < -s["max_strength_overvalue_pct"])  # ...nor while the value blend is far below the price
+    strength = (2 if ch1y is not None and ch1y >= s["strong_ch1y_pct"] else 1) if ok else 0
+    parts["valuation"] = max(v + (1 if cheap_hist else 0), strength)
     notes.append(f"value blend upside {'n/a' if up is None else f'{up:+.0f}%'}; own-history position "
                  + ("n/a" if not pos else "/".join(f"{x:.0f}%" for x in pos)))
+    notes.append("trend strength " + (f"{strength} (price {ext:+.0f}% vs 200-day, 12m {ch1y:+.0f}%, FCF yield {fcf:.1f}%)"
+                                      if ok else "0 (no trend data, below the 200-day, overextended, FCF yield too low"
+                                      + (" or priced above its own 5-year range or the value blend)" if rich or (up is not None and up < -s["max_strength_overvalue_pct"]) else ")")))
 
     parts["moat"] = MOATS.get(j.get("moat"), 0)
     parts["key_risk"] = RISKS.get(j.get("key_risk"), -1)
@@ -136,7 +154,7 @@ def score(decision: dict, trends: dict, valuation: dict | None, cfg: dict, offse
             conv = c
             break
     # a 4+ needs the mandate's basics: a decent business (quality >= 1), moving the right way or explained
-    # (direction >= 1) and a real discount (valuation >= 2)
+    # (direction >= 1) and a real discount OR trend strength (valuation points >= 2, see above)
     gated = conv >= 4 and not (parts["quality_level"] >= 1 and parts["quality_direction"] >= 1 and parts["valuation"] >= 2)
     if gated:
         conv = 3
@@ -151,7 +169,7 @@ def score(decision: dict, trends: dict, valuation: dict | None, cfg: dict, offse
     if isinstance(so, dict) and isinstance(so.get("conviction"), int):  # a buy needs both evaluations at 4+
         final = min(final, so["conviction"])
     return {"parts": parts, "offset": offset, "total": total, "conviction_score": conv, "conviction": final,
-            "falling": falling, "upside_pct": up, "notes": notes, "vetoed": final < conv, "gated": gated,
+            "falling": falling, "upside_pct": up, "trend_strength": strength, "notes": notes, "vetoed": final < conv, "gated": gated,
             "add_allowed": add_ok and final >= 4}
 
 

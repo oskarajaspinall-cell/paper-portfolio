@@ -69,6 +69,11 @@ def cfg():
     The minimum-conviction rule itself is tested with `real_cfg`."""
     c = load_config()
     c["core"]["min_buy_conviction"] = 1
+    # Pin the pre-V2 numbers (2026-11-15 moved the sector cap, trim band, size floor and vol window) so the rule
+    # mechanics keep their original fixtures; the V2 values are covered with `real_cfg` in tests/test_v2_risk.py.
+    c["portfolio"]["max_sector_pct"] = 30
+    c["tactical"].update(max_sleeve_pct=25, max_position_pct=5)   # 2026-11-15: now 40 / 8 (tests/test_v2_risk.py)
+    c["core"].update(trim_above_pct=15, trim_to_pct=15, max_entry_pct=15, min_size_pct=0, vol_lookback_sessions=126)
     return c
 
 

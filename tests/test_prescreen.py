@@ -6,6 +6,11 @@ import prescreen
 from common import DataError
 
 
+@pytest.fixture(autouse=True)
+def no_trend(monkeypatch):  # these tests cover the fair-value gate; trend strength is tested below
+    monkeypatch.setattr(prescreen, "trend_strong", lambda *a: None)
+
+
 def fake_compute(price, base):
     def compute(ticker, asof, fetcher, cfg):
         if base is None:
@@ -60,3 +65,10 @@ def test_unreliable_model_still_skips_when_every_method_is_below_price(cfg, monk
         return {"price": 100.0, "fair_value": {"base": 85.0}, "upside": {"base": -0.15}, "methods": m}, "USD"
     monkeypatch.setattr(prescreen.valuation, "compute", compute2)
     assert prescreen.check("X", "2026-11-09", None, cfg)["verdict"] == "PASS"   # one method sees value: research it
+
+
+def test_trend_strength_rescues_a_skip(cfg, monkeypatch):
+    monkeypatch.setattr(prescreen.valuation, "compute", fake_compute(235.23, 218.53))
+    monkeypatch.setattr(prescreen, "trend_strong", lambda *a: "price +20% vs 200-day, FCF yield 3.0%")
+    row = prescreen.check("X", "2026-11-15", None, cfg)
+    assert row["verdict"] == "PASS" and "trend strength" in row["reason"]

@@ -202,6 +202,44 @@ def dip_candidates(work: dict, pv: float, cfg: dict, res: dict, skip: set) -> li
     return out
 
 
+def relative_return_pp(rows: list[dict], bench: list[dict], sessions: int) -> float | None:
+    """Stock return minus benchmark return (percentage points) over the stock's last `sessions` trading sessions,
+    the benchmark taken on the same two dates. None while the history is shorter than that or has a hole."""
+    a = sorted((r for r in rows if r.get("close")), key=lambda r: r["date"])
+    b = sorted((r for r in bench if r.get("close")), key=lambda r: r["date"])
+    if len(a) <= sessions or not b:
+        return None
+    a0, a1 = a[-1 - sessions], a[-1]
+
+    def at(d):
+        ok = [r for r in b if r["date"] <= d]
+        return ok[-1] if ok else None
+    b0, b1 = at(a0["date"]), at(a1["date"])
+    if not (b0 and b1) or b0["date"] < (dt.date.fromisoformat(a0["date"]) - dt.timedelta(days=7)).isoformat():
+        return None  # no benchmark close within a week of the window start
+    return ((a1["close"] / a0["close"]) - (b1["close"] / b0["close"])) * 100
+
+
+def smoke_alarm(h: dict, rows: list[dict], bench: list[dict] | None, cfg: dict, asof: str) -> float | None:
+    """Owner request 2026-11-15: a CORE holding goes to a full re-initiation only when BOTH hold: it trails the
+    benchmark by `smoke_alarm_pp` or more over the last `smoke_alarm_sessions` sessions AND its last close is below
+    its own 200-day average (so a healthy compounder in a sector rotation is left alone). Never a sell on its own
+    (core exits are thesis-based), and not again while its last decision is younger than `smoke_alarm_rearm_days`.
+    Fewer than 200 closes: the second condition can't be tested, so no alarm. Returns the shortfall in pp, else None."""
+    c = cfg["core"]
+    gap = c.get("smoke_alarm_pp")
+    if not gap or not bench:
+        return None
+    last = (h.get("last_decision") or {}).get("date")
+    if last and (dt.date.fromisoformat(asof) - dt.date.fromisoformat(last)).days < int(c.get("smoke_alarm_rearm_days", 30)):
+        return None
+    closes = [r["close"] for r in sorted(rows, key=lambda r: r["date"]) if r.get("close")]
+    if len(closes) < 200 or closes[-1] >= sum(closes[-200:]) / 200:
+        return None
+    rel = relative_return_pp(rows, bench, int(c.get("smoke_alarm_sessions", 63)))
+    return rel if rel is not None and rel <= -float(gap) else None
+
+
 def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> dict:
     last_run = state.get("last_scan")
     if fred is None and "macro" in cfg:
@@ -210,8 +248,13 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> 
     thr = cfg["agents"]["weekly_flag_move_pct"]
     out = {"asof": asof, "last_run": last_run, "flagged": [], "reinitiate": [], "review": [],
            "unflagged": [], "exits": [], "trims": [], "mechanical_requests": [], "notes": [], "macro": [],
-           "fair_value_reached": []}
+           "fair_value_reached": [], "smoke_alarm": []}
     fv_prior = load_fv_reviews()
+    try:  # benchmark history for the smoke alarm; without it the alarm is simply off this week
+        bench = mkt.history(cfg["portfolio"]["benchmark"])["rows"]
+    except (DataError, KeyError, AttributeError):
+        bench = None
+        out["notes"].append("smoke alarm off: no benchmark history")
     for t, h in sorted(state["holdings"].items()):
         hist = mkt.history(t)
         ref = reference_close(hist["rows"], last_run, h.get("entry_close_date"))
@@ -261,6 +304,14 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> 
                 out["fair_value_reached"].append({"ticker": t, "close": last["close"], **fv})
                 if t not in out["reinitiate"]:
                     out["reinitiate"].append(t)
+            short = smoke_alarm(h, hist["rows"], bench, cfg, asof) if h["type"] == "CORE" else None
+            if short is not None:
+                reasons.append(f"SMOKE ALARM: {short:+.1f}pp vs {cfg['portfolio']['benchmark']} over "
+                               f"{cfg['core'].get('smoke_alarm_sessions', 63)} sessions and is below its 200-day average; re-examine the thesis "
+                               "(a prompt to look again, not a sell signal)")
+                out["smoke_alarm"].append({"ticker": t, "vs_benchmark_pp": round(short, 1)})
+                if t not in out["reinitiate"]:
+                    out["reinitiate"].append(t)
         if fred is not None:
             mcx = macro_check(t, last_run, asof, fred)
             if mcx["fired"]:
@@ -286,7 +337,8 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> 
     work = json.loads(json.dumps(state))
     mark(work, mkt)
     pv = totals(work)["total"]
-    cap = cfg["core"]["trim_above_pct"]
+    cap = cfg["core"]["trim_above_pct"]  # trigger (V2: 20); the trim goes back to trim_to_pct (12)
+    trim_to = cfg["core"].get("trim_to_pct", cap)
     exited = {e["ticker"] for e in out["exits"]}
     for t, h in work["holdings"].items():
         w = h["market_value_usd"] / pv * 100
@@ -294,7 +346,8 @@ def scan(state: dict, mkt: Market, fetcher, cfg: dict, asof: str, fred=None) -> 
             out["trims"].append({"ticker": t, "weight_pct": round(w, 2)})
             out["mechanical_requests"].append({
                 "ticker": t, "action": "TRIM", "position_type": "CORE", "conviction": h["conviction"],
-                "target_weight_pct": cap, "reason": f"mechanical trim: core weight {w:.2f}% above {cap}%"})
+                "target_weight_pct": trim_to,
+                "reason": f"mechanical trim: core weight {w:.2f}% above {cap}%, back to {trim_to}%"})
     # conviction below the buy bar: held at no more than its conviction size (owner request 2026-11-08)
     from portfolio import Engine, size_down_requests
     for q in size_down_requests(work, Engine(work, mkt, cfg, {}, asof), cfg):

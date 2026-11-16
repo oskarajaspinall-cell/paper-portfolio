@@ -174,7 +174,7 @@ def batch_add(t: str | None, flush: bool = False) -> None:
 
 
 cfg = load_config()
-OPTS = {"no_prescreen": False, "reason": "screen"}
+OPTS = {"no_prescreen": False, "reason": "screen", "redo": False}
 hits: list[str] = []
 hit_rows: dict[str, dict] = {}
 
@@ -204,8 +204,12 @@ def build_queue() -> list[str]:
     with (ROOT / "universe" / "universe.csv").open() as fh:
         current = {r["ticker"] for r in csv.DictReader(fh)}
     ranked = [t for t in ranked if t in current]
-    queue = [t for t in ranked if not (ROOT / "research" / Ticker(t).slug / f"{dt.date.today()}.md").exists()
+    today = f"{dt.date.today()}"
+    queue = [t for t in ranked if not (ROOT / "research" / Ticker(t).slug / f"{today}.md").exists()
              and not list((ROOT / "research" / Ticker(t).slug).glob("*-evaluation.md"))]
+    if OPTS["redo"]:  # owner request 2026-11-15: re-research names that already have an evaluation (not holdings, not today's)
+        queue = [t for t in ranked if t not in st.get("holdings", {})
+                 and not (ROOT / "research" / Ticker(t).slug / f"{today}-evaluation.md").exists()]
     def researched_since(h):  # 2026-10-25: a hit the weekly run already re-researched is not repeated
         evs = sorted(p.name[:10] for p in (ROOT / "research" / Ticker(h["ticker"]).slug).glob("20??-??-??-evaluation.md"))
         return bool(evs) and evs[-1] >= (h.get("hit_date") or "9999")
@@ -310,7 +314,8 @@ def attempt(t):
 def rank(run_dir: Path, cache_date: str) -> None:
     """The global core ranking on that day's page cache; names with a core decision in the last 90 days excluded."""
     state_ = json.loads((ROOT / "portfolio" / "state.json").read_text())
-    res = screen.run(Fetcher(today=cache_date), cfg, dt.date.today().isoformat(), state=state_)
+    c = {**cfg, "screen": {**cfg["screen"], "exclude_researched_days": 0}} if OPTS["redo"] else cfg  # --redo: keep researched names
+    res = screen.run(Fetcher(today=cache_date), c, dt.date.today().isoformat(), state=state_)
     ranked = sorted((r for r in res["rows"] if r["core"] is not None), key=screen.core_rank_key, reverse=True)
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "loop-queue.json").write_text(json.dumps([r["ticker"] for r in ranked]))
@@ -328,11 +333,12 @@ def main(argv=None) -> int:
     ap.add_argument("run_dir", help="runs/<name>")
     ap.add_argument("--cache-date", default=dt.date.today().isoformat(), help="rank: the page-cache day to screen")
     ap.add_argument("--no-prescreen", action="store_true", help="run: research every name (owner requests)")
+    ap.add_argument("--redo", action="store_true", help="run: also re-research names that already have an evaluation")
     ap.add_argument("--reason", choices=["screen", "owner_request"], default="screen",
                     help="run: the neutral reason code given to the researcher (no free text, 2026-11-09)")
     a = ap.parse_args(argv)
     run = (ROOT / a.run_dir).resolve()
-    OPTS["no_prescreen"] = a.no_prescreen
+    OPTS["no_prescreen"], OPTS["redo"] = a.no_prescreen, a.redo
     if a.reason:
         OPTS["reason"] = a.reason
     if a.cmd == "rank":

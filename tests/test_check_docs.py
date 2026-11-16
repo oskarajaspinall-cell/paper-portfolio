@@ -258,3 +258,14 @@ def test_company_reported_figure_needs_tag_and_primary_url():
     news = note_number_problems(_note(ok.replace("www.sec.gov", "www.reuters.com")), SHEET, {"sec.gov"})
     assert len(news) == 1 and "cite its primary source" in news[0]
     assert len(note_number_problems(_note("Combined ratio 76.6% [Likely]."), SHEET, {"sec.gov"})) == 1
+
+
+def test_already_true_trigger_is_flagged():
+    import check_docs
+    stats = {"debtEbitda": {"value": 0.65}, "roic": {"value": 12.0}}
+    trig = [{"text": "net cash lost", "check": {"source": "statistics", "field": "debtEbitda", "op": ">", "value": 0.0}},
+            {"text": "ROIC falls", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 8}},
+            {"text": "no figure", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 30}},
+            {"text": "text only"}]
+    out = check_docs.already_true_triggers(trig, stats)
+    assert len(out) == 1 and "debtEbitda" in out[0]

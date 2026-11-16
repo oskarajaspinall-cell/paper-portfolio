@@ -3,11 +3,11 @@
 Paper Portfolio is a hands-off, simulated stock portfolio that runs itself every week, on your own Mac or on GitHub Actions. A Python screen scores thousands of stocks on quality, valuation and momentum. Claude agents then research the best ideas, argue the bear case before the bull case, and must reach a firm decision with a conviction level. Simple scripts handle everything else: prices, position sizing, trading costs, stop-losses and returns, so no maths is left to the AI. Every decision is logged and scored against the S&P 500 at 1, 3, 6 and 12 months, building an honest track record. It's paper trading only, with no broker connection. Fork it, add your own Claude key, and choose your own stocks.
 
 **Mandate.** Beat the S&P 500 over rolling 12-month periods with a concentrated portfolio of 8–15 high-quality
-businesses bought at attractive valuations and held for their fundamentals. Every week the ~3,800 largest listed
-companies worldwide are ranked on quality and valuation (cyclicals on peak profits marked down); an AI analyst
+businesses that are working (a fair price or a healthy uptrend) and held for their fundamentals. Every week the ~3,800 largest listed
+companies worldwide are ranked on quality (40%), value (30%) and momentum with the trend (30%) (cyclicals on peak profits marked down); an AI analyst
 researches the best from stockanalysis.com figures and primary sources; the bear case is argued before the bull case
-and only conviction 4–5 out of 5 is bought, sized 7–10% by conviction and volatility, with caps of 30% per sector and
-25% in China/Hong Kong. Holdings are re-priced daily, tested against their thesis triggers, re-researched in full about
+and only conviction 4–5 out of 5 is bought, sized 7–10% by conviction and volatility, with caps of 35% per sector, 40% for
+groups of stocks that move together, and 25% in China/Hong Kong. Holdings are re-priced daily, tested against their thesis triggers, re-researched in full about
 every four weeks, and a cash reserve of 5–35% follows a macro stress score. Core positions have no price stops, and
 sell-side targets are never used. Every decision is logged and scored against the S&P 500.
 
@@ -48,7 +48,7 @@ A weekly **return attribution** (`reports/attribution/`) splits the return over 
 weak stock picks. **Trades fill at the live price or the next open**: a decided trade fills at once at the live price when its
 market is open, otherwise it becomes a pending order filled at the next opening price (every rule is checked
 again at that price); a tactical order that opens beyond its stop or target is cancelled.
-**Cash is managed as a position**: each week eight official indicators (credit spreads and their change, VIX, the
+**Cash is managed as a position**: each week nine official indicators (credit spreads and their change, VIX, the
 yield curve, real yields, the S&P 500's trend, core inflation and fed rate moves) are each scored on a sliding scale
 from calm to stressed and combined into a 0–100 stress score. That sets a cash reserve anywhere from 5% to 35%,
 moving at most 5 points a week, and an AI macro step may add or take away 5 points with cited official sources.
@@ -64,7 +64,7 @@ better than the weakest holding and, if so, swaps them.
 rated "good but not now" (conviction 3+). If one has fallen unusually since we last researched it — more than its
 own volatility and the market's move explain — and the price is at or below our fair value, it is re-researched
 the next day. Holdings get an "add to it?" review. A fall alone never triggers a buy: the research decides.
-Concentration is capped by rule: no sector above 30%, and China + Hong Kong combined (companies that report in
+Concentration is capped by rule: no sector above 35%, no group of stocks that move together (daily-return correlation 0.85+) above 40%, and China + Hong Kong combined (companies that report in
 yuan or Hong Kong dollars) no more than 25%. The AI judges each stock on its own merits; the rules handle the mix.
 Uninvested **cash earns interest** at a flat 3.8% AER (set in `CLAUDE.md` `[cash]`), credited daily on each
 day's closing cash balance and logged in `portfolio/interest.csv`.
