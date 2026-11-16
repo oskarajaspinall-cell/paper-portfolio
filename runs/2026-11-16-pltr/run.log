@@ -1,0 +1,25 @@
+[17:15:06] == research loop: 1 names queued, best first: ['PLTR']
+[17:15:06] == initiate PLTR
+[17:15:06] $ bin/py scripts/sec_delta.py PLTR --asof 2026-11-16
+[17:15:18] OK research/PLTR/sec-delta-2026-11-16.md
+[17:15:18] $ claude -p Ticker PLTR, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/PLTR/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:16:51] Note: research/PLTR/2026-11-16.md
+Fact sheet: research/PLTR/factsheet-2026-11-16.md
+Check: OK research/PLTR/2026-11-16.md type=CORE 1=61 2=94 3=119 4=52 5=37 6=84 total=447
+
+Data conflicts: none. Blocked URLs: none. The 10-Q fetch was truncated at 100,000 of 118,607 characters, so the last part of the filing was not read. The Edit tool was unavailable, so I rewrote the whole file to fix the one failed check.
+[17:16:51] $ bin/py scripts/check_docs.py note research/PLTR/2026-11-16.md
+[17:16:51] OK research/PLTR/2026-11-16.md type=CORE 1=61 2=94 3=119 4=52 5=37 6=84 total=447
+[17:16:51] $ claude -p Ticker PLTR, date 2026-11-16. Research: research/PLTR/factsheet-2026-11-16.md, research/PLTR/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/PLTR/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:17:26] research/PLTR/2026-11-16-macro.md
+OK research/PLTR/2026-11-16-macro.md macro_weight=secondary words=210
+[17:17:26] $ bin/py scripts/check_docs.py macro research/PLTR/2026-11-16-macro.md
+[17:17:26] OK research/PLTR/2026-11-16-macro.md macro_weight=secondary words=210
+[17:17:26] $ claude -p Evaluate PLTR for 2026-11-16: fact sheet research/PLTR/factsheet-2026-11-16.md, note research/PLTR/2026-11-16.md, state portfolio/state.json, macro overlay research/PLTR/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:18:42] research/PLTR/2026-11-16-evaluation.md
+OK research/PLTR/2026-11-16-evaluation.md Bear case=150 Bull case=127 decision=AVOID scorecard=6->3
+[17:18:42] $ bin/py scripts/check_docs.py eval research/PLTR/2026-11-16-evaluation.md
+[17:18:42] OK research/PLTR/2026-11-16-evaluation.md Bear case=150 Bull case=127 decision=AVOID scorecard=6->3
+[17:18:42] $ bin/py scripts/valuation.py PLTR --asof 2026-11-16 --eval research/PLTR/2026-11-16-evaluation.md
+[17:18:42] {"out": "research/PLTR/2026-11-16-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 0.48, "base": 38.4, "bull": 77.36}, "price": 167.99}
+[17:18:43] == done PLTR
