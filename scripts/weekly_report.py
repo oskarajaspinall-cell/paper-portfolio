@@ -19,6 +19,17 @@ from decision_log import hit_table, read as read_decisions  # noqa: E402
 from portfolio import format_returns, invested_return, read_csv, returns_table  # noqa: E402
 
 
+WORLD = "VT"  # Vanguard Total World Stock ETF: reporting only, never an input to a decision
+
+
+def world_closes() -> dict | None:
+    try:
+        from prices import YahooPrices
+        return {r["date"]: r["close"] for r in YahooPrices(period="2y").history(WORLD)["rows"]}
+    except Exception:  # noqa: BLE001  a missing benchmark line never blocks the report
+        return None
+
+
 def _load(path: Path, default):
     return json.loads(path.read_text()) if path.exists() else default
 
@@ -31,7 +42,22 @@ def _num4(x) -> str:
     return f"{x:.4g}" if isinstance(x, (int, float)) else str(x or "")
 
 
-def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
+def world_returns(vals: list[dict], closes: dict[str, float]) -> dict | None:
+    """Week and since-inception return of the global benchmark over the portfolio's own valuation dates
+    ({date: close}; the close on or before each date). None when a date is not covered."""
+    def on(day):
+        ds = [d for d in closes if d <= day]
+        return closes[max(ds)] if ds else None
+    dates = sorted({v["date"] for v in vals})
+    if not dates:
+        return None
+    week_ago = (dt.date.fromisoformat(dates[-1]) - dt.timedelta(days=7)).isoformat()
+    prev = ([d for d in dates if d <= week_ago] or dates[:1])[-1]
+    a, b, c = on(dates[0]), on(prev), on(dates[-1])
+    return {"week": c / b - 1, "inception": c / a - 1} if a and b and c else None
+
+
+def build(run: Path, asof: str, port: Path = ROOT / "portfolio", world: dict | None = None) -> str:
     scan = _load(run / "scan.json", {})
     empty = {"applied": [], "rejected": [], "warnings": []}
     mech_sub, sub = _load(run / "submit-mechanical.json", empty), _load(run / "submit.json", empty)
@@ -64,6 +90,9 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio") -> str:
     out = [f"# Weekly report — {asof}{dry}", "", "## 1. Summary"]
     out.append(f"- Portfolio ${total:,.0f}; week {pct(wk.get('total'))} vs SPY {pct(wk.get('spy'))}; since inception "
                f"{pct(inc.get('total'))} vs SPY {pct(inc.get('spy'))} (whole portfolio, cash included)." if total is not None else "- No valuations yet.")
+    wr = world_returns(vals, world) if vals and world else None
+    if wr:  # 2026-11-16: the universe is global, so SPY alone flatters or hides the stock picking
+        out.append(f"- Global benchmark ({WORLD}, price only): week {pct(wr['week'])}, since inception {pct(wr['inception'])}.")
     inv = invested_return(vals) if vals else None
     if inv:
         out.append(f"- Return on invested money (cash excluded): {pct(inv['pct'])} (${inv['gain']:,.0f} on ${inv['invested']:,.0f} "
@@ -188,7 +217,7 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     run = Path(a.run) if a.run else ROOT / "runs" / a.asof
     path = ROOT / "reports" / "weekly" / f"{a.asof}.md"
-    path.write_text(build(run, a.asof))
+    path.write_text(build(run, a.asof, world=world_closes()))
     print(path)
     return 0
 

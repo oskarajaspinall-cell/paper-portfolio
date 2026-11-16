@@ -40,7 +40,8 @@ from common import ROOT, DataError, Ticker, load_config  # noqa: E402
 
 WATCH = ROOT / "portfolio" / "entry_watch.csv"
 COLS = ["ticker", "entry_price", "currency", "set_date", "expires", "conviction", "decision", "source", "basis",
-        "evaluation", "last_close", "last_close_date", "pct_to_entry", "hit_date", "near_since", "split_checked"]
+        "evaluation", "last_close", "last_close_date", "pct_to_entry", "hit_date", "near_since", "split_checked",
+        "points_short", "skipped_hit_date"]  # owner 2026-11-17: see [entry].skip_hit_points_short
 
 
 def read(path: Path = WATCH) -> list[dict]:
@@ -102,8 +103,45 @@ def record_decision(d: dict, evaluation_path: Path, asof: str, cfg: dict, curren
     val = json.loads(vp.read_text()) if vp.name.endswith("-valuation.json") and vp.exists() else None
     rel = str(evaluation_path.relative_to(ROOT)) if evaluation_path.is_absolute() else str(evaluation_path)
     new = row_from_decision(d, rel, asof, cfg, val, currency or (val or {}).get("quote_currency", ""))
-    write(upsert(read(), new, d["ticker"]))
+    rows = read()
+    old = next((r for r in rows if r["ticker"] == d["ticker"] and r.get("hit_date")), None)
+    if old:  # a hit was re-researched: keep what it led to (2026-11-16: 12 hits gave 1 BUY, and nothing recorded it)
+        log = WATCH.with_name("entry_conversions.csv")
+        fresh = not log.exists()
+        with log.open("a", newline="") as fh:
+            w = csv.writer(fh)
+            if fresh:
+                w.writerow(["date", "ticker", "hit_date", "entry_price", "points_short", "decision", "conviction"])
+            w.writerow([asof, d["ticker"], old["hit_date"], old["entry_price"], old.get("points_short", ""),
+                        d.get("decision"), d.get("conviction")])
+    if new:
+        new["points_short"] = points_short(d, evaluation_path, cfg)
+    write(upsert(rows, new, d["ticker"]))
     return new
+
+
+def points_short(d: dict, evaluation_path: Path, cfg: dict) -> float | str:
+    """How many scorecard points this evaluation stays short of conviction 4 even at a price 80% lower (0 = some price
+    gets it there; "" = cannot be scored). Only the value-blend upside is re-priced, so it can overstate by about a point:
+    [entry].skip_hit_points_short allows for that."""
+    try:
+        import scorecard as S
+        price = d.get("price_at_decision")
+        trends, val = S.inputs_for(evaluation_path)
+        if trends is None or d.get("position_type") != "CORE" or not isinstance(price, (int, float)) or price <= 0:
+            return ""
+        if trends.get("fair_value"):
+            val = trends["fair_value"]
+        r = S.score(dict(d, price_at_decision=0.2 * price), trends, val, cfg, S.calibration_offset())
+        short = max(0.0, S.settings(cfg)["thresholds"][4] - r["total"])
+        return short if short or r["conviction_score"] >= 4 else 1.0  # enough points but a mandate gate holds it at 3
+    except Exception:  # noqa: BLE001  informational: never blocks recording a decision
+        return ""
+
+
+def blocked(r: dict, skip_short: float | None) -> bool:
+    """A hit on this row triggers no re-research: the scorecard is too far from 4 at any price."""
+    return bool(skip_short) and r.get("points_short") not in ("", None) and float(r["points_short"]) >= skip_short
 
 
 def is_near(r: dict, near_pct: float) -> bool:
@@ -150,7 +188,8 @@ def adjust_splits(rows: list[dict], history, asof: str) -> list[str]:
     return notes
 
 
-def check(rows: list[dict], quote, asof: str, near_pct: float = 10) -> tuple[list[dict], list[dict], list[dict]]:
+def check(rows: list[dict], quote, asof: str, near_pct: float = 10,
+          skip_short: float | None = None) -> tuple[list[dict], list[dict], list[dict]]:
     """Update each live row with its latest close; return (rows, hits, entered), where `entered` are stocks that
     moved into the close-to-entry band this check. Expired rows are dropped."""
     live, hits, entered = [], [], []
@@ -165,7 +204,9 @@ def check(rows: list[dict], quote, asof: str, near_pct: float = 10) -> tuple[lis
         e = float(r["entry_price"])
         r.update(last_close=round(float(q["close"]), 4), last_close_date=q["date"],
                  pct_to_entry=round((e / q["close"] - 1) * 100, 2))
-        if q["close"] <= e:
+        if q["close"] <= e and blocked(r, skip_short):
+            r["skipped_hit_date"] = r.get("skipped_hit_date") or q["date"]  # recorded, not researched
+        elif q["close"] <= e:
             r["hit_date"] = r.get("hit_date") or q["date"]
             hits.append(r)
         if is_near(r, near_pct):
@@ -185,12 +226,12 @@ def in_check_window(now_ny: dt.datetime, cfg: dict) -> bool:
     return now_ny.weekday() < 5 and lo <= now_ny.strftime("%H:%M") <= hi
 
 
-def intraday_hits(rows: list[dict], price_fn, today: str) -> tuple[list[dict], list[str]]:
+def intraday_hits(rows: list[dict], price_fn, today: str, skip_short: float | None = None) -> tuple[list[dict], list[str]]:
     """US-listed rows whose live price today is at/below the entry price. Returns (hits, skipped notes).
     A stale price (no trade today: a holiday or a halt) is never a hit."""
     hits, notes = [], []
     for r in rows:
-        if Ticker(r["ticker"]).exchange or r.get("expires", "9999") < today:
+        if Ticker(r["ticker"]).exchange or r.get("expires", "9999") < today or blocked(r, skip_short):
             continue
         try:
             q = price_fn(r["ticker"])
@@ -276,7 +317,7 @@ def main(argv=None) -> int:
             return 0
         from prices import live_price
         today = now_ny.date().isoformat()
-        hits, notes = intraday_hits(rows, live_price, today)
+        hits, notes = intraday_hits(rows, live_price, today, cfg["entry"].get("skip_hit_points_short"))
         stp = ROOT / "portfolio" / "state.json"
         state = json.loads(stp.read_text())
         held = set(state.get("holdings", {}))
@@ -307,7 +348,7 @@ def main(argv=None) -> int:
         from portfolio import Market, price_provider
         mkt = Market(Fetcher(cfg, refresh=True), a.asof, cfg, price_provider(cfg))
         split_notes = adjust_splits(rows, mkt.history, a.asof)
-        rows, hits, entered = check(rows, mkt.quote, a.asof, near_pct)
+        rows, hits, entered = check(rows, mkt.quote, a.asof, near_pct, cfg["entry"].get("skip_hit_points_short"))
         write(rows)
         stp = ROOT / "portfolio" / "state.json"
         state = json.loads(stp.read_text())
@@ -330,7 +371,7 @@ def main(argv=None) -> int:
              f"## Close to entry (within {near_pct:g}%)", "",
              "Information only: a stock is re-researched when it closes at or below its entry price, never bought on price.",
              "", "| Stock | Last close | Entry price | To entry | In range since | Why not a buy yet |", "|---|---|---|---|---|---|"]
-        L += [f"| {r['ticker']}{' **HIT**' if r.get('hit_date') else ''} | {fmt(r.get('last_close'))} {r.get('currency', '')} | "
+        L += [f"| {r['ticker']}{' **HIT**' if r.get('hit_date') else ' (hit skipped: too far from 4)' if r.get('skipped_hit_date') else ''} | {fmt(r.get('last_close'))} {r.get('currency', '')} | "
               f"{fmt(r['entry_price'])} | {float(r['pct_to_entry']):+.1f}% | {r.get('near_since', '')} | "
               f"{why_not_yet(r).replace('|', '/')} |" for r in close] or ["| none | | | | | |"]
         L += ["", "## Next closest", "", "| Stock | Last close | Entry price | To entry | Source | Set |", "|---|---|---|---|---|---|"]

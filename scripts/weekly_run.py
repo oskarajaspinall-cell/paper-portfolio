@@ -450,12 +450,6 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
         except Exception as e:  # noqa: BLE001
             log(f"!! FUNDING QUEUE STEP FAILED (no swap this week): {str(e)[:300]}")
 
-        try:  # observational growth-stock shadow log (2026-11-16): never blocks the week
-            import growth_test
-            log(f"growth shadow log: {growth_test.log_shadow(asof, load_config())} rows")
-        except Exception as e:  # noqa: BLE001
-            log(f"!! growth shadow log failed (ignored): {str(e)[:200]}")
-
         from decision_log import decision_from_eval
         for kind, e in evals:
             d = decision_from_eval(e.read_text())

@@ -5,7 +5,9 @@
 Uses the saved decisions (portfolio/decisions.csv, matured 1-month excess return vs SPY) and the saved research inputs.
 Table A: excess return of growers (revenue CAGR >= 15%) vs the rest, by the model's fair-value gap.
 Table B: re-score the latest evaluations with a growth-aware variant (fair value = midway to the bull case, capped at
-+30% over price, and no strength penalty for a low fair value) and list the growers it lifts to conviction 4+.
++30% over price, and no strength penalty for a low fair value); the growers it lifts to conviction 4+ are compared with
+the rest once their results mature, and the pre-registered rule gives the verdict. Everything is recomputed from the
+saved research files, so there is nothing to log in between.
 """
 from __future__ import annotations
 
@@ -41,35 +43,36 @@ def stats(xs: list[float], rng: random.Random) -> dict:
             "lo": boots[100], "hi": boots[1899]}
 
 
+def diff_ci(a: list[float], b: list[float], rng: random.Random) -> tuple[float, float, float] | None:
+    """Mean of a minus mean of b with a bootstrap 90% interval."""
+    if not a or not b:
+        return None
+    d = sorted(st.mean(rng.choices(a, k=len(a))) - st.mean(rng.choices(b, k=len(b))) for _ in range(2000))
+    return st.mean(a) - st.mean(b), d[100], d[1899]
+
+
 def variant_conviction(eval_path: Path, cfg: dict, grower: bool) -> tuple[int | None, int | None]:
-    """(baseline, growth-aware) conviction for a CORE evaluation from its saved inputs."""
-    return variant_detail(eval_path, cfg, grower)[:2]
-
-
-def variant_detail(eval_path: Path, cfg: dict, grower: bool) -> tuple:
-    """(baseline conviction, growth-aware conviction, price, base fair value, growth-aware fair value)."""
+    """(today's scorecard conviction, growth-aware conviction) for a CORE evaluation from its saved inputs; (None, None)
+    when it cannot be scored (not CORE, no fact-sheet sidecar)."""
     import scorecard as S
     from check_docs import decision_block
     d, err = decision_block(eval_path.read_text())
-    none = (None,) * 5
     if err or not d or d.get("position_type") != "CORE":
-        return none
+        return None, None
     trends, val = S.inputs_for(eval_path)
     if trends is None:
-        return none
+        return None, None
     if trends.get("fair_value"):
         val = trends["fair_value"]
-    base = S.score(d, trends, val, cfg)["conviction"]
-    if not grower or not val or not (val.get("fair_value") or {}).get("base"):
-        return base, base, d.get("price_at_decision"), None, None
-    fv, price = val["fair_value"], d.get("price_at_decision") or val.get("price")
-    mid = (fv["base"] + (fv.get("bull") or fv["base"])) / 2
-    new = max(fv["base"], min(mid, 1.3 * price)) if price else fv["base"]
+    base = S.score(d, trends, val, cfg, S.calibration_offset())["conviction"]
+    fv, price = (val or {}).get("fair_value") or {}, d.get("price_at_decision") or (val or {}).get("price")
+    if not grower or not fv.get("base") or not price:
+        return base, base
     v2 = json.loads(json.dumps(val))
-    v2["fair_value"]["base"] = new
+    v2["fair_value"]["base"] = max(fv["base"], min((fv["base"] + (fv.get("bull") or fv["base"])) / 2, 1.3 * price))
     cfg2 = json.loads(json.dumps(cfg))
     cfg2.setdefault("scorecard", {})["max_strength_overvalue_pct"] = 1e9
-    return base, S.score(d, trends, v2, cfg2)["conviction"], price, fv["base"], new
+    return base, S.score(d, trends, v2, cfg2, S.calibration_offset())["conviction"]
 
 
 def latest_valuation(ep: Path) -> dict | None:
@@ -95,8 +98,15 @@ def collect(log: Path) -> list[dict]:
     return rows
 
 
-def promotions(cfg: dict) -> list[dict]:
-    """Growers whose latest scorecard-era evaluation (it has a fact-sheet sidecar) the growth-aware variant lifts to 4+."""
+def scored(cfg: dict, log: Path | None = None) -> list[dict]:
+    """Every stock's latest scorecard-era evaluation (it has a fact-sheet sidecar), re-scored under today's rules and the
+    growth-aware variant, with its longest matured excess return vs SPY from the decision log (None until one matures)."""
+    out_by_eval: dict[str, tuple[str, float]] = {}
+    for r in csv.DictReader((log or ROOT / "portfolio" / "decisions.csv").open()):
+        for h in ("12m", "6m", "3m", "1m"):
+            if r.get(f"excess_{h}"):
+                out_by_eval[r["evaluation"]] = (h, float(r[f"excess_{h}"]))
+                break
     latest: dict[str, Path] = {}
     for ep in sorted(ROOT.glob("research/*/20??-??-??-evaluation.md")):
         if list(ep.parent.glob("factsheet-*.json")):
@@ -104,64 +114,46 @@ def promotions(cfg: dict) -> list[dict]:
     out = []
     for slug, ep in latest.items():
         g = cagr(latest_valuation(ep))
-        if g is None or g < GROWER_CAGR:
-            continue
-        base, var = variant_conviction(ep, cfg, True)
-        if base is not None and base < 4 <= var:
-            out.append({"ticker": slug, "date": ep.name[:10], "base": base, "var": var, "cagr": g})
+        base, var = variant_conviction(ep, cfg, g is not None and g >= GROWER_CAGR)
+        if base is not None:
+            h, ex = out_by_eval.get(str(ep.relative_to(ROOT)), (None, None))
+            out.append({"ticker": slug, "date": ep.name[:10], "base": base, "var": var, "cagr": g, "horizon": h, "excess": ex})
     return out
 
 
-SHADOW_COLS = ["date", "ticker", "price", "conviction", "growth_aware_conviction", "fair_value_base", "fair_value_growth_aware"]
+def promotions(cfg: dict) -> list[dict]:
+    """Growers the growth-aware variant lifts to 4+."""
+    return [r for r in scored(cfg) if r["base"] < 4 <= r["var"]]
 
 
-def log_shadow(asof: str, cfg: dict, path: Path | None = None) -> int:
-    """Append each grower's live vs growth-aware conviction (one row per ticker and day) so 3-month outcomes can be
-    compared later. Observational only: nothing reads this file when trading."""
-    path = path or ROOT / "portfolio" / "growth_shadow.csv"
-    seen = {(r["date"], r["ticker"]) for r in csv.DictReader(path.open())} if path.exists() else set()
-    latest: dict[str, Path] = {}
-    for ep in sorted(ROOT.glob("research/*/20??-??-??-evaluation.md")):
-        if ep.name[:10] <= asof and list(ep.parent.glob("factsheet-*.json")):
-            latest[ep.parent.name] = ep
-    rows = []
-    for slug, ep in latest.items():
-        g = cagr(latest_valuation(ep))
-        if g is None or g < GROWER_CAGR or (ep.name[:10], slug) in seen:
-            continue
-        base, var, price, fv, fv2 = variant_detail(ep, cfg, True)
-        if base is not None:
-            rows.append([ep.name[:10], slug, price, base, var, fv, fv2])
-    if not rows:
-        return 0
-    new = not path.exists()
-    with path.open("a", newline="") as f:
-        w = csv.writer(f)
-        if new:
-            w.writerow(SHADOW_COLS)
-        w.writerows(rows)
-    return len(rows)
-
-
-def report(rows: list[dict], promoted: list[dict], asof: str, seed: int = 1) -> str:
+def report(rows: list[dict], scored_rows: list[dict], asof: str, seed: int = 1) -> str:
     rng = random.Random(seed)
     f = lambda s: "n/a" if not s.get("n") else (f"{s['n']} | {s['mean']:+.1f} | {s['median']:+.1f} | {s['beat']:.0%} | "
                                                f"{s['lo']:+.1f} to {s['hi']:+.1f}")  # noqa: E731
     out = [f"# Growth-stock test, {asof}", "", RULE, "",
-           "Caveats: one market regime; decisions from a few days in early October, so the 1-month windows overlap; "
-           "today's fundamentals applied to past decisions; survivorship. Returns are 1-month excess vs SPY, in pp.", "",
-           "## Table A: growers (revenue CAGR >= 15%) vs the rest, by fair-value gap", "",
+           "Caveats: one market regime; decision windows overlap; today's fundamentals and today's scorecard rules applied "
+           "to past decisions; survivorship. Returns are excess vs SPY, in pp.", "",
+           "## Table A: growers (revenue CAGR >= 15%) vs the rest, by fair-value gap (1-month)", "",
            "| group | fair-value gap | n | mean | median | beat SPY | 90% interval |", "|---|---|---|---|---|---|---|"]
     for label, flag in (("growers", True), ("others", False)):
         for name, lo, hi in BANDS:
             xs = [r["excess"] for r in rows if r["grower"] == flag and r["gap"] is not None and lo <= r["gap"] < hi]
             out.append(f"| {label} | {name} | {f(stats(xs, rng))} |")
+    prom = [r for r in scored_rows if r["base"] < 4 <= r["var"]]
+    p_ex = [r["excess"] for r in prom if r["excess"] is not None]
+    r_ex = [r["excess"] for r in scored_rows if r not in prom and r["excess"] is not None]
     out += ["", "## Table B: growers a growth-aware scorecard would lift to conviction 4+", "",
-            "| ticker | evaluated | conviction now | growth-aware | revenue CAGR |", "|---|---|---|---|---|"]
-    out += [f"| {r['ticker']} | {r['date']} | {r['base']} | {r['var']} | {r['cagr']:.0%} |" for r in sorted(promoted, key=lambda r: r["ticker"])]
-    out += ["", f"{len(promoted)} names. Their returns cannot be tested yet: the scorecard only exists from 2026-11-08, so none has a "
-            "matured 1-month result. The rule needs >= 30 promoted names with matured results, so:", "",
-            "**Verdict by the rule: DO NOT CHANGE (not testable yet). Re-run in early January when 3-month results exist.**"]
+            "| ticker | evaluated | conviction now | growth-aware | revenue CAGR | excess vs SPY |", "|---|---|---|---|---|---|"]
+    out += [f"| {r['ticker']} | {r['date']} | {r['base']} | {r['var']} | {r['cagr']:.0%} | "
+            + ("not matured" if r["excess"] is None else f"{r['excess']:+.1f} ({r['horizon']})") + " |"
+            for r in sorted(prom, key=lambda r: r["ticker"])]
+    d = diff_ci(p_ex, r_ex, rng)
+    out += ["", f"{len(prom)} promoted of {len(scored_rows)} scored; with a matured result: {len(p_ex)} promoted, {len(r_ex)} others."]
+    if d:
+        out.append(f"Promoted minus others: {d[0]:+.1f}pp (90% interval {d[1]:+.1f} to {d[2]:+.1f}).")
+    change = bool(d) and len(p_ex) >= 30 and d[0] >= 5 and d[1] > 0
+    out += ["", "**Verdict by the rule: " + ("CHANGE**" if change else "DO NOT CHANGE**"
+            + (" (fewer than 30 promoted names with a matured result)" if len(p_ex) < 30 else ""))]
     return "\n".join(out) + "\n"
 
 
@@ -169,7 +161,7 @@ def main(argv=None) -> int:
     argv = argv if argv is not None else sys.argv[1:]
     asof = argv[argv.index("--asof") + 1] if "--asof" in argv else dt.date.today().isoformat()
     cfg = load_config()
-    text = report(collect(ROOT / "portfolio" / "decisions.csv"), promotions(cfg), asof)
+    text = report(collect(ROOT / "portfolio" / "decisions.csv"), scored(cfg), asof)
     p = ROOT / "reports" / "growth-test" / f"{asof}.md"
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(text)

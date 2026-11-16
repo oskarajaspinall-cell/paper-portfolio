@@ -208,13 +208,17 @@ fair_value_weight = 0.5           # owner rule 2026-11-08: ranking value = this 
 [entry]
 # Entry prices (owner rule 2026-10-09; scripts/entry_watch.py): every conviction-3+ AVOID/HOLD carries the price
 # at which the same evidence would justify conviction 4 (evaluator-set, or base fair value less the margin of
-# safety). A daily close at/below it -> the stock is re-researched first at the next run. Never an automatic buy.
+# safety). A daily close at/below it -> the stock is re-researched first at the next run (unless `skip_hit_points_short`
+# says the scorecard is too far from 4 at any price). Never an automatic buy.
 min_conviction = 3
 margin_of_safety_pct = 15      # owner request 2026-11-16 (was 20): the watch was too strict, winners never reached it
 expiry_days = 90
 near_pct = 10                     # close-to-entry watchlist: within this % of the entry price (notify on entering; info only)
 intraday_window_et = ["10:15", "11:15"]  # bin/entry-intraday acts only in this New York window (weekdays)
 intraday_max_research = 3         # re-researches a day triggered by the intraday check
+skip_hit_points_short = 2         # owner 2026-11-17: a hit triggers no re-research when today's scorecard stays this many
+                                  # points (or more) short of conviction 4 at ANY price (price is not the obstacle; 12 hits
+                                  # gave 1 BUY). The row stays; the skipped hit is dated in `skipped_hit_date`. 0 = off
 
 [dip]
 # Dip radar (design by Claude, owner request 2026-10-19; scripts/dip_radar.py, daily in bin/fill-pending, no AI). Watches
@@ -361,7 +365,7 @@ loosen_pp = 5                     # 4+ and 3 both beat their sector by more than
 # [tactical] (drift ranked by the size of the earnings reaction, pullback by the strength of the uptrend).
 # Valuation multiples are used ONLY here for ranking.
 core_picks = 10                   # new initiations per week from the core ranking
-tactical_picks = 10               # ... and from the tactical ranking (total <= max_new_initiations_per_week)
+tactical_picks = 0                # owner 2026-11-17: paused (63 tactical decisions, 0 buys); was 10. Existing tactical rules stay
 exclude_researched_days = 90      # skip names with a decision this recent, of the SAME kind only (a core verdict doesn't hide a new tactical setup)
 tactical_check_top = 40           # stage 2: daily history (setup check + ATR) for the top N candidates of EACH setup (~3 s each)
 min_metrics_per_pillar = 2
@@ -447,6 +451,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `bin/live-dashboard` (launchd every 15 min; acts weekdays 08:00–21:15 UK) → `scripts/dashboard.py` with a live-price snapshot, uploaded if changed. Display only; the official value stays on closes.
 - `scripts/corporate_actions.py check` — dividends (stockanalysis.com dividend pages) and splits (Yahoo split column, confirmed on stockanalysis.com); log in `portfolio/corporate_actions.csv`, DIVIDEND/SPLIT rows in the ledger, receivables in `state.json`.
 - `scripts/cash_policy.py` — residual-cash arithmetic (deployable cash, minimum trade, core top-up reserve, tactical cap); `portfolio/cash_telemetry.csv` — one row per run: deployable cash, open core top-up reserve, tactical capacity, starters blocked by a cap, macro stress.
+- `scripts/growth_test.py`, `scripts/growth_assumptions.py` — read-only tests of the growth-stock question (`reports/growth-test/`): recomputed from the saved research files, with a pre-registered rule; never trade. `portfolio/entry_conversions.csv` — what each re-researched entry-price hit led to (written by `entry_watch.record_decision`).
 - `scripts/regime.py` → `reports/regime/<date>.json/.md` (+ `-view.md` from `.claude/agents/macro-strategist.md`, regime mode only) — macro stress score (telemetry in residual mode), cash reserve and dip release (regime mode); `--dip` (weekdays) → `reports/regime/dip-<date>.json`, the daily dip release applied on top of the latest weekly regime.
 - `scripts/risk.py` — correlation check (owner-approved 2026-11-07): highly correlated holding pairs in the risk report and dashboard, a warning on a new core BUY that moves with a holding, and each queued idea's correlations in the swap brief. Inform-only.
 - `scripts/risk.py` — volatility-scaled core sizing (`[core].vol_*`, used by `portfolio.py`) and `risk.py report` → `reports/risk/<date>.md/.json` (weekly: each holding's vol, marginal contribution to risk and share of portfolio variance; informational, never trades).

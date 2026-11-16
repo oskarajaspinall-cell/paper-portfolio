@@ -66,6 +66,31 @@ def shrunk(xs: list[float], k: float) -> float | None:
     return st.mean(xs) * len(xs) / (len(xs) + k) if xs else None
 
 
+def points_table(pairs: list[tuple[float, float]]) -> dict:
+    """{points: {"n", "mean_vs_spy"}} from (scorecard points, excess return vs SPY) pairs: would a lower buy bar have paid?"""
+    by: dict[int, list[float]] = {}
+    for pts, ex in pairs:
+        by.setdefault(int(pts), []).append(ex)
+    return {str(k): {"n": len(v), "mean_vs_spy": st.mean(v)} for k, v in sorted(by.items(), reverse=True)}
+
+
+def points_pairs(rows: list[dict], horizon: str, cfg: dict) -> list[tuple[float, float]]:
+    """Matured decisions re-scored under today's scorecard (only those with a fact-sheet sidecar can be)."""
+    import scorecard as S
+    out = []
+    for r in rows:
+        ep = ROOT / r["evaluation"] if r.get("evaluation") else None
+        if not r.get(f"ret_{horizon}") or not ep or not ep.exists() or not list(ep.parent.glob("factsheet-*.json")):
+            continue
+        try:
+            res = S.evaluate_file(ep, cfg)[0]
+        except Exception:  # noqa: BLE001  an old document that no longer parses is skipped, never fatal
+            res = None
+        if res:
+            out.append((res["total"], float(r[f"ret_{horizon}"]) - float(r[f"spy_{horizon}"])))
+    return out
+
+
 def build(asof: str, cfg: dict, fetcher) -> dict:
     s = settings(cfg)
     rows = [r for r in csv.DictReader((ROOT / "portfolio" / "decisions.csv").open()) if r["type"] == "CORE"]
@@ -118,7 +143,7 @@ def build(asof: str, cfg: dict, fetcher) -> dict:
             offset = -1
         elif four["shrunk_vs_sector"] > s["loosen_pp"] and three["shrunk_vs_sector"] > s["loosen_pp"]:
             offset = 1
-    return {"asof": asof, "by_conviction": summary, "share_4plus_recent": share, "recent_window": len(new),
+    return {"asof": asof, "by_points": points_table(points_pairs(rows, h, cfg)), "by_conviction": summary, "share_4plus_recent": share, "recent_window": len(new),
             "share_alert": alert, "band": [s["band_lo"], s["band_hi"]], "gate": {"horizon": h, "min_n": s["min_n"],
             "n_4plus": four.get("n_sector") or 0, "n_3": three.get("n_sector") or 0},
             "gate_met": gate, "score_offset": offset, "prescreen": prescreen_check(asof, fetcher)}
@@ -165,6 +190,10 @@ def render_md(doc: dict) -> str:
         for h, c in doc["by_conviction"][g].items():
             L.append(f"| {g} | {h} | {c['n']} | {f(c['mean_vs_spy'])} | {c['n_sector']} | {f(c['mean_vs_sector'])} | "
                      f"{f(c['shrunk_vs_sector'])} |")
+    if doc.get("by_points"):
+        L += ["", f"Scorecard points under today's rules ({doc['gate']['horizon']}, the buy bar is 9):", "",
+              "| Points | n | vs SPY (pp) |", "|---|---|---|"]
+        L += [f"| {k} | {c['n']} | {f(c['mean_vs_spy'])} |" for k, c in doc["by_points"].items()]
     return "\n".join(L) + "\n"
 
 

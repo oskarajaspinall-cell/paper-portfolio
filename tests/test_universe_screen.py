@@ -250,11 +250,14 @@ def test_pick_ten_and_ten_within_cap_alternating_setups(cfg):
     rows = [{"ticker": f"C{i}", "core": 100 - i, "tactical": None} for i in range(30)] + \
            [{"ticker": f"D{i}", "core": None, "tactical": 20 - i / 10, "setup": "drift", "setup_detail": ""} for i in range(30)] + \
            [{"ticker": f"P{i}", "core": None, "tactical": 100 - i, "setup": "pullback", "setup_detail": ""} for i in range(2)]
+    cfg["screen"].update(core_picks=10, tactical_picks=10)  # the live setting may pause tactical picks (2026-11-17)
     picks = pick(rows, cfg)
     assert len(picks) == cfg["agents"]["max_new_initiations_per_week"] == 20
     assert [p["ticker"] for p in picks if p["type"] == "CORE"] == [f"C{i}" for i in range(10)]
     # alternate drift / pullback; when pullbacks run out, drift fills the rest
     assert [p["ticker"] for p in picks if p["type"] == "TACTICAL"] == ["D0", "P0", "D1", "P1"] + [f"D{i}" for i in range(2, 8)]
+    cfg["screen"]["tactical_picks"] = 0  # paused: core picks only
+    assert {p["type"] for p in pick(rows, cfg)} == {"CORE"}
 
 
 def daily(closes, vols=None, spread=1.0):

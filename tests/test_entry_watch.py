@@ -127,3 +127,29 @@ def test_intraday_hit_upgrades_a_waiting_daily_hit():
     merged = EW.merge_hits([{"ticker": "UHS", "hit_date": "2026-10-28"}],
                            [{"ticker": "UHS", "intraday": True, "time": "10:30 ET"}, {"ticker": "X", "intraday": True}])
     assert [h["ticker"] for h in merged] == ["UHS", "X"] and merged[0]["intraday"] and merged[0]["hit_date"] == "2026-10-28"
+
+
+def test_rehit_research_is_logged_as_a_conversion(cfg, tmp_path, monkeypatch):
+    monkeypatch.setattr(EW, "WATCH", tmp_path / "entry_watch.csv")
+    EW.write([{"ticker": "A", "entry_price": "80", "hit_date": "2026-11-10", "points_short": "1.0"}], EW.WATCH)
+    monkeypatch.setattr(EW, "read", lambda path=None: [dict(r) for r in __import__("csv").DictReader(EW.WATCH.open())])
+    monkeypatch.setattr(EW, "write", lambda rows, path=None: None)
+    d = {"ticker": "A", "decision": "AVOID", "conviction": 3, "entry_price": None, "position_type": "CORE"}
+    from pathlib import Path
+    assert EW.record_decision(d, Path("research/A/2026-11-16-evaluation.md"), "2026-11-16", cfg) is None
+    log = (tmp_path / "entry_conversions.csv").read_text().splitlines()
+    assert log[1] == "2026-11-16,A,2026-11-10,80,1.0,AVOID,3"
+
+
+def test_points_short_is_blank_when_it_cannot_be_scored(cfg, tmp_path):
+    assert EW.points_short({"position_type": "CORE", "price_at_decision": 100.0}, tmp_path / "2026-11-16-evaluation.md", cfg) == ""
+
+
+def test_a_hit_too_far_from_4_is_dated_but_not_researched():
+    q = lambda t: {"close": 70.0, "date": "2026-11-17", "price": 70.0, "time": "2026-11-17 10:30", "url": "u"}  # noqa: E731
+    mk = lambda short: [{"ticker": "A", "entry_price": "80", "points_short": short, "expires": "2027-01-01"}]  # noqa: E731
+    live, hits, _ = EW.check(mk("2.0"), q, "2026-11-17", skip_short=2)
+    assert not hits and live[0]["skipped_hit_date"] == "2026-11-17" and not live[0].get("hit_date")
+    assert not EW.intraday_hits(mk("2.0"), q, "2026-11-17", skip_short=2)[0]
+    for short, skip in (("1.0", 2), ("", 2), ("3.0", None), ("3.0", 0)):  # one point short, unscored, or the rule off: researched
+        assert [h["ticker"] for h in EW.check(mk(short), q, "2026-11-17", skip_short=skip)[1]] == ["A"]

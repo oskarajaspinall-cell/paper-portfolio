@@ -1,6 +1,6 @@
 # Growers and fair-value assumptions, 2026-11-16
 
-71 growers (revenue CAGR >= 15%). 31 have base fair value below price.
+73 growers (revenue CAGR >= 15%). 32 have base fair value below price.
 
 - of those, price is below the BULL fair value (no reversion, stronger history): 16
 - of those, the growth the price implies is at or below the historical CAGR: 10
@@ -34,6 +34,7 @@ A name in the last list is priced for growth it has already delivered; the base 
 | SHE-300832 | 60.55 | 42.65 | 51.69 | 31% | 16% |
 | TPE-2330 | 2350.00 | 905.97 | 1729.27 | 43% | 24% |
 | TPE-3017 | 3040.00 | 1842.67 | 3448.92 | 23% | 36% |
+| TSX-ATZ | 155.45 | 72.08 | 155.38 | 30% | 25% |
 | TW | 132.74 | 92.56 | 134.18 | 20% | 20% |
 | TYO-6532 | 12325.00 | 6742.05 | 9951.46 | 35% | 65% |
 | TYO-7747 | 3811.00 | 2711.32 | 4793.69 | 21% | 17% |
