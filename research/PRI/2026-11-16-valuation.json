@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Insurance - Life",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "P/E",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Fair Value"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 285.4629117715791,
+    "base": 295.3064604533577,
+    "bull": 295.3064604533577
+   },
+   "cost_of_equity": 0.0956065,
+   "assumptions": {
+    "roe": {
+     "bear": 0.2425,
+     "base": 0.25,
+     "bull": 0.25
+    },
+    "justified_pb": {
+     "bear": 3.0804529328036376,
+     "base": 3.186675447727901,
+     "bull": 3.186675447727901
+    },
+    "bvps": 92.669136
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 169.3162547608,
+    "base": 193.0562018504,
+    "bull": 322.209462456
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.012,
+     "base": 12.556,
+     "bull": 12.732
+    },
+    "ttm_eps": 25.307058,
+    "peak_earnings": "TTM EPS is 1.8x its 5y median: bear/base use the 5y average (15.38), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 293.39,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 246.74735943465274,
+  "base": 261.2230409190385,
+  "bull": 304.2741277875718
+ },
+ "used": [
+  "pb_roe",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.15897829021216558,
+  "base": -0.10963890753250449,
+  "bull": 0.03709781447074478
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "PRI",
+ "asof": "2026-11-16",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/pri/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/pri/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/pri/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/pri/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/pri/statistics/"
+ }
+}

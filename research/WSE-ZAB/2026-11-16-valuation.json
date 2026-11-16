@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Grocery Stores",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 31.649969601177922,
+    "base": 60.542364875775256,
+    "bull": 104.81923735456965
+   },
+   "implied_growth": -0.0192576888502825,
+   "discount_rate": 0.09979760188015649,
+   "cost_of_equity": 0.106,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.0788518580667374,
+     "base": 0.11422074457822433,
+     "bull": 0.2141792621794225
+    },
+    "cash_flow_margin": {
+     "bear": 0.07746633970183862,
+     "base": 0.11613313600416937,
+     "bull": 0.12947726578725757
+    },
+    "cagr_3y": 0.1927037161334748,
+    "cagr_5y": 0.2141792621794225,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 14.40226377055597,
+    "base": 14.815994335871467,
+    "bull": 29.638764702355836
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.221,
+     "base": 11.427,
+     "bull": 11.633
+    },
+    "ttm_ebitda": 3238652000,
+    "peak_earnings": "TTM EBITDA is 1.7x its 5y median: bear/base use the 5y average (2.003e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 31.82,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "PLN",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 25.90073432430394,
+  "base": 45.300241362474,
+  "bull": 79.75907980383171
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.18602343418278,
+  "base": 0.4236405205051539,
+  "bull": 1.506570704080192
+ },
+ "implied_growth": -0.0192576888502825,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 4.1x (base 14.82-60.54)"
+  ]
+ },
+ "ticker": "WSE:ZAB",
+ "asof": "2026-11-16",
+ "quote_currency": "PLN",
+ "financials_currency": "PLN",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/wse/ZAB/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/wse/ZAB/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/wse/ZAB/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/wse/ZAB/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/wse/ZAB/statistics/"
+ }
+}
