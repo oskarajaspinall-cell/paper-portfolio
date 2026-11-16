@@ -1,0 +1,109 @@
+{
+ "industry": {
+  "industry": "Semiconductors",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 424.41890378638556,
+    "base": 845.4292027087863,
+    "bull": 1515.2398800277713
+   },
+   "implied_growth": 0.4310692905279261,
+   "discount_rate": 0.11769661439002084,
+   "cost_of_equity": 0.118772,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.07718986271386448,
+     "base": 0.1209962742403664,
+     "bull": 0.24460537153373663
+    },
+    "cash_flow_margin": {
+     "bear": 0.11642926619432402,
+     "base": 0.2358729955110315,
+     "bull": 0.286049396066656
+    },
+    "cagr_3y": 0.18937972542772896,
+    "cagr_5y": 0.24460537153373663,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 597.4534638135118,
+    "base": 1027.0467311014052,
+    "bull": 2157.3184587211713
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.104,
+     "base": 13.541,
+     "bull": 14.605
+    },
+    "ttm_ebitda": 3611427067000,
+    "peak_earnings": "TTM EBITDA is 2.3x its 5y median: bear/base use the 5y average (1.731e+12), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 2350,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.01,
+ "reporting_currency": "TWD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 482.0970904620943,
+  "base": 905.9683788396593,
+  "bull": 1729.2660729255713
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.7948523019310237,
+  "base": -0.6144815409192939,
+  "bull": -0.2641420966274165
+ },
+ "implied_growth": 0.4310692905279261,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "TPE:2330",
+ "asof": "2026-11-16",
+ "quote_currency": "TWD",
+ "financials_currency": "TWD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/tpe/2330/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/tpe/2330/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/tpe/2330/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/tpe/2330/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/tpe/2330/statistics/"
+ }
+}

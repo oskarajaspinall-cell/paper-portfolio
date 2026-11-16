@@ -1,0 +1,112 @@
+{
+ "industry": {
+  "industry": "Semiconductors",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 0.053643401196571,
+    "base": 32.43154976465744,
+    "bull": 79.37546701078053
+   },
+   "implied_growth": null,
+   "discount_rate": 0.14988291856928684,
+   "cost_of_equity": 0.151,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.05071799667684214,
+     "base": 0.09783712745134863,
+     "bull": 0.20491251645171027
+    },
+    "cash_flow_margin": {
+     "bear": -0.015793386243386245,
+     "base": 0.09666985032504338,
+     "bull": 0.17437936229767556
+    },
+    "cagr_3y": 0.13643599335368428,
+    "cagr_5y": 0.20491251645171027,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 61.039685027949844,
+    "base": 134.55915515938963,
+    "bull": 350.0384082187642
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 18.707,
+     "base": 42.805,
+     "bull": 51.392
+    },
+    "ttm_ebitda": 11143000000,
+    "peak_earnings": "TTM EBITDA is 2.2x its 5y median: bear/base use the 5y average (5.048e+09), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 534.06,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 20.382323943447663,
+  "base": 66.47408489623484,
+  "bull": 169.59644741344175
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.9618351422247544,
+  "base": -0.875530680267695,
+  "bull": -0.6824393375024496
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 4.1x (base 32.43-134.56)",
+   "base -88% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "AMD",
+ "asof": "2026-11-16",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/amd/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/amd/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/amd/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/amd/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/amd/statistics/"
+ }
+}

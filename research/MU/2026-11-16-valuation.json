@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Semiconductors",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -664.5388247019233,
+    "base": 156.99985311415688,
+    "bull": 999.8005782585742
+   },
+   "implied_growth": null,
+   "discount_rate": 0.14725600171802902,
+   "cost_of_equity": 0.1478665,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.17,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": -0.4363680308880309,
+     "base": 0.05264721442820182,
+     "bull": 0.42644047346607805
+    },
+    "cagr_3y": 1.0464667570381798,
+    "cagr_5y": 0.44253630217364326,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 156.47117060367455,
+    "base": 326.67012073490815,
+    "bull": 1220.724283464567
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.524,
+     "base": 9.724,
+     "bull": 12.192
+    },
+    "ttm_ebitda": 108843000000,
+    "peak_earnings": "TTM EBITDA is 6.5x its 5y median: bear/base use the 5y average (3.138e+10), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 778.31,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -390.868826266724,
+  "base": 213.55660898774065,
+  "bull": 1073.4418133272384
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.5022019841280776,
+  "base": -0.7256149747687417,
+  "bull": 0.37919571035607724
+ },
+ "implied_growth": null,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.1x (base 157.00-326.67)"
+  ]
+ },
+ "ticker": "MU",
+ "asof": "2026-11-16",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/mu/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/mu/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/mu/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/mu/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/mu/statistics/"
+ }
+}
