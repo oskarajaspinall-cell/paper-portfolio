@@ -135,7 +135,8 @@ def batch_report(tickers: list[str], n: int) -> tuple[str, str]:
                     f"{state['screened']} skipped by the pre-screen this session (price above base fair value; "
                     f"reports/prescreen/). "
                     f"Portfolio ${tt['total']:,.0f}, cash {tt['cash'] / tt['total'] * 100:.1f}% vs a {res['pct']:g}% "
-                    f"reserve ({res['regime']}); {tt['n']} holdings, {len(stt.get('pending', []))} order(s) pending."]) + "\n"
+                    + ("floor (residual cash)" if str(res["regime"]).startswith("residual") else f"reserve ({res['regime']})")
+                    + f"; {tt['n']} holdings, {len(stt.get('pending', []))} order(s) pending."]) + "\n"
     return head, md
 
 
@@ -174,7 +175,7 @@ def batch_add(t: str | None, flush: bool = False) -> None:
 
 
 cfg = load_config()
-OPTS = {"no_prescreen": False, "reason": "screen", "redo": False}
+OPTS = {"no_prescreen": False, "reason": "screen", "redo": False, "holdings": False}
 hits: list[str] = []
 hit_rows: dict[str, dict] = {}
 
@@ -208,7 +209,7 @@ def build_queue() -> list[str]:
     queue = [t for t in ranked if not (ROOT / "research" / Ticker(t).slug / f"{today}.md").exists()
              and not list((ROOT / "research" / Ticker(t).slug).glob("*-evaluation.md"))]
     if OPTS["redo"]:  # owner request 2026-11-15: re-research names that already have an evaluation (not holdings, not today's)
-        queue = [t for t in ranked if t not in st.get("holdings", {})
+        queue = [t for t in ranked if (OPTS["holdings"] or t not in st.get("holdings", {}))  # --holdings: owner asked for them
                  and not (ROOT / "research" / Ticker(t).slug / f"{today}-evaluation.md").exists()]
     def researched_since(h):  # 2026-10-25: a hit the weekly run already re-researched is not repeated
         evs = sorted(p.name[:10] for p in (ROOT / "research" / Ticker(h["ticker"]).slug).glob("20??-??-??-evaluation.md"))
@@ -334,11 +335,13 @@ def main(argv=None) -> int:
     ap.add_argument("--cache-date", default=dt.date.today().isoformat(), help="rank: the page-cache day to screen")
     ap.add_argument("--no-prescreen", action="store_true", help="run: research every name (owner requests)")
     ap.add_argument("--redo", action="store_true", help="run: also re-research names that already have an evaluation")
+    ap.add_argument("--holdings", action="store_true", help="run with --redo: include current holdings (research only: "
+                    "only a BUY goes to the portfolio manager, and a holding's decision is HOLD/ADD/TRIM/SELL)")
     ap.add_argument("--reason", choices=["screen", "owner_request"], default="screen",
                     help="run: the neutral reason code given to the researcher (no free text, 2026-11-09)")
     a = ap.parse_args(argv)
     run = (ROOT / a.run_dir).resolve()
-    OPTS["no_prescreen"], OPTS["redo"] = a.no_prescreen, a.redo
+    OPTS["no_prescreen"], OPTS["redo"], OPTS["holdings"] = a.no_prescreen, a.redo, a.holdings
     if a.reason:
         OPTS["reason"] = a.reason
     if a.cmd == "rank":

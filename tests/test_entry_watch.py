@@ -14,11 +14,11 @@ def test_rows_from_decisions(cfg):
     r = EW.row_from_decision(dec(entry_price=82.5, entry_basis="P/FCF 5y low [RA]"), "e.md", "2026-10-09", cfg, val, "USD")
     assert (r["entry_price"], r["source"], r["expires"]) == (82.5, "evaluator", "2027-01-07")
     m = EW.row_from_decision(dec(), "e.md", "2026-10-09", cfg, val, "USD")  # no evaluator price: anchor
-    assert m["source"] == "mechanical" and m["entry_price"] == pytest.approx(110.0 * 0.8)
+    assert m["source"] == "mechanical" and m["entry_price"] == pytest.approx(110.0 * (1 - cfg["entry"]["margin_of_safety_pct"] / 100))
     assert EW.row_from_decision(dec(entry_price=None, entry_basis="quality falling"), "e", "2026-10-09", cfg, val) is None
     assert EW.row_from_decision(dec(conviction=2), "e", "2026-10-09", cfg, val) is None
     assert EW.row_from_decision(dec(decision="BUY", conviction=4), "e", "2026-10-09", cfg, val) is None
-    assert EW.row_from_decision(dec(), "e", "2026-10-09", cfg, {"fair_value": {"base": 120.0}})["entry_price"] == 96.0
+    assert EW.row_from_decision(dec(), "e", "2026-10-09", cfg, {"fair_value": {"base": 100.0}})["entry_price"] == pytest.approx(100.0 * (1 - cfg["entry"]["margin_of_safety_pct"] / 100))
     assert EW.row_from_decision(dec(), "e", "2026-10-09", cfg, {"fair_value": {"base": 130.0}}) is None  # 104 above price
 
 
@@ -114,3 +114,16 @@ def test_entry_hit_reason():
     assert "traded at 49.5 at 10:31 ET" in wr.entry_hit_reason({"entry_price": 50, "close": 49.5, "intraday": True,
                                                                  "time": "10:31 ET", "hit_date": "2026-10-09"})
     assert "closed at 49.5 on 2026-10-09" in wr.entry_hit_reason({"entry_price": 50, "close": 49.5, "hit_date": "2026-10-09"})
+
+
+def test_a_bounced_hit_stays_pending_until_researched():
+    rows = [{"ticker": "A", "hit_date": "2026-10-28", "last_close": "190", "entry_price": "175"},   # hit, then bounced
+            {"ticker": "B", "hit_date": "", "last_close": "50", "entry_price": "40"},               # never hit
+            {"ticker": "C", "hit_date": "2026-11-01", "last_close": "9", "entry_price": "10"}]      # held now
+    assert [h["ticker"] for h in EW.pending_hits(rows, {"C"})] == ["A"]
+
+
+def test_intraday_hit_upgrades_a_waiting_daily_hit():
+    merged = EW.merge_hits([{"ticker": "UHS", "hit_date": "2026-10-28"}],
+                           [{"ticker": "UHS", "intraday": True, "time": "10:30 ET"}, {"ticker": "X", "intraday": True}])
+    assert [h["ticker"] for h in merged] == ["UHS", "X"] and merged[0]["intraday"] and merged[0]["hit_date"] == "2026-10-28"

@@ -78,7 +78,7 @@ The business is in a cyclical recovery with the balance sheet intact: net cash (
   "file": "research/HKG-2382/2026-11-09-evaluation-2.md",
   "conviction": 3
  },
- "entry_price": null,
- "entry_basis": "Second opinion at conviction 3: no entry price set."
+ "entry_price": 56.0,
+ "entry_basis": "Second opinion at conviction 3: Near the DCF base fair value 56.87 (valuation file), used instead of base 85.50 x 0.8 because the blended base is flagged unreliable and that level sits above the price."
 }
 ```

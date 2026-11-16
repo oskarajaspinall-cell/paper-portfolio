@@ -851,3 +851,15 @@ The decision is AVOID at conviction 3, with the entry price set at $46.04 (base 
 [16:01:49] $ bin/py scripts/valuation.py FTDR --asof 2026-11-15 --eval research/FTDR/2026-11-15-evaluation.md
 [16:01:49] {"out": "research/FTDR/2026-11-15-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 21.08, "base": 57.55, "bull": 76.9}, "price": 96.64}
 [16:01:50] == done FTDR
+[16:01:53] == Research batch 04: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-15-batch-04.md; uploaded to GitHub
+[16:01:53] == initiate MEDP
+[16:01:53] $ bin/py scripts/sec_delta.py MEDP --asof 2026-11-15
+[16:02:02] Note: research/ASX-CPU/2026-11-15.md
+Fact sheet: research/ASX-CPU/factsheet-2026-11-15.md
+Check: OK research/ASX-CPU/2026-11-15.md type=CORE 1=61 2=104 3=118 4=42 5=56 6=40 total=421
+Blocked URL: https://www.computershare.com/about-us (not on the allowlist). The note's revenue-by-country mix is therefore [data unavailable]. There were no data conflicts.
+[16:02:02] $ bin/py scripts/check_docs.py note research/ASX-CPU/2026-11-15.md
+[16:02:02] OK research/ASX-CPU/2026-11-15.md type=CORE 1=61 2=104 3=118 4=42 5=56 6=40 total=421
+[16:02:02] $ claude -p Ticker ASX:CPU, date 2026-11-15. Research: research/ASX-CPU/factsheet-2026-11-15.md, research/ASX-CPU/2026-11-15.md. Macro snapshot: reports/macro/2026-11-15.md. Write research/ASX-CPU/2026-11-15-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:02:04] OK research/MEDP/sec-delta-2026-11-15.md
+[16:02:04] $ claude -p Ticker MEDP, note type CORE, date 2026-11-15. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/MEDP/sec-delta-2026-11-15.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text

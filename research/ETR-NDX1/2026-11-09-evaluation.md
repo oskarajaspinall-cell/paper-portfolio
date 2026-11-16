@@ -86,7 +86,7 @@ The turnaround is real and still accelerating: every rolling metric is at its 2-
   "file": "research/ETR-NDX1/2026-11-09-evaluation-2.md",
   "conviction": 3
  },
- "entry_price": null,
- "entry_basis": "Second opinion at conviction 3: no entry price set."
+ "entry_price": 33.24,
+ "entry_basis": "Second opinion at conviction 3: Base fair value 55.81 x 0.8 is above the price, so it cannot anchor; used the 6-month low 33.24 [HI], where EV/EBITDA would sit below its 5y min 8.0x [RA] and the price would discount the bear scenario."
 }
 ```

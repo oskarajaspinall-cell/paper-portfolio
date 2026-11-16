@@ -210,7 +210,7 @@ fair_value_weight = 0.5           # owner rule 2026-11-08: ranking value = this 
 # at which the same evidence would justify conviction 4 (evaluator-set, or base fair value less the margin of
 # safety). A daily close at/below it -> the stock is re-researched first at the next run. Never an automatic buy.
 min_conviction = 3
-margin_of_safety_pct = 20
+margin_of_safety_pct = 15      # owner request 2026-11-16 (was 20): the watch was too strict, winners never reached it
 expiry_days = 90
 near_pct = 10                     # close-to-entry watchlist: within this % of the entry price (notify on entering; info only)
 intraday_window_et = ["10:15", "11:15"]  # bin/entry-intraday acts only in this New York window (weekdays)

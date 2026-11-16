@@ -86,7 +86,7 @@ The balance sheet is close to net cash (net debt/EBITDA 0.28x) and Altman Z is 3
   "file": "research/OSL-NHY/2026-11-09-evaluation-2.md",
   "conviction": 3
  },
- "entry_price": null,
- "entry_basis": "Second opinion at conviction 3: no entry price set."
+ "entry_price": 64.34,
+ "entry_basis": "Second opinion at conviction 3: valuation file: base 80.43 x 0.8"
 }
 ```

@@ -208,8 +208,23 @@ def intraday_hits(rows: list[dict], price_fn, today: str) -> tuple[list[dict], l
 
 
 def merge_hits(existing: list[dict], new: list[dict]) -> list[dict]:
-    have = {h["ticker"] for h in existing}
-    return existing + [h for h in new if h["ticker"] not in have]
+    """Existing hits first; a new hit for a stock already waiting adds its intraday details to that entry (2026-11-16: UHS
+    was already waiting from the daily check, so its intraday hit was dropped and the intraday research skipped it)."""
+    by = {h["ticker"]: h for h in existing}
+    for h in new:
+        if h["ticker"] not in by:
+            existing = existing + [h]
+        elif h.get("intraday"):
+            by[h["ticker"]].update(h)
+    return existing
+
+
+def pending_hits(rows: list[dict], held: set[str]) -> list[dict]:
+    """Every watched stock that hit its entry price and has not been re-researched yet (a re-research replaces the
+    row and clears hit_date), whether or not the price has since bounced back above it (2026-11-16: a dip that
+    recovered before the weekly run used to drop off the list unresearched)."""
+    return [{"ticker": r["ticker"], "hit_date": r["hit_date"], "close": r["last_close"], "entry_price": float(r["entry_price"])}
+            for r in rows if r.get("hit_date") and r["ticker"] not in held]
 
 
 def notify(title: str, msg: str) -> None:
@@ -298,8 +313,7 @@ def main(argv=None) -> int:
         state = json.loads(stp.read_text())
         pending = {r["ticker"] for r in rows if r.get("hit_date")}  # a re-research replaces the row (clears it)
         state["entry_hits"] = merge_hits(
-            [{"ticker": h["ticker"], "hit_date": h["hit_date"], "close": h["last_close"],
-              "entry_price": float(h["entry_price"])} for h in hits],
+            pending_hits(rows, set(state.get("holdings", {}))),
             [h for h in state.get("entry_hits") or [] if h.get("intraday") and h["ticker"] in pending])
         tmp = stp.with_suffix(".tmp")
         tmp.write_text(json.dumps(state, indent=1, sort_keys=True))

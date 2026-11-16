@@ -1,0 +1,136 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 11.801086302208164,
+    "base": 15.737820121010358,
+    "bull": 17.744166839571495
+   },
+   "cost_of_equity": 0.0973905,
+   "assumptions": {
+    "roe": {
+     "bear": 0.08326,
+     "base": 0.10269500000000001,
+     "bull": 0.1126
+    },
+    "justified_pb": {
+     "bear": 0.8048017350342932,
+     "base": 1.0732761895552596,
+     "bull": 1.2101035356849312
+    },
+    "bvps": 14.663346
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 13.24082829231264,
+    "base": 18.734040284679292,
+    "bull": 19.239451108901527
+   },
+   "implied_growth": 0.09933497718209236,
+   "discount_rate": 0.0973905,
+   "cost_of_equity": 0.0973905,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.036408513013833285,
+     "base": 0.006207381713962751,
+     "bull": 0.01264655288351757
+    },
+    "cash_flow_margin": {
+     "bear": 0.35272123331727845,
+     "base": 0.41781264675018986,
+     "bull": 0.41781264675018986
+    },
+    "cagr_3y": -0.03781702602766657,
+    "cagr_5y": 0.01264655288351757,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 15.522420667431316,
+    "base": 17.840738770971328,
+    "bull": 20.902220690650015
+   },
+   "cost_of_equity": 0.0973905,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 1.26
+   }
+  }
+ ],
+ "price": 27.37,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 12.281000298909655,
+  "base": 16.73656017556667,
+  "bull": 18.242594929348172
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5512970296342837,
+  "base": -0.3885071181744001,
+  "bull": -0.333482099768061
+ },
+ "implied_growth": 0.09933497718209236,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "BIT:MB",
+ "asof": "2026-11-16",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/bit/MB/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/bit/MB/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/bit/MB/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/bit/MB/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/bit/MB/statistics/"
+ }
+}
