@@ -801,3 +801,167 @@ OK research/CNK/2026-11-16-evaluation.md Bear case=125 Bull case=96 decision=AVO
 [06:24:00] == done CNK
 [06:24:01] OK research/ABBV/sec-delta-2026-11-16.md
 [06:24:01] $ claude -p Ticker ABBV, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/ABBV/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:24:05] == Research batch 07: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-16-batch-07.md; uploaded to GitHub
+[06:24:42] == initiate VIE:OMV
+[06:24:42] $ bin/py scripts/sec_delta.py VIE:OMV --asof 2026-11-16
+[06:24:42] SKIP VIE:OMV: not a US listing (SEC filers only)
+[06:24:42] $ claude -p Ticker VIE:OMV, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:25:03] research/HKG-0669/2026-11-16-evaluation.md
+OK research/HKG-0669/2026-11-16-evaluation.md Bear case=142 Bull case=120 decision=AVOID scorecard=8->3
+
+**Skipped:** I didn't verify the company's revenue split by country, because no allowlisted source shows it.
+
+**Risks you should know:**
+- Results come out on Nov 18, after this decision. A re-check after that print may be worth it.
+- The fourth trigger (net debt/EBITDA) is text-only, so the weekly scan won't test it automatically. It's text-only because I couldn't confirm that the statistics-page `debtEbitda` field is net rather than gross debt.
+[06:25:03] $ bin/py scripts/check_docs.py eval research/HKG-0669/2026-11-16-evaluation.md
+[06:25:03] OK research/HKG-0669/2026-11-16-evaluation.md Bear case=142 Bull case=120 decision=AVOID scorecard=8->3
+[06:25:03] $ bin/py scripts/valuation.py HKG:0669 --asof 2026-11-16 --eval research/HKG-0669/2026-11-16-evaluation.md
+[06:25:03] {"out": "research/HKG-0669/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 6.91, "base": 103.07, "bull": 113.8}, "price": 141.8}
+[06:25:04] == done HKG:0669
+[06:25:12] Note: research/ABBV/2026-11-16.md
+Fact sheet: research/ABBV/factsheet-2026-11-16.md
+check_docs: OK research/ABBV/2026-11-16.md type=CORE 1=52 2=121 3=110 4=34 5=80 6=76 total=473
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+[06:25:12] $ bin/py scripts/check_docs.py note research/ABBV/2026-11-16.md
+[06:25:13] OK research/ABBV/2026-11-16.md type=CORE 1=52 2=121 3=110 4=34 5=80 6=76 total=473
+[06:25:13] $ claude -p Ticker ABBV, date 2026-11-16. Research: research/ABBV/factsheet-2026-11-16.md, research/ABBV/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/ABBV/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:25:32] == initiate TW
+[06:25:32] $ bin/py scripts/sec_delta.py TW --asof 2026-11-16
+[06:25:34] research/ABBV/2026-11-16-macro.md
+OK research/ABBV/2026-11-16-macro.md macro_weight=context words=50
+[06:25:34] $ bin/py scripts/check_docs.py macro research/ABBV/2026-11-16-macro.md
+[06:25:34] OK research/ABBV/2026-11-16-macro.md macro_weight=context words=50
+[06:25:34] $ claude -p Evaluate ABBV for 2026-11-16: fact sheet research/ABBV/factsheet-2026-11-16.md, note research/ABBV/2026-11-16.md, state portfolio/state.json, macro overlay research/ABBV/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:25:44] OK research/TW/sec-delta-2026-11-16.md
+[06:25:44] $ claude -p Ticker TW, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/TW/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:25:47] - Note: `research/VIE-OMV/2026-11-16.md`
+- Fact sheet: `research/VIE-OMV/factsheet-2026-11-16.md`
+- check_docs: `OK research/VIE-OMV/2026-11-16.md type=CORE 1=57 2=105 3=121 4=39 5=58 6=44 total=424`
+- Blocked URL: `https://www.omv.com/en/investor-relations` is not on the allowlist, so the note has no segment or country revenue mix. It says `[data unavailable]` for the country mix and for dividend data.
+- Data conflicts: none.
+[06:25:47] $ bin/py scripts/check_docs.py note research/VIE-OMV/2026-11-16.md
+[06:25:47] OK research/VIE-OMV/2026-11-16.md type=CORE 1=57 2=105 3=121 4=39 5=58 6=44 total=424
+[06:25:47] $ claude -p Ticker VIE:OMV, date 2026-11-16. Research: research/VIE-OMV/factsheet-2026-11-16.md, research/VIE-OMV/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/VIE-OMV/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:26:39] - Note: `research/TW/2026-11-16.md`
+- Fact sheet: `research/TW/factsheet-2026-11-16.md`
+- check_docs: `OK research/TW/2026-11-16.md type=CORE 1=60 2=112 3=135 4=37 5=63 6=54 total=461`
+- Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+- Data gaps: EV/EBITDA, EV/Sales, ROCE and net debt/EBITDA are `[data unavailable]` on the fact sheet. Revenue by country is also unavailable, so no country share is named.
+[06:26:39] $ bin/py scripts/check_docs.py note research/TW/2026-11-16.md
+[06:26:39] OK research/TW/2026-11-16.md type=CORE 1=60 2=112 3=135 4=37 5=63 6=54 total=461
+[06:26:39] $ claude -p Ticker TW, date 2026-11-16. Research: research/TW/factsheet-2026-11-16.md, research/TW/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/TW/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:26:39] research/VIE-OMV/2026-11-16-macro.md
+OK research/VIE-OMV/2026-11-16-macro.md macro_weight=secondary words=204
+[06:26:39] $ bin/py scripts/check_docs.py macro research/VIE-OMV/2026-11-16-macro.md
+[06:26:39] OK research/VIE-OMV/2026-11-16-macro.md macro_weight=secondary words=204
+[06:26:39] $ claude -p Evaluate VIE:OMV for 2026-11-16: fact sheet research/VIE-OMV/factsheet-2026-11-16.md, note research/VIE-OMV/2026-11-16.md, state portfolio/state.json, macro overlay research/VIE-OMV/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:26:49] research/ABBV/2026-11-16-evaluation.md
+OK research/ABBV/2026-11-16-evaluation.md Bear case=138 Bull case=126 decision=AVOID scorecard=3->2
+[06:26:49] $ bin/py scripts/check_docs.py eval research/ABBV/2026-11-16-evaluation.md
+[06:26:49] OK research/ABBV/2026-11-16-evaluation.md Bear case=138 Bull case=126 decision=AVOID scorecard=3->2
+[06:26:49] $ bin/py scripts/valuation.py ABBV --asof 2026-11-16 --eval research/ABBV/2026-11-16-evaluation.md
+[06:26:49] {"out": "research/ABBV/2026-11-16-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 115.31, "base": 180.45, "bull": 301.26}, "price": 295.03}
+[06:26:50] == done ABBV
+[06:27:00] research/TW/2026-11-16-macro.md
+OK research/TW/2026-11-16-macro.md macro_weight=context words=53
+[06:27:00] $ bin/py scripts/check_docs.py macro research/TW/2026-11-16-macro.md
+[06:27:00] OK research/TW/2026-11-16-macro.md macro_weight=context words=53
+[06:27:00] $ claude -p Evaluate TW for 2026-11-16: fact sheet research/TW/factsheet-2026-11-16.md, note research/TW/2026-11-16.md, state portfolio/state.json, macro overlay research/TW/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:27:10] == screened out NSE:SOLARINDS: price above base fair value (-61.0%; floor +0%) (no AI research)
+[06:27:34] == initiate UBSI
+[06:27:34] $ bin/py scripts/sec_delta.py UBSI --asof 2026-11-16
+[06:27:46] OK research/UBSI/sec-delta-2026-11-16.md
+[06:27:46] $ claude -p Ticker UBSI, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. SEC filing delta: research/UBSI/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:27:53] research/TW/2026-11-16-evaluation.md
+OK research/TW/2026-11-16-evaluation.md Bear case=146 Bull case=123 decision=AVOID scorecard=6->3
+
+The decision is AVOID at conviction 3, and the scorecard computed that number. I set the entry price at 105 USD, where P/E would be back near its 5-year low. That is above the default of base fair value 92.56 × 0.8. I didn't read `portfolio/state.json`, because an AVOID doesn't use it.
+[06:27:53] $ bin/py scripts/check_docs.py eval research/TW/2026-11-16-evaluation.md
+[06:27:53] OK research/TW/2026-11-16-evaluation.md Bear case=146 Bull case=123 decision=AVOID scorecard=6->3
+[06:27:53] $ bin/py scripts/valuation.py TW --asof 2026-11-16 --eval research/TW/2026-11-16-evaluation.md
+[06:27:53] {"out": "research/TW/2026-11-16-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 42.29, "base": 92.56, "bull": 134.18}, "price": 132.74}
+[06:27:54] research/VIE-OMV/2026-11-16-evaluation.md
+OK research/VIE-OMV/2026-11-16-evaluation.md Bear case=150 Bull case=116 decision=AVOID scorecard=5->3
+
+The decision is AVOID at conviction 3. I didn't read `portfolio/state.json` because an AVOID doesn't need it. The entry price is left empty: the default level (base fair value 93.41 × 0.8) is above today's price, and price isn't what holds the stock back, so a lower price wouldn't lift it to a buy.
+[06:27:54] $ bin/py scripts/check_docs.py eval research/VIE-OMV/2026-11-16-evaluation.md
+[06:27:54] OK research/VIE-OMV/2026-11-16-evaluation.md Bear case=150 Bull case=116 decision=AVOID scorecard=5->3
+[06:27:54] $ bin/py scripts/valuation.py VIE:OMV --asof 2026-11-16 --eval research/VIE-OMV/2026-11-16-evaluation.md
+[06:27:54] {"out": "research/VIE-OMV/2026-11-16-valuation.md", "used": ["dcf"], "fair_value": {"bear": 26.36, "base": 93.41, "bull": 135.39}, "price": 73.35}
+[06:27:54] == done TW
+[06:27:55] == done VIE:OMV
+[06:28:59] == initiate TPE:2337
+[06:28:59] $ bin/py scripts/sec_delta.py TPE:2337 --asof 2026-11-16
+[06:28:59] SKIP TPE:2337: not a US listing (SEC filers only)
+[06:28:59] $ claude -p Ticker TPE:2337, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:29:02] == initiate TPE:2603
+[06:29:02] $ bin/py scripts/sec_delta.py TPE:2603 --asof 2026-11-16
+[06:29:03] SKIP TPE:2603: not a US listing (SEC filers only)
+[06:29:03] $ claude -p Ticker TPE:2603, note type CORE, date 2026-11-16. Reason for review: screen. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:29:33] - Note: `research/UBSI/2026-11-16.md`
+- Fact sheet: `research/UBSI/factsheet-2026-11-16.md`
+- check_docs: `OK research/UBSI/2026-11-16.md type=CORE 1=64 2=121 3=113 4=50 5=55 6=48 total=451`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- Data gaps: ROIC, ROCE, operating margin and EV/EBITDA are [data unavailable] for this bank. The fact sheet also flags its fair value as unreliable.
+[06:29:33] $ bin/py scripts/check_docs.py note research/UBSI/2026-11-16.md
+[06:29:33] OK research/UBSI/2026-11-16.md type=CORE 1=64 2=121 3=113 4=50 5=55 6=48 total=451
+[06:29:33] $ claude -p Ticker UBSI, date 2026-11-16. Research: research/UBSI/factsheet-2026-11-16.md, research/UBSI/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/UBSI/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:29:57] Note: research/TPE-2337/2026-11-16.md
+Fact sheet: research/TPE-2337/factsheet-2026-11-16.md
+check_docs: OK research/TPE-2337/2026-11-16.md type=CORE 1=40 2=112 3=107 4=44 5=45 6=58 total=406
+
+- Revenue by country is [data unavailable]. I made no WebFetch calls, so the note doesn't check the 10%+ foreign-country rule.
+- The fact sheet has no recent news, so the cause of the 3-month and 6-month price fall is unverified.
+- The fair value is flagged unreliable (methods disagree 6.4x).
+- No data conflicts or blocked URLs.
+[06:29:57] $ bin/py scripts/check_docs.py note research/TPE-2337/2026-11-16.md
+[06:29:57] OK research/TPE-2337/2026-11-16.md type=CORE 1=40 2=112 3=107 4=44 5=45 6=58 total=406
+[06:29:57] $ claude -p Ticker TPE:2337, date 2026-11-16. Research: research/TPE-2337/factsheet-2026-11-16.md, research/TPE-2337/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/TPE-2337/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:30:07] research/UBSI/2026-11-16-macro.md
+OK research/UBSI/2026-11-16-macro.md macro_weight=secondary words=224
+[06:30:07] $ bin/py scripts/check_docs.py macro research/UBSI/2026-11-16-macro.md
+[06:30:07] OK research/UBSI/2026-11-16-macro.md macro_weight=secondary words=224
+[06:30:07] $ claude -p Evaluate UBSI for 2026-11-16: fact sheet research/UBSI/factsheet-2026-11-16.md, note research/UBSI/2026-11-16.md, state portfolio/state.json, macro overlay research/UBSI/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:30:08] The note is written and `check_docs.py` printed OK.
+
+- Note: `research/TPE-2603/2026-11-16.md`
+- Fact sheet: `research/TPE-2603/factsheet-2026-11-16.md`
+- Check: `OK research/TPE-2603/2026-11-16.md type=CORE 1=57 2=107 3=128 4=40 5=48 6=38 total=418`
+- Data conflicts: none.
+- Blocked URLs: none.
+- Peers: TPE:2609, TPE:2615 and ETR:HLAG. `CPH:MAERSK-B` returned a 404 on stockanalysis.com, so I dropped it.
+- Gaps: I made no WebFetch calls. Revenue by region, payout/buyback detail and short interest are marked `[data unavailable]`. The note's regional exposure is tagged `[Guessing]`.
+[06:30:08] $ bin/py scripts/check_docs.py note research/TPE-2603/2026-11-16.md
+[06:30:08] OK research/TPE-2603/2026-11-16.md type=CORE 1=57 2=107 3=128 4=40 5=48 6=38 total=418
+[06:30:08] $ claude -p Ticker TPE:2603, date 2026-11-16. Research: research/TPE-2603/factsheet-2026-11-16.md, research/TPE-2603/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/TPE-2603/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:30:16] research/TPE-2337/2026-11-16-macro.md
+OK research/TPE-2337/2026-11-16-macro.md macro_weight=context words=58
+[06:30:16] $ bin/py scripts/check_docs.py macro research/TPE-2337/2026-11-16-macro.md
+[06:30:16] OK research/TPE-2337/2026-11-16-macro.md macro_weight=context words=58
+[06:30:16] $ claude -p Evaluate TPE:2337 for 2026-11-16: fact sheet research/TPE-2337/factsheet-2026-11-16.md, note research/TPE-2337/2026-11-16.md, state portfolio/state.json, macro overlay research/TPE-2337/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:30:32] research/TPE-2603/2026-11-16-macro.md
+OK research/TPE-2603/2026-11-16-macro.md macro_weight=context words=40
+[06:30:32] $ bin/py scripts/check_docs.py macro research/TPE-2603/2026-11-16-macro.md
+[06:30:32] OK research/TPE-2603/2026-11-16-macro.md macro_weight=context words=40
+[06:30:32] $ claude -p Evaluate TPE:2603 for 2026-11-16: fact sheet research/TPE-2603/factsheet-2026-11-16.md, note research/TPE-2603/2026-11-16.md, state portfolio/state.json, macro overlay research/TPE-2603/2026-11-16-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[06:31:02] I've written research/TPE-2337/2026-11-16-evaluation.md, and the checker prints:
+
+OK research/TPE-2337/2026-11-16-evaluation.md Bear case=145 Bull case=108 decision=AVOID scorecard=4->2
+
+The decision is AVOID at conviction 2, which matches the scorecard. I didn't read the portfolio state, because it's only needed for a BUY or ADD. The entry price is left empty: the obstacle is peak-cycle memory earnings and no moat, not price, so a lower price alone wouldn't make it a buy. The mechanical fair value is flagged unreliable (its two methods are 6.4x apart), so I gave it little weight.
+[06:31:02] $ bin/py scripts/check_docs.py eval research/TPE-2337/2026-11-16-evaluation.md
+[06:31:02] OK research/TPE-2337/2026-11-16-evaluation.md Bear case=145 Bull case=108 decision=AVOID scorecard=4->2
+[06:31:02] $ bin/py scripts/valuation.py TPE:2337 --asof 2026-11-16 --eval research/TPE-2337/2026-11-16-evaluation.md
+[06:31:02] {"out": "research/TPE-2337/2026-11-16-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": -32.45, "base": 59.61, "bull": 396.07}, "price": 79.6}
+[06:31:04] == done TPE:2337
+[06:31:21] research/TPE-2603/2026-11-16-evaluation.md
+OK research/TPE-2603/2026-11-16-evaluation.md Bear case=137 Bull case=102 decision=AVOID scorecard=2->1
+
+I didn't read `portfolio/state.json` because the decision is AVOID, so no sizing or caps applied. The entry price is null: no moat and falling cyclical returns are the obstacle, not just the price.
+[06:31:21] $ bin/py scripts/check_docs.py eval research/TPE-2603/2026-11-16-evaluation.md
+[06:31:21] OK research/TPE-2603/2026-11-16-evaluation.md Bear case=137 Bull case=102 decision=AVOID scorecard=2->1
+[06:31:21] $ bin/py scripts/valuation.py TPE:2603 --asof 2026-11-16 --eval research/TPE-2603/2026-11-16-evaluation.md
+[06:31:21] {"out": "research/TPE-2603/2026-11-16-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 23.41, "base": 157.49, "bull": 233.29}, "price": 257.5}
+[06:31:23] == done TPE:2603
