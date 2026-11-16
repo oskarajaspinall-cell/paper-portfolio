@@ -1,0 +1,28 @@
+[
+ {
+  "ticker": "MA",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "A wide-moat, unlevered payments network with operating margin at a 2-year high and a strong uptrend, bought on trend strength and a low position in its own multiple range rather than a mechanical discount.",
+  "reason": "The scorecard gives 4: top quality, a near-unlevered balance sheet, a wide moat and trend strength, with the FCF dip explained by litigation cash. It does not score on value: the expected value sits near the price and the de-rating risk is real. That supports only the standard core size, which Python volatility-scales. No cap is breached, so nothing is replaced.",
+  "research_note": "research/MA/2026-11-16.md",
+  "triggers": [
+   {
+    "text": "TTM ROIC falls below 80%, giving up most of the five-year rise to 91.0% and signalling network pricing erosion.",
+    "check": {"source": "statistics", "field": "roic", "op": "<", "value": 80}
+   },
+   {
+    "text": "TTM operating margin falls below 56%, reversing the five-year expansion from 54.4% to 60.1%.",
+    "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 56}
+   },
+   {
+    "text": "TTM FCF margin falls below 40%, showing the cash gap is structural rather than litigation timing.",
+    "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 40}
+   },
+   {
+    "text": "A final US rule, court decision or law (e.g. the Credit Card Competition Act) materially caps credit interchange or forces network routing choice."
+   }
+  ]
+ }
+]

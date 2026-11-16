@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Semiconductors",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 9.636376308310384,
+    "base": 48.12380240467337,
+    "bull": 81.39990213686934
+   },
+   "implied_growth": 0.46876599408301345,
+   "discount_rate": 0.11079826992249242,
+   "cost_of_equity": 0.11403150000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.03783878245566312,
+     "base": 4.392008789715421e-05,
+     "bull": 4.392008789715421e-05
+    },
+    "cash_flow_margin": {
+     "bear": 0.07397009304184028,
+     "base": 0.22052119790894717,
+     "bull": 0.35632819416353656
+    },
+    "cagr_3y": -0.040677564911326236,
+    "cagr_5y": -0.00914675473708515,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 146.58712554585153,
+    "base": 210.49087227074236,
+    "bull": 236.16230786026202
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 13.039,
+     "base": 18.503,
+     "bull": 20.698
+    },
+    "ttm_ebitda": 10713000000
+   }
+  }
+ ],
+ "price": 303.6,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 55.28662605415744,
+  "base": 102.24615902669636,
+  "bull": 132.98737071133357
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.8178964886226698,
+  "base": -0.6632208200701701,
+  "bull": -0.561965182110232
+ },
+ "implied_growth": 0.46876599408301345,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 4.4x (base 48.12-210.49)"
+  ]
+ },
+ "ticker": "TXN",
+ "asof": "2026-11-16",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/txn/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/txn/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/txn/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/txn/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/txn/statistics/"
+ }
+}
