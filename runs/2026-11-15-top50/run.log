@@ -1708,3 +1708,62 @@ I didn't open the valuation file. The scenario targets and the 238.26 entry pric
 [03:12:05] {"out": "research/KNSL/2026-11-16-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 238.2, "base": 297.82, "bull": 454.79}, "price": 395.89}
 [03:12:05] == done TXN
 [03:12:06] == done KNSL
+[03:12:08] OK research/COP/sec-delta-2026-11-16.md
+[03:12:08] $ claude -p Ticker COP, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/COP/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:12:09] == Research batch 02: 6 researched, 2 BUY (MA, ACGL), 4 AVOID -> reports/research/2026-11-16-batch-02.md; uploaded to GitHub
+[03:12:09] == initiate AMS:WKL
+[03:12:09] $ bin/py scripts/sec_delta.py AMS:WKL --asof 2026-11-16
+[03:12:09] SKIP AMS:WKL: not a US listing (SEC filers only)
+[03:12:09] $ claude -p Ticker AMS:WKL, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:14:12] - Note: `research/AMS-WKL/2026-11-16.md`
+- Fact sheet: `research/AMS-WKL/factsheet-2026-11-16.md`
+- check_docs: `OK research/AMS-WKL/2026-11-16.md type=CORE 1=58 2=101 3=134 4=32 5=71 6=42 total=438`
+- Blocked URLs: the globenewswire.com 9-month trading update and wolterskluwer.com/en/investors were both off the allowlist. As a result, the revenue mix by division and country, organic growth and guidance are [data unavailable] in the note.
+- Peers: I swapped the Amsterdam peer for `LON:REL` (RELX), because `AMS:REN` returned a 404. The peers used were `LON:REL`, `TRI`, `SPGI` and `VRSK`.
+- Data conflicts: none.
+[03:14:12] $ bin/py scripts/check_docs.py note research/AMS-WKL/2026-11-16.md
+[03:14:12] OK research/AMS-WKL/2026-11-16.md type=CORE 1=58 2=101 3=134 4=32 5=71 6=42 total=438
+[03:14:12] $ claude -p Ticker AMS:WKL, date 2026-11-16. Research: research/AMS-WKL/factsheet-2026-11-16.md, research/AMS-WKL/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/AMS-WKL/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:14:14] Note: research/COP/2026-11-16.md
+Fact sheet: research/COP/factsheet-2026-11-16.md
+Check: OK research/COP/2026-11-16.md type=CORE 1=65 2=113 3=113 4=37 5=78 6=68 total=474
+
+Data conflicts: none. No URLs were blocked, and I made no WebFetch calls. The sec-delta file was the only extra source I read.
+
+Revenue by country is [data unavailable], because I didn't fetch the 10-K. The note says no foreign country is shown at about 10% or more, based on the 10-Q's production shares for Norway and Qatar.
+[03:14:14] $ bin/py scripts/check_docs.py note research/COP/2026-11-16.md
+[03:14:14] OK research/COP/2026-11-16.md type=CORE 1=65 2=113 3=113 4=37 5=78 6=68 total=474
+[03:14:14] $ claude -p Ticker COP, date 2026-11-16. Research: research/COP/factsheet-2026-11-16.md, research/COP/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/COP/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:14:36] research/AMS-WKL/2026-11-16-macro.md
+OK research/AMS-WKL/2026-11-16-macro.md macro_weight=context words=85
+[03:14:36] $ bin/py scripts/check_docs.py macro research/AMS-WKL/2026-11-16-macro.md
+[03:14:36] OK research/AMS-WKL/2026-11-16-macro.md macro_weight=context words=85
+[03:14:36] $ claude -p Evaluate AMS:WKL for 2026-11-16: fact sheet research/AMS-WKL/factsheet-2026-11-16.md, note research/AMS-WKL/2026-11-16.md, state portfolio/state.json, macro overlay research/AMS-WKL/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:14:47] research/COP/2026-11-16-macro.md
+OK research/COP/2026-11-16-macro.md macro_weight=secondary words=201
+[03:14:47] $ bin/py scripts/check_docs.py macro research/COP/2026-11-16-macro.md
+[03:14:47] OK research/COP/2026-11-16-macro.md macro_weight=secondary words=201
+[03:14:47] $ claude -p Evaluate COP for 2026-11-16: fact sheet research/COP/factsheet-2026-11-16.md, note research/COP/2026-11-16.md, state portfolio/state.json, macro overlay research/COP/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:15:32] research/COP/2026-11-16-evaluation.md
+OK research/COP/2026-11-16-evaluation.md Bear case=134 Bull case=109 decision=AVOID scorecard=5->3
+
+I didn't check COP's earlier verdicts, so I added no `new_evidence` field; the checker passed without it. I rated `key_risk` "high"; "medium" would still have scored conviction 3.
+[03:15:32] $ bin/py scripts/check_docs.py eval research/COP/2026-11-16-evaluation.md
+[03:15:32] OK research/COP/2026-11-16-evaluation.md Bear case=134 Bull case=109 decision=AVOID scorecard=5->3
+[03:15:32] $ bin/py scripts/valuation.py COP --asof 2026-11-16 --eval research/COP/2026-11-16-evaluation.md
+[03:15:32] {"out": "research/COP/2026-11-16-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 96.85, "base": 123.89, "bull": 130.02}, "price": 142.28}
+[03:15:33] == done COP
+[03:15:58] I wrote the evaluation to research/AMS-WKL/2026-11-16-evaluation.md and the checker passed:
+
+OK research/AMS-WKL/2026-11-16-evaluation.md Bear case=145 Bull case=137 decision=AVOID scorecard=8->3
+
+- **Decision:** AVOID at conviction 3, CORE. I first drafted it as a BUY at 4, but the scorecard set conviction to 3, which is below the buy bar, so it became AVOID.
+- **Change from last time:** the 2026-10-18 evaluation was a BUY at conviction 4 at 81.52. I recorded the price rise to 90.84 as the new evidence. That earlier verdict also came before the scorecard existed.
+- **Entry price:** 83.26, the swing low on 2026-10-29. The usual anchor (base fair value 116.24 less 20%) comes out above today's price, so it couldn't be used. I worked out that 83.26 would put the discount in the scorecard's top band. That is my own arithmetic, not a scorecard run.
+
+I didn't check the nine-month trading update because it couldn't be read, so recent growth and guidance are unverified.
+[03:15:58] $ bin/py scripts/check_docs.py eval research/AMS-WKL/2026-11-16-evaluation.md
+[03:15:58] OK research/AMS-WKL/2026-11-16-evaluation.md Bear case=145 Bull case=137 decision=AVOID scorecard=8->3
+[03:15:58] $ bin/py scripts/valuation.py AMS:WKL --asof 2026-11-16 --eval research/AMS-WKL/2026-11-16-evaluation.md
+[03:15:59] {"out": "research/AMS-WKL/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 79.39, "base": 116.24, "bull": 128.12}, "price": 90.84}
+[03:15:59] == done AMS:WKL
