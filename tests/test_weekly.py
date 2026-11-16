@@ -238,7 +238,7 @@ def test_run_makes_no_model_calls_for_unflagged_or_exits(fake_repo, monkeypatch)
     calls, agents = [], []
     monkeypatch.setattr(wr, "sh", make_sh(fake_repo, SCAN_QUIET, calls))
     assert wr.run("2026-10-10", False, 0, agent=lambda *a: agents.append(a)) == 0
-    assert [a[0] for a in agents] == ["macro-strategist"]  # quiet week: only the weekly cash-strategy view
+    assert [a[0] for a in agents] == []  # quiet week; the weekly macro view is skipped in residual cash mode (V2.3)
     assert any("portfolio.py submit" in c and "requests-mechanical.json" in c for c in calls)
 
 
@@ -266,10 +266,10 @@ def test_run_reinitiates_fired_core_trigger(fake_repo, monkeypatch):
             (fake_repo / "runs" / "2026-10-10" / "submit.json").write_text("{}")
 
     assert wr.run("2026-10-10", False, 0, agent=agent) == 0
-    assert seen == ["macro-strategist", "researcher", "macro-overlay", "evaluator", "portfolio-manager"]  # no Monte Carlo (owner 2026-10-11)
-    assert "Reason for review: tripwire." in prompts[1] and "flagged by: core or macro trigger fired" in prompts[1]
-    assert "SEC filing delta: research/TRIG/sec-delta-2026-10-10.md" in prompts[1]
-    assert "Reason for review: tripwire." in prompts[3]  # handling lives in evaluator.md (neutral prompts)
+    assert seen == ["researcher", "macro-overlay", "evaluator", "portfolio-manager"]  # no Monte Carlo (owner 2026-10-11)
+    assert "Reason for review: tripwire." in prompts[0] and "flagged by: core or macro trigger fired" in prompts[0]
+    assert "SEC filing delta: research/TRIG/sec-delta-2026-10-10.md" in prompts[0]
+    assert "Reason for review: tripwire." in prompts[2]  # handling lives in evaluator.md (neutral prompts)
 
 
 def test_failed_run_applies_no_trades_and_logs_error(fake_repo, monkeypatch):
@@ -653,7 +653,7 @@ def test_funding_queue_swap_is_submitted_as_a_replacement(fake_repo, monkeypatch
                                                 '"replacement_reason": "better business, cheaper"}\n```')
 
     assert wr.run("2026-10-10", False, 0, agent=agent) == 0
-    assert seen == ["macro-strategist", "swap-reviewer"]
+    assert seen == ["swap-reviewer"]
     req = json.loads((run / "requests-swap.json").read_text())[0]
     assert (req["ticker"], req["replaces"], req["replacement_reason"]) == ("WAIT", "WEAK", "better business, cheaper")
     assert any("portfolio.py submit" in c and "requests-swap.json" in c and "--at-market" in c for c in calls)

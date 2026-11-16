@@ -125,16 +125,19 @@ def test_dry_run_review_changes_nothing(cfg, tmp_path, reserve20):
     assert [r["ticker"] for r in out["resubmitted"]] == ["AAPL"] and sp.read_text() == before
 
 
-def test_swap_brief_and_answer(cfg, tmp_path, reserve20):
-    hold = {"LON:ULVR": holding("LON:ULVR", "CORE", 40, conv=3), "LON:SHEL": holding("LON:SHEL", "CORE", 35, conv=4)}
+def test_swap_brief_and_answer(cfg, tmp_path, reserve20, monkeypatch):
+    cfg["core"]["min_buy_conviction"] = 4
+    ev = {"AAPL": 280.0, "LON:ULVR": 4100.0}  # SHEL has neither a fair value nor an expected value
+    monkeypatch.setattr(FQ, "expected_value", lambda t, d=None: (ev.get(t), None))
+    hold = {"LON:ULVR": holding("LON:ULVR", "CORE", 40, conv=4), "LON:SHEL": holding("LON:SHEL", "CORE", 35, conv=4)}
     sp = state_file(tmp_path, cfg, hold, 25000)
     place_orders([core_buy("AAPL", conv=4)], sp, OpenMarket(cfg), cfg, WATCH, TODAY, port_dir=tmp_path)
     s = json.loads(sp.read_text())
     mkt = OpenMarket(cfg)
     P.mark(s, mkt)
     md, allowed = FQ.brief(s, mkt, cfg, TODAY)
-    assert allowed == {"buy": "AAPL", "candidates": ["LON:ULVR", "LON:SHEL"]}  # conviction 3 first
-    assert "| AAPL | 4 |" in md and "| 50.0% |" in md
+    assert allowed == {"buy": "AAPL", "candidates": ["LON:ULVR"]}  # SHEL: no upside figures -> not eligible
+    assert "| AAPL | 4 |" in md and "| 45.0% |" in md
     ok = '```json\n{"swap": true, "buy": "AAPL", "replaces": "LON:ULVR", "replacement_reason": "higher ROIC, cheaper"}\n```'
     sw = FQ.parse_swap(ok, allowed)
     assert sw["replaces"] == "LON:ULVR"
@@ -231,7 +234,10 @@ def test_an_idea_that_picks_up_a_sector_cap_stays_for_the_swap_review(cfg, tmp_p
     assert json.loads(sp.read_text())["funding_queue"][0]["ticker"] == "NVDA"
 
 
-def test_swap_brief_offers_only_swaps_the_rules_accept(cfg, tmp_path):
+def test_swap_brief_offers_only_swaps_the_rules_accept(cfg, tmp_path, monkeypatch):
+    cfg["core"]["min_buy_conviction"] = 4
+    ev = {"NVDA": 170.0, "MSFT": 380.0, "LON:ULVR": 4000.0}
+    monkeypatch.setattr(FQ, "expected_value", lambda t, d=None: (ev.get(t), None))
     hold = {"MSFT": holding("MSFT", "CORE", 25, conv=4), "LON:ULVR": holding("LON:ULVR", "CORE", 50, conv=3)}
     s = empty_state(cfg)
     s["holdings"], s["cash_usd"] = hold, 25000
@@ -243,7 +249,7 @@ def test_swap_brief_offers_only_swaps_the_rules_accept(cfg, tmp_path):
     md, allowed = FQ.brief(s, mkt, cfg, TODAY, WATCH)
     assert allowed == {"buy": "NVDA", "candidates": ["MSFT"]}
     _, unchecked = FQ.brief(s, mkt, cfg, TODAY)
-    assert unchecked["candidates"] == ["LON:ULVR", "MSFT"]
+    assert unchecked["candidates"] == ["MSFT"]  # ULVR is conviction 3: below the bar, so the downgrade path, not a swap
 
 
 def _queued(cfg, tmp_path, conv_held):
@@ -347,3 +353,21 @@ def test_expected_value_weights_the_scenarios(tmp_path, monkeypatch):
     assert FQ.value_and_basis("X", None, None) == (30, "expected 12-month value")
     assert round(FQ.disagreement("X", None, 90.0, 20.0)) == 300
     assert FQ.value_and_basis("NONE", None, 99.0) == (99.0, "base fair value")
+
+
+def _cand(**kw):
+    c = {"ticker": "LON:ULVR", "conviction": 4, "entry_date": "2026-09-01", "fv_upside_pct": 5.0, "ev_upside_pct": 2.5}
+    return {**c, **kw}
+
+
+def test_swap_guards(cfg, monkeypatch):
+    cfg["core"]["min_buy_conviction"] = 4
+    monkeypatch.setattr(FQ, "expected_value", lambda t, d=None: (280.0, None))
+    idea = {"ticker": "AAPL", "fair_value_base": 300.0, "decision_price": 200.0}  # +50% fair value, +40% expected
+    assert FQ.swap_eligible(_cand(), idea, cfg, TODAY)[0]
+    assert "under 30 days" in FQ.swap_eligible(_cand(entry_date="2026-09-20"), idea, cfg, TODAY)[1]  # 20 days held
+    assert "thesis" in FQ.swap_eligible(_cand(conviction=3), idea, cfg, TODAY)[1]
+    # the idea must win by 15pp on BOTH measures: fair value alone (+45pp) is not enough when expected value is +40 vs +30
+    assert "edge" in FQ.swap_eligible(_cand(ev_upside_pct=30.0), idea, cfg, TODAY)[1]
+    assert "edge" in FQ.swap_eligible(_cand(fv_upside_pct=40.0), idea, cfg, TODAY)[1]
+    assert "missing" in FQ.swap_eligible(_cand(ev_upside_pct=None), idea, cfg, TODAY)[1]

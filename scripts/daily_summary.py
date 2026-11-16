@@ -94,6 +94,13 @@ def build(asof: str, log_text: str = "") -> tuple[str, str]:
               + (f"; S&P 500 {dd:.1f}% below its 52-week high" if dd is not None else "")
               + (" — **dip release active**" if res.get("dip_multiplier", 1) < 1 else "")
               + f". Room above the reserve: {room:.1f}% of the portfolio."]
+    tel = [r for r in _csv(port / "cash_telemetry.csv") if r["date"] <= asof][-1:]
+    if tel:  # V2.3 residual cash: how much cash is deployable and what core top-ups hold back from the tactical sleeve
+        t = tel[0]
+        L += [f"- Deployable cash {t['available_cash_pct']}% above the floor; open core top-up reserve "
+              f"{t['open_core_topup_reserve_pct']}%; tactical capacity {t['available_tactical_cap_pct']}%; "
+              f"{t['starters_waiting']} starter(s) waiting, {t['starters_blocked_by_cap']} blocked by a cap"
+              + (f"; macro stress {t['regime_stress']}/100 (telemetry only)" if t.get("regime_stress") not in ("", None) else "") + "."]
     # funding queue
     fq = state.get("funding_queue") or []
     ev = [r for r in _csv(port / "funding_queue.csv") if r["date"] == session or r["date"] == asof]

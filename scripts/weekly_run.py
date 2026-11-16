@@ -232,6 +232,10 @@ def run_cash_strategy(asof: str, agent, log) -> None:
     except StepFailed as e:
         log(f"!! CASH STRATEGY SCORE FAILED (earlier regime / neutral reserve applies): {e}")
         return
+    from cash_policy import residual_mode
+    if residual_mode(load_config()):  # V2.3: the score is telemetry only, so the macro view (which only moves the reserve) is skipped
+        log("regime scored as read-only telemetry (residual cash mode): no macro-strategist view")
+        return
     view = ROOT / "reports" / "regime" / f"{asof}-view.md"
     try:
         agent("macro-strategist", f"Date {asof}. Regime score: reports/regime/{asof}.md. Macro snapshot: "
@@ -263,7 +267,7 @@ def run_funding_queue(asof: str, dry_run: bool, agent, log, rundir: Path) -> Non
     the swap-reviewer weighs the best one still waiting against the weakest CORE holdings. A swap is a BUY with
     `replaces`, validated by portfolio.py like any other trade."""
     dry = ["--dry-run"] if dry_run else []
-    sh(PY + ["scripts/funding_queue.py", "review", "--asof", asof] + dry, log)
+    sh(PY + ["scripts/funding_queue.py", "review", "--weekly", "--asof", asof] + dry, log)
     # a holding downgraded below the buy bar is swapped automatically for a clearly better waiting idea (2026-11-08)
     sh(PY + ["scripts/funding_queue.py", "auto-swap", "--asof", asof,
              "--out", str(rundir / "requests-auto-swap.json")] + dry, log)

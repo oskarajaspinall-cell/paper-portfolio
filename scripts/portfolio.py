@@ -512,6 +512,8 @@ def current_reserve(cfg: dict, asof: str) -> dict:
     cs = cfg.get("cash_strategy")
     if not cs:
         return {"pct": 0.0, "regime": None, "dip_multiplier": 1.0}
+    if cs.get("mode") == "residual":  # V2.3 (owner request 2026-11-16): only the operational floor; regime.py is telemetry
+        return {"pct": float(cfg["portfolio"]["min_cash_pct"]), "regime": "residual (bottom-up)", "dip_multiplier": 1.0}
     import regime
     doc = regime.latest(asof)
     if not doc:
@@ -587,6 +589,43 @@ class Engine:
         held = (s["holdings"].get(ticker) or {}).get("market_value_usd", 0.0)
         room = (s["cash_usd"] - self.reserve["pct"] / 100 * pv) * 0.995  # 0.5% margin for spread and FX costs
         return round(max(base, min(target, (held + room) / pv * 100)), 2)
+
+    def core_topup_reserve_pct(self, s) -> float:
+        """Residual-cash mode: % of the portfolio held back from tactical buys for core starter / top-up steps that
+        could really execute (scripts/cash_policy.py): core first, tactical second."""
+        return self.core_topup_detail(s)[0]
+
+    def core_topup_detail(self, s) -> tuple[float, dict]:
+        """(reserve %, {ticker: executable top-up %}); a waiting starter that maps to 0 is blocked by a cap or too small."""
+        import cash_policy
+        from funding_queue import _upside
+        pv = self.pv(s)
+        if not pv:
+            return 0.0, {}
+        p = self.cfg["portfolio"]
+        w = lambda t: s["holdings"][t]["market_value_usd"] / pv  # noqa: E731
+        by_sector: dict[str, set] = {}
+        for t, h in s["holdings"].items():
+            by_sector.setdefault(h["sector"], set()).add(t)
+        ccy = lambda t: s["holdings"][t].get("reporting_currency") or self.mkt.reporting_currency(t)  # noqa: E731
+        starters = []
+        for e in s.get("funding_queue") or []:
+            t = e.get("ticker")
+            if e.get("stage") != "topup" or t not in s["holdings"] or not e.get("target_pct"):
+                continue
+            sec = by_sector[s["holdings"][t]["sector"]]
+            limits = {"sector": (p["max_sector_pct"] / 100 - sum(w(x) for x in sec), sec)}
+            room, mates = self.cluster_room(t, s)
+            if room is not None:
+                limits["cluster"] = (room / 100 - w(t), {t} | {m for m, _ in mates})
+            for g in p.get("country_group_caps", []):
+                if ccy(t) in g["currencies"]:
+                    mem = {x for x in s["holdings"] if ccy(x) in g["currencies"]}
+                    limits["country:" + g["name"]] = (g["max_pct"] / 100 - sum(w(x) for x in mem), mem)
+            starters.append({"ticker": t, "current": w(t), "target": e["target_pct"] / 100, "upside": _upside(e),
+                             "limits": limits})
+        total, per = cash_policy.core_topup_reserve(starters)
+        return total * 100, {t: x * 100 for t, x in per.items()}
 
     # ---- the trade primitive (no rule checks; callers validate)
     def _execute(self, s, ticker, ptype, side, shares, q, reason):
@@ -856,6 +895,9 @@ class Engine:
         res = self.reserve["pct"]
         if r.get("replaces") and r.get("_cash_before_pct") is not None:  # 2026-11-08: a swap spends no reserve
             res = min(res, r["_cash_before_pct"])  # if it leaves cash no lower than it found it
+        if r["action"] in ("BUY", "ADD") and r.get("position_type") == "TACTICAL" and self.cfg.get(
+                "cash_strategy", {}).get("mode") == "residual":
+            res += self.core_topup_reserve_pct(s)  # core top-ups claim the cash first (V2.3 waterfall)
         if r["action"] in ("BUY", "ADD") and res > 0 and tt["cash"] / pv * 100 < res - 1e-9:
             out.append(("CASH_RESERVE", f"cash would be {tt['cash'] / pv * 100:.2f}%, below the {res:g}% reserve "
                                         f"({self.reserve['regime']} regime)"))

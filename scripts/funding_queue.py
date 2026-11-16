@@ -42,7 +42,9 @@ def settings(cfg: dict) -> dict:
             "starter_min_fraction": float(fq.get("starter_min_fraction", 0.5)),
             "min_step_pct": float(fq.get("min_step_pct", 1.0)),
             "auto_swap_min_gap_pp": float(fq.get("auto_swap_min_gap_pp", 15)),
-            "fair_value_weight": float(fq.get("fair_value_weight", 0.5))}
+            "fair_value_weight": float(fq.get("fair_value_weight", 0.5)),
+            "min_hold_days": int(fq.get("min_hold_days", 30)),
+            "min_trade_cap_pct": float(fq.get("min_trade_cap_pct", 2.5))}
 
 
 def queueable(rej: dict, req: dict | None, cfg: dict) -> bool:
@@ -171,6 +173,38 @@ def _upside(e: dict) -> float | None:
     return (v / c - 1) * 100 if v and c else None
 
 
+def upside_parts(ticker: str, today: str | None, fair_value_base: float | None, close: float | None
+                 ) -> tuple[float | None, float | None]:
+    """(fair-value upside %, expected-12-month-value upside %) at `close`; None for a missing or unreliable input.
+    The swap hurdle needs both separately (V2.3). They share fundamental inputs, so requiring both filters out
+    valuation-scaling noise; it does not validate two independent theses. That makes swaps intentionally rare."""
+    if not close:
+        return None, None
+    fv = fair_value_base if fair_value_base and fv_reliable(ticker, today) else None
+    ev, _ = expected_value(ticker, today)
+    return ((fv / close - 1) * 100 if fv else None), ((ev / close - 1) * 100 if ev else None)
+
+
+def swap_eligible(cand: dict, idea: dict, cfg: dict, today: str) -> tuple[bool, str]:
+    """V2.3 swap guards for the weekly swap-reviewer (owner request 2026-11-16). The holding to be sold must be
+    (1) at least `min_hold_days` old (fresh entries are not churned), (2) thesis intact (still at the buy bar: a
+    broken thesis belongs to the downgrade / fundamental-stop path, not an ad-hoc swap), and (3) beaten by the idea
+    by `auto_swap_min_gap_pp` on BOTH fair-value upside and expected-12-month-value upside."""
+    st = settings(cfg)
+    ed = cand.get("entry_date")
+    if ed and (dt.date.fromisoformat(today) - dt.date.fromisoformat(ed)).days < st["min_hold_days"]:
+        return False, f"held under {st['min_hold_days']} days"
+    if int(cand.get("conviction") or 0) < int(cfg["core"]["min_buy_conviction"]):
+        return False, "thesis not intact (below the buy bar: downgrade path)"
+    ifv, iev = upside_parts(idea["ticker"], today, idea.get("fair_value_base"), idea.get("last_close") or idea.get("decision_price"))
+    if None in (ifv, iev, cand.get("fv_upside_pct"), cand.get("ev_upside_pct")):
+        return False, "fair-value or expected-value upside missing"
+    gap = st["auto_swap_min_gap_pp"]
+    if ifv - cand["fv_upside_pct"] < gap or iev - cand["ev_upside_pct"] < gap:
+        return False, f"upside edge under {gap:g}pp on fair value or expected value"
+    return True, ""
+
+
 def _rank(q: list[dict]) -> list[dict]:
     """Top-ups of positions already started come first (finish what we started), then the best upside."""
     return sorted(q, key=lambda e: (e.get("stage") != "topup", _upside(e) is None, -(_upside(e) or 0)))
@@ -186,6 +220,41 @@ def room(state_path: Path, mkt, cfg: dict, watch: dict, today: str) -> dict:
     eng.process([copy.deepcopy(o["request"]) for o in state.get("pending", [])])
     tt = totals(work)
     return {"pct": tt["cash"] / tt["total"] * 100 - eng.reserve["pct"] - 0.5, "engine": eng, "state": work}
+
+
+TELEMETRY_COLS = ["date", "cash_pct", "available_cash_pct", "open_core_topup_reserve_pct", "available_tactical_cap_pct",
+                  "starters_waiting", "starters_blocked_by_cap", "regime_stress"]
+
+
+def log_telemetry(state_path: Path, mkt, cfg: dict, watch: dict, today: str, port_dir: Path = PORT) -> dict | None:
+    """V2.3: one row a day in portfolio/cash_telemetry.csv (residual mode only) so the effect of core top-up reserves on
+    the tactical sleeve is visible: how often a waiting starter zeroes out tactical capacity, how many are blocked by
+    a cap rather than by cash, and the (read-only) macro stress score next to it."""
+    import cash_policy
+    if not cash_policy.residual_mode(cfg):
+        return None
+    from portfolio import append_csv
+    r = room(state_path, mkt, cfg, watch, today)
+    work, eng = r["state"], r["engine"]
+    from portfolio import totals
+    tt = totals(work)
+    pv = tt["total"]
+    floor = float(cfg["portfolio"]["min_cash_pct"]) / 100
+    avail = cash_policy.available_cash(tt["cash"], pv, floor) * 100
+    reserve, per = eng.core_topup_detail(work)
+    tac = cash_policy.tactical_cap(tt["tactical"] / pv, max(0.0, avail - reserve) / 100,
+                                   float(cfg["tactical"]["max_sleeve_pct"]) / 100) * 100
+    try:
+        import regime
+        stress = (regime.latest(today) or {}).get("stress")
+    except Exception:
+        stress = None
+    row = {"date": today, "cash_pct": round(tt["cash"] / pv * 100, 2), "available_cash_pct": round(avail, 2),
+           "open_core_topup_reserve_pct": round(reserve, 2), "available_tactical_cap_pct": round(tac, 2),
+           "starters_waiting": len(per), "starters_blocked_by_cap": sum(1 for x in per.values() if x <= 1e-9),
+           "regime_stress": "" if stress is None else stress}
+    append_csv(port_dir / "cash_telemetry.csv", TELEMETRY_COLS, [row])
+    return row
 
 
 def _request(e: dict, today: str) -> dict:
@@ -262,10 +331,12 @@ def underweight_topups(state: dict, mkt, cfg: dict, today: str) -> list[dict]:
 
 
 def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.datetime | None = None,
-           dry_run: bool = False, port_dir: Path = PORT) -> dict:
+           dry_run: bool = False, port_dir: Path = PORT, weekly: bool = True) -> dict:
     """Drop stale ideas, then, best first (top-ups before new names): a full-size order when it fits; otherwise
     a starter position when the room above the reserve is at least starter_min_fraction of its target (the rest
-    stays queued as a top-up); a top-up in steps of at least min_step_pct whenever room appears."""
+    stays queued as a top-up); a top-up in steps of at least min_step_pct whenever room appears.
+    Residual-cash mode (V2.3): steps are at least cash_policy.min_trade (a final step that completes the target may be
+    smaller), and top-ups of held positions run only with weekly=True (the weekly run); daily runs start new names."""
     from portfolio import atomic_write, load_state, place_orders
     st = settings(cfg)
     state = load_state(state_path, cfg)
@@ -368,7 +439,12 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
             if not h:
                 out["waiting"].append({"ticker": t, "reason": "starter not filled yet"})
                 continue
+            import cash_policy
             from portfolio import totals
+            residual = cash_policy.residual_mode(cfg)
+            if residual and not weekly:  # V2.3 anti-churn: top-ups once a week; the tactical reserve holds the cash
+                out["waiting"].append({"ticker": t, "reason": "top-ups run in the weekly run"})
+                continue
             pv = totals(r["state"])["total"]
             now_pct = h["market_value_usd"] / pv * 100
             target = e.get("target_pct") or r["engine"].core_size(int(req["conviction"]), t, r["state"])
@@ -380,7 +456,10 @@ def review(state_path: Path, mkt, cfg: dict, watch: dict, today: str, now: dt.da
                     log_events([events[-1]], port_dir)
                 continue
             step = min(target, now_pct + max(0.0, r["pct"]))
-            if step - now_pct < st["min_step_pct"]:
+            completes = step >= target - 1e-6
+            mt = (cash_policy.min_trade(target / 100, st["min_trade_cap_pct"] / 100) * 100
+                  if residual and not completes else st["min_step_pct"])
+            if step - now_pct < mt:
                 out["waiting"].append({"ticker": t, "reason": f"top-up: {now_pct:.2f}% of {target:.2f}%, "
                                                               f"room {max(0.0, r['pct']):.2f}%"})
                 continue
@@ -463,7 +542,9 @@ def swap_candidates(state: dict, mkt, cfg: dict, today: str) -> list[dict]:
         v, basis = value_and_basis(t, today, fv)
         d = ROOT / "research" / Ticker(t).slug
         evs = sorted(p for p in d.glob("20??-??-??-evaluation.md") if p.name[:10] <= today)
-        rows.append({"ticker": t, "conviction": h.get("conviction"), "weight_pct": h["market_value_usd"] / pv * 100,
+        fvu, evu = upside_parts(t, today, fv, c)
+        rows.append({"ticker": t, "conviction": h.get("conviction"), "fv_upside_pct": fvu, "ev_upside_pct": evu,
+                     "weight_pct": h["market_value_usd"] / pv * 100,
                      "close": c, "currency": h["currency"], "entry_date": h.get("entry_date"),
                      "entry_price": h.get("entry_price"),
                      "return_pct": (c / h["entry_price"] - 1) * 100 if h.get("entry_price") else None,
@@ -498,6 +579,7 @@ def brief(state: dict, mkt, cfg: dict, today: str, watch: dict | None = None) ->
     best, cands = None, []
     for idea in q:
         pool = swap_candidates(state, mkt, cfg, today)
+        pool = [c for c in pool if swap_eligible(c, idea, cfg, today)[0]]  # V2.3 guards
         if watch is not None:
             pool = [c for c in pool if swap_allowed(state, mkt, cfg, watch, today, idea, c["ticker"])]
         if pool:
@@ -641,6 +723,7 @@ def main(argv=None) -> int:
     ap.add_argument("--asof", default=dt.date.today().isoformat())
     ap.add_argument("--out")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--weekly", action="store_true", help="the weekly run: also step up top-ups of held positions")
     a = ap.parse_args(argv)
     cfg = load_config()
     global FV_WEIGHT
@@ -662,7 +745,10 @@ def main(argv=None) -> int:
             # --asof bounds the prices (bin/fill-pending passes tomorrow to include today's close); orders and
             # the queue's dates use the real date
             today = min(a.asof, dt.date.today().isoformat())
-            out = review(sp, mkt, cfg, investable(), today, now=dt.datetime.now(dt.timezone.utc), dry_run=a.dry_run)
+            out = review(sp, mkt, cfg, investable(), today, now=dt.datetime.now(dt.timezone.utc), dry_run=a.dry_run,
+                         weekly=a.weekly)
+            if not a.dry_run:
+                out["cash_telemetry"] = log_telemetry(sp, mkt, cfg, investable(), today)
             print(json.dumps(out, indent=1))
         elif a.cmd == "add":  # backfill: validate now; queued only if the cash reserve is the sole obstacle
             reqs = json.loads(Path(a.requests).read_text())
