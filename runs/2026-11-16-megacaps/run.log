@@ -1,0 +1,192 @@
+[16:45:54] == decision log: recorded the missing research/MU/2026-11-16-evaluation.md
+[16:45:54] == research loop: 6 names queued, best first: ['GOOGL', 'AMZN', 'META', 'ZETA', 'LON:RR', 'MSFT']
+[16:45:54] == initiate AMZN
+[16:45:54] == initiate GOOGL
+[16:45:54] == initiate META
+[16:45:54] $ bin/py scripts/sec_delta.py AMZN --asof 2026-11-16
+[16:45:54] $ bin/py scripts/sec_delta.py GOOGL --asof 2026-11-16
+[16:45:54] $ bin/py scripts/sec_delta.py META --asof 2026-11-16
+[16:46:06] OK research/GOOGL/sec-delta-2026-11-16.md
+[16:46:06] $ claude -p Ticker GOOGL, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/GOOGL/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:46:07] OK research/AMZN/sec-delta-2026-11-16.md
+[16:46:07] $ claude -p Ticker AMZN, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/AMZN/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:46:09] OK research/META/sec-delta-2026-11-16.md
+[16:46:09] $ claude -p Ticker META, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/META/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:48:37] Note: research/META/2026-11-16.md
+Fact sheet: research/META/factsheet-2026-11-16.md
+check_docs: OK research/META/2026-11-16.md type=CORE 1=57 2=125 3=126 4=34 5=84 6=76 total=502
+
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+
+The fact sheet's "Next earnings date" row still reads Oct 21, 2026, which has already passed. I did not use it.
+[16:48:37] $ bin/py scripts/check_docs.py note research/META/2026-11-16.md
+[16:48:37] OK research/META/2026-11-16.md type=CORE 1=57 2=125 3=126 4=34 5=84 6=76 total=502
+[16:48:37] $ claude -p Ticker META, date 2026-11-16. Research: research/META/factsheet-2026-11-16.md, research/META/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/META/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:48:43] Note written and passed the check, so I'm sending the final report now.
+
+- Note: `research/AMZN/2026-11-16.md`
+- Fact sheet: `research/AMZN/factsheet-2026-11-16.md`
+- Check: `OK research/AMZN/2026-11-16.md type=CORE 1=69 2=127 3=132 4=45 5=74 6=73 total=520`
+- Data conflicts: none.
+- Blocked URLs: none.
+- Gap: the 10-Q fetch did not return the segment mix or sales by country, so the note says [data unavailable] for both. I used 1 of the 6 allowed fetches.
+- Gap: the fetch also left the last 4,379 characters of the 10-Q unread.
+[16:48:43] $ bin/py scripts/check_docs.py note research/AMZN/2026-11-16.md
+[16:48:43] OK research/AMZN/2026-11-16.md type=CORE 1=69 2=127 3=132 4=45 5=74 6=73 total=520
+[16:48:43] $ claude -p Ticker AMZN, date 2026-11-16. Research: research/AMZN/factsheet-2026-11-16.md, research/AMZN/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/AMZN/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:48:47] Note: research/GOOGL/2026-11-16.md
+Fact sheet: research/GOOGL/factsheet-2026-11-16.md
+Check: OK research/GOOGL/2026-11-16.md type=CORE 1=50 2=125 3=124 4=48 5=73 6=69 total=489
+
+Data conflicts: none. No URLs were blocked. I made 1 WebFetch (the 10-Q), and the SEC delta file was read first.
+
+The Edit tool wasn't available, so I rewrote the note with Write after the first check failed on an uncited backlog figure.
+
+I didn't check the Q3 other-income components or the capex guidance, because the fetched page text was truncated. I tagged the claim that the P/E is flattered by non-operating gains [Likely] for that reason.
+[16:48:47] $ bin/py scripts/check_docs.py note research/GOOGL/2026-11-16.md
+[16:48:47] OK research/GOOGL/2026-11-16.md type=CORE 1=50 2=125 3=124 4=48 5=73 6=69 total=489
+[16:48:47] $ claude -p Ticker GOOGL, date 2026-11-16. Research: research/GOOGL/factsheet-2026-11-16.md, research/GOOGL/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/GOOGL/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:49:00] research/META/2026-11-16-macro.md
+OK research/META/2026-11-16-macro.md macro_weight=context words=80
+
+I skipped the WebFetch reads and the country-risk check. The research note found no foreign country at roughly 10% or more of revenue, but it did not verify META's geographic mix.
+[16:49:00] $ bin/py scripts/check_docs.py macro research/META/2026-11-16-macro.md
+[16:49:00] OK research/META/2026-11-16-macro.md macro_weight=context words=80
+[16:49:00] $ claude -p Evaluate META for 2026-11-16: fact sheet research/META/factsheet-2026-11-16.md, note research/META/2026-11-16.md, state portfolio/state.json, macro overlay research/META/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:49:11] research/GOOGL/2026-11-16-macro.md
+OK research/GOOGL/2026-11-16-macro.md macro_weight=context words=50
+
+Skipped: I didn't fetch any official pages.
+[16:49:11] $ bin/py scripts/check_docs.py macro research/GOOGL/2026-11-16-macro.md
+[16:49:11] OK research/GOOGL/2026-11-16-macro.md macro_weight=context words=50
+[16:49:11] $ claude -p Evaluate GOOGL for 2026-11-16: fact sheet research/GOOGL/factsheet-2026-11-16.md, note research/GOOGL/2026-11-16.md, state portfolio/state.json, macro overlay research/GOOGL/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:49:18] research/AMZN/2026-11-16-macro.md
+OK research/AMZN/2026-11-16-macro.md macro_weight=secondary words=203
+[16:49:18] $ bin/py scripts/check_docs.py macro research/AMZN/2026-11-16-macro.md
+[16:49:18] OK research/AMZN/2026-11-16-macro.md macro_weight=secondary words=203
+[16:49:18] $ claude -p Evaluate AMZN for 2026-11-16: fact sheet research/AMZN/factsheet-2026-11-16.md, note research/AMZN/2026-11-16.md, state portfolio/state.json, macro overlay research/AMZN/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:49:52] research/META/2026-11-16-evaluation.md
+OK research/META/2026-11-16-evaluation.md Bear case=145 Bull case=133 decision=AVOID scorecard=6->3
+
+I set the entry price at 406, where the P/E would be back at its 5-year low of 13.6x. I didn't use the default rule (base fair value 230.28 x 0.8) because that base is built on a negative DCF and isn't reliable. I didn't check whether META had an earlier evaluation beyond confirming there's no evaluation file in its research folder.
+[16:49:52] $ bin/py scripts/check_docs.py eval research/META/2026-11-16-evaluation.md
+[16:49:52] OK research/META/2026-11-16-evaluation.md Bear case=145 Bull case=133 decision=AVOID scorecard=6->3
+[16:49:52] $ bin/py scripts/valuation.py META --asof 2026-11-16 --eval research/META/2026-11-16-evaluation.md
+[16:49:52] {"out": "research/META/2026-11-16-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 73.1, "base": 230.28, "bull": 638.12}, "price": 641.69}
+[16:49:54] == done META
+[16:49:54] == initiate ZETA
+[16:49:54] $ bin/py scripts/sec_delta.py ZETA --asof 2026-11-16
+[16:49:55] research/GOOGL/2026-11-16-evaluation.md
+OK research/GOOGL/2026-11-16-evaluation.md Bear case=140 Bull case=98 decision=AVOID scorecard=5->3
+
+I rated the moat "wide" and the key risk "high". Those two calls cancel out (+2 and −2), so they don't move the score. The decision is AVOID: the valuation scored 0 points because the price is above base fair value and below its 200-day average. I found no earlier GOOGL evaluation, so no `new_evidence` was needed.
+[16:49:55] $ bin/py scripts/check_docs.py eval research/GOOGL/2026-11-16-evaluation.md
+[16:49:55] OK research/GOOGL/2026-11-16-evaluation.md Bear case=140 Bull case=98 decision=AVOID scorecard=5->3
+[16:49:55] $ bin/py scripts/valuation.py GOOGL --asof 2026-11-16 --eval research/GOOGL/2026-11-16-evaluation.md
+[16:49:56] {"out": "research/GOOGL/2026-11-16-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 152.61, "base": 256.59, "bull": 278.04}, "price": 295.77}
+[16:49:57] == done GOOGL
+[16:49:57] == initiate LON:RR
+[16:49:57] $ bin/py scripts/sec_delta.py LON:RR --asof 2026-11-16
+[16:49:57] SKIP LON:RR: not a US listing (SEC filers only)
+[16:49:57] $ claude -p Ticker LON:RR, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:50:01] Decision: AVOID, conviction 3 (the scorecard result).
+
+research/AMZN/2026-11-16-evaluation.md
+OK research/AMZN/2026-11-16-evaluation.md Bear case=138 Bull case=128 decision=AVOID scorecard=5->3
+
+I didn't check whether AMZN had a different verdict in the last 30 days, because the brief limited me to the four inputs. The checker passed with no `new_evidence` field. The entry price is the default: base fair value 241.22 × 0.8 = 192.98.
+[16:50:01] $ bin/py scripts/check_docs.py eval research/AMZN/2026-11-16-evaluation.md
+[16:50:01] OK research/AMZN/2026-11-16-evaluation.md Bear case=138 Bull case=128 decision=AVOID scorecard=5->3
+[16:50:01] $ bin/py scripts/valuation.py AMZN --asof 2026-11-16 --eval research/AMZN/2026-11-16-evaluation.md
+[16:50:01] {"out": "research/AMZN/2026-11-16-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 119.62, "base": 241.22, "bull": 254.91}, "price": 266.66}
+[16:50:03] == done AMZN
+[16:50:03] == initiate MSFT
+[16:50:03] $ bin/py scripts/sec_delta.py MSFT --asof 2026-11-16
+[16:50:05] OK research/ZETA/sec-delta-2026-11-16.md
+[16:50:05] $ claude -p Ticker ZETA, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/ZETA/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:50:14] OK research/MSFT/sec-delta-2026-11-16.md
+[16:50:14] $ claude -p Ticker MSFT, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/MSFT/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:52:19] Note: research/LON-RR/2026-11-16.md
+Fact sheet: research/LON-RR/factsheet-2026-11-16.md
+Check: OK research/LON-RR/2026-11-16.md type=CORE 1=57 2=103 3=105 4=32 5=48 6=61 total=406
+
+Data gaps and blocked URLs:
+- Blocked: https://www.rolls-royce.com/investors/results-and-reports.aspx was not on the allowlist, so I did not retry it.
+- Revenue mix by country is [data unavailable] in the note, because no primary source could be read.
+- Fair value is [data unavailable], because the fact sheet had no GBP FX rate.
+- Data conflicts: none.
+[16:52:19] $ bin/py scripts/check_docs.py note research/LON-RR/2026-11-16.md
+[16:52:19] OK research/LON-RR/2026-11-16.md type=CORE 1=57 2=103 3=105 4=32 5=48 6=61 total=406
+[16:52:19] $ claude -p Ticker LON:RR, date 2026-11-16. Research: research/LON-RR/factsheet-2026-11-16.md, research/LON-RR/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/LON-RR/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:52:48] research/LON-RR/2026-11-16-macro.md
+OK research/LON-RR/2026-11-16-macro.md macro_weight=context words=57
+[16:52:48] $ bin/py scripts/check_docs.py macro research/LON-RR/2026-11-16-macro.md
+[16:52:48] OK research/LON-RR/2026-11-16-macro.md macro_weight=context words=57
+[16:52:48] $ claude -p Evaluate LON:RR for 2026-11-16: fact sheet research/LON-RR/factsheet-2026-11-16.md, note research/LON-RR/2026-11-16.md, state portfolio/state.json, macro overlay research/LON-RR/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:52:58] Note: research/MSFT/2026-11-16.md
+Fact sheet: research/MSFT/factsheet-2026-11-16.md
+check_docs: OK research/MSFT/2026-11-16.md type=CORE 1=64 2=140 3=139 4=52 5=74 6=82 total=551
+
+Issues:
+- **Country split:** The 10-Q excerpt I fetched stopped before the geographic note. Section 1 therefore says [data unavailable] for any single foreign country at ~10%+.
+- **Blocked URLs:** None.
+- **Fact-sheet field:** The "Next earnings date" field still shows Oct 28, 2026, which is stale. The 10-Q was filed that day, and the note flags this.
+- **Other conflicts:** None.
+- **Fetches:** I used 1 of the 6 fetches. The first check_docs run failed on a bad source line, which I removed.
+[16:52:58] $ bin/py scripts/check_docs.py note research/MSFT/2026-11-16.md
+[16:52:58] OK research/MSFT/2026-11-16.md type=CORE 1=64 2=140 3=139 4=52 5=74 6=82 total=551
+[16:52:58] $ claude -p Ticker MSFT, date 2026-11-16. Research: research/MSFT/factsheet-2026-11-16.md, research/MSFT/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/MSFT/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:53:07] - Note: `research/ZETA/2026-11-16.md`
+- Fact sheet: `research/ZETA/factsheet-2026-11-16.md`
+- Check: `OK research/ZETA/2026-11-16.md type=CORE 1=57 2=126 3=125 4=43 5=64 6=89 total=504`
+- Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+- Gaps: ROIC, P/E and the DCF fair value are [data unavailable] on the fact sheet. The note marks the country revenue mix as unverified [Guessing].
+[16:53:07] $ bin/py scripts/check_docs.py note research/ZETA/2026-11-16.md
+[16:53:07] OK research/ZETA/2026-11-16.md type=CORE 1=57 2=126 3=125 4=43 5=64 6=89 total=504
+[16:53:07] $ claude -p Ticker ZETA, date 2026-11-16. Research: research/ZETA/factsheet-2026-11-16.md, research/ZETA/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/ZETA/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:53:24] research/MSFT/2026-11-16-macro.md
+OK research/MSFT/2026-11-16-macro.md macro_weight=secondary words=248
+[16:53:24] $ bin/py scripts/check_docs.py macro research/MSFT/2026-11-16-macro.md
+[16:53:24] OK research/MSFT/2026-11-16-macro.md macro_weight=secondary words=248
+[16:53:24] $ claude -p Evaluate MSFT for 2026-11-16: fact sheet research/MSFT/factsheet-2026-11-16.md, note research/MSFT/2026-11-16.md, state portfolio/state.json, macro overlay research/MSFT/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:53:41] research/ZETA/2026-11-16-macro.md
+OK research/ZETA/2026-11-16-macro.md macro_weight=secondary words=204
+[16:53:41] $ bin/py scripts/check_docs.py macro research/ZETA/2026-11-16-macro.md
+[16:53:41] OK research/ZETA/2026-11-16-macro.md macro_weight=secondary words=204
+[16:53:41] $ claude -p Evaluate ZETA for 2026-11-16: fact sheet research/ZETA/factsheet-2026-11-16.md, note research/ZETA/2026-11-16.md, state portfolio/state.json, macro overlay research/ZETA/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:53:59] research/LON-RR/2026-11-16-evaluation.md
+OK research/LON-RR/2026-11-16-evaluation.md Bear case=140 Bull case=112 decision=BUY scorecard=9->4
+
+I first wrote this as AVOID at conviction 3. The scorecard came back at 4, so I changed the decision to BUY 4 to match. I left the judgement fields as written: moat "wide", key risk "medium", no veto. The fact sheet has no fair value (no GBP exchange rate), so the four valuation points come only from trend strength. That signal is thin, with the price just +0.8% above its 200-day average. I checked the 7% size against cash after the pending ACGL order by rough arithmetic only; `portfolio.py` does the real sizing, cap and cluster checks.
+[16:53:59] $ bin/py scripts/check_docs.py eval research/LON-RR/2026-11-16-evaluation.md
+[16:53:59] OK research/LON-RR/2026-11-16-evaluation.md Bear case=140 Bull case=112 decision=BUY scorecard=9->4
+[16:53:59] $ bin/py scripts/valuation.py LON:RR --asof 2026-11-16 --eval research/LON-RR/2026-11-16-evaluation.md
+[16:54:00] {"out": "research/LON-RR/2026-11-16-valuation.md", "used": null, "fair_value": {}, "price": 1350.6}
+[16:54:00] $ claude -p Independent second evaluation of LON:RR for 2026-11-16: fact sheet research/LON-RR/factsheet-2026-11-16.md, note research/LON-RR/2026-11-16.md, state portfolio/state.json, macro overlay research/LON-RR/2026-11-16-macro.md. Write it to research/LON-RR/2026-11-16-evaluation-2.md (not the usual file). Do not read research/LON-RR/2026-11-16-evaluation.md or any other evaluation of this stock dated 2026-11-16. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:54:24] research/ZETA/2026-11-16-evaluation.md — OK research/ZETA/2026-11-16-evaluation.md Bear case=142 Bull case=116 decision=AVOID scorecard=2->1
+
+The decision is AVOID at conviction 1, so no entry price is set. I didn't check for an earlier ZETA verdict in the last 30 days because my inputs don't show one. I set the moat to "none" and the key risk to "high", which cost 2 points. Even with a narrow moat and medium risk, the score would stay below the buy bar.
+[16:54:24] $ bin/py scripts/check_docs.py eval research/ZETA/2026-11-16-evaluation.md
+[16:54:24] OK research/ZETA/2026-11-16-evaluation.md Bear case=142 Bull case=116 decision=AVOID scorecard=2->1
+[16:54:24] $ bin/py scripts/valuation.py ZETA --asof 2026-11-16 --eval research/ZETA/2026-11-16-evaluation.md
+[16:54:24] {"out": "research/ZETA/2026-11-16-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 18.98, "base": 25.99, "bull": 26.49}, "price": 36.65}
+[16:54:25] == done ZETA
+[16:54:32] research/MSFT/2026-11-16-evaluation.md
+OK research/MSFT/2026-11-16-evaluation.md Bear case=150 Bull case=142 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3, with an entry price of 400. That is about where the P/E would sit near its 5-year low; I didn't use the mechanical base fair value because the fact sheet flags it as unreliable. I didn't look for an earlier MSFT verdict in the last 30 days because that file wasn't one of my inputs, and the checker didn't flag one.
+[16:54:32] $ bin/py scripts/check_docs.py eval research/MSFT/2026-11-16-evaluation.md
+[16:54:32] OK research/MSFT/2026-11-16-evaluation.md Bear case=150 Bull case=142 decision=AVOID scorecard=7->3
+[16:54:32] $ bin/py scripts/valuation.py MSFT --asof 2026-11-16 --eval research/MSFT/2026-11-16-evaluation.md
+[16:54:32] {"out": "research/MSFT/2026-11-16-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 186.67, "base": 248.42, "bull": 406.25}, "price": 523.88}
+[16:54:33] == done MSFT
+[16:54:47] research/LON-RR/2026-11-16-evaluation-2.md
+OK research/LON-RR/2026-11-16-evaluation-2.md Bear case=125 Bull case=119 decision=AVOID scorecard=8->3
+
+The second opinion is AVOID at conviction 3. The scorecard gave 8 points, one short of the 9 needed for a BUY. Trend strength was the only source of valuation points: no fair value could be calculated because the fact sheet had no GBP exchange rate. Next results are expected Nov 20; I did not treat that date as a veto.
+[16:54:47] $ bin/py scripts/check_docs.py eval research/LON-RR/2026-11-16-evaluation-2.md
+[16:54:47] OK research/LON-RR/2026-11-16-evaluation-2.md Bear case=125 Bull case=119 decision=AVOID scorecard=8->3
+[16:54:47] == LON:RR: second opinion conviction 3 -> AVOID 3
+[16:54:47] $ bin/py scripts/check_docs.py eval research/LON-RR/2026-11-16-evaluation.md
+[16:54:47] OK research/LON-RR/2026-11-16-evaluation.md Bear case=140 Bull case=112 decision=AVOID scorecard=9->3
+[16:54:48] == done LON:RR

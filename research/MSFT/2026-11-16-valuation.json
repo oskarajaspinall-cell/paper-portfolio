@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Software - Infrastructure",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 87.13988346823272,
+    "base": 102.14934620158928,
+    "bull": 306.7321217003499
+   },
+   "implied_growth": 0.5107786052896766,
+   "discount_rate": 0.10046212166312775,
+   "cost_of_equity": 0.1025075,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.05120573676507929,
+     "base": 0.08716281627804472,
+     "bull": 0.1612397915820203
+    },
+    "cash_flow_margin": {
+     "bear": 0.13724075616620243,
+     "base": 0.13724075616620243,
+     "bull": 0.29055959555152067
+    },
+    "cagr_3y": 0.1612397915820203,
+    "cagr_5y": 0.1374114735301586,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 385.7324630773362,
+    "base": 540.9535915682062,
+    "bull": 605.2840742481203
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 8.493,
+     "base": 11.83,
+     "bull": 13.213
+    },
+    "ttm_revenue": 346445000000
+   }
+  }
+ ],
+ "price": 523.88,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 186.67074333793389,
+  "base": 248.41742799046156,
+  "bull": 406.2494392162734
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6436765226045394,
+  "base": -0.5258123463570635,
+  "bull": -0.22453722376064478
+ },
+ "implied_growth": 0.5107786052896766,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 5.3x (base 102.15-540.95)"
+  ]
+ },
+ "ticker": "MSFT",
+ "asof": "2026-11-16",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/msft/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/msft/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/msft/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/msft/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/msft/statistics/"
+ }
+}
