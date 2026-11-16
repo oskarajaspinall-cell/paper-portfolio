@@ -282,6 +282,8 @@ def build_data(live: bool = True) -> dict:
         "invested": portfolio.invested_return(vals),
         "week": week, "series": ser, "live_point": live_pt, "holdings": hold, "interest": state.get("cash_interest"),
         "regime": regime_now(),
+        "cash_mode": cfg.get("cash_strategy", {}).get("mode", "regime"),
+        "cash_floor_pct": float(cfg["portfolio"]["min_cash_pct"]),
         "sectors": sorted(([k, v] for k, v in sectors.items()), key=lambda kv: -kv[1]),
         "countries": sorted(([k, v] for k, v in countries.items()), key=lambda kv: -kv[1]),
         "ledger": [{k: r.get(k, "") for k in ("date", "ticker", "type", "side", "shares", "fill_price", "currency",
@@ -393,7 +395,7 @@ __MANDATE__
 <div class="tw" style="margin-top:12px"><table id="attrTable"></table></div></section></div>
 <section class="card"><h2>Holdings</h2><div class="tw"><table id="holdings"></table></div></section>
 <section class="card"><h2>Pending orders</h2><div class="sub">Decided trades fill at the next opening price of their own market; every rule is checked again at that price. The 21:30 UK job records the fills.</div><div class="tw"><table id="pending"></table></div></section>
-<section class="card"><h2>Funding queue</h2><div class="sub">Conviction-4 buys waiting for room above the cash reserve, best first. A position that started small (a starter) is topped up first as room appears; the others are bought once there's room, or swapped in for a weaker holding by the weekly review. Each drops out after 30 days or if the price runs 10% above where we decided.</div><div class="tw"><table id="fqueue"></table></div></section>
+<section class="card"><h2>Funding queue</h2><div class="sub">Conviction-4 buys waiting for cash, best first. The portfolio runs up to 98.5% invested, so a buy waits only when it doesn't fit. A position that started small (a starter) is topped up first, once a week; the others are bought when cash frees up (a trim, a sale or a swap), or swapped in for a weaker holding by the weekly review. Each drops out after 30 days or if the price runs 10% above where we decided.</div><div class="tw"><table id="fqueue"></table></div></section>
 <section class="card"><h2>Dip radar</h2><div class="sub" id="dipSub"></div><div class="tw"><table id="dips"></table></div></section>
 <section class="card"><h2>Close to entry</h2><div class="sub" id="nearSub"></div><div class="tw"><table id="near"></table></div></section>
 <section class="card"><h2>Watchlist: entry prices</h2><div class="sub">Conviction-3 names and the price at which we'd consider buying. A close at or below it triggers a full re-research (never an automatic buy). Closest first.</div><div class="tw"><table id="watch"></table></div></section>
@@ -432,7 +434,7 @@ $('tiles').append(
   return tile('Latest day (whole portfolio)','n/a','');})(),
  tile('This week (whole portfolio)',D.week?pct(D.week.portfolio*100):'n/a',D.week&&D.week.spy!=null?'SPY '+pct(D.week.spy*100):'',''),
  tile('Cash',usd(D.cash),(D.total?(D.cash/D.total*100).toFixed(1)+'% of portfolio':'')+(D.interest?` · earns ${D.interest.aer_pct}% AER, ${usd(D.interest.total_usd)} so far`:'')+(D.receivable?` · ${usd(D.receivable,2)} dividends due`:'')),
- tile('Cash strategy',D.regime?({risk_on:'Risk-on',neutral:'Neutral',defensive:'Defensive'})[D.regime.final_regime]:'n/a',D.regime?(D.regime.stress!=null?`stress ${D.regime.stress}/100 · `:'')+`reserve ${D.regime.reserve_pct}% · S&P ${D.regime.dip.drawdown_pct}% off its high`+(D.regime.dip.multiplier<1?' · buying the dip':''):''),
+ D.cash_mode==='residual'?tile('Cash policy','Residual',`${D.cash_floor_pct}% floor, otherwise fully invested`+(D.regime&&D.regime.stress!=null?` · macro stress ${D.regime.stress}/100 (telemetry only)`:'')):tile('Cash strategy',D.regime?({risk_on:'Risk-on',neutral:'Neutral',defensive:'Defensive'})[D.regime.final_regime]:'n/a',D.regime?(D.regime.stress!=null?`stress ${D.regime.stress}/100 · `:'')+`reserve ${D.regime.reserve_pct}% · S&P ${D.regime.dip.drawdown_pct}% off its high`+(D.regime.dip.multiplier<1?' · buying the dip':''):''),
  tile('Holdings',String(D.holdings.length),D.holdings.filter(h=>h.type==='CORE').length+' core · '+D.holdings.filter(h=>h.type==='TACTICAL').length+' tactical'),
  tile('Decisions logged',String(D.n_decisions),'')
 );
@@ -650,7 +652,9 @@ def mandate_html(cfg: dict) -> str:
                  + f"; at most {p['max_holdings']} holdings."),
         ("Monitor", "Daily re-pricing and thesis triggers, a dip radar for unusual falls"
                     + (f", and a full re-check of {roll} holdings a week" if roll else "")
-                    + (f". A cash reserve of {cs['reserve_min_pct']:g}-{cs['reserve_max_pct']:g}% follows a "
+                    + (f". Cash is whatever the caps and conviction bar leave, above a {p['min_cash_pct']:g}% floor; "
+                       "the macro stress score is shown, never used to size cash." if cs.get("mode") == "residual" else
+                       f". A cash reserve of {cs['reserve_min_pct']:g}-{cs['reserve_max_pct']:g}% follows a "
                        "macro stress score." if "reserve_min_pct" in cs else ".")),
     ]
     intro = (f"Objective: beat the S&P 500 over rolling 12-month periods with a concentrated portfolio of "
