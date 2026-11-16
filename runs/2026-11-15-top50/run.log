@@ -1210,3 +1210,239 @@ OK research/MAS/2026-11-15-macro.md macro_weight=secondary words=178
 [20:27:15] !! FAILED CHRD: claude -p Ticker CHRD, note type CORE, date 2026-11-15. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/CHRD/sec-delta-2026-11-15.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk -
 [20:27:22] You've hit your session limit · resets 12:50am (Europe/London)
 [20:27:22] !! FAILED SHE:002142: claude -p Ticker SHE:002142, note type CORE, date 2026-11-15. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(resea
+[20:27:25] == Research batch 10: 5 researched, 0 BUY, 5 AVOID -> reports/research/2026-11-15-batch-10.md; uploaded to GitHub
+[20:27:25] == pre-screen: 0 names skipped without AI research (reports/prescreen/)
+[20:27:25] == research loop stopped (repeated failures: usage limit?)
+[02:49:32] == research loop: 44 names queued, best first: ['CF', 'MO', 'LLY', 'ANF', 'SHA:600036', 'BVMF:CXSE3', 'LON:RMV', 'CROX', 'MTCH', 'TYO:4503']
+[02:49:32] == initiate MO
+[02:49:32] == initiate LLY
+[02:49:32] == initiate CF
+[02:49:32] $ bin/py scripts/sec_delta.py MO --asof 2026-11-16
+[02:49:32] $ bin/py scripts/sec_delta.py LLY --asof 2026-11-16
+[02:49:32] $ bin/py scripts/sec_delta.py CF --asof 2026-11-16
+[02:49:45] OK research/LLY/sec-delta-2026-11-16.md
+[02:49:45] $ claude -p Ticker LLY, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/LLY/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:49:46] OK research/MO/sec-delta-2026-11-16.md
+[02:49:46] $ claude -p Ticker MO, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/MO/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:49:46] OK research/CF/sec-delta-2026-11-16.md
+[02:49:46] $ claude -p Ticker CF, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/CF/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:51:46] == research loop: 15 names queued, best first: ['SHA:600036', 'MAS', 'SHE:002142', 'MEDP', 'MA', 'CHRD', 'SHE:002966', 'ACGL', 'PCTY', 'SHE:000001']
+[02:51:46] == initiate MAS
+[02:51:46] == initiate SHA:600036
+[02:51:46] $ bin/py scripts/sec_delta.py MAS --asof 2026-11-16
+[02:51:46] == initiate SHE:002142
+[02:51:46] $ bin/py scripts/sec_delta.py SHA:600036 --asof 2026-11-16
+[02:51:46] $ bin/py scripts/sec_delta.py SHE:002142 --asof 2026-11-16
+[02:51:46] SKIP SHA:600036: not a US listing (SEC filers only)
+[02:51:46] SKIP SHE:002142: not a US listing (SEC filers only)
+[02:51:46] $ claude -p Ticker SHE:002142, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:51:46] $ claude -p Ticker SHA:600036, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:51:57] OK research/MAS/sec-delta-2026-11-16.md
+[02:51:57] $ claude -p Ticker MAS, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/MAS/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:54:41] I haven't written the note. The fact sheet for SHE:002142 (Bank of Ningbo) isn't finished, and I can't read any numbers until it is.
+
+- **What's running:** `bin/py scripts/fact_sheet.py SHE:002142 --peers SHE:000001 SHA:600036 SHA:601166 SHA:600919 SHA:601009 --asof 2026-11-16`. It went past the 120s foreground limit and is running in the background (task `bnia2veks`). Its output file is still empty, and `research/SHE-002142/factsheet-2026-11-16.md` doesn't exist yet. The script is probably slow because of the rate limit of one request per 3 seconds across six tickers.
+- **Why I stopped:** I tried to wait with a `bin/py` sleep. The environment denied it because it isn't one of the allowed plain script commands. I haven't tried another way around that.
+- **Older files:** `research/SHE-002142/` holds a 2026-10-19 fact sheet and note, and a 2026-11-15 `factsheet-2026-11-15.json`. I didn't use them. This note has to rest on a fact sheet dated 2026-11-16.
+
+To go on, re-invoke me once the background task finishes and the `.md` file exists. I'd then read it, write the CORE note, and run `check_docs.py`. If the task fails or times out, I'll return its error verbatim.
+
+The note is written and `check_docs.py` passes.
+
+- Note: `research/SHE-002142/2026-11-16.md`
+- Fact sheet: `research/SHE-002142/factsheet-2026-11-16.md`
+- Check: `OK research/SHE-002142/2026-11-16.md type=CORE 1=37 2=110 3=114 4=51 5=34 6=37 total=383`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- Fair value: the fact sheet flags it unreliable (methods disagree 4.4x), and the note says so.
+- Missing data: ROIC, ROCE, operating margin and net debt/EBITDA are [data unavailable] on the fact sheet.
+- Not covered: the Q3 2026 filing and asset-quality data aren't covered in the note.
+[02:54:41] $ bin/py scripts/check_docs.py note research/SHE-002142/2026-11-16.md
+[02:54:41] OK research/SHE-002142/2026-11-16.md type=CORE 1=37 2=110 3=114 4=51 5=34 6=37 total=383
+[02:54:41] $ bin/py scripts/macro_data.py --asof 2026-11-16
+[02:54:51] Note: research/SHA-600036/2026-11-16.md
+Fact sheet: research/SHA-600036/factsheet-2026-11-16.md
+Check: OK research/SHA-600036/2026-11-16.md type=CORE 1=65 2=143 3=135 4=35 5=44 6=67 total=489
+
+Data conflicts: none.
+
+Blocked URLs: none. I made no WebFetch calls.
+
+Peer swap: stockanalysis.com has no page for SHA:601398, SHA:601939, SHA:601328 or SHA:601288, so the large state banks aren't in the peer set. The peers used are SHA:601166, SHA:600000, SHA:600016 and SHE:000001.
+[02:54:51] $ bin/py scripts/check_docs.py note research/SHA-600036/2026-11-16.md
+[02:54:51] OK research/SHA-600036/2026-11-16.md type=CORE 1=65 2=143 3=135 4=35 5=44 6=67 total=489
+[02:54:51] $ bin/py scripts/macro_data.py --asof 2026-11-16
+[02:54:53] - Note: `research/MAS/2026-11-16.md`
+- Fact sheet: `research/MAS/factsheet-2026-11-16.md`
+- Check: `OK research/MAS/2026-11-16.md type=CORE 1=62 2=115 3=128 4=36 5=41 6=72 total=454`
+- Data conflicts: none.
+- Blocked URLs: none. I used 1 of 6 WebFetch calls, on the 10-Q at sec.gov.
+[02:54:53] $ bin/py scripts/check_docs.py note research/MAS/2026-11-16.md
+[02:54:53] OK research/MAS/2026-11-16.md type=CORE 1=62 2=115 3=128 4=36 5=41 6=72 total=454
+[02:54:53] $ bin/py scripts/macro_data.py --asof 2026-11-16
+[02:57:16] {"out": "reports/macro/2026-11-16.md", "series": 20, "unavailable": []}
+[02:57:16] $ claude -p Ticker SHE:002142, date 2026-11-16. Research: research/SHE-002142/factsheet-2026-11-16.md, research/SHE-002142/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/SHE-002142/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:57:20] {"out": "reports/macro/2026-11-16.md", "series": 20, "unavailable": []}
+[02:57:20] $ claude -p Ticker MAS, date 2026-11-16. Research: research/MAS/factsheet-2026-11-16.md, research/MAS/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/MAS/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:57:24] {"out": "reports/macro/2026-11-16.md", "series": 20, "unavailable": []}
+[02:57:24] $ claude -p Ticker SHA:600036, date 2026-11-16. Research: research/SHA-600036/factsheet-2026-11-16.md, research/SHA-600036/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/SHA-600036/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:57:30] research/SHE-002142/2026-11-16-macro.md
+OK research/SHE-002142/2026-11-16-macro.md macro_weight=context words=79
+[02:57:30] $ bin/py scripts/check_docs.py macro research/SHE-002142/2026-11-16-macro.md
+[02:57:30] OK research/SHE-002142/2026-11-16-macro.md macro_weight=context words=79
+[02:57:30] $ claude -p Evaluate SHE:002142 for 2026-11-16: fact sheet research/SHE-002142/factsheet-2026-11-16.md, note research/SHE-002142/2026-11-16.md, state portfolio/state.json, macro overlay research/SHE-002142/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:57:57] research/MAS/2026-11-16-macro.md
+OK research/MAS/2026-11-16-macro.md macro_weight=secondary words=218
+[02:57:57] $ bin/py scripts/check_docs.py macro research/MAS/2026-11-16-macro.md
+[02:57:57] OK research/MAS/2026-11-16-macro.md macro_weight=secondary words=218
+[02:57:57] $ claude -p Evaluate MAS for 2026-11-16: fact sheet research/MAS/factsheet-2026-11-16.md, note research/MAS/2026-11-16.md, state portfolio/state.json, macro overlay research/MAS/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:57:59] research/SHA-600036/2026-11-16-macro.md
+OK research/SHA-600036/2026-11-16-macro.md macro_weight=context words=82
+[02:57:59] $ bin/py scripts/check_docs.py macro research/SHA-600036/2026-11-16-macro.md
+[02:57:59] OK research/SHA-600036/2026-11-16-macro.md macro_weight=context words=82
+[02:57:59] $ claude -p Evaluate SHA:600036 for 2026-11-16: fact sheet research/SHA-600036/factsheet-2026-11-16.md, note research/SHA-600036/2026-11-16.md, state portfolio/state.json, macro overlay research/SHA-600036/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:58:52] research/SHE-002142/2026-11-16-evaluation.md
+OK research/SHE-002142/2026-11-16-evaluation.md Bear case=145 Bull case=114 decision=AVOID scorecard=5->3
+
+**Decision:** AVOID. The scorecard gives a total of 5, which is conviction 3, below the buy bar of 4. No entry price is set, because a lower price isn't the obstacle: ROE keeps falling and asset quality can't be measured from the inputs.
+
+**Decline judgement:** I first marked the decline as structural. The scorecard showed that the metric it counts as falling is FCF margin, not ROE. I changed the judgement to temporary, since a bank's FCF margin swings with deposit and loan flows. That change took conviction from 2 to 3, and AVOID holds either way. The falling ROE is counted under key risk.
+
+**Not checked:** I did not read the 2026-10-19 evaluation, so I don't know its earlier verdict. The checker raised no consistency problem. Bank-specific numbers like asset quality and capital ratios aren't on the fact sheet, so the main credit risk is unmeasured.
+[02:58:52] $ bin/py scripts/check_docs.py eval research/SHE-002142/2026-11-16-evaluation.md
+[02:58:52] OK research/SHE-002142/2026-11-16-evaluation.md Bear case=145 Bull case=114 decision=AVOID scorecard=5->3
+[02:58:52] $ bin/py scripts/valuation.py SHE:002142 --asof 2026-11-16 --eval research/SHE-002142/2026-11-16-evaluation.md
+[02:58:52] {"out": "research/SHE-002142/2026-11-16-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 37.99, "base": 45.66, "bull": 50.25}, "price": 34.15}
+[02:58:53] == done SHE:002142
+[02:58:53] == initiate MEDP
+[02:58:53] $ bin/py scripts/sec_delta.py MEDP --asof 2026-11-16
+[02:59:04] OK research/MEDP/sec-delta-2026-11-16.md
+[02:59:04] $ claude -p Ticker MEDP, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/MEDP/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:59:18] research/SHA-600036/2026-11-16-evaluation.md
+OK research/SHA-600036/2026-11-16-evaluation.md Bear case=141 Bull case=132 decision=AVOID scorecard=5->3
+[02:59:18] $ bin/py scripts/check_docs.py eval research/SHA-600036/2026-11-16-evaluation.md
+[02:59:19] OK research/SHA-600036/2026-11-16-evaluation.md Bear case=141 Bull case=132 decision=AVOID scorecard=5->3
+[02:59:19] $ bin/py scripts/valuation.py SHA:600036 --asof 2026-11-16 --eval research/SHA-600036/2026-11-16-evaluation.md
+[02:59:19] {"out": "research/SHA-600036/2026-11-16-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 45.35, "base": 57.59, "bull": 60.07}, "price": 42.93}
+[02:59:19] == done SHA:600036
+[02:59:19] == initiate MA
+[02:59:19] $ bin/py scripts/sec_delta.py MA --asof 2026-11-16
+[02:59:30] OK research/MA/sec-delta-2026-11-16.md
+[02:59:30] $ claude -p Ticker MA, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/MA/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[02:59:35] research/MAS/2026-11-16-evaluation.md
+OK research/MAS/2026-11-16-evaluation.md Bear case=141 Bull case=125 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3, with the entry price set to the default anchor of 48.38 (base fair value 60.48 x 0.8). I didn't add valuation overrides.
+[02:59:35] $ bin/py scripts/check_docs.py eval research/MAS/2026-11-16-evaluation.md
+[02:59:35] OK research/MAS/2026-11-16-evaluation.md Bear case=141 Bull case=125 decision=AVOID scorecard=7->3
+[02:59:35] $ bin/py scripts/valuation.py MAS --asof 2026-11-16 --eval research/MAS/2026-11-16-evaluation.md
+[02:59:35] {"out": "research/MAS/2026-11-16-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 29.42, "base": 60.48, "bull": 64.38}, "price": 84.68}
+[02:59:36] == done MAS
+[02:59:36] == initiate CHRD
+[02:59:36] $ bin/py scripts/sec_delta.py CHRD --asof 2026-11-16
+[02:59:47] OK research/CHRD/sec-delta-2026-11-16.md
+[02:59:47] $ claude -p Ticker CHRD, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/CHRD/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:00:53] Note: research/MEDP/2026-11-16.md
+Fact sheet: research/MEDP/factsheet-2026-11-16.md
+check_docs: OK research/MEDP/2026-11-16.md type=CORE 1=68 2=142 3=115 4=51 5=59 6=65 total=500
+
+Data conflicts: none.
+
+Blocked URLs: none. I used 1 WebFetch (the sec.gov 10-Q). It returned only the first 100,000 of 119,283 characters, so the last 19,283 were not read.
+[03:00:53] $ bin/py scripts/check_docs.py note research/MEDP/2026-11-16.md
+[03:00:53] OK research/MEDP/2026-11-16.md type=CORE 1=68 2=142 3=115 4=51 5=59 6=65 total=500
+[03:00:53] $ claude -p Ticker MEDP, date 2026-11-16. Research: research/MEDP/factsheet-2026-11-16.md, research/MEDP/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/MEDP/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:01:11] research/MEDP/2026-11-16-macro.md
+OK research/MEDP/2026-11-16-macro.md macro_weight=context words=44
+[03:01:11] $ bin/py scripts/check_docs.py macro research/MEDP/2026-11-16-macro.md
+[03:01:11] OK research/MEDP/2026-11-16-macro.md macro_weight=context words=44
+[03:01:11] $ claude -p Evaluate MEDP for 2026-11-16: fact sheet research/MEDP/factsheet-2026-11-16.md, note research/MEDP/2026-11-16.md, state portfolio/state.json, macro overlay research/MEDP/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:01:45] Note: research/CHRD/2026-11-16.md
+Fact sheet: research/CHRD/factsheet-2026-11-16.md
+check_docs: OK research/CHRD/2026-11-16.md type=CORE 1=52 2=101 3=106 4=37 5=65 6=85 total=446
+Data conflicts: none. Blocked URLs: none. I made no web fetches.
+
+Skipped: web fetches (the fact sheet and SEC delta were enough) and the oil-price sensitivity. Risk: the fact sheet lists the next earnings date as Nov 4, which has already passed.
+[03:01:45] $ bin/py scripts/check_docs.py note research/CHRD/2026-11-16.md
+[03:01:45] OK research/CHRD/2026-11-16.md type=CORE 1=52 2=101 3=106 4=37 5=65 6=85 total=446
+[03:01:45] $ claude -p Ticker CHRD, date 2026-11-16. Research: research/CHRD/factsheet-2026-11-16.md, research/CHRD/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/CHRD/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:01:57] Note: research/MA/2026-11-16.md
+Fact sheet: research/MA/factsheet-2026-11-16.md
+check_docs: OK research/MA/2026-11-16.md type=CORE 1=70 2=118 3=128 4=42 5=47 6=101 total=506
+
+- **Blocked URLs:** none. I made one WebFetch, of the 10-Q on sec.gov.
+- **Data conflicts:** none. The fetched excerpt did not reach the Legal Proceedings note or any single-country revenue split.
+- **Unreconciled item:** I did not reconcile the litigation cash outflow with the fall in FCF margin. The note marks that link [Guessing].
+- **Fact sheet date:** its "Next earnings date" row shows Oct 29, 2026, which has already passed. I did not use it.
+[03:01:57] $ bin/py scripts/check_docs.py note research/MA/2026-11-16.md
+[03:01:57] OK research/MA/2026-11-16.md type=CORE 1=70 2=118 3=128 4=42 5=47 6=101 total=506
+[03:01:57] $ claude -p Ticker MA, date 2026-11-16. Research: research/MA/factsheet-2026-11-16.md, research/MA/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/MA/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:01:58] I wrote `research/MEDP/2026-11-16-evaluation.md`, and the checker prints: `OK research/MEDP/2026-11-16-evaluation.md Bear case=137 Bull case=129 decision=AVOID scorecard=7->3`
+
+The decision is AVOID at conviction 3, with an entry price of 366.65 (the base fair value of 458.31 less 20%). The scorecard scored the business near the top for quality, trend and balance sheet. It got only 1 point for valuation, because the price implies year-one growth well above how fast its order backlog is growing.
+
+The macro overlay's weight is "context", so it did not change the decision.
+[03:01:58] $ bin/py scripts/check_docs.py eval research/MEDP/2026-11-16-evaluation.md
+[03:01:59] OK research/MEDP/2026-11-16-evaluation.md Bear case=137 Bull case=129 decision=AVOID scorecard=7->3
+[03:01:59] $ bin/py scripts/valuation.py MEDP --asof 2026-11-16 --eval research/MEDP/2026-11-16-evaluation.md
+[03:01:59] {"out": "research/MEDP/2026-11-16-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 380.35, "base": 458.31, "bull": 684.07}, "price": 653.94}
+[03:01:59] == done MEDP
+[03:01:59] == initiate SHE:002966
+[03:01:59] $ bin/py scripts/sec_delta.py SHE:002966 --asof 2026-11-16
+[03:01:59] SKIP SHE:002966: not a US listing (SEC filers only)
+[03:01:59] $ claude -p Ticker SHE:002966, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:02:15] research/MA/2026-11-16-macro.md
+OK research/MA/2026-11-16-macro.md macro_weight=context words=55
+[03:02:15] $ bin/py scripts/check_docs.py macro research/MA/2026-11-16-macro.md
+[03:02:15] OK research/MA/2026-11-16-macro.md macro_weight=context words=55
+[03:02:15] $ claude -p Evaluate MA for 2026-11-16: fact sheet research/MA/factsheet-2026-11-16.md, note research/MA/2026-11-16.md, state portfolio/state.json, macro overlay research/MA/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:02:26] research/CHRD/2026-11-16-macro.md
+OK research/CHRD/2026-11-16-macro.md macro_weight=primary words=232
+[03:02:26] $ bin/py scripts/check_docs.py macro research/CHRD/2026-11-16-macro.md
+[03:02:26] OK research/CHRD/2026-11-16-macro.md macro_weight=primary words=232
+[03:02:26] $ claude -p Evaluate CHRD for 2026-11-16: fact sheet research/CHRD/factsheet-2026-11-16.md, note research/CHRD/2026-11-16.md, state portfolio/state.json, macro overlay research/CHRD/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:03:01] Note: research/SHE-002966/2026-11-16.md
+Fact sheet: research/SHE-002966/factsheet-2026-11-16.md
+Check: OK research/SHE-002966/2026-11-16.md type=CORE 1=41 2=107 3=134 4=42 5=46 6=85 total=455
+Data conflicts: none. The fair value is flagged unreliable, and the note says so. No fetches were made, so no URLs were blocked. The next earnings date on the fact sheet (Oct 29, 2026) is already past.
+[03:03:01] $ bin/py scripts/check_docs.py note research/SHE-002966/2026-11-16.md
+[03:03:01] OK research/SHE-002966/2026-11-16.md type=CORE 1=41 2=107 3=134 4=42 5=46 6=85 total=455
+[03:03:01] $ claude -p Ticker SHE:002966, date 2026-11-16. Research: research/SHE-002966/factsheet-2026-11-16.md, research/SHE-002966/2026-11-16.md. Macro snapshot: reports/macro/2026-11-16.md. Write research/SHE-002966/2026-11-16-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:03:17] research/SHE-002966/2026-11-16-macro.md
+OK research/SHE-002966/2026-11-16-macro.md macro_weight=context words=41
+[03:03:17] $ bin/py scripts/check_docs.py macro research/SHE-002966/2026-11-16-macro.md
+[03:03:17] OK research/SHE-002966/2026-11-16-macro.md macro_weight=context words=41
+[03:03:17] $ claude -p Evaluate SHE:002966 for 2026-11-16: fact sheet research/SHE-002966/factsheet-2026-11-16.md, note research/SHE-002966/2026-11-16.md, state portfolio/state.json, macro overlay research/SHE-002966/2026-11-16-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:03:27] research/MA/2026-11-16-evaluation.md
+OK research/MA/2026-11-16-evaluation.md Bear case=134 Bull case=140 decision=BUY scorecard=9->4
+
+The decision is a CORE BUY at conviction 4. The scorecard sets that number from quality, a wide moat and trend strength, not from a discount: every mechanical fair value is below the price. I put the decision in as AVOID 3 before scoring it, then changed it to the 4 the scorecard required. I left the bear and bull cases and the judgement fields unchanged.
+
+I didn't check the portfolio's cash reserve. With V and AAPL already waiting in the funding queue for cash, this buy will probably be queued too. It also still needs the independent second evaluation at 4+ before it can be bought.
+[03:03:27] $ bin/py scripts/check_docs.py eval research/MA/2026-11-16-evaluation.md
+[03:03:27] OK research/MA/2026-11-16-evaluation.md Bear case=134 Bull case=140 decision=BUY scorecard=9->4
+[03:03:27] $ bin/py scripts/valuation.py MA --asof 2026-11-16 --eval research/MA/2026-11-16-evaluation.md
+[03:03:27] {"out": "research/MA/2026-11-16-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 305.44, "base": 365.29, "bull": 471.9}, "price": 661.19}
+[03:03:27] $ claude -p Independent second evaluation of MA for 2026-11-16: fact sheet research/MA/factsheet-2026-11-16.md, note research/MA/2026-11-16.md, state portfolio/state.json, macro overlay research/MA/2026-11-16-macro.md. Write it to research/MA/2026-11-16-evaluation-2.md (not the usual file). Do not read research/MA/2026-11-16-evaluation.md or any other evaluation of this stock dated 2026-11-16. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:03:38] I couldn't verify whether CHRD had a different verdict in the last 30 days, because I'm only allowed to read the inputs listed; the checker passed.
+
+research/CHRD/2026-11-16-evaluation.md
+OK research/CHRD/2026-11-16-evaluation.md Bear case=142 Bull case=106 decision=AVOID scorecard=4->2
+[03:03:38] $ bin/py scripts/check_docs.py eval research/CHRD/2026-11-16-evaluation.md
+[03:03:38] OK research/CHRD/2026-11-16-evaluation.md Bear case=142 Bull case=106 decision=AVOID scorecard=4->2
+[03:03:38] $ bin/py scripts/valuation.py CHRD --asof 2026-11-16 --eval research/CHRD/2026-11-16-evaluation.md
+[03:03:38] {"out": "research/CHRD/2026-11-16-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 114.28, "base": 155.31, "bull": 159.44}, "price": 149.93}
+[03:03:39] == done CHRD
+[03:03:39] == initiate ACGL
+[03:03:39] $ bin/py scripts/sec_delta.py ACGL --asof 2026-11-16
+[03:03:49] OK research/ACGL/sec-delta-2026-11-16.md
+[03:03:49] $ claude -p Ticker ACGL, note type CORE, date 2026-11-16. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/ACGL/sec-delta-2026-11-16.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[03:04:35] research/SHE-002966/2026-11-16-evaluation.md
+OK research/SHE-002966/2026-11-16-evaluation.md Bear case=140 Bull case=87 decision=AVOID scorecard=3->2
+
+Unchecked: the 2026-10-19 verdict was AVOID at conviction 3, so this one names `method_change` (that verdict came before the scorecard). The checker accepted it.
+[03:04:35] $ bin/py scripts/check_docs.py eval research/SHE-002966/2026-11-16-evaluation.md
+[03:04:36] OK research/SHE-002966/2026-11-16-evaluation.md Bear case=140 Bull case=87 decision=AVOID scorecard=3->2
+[03:04:36] $ bin/py scripts/valuation.py SHE:002966 --asof 2026-11-16 --eval research/SHE-002966/2026-11-16-evaluation.md
+[03:04:36] {"out": "research/SHE-002966/2026-11-16-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 9.39, "base": 11.35, "bull": 12.91}, "price": 9.63}
+[03:04:37] == done SHE:002966

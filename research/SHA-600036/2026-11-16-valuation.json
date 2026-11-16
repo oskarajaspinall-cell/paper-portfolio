@@ -1,0 +1,138 @@
+{
+ "industry": {
+  "industry": "Banks - Regional",
+  "known": true,
+  "best": "P/B + sustainable ROE",
+  "second": "FCFE / DDM",
+  "best_models": [
+   "pb_roe"
+  ],
+  "second_models": [
+   "fcfe",
+   "ddm"
+  ],
+  "stockanalysis": "Neither"
+ },
+ "methods": [
+  {
+   "model": "pb_roe",
+   "label": "P/B + ROE",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 44.180958999306924,
+    "base": 55.73547931316831,
+    "bull": 58.66355253326733
+   },
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "roe": {
+     "bear": 0.12021,
+     "base": 0.14511,
+     "bull": 0.15142
+    },
+    "justified_pb": {
+     "bear": 0.9426732673267325,
+     "base": 1.1892079207920792,
+     "bull": 1.2516831683168317
+    },
+    "bvps": 46.867733
+   }
+  },
+  {
+   "model": "fcfe",
+   "label": "FCFE DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 47.69652773800482,
+    "base": 61.29238679239645,
+    "bull": 62.88837669062178
+   },
+   "implied_growth": -0.06817814200031519,
+   "discount_rate": 0.126,
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.012006790649257509,
+     "base": 0.022539951106880663,
+     "bull": 0.02917338572603767
+    },
+    "cash_flow_margin": {
+     "bear": 0.45203945855683003,
+     "base": 0.5077279188086983,
+     "bull": 0.5077279188086983
+    },
+    "cagr_3y": 0.010986418701484979,
+    "cagr_5y": 0.02917338572603767,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ddm",
+   "label": "dividend discount",
+   "slot": "second",
+   "status": "ok",
+   "quote_ccy": true,
+   "values": {
+    "bear": 18.34315315315315,
+    "base": 20.357920792079202,
+    "bull": 22.815494505494502
+   },
+   "cost_of_equity": 0.126,
+   "assumptions": {
+    "dividend_growth": {
+     "bear": 0.015000000000000001,
+     "base": 0.025,
+     "bull": 0.035
+    },
+    "dps": 2.006
+   }
+  }
+ ],
+ "price": 42.93,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 45.35281524553955,
+  "base": 57.58778180624436,
+  "bull": 60.07182725238548
+ },
+ "used": [
+  "pb_roe",
+  "fcfe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": 0.056436413825752485,
+  "base": 0.3414344702130063,
+  "bull": 0.39929716404345394
+ },
+ "implied_growth": -0.06817814200031519,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 3.0x (base 20.36-61.29)"
+  ]
+ },
+ "ticker": "SHA:600036",
+ "asof": "2026-11-16",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/600036/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/600036/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/600036/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/600036/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/600036/statistics/"
+ }
+}

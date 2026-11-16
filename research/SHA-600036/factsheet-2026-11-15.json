@@ -1,0 +1,192 @@
+{
+ "ticker": "SHA:600036",
+ "asof": "2026-11-15",
+ "sector": "Financials",
+ "industry": "Banks - Regional",
+ "quality": {
+  "ROIC": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROCE": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "ROE": {
+   "ttm": 11.535,
+   "fy_5y_change": -3.1210000000000004,
+   "fy_5y_label": "falling"
+  },
+  "Gross margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Operating margin": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": "[data unavailable]"
+  },
+  "Net margin": {
+   "ttm": 50.772791880869825,
+   "fy_5y_change": 5.25501325462173,
+   "fy_5y_label": "rising"
+  },
+  "FCF margin": {
+   "ttm": 150.75718327820508,
+   "fy_5y_change": 82.71391884938637,
+   "fy_5y_label": "rising"
+  },
+  "FCF conversion (FCF/NI)": {
+   "ttm": 296.92513981096903,
+   "fy_5y_change": 150.21163125237004,
+   "fy_5y_label": "rising"
+  },
+  "Net debt / EBITDA (debt \u2212 cash & ST inv.)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  },
+  "Net debt / EBITDA (site definition)": {
+   "ttm": null,
+   "fy_5y_change": null,
+   "fy_5y_label": null
+  }
+ },
+ "recent": {
+  "FCF margin": {
+   "latest": 150.75718327820508,
+   "change": 256.58828749209164,
+   "direction": "rising",
+   "change_3y": 149.9469171654259,
+   "direction_3y": "rising",
+   "high": 338.21099459802986
+  }
+ },
+ "valuation": {
+  "P/E": {
+   "current": 7.34964,
+   "pos_pct": 43.69589422407793,
+   "peer_premium_pct": 9.712494402149584
+  },
+  "EV/EBITDA": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "EV/Sales": {
+   "current": null,
+   "pos_pct": null,
+   "peer_premium_pct": null
+  },
+  "P/FCF": {
+   "current": 2.41507,
+   "pos_pct": 10.74386604774536,
+   "peer_premium_pct": 8.39631956912028
+  },
+  "P/B": {
+   "current": 0.7933,
+   "pos_pct": 20.316856780735108,
+   "peer_premium_pct": 92.08232445520584
+  }
+ },
+ "trend": {
+  "price_vs_sma200_pct": 8.948330118769654,
+  "ch1y_pct": null,
+  "fcf_yield_pct": 41.407
+ },
+ "fair_value": {
+  "price": 42.93,
+  "fair_value": {
+   "bear": 45.35281524553955,
+   "base": 57.58778180624436,
+   "bull": 60.07182725238548
+  },
+  "methods": [
+   {
+    "model": "pb_roe",
+    "label": "P/B + ROE",
+    "slot": "best",
+    "status": "ok",
+    "values": {
+     "bear": 44.180958999306924,
+     "base": 55.73547931316831,
+     "bull": 58.66355253326733
+    },
+    "cost_of_equity": 0.126,
+    "assumptions": {
+     "roe": {
+      "bear": 0.12021,
+      "base": 0.14511,
+      "bull": 0.15142
+     },
+     "justified_pb": {
+      "bear": 0.9426732673267325,
+      "base": 1.1892079207920792,
+      "bull": 1.2516831683168317
+     },
+     "bvps": 46.867733
+    }
+   },
+   {
+    "model": "fcfe",
+    "label": "FCFE DCF",
+    "slot": "second",
+    "status": "ok",
+    "values": {
+     "bear": 47.69652773800482,
+     "base": 61.29238679239645,
+     "bull": 62.88837669062178
+    },
+    "implied_growth": -0.06817814200031519,
+    "discount_rate": 0.126,
+    "cost_of_equity": 0.126,
+    "assumptions": {
+     "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+     "growth": {
+      "bear": -0.012006790649257509,
+      "base": 0.022539951106880663,
+      "bull": 0.02917338572603767
+     },
+     "cash_flow_margin": {
+      "bear": 0.45203945855683003,
+      "base": 0.5077279188086983,
+      "bull": 0.5077279188086983
+     },
+     "cagr_3y": 0.010986418701484979,
+     "cagr_5y": 0.02917338572603767,
+     "terminal_growth": 0.025
+    }
+   },
+   {
+    "model": "ddm",
+    "label": "dividend discount",
+    "slot": "second",
+    "status": "ok",
+    "quote_ccy": true,
+    "values": {
+     "bear": 18.34315315315315,
+     "base": 20.357920792079202,
+     "bull": 22.815494505494502
+    },
+    "cost_of_equity": 0.126,
+    "assumptions": {
+     "dividend_growth": {
+      "bear": 0.015000000000000001,
+      "base": 0.025,
+      "bull": 0.035
+     },
+     "dps": 2.006
+    }
+   }
+  ],
+  "reliability": {
+   "reliable": false,
+   "reasons": [
+    "methods disagree 3.0x (base 20.36-61.29)"
+   ]
+  }
+ }
+}

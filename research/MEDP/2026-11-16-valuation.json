@@ -1,0 +1,116 @@
+{
+ "industry": {
+  "industry": "Diagnostics & Research",
+  "known": true,
+  "best": "DCF / rNPV",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf",
+   "rnpv"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 331.0818614328777,
+    "base": 429.9301593541053,
+    "bull": 710.5596305400451
+   },
+   "implied_growth": 0.23079142236163347,
+   "discount_rate": 0.10407080852418156,
+   "cost_of_equity": 0.10465150000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.08308296746765682,
+     "base": 0.11777601866272062,
+     "bull": 0.21993813971556886
+    },
+    "cash_flow_margin": {
+     "bear": 0.19317065946705858,
+     "base": 0.2217107211107725,
+     "bull": 0.2515680865089948
+    },
+    "cagr_3y": 0.20116593493531365,
+    "cagr_5y": 0.21993813971556886,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "rnpv",
+   "label": "rNPV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs pipeline success probabilities and peak sales, not on stockanalysis.com]"
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 478.8876256224536,
+    "base": 515.063023818644,
+    "bull": 631.1010497266427
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 4.657,
+     "base": 5.023,
+     "bull": 6.197
+    },
+    "ttm_revenue": 2838385000
+   }
+  }
+ ],
+ "price": 653.94,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 380.35044949606964,
+  "base": 458.3077808422848,
+  "bull": 684.0734369355777
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.4183710286936575,
+  "base": -0.2991592793799358,
+  "bull": 0.04607981915095816
+ },
+ "implied_growth": 0.23079142236163347,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "MEDP",
+ "asof": "2026-11-16",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-13",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/medp/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/medp/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/medp/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/medp/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/medp/statistics/"
+ }
+}
