@@ -1,0 +1,30 @@
+[
+ {
+  "ticker": "DXCM",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "A net-cash CGM leader with sharply rising returns and margins trades at the bottom of its own multiple range while in a healthy uptrend, with buybacks shrinking the share count.",
+  "reason": "Scorecard gives conviction 4: top-tier and rising returns, net cash, and trend-strength valuation points with the price near the expected-value blend. Python sets the volatility-scaled size; cash cannot fund it above the 1.5% floor, so the conviction-3 OTIS holding is sold to fund it.",
+  "research_note": "research/DXCM/2026-11-17.md",
+  "triggers": [
+   {
+    "text": "TTM ROIC falls below 25%, giving up most of the rise from 24.1% in FY2024 to 45.9%.",
+    "check": {"source": "statistics", "field": "roic", "op": "<", "value": 25}
+   },
+   {
+    "text": "TTM gross margin falls below 58%, under the FY2025 low of 60.1%, signalling CGM price competition.",
+    "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 58}
+   },
+   {
+    "text": "TTM operating margin falls below 18%, reversing the step-up from 17.2% a year earlier to 24.0%.",
+    "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 18}
+   },
+   {
+    "text": "A new FDA warning letter, recall order or production shutdown disclosed in a 10-Q/8-K."
+   }
+  ],
+  "replaces": "OTIS",
+  "replacement_reason": "OTIS is held at conviction 3 with a balanced rather than compelling skew, price above its mechanical fair value, falling operating margin and rising leverage (its own thesis); DXCM clears the buy bar at conviction 4 with rising returns and net cash, and cash cannot fund a full position above the 1.5% floor."
+ }
+]

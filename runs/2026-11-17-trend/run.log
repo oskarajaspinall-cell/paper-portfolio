@@ -246,3 +246,234 @@ The decision is **AVOID at conviction 3**, with a new entry price of 211.47. Tha
 [22:48:11] $ bin/py scripts/valuation.py CRM --asof 2026-11-17 --eval research/CRM/2026-11-17-evaluation.md
 [22:48:11] {"out": "research/CRM/2026-11-17-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 90.51, "base": 248.79, "bull": 297.34}, "price": 214.83}
 [22:48:12] == done CRM
+[22:48:17] == Research batch 01: 6 researched, 1 BUY (RELY), 5 AVOID -> reports/research/2026-11-17-batch-01.md; uploaded to GitHub
+[22:48:17] == initiate BUD:RICHTER
+[22:48:17] $ bin/py scripts/sec_delta.py BUD:RICHTER --asof 2026-11-17
+[22:48:17] SKIP BUD:RICHTER: not a US listing (SEC filers only)
+[22:48:17] $ claude -p Ticker BUD:RICHTER, note type CORE, date 2026-11-17. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:48:37] research/ASX-FMG/2026-11-17-evaluation.md
+OK research/ASX-FMG/2026-11-17-evaluation.md Bear case=141 Bull case=120 decision=AVOID scorecard=6->3
+[22:48:37] $ bin/py scripts/check_docs.py eval research/ASX-FMG/2026-11-17-evaluation.md
+[22:48:37] OK research/ASX-FMG/2026-11-17-evaluation.md Bear case=141 Bull case=120 decision=AVOID scorecard=6->3
+[22:48:37] $ bin/py scripts/valuation.py ASX:FMG --asof 2026-11-17 --eval research/ASX-FMG/2026-11-17-evaluation.md
+[22:48:37] {"out": "research/ASX-FMG/2026-11-17-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 14.0, "base": 16.7, "bull": 18.88}, "price": 14.42}
+[22:48:38] == done ASX:FMG
+[22:48:38] == initiate PAYC
+[22:48:38] $ bin/py scripts/sec_delta.py PAYC --asof 2026-11-17
+[22:48:49] OK research/PAYC/sec-delta-2026-11-17.md
+[22:48:49] $ claude -p Ticker PAYC, note type CORE, date 2026-11-17. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/PAYC/sec-delta-2026-11-17.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:49:33] research/AMS-WKL/2026-11-17-evaluation.md
+OK research/AMS-WKL/2026-11-17-evaluation.md Bear case=138 Bull case=131 decision=AVOID scorecard=8->3
+
+Not checked: I didn't read the 2026-11-16 evaluation, because the inputs rule didn't allow it. The checker raised no consistency problem. I worked out the 86.8 entry price by hand, since my one calculation command was blocked. It's where the scorecard's value-blend upside reaches 30%, the band that would lift the score to conviction 4.
+[22:49:33] $ bin/py scripts/check_docs.py eval research/AMS-WKL/2026-11-17-evaluation.md
+[22:49:33] OK research/AMS-WKL/2026-11-17-evaluation.md Bear case=138 Bull case=131 decision=AVOID scorecard=8->3
+[22:49:33] $ bin/py scripts/valuation.py AMS:WKL --asof 2026-11-17 --eval research/AMS-WKL/2026-11-17-evaluation.md
+[22:49:33] {"out": "research/AMS-WKL/2026-11-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 79.19, "base": 115.98, "bull": 127.82}, "price": 90.84}
+[22:49:34] == done AMS:WKL
+[22:49:34] == initiate DXCM
+[22:49:34] $ bin/py scripts/sec_delta.py DXCM --asof 2026-11-17
+[22:49:45] OK research/DXCM/sec-delta-2026-11-17.md
+[22:49:45] $ claude -p Ticker DXCM, note type CORE, date 2026-11-17. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/DXCM/sec-delta-2026-11-17.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:49:49] - Note: `research/BUD-RICHTER/2026-11-17.md`
+- Fact sheet: `research/BUD-RICHTER/factsheet-2026-11-17.md`
+- check_docs: `OK research/BUD-RICHTER/2026-11-17.md type=CORE 1=68 2=112 3=122 4=48 5=38 6=86 total=474`
+- Peers: TEVA, LON:HIK and VTRS. SIX:SDZ returned a 404 on stockanalysis.com, so I swapped it out.
+- Blocked URL: `gedeonrichter.com` is not on the allowlist, so I could not read the company's revenue mix by region. Section 1 marks it [data unavailable].
+- Stale data: the fact sheet still lists the next earnings date as 10 November 2026, which has already passed. Q3 2026 results were published that day, but no figures from them are in the fact sheet or the note.
+- Sector shows as Unknown on the fact sheet. The peer P/E median uses only two peers.
+[22:49:49] $ bin/py scripts/check_docs.py note research/BUD-RICHTER/2026-11-17.md
+[22:49:49] OK research/BUD-RICHTER/2026-11-17.md type=CORE 1=68 2=112 3=122 4=48 5=38 6=86 total=474
+[22:49:49] $ claude -p Ticker BUD:RICHTER, date 2026-11-17. Research: research/BUD-RICHTER/factsheet-2026-11-17.md, research/BUD-RICHTER/2026-11-17.md. Macro snapshot: reports/macro/2026-11-17.md. Write research/BUD-RICHTER/2026-11-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:50:06] research/BUD-RICHTER/2026-11-17-macro.md
+OK research/BUD-RICHTER/2026-11-17-macro.md macro_weight=context words=57
+[22:50:06] $ bin/py scripts/check_docs.py macro research/BUD-RICHTER/2026-11-17-macro.md
+[22:50:06] OK research/BUD-RICHTER/2026-11-17-macro.md macro_weight=context words=57
+[22:50:06] $ claude -p Evaluate BUD:RICHTER for 2026-11-17: fact sheet research/BUD-RICHTER/factsheet-2026-11-17.md, note research/BUD-RICHTER/2026-11-17.md, state portfolio/state.json, macro overlay research/BUD-RICHTER/2026-11-17-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:50:10] - Note: `research/PAYC/2026-11-17.md`
+- Fact sheet: `research/PAYC/factsheet-2026-11-17.md`
+- check_docs: `OK research/PAYC/2026-11-17.md type=CORE 1=63 2=119 3=119 4=41 5=73 6=101 total=516`
+- Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+
+Ponytail: I skipped primary-source fetches beyond the SEC delta and fact sheet, so the revenue mix by country is unverified. Peers were chosen without checking they all have stockanalysis pages, but the fact sheet ran for all four.
+[22:50:10] $ bin/py scripts/check_docs.py note research/PAYC/2026-11-17.md
+[22:50:10] OK research/PAYC/2026-11-17.md type=CORE 1=63 2=119 3=119 4=41 5=73 6=101 total=516
+[22:50:10] $ claude -p Ticker PAYC, date 2026-11-17. Research: research/PAYC/factsheet-2026-11-17.md, research/PAYC/2026-11-17.md. Macro snapshot: reports/macro/2026-11-17.md. Write research/PAYC/2026-11-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:50:26] research/PAYC/2026-11-17-macro.md
+OK research/PAYC/2026-11-17-macro.md macro_weight=context words=55
+[22:50:26] $ bin/py scripts/check_docs.py macro research/PAYC/2026-11-17-macro.md
+[22:50:26] OK research/PAYC/2026-11-17-macro.md macro_weight=context words=55
+[22:50:26] $ claude -p Evaluate PAYC for 2026-11-17: fact sheet research/PAYC/factsheet-2026-11-17.md, note research/PAYC/2026-11-17.md, state portfolio/state.json, macro overlay research/PAYC/2026-11-17-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:50:54] Note: research/DXCM/2026-11-17.md
+Fact sheet: research/DXCM/factsheet-2026-11-17.md
+check_docs: OK research/DXCM/2026-11-17.md type=CORE 1=61 2=135 3=112 4=40 5=60 6=56 total=464
+
+Data conflicts: none.
+
+Blocked URLs: none.
+
+Two limits on the 10-Q fetch:
+- It returned no MD&A or Risk Factors text and nothing on the FDA warning letter, so the note only infers the matter may be closed from the sec-delta file's removed risk factors.
+- It did not state US versus international percentages, so the note gives no split.
+
+Two sources in the note's Sources section are headline URLs from the fact sheet, not fetches: the Business Wire Q3 release and the TipRanks buyback item. The note cites the buyback only from the headline, tagged `[Likely]`.
+[22:50:54] $ bin/py scripts/check_docs.py note research/DXCM/2026-11-17.md
+[22:50:54] OK research/DXCM/2026-11-17.md type=CORE 1=61 2=135 3=112 4=40 5=60 6=56 total=464
+[22:50:54] $ claude -p Ticker DXCM, date 2026-11-17. Research: research/DXCM/factsheet-2026-11-17.md, research/DXCM/2026-11-17.md. Macro snapshot: reports/macro/2026-11-17.md. Write research/DXCM/2026-11-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:51:11] research/DXCM/2026-11-17-macro.md
+OK research/DXCM/2026-11-17-macro.md macro_weight=context words=58
+[22:51:11] $ bin/py scripts/check_docs.py macro research/DXCM/2026-11-17-macro.md
+[22:51:11] OK research/DXCM/2026-11-17-macro.md macro_weight=context words=58
+[22:51:11] $ claude -p Evaluate DXCM for 2026-11-17: fact sheet research/DXCM/factsheet-2026-11-17.md, note research/DXCM/2026-11-17.md, state portfolio/state.json, macro overlay research/DXCM/2026-11-17-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:51:35] research/PAYC/2026-11-17-evaluation.md
+OK research/PAYC/2026-11-17-evaluation.md Bear case=135 Bull case=124 decision=BUY scorecard=9->4
+[22:51:35] $ bin/py scripts/check_docs.py eval research/PAYC/2026-11-17-evaluation.md
+[22:51:35] OK research/PAYC/2026-11-17-evaluation.md Bear case=135 Bull case=124 decision=BUY scorecard=9->4
+[22:51:35] $ bin/py scripts/valuation.py PAYC --asof 2026-11-17 --eval research/PAYC/2026-11-17-evaluation.md
+[22:51:35] {"out": "research/PAYC/2026-11-17-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 100.23, "base": 260.07, "bull": 422.6}, "price": 254.75}
+[22:51:35] $ claude -p Independent second evaluation of PAYC for 2026-11-17: fact sheet research/PAYC/factsheet-2026-11-17.md, note research/PAYC/2026-11-17.md, state portfolio/state.json, macro overlay research/PAYC/2026-11-17-macro.md. Write it to research/PAYC/2026-11-17-evaluation-2.md (not the usual file). Do not read research/PAYC/2026-11-17-evaluation.md or any other evaluation of this stock dated 2026-11-17. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:51:45] research/BUD-RICHTER/2026-11-17-evaluation.md
+OK research/BUD-RICHTER/2026-11-17-evaluation.md Bear case=135 Bull case=116 decision=BUY scorecard=9->4
+
+I didn't read the Q3 2026 results; I flagged that in the bear case and the key risk. On 2026-11-15 this stock was rated AVOID 3. This BUY 4 uses `new_evidence: method_change` (the scorecard rules changed since), and the checker accepted that. Cash after the pending RELY order can't fund this buy above the 1.5% floor, so it names OTIS (conviction 3) to sell.
+[22:51:45] $ bin/py scripts/check_docs.py eval research/BUD-RICHTER/2026-11-17-evaluation.md
+[22:51:46] OK research/BUD-RICHTER/2026-11-17-evaluation.md Bear case=135 Bull case=116 decision=BUY scorecard=9->4
+[22:51:46] $ bin/py scripts/valuation.py BUD:RICHTER --asof 2026-11-17 --eval research/BUD-RICHTER/2026-11-17-evaluation.md
+[22:51:46] {"out": "research/BUD-RICHTER/2026-11-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 7281.63, "base": 18245.16, "bull": 21290.35}, "price": 13700}
+[22:51:46] $ claude -p Independent second evaluation of BUD:RICHTER for 2026-11-17: fact sheet research/BUD-RICHTER/factsheet-2026-11-17.md, note research/BUD-RICHTER/2026-11-17.md, state portfolio/state.json, macro overlay research/BUD-RICHTER/2026-11-17-macro.md. Write it to research/BUD-RICHTER/2026-11-17-evaluation-2.md (not the usual file). Do not read research/BUD-RICHTER/2026-11-17-evaluation.md or any other evaluation of this stock dated 2026-11-17. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:52:38] research/DXCM/2026-11-17-evaluation.md
+OK research/DXCM/2026-11-17-evaluation.md Bear case=139 Bull case=141 decision=BUY scorecard=9->4
+
+The decision is BUY, CORE, conviction 4, replacing OTIS. That flips the AVOID at conviction 3 from 2026-11-15, two days ago and at a similar price. I justified the flip as a `method_change`: the 2026-11-17 scorecard rule now counts two trend-strength points as three, which lifts the same evidence from 8 to 9 points. Its valuation points come from that trend strength, not from a discount. To find the earlier verdict I read its decision and conviction lines; that file wasn't one of my listed inputs.
+
+The decline cause is marked `temporary` on partly guessed evidence: the note's own explanation for the falling FCF margin is tagged [Guessing]. The rules still need an independent second evaluation at 4+ before this buy executes.
+[22:52:38] $ bin/py scripts/check_docs.py eval research/DXCM/2026-11-17-evaluation.md
+[22:52:38] OK research/DXCM/2026-11-17-evaluation.md Bear case=139 Bull case=141 decision=BUY scorecard=9->4
+[22:52:38] $ bin/py scripts/valuation.py DXCM --asof 2026-11-17 --eval research/DXCM/2026-11-17-evaluation.md
+[22:52:38] {"out": "research/DXCM/2026-11-17-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 11.18, "base": 60.9, "bull": 142.44}, "price": 81.61}
+[22:52:38] $ claude -p Independent second evaluation of DXCM for 2026-11-17: fact sheet research/DXCM/factsheet-2026-11-17.md, note research/DXCM/2026-11-17.md, state portfolio/state.json, macro overlay research/DXCM/2026-11-17-macro.md. Write it to research/DXCM/2026-11-17-evaluation-2.md (not the usual file). Do not read research/DXCM/2026-11-17-evaluation.md or any other evaluation of this stock dated 2026-11-17. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[22:52:59] research/PAYC/2026-11-17-evaluation-2.md
+OK research/PAYC/2026-11-17-evaluation-2.md Bear case=146 Bull case=125 decision=BUY scorecard=9->4
+
+The decision is a CORE BUY at conviction 4 (scorecard total 9). It replaces JKHY, a conviction-3 holding, because cash left after the pending RELY order can't fund a full position above the 1.5% floor. On 2026-11-15 this stock got AVOID 3. The checker accepted `method_change` here because a scorecard rule has changed since then; the business evidence is the same.
+
+I worked out the cash and sector room myself and didn't run `portfolio.py`. I didn't know RELY's sector, and if it is Technology, the Tech sector could end up close to its 35% cap. The trend-strength points are also borderline: the price is 49.7% above its 200-day average, against a 50% "overextended" limit.
+[22:52:59] $ bin/py scripts/check_docs.py eval research/PAYC/2026-11-17-evaluation-2.md
+[22:52:59] OK research/PAYC/2026-11-17-evaluation-2.md Bear case=146 Bull case=125 decision=BUY scorecard=9->4
+[22:52:59] == PAYC: second opinion conviction 4 -> BUY 4
+[22:52:59] $ bin/py scripts/check_docs.py eval research/PAYC/2026-11-17-evaluation.md
+[22:52:59] OK research/PAYC/2026-11-17-evaluation.md Bear case=135 Bull case=124 decision=BUY scorecard=9->4
+[22:53:00] == portfolio-manager PAYC (BUY 4)
+[22:53:00] $ claude -p Evaluation files: research/PAYC/2026-11-17-evaluation.md. Date 2026-11-17. Write the requests to runs/2026-11-17-trend/requests-PAYC.json and submit with --at-market --save runs/2026-11-17-trend/submit-PAYC.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[22:53:18] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| PAYC | BUY (replaces JKHY) | CORE | 4 |
+
+```json
+{
+ "mode": "at_market",
+ "placed": [
+  {"id": "2026-11-17-2", "ticker": "PAYC", "action": "BUY", "type": "CORE", "est_shares": 30, "est_price": 254.75, "est_currency": "USD", "est_close_date": "2026-11-16", "est_usd": 7642.5, "replaces": "JKHY"}
+ ],
+ "applied": [],
+ "rejected": [],
+ "warnings": ["cash 6.2% vs a 1.5% reserve (residual (bottom-up) regime)"],
+ "filled_now": [],
+ "queued_for_next_open": [
+  {"id": "2026-11-17-2", "ticker": "PAYC", "action": "BUY", "type": "CORE", "est_shares": 30, "est_price": 254.75, "est_usd": 7642.5, "replaces": "JKHY"}
+ ],
+ "dry_run": false
+}
+```
+
+Nothing filled now. The PAYC buy (30 shares, about $7,642.50) is queued for the next open. No trades were rejected. The submit output shows only the PAYC order, with no separate JKHY sell listed. I didn't check the saved file `runs/2026-11-17-trend/submit-PAYC.json`.
+[22:53:18] == done PAYC
+[22:53:23] research/BUD-RICHTER/2026-11-17-evaluation-2.md
+OK research/BUD-RICHTER/2026-11-17-evaluation-2.md Bear case=137 Bull case=131 decision=BUY scorecard=9->4
+[22:53:23] $ bin/py scripts/check_docs.py eval research/BUD-RICHTER/2026-11-17-evaluation-2.md
+[22:53:23] OK research/BUD-RICHTER/2026-11-17-evaluation-2.md Bear case=137 Bull case=131 decision=BUY scorecard=9->4
+[22:53:23] == BUD:RICHTER: second opinion conviction 4 -> BUY 4
+[22:53:23] $ bin/py scripts/check_docs.py eval research/BUD-RICHTER/2026-11-17-evaluation.md
+[22:53:23] OK research/BUD-RICHTER/2026-11-17-evaluation.md Bear case=135 Bull case=116 decision=BUY scorecard=9->4
+[22:53:24] == portfolio-manager BUD:RICHTER (BUY 4)
+[22:53:24] $ claude -p Evaluation files: research/BUD-RICHTER/2026-11-17-evaluation.md. Date 2026-11-17. Write the requests to runs/2026-11-17-trend/requests-BUD-RICHTER.json and submit with --at-market --save runs/2026-11-17-trend/submit-BUD-RICHTER.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[22:53:42] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| BUD:RICHTER | BUY (replaces OTIS) | CORE | 4 |
+
+Script output (nothing filled, nothing queued):
+```json
+{
+ "mode": "at_market",
+ "placed": [],
+ "applied": [],
+ "rejected": [
+  {
+   "date": "2026-11-17",
+   "ticker": "BUD:RICHTER",
+   "action": "BUY",
+   "type": "CORE",
+   "rule": "CASH_MIN",
+   "detail": "cash would be -0.12% (< 1.5%); cash would be -0.12%, below the 1.5% reserve (residual (bottom-up) regime)"
+  }
+ ],
+ "warnings": [
+  "cash 6.2% vs a 1.5% reserve (residual (bottom-up) regime)"
+ ],
+ "filled_now": [],
+ "queued_for_next_open": [],
+ "dry_run": false
+}
+```
+
+The BUY was rejected under rule CASH_MIN, so no trade was made and OTIS was not sold. I did not work around it.
+
+The requests file is at `runs/2026-11-17-trend/requests-BUD-RICHTER.json`.
+[22:53:42] == done BUD:RICHTER
+[22:54:08] research/DXCM/2026-11-17-evaluation-2.md
+OK research/DXCM/2026-11-17-evaluation-2.md Bear case=147 Bull case=142 decision=BUY scorecard=9->4
+
+- **New evidence:** I first wrote an AVOID at conviction 3, but the scorecard gives a total of 9, which is conviction 4, so the decision is BUY. The 2026-11-15 evaluation was AVOID at 3. I used `method_change` as the new evidence: a scorecard rule added on 2026-11-17 gives trend strength 3 points when the value blend is at or above the price. The checker accepted that.
+- **Replacement:** I set `replaces: OTIS` because cash looks too thin to fund the buy. That rests on my own rough sum of the RELY and PAYC orders pending in `portfolio/state.json`, not a portfolio script. CI and ZTS are other conviction-3 options.
+- **Inputs read:** to find the earlier verdict, I searched the 2026-11-15 evaluation for its decision and conviction lines, outside the four inputs. I did not open the 2026-11-17 primary evaluation.
+- **What drives the score:** the 3 valuation points depend on my own scenario targets, because the fair value is flagged unreliable and ignored. A lower base case would likely drop the trend points back to 2, and the conviction back to 3.
+[22:54:08] $ bin/py scripts/check_docs.py eval research/DXCM/2026-11-17-evaluation-2.md
+[22:54:08] OK research/DXCM/2026-11-17-evaluation-2.md Bear case=147 Bull case=142 decision=BUY scorecard=9->4
+[22:54:08] == DXCM: second opinion conviction 4 -> BUY 4
+[22:54:08] $ bin/py scripts/check_docs.py eval research/DXCM/2026-11-17-evaluation.md
+[22:54:09] OK research/DXCM/2026-11-17-evaluation.md Bear case=139 Bull case=141 decision=BUY scorecard=9->4
+[22:54:10] == portfolio-manager DXCM (BUY 4)
+[22:54:10] $ claude -p Evaluation files: research/DXCM/2026-11-17-evaluation.md. Date 2026-11-17. Write the requests to runs/2026-11-17-trend/requests-DXCM.json and submit with --at-market --save runs/2026-11-17-trend/submit-DXCM.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[22:54:27] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| DXCM | BUY (replaces OTIS) | CORE | 4 |
+
+Script output:
+```json
+{
+ "mode": "at_market",
+ "placed": [],
+ "applied": [],
+ "rejected": [
+  {
+   "date": "2026-11-17",
+   "ticker": "DXCM",
+   "action": "BUY",
+   "type": "CORE",
+   "rule": "CASH_MIN",
+   "detail": "cash would be -0.08% (< 1.5%); cash would be -0.08%, below the 1.5% reserve (residual (bottom-up) regime)"
+  }
+ ],
+ "warnings": [
+  "cash 6.2% vs a 1.5% reserve (residual (bottom-up) regime)"
+ ],
+ "filled_now": [],
+ "queued_for_next_open": [],
+ "dry_run": false
+}
+```
+
+The DXCM buy was rejected under rule CASH_MIN, so nothing filled and nothing was queued. The order would have left cash at -0.08%, below the 1.5% floor, even with the OTIS sale. I did not work around it.
+
+I didn't check whether the funding queue picks DXCM up afterwards.
+[22:54:27] == done DXCM
