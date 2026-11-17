@@ -22,6 +22,8 @@ plist() { # label script calendar-xml
   <key>Label</key><string>$1</string>
   <key>ProgramArguments</key><array><string>/bin/bash</string><string>$DIR/bin/$2</string></array>
   <key>WorkingDirectory</key><string>$DIR</string>
+  <!-- 2026-11-17: launchd kills a finished job's process group; the 21:30 run starts a detached research loop -->
+  <key>AbandonProcessGroup</key><true/>
   <key>StartCalendarInterval</key>
 $3
   <key>StandardOutPath</key><string>$DIR/logs/launchd.log</string>
