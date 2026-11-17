@@ -358,6 +358,12 @@ def build_data(live: bool = True) -> dict:
     for h in HORIZONS:
         done = [d for d in decisions if d.get(f"hit_{h}m") not in ("", None)]
         hits[f"{h}m"] = {"n": len(done), "hits": sum(int(d[f"hit_{h}m"]) for d in done)}
+        for side, own in (("buy", True), ("avoid", False)):  # one blended rate is mostly AVOIDs in a rising market
+            part = [d for d in done if (d["decision"] in ("BUY", "ADD", "HOLD")) == own]
+            hits[f"{h}m"][side] = {"n": len(part), "hits": sum(int(d[f"hit_{h}m"]) for d in part)}
+    newest = decisions[::-1]
+    matured = {id(d) for d in [d for d in newest if d.get("excess_1m") not in ("", None)][:300]}
+    shown = [d for i, d in enumerate(newest) if i < 60 or d["decision"] != "AVOID" or id(d) in matured]
     last = ser[-1] if ser else None
     week = week_change(ser)
     live_pt = None  # the chart's live point (1D range): whole portfolio and SPY at live prices
@@ -401,7 +407,7 @@ def build_data(live: bool = True) -> dict:
                                               "fill_close_date", "gross_usd", "costs_usd", "reason")} for r in ledger],
         "decisions": [{k: d.get(k, "") for k in ("date", "ticker", "type", "decision", "conviction", "price", "currency",
                                                  "excess_1m", "excess_3m", "evaluation", "price_date")}
-                      | {"live": "price: live" in (d.get("note") or "")} for d in decisions[::-1][:60]],
+                      | {"live": "price: live" in (d.get("note") or "")} for d in shown],
         "hits": hits, "n_decisions": len(decisions),
         "watch": sorted(({"ticker": r["ticker"], "close": r.get("last_close"), "entry": r["entry_price"],
                           "close_date": r.get("last_close_date", ""), "live": snap.get(r["ticker"]),
@@ -411,8 +417,8 @@ def build_data(live: bool = True) -> dict:
                           "blocked": entry_watch.blocked(r, cfg["entry"].get("skip_hit_points_short")),
                           "skipped": r.get("skipped_hit_date", ""),
                           "why": entry_watch.why_not_yet(r) if entry_watch.is_near(r, near_pct) else ""}
-                         for r in watch_rows),
-                        key=lambda r: -(r["to_entry"] if r["to_entry"] is not None else -999))[:40],
+                         for r in all_watch),  # every name; only the 40 closest carry a live price
+                        key=lambda r: -(r["to_entry"] if r["to_entry"] is not None else -999)),
         "near_pct": near_pct,
         "pending": [{"id": o["id"], "placed": o["placed"], "action": o["request"]["action"],
                      "ticker": o["request"]["ticker"], "type": o["request"]["position_type"],
@@ -457,7 +463,7 @@ h1{font-size:20px;margin:0}h2{font-size:16px;margin:0 0 4px}.sub{color:var(--ink
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:12px}
 .tile .l{color:var(--ink2);font-size:13px}.tile .v{font-size:22px;font-weight:600}.tile .d{font-size:13px}
 .up{color:var(--up)}.down{color:var(--down)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}@media (max-width:760px){.grid2{grid-template-columns:minmax(0,1fr)}}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink2);margin:6px 0}
 .key{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:6px;border-radius:1px}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:6px}
@@ -492,7 +498,11 @@ a{color:var(--s1)}.pill{display:inline-block;padding:1px 8px;border-radius:999px
 .page{display:none}.page.on{display:block}
 td.w{white-space:nowrap;max-width:360px;min-width:0;overflow:hidden;text-overflow:ellipsis}tr.open td.w{white-space:normal}
 tr.x{cursor:pointer}tr.x:hover td{background:color-mix(in srgb,var(--ink) 3%,transparent)}
-.more{margin-top:10px}.filter{width:100%;max-width:320px;margin:8px 0;padding:6px 10px;border:1px solid var(--ring);border-radius:8px;background:var(--page);color:var(--ink);font:inherit;font-size:13px}
+.more{margin-top:10px}th.so{cursor:pointer;user-select:none}th.so:hover{color:var(--ink)}
+th[aria-sort="ascending"]::after{content:" ▲";font-size:10px}th[aria-sort="descending"]::after{content:" ▼";font-size:10px}
+.chip{background:none;border:1px solid var(--ring);border-radius:999px;color:var(--ink2);padding:3px 12px;cursor:pointer;font:inherit;font-size:13px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--page);border-color:var(--ink)}
+.filter{width:100%;max-width:320px;margin:8px 0;padding:6px 10px;border:1px solid var(--ring);border-radius:8px;background:var(--page);color:var(--ink);font:inherit;font-size:13px}
 .att{list-style:none;margin:8px 0 0;padding:0}.att li{padding:7px 0;border-bottom:1px solid var(--grid);font-size:14px;cursor:pointer;display:flex;gap:10px;align-items:baseline}
 .att li:last-child{border-bottom:0}.att li:hover{color:var(--s1)}.att .go{margin-left:auto;color:var(--muted);font-size:12px;white-space:nowrap}
 .lg{background:none;border:0;color:var(--ink2);font:inherit;font-size:13px;cursor:pointer;padding:0}.lg[aria-pressed="false"]{opacity:.45;text-decoration:line-through}
@@ -502,7 +512,7 @@ tr.x{cursor:pointer}tr.x:hover td{background:color-mix(in srgb,var(--ink) 3%,tra
 .daily summary{cursor:pointer;color:var(--muted);font-size:13px;margin-top:10px}
 td.nm{max-width:180px;overflow:hidden;text-overflow:ellipsis}
 </style></head><body><main>
-<header class="top"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><div><h1>Paper Portfolio</h1><div class="sub">Simulated $<span id="start"></span> · paper trading only, not investment advice · updated <span id="gen"></span> · <span id="counts"></span></div></div>
+<header class="top"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><div><h1>Paper Portfolio</h1><div class="sub">Paper trading only, not investment advice · updated <span id="gen"></span> · <span id="counts"></span></div></div>
 <button class="toggle" id="theme" type="button">Toggle dark mode</button></div>
 </header><nav class="pages" role="tablist" aria-label="Sections" id="pages"></nav>
 <div class="page" data-page="overview">
@@ -521,19 +531,18 @@ __DAILY__
 <span><span class="sw" style="background:var(--s2)"></span>Tactical</span></div><div id="bars"></div></section>
 <section class="card"><h2>Sectors &amp; countries</h2><div class="tabs" role="tablist"><button type="button" role="tab" class="tab2" data-mix="sectors">Sectors</button><button type="button" role="tab" class="tab2" data-mix="countries">Countries</button></div>
 <div class="sub" id="mixSub"></div><div id="sectors"></div></section></div>
+</div>
+<div class="page" data-page="holdings">
+<section class="card"><h2>Holdings</h2><div class="sub">Latest research = the conviction of the most recent evaluation; when it is below the held conviction the weekly run resizes the position. Click a row for its plan.</div><div class="tw"><table id="holdings"></table></div></section>
 <div class="grid2"><section class="card"><h2>Risk</h2><div class="sub" id="riskSub"></div>
 <div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Share of portfolio risk</span><span><span class="sw" style="background:var(--axis)"></span>Share of invested money</span></div>
 <div id="risk"></div><div class="sub" id="corrPairs"></div><details><summary>Show as a table</summary><div class="tw"><table id="riskTable"></table></div></details></section>
 <section class="card"><h2>Where the excess return came from</h2><div class="sub" id="attrSub"></div><div class="tiles" id="attrTiles"></div>
 <div class="tw" style="margin-top:12px"><table id="attrTable"></table></div></section></div>
 </div>
-<div class="page" data-page="holdings">
-<section class="card"><h2>Holdings</h2><div class="sub">Latest research = the conviction of the most recent evaluation; when it is below the held conviction the weekly run resizes the position. Click a row for its plan.</div><div class="tw"><table id="holdings"></table></div></section>
-</div>
 <div class="page" data-page="pipeline">
 <section class="card"><h2>Pending orders</h2><div class="sub">Decided trades fill at the next opening price of their own market; every rule is checked again at that price. The 21:30 UK job records the fills.</div><div class="tw"><table id="pending"></table></div></section>
 <section class="card"><h2>Funding queue</h2><div class="sub">Conviction-4 buys waiting for cash, best first. The portfolio runs up to 98.5% invested, so a buy waits only when it doesn't fit. A position that started small (a starter) is topped up first, once a week; the others are bought when cash frees up (a trim, a sale or a swap), or swapped in for a weaker holding by the weekly review. Each drops out after 30 days or if the price runs 10% above where we decided.</div><div class="tw"><table id="fqueue"></table></div></section>
-<section class="card"><h2>Close to entry</h2><div class="sub" id="nearSub"></div><div class="tw"><table id="near"></table></div></section>
 <section class="card"><h2>Watchlist: entry prices</h2><div class="sub" id="watchSub"></div><div class="tw"><table id="watch"></table></div></section>
 <section class="card"><h2>Dip radar</h2><div class="sub" id="dipSub"></div><div class="tw"><table id="dips"></table></div></section>
 <section class="card"><h2>Latest screen</h2><div class="sub" id="screenSub"></div><div id="picks" style="margin-top:8px"></div></section>
@@ -541,7 +550,7 @@ __DAILY__
 <div class="page" data-page="activity">
 <section class="card"><h2>Research funnel</h2><div class="sub">How many stocks were researched, how many reached the buy bar, and how many were bought.</div><div class="tiles" id="funnel"></div></section>
 <section class="card"><h2>Recent trades</h2><div class="tw"><table id="trades"></table></div></section>
-<section class="card"><h2>Decisions &amp; hit rates</h2><div class="sub">A decision is a hit when it was right about direction vs SPY: BUY/ADD/HOLD beat SPY, AVOID/SELL/TRIM lagged it.</div>
+<section class="card"><h2>Decisions &amp; hit rates</h2><div class="sub">A decision is a hit when it was right about direction against the S&amp;P 500: a buy or hold that beat it, an avoid or trim that lagged it. Avoids are counted apart because there are far more of them. The table lists the latest decisions and those with a result; click a column to sort.</div>
 <div class="tiles" id="hits"></div><div class="tw" style="margin-top:12px"><table id="decisions"></table></div></section>
 <section class="card"><h2>Conviction scoreboard</h2><div class="sub" id="scoreSub"></div><div class="tw"><table id="score"></table></div>
 <div class="sub" style="margin-top:12px" id="pointsSub"></div><div class="tw"><table id="points"></table></div></section>
@@ -565,7 +574,7 @@ const px=x=>x==null||x===''||isNaN(+x)?'':(+x).toLocaleString('en-US',{maximumFr
 try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}
 $('theme').onclick=()=>{const dark=matchMedia('(prefers-color-scheme: dark)').matches;const cur=document.documentElement.dataset.theme||(dark?'dark':'light');
 const n=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}};
-$('start').textContent=D.start.toLocaleString('en-US');$('gen').textContent=D.generated;
+$('gen').textContent=D.generated;
 $('counts').textContent=`${D.holdings.length} holdings · ${D.n_decisions} decisions logged`;
 const PAGES=[['overview','Overview'],['holdings','Holdings',D.holdings.length],['pipeline','Pipeline',(D.pending||[]).length+(D.funding_queue||[]).length||''],['activity','Activity'],['process','Process']];
 let PAGE='overview',drawn=false;
@@ -573,13 +582,13 @@ function setPage(n,push){PAGE=PAGES.some(([k])=>k===n)?n:'overview';
  document.querySelectorAll('.page').forEach(d=>d.classList.toggle('on',d.dataset.page===PAGE));
  document.querySelectorAll('.pg').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.p===PAGE)));
  if(push){try{history.replaceState(null,'','#'+PAGE)}catch(e){}scrollTo(0,0);}
- if(PAGE==='overview'&&drawn)drawAll();}
+ if(drawn)drawAll();}
 PAGES.forEach(([k,l,c])=>{const b=el('button',{type:'button',role:'tab',class:'pg','data-p':k},l);if(c)b.append(el('span',{class:'ct'},String(c)));b.onclick=()=>setPage(k,true);$('pages').append(b);});
 addEventListener('hashchange',()=>setPage(location.hash.slice(1)));
 $('hero').textContent=usd(D.total);
 const I=D.invested;
-$('heroSub').textContent=(D.inception?`At the ${D.close_date} close. `+(I?`Invested money ${pct(I.pct*100)} vs the same money in the S&P 500 ${pct(I.spy_pct==null?null:I.spy_pct*100)}; whole portfolio incl. cash ${pct(D.since==null?null:D.since*100)} since ${D.series.length?D.series[0].date:D.inception}`:`Since ${D.inception}: ${pct(D.since==null?null:D.since*100)} vs SPY ${pct(D.since_spy==null?null:D.since_spy*100)}`):'No trades yet: the portfolio is all cash.')
- +(D.live_total!=null&&D.holdings.some(h=>h.live_day_pct!=null)?` · Live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
+$('heroSub').textContent=(D.inception?`At the ${D.close_date} close`:'No trades yet: the portfolio is all cash')
+ +(D.live_total!=null&&D.holdings.some(h=>h.live_day_pct!=null)?` · live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
 const tile=(l,v,d,c)=>el('div',{class:'tile'},el('div',{class:'l'},l),el('div',{class:'v'},v),d?el('div',{class:'d '+(c||'')},d):'');
 $('tiles').append(
  I?tile('Return on invested money',pct(I.pct*100),`${usd(I.gain)} on ${usd(I.invested)} invested`+(I.spy_pct==null?'':` · same money in S&P 500 ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
@@ -685,7 +694,7 @@ function hbars(box,items,emptyMsg){box.replaceChildren();if(!items.length){box.a
   const tipN=()=>[el('div',{},el('b',{},it.v.toFixed(2)+'%'),' ',el('span',{class:'muted'},it.tip||it.label))];
   hit.addEventListener('pointermove',ev=>{bar.style.opacity=.8;showTip(ev,tipN());});hit.addEventListener('pointerleave',()=>{bar.style.opacity=1;hideTip();});
   svg.append(hit);});box.append(svg);}
-function drawAll(){drawLine();riskBars();
+function drawAll(){if(PAGE==='holdings')riskBars();if(PAGE!=='overview')return;drawLine();
  hbars($('bars'),D.holdings.map(h=>({label:h.ticker,v:h.weight,c:h.type==='CORE'?'--s1':'--s2',tip:`${h.ticker} ${h.name} · ${h.type.toLowerCase()} · ${usd(h.value)}`})),'No holdings yet.');
  drawMix();}
 let MIX='sectors';try{MIX=localStorage.getItem('mixTab')||MIX}catch(e){}if(!['sectors','countries'].includes(MIX))MIX='sectors';
@@ -727,19 +736,29 @@ function riskBars(){const box=$('risk');box.replaceChildren();const R=D.risk;
 {let r0='All';try{r0=localStorage.getItem('chartRange')||r0}catch(e){}RANGE=RANGES.some(([r])=>r===r0)?r0:'All';
  document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===RANGE)));}
 {let t0='invested';try{t0=localStorage.getItem('chartTab')||t0}catch(e){}setTab(TABS[t0]?t0:'invested');}
-setPage(location.hash.slice(1));drawn=true;drawAll();let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(PAGE==='overview')drawAll();},150);});
+setPage(location.hash.slice(1));drawn=true;drawAll();let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(drawAll,150);});
 // ---- tables
-function table(id,cols,rows,empty,opt={}){const t=$(id),lim=opt.limit??15;t.append(el('tr',{},...cols.map(c=>el('th',{class:c.n?'n':''},c.h))));
+function table(id,cols,rows,empty,opt={}){const t=$(id),lim=opt.limit??15;
+ const ths=cols.map(c=>el('th',{class:(c.n?'n ':'')+'so',tabindex:0,title:'Click to sort'},c.h));t.append(el('tr',{},...ths));
  if(!rows.length){t.append(el('tr',{},el('td',{colspan:cols.length,class:'muted'},empty)));return;}
  const wide=cols.some(c=>c.w);
  const trs=rows.map(r=>{const tr=el('tr',{},...cols.map(c=>{const v=c.f(r);const td=el('td',{class:(c.n?'n ':'')+(c.w?'w ':'')+(c.c?c.c(r):'')});
   if(v instanceof Node)td.append(v);else td.textContent=v;return td;}));
   if(wide){tr.classList.add('x');tr.title='Click to show the full text';tr.onclick=e=>{if(!e.target.closest('a'))tr.classList.toggle('open');};}t.append(tr);return tr;});
- const wrap=t.closest('.tw');let all=false,q='';const more=el('button',{type:'button',class:'toggle more'});
- const apply=()=>{let n=0;trs.forEach(tr=>{const ok=!q||tr.textContent.toLowerCase().includes(q),show=ok&&(all||q||n<lim);if(show)n++;tr.hidden=!show;});
-  more.hidden=rows.length<=lim||!!q;more.textContent=all?`Show the first ${lim}`:`Show all ${rows.length}`;};
+ const wrap=t.closest('.tw');let all=false,q='',chip=opt.chips?opt.chips[0][1]:null,ord=trs.map((_,i)=>i),sc=-1,dir=1;
+ const more=el('button',{type:'button',class:'toggle more'});
+ const apply=()=>{let n=0,m=0;ord.forEach(i=>{const tr=trs[i],ok=(!q||tr.textContent.toLowerCase().includes(q))&&(!chip||chip(rows[i])),show=ok&&(all||q||n<lim);if(ok)m++;if(show)n++;tr.hidden=!show;});
+  more.hidden=m<=lim||!!q;more.textContent=all?`Show the first ${lim}`:`Show all ${m}`;};
  more.onclick=()=>{all=!all;apply();};wrap.after(more);
+ // sort on the cell text: numbers for numeric columns, blanks always last
+ const key=(ci,i)=>{const x=trs[i].children[ci].textContent.trim();if(!cols[ci].n)return x.toLowerCase()||null;const v=parseFloat(x.replace(/[$,+▲▼\s]/g,'').replace('−','-'));return isNaN(v)?null:v;};
+ ths.forEach((th,ci)=>{const go=()=>{dir=sc===ci?-dir:(cols[ci].n?-1:1);sc=ci;const k=trs.map((_,i)=>key(ci,i));
+   ord.sort((a,b)=>k[a]==null?(k[b]==null?0:1):k[b]==null?-1:(k[a]<k[b]?-1:k[a]>k[b]?1:0)*dir);ord.forEach(i=>t.append(trs[i]));
+   ths.forEach(x=>x.removeAttribute('aria-sort'));th.setAttribute('aria-sort',dir>0?'ascending':'descending');apply();};
+  th.onclick=go;th.onkeydown=e=>{if(e.key==='Enter')go();};});
  if(opt.filter){const inp=el('input',{type:'search',class:'filter',placeholder:opt.filter,'aria-label':opt.filter});inp.oninput=()=>{q=inp.value.trim().toLowerCase();apply();};wrap.before(inp);}
+ if(opt.chips){const box=el('div',{class:'ranges',role:'group'});opt.chips.forEach(([l,f],i)=>{const b=el('button',{type:'button',class:'chip','aria-pressed':String(i===0)},l);
+   b.onclick=()=>{chip=f;all=false;box.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));apply();};box.append(b);});wrap.before(box);}
  apply();}
 const link=(path,txt)=>D.repo&&path?el('a',{href:`${D.repo}/blob/main/${path}`,target:'_blank',rel:'noopener'},txt):txt;
 const dayOf=r=>r.live_day_pct!=null?{p:r.live_day_pct,u:r.live_day_usd,t:'last 24h: live price vs the '+r.last_date+' close'}:
@@ -777,28 +796,25 @@ table('dips',[{h:'Ticker',f:r=>r.ticker},{h:'Kind',f:r=>r.kind==='holding'?'hold
  {h:'Stock-specific',n:1,f:r=>r.specific_pct==null?'–':pct(r.specific_pct,1),c:r=>cls(r.specific_pct)},
  {h:'vs base FV',n:1,f:r=>r.vs_base_pct==null?'–':pct(r.vs_base_pct,0)},{h:'Why not a signal',w:1,f:r=>r.signal?'':(r.why_not||'')}],
  P?P.rows:[],'No unusual falls since our last research (nothing at z −1 or lower).');}
-{const np=D.near_pct??10,nr=(D.watch||[]).filter(r=>r.to_entry!=null&&r.to_entry>=-np);
-document.getElementById('nearSub').textContent=`Stocks within ${np}% of their entry price, closest first, with the evaluator's reason each isn't a buy yet. Information only: a close at or below the entry price triggers a re-research, never a purchase.`;
-const lv=r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–',lte=r=>r.live?(r.entry/r.live.price-1)*100:null;
-table('near',[{h:'Ticker',f:r=>r.ticker},{h:'Close',n:1,f:r=>r.close==null||r.close===''?'':`${(+r.close).toFixed(2)} ${r.ccy} (${r.close_date})`},
- {h:'Live',n:1,f:lv},
- {h:'Entry price',n:1,f:r=>`${(+r.entry).toFixed(2)} ${r.ccy}`},{h:'To entry (close)',n:1,f:r=>pct(r.to_entry,1),c:r=>r.to_entry>=0?'up':''},
- {h:'To entry (live)',n:1,f:r=>{const x=lte(r);return x==null?'–':pct(x,1);},c:r=>lte(r)>=0?'up':''},
- {h:'Since',f:r=>r.hit?'HIT '+r.hit:(r.near_since||'')},
- {h:'Why not a buy yet',w:1,f:r=>r.why||''},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],nr,`No stock is within ${np}% of its entry price.`,{filter:'Filter by ticker or text'});}
+{const np=D.near_pct??10,W=D.watch||[],nearRow=r=>r.hit||(r.to_entry!=null&&r.to_entry>=-np),lte=r=>r.live?(r.entry/r.live.price-1)*100:null;
 table('watch',[{h:'Ticker',f:r=>r.ticker},{h:'Conv.',n:1,f:r=>r.conviction??''},{h:'Close',n:1,f:r=>r.close==null||r.close===''?'':`${(+r.close).toFixed(2)} ${r.ccy} (${r.close_date})`},
  {h:'Live',n:1,f:r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–'},
- {h:'To entry (live)',n:1,f:r=>{const x=r.live?(r.entry/r.live.price-1)*100:null;return x==null?'–':pct(x,1);},c:r=>r.live&&r.entry>=r.live.price?'up':''},
  {h:'Entry price',n:1,f:r=>`${(+r.entry).toFixed(2)} ${r.ccy}`},{h:'To entry (close)',n:1,f:r=>r.to_entry==null?'':pct(r.to_entry,1),c:r=>r.to_entry!=null&&r.to_entry>=0?'up':''},
- {h:'Status',f:r=>r.hit?'HIT '+r.hit+': re-research next run':r.skipped?'hit skipped '+r.skipped:r.blocked?'too far from a 4: a hit is skipped':''},{h:'Set by',f:r=>r.source}],D.watch||[],'No entry prices yet.',{filter:'Filter by ticker'});
-$('watchSub').textContent=`The ${(D.watch||[]).length} closest of ${D.n_watch} conviction-3 names, with the price at which we'd look again. A close at or below it triggers a full re-research (never an automatic buy), unless the scorecard is 2 or more points short of a 4 at any price.`;
+ {h:'To entry (live)',n:1,f:r=>{const x=lte(r);return x==null?'–':pct(x,1);},c:r=>lte(r)>=0?'up':''},
+ {h:'Status',f:r=>r.hit?'HIT '+r.hit+': re-research next run':r.skipped?'hit skipped '+r.skipped:r.blocked?'too far from a 4: a hit is skipped':r.near_since?'close since '+r.near_since:''},
+ {h:'Why not a buy yet',w:1,f:r=>r.why||''},{h:'Set by',f:r=>r.source},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],W,'No entry prices yet.',
+ {filter:'Filter by ticker or text',chips:[[`Within ${np}% of entry (${W.filter(nearRow).length})`,nearRow],[`All ${W.length}`,null]]});
+$('watchSub').textContent=`${W.length} conviction-3 names, closest first, with the price at which we'd look again. Live prices cover the 40 closest. A close at or below it triggers a full re-research (never an automatic buy), unless the scorecard is 2 or more points short of a 4 at any price.`;}
 table('trades',[{h:'Date',f:r=>r.date},{h:'Side',f:r=>r.side},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Shares',n:1,f:r=>r.shares},
  {h:'Fill',n:1,f:r=>`${px(r.fill_price)} ${r.currency} (${r.fill_close_date})`},{h:'Gross',n:1,f:r=>usd(+r.gross_usd,2)},{h:'Costs',n:1,f:r=>usd(+r.costs_usd,2)},
  {h:'Reason',w:1,f:r=>r.reason||''}],D.ledger,'No trades yet.');
-['1m','3m','6m','12m'].forEach(h=>{const x=D.hits[h];$('hits').append(tile(h+' hit rate',x.n?Math.round(x.hits/x.n*100)+'%':'–',x.n?`${x.hits} of ${x.n} decisions`:'none matured yet'));});
+{const hs=['1m','3m','6m','12m'].filter(h=>D.hits[h].n),rate=(l,x)=>tile(l,x.n?Math.round(x.hits/x.n*100)+'%':'–',x.n?`${x.hits} of ${x.n} decisions right`:'none matured yet');
+ if(!hs.length)$('hits').append(tile('Hit rate','–','no decision is a month old yet'));
+ hs.forEach(h=>$('hits').append(rate(`Buys and holds, ${h}`,D.hits[h].buy),rate(`Avoids and trims, ${h}`,D.hits[h].avoid)));}
 table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Decision',f:r=>r.decision},
  {h:'Conv.',n:1,f:r=>r.conviction},{h:'Price',n:1,f:r=>`${(+r.price).toFixed(2)} ${r.currency} (${r.live?'live, ':'close '}${r.price_date})`},{h:'1m vs SPY',n:1,f:r=>r.excess_1m===''?'–':pct(+r.excess_1m,1),c:r=>r.excess_1m===''?'':cls(+r.excess_1m)},
- {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision'});
+ {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision',chips:[['With a result',r=>r.excess_1m!==''],['Buys',r=>r.decision==='BUY'||r.decision==='ADD'],
+  ['Holds and trims',r=>!['BUY','ADD','AVOID'].includes(r.decision)],['Avoids',r=>r.decision==='AVOID'],['All',null]]});
 {const F=D.funnel||{};['7','30'].forEach(d=>{const x=F[d];if(!x)return;$('funnel').append(tile(`Last ${d} days: researched`,String(x.researched),'stocks given a verdict'),
   tile('reached conviction 4+',String(x.conv4),x.researched?(x.conv4/x.researched*100).toFixed(1)+'% of those researched':''),tile('bought',String(x.bought),'filled buy orders'));});}
 {const SC=D.scoreboard||{},rows=Object.entries(SC.by_conviction||{}).flatMap(([g,hs])=>Object.entries(hs).map(([h,c])=>({g,h,...c}))).sort((a,b)=>b.g.localeCompare(a.g)||a.h.localeCompare(b.h));

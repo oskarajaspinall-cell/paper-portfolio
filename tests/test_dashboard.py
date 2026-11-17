@@ -48,7 +48,11 @@ def test_health_reads_the_last_run_and_problem_lines(tmp_path):
 
 
 def test_page_renders_with_the_new_sections():
-    html = D.render(D.build_data(live=False))
+    data = D.build_data(live=False)
+    h1 = data["hits"]["1m"]  # buys and avoids are scored apart and add up to the blended figure
+    assert h1["buy"]["n"] + h1["avoid"]["n"] == h1["n"] and h1["buy"]["hits"] + h1["avoid"]["hits"] == h1["hits"]
+    html = D.render(data)
+    assert 'id="near"' not in html and html.index('id="risk"') > html.index('data-page="holdings"')
     for needle in ('data-page="overview"', 'id="att"', 'id="funnel"', 'id="score"', 'id="jobs"', "function setPage"):
         assert needle in html
 
