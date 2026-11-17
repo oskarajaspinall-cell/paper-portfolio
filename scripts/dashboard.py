@@ -320,7 +320,7 @@ def build_data(live: bool = True) -> dict:
     decisions = _csv(port / "decisions.csv")
     today = dt.date.today().isoformat()
     last_dec = {d["ticker"]: d for d in decisions}
-    for h in hold:  # the latest research next to what is held (a downgrade waits for the weekly run to resize it)
+    for h in hold:  # the latest research next to what is held
         d = last_dec.get(h["ticker"])
         h["latest_conviction"] = int(d["conviction"]) if d and d.get("conviction") else None
         h["latest_eval_date"], h["latest_decision"] = (d["date"], d["decision"]) if d else (None, None)
@@ -329,6 +329,8 @@ def build_data(live: bool = True) -> dict:
         v = json.loads(vfiles[-1].read_text()) if vfiles else {}
         base = (v.get("fair_value") or {}).get("base")
         h["fv_upside"] = (base / h["last_price"] - 1) * 100 if base and h["last_price"] and v.get("quote_currency") == h["currency"] else None
+        # the scorecard ignores a fair value whose methods disagree widely; the page must not show it as a plain number
+        h["fv_unreliable"] = bool(base) and not __import__("valuation").is_reliable(v)
     cal = ROOT / "reports" / "calibration" / "latest.json"
     cal = json.loads(cal.read_text()) if cal.exists() else {}
     screens = sorted((ROOT / "reports" / "screen").glob("20??-??-??.json"))
@@ -533,7 +535,7 @@ __DAILY__
 <div class="sub" id="mixSub"></div><div id="sectors"></div></section></div>
 </div>
 <div class="page" data-page="holdings">
-<section class="card"><h2>Holdings</h2><div class="sub">Latest research = the conviction of the most recent evaluation; when it is below the held conviction the position is resized at the next open. Click a row for its plan.</div><div class="tw"><table id="holdings"></table></div></section>
+<section class="card"><h2>Holdings</h2><div class="sub">Latest research = the conviction of the most recent evaluation; when it is below the held conviction the position is resized at the next open. A “?” after a fair-value figure means the valuation methods disagree widely, so the scorecard ignores it. Click a row for its plan.</div><div class="tw"><table id="holdings"></table></div></section>
 <div class="grid2"><section class="card"><h2>Risk</h2><div class="sub" id="riskSub"></div>
 <div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Share of portfolio risk</span><span><span class="sw" style="background:var(--axis)"></span>Share of invested money</span></div>
 <div id="risk"></div><div class="sub" id="corrPairs"></div><details><summary>Show as a table</summary><div class="tw"><table id="riskTable"></table></div></details></section>
@@ -771,7 +773,7 @@ table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>el('span',{title:r.n
  {h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},{h:'Value',n:1,f:r=>usd(r.value)},
  {h:'Since entry',n:1,f:r=>pct(r.live_change_pct!=null&&r.live_day_pct!=null?r.live_change_pct:r.change_pct,1),c:r=>cls(r.live_day_pct!=null?r.live_change_pct:r.change_pct)},
  {h:'P/L',n:1,f:r=>r.pl==null?'':usd(r.pl),c:r=>cls(r.pl)},{h:'24h change',n:1,f:r=>chg(dayOf(r))},
- {h:'To fair value',n:1,f:r=>r.fv_upside==null?'–':pct(r.fv_upside,0),c:r=>cls(r.fv_upside)},
+ {h:'To fair value',n:1,f:r=>r.fv_upside==null?'–':r.fv_unreliable?el('span',{class:'muted',title:'Unreliable: the valuation methods disagree by more than 2x, so the scorecard ignores this fair value'},pct(r.fv_upside,0)+' ?'):pct(r.fv_upside,0),c:r=>r.fv_unreliable?'':cls(r.fv_upside)},
  {h:'Days held',n:1,f:r=>r.days_held??''},{h:'Entry',n:1,f:r=>r.entry_price==null?'':`${px(r.entry_price)} ${r.currency} (${r.entry_date})`},
  {h:'Close',n:1,f:r=>r.last_price==null?'':`${px(r.last_price)} ${r.currency} (${r.last_date})`},{h:'Live',n:1,f:r=>r.live?`${r.live.price.toFixed(2)} (${r.live.uk})`:'–'},
  {h:'Sector',f:r=>r.sector},{h:'Plan and thesis',w:1,f:r=>[r.plan,r.thesis].filter(Boolean).join(' · ')}],D.holdings,'No holdings yet: the portfolio is all cash.',{limit:30});
