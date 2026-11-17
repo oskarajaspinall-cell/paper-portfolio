@@ -613,7 +613,7 @@ $('heroSub').textContent=(D.inception?`At the ${D.close_date} close`:'No trades 
  +(D.live_total!=null&&D.holdings.some(h=>h.live_day_pct!=null)?` · live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
 const tile=(l,v,d,c)=>el('div',{class:'tile'},el('div',{class:'l'},l),el('div',{class:'v'},v),d?el('div',{class:'d '+(c||'')},d):'');
 $('tiles').append(
- I?tile('Return on invested money',pct(I.pct*100),`${usd(I.gain)} on ${usd(I.invested)} invested`+(I.spy_pct==null?'':` · same money in S&P 500 ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
+ I?tile('Return on invested money',pct(I.pct*100),`${usd(I.gain)} on ${usd(I.invested)} invested`+(I.spy_pct==null?'':` · S&P 500 from day one ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
   :tile('Return on invested money','–','starts with the first trade'),
  D.inception?tile('Whole portfolio (incl. cash)',D.since==null?'n/a':pct(D.since*100),(D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100))+(D.since_world==null?'':' · global (VT) '+pct(D.since_world*100)),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
   :tile('Whole portfolio (incl. cash)','–','starts with the first trade'),
@@ -632,8 +632,8 @@ const tip=$('tip');function showTip(ev,nodes){tip.replaceChildren(...nodes);tip.
 tip.style.left=x+'px';tip.style.top=Math.max(8,ev.clientY-tip.offsetHeight-12)+'px';}function hideTip(){tip.style.display='none'}
 // ---- line chart
 const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['invested','spy_same','portfolio','spy','baseline','world','invested_tw'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
-const TABS={invested:{sub:'Gain on the money put into stocks, cash excluded, vs the same money put into the S&P 500 on the same days (%, US dollars).',
-  defs:[['invested','Invested money','--s1','Invested'],['spy_same','Same money in S&P 500','--s2','S&P 500']]},
+const TABS={invested:{sub:'Gain on the money put into stocks, cash excluded, vs the S&P 500 bought with all the money on day one (%, US dollars).',
+  defs:[['invested','Invested money','--s1','Invested'],['spy_same','S&P 500 from day one','--s2','S&P 500']]},
  whole:{sub:'All $100k, cash and its interest included, vs the S&P 500 since inception (%, US dollars). Baseline = the first week\'s picks held unchanged.',
   defs:[['portfolio','Whole portfolio (incl. cash)','--s1','Portfolio'],['spy','S&P 500 (SPY)','--s2','S&P 500'],['world','Global shares (VT)','--s3','Global'],['baseline','Baseline (first picks held)','--muted','Baseline']]}};
 const HID=new Set(['baseline']);try{const h=localStorage.getItem('chartHidden');if(h!=null){HID.clear();h.split(',').filter(Boolean).forEach(k=>HID.add(k));}}catch(e){}
@@ -651,7 +651,7 @@ function rangeSeries(){if(!S.length)return {pts:[],base:null};const last=S[S.len
  else if(cut){const c=`${cut.getFullYear()}-${String(cut.getMonth()+1).padStart(2,'0')}-${String(cut.getDate()).padStart(2,'0')}`;S.forEach((p,i)=>{if(p.date<=c)i0=i;});}
  // a part of the history: the invested tab compares time-weighted returns (money in stocks vs SPY's price), since the
  // money-weighted lines only add up over the whole period (see invested_tw in dashboard.py)
- const win=S.slice(i0).concat(RANGE==='1D'&&LP?[LP]:[]).map(p=>CUR==='invested'?{...p,invested:p.invested_tw,spy_same:p.spy}:p);const keys=['invested','spy_same','portfolio','spy','baseline','world'];
+ const win=S.slice(i0).concat(RANGE==='1D'&&LP?[LP]:[]).map(p=>CUR==='invested'?{...p,invested:p.invested_tw}:p);const keys=['invested','spy_same','portfolio','spy','baseline','world'];
  const base={};keys.forEach(k=>{const b=win.find(p=>p[k]!=null);base[k]=b?b[k]:null;});
  return {pts:win.map(p=>({...p,...Object.fromEntries(keys.map(k=>[k,p[k]==null||base[k]==null?null:((100+p[k])/(100+base[k])-1)*100]))})),base:win[0]};}
 function setRange(r){RANGE=r;document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===r)));
@@ -669,7 +669,7 @@ document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab)
 function drawLine(){const box=$('line');box.replaceChildren();const RS=rangeSeries(),S=RS.pts,vis=defs.filter(([k])=>!HID.has(k));
  const rl=(RANGES.find(([r])=>r===RANGE)||[])[1]||RANGE,[A,B2]=defs,lastP=S[S.length-1];
  const gapNow=A&&B2&&lastP&&lastP[A[0]]!=null&&lastP[B2[0]]!=null?lastP[A[0]]-lastP[B2[0]]:null;
- $('lineSub').textContent=(TABS[CUR]||TABS.invested).sub+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+(CUR==='invested'?', as a daily-chained return of the money in stocks against the S&P 500\'s own move':'')+'.':'')
+ $('lineSub').textContent=(TABS[CUR]||TABS.invested).sub+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+(CUR==='invested'&&RANGE!=='All'?', as a daily-chained return of the money in stocks':'')+'.':'')
   +(gapNow==null?'':` ${gapNow>=0?'Ahead of':'Behind'} the S&P 500 by ${Math.abs(gapNow).toFixed(1)} percentage points.`);
  if(S.length<2){box.append(el('div',{class:'empty'},'Not enough data for this period yet.'));return;}
  const W=Math.max(300,Math.round(box.getBoundingClientRect().width)),L=44,R=W<560?92:124,T=12,B=30,H=W<560?230:320;

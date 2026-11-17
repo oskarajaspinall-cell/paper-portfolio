@@ -223,7 +223,7 @@ def test_invested_return_counts_dividends_and_spy_dividends():
     vals = [v("2026-10-06", 10000, 10000, spy=100, div=0), v("2026-10-31", 10000, 10000, income=50, spy=100, div=1.0)]
     last = invested_series(vals)[-1]
     assert last["dividends"] == 50 and last["pct"] == pytest.approx(0.005)
-    assert last["spy_pct"] == pytest.approx(100 * 1.0 / 10000)  # 100 SPY units x $1 dividend
+    assert last["spy_pct"] == pytest.approx(0.01)  # SPY flat at 100 since day one plus a $1 dividend
 
 
 def test_old_valuation_rows_without_the_new_columns_still_work():

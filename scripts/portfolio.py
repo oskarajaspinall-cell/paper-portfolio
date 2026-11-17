@@ -443,33 +443,27 @@ def returns_table(vals: list[dict], asof: str) -> dict:
 def invested_series(vals: list[dict]) -> list[dict]:
     """Return on the money put into stocks, cash excluded (owner request 2026-10-14), one point per valuation
     date (the last row of each date). gain = holdings value + sale proceeds + dividends - money in (buys incl.
-    costs); pct = gain / money in. spy_pct is the same money in SPY on the same dates: every buy buys SPY at that
-    row's close, every sale sells the same dollars of it, and the SPY units held earn SPY's dividends (owner
-    request 2026-10-16). Dates before the first buy are left out."""
+    costs); pct = gain / money in. spy_pct is SPY bought with everything on day one (owner request 2026-11-17,
+    replacing "the same money on the same dates"): SPY's return from the first valuation row's close, plus SPY's
+    dividends since then where recorded. Dates before the first buy are left out."""
     out: dict[str, dict] = {}
-    units = proceeds = prev_in = prev_out = 0.0
-    spy = prev_div = None
+    spy = spy0 = div0 = div = None
     for v in vals:
         cin = _num(v, "core_in") + _num(v, "tactical_in")
         cout = _num(v, "core_out") + _num(v, "tactical_out")
         income = _num(v, "core_income") + _num(v, "tactical_income")
         spy = float(v["spy_close"]) if v.get("spy_close") not in ("", None) else spy
-        if v.get("spy_div_cum") not in ("", None):  # SPY dividends since the last row, on the units held before
+        spy0 = spy0 or spy
+        if v.get("spy_div_cum") not in ("", None):  # SPY's cumulative dividend per share
             div = float(v["spy_div_cum"])
-            if prev_div is not None and div > prev_div:
-                proceeds += units * (div - prev_div)
-            prev_div = div
-        if spy:
-            units += (cin - prev_in - (cout - prev_out)) / spy
-            proceeds += cout - prev_out
-        prev_in, prev_out = cin, cout
+            div0 = div if div0 is None else div0
         if cin <= 0:
             continue
         value = _num(v, "core_usd") + _num(v, "tactical_usd")
         gain = value + cout + income - cin
         out[v["date"]] = {"date": v["date"], "invested": round(cin, 2), "value": round(value, 2),
                           "proceeds": round(cout, 2), "dividends": round(income, 2), "gain": round(gain, 2),
-                          "pct": gain / cin, "spy_pct": None if not spy else (units * spy + proceeds - cin) / cin}
+                          "pct": gain / cin, "spy_pct": None if not (spy and spy0) else (spy + (div or 0) - (div0 or 0)) / spy0 - 1}
     return [out[d] for d in sorted(out)]
 
 

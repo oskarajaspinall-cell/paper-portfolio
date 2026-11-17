@@ -778,15 +778,14 @@ def test_invested_return_single_buy():
     assert r["spy_pct"] == pytest.approx(0.05)
 
 
-def test_invested_series_two_buys_same_money_spy():
+def test_invested_series_two_buys_spy_from_day_one():
     vals = [val("2026-10-06", "post", 100000, core=10000, cin=10000, spy=100),
             val("2026-10-08", "post", 100000, core=21000, cin=20000, spy=110),
             val("2026-10-09", "daily", 100000, core=22000, cin=20000, spy=121)]
     ser = invested_series(vals)
     assert [p["date"] for p in ser] == ["2026-10-06", "2026-10-08", "2026-10-09"]
     assert ser[-1]["pct"] == pytest.approx(0.10)
-    # 100 SPY units at 100 + 90.909 at 110, worth 121 each, against 20000 in
-    assert ser[-1]["spy_pct"] == pytest.approx((100 + 10000 / 110) * 121 / 20000 - 1)
+    assert ser[-1]["spy_pct"] == pytest.approx(0.21)  # everything in SPY at 100 on day one, now 121
 
 
 def test_invested_return_partial_sale():
@@ -795,8 +794,7 @@ def test_invested_return_partial_sale():
             val("2026-10-08", "daily", 100000, core=6600, cin=10000, cout=6000, spy=120)]
     r = invested_return(vals)
     assert r["gain"] == pytest.approx(2600) and r["pct"] == pytest.approx(0.26)
-    # SPY: 100 units, 50 sold at 120 for 6000, 50 left at 120
-    assert r["spy_pct"] == pytest.approx(0.20)
+    assert r["spy_pct"] == pytest.approx(0.20)  # SPY 100 -> 120 since day one; our sales don't change it
 
 
 def test_hold_requests_apply_at_once_and_only_trades_are_queued(cfg, tmp_path):

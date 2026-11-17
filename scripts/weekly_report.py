@@ -96,7 +96,7 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio", world: dict | N
     inv = invested_return(vals) if vals else None
     if inv:
         out.append(f"- Return on invested money (cash excluded): {pct(inv['pct'])} (${inv['gain']:,.0f} on ${inv['invested']:,.0f} "
-                   f"invested) vs the same money in SPY {pct(inv['spy_pct'])}.")
+                   f"invested) vs SPY bought on day one {pct(inv['spy_pct'])}.")
     out.append(f"- Trades: {len(applied)} executed ({mech} mechanical), {len(placed)} order(s) placed for the next open, "
                f"{len(rejected)} rejected; "
                f"{len(state.get('holdings', {}))} holdings, cash "
