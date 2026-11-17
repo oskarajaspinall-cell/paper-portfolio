@@ -51,3 +51,13 @@ def test_page_renders_with_the_new_sections():
     html = D.render(D.build_data(live=False))
     for needle in ('data-page="overview"', 'id="att"', 'id="funnel"', 'id="score"', 'id="jobs"', "function setPage"):
         assert needle in html
+
+
+def test_daily_html_shows_the_latest_run_and_folds_the_rest(tmp_path):
+    assert D.daily_html(tmp_path) == ""
+    (tmp_path / "2026-11-13.md").write_text("# old\n\n**Trades**\n- None.\n")
+    (tmp_path / "2026-11-16.md").write_text("# Daily\n\n**Trades**\n- BUY A <b>\n\n**Watchlist**: quiet\n\n**Problems**: none.\n")
+    h = D.daily_html(tmp_path)
+    assert "2026-11-16" in h and "<li>BUY A &lt;b&gt;</li>" in h and "old" not in h
+    top, rest = h.split("<details>")
+    assert "Problems" in top and "Watchlist" in rest

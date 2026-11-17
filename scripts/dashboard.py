@@ -498,6 +498,8 @@ tr.x{cursor:pointer}tr.x:hover td{background:color-mix(in srgb,var(--ink) 3%,tra
 .lg{background:none;border:0;color:var(--ink2);font:inherit;font-size:13px;cursor:pointer;padding:0}.lg[aria-pressed="false"]{opacity:.45;text-decoration:line-through}
 .flag{display:inline-block;padding:0 6px;border-radius:6px;font-size:12px;font-weight:600;color:var(--down);background:color-mix(in srgb,var(--down) 13%,transparent)}
 .okd{color:var(--up)}.bad{color:var(--down)}
+.daily p{margin:8px 0 0;font-size:14px;max-width:90ch}.daily ul{margin:4px 0 0;padding-left:18px;font-size:14px}
+.daily summary{cursor:pointer;color:var(--muted);font-size:13px;margin-top:10px}
 td.nm{max-width:180px;overflow:hidden;text-overflow:ellipsis}
 </style></head><body><main>
 <header class="top"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><div><h1>Paper Portfolio</h1><div class="sub">Simulated $<span id="start"></span> · paper trading only, not investment advice · updated <span id="gen"></span> · <span id="counts"></span></div></div>
@@ -507,6 +509,7 @@ td.nm{max-width:180px;overflow:hidden;text-overflow:ellipsis}
 <section class="card" aria-label="Summary"><div class="sub">Portfolio value</div><div class="hero" id="hero"></div><div class="sub" id="heroSub"></div>
 <div class="tiles" id="tiles"></div></section>
 <section class="card" id="attCard"><h2>Needs attention</h2><ul class="att" id="att"></ul></section>
+__DAILY__
 <section class="card"><h2>Return vs the S&amp;P 500</h2>
 <div class="tabs" role="tablist"><button type="button" role="tab" class="tab" data-tab="invested">Invested money</button><button type="button" role="tab" class="tab" data-tab="whole">Whole portfolio</button></div>
 <div class="ranges" role="group" aria-label="Chart period" id="ranges"></div>
@@ -853,9 +856,34 @@ def mandate_html(cfg: dict) -> str:
             f'<p>{e(intro)}</p><ol class="steps">{lis}</ol><p class="sub">{e(rule)}</p></section>')
 
 
+DAILY_TOP = ("**Portfolio", "**Trades", "**Moves", "**Problems")
+
+
+def daily_html(folder: Path) -> str:
+    """The latest reports/daily/<date>.md as a card: what the 21:30 run did (owner request 2026-11-17). Value,
+    trades, moves and problems show; the rest folds under "Full report"."""
+    import re
+    from html import escape
+    files = sorted(folder.glob("*.md"))
+    if not files:
+        return ""
+
+    def block(b: str) -> str:
+        lines = [re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", escape(ln)) for ln in b.strip().splitlines()]
+        items = "".join(f"<li>{ln[2:]}</li>" for ln in lines if ln.startswith("- "))
+        return "".join(f"<p>{ln}</p>" for ln in lines if not ln.startswith("- ")) + (f"<ul>{items}</ul>" if items else "")
+
+    blocks = [b.strip() for b in files[-1].read_text().split("\n\n") if b.strip() and not b.startswith("#")]
+    top = "".join(block(b) for b in blocks if b.startswith(DAILY_TOP))
+    rest = "".join(block(b) for b in blocks if not b.startswith(DAILY_TOP))
+    more = f"<details><summary>Full report</summary>{rest}</details>" if rest else ""
+    return f'<section class="card daily"><h2>Last daily run · {escape(files[-1].stem)}</h2>{top}{more}</section>'
+
+
 def render(data: dict) -> str:
     blob = json.dumps(data).replace("</", "<\\/")  # never let data close the script tag
-    return PAGE.replace("__DATA__", blob).replace("__MANDATE__", mandate_html(load_config()))
+    return (PAGE.replace("__DATA__", blob).replace("__MANDATE__", mandate_html(load_config()))
+            .replace("__DAILY__", daily_html(ROOT / "reports" / "daily")))
 
 
 def main(argv=None) -> int:
