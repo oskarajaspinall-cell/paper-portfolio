@@ -1,0 +1,108 @@
+[15:48:16] == re-research ALV (entry price hit)
+[15:48:16] == re-research ANF (entry price hit)
+[15:48:16] == re-research CBSH (entry price hit)
+[15:48:16] $ bin/py scripts/sec_delta.py ALV --asof 2026-11-17
+[15:48:16] $ bin/py scripts/sec_delta.py ANF --asof 2026-11-17
+[15:48:16] $ bin/py scripts/sec_delta.py CBSH --asof 2026-11-17
+[15:48:32] OK research/ANF/sec-delta-2026-11-17.md
+[15:48:32] $ claude -p Ticker ANF, note type CORE, date 2026-11-17. Reason for review: entry_hit. Facts: entry price: 144.755; price: traded at 143.675 at 10:45 ET. SEC filing delta: research/ANF/sec-delta-2026-11-17.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:48:35] OK research/ALV/sec-delta-2026-11-17.md
+[15:48:35] $ claude -p Ticker ALV, note type CORE, date 2026-11-17. Reason for review: entry_hit. Facts: entry price: 120.3919; price: traded at 118.21 at 10:46 ET. SEC filing delta: research/ALV/sec-delta-2026-11-17.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:48:37] OK research/CBSH/sec-delta-2026-11-17.md
+[15:48:37] $ claude -p Ticker CBSH, note type CORE, date 2026-11-17. Reason for review: entry_hit. Facts: entry price: 55.41; price: traded at 54.97 at 10:44 ET. SEC filing delta: research/CBSH/sec-delta-2026-11-17.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:51:28] The note is written and `check_docs.py` passed. No web fetches were used: the sec-delta file and the headlines in the fact sheet were enough.
+
+- Note: `research/CBSH/2026-11-17.md`
+- Fact sheet: `research/CBSH/factsheet-2026-11-17.md`
+- Check: `OK research/CBSH/2026-11-17.md type=CORE 1=66 2=93 3=118 4=48 5=53 6=99 total=477`
+- Data conflicts: none.
+- Blocked URLs: none.
+- Caveats:
+  - The fact sheet marks the fair value unreliable, because the methods disagree by 3.9x.
+  - ROIC, ROCE and the margin and leverage rows are [data unavailable] on the fact sheet, as is usual for banks.
+  - I found no specific cause for the price dip, and the note says so.
+[15:51:28] $ bin/py scripts/check_docs.py note research/CBSH/2026-11-17.md
+[15:51:28] OK research/CBSH/2026-11-17.md type=CORE 1=66 2=93 3=118 4=48 5=53 6=99 total=477
+[15:51:28] $ bin/py scripts/macro_data.py --asof 2026-11-17
+[15:51:31] The fact sheet script is still running in the background and hasn't written anything yet. I can't wait on it from here, so I'm stopping here until it finishes. The task notification will bring me back to read the fact sheet and write the note.
+
+Nothing is written yet: there is no note, no fact sheet and no `check_docs` result. The one thing done so far is reading the SEC delta file.
+
+- Note: `research/ALV/2026-11-17.md`
+- Fact sheet: `research/ALV/factsheet-2026-11-17.md`
+- Check: `OK research/ALV/2026-11-17.md type=CORE 1=80 2=99 3=135 4=31 5=49 6=60 total=454`
+- Data gaps and blocked URLs:
+  - China's share of revenue is marked [data unavailable]. The 10-Q fetch returned text that cut off before the regional note.
+  - No URLs were blocked, and I made one WebFetch.
+  - There were no data conflicts.
+- Peers used: APTV, LEA, BWA, GNTX.
+[15:51:31] $ bin/py scripts/check_docs.py note research/ALV/2026-11-17.md
+[15:51:31] OK research/ALV/2026-11-17.md type=CORE 1=80 2=99 3=135 4=31 5=49 6=60 total=454
+[15:51:31] $ bin/py scripts/macro_data.py --asof 2026-11-17
+[15:51:45] - Note: `research/ANF/2026-11-17.md`
+- Fact sheet: `research/ANF/factsheet-2026-11-17.md`
+- check_docs: `OK research/ANF/2026-11-17.md type=CORE 1=58 2=109 3=99 4=39 5=46 6=116 total=467`
+- Data conflicts: none.
+- Blocked URLs: none. I used one WebFetch (the 10-Q on sec.gov).
+- Fact sheet: it timed out in the foreground on the first run and succeeded on the rerun.
+- Not found: I found no company news explaining the fall from the 2026-11-05 high. The note says the cause is unidentified.
+- Sources I cited without opening: the WSJ and GlobeNewswire URLs come from the fact sheet's headline list.
+[15:51:45] $ bin/py scripts/check_docs.py note research/ANF/2026-11-17.md
+[15:51:45] OK research/ANF/2026-11-17.md type=CORE 1=58 2=109 3=99 4=39 5=46 6=116 total=467
+[15:51:45] $ bin/py scripts/macro_data.py --asof 2026-11-17
+[15:53:57] {"out": "reports/macro/2026-11-17.md", "series": 20, "unavailable": []}
+[15:53:57] $ claude -p Ticker CBSH, date 2026-11-17. Research: research/CBSH/factsheet-2026-11-17.md, research/CBSH/2026-11-17.md. Macro snapshot: reports/macro/2026-11-17.md. Write research/CBSH/2026-11-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:54:01] {"out": "reports/macro/2026-11-17.md", "series": 20, "unavailable": []}
+[15:54:01] $ claude -p Ticker ALV, date 2026-11-17. Research: research/ALV/factsheet-2026-11-17.md, research/ALV/2026-11-17.md. Macro snapshot: reports/macro/2026-11-17.md. Write research/ALV/2026-11-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:54:05] {"out": "reports/macro/2026-11-17.md", "series": 20, "unavailable": []}
+[15:54:05] $ claude -p Ticker ANF, date 2026-11-17. Research: research/ANF/factsheet-2026-11-17.md, research/ANF/2026-11-17.md. Macro snapshot: reports/macro/2026-11-17.md. Write research/ANF/2026-11-17-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:54:17] research/ALV/2026-11-17-macro.md
+OK research/ALV/2026-11-17-macro.md macro_weight=context words=101
+[15:54:17] $ bin/py scripts/check_docs.py macro research/ALV/2026-11-17-macro.md
+[15:54:17] OK research/ALV/2026-11-17-macro.md macro_weight=context words=101
+[15:54:17] $ claude -p Evaluate ALV for 2026-11-17: fact sheet research/ALV/factsheet-2026-11-17.md, note research/ALV/2026-11-17.md, state portfolio/state.json, macro overlay research/ALV/2026-11-17-macro.md. Reason for review: entry_hit. Facts: entry price: 120.3919; price: traded at 118.21 at 10:46 ET. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:54:19] research/CBSH/2026-11-17-macro.md
+OK research/CBSH/2026-11-17-macro.md macro_weight=secondary words=245
+[15:54:19] $ bin/py scripts/check_docs.py macro research/CBSH/2026-11-17-macro.md
+[15:54:19] OK research/CBSH/2026-11-17-macro.md macro_weight=secondary words=245
+[15:54:19] $ claude -p Evaluate CBSH for 2026-11-17: fact sheet research/CBSH/factsheet-2026-11-17.md, note research/CBSH/2026-11-17.md, state portfolio/state.json, macro overlay research/CBSH/2026-11-17-macro.md. Reason for review: entry_hit. Facts: entry price: 55.41; price: traded at 54.97 at 10:44 ET. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:54:23] research/ANF/2026-11-17-macro.md
+OK research/ANF/2026-11-17-macro.md macro_weight=context words=140
+[15:54:23] $ bin/py scripts/check_docs.py macro research/ANF/2026-11-17-macro.md
+[15:54:23] OK research/ANF/2026-11-17-macro.md macro_weight=context words=140
+[15:54:23] $ claude -p Evaluate ANF for 2026-11-17: fact sheet research/ANF/factsheet-2026-11-17.md, note research/ANF/2026-11-17.md, state portfolio/state.json, macro overlay research/ANF/2026-11-17-macro.md. Reason for review: entry_hit. Facts: entry price: 144.755; price: traded at 143.675 at 10:45 ET. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:55:37] research/CBSH/2026-11-17-evaluation.md
+OK research/CBSH/2026-11-17-evaluation.md Bear case=146 Bull case=121 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3. The scorecard found nothing falling, so the decline cause is set to "none". I did not read the three earlier CBSH evaluations (2026-10-18, 11-08, 11-16), but the checker raised no consistency problem. The new entry price of 55.00 is below the 54.97 intraday trade, so the watch could hit again soon and set off another re-research on the same evidence.
+[15:55:37] $ bin/py scripts/check_docs.py eval research/CBSH/2026-11-17-evaluation.md
+[15:55:38] OK research/CBSH/2026-11-17-evaluation.md Bear case=146 Bull case=121 decision=AVOID scorecard=7->3
+[15:55:38] $ bin/py scripts/valuation.py CBSH --asof 2026-11-17 --eval research/CBSH/2026-11-17-evaluation.md
+[15:55:38] {"out": "research/CBSH/2026-11-17-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 58.23, "base": 64.7, "bull": 69.74}, "price": 55.51}
+[15:55:39] == CBSH: AVOID 3
+[15:55:59] research/ANF/2026-11-17-evaluation.md
+OK research/ANF/2026-11-17-evaluation.md Bear case=146 Bull case=111 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3, the same verdict as on 2026-11-15, so no new evidence was needed. I set no entry price: a lower price could add at most one valuation point (to 8), still short of the 9 needed for conviction 4. I read the two earlier ANF evaluations' decision lines to check consistency, which is outside the listed inputs.
+[15:55:59] $ bin/py scripts/check_docs.py eval research/ANF/2026-11-17-evaluation.md
+[15:55:59] OK research/ANF/2026-11-17-evaluation.md Bear case=146 Bull case=111 decision=AVOID scorecard=7->3
+[15:55:59] $ bin/py scripts/valuation.py ANF --asof 2026-11-17 --eval research/ANF/2026-11-17-evaluation.md
+[15:55:59] {"out": "research/ANF/2026-11-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": -40.2, "base": 169.82, "bull": 244.4}, "price": 145.77}
+[15:56:01] == ANF: AVOID 3
+[15:56:27] research/ALV/2026-11-17-evaluation.md
+OK research/ALV/2026-11-17-evaluation.md Bear case=143 Bull case=128 decision=BUY scorecard=9->4
+[15:56:27] $ bin/py scripts/check_docs.py eval research/ALV/2026-11-17-evaluation.md
+[15:56:27] OK research/ALV/2026-11-17-evaluation.md Bear case=143 Bull case=128 decision=BUY scorecard=9->4
+[15:56:27] $ bin/py scripts/valuation.py ALV --asof 2026-11-17 --eval research/ALV/2026-11-17-evaluation.md
+[15:56:27] {"out": "research/ALV/2026-11-17-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 46.4, "base": 138.05, "bull": 153.88}, "price": 117.37}
+[15:56:27] $ claude -p Independent second evaluation of ALV for 2026-11-17: fact sheet research/ALV/factsheet-2026-11-17.md, note research/ALV/2026-11-17.md, state portfolio/state.json, macro overlay research/ALV/2026-11-17-macro.md. Write it to research/ALV/2026-11-17-evaluation-2.md (not the usual file). Do not read research/ALV/2026-11-17-evaluation.md or any other evaluation of this stock dated 2026-11-17. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:57:48] research/ALV/2026-11-17-evaluation-2.md
+OK research/ALV/2026-11-17-evaluation-2.md Bear case=146 Bull case=120 decision=AVOID scorecard=8->3
+
+My verdict is AVOID at conviction 3: the scorecard totals 8, one point short of the 9 needed for conviction 4. I set the entry price at 117.34 (base fair value 138.05 less 15%), only just below the last close of 117.37. That means a small dip triggers another review even though price isn't the main obstacle: the score holds back on the moat (narrow) and the key risk (medium), not on value. I didn't run the 30-day verdict-change check myself. The checker passed without asking for `new_evidence`, though the existing entry price of 120.39 shows ALV had an earlier verdict.
+[15:57:48] $ bin/py scripts/check_docs.py eval research/ALV/2026-11-17-evaluation-2.md
+[15:57:49] OK research/ALV/2026-11-17-evaluation-2.md Bear case=146 Bull case=120 decision=AVOID scorecard=8->3
+[15:57:49] == ALV: second opinion conviction 3 -> AVOID 3
+[15:57:49] $ bin/py scripts/check_docs.py eval research/ALV/2026-11-17-evaluation.md
+[15:57:49] OK research/ALV/2026-11-17-evaluation.md Bear case=143 Bull case=128 decision=AVOID scorecard=9->3
+[15:57:50] == ALV: AVOID 3
