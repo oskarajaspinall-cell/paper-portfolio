@@ -1,0 +1,30 @@
+[
+ {
+  "ticker": "RELY",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "A net-cash, newly profitable digital remitter with sharply rising margins and an 8.98% FCF yield trades at the bottom of its own P/FCF range, pricing a fade its raised guidance does not show.",
+  "reason": "Scorecard gives conviction 4: high, rising returns, net cash, and both discount and trend points. Python sets the volatility-scaled core size; cash cannot fund a full position above the 1.5% floor, so the conviction-3 HRB holding is sold to fund it.",
+  "research_note": "research/RELY/2026-11-17.md",
+  "triggers": [
+   {
+    "text": "TTM operating margin falls below 8%, reversing most of the step-up from 2.2% a year earlier to 13.0%.",
+    "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 8}
+   },
+   {
+    "text": "TTM ROIC falls below 20%, showing the returns step-up was not durable.",
+    "check": {"source": "statistics", "field": "roic", "op": "<", "value": 20}
+   },
+   {
+    "text": "TTM FCF margin falls below 12%, back near the 11.1% of a year earlier.",
+    "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 12}
+   },
+   {
+    "text": "A regulatory outcome (AUSTRAC or US remittance rules) restricts a major corridor or imposes a material penalty, disclosed in a filing."
+   }
+  ],
+  "replaces": "HRB",
+  "replacement_reason": "HRB is held at conviction 3 with its remaining upside mostly shareholder yield after a re-rating (its own thesis); RELY clears the buy bar at conviction 4 with rising margins and a discount, and current cash cannot fund a full position above the 1.5% floor."
+ }
+]
