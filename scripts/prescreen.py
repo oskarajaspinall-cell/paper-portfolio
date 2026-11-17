@@ -4,6 +4,9 @@ fair value (scripts/valuation.py, the same number the fact sheet shows) sits bel
 researcher / macro-overlay / evaluator sessions. Owner request 2026-10-12: research the universe more
 efficiently. Every BUY to date had a base fair value above the price (+30% to +182% where measured).
 
+A name that passes is then scored on the scorecard's measurable parts (`points_gate`, 2026-11-17): one that cannot
+reach conviction 4 whatever the research finds is skipped too.
+
 A stock whose fair value can't be computed passes (we can't judge it, so the full research decides). Each
 verdict is appended to reports/prescreen/<asof>.csv. The screen re-runs free every day, so a stock that falls
 below its fair value is picked up again.
@@ -49,7 +52,54 @@ def check(ticker: str, asof: str, fetcher, cfg: dict) -> dict:
     if row["verdict"] == "SKIP":
         why = trend_strong(ticker, fetcher, cfg)
         if why:
-            return row | {"verdict": "PASS", "reason": f"{row['reason']}; passes on trend strength ({why})"}
+            row = row | {"verdict": "PASS", "reason": f"{row['reason']}; passes on trend strength ({why})"}
+    return points_gate(row, ticker, asof, fetcher, cfg)
+
+
+def scorecard_points(ticker: str, asof: str, fetcher, cfg: dict) -> tuple[dict, bool] | None:
+    """(the scorecard on the Python inputs alone, whether a reliable fair value was in it). The fact sheet's trends
+    and the mechanical fair value, built in memory; judgement fields neutral (narrow moat, medium key risk, no
+    decline explained, no analyst expected value)."""
+    import fact_sheet
+    import scorecard
+    fvo: dict = {}
+    fact_sheet.build(ticker, [], fetcher, asof, fvo)
+    if not fvo.get("trends"):
+        return None
+    fv = fvo.get("fv") or {}
+    d = {"decision": "BUY", "price_at_decision": fv.get("price"),
+         "scorecard": {"decline_cause": "none", "moat": "narrow", "key_risk": "medium"}}
+    res = scorecard.score(d, fvo["trends"], fv or None, cfg, scorecard.calibration_offset())
+    return res, bool((fv.get("fair_value") or {}).get("base")) and valuation.is_reliable(fv)
+
+
+def points_gate(row: dict, ticker: str, asof: str, fetcher, cfg: dict) -> dict:
+    """Owner request 2026-11-17: a name that passed the fair-value gate still skips the AI steps when the scorecard
+    cannot get it to conviction 4. Python sets the conviction and the evaluator can add at most 3 points to this
+    estimate (a wide moat, a low key risk, a temporary decline), so:
+    - quality level 0 (return on capital below `[scorecard].quality_lo`, or none published) fails the 4+ gate whatever
+      the evaluator writes;
+    - an estimate below `[screen].prescreen_min_points` is out of reach. Only with a reliable fair value: without one
+      the evaluator's own expected value sets the valuation points and the estimate is too low to trust.
+    Replay on the 318 new-name evaluations of 2026-11-08..16: 24% skipped (50 on quality, 26 on points), none of
+    them reached conviction 4 and the highest real total among them was 7; the real total never beat the estimate
+    by more than 3."""
+    floor = float(cfg["screen"].get("prescreen_min_points", 0))
+    if row["verdict"] != "PASS" or not floor:
+        return row
+    try:
+        got = scorecard_points(ticker, asof, fetcher, cfg)
+    except (DataError, KeyError, ValueError, ZeroDivisionError, TypeError):
+        return row  # can't score it: full research decides
+    if got is None:
+        return row
+    res, reliable = got
+    if res["parts"]["quality_level"] == 0:
+        return row | {"verdict": "SKIP", "reason": f"{row['reason']}; but {res['notes'][0]} is below the scorecard's "
+                      "quality floor, which blocks conviction 4 whatever the research finds"}
+    if reliable and res["total"] < floor:
+        return row | {"verdict": "SKIP", "reason": f"{row['reason']}; but the scorecard's measurable parts give "
+                      f"{res['total']:g} points (floor {floor:g}): conviction 4 is out of reach"}
     return row
 
 

@@ -1,6 +1,6 @@
 """Bulk core research loop (no fixed schedule; started by hand with bin/research-loop). Works through a ranked queue
 (`<run>/loop-queue.json`, best first), 3 stocks at a time: the free pre-screen (scripts/prescreen.py) first, then
-researcher -> macro-overlay -> evaluator, the decision log, and the portfolio-manager for any BUY (owner rule
+researcher -> macro-overlay -> evaluator, the decision log, and the portfolio-manager for any BUY or any decision on a holding (owner rule
 2026-10-08: buys happen autonomously; the portfolio's rules still validate them, and the funding queue keeps a BUY
 the cash reserve blocks). Entry-price and dip-radar hits go first. Every 6 finished stocks a batch report
 (reports/research/<date>-batch-NN.md) is committed and pushed. It stops when the queue is done or `stop_after`
@@ -286,10 +286,13 @@ def attempt(t):
             state["fails_in_row"] = 0
         from decision_log import decision_from_eval
         d = decision_from_eval(ev.read_text())
-        if d["decision"] == "BUY":
+        # 2026-11-17: a holding's HOLD/ADD/TRIM/SELL is applied as well (a --holdings loop re-rated CI and ZTS to 3 on
+        # 2026-11-16 and nothing recorded it: the weekly run sizes from state.json, so they were never resized)
+        held = t in json.loads((ROOT / "portfolio" / "state.json").read_text()).get("holdings", {})
+        if d["decision"] == "BUY" or held:
             try:
                 with pm_lock:
-                    log(f"== portfolio-manager {t} (BUY {d['conviction']})")
+                    log(f"== portfolio-manager {t} ({d['decision']} {d['conviction']})")
                     agent("portfolio-manager",
                                     f"Evaluation files: {ev.relative_to(ROOT)}. Date {asof}. Write the requests to "
                                     f"{run.relative_to(ROOT)}/requests-{Ticker(t).slug}.json and submit with --at-market "
@@ -335,8 +338,8 @@ def main(argv=None) -> int:
     ap.add_argument("--cache-date", default=dt.date.today().isoformat(), help="rank: the page-cache day to screen")
     ap.add_argument("--no-prescreen", action="store_true", help="run: research every name (owner requests)")
     ap.add_argument("--redo", action="store_true", help="run: also re-research names that already have an evaluation")
-    ap.add_argument("--holdings", action="store_true", help="run with --redo: include current holdings (research only: "
-                    "only a BUY goes to the portfolio manager, and a holding's decision is HOLD/ADD/TRIM/SELL)")
+    ap.add_argument("--holdings", action="store_true", help="run with --redo: include current holdings (their HOLD/ADD/TRIM/SELL "
+                    "goes to the portfolio manager, like a BUY)")
     ap.add_argument("--reason", choices=["screen", "owner_request"], default="screen",
                     help="run: the neutral reason code given to the researcher (no free text, 2026-11-09)")
     a = ap.parse_args(argv)

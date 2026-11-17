@@ -1,0 +1,47 @@
+[
+  {
+    "ticker": "CI",
+    "action": "TRIM",
+    "position_type": "CORE",
+    "conviction": 3,
+    "thesis": "A deleveraging PBM and employer-health franchise with rising ROIC of 12.7% and a 10.40% FCF yield trades near the bottom of its own 5-year P/E range and below its EV/EBITDA minimum, where the price implies a revenue decline that raised 2026 guidance does not show.",
+    "reason": "Cheap on its own history with rising returns and raised guidance, but only one-point quality and balance-sheet scores plus open 2027 PBM reform risk leave the scorecard below the hold band. Conviction 3 means trimming to the smaller conviction-3 size, not selling: the thesis is intact.",
+    "research_note": "research/CI/2026-11-16.md",
+    "triggers": [
+      {"text": "TTM ROIC falls below 10%, giving up most of the five-year improvement from 8.8% to 12.7%.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 10}},
+      {"text": "TTM operating margin falls below 3.5%, under the FY2025 five-year low of 3.7%, showing rebate reform or medical cost pressure is compressing profitability structurally.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 3.5}},
+      {"text": "TTM FCF margin falls below 2.0%, well under the current 2.9%, signalling cash generation and buyback capacity are deteriorating.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 2.0}},
+      {"text": "Net debt/EBITDA rises above 2.5x (1.87x TTM now), reversing the deleveraging.", "check": {"source": "statistics", "field": "debtEbitda", "op": ">", "value": 2.5}}
+    ]
+  },
+  {
+    "ticker": "ZTS",
+    "action": "TRIM",
+    "position_type": "CORE",
+    "conviction": 3,
+    "thesis": "A high-return animal-health franchise whose margins remain intact despite companion-animal share loss trades below its own 5-year minimum multiples, pricing near-stagnation that growing livestock and diagnostics and raised EPS guidance do not show.",
+    "reason": "Quality and cash returns are intact and the price sits below every own-history multiple floor, but companion-animal competition is real, the fair value is unreliable and the DCF base offers little cushion. Scorecard conviction 3 with the thesis intact: keep the position, trimmed to the smaller conviction-3 size under the sizing rules.",
+    "research_note": "research/ZTS/2026-11-16.md",
+    "triggers": [
+      {"text": "TTM operating margin falls below the FY2023 5-year low of 35.9%, showing competition is eroding profitability, not just growth.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 35.9}},
+      {"text": "TTM gross margin falls below the FY2022 5-year low of 69.7%, signalling structural loss of pricing power.", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 69.7}},
+      {"text": "TTM ROIC falls below 22%, a clear break below the five-year range, showing the moat's returns are eroding.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 22}},
+      {"text": "Companion-animal revenue declines for two further consecutive quarters with dermatology share loss cited in the 10-Q MD&A, or 2027 guidance implies a total revenue decline."}
+    ]
+  },
+  {
+    "ticker": "OTIS",
+    "action": "TRIM",
+    "position_type": "CORE",
+    "conviction": 3,
+    "thesis": "A wide-moat elevator service franchise trading below its own 5y multiple range, but the DCF-based fair value sits under the price and margins and leverage are moving the wrong way, so it is held below the buy bar.",
+    "reason": "Same evidence as the 2026-11-08 TRIM 3: excellent quality and multiples below their 5y range, but the base fair value is under the price, operating margin is slipping and leverage exceeds 3x. Keep it at no more than the conviction-3 size, which it already roughly sits at; no ADD.",
+    "research_note": "research/OTIS/2026-11-16.md",
+    "triggers": [
+      {"text": "Operating margin falls below 14.0% (statistics page), showing cost inflation is outrunning service mix and pricing.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 14.0}},
+      {"text": "Gross margin falls below 28.5% (statistics page).", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 28.5}},
+      {"text": "Net debt / EBITDA (ratios page) rises above 3.6x, i.e. buybacks funded by debt beyond what the cash flow supports."},
+      {"text": "A filing or results release reports Service organic sales growth turning negative or a Service margin decline, breaking the recurring-revenue thesis."}
+    ]
+  }
+]

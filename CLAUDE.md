@@ -343,6 +343,8 @@ min_fcf_yield_pct = 1.0           # ...price above its 200-day average but no mo
 max_strength_hist_pos = 100       # ...and no strength points while P/E and EV/EBITDA sit above their own 5-year max (V, AAPL: 9 at ~2x fair value; 2026-11-16)
 max_strength_overvalue_pct = 20   # ...nor while the value blend (fair value + expected value) is more than this % BELOW the price (MA: -23%)
 strong_ch1y_pct = 15              # ...= 1 point; 2 if the 12-month change is also at least this %. A business that is working, fairly priced.
+strength_at_value_points = 3      # 2026-11-17: 2 strength points become this when the value blend is at or above the price (2 = off).
+                                  # With 2, a full-quality narrow-moat leader stopped at 8 points; above the blend it stays at 2.
 hold_4 = 8                        # hold band: a holding keeps conviction 4 from this total (an ADD needs the buy threshold)
 # 4+ also needs quality level >= 1, direction >= 1 and valuation points >= 2 (a real discount OR trend strength: the mandate is a good business that is working)
 
@@ -385,6 +387,9 @@ history = ["cheap_evebitda", "cheap_pfcf", "cheap_pe", "cheap_pb", "roic_trend",
 prescreen_min_base_upside_pct = 0  # owner 2026-10-12 (efficiency): bulk initiations (research loop) skip the AI steps when
                                    # the mechanical base fair value is this % or more BELOW the price (scripts/prescreen.py;
                                    # no fair value = researched). Every BUY so far had base upside +30% or more.
+prescreen_min_points = 5           # owner request 2026-11-17: a name that passes is scored on the scorecard's measurable parts
+                                   # (neutral judgement fields); below this with a reliable fair value, or quality level 0, it
+                                   # cannot reach conviction 4, so the AI steps are skipped. 0 = off.
 
 [macro]
 # Macro overlay (owner-approved exception to the stockanalysis.com-only rule, for MACRO variables only).
@@ -466,7 +471,7 @@ Run scripts with `bin/py` (uses `.venv` locally, `python3` in CI).
 - `scripts/daily_summary.py` — the plain-English summary of each weekday 21:30 run (owner request 2026-10-21): `reports/daily/<date>.md` + a Mac notification; no AI.
 - `scripts/dip_radar.py` — the dip radar (no AI): `reports/dip-radar/<date>.md/.json` (signals, near-misses), hits in `state.json` `dip_hits` (cleared once the stock is re-researched by any route).
 - `scripts/research_loop.py` + `bin/research-loop runs/<name>` — the bulk research loop (owner-started, no schedule): `rank` builds `runs/<name>/loop-queue.json` (the global core ranking on a day's page cache); `run` (via `bin/research-loop`, detached, Mac kept awake) researches it 3 at a time, entry-price / dip-radar hits first, pre-screen gate, portfolio-manager for BUYs, a committed batch report every 6 stocks; stops after 3 failures in a row (usage limit). Rerun to continue.
-- `scripts/prescreen.py` — mechanical gate before a bulk initiation (no model calls): price above the base fair value by more than `[screen].prescreen_min_base_upside_pct` → no AI research that day; verdicts in `reports/prescreen/<date>.csv`. Owner requests, entry-price hits, holdings and the weekly picks are never gated.
+- `scripts/prescreen.py` — mechanical gate before a bulk initiation (no model calls): price above the base fair value by more than `[screen].prescreen_min_base_upside_pct` → no AI research that day; a name that passes is then scored on the scorecard's measurable parts and skipped when conviction 4 is out of reach (`[screen].prescreen_min_points`); verdicts in `reports/prescreen/<date>.csv`. Owner requests, entry-price hits, holdings and the weekly picks are never gated.
 - `scripts/check_docs.py` — template, word-limit, tag, allowlist, conviction and Decision-block checks for notes and evaluations; number provenance (design by Claude 2026-10-16): a number in an evaluation's prose that isn't in the fact sheet, note, macro overlay, config or its own Decision block fails it (notes: a number not in the fact sheet must be a cited `[company-reported]` figure or a section-4 level).
 - `scripts/allowlist_hook.py` — WebFetch guard (wired in `.claude/settings.json`); blocked URLs go to `logs/skipped-urls.log`. WebSearch, curl and wget are denied.
 - `scripts/common.py` — config reader, ticker/URL mapping, allowlist, thesis-only trigger rule.

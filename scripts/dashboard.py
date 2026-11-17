@@ -192,7 +192,7 @@ def attention(pending: list[dict], holdings: list[dict], entry_hits: list[dict],
         lc = h.get("latest_conviction")
         if lc is not None and lc < min_buy and lc < (h.get("conviction") or 0):
             out.append({"page": "holdings", "text": f"{h['ticker']}: research of {h.get('latest_eval_date')} rates it conviction {lc} "
-                                                    f"(held as {h['conviction']}); the weekly run resizes it"})
+                                                    f"(held as {h['conviction']}); not applied to the position yet"})
     if entry_hits:
         out.append({"page": "pipeline", "text": "Entry price hit, waiting for re-research: " + ", ".join(h["ticker"] for h in entry_hits)})
     skipped = [r["ticker"] for r in watch if r.get("skipped_hit_date")]
@@ -533,7 +533,7 @@ __DAILY__
 <div class="sub" id="mixSub"></div><div id="sectors"></div></section></div>
 </div>
 <div class="page" data-page="holdings">
-<section class="card"><h2>Holdings</h2><div class="sub">Latest research = the conviction of the most recent evaluation; when it is below the held conviction the weekly run resizes the position. Click a row for its plan.</div><div class="tw"><table id="holdings"></table></div></section>
+<section class="card"><h2>Holdings</h2><div class="sub">Latest research = the conviction of the most recent evaluation; when it is below the held conviction the position is resized at the next open. Click a row for its plan.</div><div class="tw"><table id="holdings"></table></div></section>
 <div class="grid2"><section class="card"><h2>Risk</h2><div class="sub" id="riskSub"></div>
 <div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Share of portfolio risk</span><span><span class="sw" style="background:var(--axis)"></span>Share of invested money</span></div>
 <div id="risk"></div><div class="sub" id="corrPairs"></div><details><summary>Show as a table</summary><div class="tw"><table id="riskTable"></table></div></details></section>
@@ -767,7 +767,7 @@ const chg=d=>{if(!d)return '–';const c=d.p>0.005?'up':d.p<-0.005?'down':'flat'
  const b=el('span',{class:'chg '+c,title:d.t},(c==='up'?'▲ ':c==='down'?'▼ ':'')+pct(d.p,2));
  if(d.u!=null)b.append(el('small',{},(d.u>=0?'+':'−')+usd(Math.abs(d.u))));return b;};
 table('holdings',[{h:'Ticker',f:r=>r.ticker},{h:'Name',f:r=>el('span',{title:r.name},r.name),c:()=>'nm'},{h:'Held conv.',n:1,f:r=>r.conviction??''},
- {h:'Latest research',f:r=>{if(r.latest_conviction==null)return '';const t=`${r.latest_conviction} (${r.latest_eval_date})`;return r.latest_conviction<D.min_buy&&r.latest_conviction<(r.conviction||0)?el('span',{class:'flag',title:'Below the buy bar: the weekly run resizes it'},t+' ▼'):t;}},
+ {h:'Latest research',f:r=>{if(r.latest_conviction==null)return '';const t=`${r.latest_conviction} (${r.latest_eval_date})`;return r.latest_conviction<D.min_buy&&r.latest_conviction<(r.conviction||0)?el('span',{class:'flag',title:'Below the buy bar: the position is resized at the next open'},t+' ▼'):t;}},
  {h:'Weight',n:1,f:r=>r.weight.toFixed(1)+'%'},{h:'Value',n:1,f:r=>usd(r.value)},
  {h:'Since entry',n:1,f:r=>pct(r.live_change_pct!=null&&r.live_day_pct!=null?r.live_change_pct:r.change_pct,1),c:r=>cls(r.live_day_pct!=null?r.live_change_pct:r.change_pct)},
  {h:'P/L',n:1,f:r=>r.pl==null?'':usd(r.pl),c:r=>cls(r.pl)},{h:'24h change',n:1,f:r=>chg(dayOf(r))},

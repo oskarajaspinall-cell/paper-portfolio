@@ -153,3 +153,13 @@ def test_no_strength_when_the_value_blend_is_far_below_the_price():
     far = S.score(decision(ev=70), with_trend(), dict(VAL, fair_value={"base": 70}), CFG)      # blend ~ -30%
     assert far["trend_strength"] == 0 and far["conviction"] <= 3
     assert S.score(decision(ev=90), with_trend(), dict(VAL, fair_value={"base": 90}), CFG)["trend_strength"] == 2  # -10%
+
+
+def test_a_strong_trend_at_or_below_the_value_blend_earns_the_third_point():
+    cfg = {"scorecard": {"strength_at_value_points": 3}, "funding_queue": {"fair_value_weight": 0.5}}
+    fair = S.score(decision(ev=101, risk="medium"), with_trend(), EXPENSIVE, cfg)            # blend +1.5%
+    assert fair["parts"]["valuation"] == 3 and fair["total"] == 9 and fair["conviction"] == 4
+    assert S.score(decision(ev=101, risk="medium"), with_trend(), EXPENSIVE, CFG)["conviction"] == 3   # off: stops at 8
+    above = S.score(decision(ev=90, risk="medium"), with_trend(), dict(VAL, fair_value={"base": 90}), cfg)   # blend -10%
+    assert above["parts"]["valuation"] == 2 and above["conviction"] == 3
+    assert S.score(decision(ev=101, risk="medium"), with_trend(ch1y=5.0), EXPENSIVE, cfg)["parts"]["valuation"] == 1  # up, not strong

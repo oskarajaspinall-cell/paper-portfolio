@@ -7,8 +7,9 @@ from common import DataError
 
 
 @pytest.fixture(autouse=True)
-def no_trend(monkeypatch):  # these tests cover the fair-value gate; trend strength is tested below
+def no_trend(monkeypatch):  # these tests cover the fair-value gate; trend strength and the points gate are tested below
     monkeypatch.setattr(prescreen, "trend_strong", lambda *a: None)
+    monkeypatch.setattr(prescreen, "scorecard_points", lambda *a: None)
 
 
 def fake_compute(price, base):
@@ -72,3 +73,32 @@ def test_trend_strength_rescues_a_skip(cfg, monkeypatch):
     monkeypatch.setattr(prescreen, "trend_strong", lambda *a: "price +20% vs 200-day, FCF yield 3.0%")
     row = prescreen.check("X", "2026-11-15", None, cfg)
     assert row["verdict"] == "PASS" and "trend strength" in row["reason"]
+
+
+def points(total, quality=2):
+    return {"total": total, "parts": {"quality_level": quality}, "notes": ["ROIC TTM 4.0%"]}
+
+
+@pytest.mark.parametrize("got,verdict", [((points(4), True), "SKIP"),       # below the floor with a reliable fair value
+                                         ((points(5), True), "PASS"),       # at the floor: researched
+                                         ((points(2), False), "PASS"),      # no reliable fair value: the estimate isn't trusted
+                                         ((points(8, quality=0), False), "SKIP"),  # the quality gate blocks a 4 regardless
+                                         (None, "PASS")])
+def test_points_gate_skips_what_cannot_reach_conviction_4(cfg, monkeypatch, got, verdict):
+    monkeypatch.setattr(prescreen.valuation, "compute", fake_compute(100, 140))
+    monkeypatch.setattr(prescreen, "scorecard_points", lambda *a: got)
+    cfg = {**cfg, "screen": {**cfg["screen"], "prescreen_min_points": 5}}
+    assert prescreen.check("X", "2026-11-17", None, cfg)["verdict"] == verdict
+
+
+def test_points_gate_off_or_unscoreable_passes(cfg, monkeypatch):
+    monkeypatch.setattr(prescreen.valuation, "compute", fake_compute(100, 140))
+    monkeypatch.setattr(prescreen, "scorecard_points", lambda *a: (points(1), True))
+    off = {**cfg, "screen": {**cfg["screen"], "prescreen_min_points": 0}}
+    assert prescreen.check("X", "2026-11-17", None, off)["verdict"] == "PASS"
+
+    def boom(*a):
+        raise DataError("no statements")
+    monkeypatch.setattr(prescreen, "scorecard_points", boom)
+    on = {**cfg, "screen": {**cfg["screen"], "prescreen_min_points": 5}}
+    assert prescreen.check("X", "2026-11-17", None, on)["verdict"] == "PASS"

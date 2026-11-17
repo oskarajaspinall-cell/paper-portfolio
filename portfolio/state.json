@@ -355,7 +355,7 @@
    "entry_price": 20.96,
    "entry_url": "https://stockanalysis.com/quote/hkg/0291/history/",
    "exit_plan": null,
-   "last_close": 21.2,
+   "last_close": 21.200000762939453,
    "last_close_date": "2026-11-16",
    "last_decision": {
     "action": "HOLD",
@@ -364,7 +364,7 @@
    },
    "last_price_usd": 2.702339,
    "market_value_usd": 10128.37,
-   "prev_close": 20.46,
+   "prev_close": 20.459999084472656,
    "prev_close_date": "2026-11-13",
    "reporting_currency": "CNY",
    "research_note": "research/HKG-0291/2026-11-15.md",
@@ -415,7 +415,7 @@
    "entry_price": 4.5,
    "entry_url": "https://finance.yahoo.com/quote/3998.HK/history",
    "exit_plan": null,
-   "last_close": 4.64,
+   "last_close": 4.639999866485596,
    "last_close_date": "2026-11-16",
    "last_decision": {
     "action": "HOLD",
@@ -424,7 +424,7 @@
    },
    "last_price_usd": 0.591455,
    "market_value_usd": 8964.69,
-   "prev_close": 4.57,
+   "prev_close": 4.570000171661377,
    "prev_close_date": "2026-11-13",
    "reporting_currency": "CNY",
    "research_note": "research/HKG-3998/2026-11-08.md",
@@ -481,7 +481,7 @@
    "entry_price": 185.6,
    "entry_url": "https://stockanalysis.com/quote/hkg/9999/history/",
    "exit_plan": null,
-   "last_close": 193.1,
+   "last_close": 193.10000610351562,
    "last_close_date": "2026-11-16",
    "last_decision": {
     "action": "HOLD",
@@ -490,7 +490,7 @@
    },
    "last_price_usd": 24.614232,
    "market_value_usd": 7261.2,
-   "prev_close": 190.4,
+   "prev_close": 190.39999389648438,
    "prev_close_date": "2026-11-13",
    "reporting_currency": "CNY",
    "research_note": "research/HKG-9999/2026-11-15.md",
@@ -944,6 +944,120 @@
        "value": 1
       },
       "text": "Balance sheet levers up: debt/EBITDA (statistics page) rises above 1x, ending the net cash position"
+     }
+    ]
+   }
+  },
+  {
+   "estimate": {
+    "close_date": "2026-11-16",
+    "currency": "USD",
+    "price": 300.1600036621094,
+    "shares": 7,
+    "side": "TRIM",
+    "usd": 2101.12
+   },
+   "id": "2026-11-17-2",
+   "placed": "2026-11-17",
+   "placed_at": "2026-11-17T03:54:20+00:00",
+   "request": {
+    "action": "TRIM",
+    "conviction": 3,
+    "position_type": "CORE",
+    "reason": "Cheap on its own history with rising returns and raised guidance, but only one-point quality and balance-sheet scores plus open 2027 PBM reform risk leave the scorecard below the hold band. Conviction 3 means trimming to the smaller conviction-3 size, not selling: the thesis is intact.",
+    "research_note": "research/CI/2026-11-16.md",
+    "thesis": "A deleveraging PBM and employer-health franchise with rising ROIC of 12.7% and a 10.40% FCF yield trades near the bottom of its own 5-year P/E range and below its EV/EBITDA minimum, where the price implies a revenue decline that raised 2026 guidance does not show.",
+    "ticker": "CI",
+    "triggers": [
+     {
+      "check": {
+       "field": "roic",
+       "op": "<",
+       "source": "statistics",
+       "value": 10
+      },
+      "text": "TTM ROIC falls below 10%, giving up most of the five-year improvement from 8.8% to 12.7%."
+     },
+     {
+      "check": {
+       "field": "operatingMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 3.5
+      },
+      "text": "TTM operating margin falls below 3.5%, under the FY2025 five-year low of 3.7%, showing rebate reform or medical cost pressure is compressing profitability structurally."
+     },
+     {
+      "check": {
+       "field": "fcfMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 2.0
+      },
+      "text": "TTM FCF margin falls below 2.0%, well under the current 2.9%, signalling cash generation and buyback capacity are deteriorating."
+     },
+     {
+      "check": {
+       "field": "debtEbitda",
+       "op": ">",
+       "source": "statistics",
+       "value": 2.5
+      },
+      "text": "Net debt/EBITDA rises above 2.5x (1.87x TTM now), reversing the deleveraging."
+     }
+    ]
+   }
+  },
+  {
+   "estimate": {
+    "close_date": "2026-11-16",
+    "currency": "USD",
+    "price": 84.38999938964844,
+    "shares": 36,
+    "side": "TRIM",
+    "usd": 3038.04
+   },
+   "id": "2026-11-17-3",
+   "placed": "2026-11-17",
+   "placed_at": "2026-11-17T03:54:20+00:00",
+   "request": {
+    "action": "TRIM",
+    "conviction": 3,
+    "position_type": "CORE",
+    "reason": "Quality and cash returns are intact and the price sits below every own-history multiple floor, but companion-animal competition is real, the fair value is unreliable and the DCF base offers little cushion. Scorecard conviction 3 with the thesis intact: keep the position, trimmed to the smaller conviction-3 size under the sizing rules.",
+    "research_note": "research/ZTS/2026-11-16.md",
+    "thesis": "A high-return animal-health franchise whose margins remain intact despite companion-animal share loss trades below its own 5-year minimum multiples, pricing near-stagnation that growing livestock and diagnostics and raised EPS guidance do not show.",
+    "ticker": "ZTS",
+    "triggers": [
+     {
+      "check": {
+       "field": "operatingMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 35.9
+      },
+      "text": "TTM operating margin falls below the FY2023 5-year low of 35.9%, showing competition is eroding profitability, not just growth."
+     },
+     {
+      "check": {
+       "field": "grossMargin",
+       "op": "<",
+       "source": "statistics",
+       "value": 69.7
+      },
+      "text": "TTM gross margin falls below the FY2022 5-year low of 69.7%, signalling structural loss of pricing power."
+     },
+     {
+      "check": {
+       "field": "roic",
+       "op": "<",
+       "source": "statistics",
+       "value": 22
+      },
+      "text": "TTM ROIC falls below 22%, a clear break below the five-year range, showing the moat's returns are eroding."
+     },
+     {
+      "text": "Companion-animal revenue declines for two further consecutive quarters with dermatology share loss cited in the 10-Q MD&A, or 2027 guidance implies a total revenue decline."
      }
     ]
    }
