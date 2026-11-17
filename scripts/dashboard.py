@@ -58,16 +58,36 @@ def series(vals: list[dict], start_cash: float) -> list[dict]:
         return []
     spy0 = _f(pts[0]["spy_close"])
     inv = {p["date"]: p for p in portfolio.invested_series(vals)}
-    out = []
+    out, tw, prev = [], None, None
     for v in pts:
+        tw, prev = invested_tw(v, prev, tw), v
         tot, spy, base, i = _f(v["total_usd"]), _f(v["spy_close"]), _f(v.get("baseline_usd")), inv.get(v["date"])
         out.append({"date": v["date"], "value": tot,
                     "portfolio": None if tot is None else tot / start_cash * 100,
                     "spy": None if not (spy and spy0) else spy / spy0 * 100,
                     "baseline": None if base is None else base / start_cash * 100,
                     "invested": None if not i else 100 + i["pct"] * 100,
-                    "spy_same": None if not i or i["spy_pct"] is None else 100 + i["spy_pct"] * 100})
+                    "spy_same": None if not i or i["spy_pct"] is None else 100 + i["spy_pct"] * 100,
+                    "invested_tw": tw})
     return out
+
+
+def invested_tw(v: dict, prev: dict | None, idx: float | None) -> float | None:
+    """Time-weighted index of the money in stocks (2026-11-17). The money-weighted "invested" line is (holdings +
+    proceeds + income) / everything ever invested, so its change over a few days is not that period's return: the
+    proceeds already taken out don't move, and a day's buys and sells change the divisor (on 17 Nov it showed the S&P
+    500 at -0.5% on a -1.0% day). Here each day chains (value + income) / (yesterday's value + today's net buys at the
+    open). The chart uses it, with SPY's own price, for every range but All."""
+    f = lambda r, k: _f(r.get(k)) or 0.0  # noqa: E731
+    val = lambda r: f(r, "core_usd") + f(r, "tactical_usd")  # noqa: E731
+    cum = lambda r, side: f(r, f"core_{side}") + f(r, f"tactical_{side}")  # noqa: E731
+    if prev is None:
+        return None
+    base = val(prev) + (cum(v, "in") - cum(prev, "in")) - (cum(v, "out") - cum(prev, "out"))
+    inc = (f(v, "core_income") + f(v, "tactical_income")) - (f(prev, "core_income") + f(prev, "tactical_income"))
+    if base <= 0:
+        return idx
+    return (idx or 100.0) * (val(v) + inc) / base
 
 
 def week_change(ser: list[dict]) -> dict | None:
@@ -611,7 +631,7 @@ $('tiles').append(
 const tip=$('tip');function showTip(ev,nodes){tip.replaceChildren(...nodes);tip.style.display='block';const x=Math.min(ev.clientX+14,innerWidth-tip.offsetWidth-8);
 tip.style.left=x+'px';tip.style.top=Math.max(8,ev.clientY-tip.offsetHeight-12)+'px';}function hideTip(){tip.style.display='none'}
 // ---- line chart
-const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['invested','spy_same','portfolio','spy','baseline','world'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
+const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['invested','spy_same','portfolio','spy','baseline','world','invested_tw'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
 const TABS={invested:{sub:'Gain on the money put into stocks, cash excluded, vs the same money put into the S&P 500 on the same days (%, US dollars).',
   defs:[['invested','Invested money','--s1','Invested'],['spy_same','Same money in S&P 500','--s2','S&P 500']]},
  whole:{sub:'All $100k, cash and its interest included, vs the S&P 500 since inception (%, US dollars). Baseline = the first week\'s picks held unchanged.',
@@ -629,7 +649,9 @@ function rangeSeries(){if(!S.length)return {pts:[],base:null};const last=S[S.len
  if(RANGE==='All')return {pts:S,base:S[0]};  // since inception, exactly as the headline figures
  let i0=0;if(RANGE==='1D')i0=Math.max(0,S.length-2);
  else if(cut){const c=`${cut.getFullYear()}-${String(cut.getMonth()+1).padStart(2,'0')}-${String(cut.getDate()).padStart(2,'0')}`;S.forEach((p,i)=>{if(p.date<=c)i0=i;});}
- const win=S.slice(i0).concat(RANGE==='1D'&&LP?[LP]:[]);const keys=['invested','spy_same','portfolio','spy','baseline','world'];
+ // a part of the history: the invested tab compares time-weighted returns (money in stocks vs SPY's price), since the
+ // money-weighted lines only add up over the whole period (see invested_tw in dashboard.py)
+ const win=S.slice(i0).concat(RANGE==='1D'&&LP?[LP]:[]).map(p=>CUR==='invested'?{...p,invested:p.invested_tw,spy_same:p.spy}:p);const keys=['invested','spy_same','portfolio','spy','baseline','world'];
  const base={};keys.forEach(k=>{const b=win.find(p=>p[k]!=null);base[k]=b?b[k]:null;});
  return {pts:win.map(p=>({...p,...Object.fromEntries(keys.map(k=>[k,p[k]==null||base[k]==null?null:((100+p[k])/(100+base[k])-1)*100]))})),base:win[0]};}
 function setRange(r){RANGE=r;document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===r)));
@@ -647,7 +669,7 @@ document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab)
 function drawLine(){const box=$('line');box.replaceChildren();const RS=rangeSeries(),S=RS.pts,vis=defs.filter(([k])=>!HID.has(k));
  const rl=(RANGES.find(([r])=>r===RANGE)||[])[1]||RANGE,[A,B2]=defs,lastP=S[S.length-1];
  const gapNow=A&&B2&&lastP&&lastP[A[0]]!=null&&lastP[B2[0]]!=null?lastP[A[0]]-lastP[B2[0]]:null;
- $('lineSub').textContent=(TABS[CUR]||TABS.invested).sub+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+'.':'')
+ $('lineSub').textContent=(TABS[CUR]||TABS.invested).sub+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+(CUR==='invested'?', as a daily-chained return of the money in stocks against the S&P 500\'s own move':'')+'.':'')
   +(gapNow==null?'':` ${gapNow>=0?'Ahead of':'Behind'} the S&P 500 by ${Math.abs(gapNow).toFixed(1)} percentage points.`);
  if(S.length<2){box.append(el('div',{class:'empty'},'Not enough data for this period yet.'));return;}
  const W=Math.max(300,Math.round(box.getBoundingClientRect().width)),L=44,R=W<560?92:124,T=12,B=30,H=W<560?230:320;

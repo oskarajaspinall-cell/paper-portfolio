@@ -65,3 +65,15 @@ def test_daily_html_shows_the_latest_run_and_folds_the_rest(tmp_path):
     assert "2026-11-16" in h and "<li>BUY A &lt;b&gt;</li>" in h and "old" not in h
     top, rest = h.split("<details>")
     assert "Problems" in top and "Watchlist" in rest
+
+
+def test_invested_tw_is_the_period_return_not_the_money_weighted_change():
+    row = lambda val, inn, out, inc=0: {"core_usd": val, "tactical_usd": 0, "core_in": inn, "tactical_in": 0,  # noqa: E731
+                                        "core_out": out, "tactical_out": 0, "core_income": inc, "tactical_income": 0}
+    a, b = row(1000, 1000, 0), row(1100, 1000, 0)               # +10%, no flows
+    assert D.invested_tw(b, a, 100.0) == pytest.approx(110.0)
+    c = row(600, 1000, 500)                                     # sold 500 at the open, the rest fell 0%: 600 of 600
+    assert D.invested_tw(c, b, 110.0) == pytest.approx(110.0)
+    d = row(1200, 1600, 500)                                    # bought 600 at the open, all flat
+    assert D.invested_tw(d, c, 110.0) == pytest.approx(110.0)
+    assert D.invested_tw(a, None, None) is None
