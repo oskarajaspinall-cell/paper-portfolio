@@ -506,6 +506,7 @@ td.nm{max-width:180px;overflow:hidden;text-overflow:ellipsis}
 <button class="toggle" id="theme" type="button">Toggle dark mode</button></div>
 </header><nav class="pages" role="tablist" aria-label="Sections" id="pages"></nav>
 <div class="page" data-page="overview">
+__INTRO__
 <section class="card" aria-label="Summary"><div class="sub">Portfolio value</div><div class="hero" id="hero"></div><div class="sub" id="heroSub"></div>
 <div class="tiles" id="tiles"></div></section>
 <section class="card" id="attCard"><h2>Needs attention</h2><ul class="att" id="att"></ul></section>
@@ -817,7 +818,7 @@ if(D.repo)$('repo').append('Source and research notes: ',el('a',{href:D.repo},D.
 """
 
 
-def mandate_html(cfg: dict) -> str:
+def mandate_html(cfg: dict, short: bool = False) -> str:
     """The mandate / investment-process card at the top of the dashboard (owner request 2026-11-06: make the
     process visible to outside viewers). Built from the live config so its numbers never go stale."""
     from html import escape as e
@@ -851,6 +852,10 @@ def mandate_html(cfg: dict) -> str:
     rule = ("Core positions have no price stops: they are sold when the business case breaks, not when the price "
             "falls. Sell-side price targets are never used. Every decision is logged and scored against the "
             "S&P 500 at 1, 3, 6 and 12 months.")
+    if short:  # top of Overview: say what this is first (owner request 2026-11-17); the full card stays on Process
+        return (f'<section class="card mandate" aria-label="What this is"><h2>What this is</h2><p>{e(intro)}</p>'
+                f'<p class="sub">{e(" → ".join(t for t, _ in steps))} · '
+                '<a href="#process" onclick="setPage(\'process\',true);return false">How it works</a></p></section>')
     lis = "".join(f'<li><b>{i}. {e(t)}</b><span>{e(d)}</span></li>' for i, (t, d) in enumerate(steps, 1))
     return (f'<section class="card mandate" aria-label="Mandate"><h2>Mandate &amp; investment process</h2>'
             f'<p>{e(intro)}</p><ol class="steps">{lis}</ol><p class="sub">{e(rule)}</p></section>')
@@ -883,6 +888,7 @@ def daily_html(folder: Path) -> str:
 def render(data: dict) -> str:
     blob = json.dumps(data).replace("</", "<\\/")  # never let data close the script tag
     return (PAGE.replace("__DATA__", blob).replace("__MANDATE__", mandate_html(load_config()))
+            .replace("__INTRO__", mandate_html(load_config(), short=True))
             .replace("__DAILY__", daily_html(ROOT / "reports" / "daily")))
 
 
