@@ -44,8 +44,17 @@ bin/with-timeout 600 bin/py scripts/decision_log.py update --asof "$ASOF" || ech
 HEAD_LINE=$(bin/with-timeout 120 bin/py scripts/daily_summary.py --asof "$ASOF" --log "$LOG") || HEAD_LINE="summary not written"
 echo "summary: $HEAD_LINE"
 osascript -e "display notification \"${HEAD_LINE//\"/}\" with title \"Paper portfolio: 21:30 run\" subtitle \"reports/daily/$(date +%F).md\"" 2>/dev/null || true
-if git diff --quiet -- portfolio; then echo "nothing changed"; exit 0; fi
+# Owner-queued research (2026-11-17): runs/queued-research holds one line, "runs/<name> [loop flags]". Once this update is
+# done the research loop starts on it, detached (a BUY goes to the portfolio manager for the next open). The file is
+# removed only when the loop started, so a failed start is tried again tomorrow.
+start_queued() {
+  [ -s runs/queued-research ] || return 0
+  # shellcheck disable=SC2046
+  if bin/research-loop $(head -1 runs/queued-research); then rm runs/queued-research; else echo "!! queued research not started"; fi
+}
+if git diff --quiet -- portfolio; then echo "nothing changed"; start_queued; exit 0; fi
 bin/with-timeout 600 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
 git add -A -- portfolio docs reports/entry-watch reports/regime reports/dip-radar reports/attribution reports/risk reports/daily "$LOG"
 git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
+start_queued
 echo "== end $(date)"

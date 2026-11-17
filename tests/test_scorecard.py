@@ -163,3 +163,14 @@ def test_a_strong_trend_at_or_below_the_value_blend_earns_the_third_point():
     above = S.score(decision(ev=90, risk="medium"), with_trend(), dict(VAL, fair_value={"base": 90}), cfg)   # blend -10%
     assert above["parts"]["valuation"] == 2 and above["conviction"] == 3
     assert S.score(decision(ev=101, risk="medium"), with_trend(ch1y=5.0), EXPENSIVE, cfg)["parts"]["valuation"] == 1  # up, not strong
+
+
+def test_method_change_after_a_scorecard_rule_change(tmp_path, monkeypatch):
+    import json
+    import check_docs
+    (tmp_path / "2026-11-15-evaluation.md").write_text("x\n```json\n" + json.dumps({"decision": "AVOID", "conviction": 3}) + "\n```\n")
+    new = {"decision": "BUY", "conviction": 4, "new_evidence": {"type": "method_change", "text": "strength at value"}}
+    monkeypatch.setattr(S, "evaluate_file", lambda p, cfg=None: ({"conviction": 4}, []))   # today's rules: that evaluation is a 4
+    assert check_docs.consistency_problems(tmp_path / "2026-11-17-evaluation.md", new) == []
+    monkeypatch.setattr(S, "evaluate_file", lambda p, cfg=None: ({"conviction": 3}, []))   # still a 3: no method change happened
+    assert check_docs.consistency_problems(tmp_path / "2026-11-17-evaluation.md", new)

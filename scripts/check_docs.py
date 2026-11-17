@@ -297,6 +297,18 @@ CONSISTENCY_DAYS = 30
 EVIDENCE_TYPES = ("new_results", "guidance", "price_move", "trigger_fired", "new_information", "method_change")
 
 
+def rescored_across_buy_line(prev: Path, recorded: int) -> bool:
+    """...or a scorecard rule changed since (2026-11-17, `strength_at_value_points`): the earlier evaluation, scored
+    again on its own saved inputs under today's rules, lands on the other side of the buy line (4). Python decides
+    this, so a prompt can't claim a method change that didn't happen."""
+    import scorecard
+    try:
+        res, _ = scorecard.evaluate_file(prev)
+    except Exception:  # noqa: BLE001  unreadable inputs: no method change shown
+        return False
+    return res is not None and (res["conviction"] >= 4) != (recorded >= 4)
+
+
 def consistency_problems(path: Path, d: dict) -> list[str]:
     """A verdict that differs from one on this stock in the last 30 days must name new evidence (2026-11-09: OKE
     went AVOID 3 -> BUY 4 on the same fact sheet). Python verifies a price move (>10%) or a newer reporting period
@@ -322,11 +334,14 @@ def consistency_problems(path: Path, d: dict) -> list[str]:
     ne = d.get("new_evidence")
     if not isinstance(ne, dict) or ne.get("type") not in EVIDENCE_TYPES or not str(ne.get("text", "")).strip():
         return [f"verdict differs from {was}: add \"new_evidence\": {{\"type\": one of {EVIDENCE_TYPES}, \"text\": ...}} "
-                "naming what changed since then, or keep the earlier verdict (same evidence, same decision)"]
+                "naming what changed since then, or keep the earlier verdict (same evidence, same decision)"
+                + ("; a scorecard rule changed since then (that evaluation scores on the other side of the buy line "
+                   "today), so \"method_change\" is accepted" if rescored_across_buy_line(prev[-1], c0) else "")]
     t = ne["type"]
-    if t == "method_change":  # the earlier verdict predates the Python scorecard (2026-11-09)
-        if prev[-1].name[:10] >= SCORECARD_FROM:
-            return [f"new_evidence method_change: {was} was already set by the scorecard"]
+    if t == "method_change":  # the earlier verdict predates the Python scorecard (2026-11-09)...
+        if prev[-1].name[:10] >= SCORECARD_FROM and not rescored_across_buy_line(prev[-1], c0):
+            return [f"new_evidence method_change: {was} was already set by the scorecard, and today's rules score "
+                    "that evaluation the same side of the buy line"]
         return []
     if t == "price_move":
         p0, p1 = pd_.get("price_at_decision"), d.get("price_at_decision")
