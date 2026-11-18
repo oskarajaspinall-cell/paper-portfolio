@@ -77,3 +77,10 @@ def test_invested_tw_is_the_period_return_not_the_money_weighted_change():
     d = row(1200, 1600, 500)                                    # bought 600 at the open, all flat
     assert D.invested_tw(d, c, 110.0) == pytest.approx(110.0)
     assert D.invested_tw(a, None, None) is None
+
+
+def test_review_items_have_a_status_each():
+    import dashboard as D
+    items = D.review_items([{"date": "2026-11-17", "decision": "BUY", "ticker": "RELY", "excess_1m": ""}], "2026-11-18")
+    assert len(items) == 9 and all(i["status"] and i["question"] and i["decides"] for i in items)
+    assert "RELY" in items[1]["status"] and items[0]["status"].startswith("first one-month results")

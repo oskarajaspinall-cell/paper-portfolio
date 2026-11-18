@@ -176,6 +176,56 @@ def add_world(ser: list[dict], closes: dict | None) -> None:
         p["world"] = c / base * 100 if c else None
 
 
+REVIEW_DATE = "early January 2027"
+SCORECARD_FROM = "2026-11-08"  # scorecard-era decisions: their first one-month results arrive from 2026-12-08
+
+
+def review_items(decisions: list[dict], today: str) -> list[dict]:
+    """What is being tracked until the January review (owner request 2026-11-18), each with a live status."""
+    port = ROOT / "portfolio"
+    sc = [d for d in decisions if d["date"] >= SCORECARD_FROM]
+    sc1m = [d for d in sc if d.get("excess_1m") not in ("", None)]
+    first = "first one-month results from 8 Dec" if not sc1m else f"{len(sc1m)} of {len(sc)} scorecard-era decisions have a one-month result"
+    buys = [d for d in decisions if d["date"] >= "2026-11-17" and d["decision"] == "BUY"]
+    conv = [r for r in _csv(port / "entry_conversions.csv") if r.get("date", "") >= "2026-11-18"]
+    exits = _csv(port / "exits.csv")
+    lag = [e for e in exits if e.get("since_excess") not in ("", None)]
+    sizing = [e for e in exits if e.get("kind") == "sizing"]
+    import shadow_shorts
+    book = shadow_shorts.read()
+    scr = sorted((ROOT / "reports" / "short-screen").glob("20??-??-??.json"))
+    qual = [c["ticker"] for c in json.loads(scr[-1].read_text()).get("candidates", []) if c.get("qualifies")] if scr else []
+    adrs = _csv(ROOT / "universe" / "adr_map.csv")
+    return [
+        {"area": "Buying", "item": "Growth test", "question": "Do names promoted by the growth assumptions beat the rest?",
+         "decides": "Change only with 30+ results, 5pp+ and an interval excluding zero", "status": first},
+        {"area": "Buying", "item": "Third valuation point for a strong trend at value",
+         "question": "Did the names it promoted (needs the value blend 10%+ above the price) beat the other avoids?",
+         "decides": "Keep, or set back to 2 points", "status": f"{len(buys)} buy decisions since 17 Nov: {', '.join(d['ticker'] for d in buys) or 'none'}"},
+        {"area": "Buying", "item": "Pre-screen skips", "question": "Did names skipped as too weak (under 5 points) go on to beat their sector?",
+         "decides": "Keep or lower the 5-point pre-screen", "status": "the calibration report's skip line; " + first},
+        {"area": "Buying", "item": "Entry prices from the scorecard", "question": "Does a hit now usually end in a buy?",
+         "decides": "If not, the analysts score lower prices differently than the re-score assumes",
+         "status": f"{len(conv)} hit(s) re-researched since 18 Nov, {sum(r.get('decision') == 'BUY' for r in conv)} bought"},
+        {"area": "Missed gains", "item": "Cheap but deteriorating (the ADT / FISV kind)",
+         "question": "Do very cheap conviction-3 avoids with falling quality beat the other 3s and our buys? Takeover jumps count (also shown without)",
+         "decides": "Only a whole-group result would loosen the quality-direction rule", "status": "three-month results from early January"},
+        {"area": "Selling", "item": "Every trim and sale", "question": "Did sizing trims, research trims and swaps pay off?",
+         "decides": "Revisit the conviction-3 size if trims keep cutting winners",
+         "status": f"{len(exits)} exits tracked; {sum(float(e['since_excess']) < 0 for e in lag)} of {len(lag)} have lagged the S&P since"},
+        {"area": "Selling", "item": "Trim versus sell conviction 3s",
+         "question": "Did the 3s kept after trimming earn more than the same money spread over the 4s?",
+         "decides": "Switch to selling 3s (proceeds into the 4s, 12% cap) if the 4s clearly win",
+         "status": f"{len(sizing)} sizing trim(s) so far: {', '.join(sorted({e['ticker'] for e in sizing})) or 'none'}"},
+        {"area": "Shorts (paper only)", "item": "Shadow short book",
+         "question": "20+ closed across 5+ industries, stocks below their sector fund, puts profitable after spreads?",
+         "decides": "Whether a real short side is ever designed; also whether the 5/7 bar lets enough through",
+         "status": f"{sum(r['status'] == 'open' for r in book)} open, {sum(r['status'] == 'closed' for r in book)} closed; qualifying today: {', '.join(qual) or 'none'}"},
+        {"area": "Shorts (paper only)", "item": "US-listing map", "question": "Is the list of foreign stocks with US-listed options still current?",
+         "decides": "Re-check against current listings (it missed SKHY)", "status": f"{len(adrs)} stocks mapped"},
+    ]
+
+
 def shadow_shorts_data() -> dict:
     """The shadow short book and the latest short screen (SHADOW ONLY: nothing trades)."""
     import shadow_shorts
@@ -438,6 +488,7 @@ def build_data(live: bool = True) -> dict:
         "funnel": funnel(decisions, all_ledger, today),
         "scoreboard": {"asof": cal.get("asof"), "by_conviction": cal.get("by_conviction") or {}, "by_points": cal.get("by_points") or {}},
         "health": health(ROOT / "logs", today),
+        "review": {"date": REVIEW_DATE, "items": review_items(decisions, today)},
         "trades": [{"date": r["date"], "side": r["side"], "ticker": r["ticker"]} for r in all_ledger],
         "n_watch": len(all_watch),
         "week": week, "series": ser, "live_point": live_pt, "holdings": hold, "interest": state.get("cash_interest"),
@@ -608,6 +659,7 @@ __DAILY__
 </div>
 <div class="page" data-page="process">
 __MANDATE__
+<section class="card"><h2>Tracked until the January review</h2><div class="sub" id="reviewSub"></div><div class="tw"><table id="review"></table></div></section>
 <section class="card"><h2>System health</h2><div class="sub">When each scheduled job last ran, and any problem lines its logs wrote in the last 7 days.</div>
 <div class="tw"><table id="jobs"></table></div><div class="tw" style="margin-top:12px"><table id="problems"></table></div></section>
 </div>
@@ -867,6 +919,8 @@ table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f
  {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},
  {h:'Since vs SPY',n:1,f:r=>!r.since_excess?'–':pct(+r.since_excess,1),c:r=>!r.since_excess?'':cls(+r.since_excess),t:r=>r.since_date?`to the ${r.since_date} close`:'buys, holds, trims and conviction-3 avoids only'},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision',chips:[['With a result',r=>r.excess_1m!==''],['Buys',r=>r.decision==='BUY'||r.decision==='ADD'],
   ['Holds and trims',r=>!['BUY','ADD','AVOID'].includes(r.decision)],['Avoids',r=>r.decision==='AVOID'],['All',null]]});
+{const R=D.review||{};$('reviewSub').textContent=`Rules on trial and open questions, each decided with data at the review in ${R.date||'January'}. Status updates every night.`;
+ table('review',[{h:'Area',f:r=>r.area},{h:'What',f:r=>r.item},{h:'Question',w:1,f:r=>r.question},{h:'What it decides',w:1,f:r=>r.decides},{h:'Status now',w:1,f:r=>r.status}],R.items||[],'Nothing tracked.',{chips:[['All',null]].concat([...new Set((R.items||[]).map(r=>r.area))].map(a=>[a,r=>r.area===a]))});}
 {const SH=D.shorts||{},B=SH.book||[],op=B.filter(r=>r.status==='open'),cl=B.filter(r=>r.status==='closed');
  $('shortSub').textContent=`Tracking only: nothing is traded and no money is used. A stock is a candidate when the research rated it 1 or 2 and its earnings are far above its own 5-year history; it is shorted on paper (a put, plus the stock against its sector fund) only at a confidence of 5 of 7, after its trend has turned and a separate short analysis rates it 4+. At most 3 at a time. Screen ${SH.asof||'not run yet'}.`;
  const med=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
