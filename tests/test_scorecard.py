@@ -163,6 +163,9 @@ def test_a_strong_trend_at_or_below_the_value_blend_earns_the_third_point():
     above = S.score(decision(ev=90, risk="medium"), with_trend(), dict(VAL, fair_value={"base": 90}), cfg)   # blend -10%
     assert above["parts"]["valuation"] == 2 and above["conviction"] == 3
     assert S.score(decision(ev=101, risk="medium"), with_trend(ch1y=5.0), EXPENSIVE, cfg)["parts"]["valuation"] == 1  # up, not strong
+    tight = {"scorecard": {"strength_at_value_points": 3, "strength_at_value_min_upside_pct": 10},
+             "funding_queue": {"fair_value_weight": 0.5}}
+    assert S.score(decision(ev=101, risk="medium"), with_trend(), EXPENSIVE, tight)["conviction"] == 3   # +1.5%: too thin
 
 
 def test_method_change_after_a_scorecard_rule_change(tmp_path, monkeypatch):

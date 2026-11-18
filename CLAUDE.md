@@ -344,6 +344,7 @@ max_strength_hist_pos = 100       # ...and no strength points while P/E and EV/E
 max_strength_overvalue_pct = 20   # ...nor while the value blend (fair value + expected value) is more than this % BELOW the price (MA: -23%)
 strong_ch1y_pct = 15              # ...= 1 point; 2 if the 12-month change is also at least this %. A business that is working, fairly priced.
 strength_at_value_points = 3      # 2026-11-17: 2 strength points become this when the value blend is at or above the price (2 = off).
+strength_at_value_min_upside_pct = 10  # 2026-11-18 (owner): ...and only when the blend is at least this % above the price.
                                   # With 2, a full-quality narrow-moat leader stopped at 8 points; above the blend it stays at 2.
 hold_4 = 8                        # hold band: a holding keeps conviction 4 from this total (an ADD needs the buy threshold)
 # 4+ also needs quality level >= 1, direction >= 1 and valuation points >= 2 (a real discount OR trend strength: the mandate is a good business that is working)

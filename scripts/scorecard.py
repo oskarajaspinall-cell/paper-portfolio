@@ -55,6 +55,7 @@ def settings(cfg: dict) -> dict:
             "max_strength_hist_pos": float(c.get("max_strength_hist_pos", 100)),
             "max_strength_overvalue_pct": float(c.get("max_strength_overvalue_pct", 20)),
             "strength_at_value": float(c.get("strength_at_value_points", 2)),
+            "strength_at_value_min_up": float(c.get("strength_at_value_min_upside_pct", 0)),
             "fv_weight": float((cfg.get("funding_queue") or {}).get("fair_value_weight", 0.5))}
 
 
@@ -142,8 +143,9 @@ def score(decision: dict, trends: dict, valuation: dict | None, cfg: dict, offse
     # 2026-11-17: a strong trend that is also at or below the value blend earns `strength_at_value_points` (3). With 2, a
     # full-quality, narrow-moat, medium-risk leader stopped at 8: of 77 names scored on trend strength one reached 4 (a
     # wide moat). October's strong-trend AVOIDs at or below fair value did as well as the rest over a month; those above it
-    # lagged by 9pp, so above the blend the points stay at 2.
-    at_value = strength == 2 and up is not None and up >= 0
+    # lagged by 9pp, so above the blend the points stay at 2. 2026-11-18 (owner): the blend must be at least
+    # `strength_at_value_min_upside_pct` (10%) above the price, so a stretched name a hair under fair value (PAYC +2%) stays at 8.
+    at_value = strength == 2 and up is not None and up >= s["strength_at_value_min_up"]
     parts["valuation"] = max(v + (1 if cheap_hist else 0), s["strength_at_value"] if at_value else strength)
     notes.append(f"value blend upside {'n/a' if up is None else f'{up:+.0f}%'}; own-history position "
                  + ("n/a" if not pos else "/".join(f"{x:.0f}%" for x in pos)))
