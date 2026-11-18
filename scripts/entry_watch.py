@@ -77,17 +77,43 @@ def anchor(valuation: dict, cfg: dict) -> float | None:
     return round(base * (1 - cfg["entry"]["margin_of_safety_pct"] / 100), 4)
 
 
+def scorecard_entry(d: dict, evaluation_path: Path, cfg: dict):
+    """The highest price (1% steps, down to 20% of the decision price) at which today's scorecard gives the buy
+    conviction with the same evidence (owner 2026-11-18: the entry price was 85% of fair value, unrelated to what
+    decides a buy; CBSH's sat above the price it was just turned down at). None = no price gets there;
+    "" = cannot be scored (TACTICAL, no fact-sheet sidecar): the older rules apply."""
+    try:
+        import scorecard as S
+        price = d.get("price_at_decision")
+        trends, val = S.inputs_for(evaluation_path)
+        if trends is None or d.get("position_type") != "CORE" or not isinstance(price, (int, float)) or price <= 0:
+            return ""
+        if trends.get("fair_value"):
+            val = trends["fair_value"]
+        bar, off = int(cfg["core"].get("min_buy_conviction", 4)), S.calibration_offset()
+        for k in range(99, 19, -1):
+            if S.score(dict(d, price_at_decision=price * k / 100), trends, val, cfg, off)["conviction"] >= bar:
+                return round(price * k / 100, 4)
+        return None
+    except Exception:  # noqa: BLE001  informational: never blocks recording a decision
+        return ""
+
+
 def row_from_decision(d: dict, evaluation: str, asof: str, cfg: dict, valuation: dict | None,
-                      currency: str = "") -> dict | None:
-    """The watch row for one logged decision, or None (no row: below conviction 3, a BUY/ADD/SELL, or the
-    evaluator said price isn't the obstacle)."""
+                      currency: str = "", sc="") -> dict | None:
+    """The watch row for one logged decision, or None (no row: below conviction 3, a BUY/ADD/SELL, the
+    evaluator said price isn't the obstacle, or the scorecard reaches a buy at no price). `sc` = scorecard_entry()."""
     ec = cfg["entry"]
     if int(d.get("conviction") or 0) < ec["min_conviction"] or d.get("decision") in ("BUY", "ADD", "SELL"):
         return None
     if "entry_price" in d and d["entry_price"] is None:
         return None  # owner rule: price isn't the obstacle, so a lower price wouldn't change the decision
+    if sc is None:
+        return None  # no price makes it a buy on the scorecard: nothing to watch for
     price, source, basis = d.get("entry_price"), "evaluator", d.get("entry_basis") or ""
-    if not isinstance(price, (int, float)):
+    if isinstance(sc, (int, float)):
+        price, source, basis = sc, "scorecard", "highest price at which the scorecard gives conviction 4 on the same evidence"
+    elif not isinstance(price, (int, float)):
         price = anchor(valuation or {}, cfg)
         source, basis = "mechanical", f"base fair value x (1 - {ec['margin_of_safety_pct']:g}% margin of safety)"
     if not price or (isinstance(d.get("price_at_decision"), (int, float)) and price >= d["price_at_decision"]):
@@ -109,7 +135,8 @@ def record_decision(d: dict, evaluation_path: Path, asof: str, cfg: dict, curren
     vp = evaluation_path.with_name(evaluation_path.name.replace("-evaluation.md", "-valuation.json"))
     val = json.loads(vp.read_text()) if vp.name.endswith("-valuation.json") and vp.exists() else None
     rel = str(evaluation_path.relative_to(ROOT)) if evaluation_path.is_absolute() else str(evaluation_path)
-    new = row_from_decision(d, rel, asof, cfg, val, currency or (val or {}).get("quote_currency", ""))
+    new = row_from_decision(d, rel, asof, cfg, val, currency or (val or {}).get("quote_currency", ""),
+                            scorecard_entry(d, evaluation_path if evaluation_path.is_absolute() else ROOT / evaluation_path, cfg))
     rows = read()
     old = next((r for r in rows if r["ticker"] == d["ticker"] and r.get("hit_date")), None)
     if old:  # a hit was re-researched: keep what it led to (2026-11-16: 12 hits gave 1 BUY, and nothing recorded it)
@@ -282,7 +309,7 @@ def notify(title: str, msg: str) -> None:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["check", "backfill", "list", "intraday"])
+    ap.add_argument("cmd", choices=["check", "backfill", "list", "intraday", "rescore"])
     ap.add_argument("--force", action="store_true", help="intraday: run outside the New York time window")
     ap.add_argument("--asof", default=dt.date.today().isoformat())
     ap.add_argument("--near", action="store_true", help="list: close-to-entry stocks only")
@@ -309,11 +336,42 @@ def main(argv=None) -> int:
                 subprocess.run([str(ROOT / "bin" / "py"), "scripts/valuation.py", t, "--asof", ev.name[:10]],
                                cwd=ROOT, capture_output=True)
             val = json.loads(vp.read_text()) if vp.exists() else None
-            new = row_from_decision(d, r["evaluation"], r["date"], cfg, val, (val or {}).get("quote_currency", ""))
+            new = row_from_decision(d, r["evaluation"], r["date"], cfg, val, (val or {}).get("quote_currency", ""),
+                                    scorecard_entry(d, ev, cfg))
             if new:
                 rows, added = upsert(rows, new, t), added + 1
         write(rows)
         print(json.dumps({"added": added, "watching": len(rows)}))
+        return 0
+    if a.cmd == "rescore":  # one-off (2026-11-18): every row's entry price re-set from the scorecard
+        from decision_log import decision_from_eval
+        out, kept, moved, dropped = [], 0, [], []
+        for r in read():
+            ev = ROOT / (r.get("evaluation") or "")
+            if not r.get("evaluation") or not ev.exists():
+                out.append(r)
+                continue
+            d = dict(decision_from_eval(ev.read_text()), ticker=r["ticker"], decision=r["decision"])
+            sc = scorecard_entry(d, ev, cfg)
+            if sc == "":  # unscorable (pre-scorecard research): keep the row exactly, incl. the 16 Nov margin rescale
+                out.append(r)
+                continue
+            vp = ev.with_name(ev.name.replace("-evaluation.md", "-valuation.json"))
+            new = row_from_decision(d, r["evaluation"], r["set_date"], cfg, json.loads(vp.read_text()) if vp.exists() else None,
+                                    r.get("currency", ""), sc)
+            if not new:
+                dropped.append(r["ticker"])
+                continue
+            new["points_short"] = points_short(d, ev, cfg)
+            new.update({k: r[k] for k in ("last_close", "last_close_date", "split_checked") if r.get(k)})
+            if abs(float(new["entry_price"]) - float(r["entry_price"])) > 1e-9:
+                moved.append((r["ticker"], float(r["entry_price"]), new["entry_price"]))
+            else:  # unchanged: keep its hit / near / skipped history
+                new = r
+            kept += 1
+            out.append(new)
+        write(out)
+        print(json.dumps({"kept": kept, "moved": len(moved), "dropped": dropped, "sample": moved[:15]}))
         return 0
     rows = read()
     if a.cmd == "intraday":

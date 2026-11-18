@@ -207,8 +207,9 @@ fair_value_weight = 0.5           # owner rule 2026-11-08: ranking value = this 
 
 [entry]
 # Entry prices (owner rule 2026-10-09; scripts/entry_watch.py): every conviction-3+ AVOID/HOLD carries the price
-# at which the same evidence would justify conviction 4 (evaluator-set, or base fair value less the margin of
-# safety). A daily close at/below it -> the stock is re-researched first at the next run (unless `skip_hit_points_short`
+# at which the same evidence would justify conviction 4: since 2026-11-18 the highest price at which the scorecard gives
+# a 4 (re-scored in 1% steps); a name that reaches 4 at no price is not watched. Only research without a fact-sheet
+# sidecar (pre-scorecard) keeps the older evaluator-set price or base fair value less the margin of safety. A daily close at/below it -> the stock is re-researched first at the next run (unless `skip_hit_points_short`
 # says the scorecard is too far from 4 at any price). Never an automatic buy.
 min_conviction = 3
 margin_of_safety_pct = 15      # owner request 2026-11-16 (was 20): the watch was too strict, winners never reached it

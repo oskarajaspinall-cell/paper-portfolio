@@ -822,7 +822,7 @@ table('watch',[{h:'Ticker',f:r=>r.ticker},{h:'Conv.',n:1,f:r=>r.conviction??''},
  {h:'Status',f:r=>r.hit?'HIT '+r.hit+': re-research next run':r.skipped?'hit skipped '+r.skipped:r.blocked?'too far from a 4: a hit is skipped':r.near_since?'close since '+r.near_since:''},
  {h:'Why not a buy yet',w:1,f:r=>r.why||''},{h:'Set by',f:r=>r.source},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],W,'No entry prices yet.',
  {filter:'Filter by ticker or text',chips:[[`Within ${np}% of entry (${W.filter(nearRow).length})`,nearRow],[`All ${W.length}`,null]]});
-$('watchSub').textContent=`${W.length} conviction-3 names, closest first, with the price at which we'd look again. Live prices cover the 40 closest. A close at or below it triggers a full re-research (never an automatic buy), unless the scorecard is 2 or more points short of a 4 at any price.`;}
+$('watchSub').textContent=`${W.length} conviction-3 names, closest first, with the entry price: the highest price at which the scorecard would rate the same evidence a 4 (older research: the analyst's price or 85% of fair value). Names that would not reach a 4 at any price are not listed. Live prices cover the 40 closest. A close at or below the entry price triggers a full re-research, never an automatic buy.`;}
 table('trades',[{h:'Date',f:r=>r.date},{h:'Side',f:r=>r.side},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Shares',n:1,f:r=>r.shares},
  {h:'Fill',n:1,f:r=>`${px(r.fill_price)} ${r.currency} (${r.fill_close_date})`},{h:'Gross',n:1,f:r=>usd(+r.gross_usd,2)},{h:'Costs',n:1,f:r=>usd(+r.costs_usd,2)},
  {h:'Reason',w:1,f:r=>r.reason||''}],D.ledger,'No trades yet.');

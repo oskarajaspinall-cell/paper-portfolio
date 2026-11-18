@@ -153,3 +153,20 @@ def test_a_hit_too_far_from_4_is_dated_but_not_researched():
     assert not EW.intraday_hits(mk("2.0"), q, "2026-11-17", skip_short=2)[0]
     for short, skip in (("1.0", 2), ("", 2), ("3.0", None), ("3.0", 0)):  # one point short, unscored, or the rule off: researched
         assert [h["ticker"] for h in EW.check(mk(short), q, "2026-11-17", skip_short=skip)[1]] == ["A"]
+
+
+def test_scorecard_sets_the_entry_price(cfg, monkeypatch):
+    val = {"fair_value": {"base": 110.0}}
+    r = EW.row_from_decision(dec(entry_price=82.5), "e.md", "2026-11-18", cfg, val, "USD", sc=71.0)
+    assert (r["entry_price"], r["source"]) == (71.0, "scorecard")  # the scorecard beats the evaluator's and the 85% anchor
+    assert EW.row_from_decision(dec(), "e.md", "2026-11-18", cfg, val, "USD", sc=None) is None  # a buy at no price: not watched
+    assert EW.row_from_decision(dec(), "e.md", "2026-11-18", cfg, val, "USD", sc="")["source"] == "mechanical"  # unscorable
+
+    import scorecard as S
+    cfg["core"]["min_buy_conviction"] = 4
+    monkeypatch.setattr(S, "inputs_for", lambda p: ({"t": 1}, {}))
+    monkeypatch.setattr(S, "calibration_offset", lambda: 0.0)
+    monkeypatch.setattr(S, "score", lambda d, t, v, c, o: {"conviction": 4 if d["price_at_decision"] <= 80 else 3})
+    assert EW.scorecard_entry(dec(position_type="CORE"), None, cfg) == 80.0      # highest price that scores a 4
+    monkeypatch.setattr(S, "score", lambda d, t, v, c, o: {"conviction": 3})
+    assert EW.scorecard_entry(dec(position_type="CORE"), None, cfg) is None
