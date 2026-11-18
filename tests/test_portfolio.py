@@ -793,7 +793,8 @@ def test_invested_return_partial_sale():
             val("2026-10-07", "post", 100000, core=6000, cin=10000, cout=6000, spy=120),
             val("2026-10-08", "daily", 100000, core=6600, cin=10000, cout=6000, spy=120)]
     r = invested_return(vals)
-    assert r["gain"] == pytest.approx(2600) and r["pct"] == pytest.approx(0.26)
+    assert r["gain"] == pytest.approx(2600) and r["pct_on_buys"] == pytest.approx(0.26)
+    assert r["pct"] == pytest.approx(1.2 * 1.1 - 1)  # time-weighted: the stock made +20% then +10%; the sale doesn't dilute it
     assert r["spy_pct"] == pytest.approx(0.20)  # SPY 100 -> 120 since day one; our sales don't change it
 
 

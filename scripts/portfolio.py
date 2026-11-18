@@ -440,15 +440,38 @@ def returns_table(vals: list[dict], asof: str) -> dict:
     return out
 
 
+def invested_tw(v: dict, prev: dict | None, idx: float | None) -> float | None:
+    """Time-weighted index of the money in stocks (2026-11-17). The money-weighted "invested" line is (holdings +
+    proceeds + income) / everything ever invested, so its change over a few days is not that period's return: the
+    proceeds already taken out don't move, and a day's buys and sells change the divisor (on 17 Nov it showed the S&P
+    500 at -0.5% on a -1.0% day). Here each day chains (value + income + sale proceeds) / (yesterday's value + today's
+    buys at the open). It is the headline invested return and the chart's invested line."""
+    f = lambda r, k: _num(r, k)  # noqa: E731
+    val = lambda r: f(r, "core_usd") + f(r, "tactical_usd")  # noqa: E731
+    cum = lambda r, side: f(r, f"core_{side}") + f(r, f"tactical_{side}")  # noqa: E731
+    if prev is None:
+        return None
+    # fills are at the open: a buy's money is at work all day (base), a sale's proceeds carry the sold shares'
+    # move from yesterday's close to the open (numerator)
+    base = val(prev) + (cum(v, "in") - cum(prev, "in"))
+    inc = (f(v, "core_income") + f(v, "tactical_income")) - (f(prev, "core_income") + f(prev, "tactical_income"))
+    if base <= 0:
+        return idx
+    return (idx or 100.0) * (val(v) + inc + (cum(v, "out") - cum(prev, "out"))) / base
+
+
 def invested_series(vals: list[dict]) -> list[dict]:
     """Return on the money put into stocks, cash excluded (owner request 2026-10-14), one point per valuation
     date (the last row of each date). gain = holdings value + sale proceeds + dividends - money in (buys incl.
-    costs); pct = gain / money in. spy_pct is SPY bought with everything on day one (owner request 2026-11-17,
+    costs). pct is the TIME-WEIGHTED return of the money in stocks (invested_tw, 2026-11-18: gain / every buy ever
+    made counted recycled sale proceeds twice and showed +6.4% while the whole portfolio, cash included, made +7.5%);
+    pct_on_buys keeps gain / money in. spy_pct is SPY bought with everything on day one (owner request 2026-11-17,
     replacing "the same money on the same dates"): SPY's return from the first valuation row's close, plus SPY's
     dividends since then where recorded. Dates before the first buy are left out."""
     out: dict[str, dict] = {}
-    spy = spy0 = div0 = div = None
+    spy = spy0 = div0 = div = prev = tw = None
     for v in vals:
+        tw, prev = invested_tw(v, prev, tw), v
         cin = _num(v, "core_in") + _num(v, "tactical_in")
         cout = _num(v, "core_out") + _num(v, "tactical_out")
         income = _num(v, "core_income") + _num(v, "tactical_income")
@@ -463,7 +486,7 @@ def invested_series(vals: list[dict]) -> list[dict]:
         gain = value + cout + income - cin
         out[v["date"]] = {"date": v["date"], "invested": round(cin, 2), "value": round(value, 2),
                           "proceeds": round(cout, 2), "dividends": round(income, 2), "gain": round(gain, 2),
-                          "pct": gain / cin, "spy_pct": None if not (spy and spy0) else (spy + (div or 0) - (div0 or 0)) / spy0 - 1}
+                          "pct": (tw or 100.0) / 100 - 1, "pct_on_buys": gain / cin, "spy_pct": None if not (spy and spy0) else (spy + (div or 0) - (div0 or 0)) / spy0 - 1}
     return [out[d] for d in sorted(out)]
 
 

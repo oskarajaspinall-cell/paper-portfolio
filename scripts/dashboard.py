@@ -67,28 +67,13 @@ def series(vals: list[dict], start_cash: float) -> list[dict]:
                     "portfolio": None if tot is None else tot / start_cash * 100,
                     "spy": None if not (spy and spy0) else (spy + (_f(v.get("spy_div_cum")) or 0.0) - div0) / spy0 * 100,
                     "baseline": None if base is None else base / start_cash * 100,
-                    "invested": None if not i else 100 + i["pct"] * 100,
+                    "invested": None if not i else 100 + i["pct"] * 100,  # time-weighted, = invested_tw
                     "spy_same": None if not i or i["spy_pct"] is None else 100 + i["spy_pct"] * 100,
                     "invested_tw": tw})
     return out
 
 
-def invested_tw(v: dict, prev: dict | None, idx: float | None) -> float | None:
-    """Time-weighted index of the money in stocks (2026-11-17). The money-weighted "invested" line is (holdings +
-    proceeds + income) / everything ever invested, so its change over a few days is not that period's return: the
-    proceeds already taken out don't move, and a day's buys and sells change the divisor (on 17 Nov it showed the S&P
-    500 at -0.5% on a -1.0% day). Here each day chains (value + income) / (yesterday's value + today's net buys at the
-    open). The chart uses it, with SPY's own price, for every range but All."""
-    f = lambda r, k: _f(r.get(k)) or 0.0  # noqa: E731
-    val = lambda r: f(r, "core_usd") + f(r, "tactical_usd")  # noqa: E731
-    cum = lambda r, side: f(r, f"core_{side}") + f(r, f"tactical_{side}")  # noqa: E731
-    if prev is None:
-        return None
-    base = val(prev) + (cum(v, "in") - cum(prev, "in")) - (cum(v, "out") - cum(prev, "out"))
-    inc = (f(v, "core_income") + f(v, "tactical_income")) - (f(prev, "core_income") + f(prev, "tactical_income"))
-    if base <= 0:
-        return idx
-    return (idx or 100.0) * (val(v) + inc) / base
+invested_tw = portfolio.invested_tw  # moved to portfolio.py (2026-11-18)
 
 
 def week_change(ser: list[dict]) -> dict | None:
@@ -619,7 +604,7 @@ $('heroSub').textContent=(D.inception?`At the ${D.close_date} close`:'No trades 
  +(D.live_total!=null&&D.holdings.some(h=>h.live_day_pct!=null)?` · live estimate ${usd(D.live_total)} (${pct((D.live_total/D.total-1)*100,2)} since the close) at ${D.live_at}`:'');
 const tile=(l,v,d,c)=>el('div',{class:'tile'},el('div',{class:'l'},l),el('div',{class:'v'},v),d?el('div',{class:'d '+(c||'')},d):'');
 $('tiles').append(
- I?tile('Return on invested money',pct(I.pct*100),`${usd(I.gain)} on ${usd(I.invested)} invested`+(I.spy_pct==null?'':` · S&P 500 from day one ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
+ I?tile('Return on invested money',pct(I.pct*100),`time-weighted, cash excluded · ${usd(I.gain)} gained`+(I.spy_pct==null?'':` · S&P 500 from day one ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
   :tile('Return on invested money','–','starts with the first trade'),
  D.inception?tile('Whole portfolio (incl. cash)',D.since==null?'n/a':pct(D.since*100),(D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100))+(D.since_world==null?'':' · global (VT) '+pct(D.since_world*100)),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
   :tile('Whole portfolio (incl. cash)','–','starts with the first trade'),
@@ -656,8 +641,7 @@ function rangeSeries(){if(!S.length)return {pts:[],base:null};const last=S[S.len
  let i0=0;if(RANGE==='1D')i0=Math.max(0,S.length-2);
  else if(cut){const c=`${cut.getFullYear()}-${String(cut.getMonth()+1).padStart(2,'0')}-${String(cut.getDate()).padStart(2,'0')}`;S.forEach((p,i)=>{if(p.date<=c)i0=i;});}
  // a part of the history: the invested tab compares time-weighted returns (money in stocks vs SPY's price), since the
- // money-weighted lines only add up over the whole period (see invested_tw in dashboard.py)
- const win=S.slice(i0).concat(RANGE==='1D'&&LP?[LP]:[]).map(p=>RANGE==='All'?p:{...p,invested:p.invested_tw});const keys=['invested','portfolio','spy','world'];
+ const win=S.slice(i0).concat(RANGE==='1D'&&LP?[LP]:[]);const keys=['invested','portfolio','spy','world'];
  const base={};keys.forEach(k=>{const b=win.find(p=>p[k]!=null);base[k]=b?b[k]:null;});
  return {pts:win.map(p=>({...p,...Object.fromEntries(keys.map(k=>[k,p[k]==null||base[k]==null?null:((100+p[k])/(100+base[k])-1)*100]))})),base:win[0]};}
 function setRange(r){RANGE=r;document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===r)));
@@ -674,7 +658,7 @@ function drawLine(){const box=$('line');box.replaceChildren();const RS=rangeSeri
  // the shaded gap and the sentence compare the first visible portfolio line with the S&P 500
  const A=vis.find(([k])=>k==='portfolio'||k==='invested'),B2=vis.find(([k])=>k==='spy');
  const gapNow=A&&B2&&lastP&&lastP[A[0]]!=null&&lastP[B2[0]]!=null?lastP[A[0]]-lastP[B2[0]]:null;
- $('lineSub').textContent=LINE_SUB+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+(RANGE!=='All'&&vis.some(([k])=>k==='invested')?'; the invested line is a daily-chained return of the money in stocks':'')+'.':'')
+ $('lineSub').textContent=LINE_SUB+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+'.':'')
   +(gapNow==null?'':` ${A[3]} ${gapNow>=0?'ahead of':'behind'} the S&P 500 by ${Math.abs(gapNow).toFixed(1)} percentage points.`);
  if(S.length<2){box.append(el('div',{class:'empty'},'Not enough data for this period yet.'));return;}
  const W=Math.max(300,Math.round(box.getBoundingClientRect().width)),L=44,R=W<560?92:124,T=12,B=30,H=W<560?230:320;

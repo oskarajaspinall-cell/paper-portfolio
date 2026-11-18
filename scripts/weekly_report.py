@@ -99,11 +99,11 @@ def build(run: Path, asof: str, port: Path = ROOT / "portfolio", world: dict | N
                f"{pct(inc.get('total'))} vs SPY {pct(inc.get('spy'))} (whole portfolio, cash included)." if total is not None else "- No valuations yet.")
     wr = world_returns(vals, world) if vals and world else None
     if wr:  # 2026-11-16: the universe is global, so SPY alone flatters or hides the stock picking
-        out.append(f"- Global benchmark ({WORLD}, price only): week {pct(wr['week'])}, since inception {pct(wr['inception'])}.")
+        out.append(f"- Global benchmark ({WORLD}, dividends included): week {pct(wr['week'])}, since inception {pct(wr['inception'])}.")
     inv = invested_return(vals) if vals else None
     if inv:
-        out.append(f"- Return on invested money (cash excluded): {pct(inv['pct'])} (${inv['gain']:,.0f} on ${inv['invested']:,.0f} "
-                   f"invested) vs SPY bought on day one {pct(inv['spy_pct'])}.")
+        out.append(f"- Return on invested money (cash excluded, time-weighted): {pct(inv['pct'])} (${inv['gain']:,.0f} gained) "
+                   f"vs SPY bought on day one {pct(inv['spy_pct'])}.")
     out.append(f"- Trades: {len(applied)} executed ({mech} mechanical), {len(placed)} order(s) placed for the next open, "
                f"{len(rejected)} rejected; "
                f"{len(state.get('holdings', {}))} holdings, cash "
