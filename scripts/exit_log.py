@@ -65,7 +65,7 @@ def rebuild(ledger: list[dict], old: list[dict], mkt) -> list[dict]:
 
 def since(rows: list[dict], ledger: list[dict], mkt, asof: str) -> list[str]:
     """Refresh the since-exit figures to the latest close on/before `asof`."""
-    spy, notes = mkt.cfg["portfolio"]["benchmark"], []
+    notes = []
     buys = {(t["date"], t["ticker"]): t for t in ledger if t["side"] in ("BUY", "ADD")}
 
     def ret(ticker, price_usd, start):
@@ -74,13 +74,12 @@ def since(rows: list[dict], ledger: list[dict], mkt, asof: str) -> list[str]:
 
     for r in rows:
         try:
-            sr, day = ret(r["ticker"], float(r["price_usd"]), r["price_date"])
-            br = mkt.quote(spy, asof)["close"] / float(r["spy_close"]) - 1
+            DL.since_one(r, mkt, asof)
         except DataError as e:
             notes.append(f"{r['ticker']} {r['date']}: [data unavailable] ({e.field})")
             continue
-        r.update(since_date=day, since_ret=round(sr * 100, 2), since_spy=round(br * 100, 2),
-                 since_excess=round((sr - br) * 100, 2), kept_usd=round(float(r["usd"]) * sr, 2))
+        sr = r["since_ret"] / 100
+        r["kept_usd"] = round(float(r["usd"]) * sr, 2)
         b = buys.get((r["date"], r["replaced_by"])) if r.get("replaced_by") else None
         if b:
             try:

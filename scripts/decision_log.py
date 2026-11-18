@@ -32,7 +32,8 @@ LOG = ROOT / "portfolio" / "decisions.csv"
 HORIZONS = (1, 3, 6, 12)
 COLS = (["date", "ticker", "type", "decision", "conviction", "price", "currency", "price_date", "price_usd",
          "spy_close", "evaluation", "note", "fair_value_base"]
-        + [f"{k}_{h}m" for h in HORIZONS for k in ("ret", "spy", "excess", "hit")])
+        + [f"{k}_{h}m" for h in HORIZONS for k in ("ret", "spy", "excess", "hit")]
+        + ["since_date", "since_ret", "since_spy", "since_excess"])
 POSITIVE = {"BUY", "ADD", "HOLD"}
 
 
@@ -181,6 +182,29 @@ def update(rows: list[dict], mkt, asof: str) -> list[str]:
     return notes
 
 
+def since_one(r: dict, mkt, asof: str) -> None:
+    """The stock's and SPY's USD return from the row's price to the latest close on/before `asof` (split-adjusted)."""
+    q, s = mkt.quote(r["ticker"], asof), mkt.quote(mkt.cfg["portfolio"]["benchmark"], asof)
+    ret = q["price_usd"] * split_factor(mkt, r["ticker"], r["price_date"], q["date"]) / float(r["price_usd"]) - 1
+    sr = s["close"] / float(r["spy_close"]) - 1
+    r.update(since_date=q["date"], since_ret=round(ret * 100, 2), since_spy=round(sr * 100, 2),
+             since_excess=round((ret - sr) * 100, 2))
+
+
+def since(rows: list[dict], mkt, asof: str) -> list[str]:
+    """Owner request 2026-11-18: return since the decision vs SPY, refreshed nightly for buys, holds and trims
+    (61 rows, 26 stocks); avoids are left out (679 stocks would be re-priced every night)."""
+    notes = []
+    for r in rows:
+        if r["decision"] == "AVOID":
+            continue
+        try:
+            since_one(r, mkt, asof)
+        except (DataError, ValueError) as e:
+            notes.append(f"{r['ticker']} {r['date']} since: [data unavailable] ({getattr(e, 'field', e)})")
+    return notes
+
+
 def split_factor(mkt, ticker: str, after: str, through: str) -> float:
     """New shares per old share from splits dated after `after` up to `through` (Yahoo history's split
     column), so a split between the decision and the horizon never reads as a fall (2026-10-16)."""
@@ -243,7 +267,7 @@ def main(argv=None) -> int:
             print(json.dumps(reprice(rows, a.asof, mkt, decided_at, price_at), indent=1))
             write(rows)
         else:
-            notes = update(rows, mkt, a.asof)
+            notes = update(rows, mkt, a.asof) + since(rows, mkt, a.asof)
             write(rows)
             print(json.dumps({"rows": len(rows), "notes": notes}))
     except (DataError, ValueError) as e:

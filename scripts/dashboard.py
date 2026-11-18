@@ -420,7 +420,7 @@ def build_data(live: bool = True) -> dict:
         "ledger": [{k: r.get(k, "") for k in ("date", "ticker", "type", "side", "shares", "fill_price", "currency",
                                               "fill_close_date", "gross_usd", "costs_usd", "reason")} for r in ledger],
         "decisions": [{k: d.get(k, "") for k in ("date", "ticker", "type", "decision", "conviction", "price", "currency",
-                                                 "excess_1m", "excess_3m", "evaluation", "price_date")}
+                                                 "excess_1m", "excess_3m", "evaluation", "price_date", "since_excess", "since_date")}
                       | {"live": "price: live" in (d.get("note") or "")} for d in shown],
         "hits": hits, "n_decisions": len(decisions),
         "exits": [{k: e.get(k, "") for k in ("date", "ticker", "decision", "shares", "kind", "replaced_by", "usd", "since_date",
@@ -761,7 +761,7 @@ function table(id,cols,rows,empty,opt={}){const t=$(id),lim=opt.limit??15;
  if(!rows.length){t.append(el('tr',{},el('td',{colspan:cols.length,class:'muted'},empty)));return;}
  const wide=cols.some(c=>c.w);
  const trs=rows.map(r=>{const tr=el('tr',{},...cols.map(c=>{const v=c.f(r);const td=el('td',{class:(c.n?'n ':'')+(c.w?'w ':'')+(c.c?c.c(r):'')});
-  if(v instanceof Node)td.append(v);else td.textContent=v;return td;}));
+  if(c.t)td.title=c.t(r);if(v instanceof Node)td.append(v);else td.textContent=v;return td;}));
   if(wide){tr.classList.add('x');tr.title='Click to show the full text';tr.onclick=e=>{if(!e.target.closest('a'))tr.classList.toggle('open');};}t.append(tr);return tr;});
  const wrap=t.closest('.tw');let all=false,q='',chip=opt.chips?opt.chips[0][1]:null,ord=trs.map((_,i)=>i),sc=-1,dir=1;
  const more=el('button',{type:'button',class:'toggle more'});
@@ -831,7 +831,8 @@ table('trades',[{h:'Date',f:r=>r.date},{h:'Side',f:r=>r.side},{h:'Ticker',f:r=>r
  hs.forEach(h=>$('hits').append(rate(`Buys and holds, ${h}`,D.hits[h].buy),rate(`Avoids and trims, ${h}`,D.hits[h].avoid)));}
 table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Decision',f:r=>r.decision},
  {h:'Conv.',n:1,f:r=>r.conviction},{h:'Price',n:1,f:r=>`${(+r.price).toFixed(2)} ${r.currency} (${r.live?'live, ':'close '}${r.price_date})`},{h:'1m vs SPY',n:1,f:r=>r.excess_1m===''?'–':pct(+r.excess_1m,1),c:r=>r.excess_1m===''?'':cls(+r.excess_1m)},
- {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision',chips:[['With a result',r=>r.excess_1m!==''],['Buys',r=>r.decision==='BUY'||r.decision==='ADD'],
+ {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},
+ {h:'Since vs SPY',n:1,f:r=>!r.since_excess?'–':pct(+r.since_excess,1),c:r=>!r.since_excess?'':cls(+r.since_excess),t:r=>r.since_date?`to the ${r.since_date} close`:'buys, holds and trims only'},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision',chips:[['With a result',r=>r.excess_1m!==''],['Buys',r=>r.decision==='BUY'||r.decision==='ADD'],
   ['Holds and trims',r=>!['BUY','ADD','AVOID'].includes(r.decision)],['Avoids',r=>r.decision==='AVOID'],['All',null]]});
 {const E=D.exits||[],sv=x=>x===''?'–':(+x>=0?'+':'−')+usd(Math.abs(+x),0),lag=E.filter(r=>r.since_excess!==''),m1=E.filter(r=>r.hit_1m!=='');
  $('exitTiles').append(tile('Since the exit: lagged the S&P 500',lag.length?`${lag.filter(r=>+r.since_excess<0).length} of ${lag.length}`:'–','sold or trimmed stocks that did worse than the index since'),

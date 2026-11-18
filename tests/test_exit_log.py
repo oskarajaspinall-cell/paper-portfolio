@@ -38,3 +38,11 @@ def test_since_exit_swap_and_rebuild_keeps_outcomes():
     assert r["kept_usd"] == 100.0 and r["vs_replacement_since"] == 10.0  # NEW +20% minus OLD +10%
     r["hit_1m"] = 0
     assert X.rebuild(ledger, rows, m)[0]["hit_1m"] == 0  # filled outcomes survive a rebuild
+
+
+def test_since_one_on_a_decision_row():
+    import decision_log as DL
+    r = {"ticker": "OLD", "price_date": "2026-11-10", "price_usd": "100", "spy_close": "700", "decision": "BUY"}
+    m = Mkt({"OLD": {"2026-11-10": 100, "2026-11-17": 90}, "SPY": {"2026-11-10": 700, "2026-11-17": 707}})
+    DL.since_one(r, m, "2026-11-18")
+    assert (r["since_date"], r["since_ret"], r["since_spy"], r["since_excess"]) == ("2026-11-17", -10.0, 1.0, -11.0)
