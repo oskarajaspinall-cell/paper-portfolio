@@ -23,15 +23,16 @@ WORLD = "VT"  # Vanguard Total World Stock ETF: reporting only, never an input t
 
 
 def world_closes() -> dict | None:
+    """VT's dividend-adjusted closes (2026-11-18, owner: benchmarks include dividends)."""
     try:
         from prices import YahooPrices
-        return {r["date"]: r["close"] for r in YahooPrices(period="2y").history(WORLD)["rows"]}
+        return {r["date"]: r.get("adj_close") or r["close"] for r in YahooPrices(period="2y").history(WORLD)["rows"]}
     except Exception:  # noqa: BLE001  a missing benchmark line never blocks the report
         pass
     try:  # 2026-11-18: Yahoo served VT's latest bar with no close and the whole line vanished; for a comparison
         # line a day-stale close beats no line, so keep the complete bars (history() refuses this for holdings)
         from prices import YahooPrices, rows_from_frame
-        return {r["date"]: r["close"] for r in rows_from_frame(YahooPrices._yf(WORLD, "2y")[0])} or None
+        return {r["date"]: r.get("adj_close") or r["close"] for r in rows_from_frame(YahooPrices._yf(WORLD, "2y")[0])} or None
     except Exception:  # noqa: BLE001
         return None
 

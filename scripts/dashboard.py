@@ -57,6 +57,7 @@ def series(vals: list[dict], start_cash: float) -> list[dict]:
     if not pts:
         return []
     spy0 = _f(pts[0]["spy_close"])
+    div0 = _f(pts[0].get("spy_div_cum")) or 0.0  # SPY's dividends count (owner 2026-11-18), as in invested_series
     inv = {p["date"]: p for p in portfolio.invested_series(vals)}
     out, tw, prev = [], None, None
     for v in pts:
@@ -64,7 +65,7 @@ def series(vals: list[dict], start_cash: float) -> list[dict]:
         tot, spy, base, i = _f(v["total_usd"]), _f(v["spy_close"]), _f(v.get("baseline_usd")), inv.get(v["date"])
         out.append({"date": v["date"], "value": tot,
                     "portfolio": None if tot is None else tot / start_cash * 100,
-                    "spy": None if not (spy and spy0) else spy / spy0 * 100,
+                    "spy": None if not (spy and spy0) else (spy + (_f(v.get("spy_div_cum")) or 0.0) - div0) / spy0 * 100,
                     "baseline": None if base is None else base / start_cash * 100,
                     "invested": None if not i else 100 + i["pct"] * 100,
                     "spy_same": None if not i or i["spy_pct"] is None else 100 + i["spy_pct"] * 100,
@@ -638,9 +639,9 @@ const tip=$('tip');function showTip(ev,nodes){tip.replaceChildren(...nodes);tip.
 tip.style.left=x+'px';tip.style.top=Math.max(8,ev.clientY-tip.offsetHeight-12)+'px';}function hideTip(){tip.style.display='none'}
 // ---- line chart
 const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['invested','spy_same','portfolio','spy','baseline','world','invested_tw'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
-const TABS={invested:{sub:'Gain on the money put into stocks, cash excluded, vs the S&P 500 and global shares (VT) bought with all the money on day one (%, US dollars).',
+const TABS={invested:{sub:'Gain on the money put into stocks, cash excluded, vs the S&P 500 and global shares (VT) bought with all the money on day one, dividends included (%, US dollars).',
   defs:[['invested','Invested money','--s1','Invested'],['spy_same','S&P 500 from day one','--s2','S&P 500'],['world','Global shares (VT) from day one','--s3','Global']]},
- whole:{sub:'All $100k, cash and its interest included, vs the S&P 500 since inception (%, US dollars). Baseline = the first week\'s picks held unchanged.',
+ whole:{sub:'All $100k, cash and its interest included, vs the S&P 500 and global shares (VT) since inception, dividends included (%, US dollars). Baseline = the first week\'s picks held unchanged.',
   defs:[['portfolio','Whole portfolio (incl. cash)','--s1','Portfolio'],['spy','S&P 500 (SPY)','--s2','S&P 500'],['world','Global shares (VT)','--s3','Global'],['baseline','Baseline (first picks held)','--muted','Baseline']]}};
 const HID=new Set(['baseline']);try{const h=localStorage.getItem('chartHidden');if(h!=null){HID.clear();h.split(',').filter(Boolean).forEach(k=>HID.add(k));}}catch(e){}
 const TRD={};(D.trades||[]).forEach(t=>{(TRD[t.date]=TRD[t.date]||[]).push(t);});
