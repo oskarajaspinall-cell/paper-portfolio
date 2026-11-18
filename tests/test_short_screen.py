@@ -122,10 +122,27 @@ def test_alt_exit_rules_followed_side_by_side(scfg):
     rows = [{"date": d, "close": c, "high": c * 1.01, "low": c * 0.99} for d, c in zip(days, px)]
     etf = {d: 50.0 for d in days}
     alt = SS.alt_exits(rows, etf, days[60], days[-1], scfg)
-    assert set(alt) == set(SS.ALT_RULES)
+    assert set(alt) == set(SS.ALT_RULES) - {"value"}   # no valuation anchor given
     assert alt["take15"]["fired"] and alt["take15"]["result"] >= 15 and alt["take25"]["result"] >= 25
     assert alt["trail_atr"]["fired"] and alt["trail_atr"]["date"] < alt["hold"]["date"]   # the rebound trips it
     assert not alt["hold"]["fired"] and alt["hold"]["result"] == pytest.approx(-((px[-1] / px[60]) - 1) * 100, abs=0.01)
     book = [{"sector": "Technology", "alt_exits": json.dumps(alt)}, {"sector": "Energy", "alt_exits": json.dumps(alt)}]
     summ = SS.alt_summary(book)
     assert summ["All"]["take15"]["n"] == 2 and set(summ) == {"All", "Technology", "Energy"}
+
+
+def test_valuation_and_technical_exit_rules(scfg):
+    sheet = ("| P/E | 6.4x | [data unavailable] | x |\n| EV/Sales | 3.7x | 1.0x / 6.8x / 12.6x | 23% |\n"
+             "| P/B | 9.9x | 0.7x / 8.6x / 16.4x | 36% |\n")
+    vt = SS.valuation_target(sheet, 1255.0)
+    assert vt["multiple"] == "P/B" and vt["target"] == pytest.approx(1255 * 8.6 / 9.9, abs=0.01)
+    assert SS.valuation_target(sheet.replace("9.9x", "6.3x"), 797.0) is None   # both multiples already below median
+    assert SS.valuation_target("| P/B | 6.3x | 0.7x / 8.6x / 16.4x |", 797.0) is None   # already below its median
+    assert SS.rsi([float(x) for x in range(1, 40)]) == 100.0 and SS.rsi([40.0 - x for x in range(39)]) == 0.0
+    days = [f"2026-{m:02d}-{d:02d}" for m in (8, 9, 10, 11) for d in range(1, 29)]
+    px = [100.0] * 60 + [100 - 2 * i for i in range(1, 21)] + [60 + 3 * i for i in range(1, 33)]
+    rows = [{"date": d, "close": c, "high": c * 1.01, "low": c * 0.99} for d, c in zip(days, px)]
+    alt = SS.alt_exits(rows, {d: 50.0 for d in days}, days[60], days[-1], scfg, {"target": 80.0})
+    assert alt["value"]["fired"] and alt["value"]["result"] == pytest.approx(-(80 / 98 - 1) * 100, abs=0.01)
+    assert alt["rsi30"]["fired"] and alt["stretch25"]["fired"]
+    assert "value" not in SS.alt_exits(rows, {d: 50.0 for d in days}, days[60], days[-1], scfg)

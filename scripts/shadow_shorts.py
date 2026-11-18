@@ -28,7 +28,7 @@ BOOK = ROOT / "portfolio" / "shadow_shorts.csv"
 COLS = ["id", "ticker", "status", "opened", "evaluation", "confidence", "short_conviction", "industry", "currency",
         "entry_close", "sector_etf", "etf_entry", "borrow_fee_pct", "put_underlying", "put_contract", "put_expiry", "put_strike", "contracts", "put_entry_mid",
         "put_bid", "put_ask", "put_iv", "premium_usd", "notional_usd", "last_date", "last_close", "etf_last",
-        "put_last_mid", "sector", "alt_exits", "stock_ret_pct", "etf_ret_pct", "stock_vs_etf_pct", "borrow_cost_pct", "short_net_pct", "put_pnl_usd", "closed", "close_reason"]
+        "put_last_mid", "sector", "val_target", "alt_exits", "stock_ret_pct", "etf_ret_pct", "stock_vs_etf_pct", "borrow_cost_pct", "short_net_pct", "put_pnl_usd", "closed", "close_reason"]
 SECTOR_ETF = {"Technology": "XLK", "Financials": "XLF", "Healthcare": "XLV", "Energy": "XLE", "Industrials": "XLI",
               "Consumer Discretionary": "XLY", "Consumer Staples": "XLP", "Utilities": "XLU", "Real Estate": "XLRE",
               "Materials": "XLB", "Basic Materials": "XLB", "Communication Services": "XLC"}
@@ -136,7 +136,35 @@ def exit_reason(row: dict, close: float, asof: str, falsifier_hits: list[str], c
 
 ALT_RULES = {"trend": "back above a rising 50-day average", "trail_atr": "trailing stop: lowest close + 2.5 x ATR",
              "take15": "profit-take at +15 points vs the sector", "take25": "profit-take at +25 points vs the sector",
+             "value": "valuation back to normal: price-to-book (else EV/sales) down to its own 5-year median",
+             "rsi30": "oversold: 14-day RSI at 30 or below", "stretch25": "stretched: 25% or more below the 50-day average",
              "hold": "hold to the time limit"}
+
+
+def valuation_target(sheet_md: str, entry_close: float) -> dict | None:
+    """The price at which the cycle-robust multiple is back at its own 5-year median (owner 2026-11-18). Price-to-book,
+    else EV/sales; earnings multiples are left out (a peak makes them look cheap). None when the multiple is unknown
+    or already at/below its median when the short opens (then there is nothing for this rule to wait for)."""
+    import re
+    for name in ("P/B", "EV/Sales"):
+        m = re.search(rf"^\| {re.escape(name)} \| ([\d.,]+)x \| [\d.,]+x / ([\d.,]+)x / [\d.,]+x \|", sheet_md, re.M)
+        if m:
+            cur, med = float(m.group(1).replace(",", "")), float(m.group(2).replace(",", ""))
+            if cur > med > 0:  # shortcut: EV/sales scaled by price ignores debt, fine for the low-debt names screened
+                return {"multiple": name, "current": cur, "median": med, "target": round(entry_close * med / cur, 4)}
+    return None
+
+
+def rsi(closes: list[float], n: int = 14) -> float | None:
+    """Wilder's RSI on daily closes."""
+    if len(closes) <= n:
+        return None
+    ch = [b - a for a, b in zip(closes, closes[1:])]
+    up = sum(max(c, 0) for c in ch[:n]) / n
+    dn = sum(max(-c, 0) for c in ch[:n]) / n
+    for c in ch[n:]:
+        up, dn = (up * (n - 1) + max(c, 0)) / n, (dn * (n - 1) + max(-c, 0)) / n
+    return 100.0 if dn == 0 else 100 - 100 / (1 + up / dn)
 
 
 def horizon_end(row: dict, cfg: dict) -> str:
@@ -146,7 +174,8 @@ def horizon_end(row: dict, cfg: dict) -> str:
     return (dt.date.fromisoformat(row["opened"]) + dt.timedelta(days=180)).isoformat()
 
 
-def alt_exits(rows: list[dict], etf: dict[str, float], opened: str, end: str, cfg: dict) -> dict:
+def alt_exits(rows: list[dict], etf: dict[str, float], opened: str, end: str, cfg: dict,
+              val_target: dict | None = None) -> dict:
     """What each candidate exit rule would have made on this position (owner 2026-11-18: compare exit rules, and by
     sector, before choosing one). Result = the short's gain vs the sector ETF in points (+ = the short won), at the
     rule's first trigger, else at the latest close up to `end` (still held). Judged independently of the real exit."""
@@ -165,13 +194,20 @@ def alt_exits(rows: list[dict], etf: dict[str, float], opened: str, end: str, cf
         c, r, d = closes[i], res(i), rows[i]["date"]
         low = min(low, c)
         sma, sma5 = (sum(closes[i - 49:i + 1]) / 50, sum(closes[i - 54:i - 4]) / 50) if i >= 54 else (None, None)
+        sma50 = sum(closes[i - 49:i + 1]) / 50 if i >= 49 else None
+        rs = rsi(closes[:i + 1])
         hits = {"trend": sma is not None and c > sma > sma5, "trail_atr": a > 0 and c >= low + k * a,
-                "take15": r >= 15, "take25": r >= 25}
+                "take15": r >= 15, "take25": r >= 25,
+                "value": bool(val_target) and c <= val_target["target"],
+                "rsi30": rs is not None and rs <= cfg["short"].get("rsi_cover", 30),
+                "stretch25": sma50 is not None and c <= sma50 * (1 - cfg["short"].get("stretch_below_50d_pct", 25) / 100)}
         for rule, hit in hits.items():
             if hit and rule not in out:
                 out[rule] = {"date": d, "result": r, "fired": True}
     last = len(rows) - 1
     for rule in ALT_RULES:
+        if rule == "value" and not val_target:
+            continue  # no valuation anchor for this position: left out of the rule's comparison
         out.setdefault(rule, {"date": rows[last]["date"], "result": res(last), "fired": False})
     return out
 
@@ -253,7 +289,8 @@ def run(asof: str, cfg: dict, mkt, agent: bool, log=print) -> dict:
             try:
                 hist = mkt.history(r["ticker"])["rows"]
                 etf = {x["date"]: x["close"] for x in mkt.history(r["sector_etf"])["rows"] if x.get("close")}
-                r["alt_exits"] = json.dumps(alt_exits(hist, etf, r["opened"], min(asof, horizon_end(r, cfg)), cfg))
+                r["alt_exits"] = json.dumps(alt_exits(hist, etf, r["opened"], min(asof, horizon_end(r, cfg)), cfg,
+                                                      json.loads(r["val_target"]) if r.get("val_target") else None))
             except DataError:
                 pass
     for r in rows:  # mark and close
@@ -307,6 +344,9 @@ def run(asof: str, cfg: dict, mkt, agent: bool, log=print) -> dict:
         put = price_put(c["ticker"], hq["close"], asof, closes, cfg, adr=und)
         row = new_position(c, d, path, q, etf, mkt.quote(etf, asof)["close"], put, pv, asof, cfg)
         row["sector"] = sector
+        fs = ROOT / "research" / slug / f"factsheet-{asof}.md"
+        vt = valuation_target(fs.read_text(), q["close"]) if fs.exists() else None
+        row["val_target"] = json.dumps(vt) if vt else ""
         rows.append(row)
         open_rows.append(row)
         opened.append(c["ticker"])
