@@ -548,7 +548,7 @@ __INTRO__
 <section class="card" id="attCard"><h2>Needs attention</h2><ul class="att" id="att"></ul></section>
 __DAILY__
 <section class="card"><h2>Return vs the S&amp;P 500</h2>
-<div class="tabs" role="tablist"><button type="button" role="tab" class="tab" data-tab="invested">Invested money</button><button type="button" role="tab" class="tab" data-tab="whole">Whole portfolio</button></div>
+<div class="tabs" role="tablist"><button type="button" role="tab" class="tab" data-tab="whole">Whole portfolio</button><button type="button" role="tab" class="tab" data-tab="invested">Invested money</button></div>
 <div class="ranges" role="group" aria-label="Chart period" id="ranges"></div>
 <div class="sub" id="lineSub"></div>
 <div class="legend" id="lineLegend"></div><div id="line"></div>
@@ -638,8 +638,8 @@ const tip=$('tip');function showTip(ev,nodes){tip.replaceChildren(...nodes);tip.
 tip.style.left=x+'px';tip.style.top=Math.max(8,ev.clientY-tip.offsetHeight-12)+'px';}function hideTip(){tip.style.display='none'}
 // ---- line chart
 const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['invested','spy_same','portfolio','spy','baseline','world','invested_tw'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
-const TABS={invested:{sub:'Gain on the money put into stocks, cash excluded, vs the S&P 500 bought with all the money on day one (%, US dollars).',
-  defs:[['invested','Invested money','--s1','Invested'],['spy_same','S&P 500 from day one','--s2','S&P 500']]},
+const TABS={invested:{sub:'Gain on the money put into stocks, cash excluded, vs the S&P 500 and global shares (VT) bought with all the money on day one (%, US dollars).',
+  defs:[['invested','Invested money','--s1','Invested'],['spy_same','S&P 500 from day one','--s2','S&P 500'],['world','Global shares (VT) from day one','--s3','Global']]},
  whole:{sub:'All $100k, cash and its interest included, vs the S&P 500 since inception (%, US dollars). Baseline = the first week\'s picks held unchanged.',
   defs:[['portfolio','Whole portfolio (incl. cash)','--s1','Portfolio'],['spy','S&P 500 (SPY)','--s2','S&P 500'],['world','Global shares (VT)','--s3','Global'],['baseline','Baseline (first picks held)','--muted','Baseline']]}};
 const HID=new Set(['baseline']);try{const h=localStorage.getItem('chartHidden');if(h!=null){HID.clear();h.split(',').filter(Boolean).forEach(k=>HID.add(k));}}catch(e){}
@@ -663,8 +663,8 @@ function rangeSeries(){if(!S.length)return {pts:[],base:null};const last=S[S.len
 function setRange(r){RANGE=r;document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===r)));
  try{localStorage.setItem('chartRange',r)}catch(e){}drawLine();}
 RANGES.forEach(([r,l])=>{const b=el('button',{type:'button',class:'rng','data-r':r,title:l,'aria-pressed':'false'},r);b.onclick=()=>setRange(r);$('ranges').append(b);});
-let CUR='invested';
-function setTab(name){const t=TABS[name]||TABS.invested;CUR=TABS[name]?name:'invested';defs=t.defs.filter(([k])=>S.some(p=>p[k]!=null));
+let CUR='whole';
+function setTab(name){const t=TABS[name]||TABS.whole;CUR=TABS[name]?name:'whole';defs=t.defs.filter(([k])=>S.some(p=>p[k]!=null));
  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===name)));
  $('lineSub').textContent=t.sub;$('lineLegend').replaceChildren(...defs.map(([k,n,c])=>{const b=el('button',{type:'button',class:'lg','aria-pressed':String(!HID.has(k)),title:'Show or hide this line'},el('span',{class:'key',style:`background:var(${c})`}),n);
   b.onclick=()=>{if(HID.has(k))HID.delete(k);else if(defs.filter(([x])=>!HID.has(x)).length>1)HID.add(k);try{localStorage.setItem('chartHidden',[...HID].join(','))}catch(e){}setTab(CUR);};return b;}));
@@ -765,7 +765,7 @@ function riskBars(){const box=$('risk');box.replaceChildren();const R=D.risk;
    {h:'Interaction',n:1,f:r=>p2(r.interaction),c:r=>cls(r.interaction)},{h:'Total',n:1,f:r=>p2(r.t),c:r=>cls(r.t)}],rows,'');}}
 {let r0='All';try{r0=localStorage.getItem('chartRange')||r0}catch(e){}RANGE=RANGES.some(([r])=>r===r0)?r0:'All';
  document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===RANGE)));}
-{let t0='invested';try{t0=localStorage.getItem('chartTab')||t0}catch(e){}setTab(TABS[t0]?t0:'invested');}
+{let t0='whole';try{t0=localStorage.getItem('chartTab')||t0}catch(e){}setTab(TABS[t0]?t0:'whole');}
 setPage(location.hash.slice(1));drawn=true;drawAll();let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(drawAll,150);});
 // ---- tables
 function table(id,cols,rows,empty,opt={}){const t=$(id),lim=opt.limit??15;
