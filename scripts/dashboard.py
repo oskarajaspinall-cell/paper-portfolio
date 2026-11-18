@@ -548,7 +548,7 @@ __INTRO__
 <div class="tiles" id="tiles"></div></section>
 <section class="card" id="attCard"><h2>Needs attention</h2><ul class="att" id="att"></ul></section>
 __DAILY__
-<section class="card"><h2>Return vs the S&amp;P 500</h2>
+<section class="card"><h2>Return vs the S&amp;P 500 and global shares (VT)</h2>
 <div class="ranges" role="group" aria-label="Chart period" id="ranges"></div>
 <div class="sub" id="lineSub"></div>
 <div class="legend" id="lineLegend"></div><div id="line"></div>
@@ -681,7 +681,7 @@ function drawLine(){const box=$('line');box.replaceChildren();const RS=rangeSeri
  // equal spacing per trading day (weekends and holidays take no room)
  const XI=new Map(S.map((p,i)=>[p.date,i])),XD=p=>L+XI.get(p.date)/((S.length-1)||1)*(W-L-R);
  const all=S.flatMap(p=>vis.map(([k])=>p[k]).filter(v=>v!=null));const N=nice(Math.min(0,...all),Math.max(0,...all)+1e-9),lo=N.lo,hi=N.hi;
- const Y=v=>T+(hi-v)/(hi-lo)*(H-T-B);const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Return of the portfolio against the S&P 500 (%); the same figures are in the table below'});
+ const Y=v=>T+(hi-v)/(hi-lo)*(H-T-B);const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Return of the portfolio against the S&P 500 and global shares (VT) (%); the same figures are in the table below'});
  for(let v=lo;v<=hi+N.st/2;v+=N.st){const z=Math.abs(v)<N.st/1e6;svg.append(sv('line',{x1:L,x2:W-R,y1:Y(v),y2:Y(v),stroke:z?'var(--axis)':'var(--grid)','stroke-width':1}));
   const t=sv('text',{x:L-6,y:Y(v)+4,'text-anchor':'end'});t.textContent=(z?0:v).toFixed(N.st<1?1:0)+'%';svg.append(t);}
  const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
