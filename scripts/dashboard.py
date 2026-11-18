@@ -646,11 +646,11 @@ const HID=new Set(['baseline']);try{const h=localStorage.getItem('chartHidden');
 const TRD={};(D.trades||[]).forEach(t=>{(TRD[t.date]=TRD[t.date]||[]).push(t);});
 function nice(lo,hi){const raw=(hi-lo)/5||1,p=Math.pow(10,Math.floor(Math.log10(raw))),m=raw/p,st=(m<1.5?1:m<3?2:m<7?5:10)*p;return {lo:Math.floor(lo/st)*st,hi:Math.ceil(hi/st)*st,st};}
 let defs=[],RANGE='All';
-const RANGES=[['1D','24h'],['1W','1 week'],['3M','3 months'],['6M','6 months'],['YTD','Year to date'],['All','All']];
+const RANGES=[['1D','24h'],['1W','1 week'],['1M','1 month'],['3M','3 months'],['6M','6 months'],['YTD','Year to date'],['All','All']];
 const LP=D.live_point?{...D.live_point,...Object.fromEntries(['invested','spy_same','portfolio','spy','baseline','world'].map(k=>[k,D.live_point[k]==null?null:D.live_point[k]-100]))}:null;
 function rangeSeries(){if(!S.length)return {pts:[],base:null};const last=S[S.length-1],ld=new Date(last.date+'T00:00:00');let cut=null;
  if(RANGE==='1W'){cut=new Date(ld);cut.setDate(cut.getDate()-7);}
- else if(RANGE==='3M'||RANGE==='6M'){cut=new Date(ld);cut.setMonth(cut.getMonth()-(RANGE==='3M'?3:6));}
+ else if(['1M','3M','6M'].includes(RANGE)){cut=new Date(ld);cut.setMonth(cut.getMonth()-parseInt(RANGE));}
  else if(RANGE==='YTD'){cut=new Date(ld.getFullYear(),0,1);cut.setDate(0);}
  if(RANGE==='All')return {pts:S,base:S[0]};  // since inception, exactly as the headline figures
  let i0=0;if(RANGE==='1D')i0=Math.max(0,S.length-2);
