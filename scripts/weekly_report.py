@@ -23,18 +23,24 @@ WORLD = "VT"  # Vanguard Total World Stock ETF: reporting only, never an input t
 
 
 def world_closes() -> dict | None:
-    """VT's dividend-adjusted closes (2026-11-18, owner: benchmarks include dividends)."""
+    """VT's dividend-adjusted closes (2026-11-18, owner: benchmarks include dividends). A failed download falls back
+    to the last good one (data/cache/world_closes.json), so one Yahoo hiccup doesn't blank the benchmark line."""
+    last_good = ROOT / "data" / "cache" / "world_closes.json"
+    out = None
     try:
         from prices import YahooPrices
-        return {r["date"]: r.get("adj_close") or r["close"] for r in YahooPrices(period="2y").history(WORLD)["rows"]}
+        out = {r["date"]: r.get("adj_close") or r["close"] for r in YahooPrices(period="2y").history(WORLD)["rows"]}
     except Exception:  # noqa: BLE001  a missing benchmark line never blocks the report
-        pass
-    try:  # 2026-11-18: Yahoo served VT's latest bar with no close and the whole line vanished; for a comparison
-        # line a day-stale close beats no line, so keep the complete bars (history() refuses this for holdings)
-        from prices import YahooPrices, rows_from_frame
-        return {r["date"]: r.get("adj_close") or r["close"] for r in rows_from_frame(YahooPrices._yf(WORLD, "2y")[0])} or None
-    except Exception:  # noqa: BLE001
-        return None
+        try:  # Yahoo served the latest bar with no close: keep the complete bars (history() refuses this for holdings)
+            from prices import YahooPrices, rows_from_frame
+            out = {r["date"]: r.get("adj_close") or r["close"] for r in rows_from_frame(YahooPrices._yf(WORLD, "2y")[0])} or None
+        except Exception:  # noqa: BLE001
+            out = None
+    if out:
+        last_good.parent.mkdir(parents=True, exist_ok=True)
+        last_good.write_text(json.dumps(out))
+        return out
+    return json.loads(last_good.read_text()) if last_good.exists() else None
 
 
 def _load(path: Path, default):
