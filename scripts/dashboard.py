@@ -383,6 +383,7 @@ def build_data(live: bool = True) -> dict:
         for side, own in (("buy", True), ("avoid", False)):  # one blended rate is mostly AVOIDs in a rising market
             part = [d for d in done if (d["decision"] in ("BUY", "ADD", "HOLD")) == own]
             hits[f"{h}m"][side] = {"n": len(part), "hits": sum(int(d[f"hit_{h}m"]) for d in part)}
+    exits = _csv(port / "exits.csv")[::-1]  # scripts/exit_log.py: how sold and trimmed stocks did afterwards
     newest = decisions[::-1]
     matured = {id(d) for d in [d for d in newest if d.get("excess_1m") not in ("", None)][:300]}
     shown = [d for i, d in enumerate(newest) if i < 60 or d["decision"] != "AVOID" or id(d) in matured]
@@ -431,6 +432,9 @@ def build_data(live: bool = True) -> dict:
                                                  "excess_1m", "excess_3m", "evaluation", "price_date")}
                       | {"live": "price: live" in (d.get("note") or "")} for d in shown],
         "hits": hits, "n_decisions": len(decisions),
+        "exits": [{k: e.get(k, "") for k in ("date", "ticker", "decision", "shares", "kind", "replaced_by", "usd", "since_date",
+                                             "since_ret", "since_excess", "kept_usd", "vs_replacement_since",
+                                             "excess_1m", "hit_1m", "excess_3m")} for e in exits],
         "watch": sorted(({"ticker": r["ticker"], "close": r.get("last_close"), "entry": r["entry_price"],
                           "close_date": r.get("last_close_date", ""), "live": snap.get(r["ticker"]),
                           "ccy": r.get("currency", ""), "to_entry": _f(r.get("pct_to_entry")), "source": r["source"],
@@ -574,6 +578,8 @@ __DAILY__
 <section class="card"><h2>Recent trades</h2><div class="tw"><table id="trades"></table></div></section>
 <section class="card"><h2>Decisions &amp; hit rates</h2><div class="sub">A decision is a hit when it was right about direction against the S&amp;P 500: a buy or hold that beat it, an avoid or trim that lagged it. Avoids are counted apart because there are far more of them. The table lists the latest decisions and those with a result; click a column to sort.</div>
 <div class="tiles" id="hits"></div><div class="tw" style="margin-top:12px"><table id="decisions"></table></div></section>
+<section class="card"><h2>After we sold</h2><div class="sub">Every trim and sale, followed from its fill price. A trim or sale was right when the stock then lagged the S&amp;P 500. "Selling saved" is what the sold shares have lost since (+) or gained (−); for a swap, the last column is the stock bought minus the one sold.</div>
+<div class="tiles" id="exitTiles"></div><div class="tw" style="margin-top:12px"><table id="exits"></table></div></section>
 <section class="card"><h2>Conviction scoreboard</h2><div class="sub" id="scoreSub"></div><div class="tw"><table id="score"></table></div>
 <div class="sub" style="margin-top:12px" id="pointsSub"></div><div class="tw"><table id="points"></table></div></section>
 </div>
@@ -839,6 +845,17 @@ table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f
  {h:'Conv.',n:1,f:r=>r.conviction},{h:'Price',n:1,f:r=>`${(+r.price).toFixed(2)} ${r.currency} (${r.live?'live, ':'close '}${r.price_date})`},{h:'1m vs SPY',n:1,f:r=>r.excess_1m===''?'–':pct(+r.excess_1m,1),c:r=>r.excess_1m===''?'':cls(+r.excess_1m)},
  {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision',chips:[['With a result',r=>r.excess_1m!==''],['Buys',r=>r.decision==='BUY'||r.decision==='ADD'],
   ['Holds and trims',r=>!['BUY','ADD','AVOID'].includes(r.decision)],['Avoids',r=>r.decision==='AVOID'],['All',null]]});
+{const E=D.exits||[],sv=x=>x===''?'–':(+x>=0?'+':'−')+usd(Math.abs(+x),0),lag=E.filter(r=>r.since_excess!==''),m1=E.filter(r=>r.hit_1m!=='');
+ $('exitTiles').append(tile('Since the exit: lagged the S&P 500',lag.length?`${lag.filter(r=>+r.since_excess<0).length} of ${lag.length}`:'–','sold or trimmed stocks that did worse than the index since'),
+  tile('Selling saved so far',lag.length?sv(-lag.reduce((a,r)=>a+(+r.kept_usd||0),0)):'–','what the sold shares lost since (+) or gained (−)'),
+  tile('Trims and sells right, 1m',m1.length?Math.round(m1.filter(r=>+r.hit_1m).length/m1.length*100)+'%':'–',m1.length?`${m1.filter(r=>+r.hit_1m).length} of ${m1.length}`:'none a month old yet'));
+ const why=r=>r.kind==='swap'?`swapped for ${r.replaced_by}`:r.kind==='sizing'?'cut to conviction-3 size':'research';
+ table('exits',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Exit',f:r=>r.decision.toLowerCase()},{h:'Why',f:why},{h:'Sold',n:1,f:r=>usd(+r.usd,0)},
+  {h:'Since, vs S&P',n:1,f:r=>r.since_excess===''?'–':pct(+r.since_excess,1),c:r=>r.since_excess===''?'':cls(-r.since_excess)},
+  {h:'Selling saved',n:1,f:r=>sv(-r.kept_usd),c:r=>r.kept_usd===''?'':cls(-r.kept_usd)},
+  {h:'Bought vs sold',n:1,f:r=>r.vs_replacement_since===''?'–':pct(+r.vs_replacement_since,1),c:r=>r.vs_replacement_since===''?'':cls(+r.vs_replacement_since)},
+  {h:'1m vs SPY',n:1,f:r=>r.excess_1m===''?'–':pct(+r.excess_1m,1),c:r=>r.excess_1m===''?'':cls(-r.excess_1m)},
+  {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(-r.excess_3m)}],E,'No trims or sales yet.');}
 {const F=D.funnel||{};['7','30'].forEach(d=>{const x=F[d];if(!x)return;$('funnel').append(tile(`Last ${d} days: researched`,String(x.researched),'stocks given a verdict'),
   tile('reached conviction 4+',String(x.conv4),x.researched?(x.conv4/x.researched*100).toFixed(1)+'% of those researched':''),tile('bought',String(x.bought),'filled buy orders'));});}
 {const SC=D.scoreboard||{},rows=Object.entries(SC.by_conviction||{}).flatMap(([g,hs])=>Object.entries(hs).map(([h,c])=>({g,h,...c}))).sort((a,b)=>b.g.localeCompare(a.g)||a.h.localeCompare(b.h));
