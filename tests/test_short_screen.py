@@ -71,11 +71,10 @@ def test_put_choice_and_thin_chain(scfg):
 def test_exits_and_marks(scfg):
     row = {"entry_close": "100", "etf_entry": "50", "put_entry_mid": "10", "contracts": "2", "put_expiry": "2027-03-19",
            "opened": "2026-11-18"}
-    assert SS.exit_reason(row, 116, "2026-12-01", None, [], scfg).startswith("stop")
-    assert SS.exit_reason(row, 90, "2026-12-01", 92.0, [], scfg).startswith("target")
-    assert SS.exit_reason(row, 95, "2026-12-01", None, ["gross margin rose"], scfg).startswith("falsifier")
-    assert SS.exit_reason(row, 95, "2027-02-20", None, [], scfg).startswith("time")
-    assert SS.exit_reason(row, 95, "2026-12-01", None, [], scfg) == ""
+    assert SS.exit_reason(row, 116, "2026-12-01", [], scfg).startswith("stop")
+    assert SS.exit_reason(row, 95, "2026-12-01", ["gross margin rose"], scfg).startswith("falsifier")
+    assert SS.exit_reason(row, 95, "2027-02-20", [], scfg).startswith("time")
+    assert SS.exit_reason(row, 50, "2026-12-01", [], scfg) == ""   # no fair-value target: a big fall keeps it open
     SS.mark(row, 80, 51, "2026-12-01", 22.0)
     assert (row["stock_vs_etf_pct"], row["put_pnl_usd"]) == (-22.0, 2400.0)   # -20% vs +2%; (22-10) x 100 x 2
 
@@ -115,3 +114,18 @@ def test_foreign_shorts_restricted_markets_adr_and_borrowing(scfg):
     SS.mark(row, 80, 51, "2027-05-18", None)                              # 181 days: 6% x 181/365 = 2.98%
     assert row["borrow_cost_pct"] == pytest.approx(2.98, abs=0.01)
     assert row["short_net_pct"] == pytest.approx(22.0 - 2.98, abs=0.01)  # stock -20% vs fund +2%, less the fee
+
+
+def test_alt_exit_rules_followed_side_by_side(scfg):
+    days = [f"2026-{m:02d}-{d:02d}" for m in (8, 9, 10, 11) for d in range(1, 29)]
+    px = [100.0] * 60 + [100 - 2 * i for i in range(1, 21)] + [60 + 3 * i for i in range(1, 33)]  # flat, falls 40%, rebounds
+    rows = [{"date": d, "close": c, "high": c * 1.01, "low": c * 0.99} for d, c in zip(days, px)]
+    etf = {d: 50.0 for d in days}
+    alt = SS.alt_exits(rows, etf, days[60], days[-1], scfg)
+    assert set(alt) == set(SS.ALT_RULES)
+    assert alt["take15"]["fired"] and alt["take15"]["result"] >= 15 and alt["take25"]["result"] >= 25
+    assert alt["trail_atr"]["fired"] and alt["trail_atr"]["date"] < alt["hold"]["date"]   # the rebound trips it
+    assert not alt["hold"]["fired"] and alt["hold"]["result"] == pytest.approx(-((px[-1] / px[60]) - 1) * 100, abs=0.01)
+    book = [{"sector": "Technology", "alt_exits": json.dumps(alt)}, {"sector": "Energy", "alt_exits": json.dumps(alt)}]
+    summ = SS.alt_summary(book)
+    assert summ["All"]["take15"]["n"] == 2 and set(summ) == {"All", "Technology", "Energy"}

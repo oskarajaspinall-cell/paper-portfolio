@@ -244,7 +244,8 @@ def shadow_shorts_data() -> dict:
                                                                             "trend_turned", "guards", "qualifies")},
                                                    "verdict": verdict(c["ticker"])}
                                                   for c in s.get("candidates", []) if c.get("confidence", 0) >= 3],
-            "book": shadow_shorts.read()}
+            "book": shadow_shorts.read(), "rules": shadow_shorts.ALT_RULES,
+            "exit_rules": shadow_shorts.alt_summary(shadow_shorts.read())}
 
 
 def funnel(decisions: list[dict], ledger: list[dict], today: str) -> dict:
@@ -653,6 +654,7 @@ __DAILY__
 <div class="tiles" id="exitTiles"></div><div class="tw" style="margin-top:12px"><table id="exits"></table></div></section>
 <section class="card"><h2>Shadow shorts</h2><div class="sub" id="shortSub"></div>
 <div class="tiles" id="shortTiles"></div><div class="tw" style="margin-top:12px"><table id="shortBook"></table></div>
+<div class="sub" style="margin-top:12px">Exit rules compared on the same positions: median result vs the sector fund (points, + = the short won), overall and by sector. A rule that never fired counts as held to the time limit. Chosen at the January review.</div><div class="tw"><table id="shortRules"></table></div>
 <div class="sub" style="margin-top:12px">Candidates scoring 3 or more (out of 7)</div><div class="tw"><table id="shortCands"></table></div></section>
 <section class="card"><h2>Conviction scoreboard</h2><div class="sub" id="scoreSub"></div><div class="tw"><table id="score"></table></div>
 <div class="sub" style="margin-top:12px" id="pointsSub"></div><div class="tw"><table id="points"></table></div></section>
@@ -919,6 +921,9 @@ table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f
  {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},
  {h:'Since vs SPY',n:1,f:r=>!r.since_excess?'–':pct(+r.since_excess,1),c:r=>!r.since_excess?'':cls(+r.since_excess),t:r=>r.since_date?`to the ${r.since_date} close`:'buys, holds, trims and conviction-3 avoids only'},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision',chips:[['With a result',r=>r.excess_1m!==''],['Buys',r=>r.decision==='BUY'||r.decision==='ADD'],
   ['Holds and trims',r=>!['BUY','ADD','AVOID'].includes(r.decision)],['Avoids',r=>r.decision==='AVOID'],['All',null]]});
+{const SH=D.shorts||{},X=SH.exit_rules||{},secs=Object.keys(X).filter(g=>g!=='All').sort(),cell=(g,k)=>{const v=(X[g]||{})[k];return v?`${pct(v.median,1).replace('%','')} (${v.n})`:'–';};
+ table('shortRules',[{h:'Exit rule',f:r=>r.label},{h:'All sectors',n:1,f:r=>cell('All',r.k)},...secs.map(g=>({h:g,n:1,f:r=>cell(g,r.k)}))],
+  X.All?Object.entries(SH.rules||{}).map(([k,label])=>({k,label})):[],'No shadow positions yet: the comparison fills in as they open.');}
 {const R=D.review||{};$('reviewSub').textContent=`Rules on trial and open questions, each decided with data at the review in ${R.date||'January'}. Status updates every night.`;
  table('review',[{h:'Area',f:r=>r.area},{h:'What',f:r=>r.item},{h:'Question',w:1,f:r=>r.question},{h:'What it decides',w:1,f:r=>r.decides},{h:'Status now',w:1,f:r=>r.status}],R.items||[],'Nothing tracked.',{chips:[['All',null]].concat([...new Set((R.items||[]).map(r=>r.area))].map(a=>[a,r=>r.area===a]))});}
 {const SH=D.shorts||{},B=SH.book||[],op=B.filter(r=>r.status==='open'),cl=B.filter(r=>r.status==='closed');
