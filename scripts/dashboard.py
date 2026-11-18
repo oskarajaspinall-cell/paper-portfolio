@@ -181,8 +181,18 @@ def shadow_shorts_data() -> dict:
     import shadow_shorts
     scr = sorted((ROOT / "reports" / "short-screen").glob("20??-??-??.json"))
     s = json.loads(scr[-1].read_text()) if scr else {}
-    return {"asof": s.get("asof"), "candidates": [{k: c.get(k) for k in ("ticker", "decided", "conviction", "confidence",
-                                                                         "trend_turned", "guards", "qualifies")}
+    from decision_log import decision_from_eval
+
+    def verdict(t):  # the latest short evaluation, e.g. "NO 1 (2026-11-18)"
+        evs = sorted((ROOT / "research" / Ticker(t).slug).glob("*-short-evaluation.md"))
+        try:
+            d = decision_from_eval(evs[-1].read_text()) if evs else None
+        except ValueError:
+            return ""
+        return f"{d['decision']} {d['conviction']} ({evs[-1].name[:10]})" if d else ""
+    return {"asof": s.get("asof"), "candidates": [{**{k: c.get(k) for k in ("ticker", "decided", "conviction", "confidence",
+                                                                            "trend_turned", "guards", "qualifies")},
+                                                   "verdict": verdict(c["ticker"])}
                                                   for c in s.get("candidates", []) if c.get("confidence", 0) >= 3],
             "book": shadow_shorts.read()}
 
@@ -870,7 +880,7 @@ table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f
   {h:'Put P/L',n:1,f:r=>r.put_pnl_usd===''?'–':usd(+r.put_pnl_usd,0),c:r=>r.put_pnl_usd===''?'':cls(+r.put_pnl_usd)},
   {h:'Evaluation',f:r=>link(r.evaluation,'read')}],B,'No shadow shorts yet.');
  table('shortCands',[{h:'Ticker',f:r=>r.ticker},{h:'Researched',f:r=>r.decided},{h:'Conv.',n:1,f:r=>r.conviction},{h:'Confidence',n:1,f:r=>`${r.confidence}/7`},
-  {h:'Trend turned',f:r=>r.trend_turned?'yes':'no'},{h:'Blocked by',w:1,f:r=>(r.guards||[]).join('; ')||'–'},{h:'Qualifies',f:r=>r.qualifies?'yes':'no'}],SH.candidates||[],'No candidates.');}
+  {h:'Trend turned',f:r=>r.trend_turned?'yes':'no'},{h:'Blocked by',w:1,f:r=>(r.guards||[]).join('; ')||'–'},{h:'Qualifies',f:r=>r.qualifies?'yes':'no'},{h:'Short analysis',f:r=>r.verdict||'–'}],SH.candidates||[],'No candidates.');}
 {const E=D.exits||[],sv=x=>x===''?'–':(+x>=0?'+':'−')+usd(Math.abs(+x),0),lag=E.filter(r=>r.since_excess!==''),m1=E.filter(r=>r.hit_1m!=='');
  $('exitTiles').append(tile('Since the exit: lagged the S&P 500',lag.length?`${lag.filter(r=>+r.since_excess<0).length} of ${lag.length}`:'–','sold or trimmed stocks that did worse than the index since'),
   tile('Selling saved so far',lag.length?sv(-lag.reduce((a,r)=>a+(+r.kept_usd||0),0)):'–','what the sold shares lost since (+) or gained (−)'),
