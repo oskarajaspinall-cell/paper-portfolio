@@ -399,9 +399,10 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
                  and Ticker(p["ticker"]).slug not in recent.get(p["type"], set())]
         # entry-price hits (owner rule 2026-10-09) go first and bypass the 90-day rule: the price reached the
         # level we set, so re-research whether it's now a BUY (it fell for a reason; nothing is bought blindly)
+        from entry_watch import researched_since
         hits = [{"ticker": h["ticker"], "type": "CORE", "entry_hit": h}
                 for h in (state.get("entry_hits") or []) + (state.get("dip_hits") or [])
-                if h["ticker"] not in state["holdings"]]
+                if h["ticker"] not in state["holdings"] and not researched_since(h)]  # the loop may have done it (2026-11-18)
         hits = list({h["ticker"]: h for h in reversed(hits)}.values())[::-1]  # one per stock, first kept
         picks = hits + [p for p in picks if p["ticker"] not in {h["ticker"] for h in hits}]
         manifest["skipped"] = []

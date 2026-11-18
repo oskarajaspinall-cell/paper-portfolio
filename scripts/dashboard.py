@@ -170,8 +170,9 @@ def add_world(ser: list[dict], closes: dict | None) -> None:
         ds = [d for d in closes if d <= day]
         return closes[max(ds)] if ds else None
     base = on(ser[0]["date"]) if ser and closes else None
-    for p in ser:
-        c = on(p["date"]) if base else None
+    last = max(closes) if closes else ""
+    for p in ser:  # never carried past VT's last close (2026-11-18: Yahoo had no 17 Nov close, the 16th stood in)
+        c = on(p["date"]) if base and p["date"] <= last else None
         p["world"] = c / base * 100 if c else None
 
 
@@ -271,7 +272,10 @@ def build_data(live: bool = True) -> dict:
         hold.append({"ticker": t, "name": names.get(t, ""), "type": h["type"], "conviction": h.get("conviction"),
                      "sector": h.get("sector") or "", "entry_date": h.get("entry_date", ""), "currency": h.get("currency", ""),
                      "entry_price": ep, "last_price": lp, "last_date": h.get("last_close_date", ""),
-                     "change_pct": (lp / ep - 1) * 100 if ep and lp else None,
+                     # vs what the shares still held cost in US dollars (2026-11-18: the first buy's price ignored LDOS's
+                     # top-up, showing +3.5% on a $15 loss), so it always agrees with the P/L
+                     "change_pct": (mv / cb - 1) * 100 if cb else ((lp / ep - 1) * 100 if ep and lp else None),
+                     "cost": cb or None,
                      "value": mv, "weight": mv / total * 100 if total else 0, "pl": mv - cb if cb else None,
                      "plan": plan, "thesis": h.get("thesis", ""),
                      "prev_close": _f(h.get("prev_close")), "prev_date": h.get("prev_close_date", "")})
@@ -300,8 +304,8 @@ def build_data(live: bool = True) -> dict:
         q, lc = snap.get(h["ticker"]), h["last_price"]
         h["live"] = q
         if q and lc:
-            h["live_change_pct"] = (q["price"] / h["entry_price"] - 1) * 100 if h["entry_price"] else None
             h["live_value"] = h["value"] * q["price"] / lc
+            h["live_change_pct"] = (h["live_value"] / h["cost"] - 1) * 100 if h["cost"] else None
             if q["date"] > (h["last_date"] or ""):  # a session after the last close is trading: today's move
                 h["live_day_pct"] = (q["price"] / lc - 1) * 100
                 h["live_day_usd"] = h["live_value"] - h["value"]
@@ -393,13 +397,14 @@ def build_data(live: bool = True) -> dict:
         "since": None if not last or last["portfolio"] is None else last["portfolio"] / 100 - 1,
         "since_spy": None if not last or last["spy"] is None else last["spy"] / 100 - 1,
         "invested": portfolio.invested_return(vals),
-        "since_world": None if not last or last.get("world") is None else last["world"] / 100 - 1,
+        "since_world": next((p["world"] / 100 - 1 for p in reversed(ser) if p.get("world") is not None), None),
+        "world_date": next((p["date"] for p in reversed(ser) if p.get("world") is not None), None),
         "max_drawdown": max_drawdown([p.get("value") for p in ser]),
         "min_buy": int(cfg["core"].get("min_buy_conviction", 4)),
         "attention": attention([{"action": o["request"]["action"], "ticker": o["request"]["ticker"], "fills": expected_fill(o, cfg)}
                                 for o in state.get("pending", [])], hold,
-                               [h for h in state.get("entry_hits") or []  # still unresearched: its watch row keeps the hit date
-                                if h["ticker"] in {r["ticker"] for r in all_watch if r.get("hit_date")}], all_watch,
+                               [h for h in state.get("entry_hits") or []  # still unresearched (the same test as the loop and weekly run)
+                                if h["ticker"] not in state.get("holdings", {}) and not entry_watch.researched_since(h)], all_watch,
                                state.get("funding_queue") or [], int(cfg["core"].get("min_buy_conviction", 4))),
         "funnel": funnel(decisions, all_ledger, today),
         "scoreboard": {"asof": cal.get("asof"), "by_conviction": cal.get("by_conviction") or {}, "by_points": cal.get("by_points") or {}},
@@ -606,7 +611,7 @@ const tile=(l,v,d,c)=>el('div',{class:'tile'},el('div',{class:'l'},l),el('div',{
 $('tiles').append(
  I?tile('Return on invested money',pct(I.pct*100),`time-weighted, cash excluded · ${usd(I.gain)} gained`+(I.spy_pct==null?'':` · S&P 500 from day one ${pct(I.spy_pct*100)}`),cls(I.spy_pct==null?null:I.pct-I.spy_pct))
   :tile('Return on invested money','–','starts with the first trade'),
- D.inception?tile('Whole portfolio (incl. cash)',D.since==null?'n/a':pct(D.since*100),(D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100))+(D.since_world==null?'':' · global (VT) '+pct(D.since_world*100)),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
+ D.inception?tile('Whole portfolio (incl. cash)',D.since==null?'n/a':pct(D.since*100),(D.since_spy==null?'':'S&P 500 '+pct(D.since_spy*100))+(D.since_world==null?'':' · global (VT) '+pct(D.since_world*100)+(D.world_date&&D.world_date<D.close_date?` (to ${D.world_date})`:'')),cls(D.since==null||D.since_spy==null?null:D.since-D.since_spy))
   :tile('Whole portfolio (incl. cash)','–','starts with the first trade'),
  (()=>{const s=D.series,a=s.length>1?s[s.length-2]:null,b=s.length?s[s.length-1]:null;
   if(D.live_total!=null&&D.total&&D.holdings.some(h=>h.live_day_pct!=null))return tile('Last 24h',pct((D.live_total/D.total-1)*100),`live ${D.live_at} · ${(D.live_total>=D.total?'+':'−')+usd(Math.abs(D.live_total-D.total))} vs the ${D.close_date} close`,cls(D.live_total-D.total));

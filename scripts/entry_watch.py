@@ -44,6 +44,13 @@ COLS = ["ticker", "entry_price", "currency", "set_date", "expires", "conviction"
         "points_short", "skipped_hit_date"]  # owner 2026-11-17: see [entry].skip_hit_points_short
 
 
+def researched_since(hit: dict) -> bool:
+    """A hit whose stock already has an evaluation dated on/after the hit (2026-10-25; shared 2026-11-18 by the
+    research loop, the weekly run and the dashboard, so a hit the loop handled is not researched again)."""
+    evs = sorted(q.name[:10] for q in (ROOT / "research" / Ticker(hit["ticker"]).slug).glob("20??-??-??-evaluation.md"))
+    return bool(evs) and evs[-1] >= (hit.get("hit_date") or "9999")
+
+
 def read(path: Path = WATCH) -> list[dict]:
     if not path.exists():
         return []

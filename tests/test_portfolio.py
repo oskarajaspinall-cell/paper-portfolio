@@ -855,3 +855,20 @@ def test_country_cap_ignores_non_group_names(cfg, china):
     assert e.applied
     e.process([core_buy("AAPL", conv=4)])
     assert len(e.applied) == 2
+
+
+def test_mark_never_moves_a_holding_back_to_an_older_close(cfg):
+    from portfolio import mark
+
+    class Stale:  # a cached page one day behind the mark already in the state
+        asof = "2026-11-17"
+
+        def quote(self, t, on=None):
+            return {"close": 99.0, "date": "2026-11-16", "price_usd": 99.0}
+
+        def history(self, t):
+            return {"rows": []}
+    s = empty_state(cfg)
+    s["holdings"] = {"AAPL": {"type": "CORE", "sector": "Technology", "shares": 10, "last_close": 101.0, "last_close_date": "2026-11-17", "market_value_usd": 1010.0}}
+    mark(s, Stale())
+    assert s["holdings"]["AAPL"]["market_value_usd"] == 1010.0 and s["holdings"]["AAPL"]["last_close_date"] == "2026-11-17"

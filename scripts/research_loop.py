@@ -211,9 +211,7 @@ def build_queue() -> list[str]:
     if OPTS["redo"]:  # owner request 2026-11-15: re-research names that already have an evaluation (not holdings, not today's)
         queue = [t for t in ranked if (OPTS["holdings"] or t not in st.get("holdings", {}))  # --holdings: owner asked for them
                  and not (ROOT / "research" / Ticker(t).slug / f"{today}-evaluation.md").exists()]
-    def researched_since(h):  # 2026-10-25: a hit the weekly run already re-researched is not repeated
-        evs = sorted(p.name[:10] for p in (ROOT / "research" / Ticker(h["ticker"]).slug).glob("20??-??-??-evaluation.md"))
-        return bool(evs) and evs[-1] >= (h.get("hit_date") or "9999")
+    from entry_watch import researched_since  # a hit the weekly run already re-researched is not repeated
     hit_rows = {h["ticker"]: h for h in reversed((st.get("entry_hits") or []) + (st.get("dip_hits") or []))
                 if h["ticker"] not in st.get("holdings", {}) and not researched_since(h)}  # entry-price / dip hits
     hits = list(hit_rows)

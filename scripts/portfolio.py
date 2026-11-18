@@ -252,6 +252,8 @@ def mark(state: dict, mkt: Market) -> dict:
     """Mark holdings (and baseline) to the latest completed close. Mutates state."""
     for t, h in state["holdings"].items():
         q = mkt.quote(t)
+        if h.get("last_close_date") and h["last_close_date"] <= mkt.asof and q["date"] < h["last_close_date"]:
+            continue  # 2026-11-18: an order placed from a stale cached page re-marked every holding a day back; never go back
         h.update(last_close=q["close"], last_close_date=q["date"], last_price_usd=round(q["price_usd"], 6),
                  market_value_usd=round(h["shares"] * q["price_usd"], 2))
         prev = [r for r in mkt.history(t)["rows"] if r["date"] < q["date"] and r.get("close")]
