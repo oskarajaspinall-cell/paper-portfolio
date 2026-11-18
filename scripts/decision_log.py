@@ -192,11 +192,11 @@ def since_one(r: dict, mkt, asof: str) -> None:
 
 
 def since(rows: list[dict], mkt, asof: str) -> list[str]:
-    """Owner request 2026-11-18: return since the decision vs SPY, refreshed nightly for buys, holds and trims
-    (61 rows, 26 stocks); avoids are left out (679 stocks would be re-priced every night)."""
+    """Owner request 2026-11-18: return since the decision vs SPY, refreshed nightly for buys, holds, trims and
+    conviction-3 avoids (the near-misses); avoids below 3 are left out."""
     notes = []
     for r in rows:
-        if r["decision"] == "AVOID":
+        if r["decision"] == "AVOID" and str(r.get("conviction")) != "3":
             continue
         try:
             since_one(r, mkt, asof)

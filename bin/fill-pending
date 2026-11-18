@@ -39,7 +39,8 @@ bin/with-timeout 600 bin/py scripts/funding_queue.py auto-swap --asof "$ASOF" ||
 # decision log's 1/3/6/12-month scores. Informational: a failure is logged and never stops the update.
 bin/with-timeout 600 bin/py scripts/attribution.py report --asof "$ASOF" || echo "!! attribution not updated"
 bin/with-timeout 300 bin/py scripts/risk.py report --asof "$ASOF" || echo "!! risk report not updated"
-bin/with-timeout 600 bin/py scripts/decision_log.py update --asof "$ASOF" || echo "!! decision scores not updated"
+# since-decision returns re-price ~540 stocks (conviction-3 avoids included, 2026-11-18): about 6-7 minutes
+bin/with-timeout 1200 bin/py scripts/decision_log.py update --asof "$ASOF" || echo "!! decision scores not updated"
 # How stocks did after we trimmed or sold them (owner request 2026-11-18): portfolio/exits.csv
 bin/with-timeout 600 bin/py scripts/exit_log.py update --asof "$ASOF" || echo "!! exit outcomes not updated"
 # The run's plain-English summary (owner request 2026-10-21): reports/daily/<date>.md + a Mac notification

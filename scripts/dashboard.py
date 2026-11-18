@@ -373,6 +373,14 @@ def build_data(live: bool = True) -> dict:
         for side, own in (("buy", True), ("avoid", False)):  # one blended rate is mostly AVOIDs in a rising market
             part = [d for d in done if (d["decision"] in ("BUY", "ADD", "HOLD")) == own]
             hits[f"{h}m"][side] = {"n": len(part), "hits": sum(int(d[f"hit_{h}m"]) for d in part)}
+    pend = {o["request"]["ticker"] for o in state.get("pending", [])}
+
+    def fate(d):  # a BUY/ADD decision is research; say whether it became a trade (DOX 2026-10-19 never did)
+        if d["decision"] not in ("BUY", "ADD"):
+            return ""
+        if any(r["ticker"] == d["ticker"] and r["side"] in ("BUY", "ADD") and r["date"] >= d["date"] for r in all_ledger):
+            return "bought"
+        return "order pending" if d["ticker"] in pend else "not bought"
     exits = _csv(port / "exits.csv")[::-1]  # scripts/exit_log.py: how sold and trimmed stocks did afterwards
     newest = decisions[::-1]
     matured = {id(d) for d in [d for d in newest if d.get("excess_1m") not in ("", None)][:300]}
@@ -421,7 +429,7 @@ def build_data(live: bool = True) -> dict:
                                               "fill_close_date", "gross_usd", "costs_usd", "reason")} for r in ledger],
         "decisions": [{k: d.get(k, "") for k in ("date", "ticker", "type", "decision", "conviction", "price", "currency",
                                                  "excess_1m", "excess_3m", "evaluation", "price_date", "since_excess", "since_date")}
-                      | {"live": "price: live" in (d.get("note") or "")} for d in shown],
+                      | {"live": "price: live" in (d.get("note") or ""), "fate": fate(d)} for d in shown],
         "hits": hits, "n_decisions": len(decisions),
         "exits": [{k: e.get(k, "") for k in ("date", "ticker", "decision", "shares", "kind", "replaced_by", "usd", "since_date",
                                              "since_ret", "since_excess", "kept_usd", "vs_replacement_since",
@@ -829,10 +837,10 @@ table('trades',[{h:'Date',f:r=>r.date},{h:'Side',f:r=>r.side},{h:'Ticker',f:r=>r
 {const hs=['1m','3m','6m','12m'].filter(h=>D.hits[h].n),rate=(l,x)=>tile(l,x.n?Math.round(x.hits/x.n*100)+'%':'–',x.n?`${x.hits} of ${x.n} decisions right`:'none matured yet');
  if(!hs.length)$('hits').append(tile('Hit rate','–','no decision is a month old yet'));
  hs.forEach(h=>$('hits').append(rate(`Buys and holds, ${h}`,D.hits[h].buy),rate(`Avoids and trims, ${h}`,D.hits[h].avoid)));}
-table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Decision',f:r=>r.decision},
+table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f:r=>(r.type||'').toLowerCase()},{h:'Decision',f:r=>r.decision+(r.fate&&r.fate!=='bought'?` · ${r.fate}`:'')},
  {h:'Conv.',n:1,f:r=>r.conviction},{h:'Price',n:1,f:r=>`${(+r.price).toFixed(2)} ${r.currency} (${r.live?'live, ':'close '}${r.price_date})`},{h:'1m vs SPY',n:1,f:r=>r.excess_1m===''?'–':pct(+r.excess_1m,1),c:r=>r.excess_1m===''?'':cls(+r.excess_1m)},
  {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},
- {h:'Since vs SPY',n:1,f:r=>!r.since_excess?'–':pct(+r.since_excess,1),c:r=>!r.since_excess?'':cls(+r.since_excess),t:r=>r.since_date?`to the ${r.since_date} close`:'buys, holds and trims only'},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision',chips:[['With a result',r=>r.excess_1m!==''],['Buys',r=>r.decision==='BUY'||r.decision==='ADD'],
+ {h:'Since vs SPY',n:1,f:r=>!r.since_excess?'–':pct(+r.since_excess,1),c:r=>!r.since_excess?'':cls(+r.since_excess),t:r=>r.since_date?`to the ${r.since_date} close`:'buys, holds, trims and conviction-3 avoids only'},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision',chips:[['With a result',r=>r.excess_1m!==''],['Buys',r=>r.decision==='BUY'||r.decision==='ADD'],
   ['Holds and trims',r=>!['BUY','ADD','AVOID'].includes(r.decision)],['Avoids',r=>r.decision==='AVOID'],['All',null]]});
 {const E=D.exits||[],sv=x=>x===''?'–':(+x>=0?'+':'−')+usd(Math.abs(+x),0),lag=E.filter(r=>r.since_excess!==''),m1=E.filter(r=>r.hit_1m!=='');
  $('exitTiles').append(tile('Since the exit: lagged the S&P 500',lag.length?`${lag.filter(r=>+r.since_excess<0).length} of ${lag.length}`:'–','sold or trimmed stocks that did worse than the index since'),
