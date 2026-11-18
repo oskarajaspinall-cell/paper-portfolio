@@ -477,11 +477,11 @@ PAGE = r"""<!doctype html>
 <title>Paper Portfolio</title>
 <style>
 :root{color-scheme:light;--page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;
---axis:#c3c2b7;--ring:rgba(11,11,11,.10);--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--up:#006300;--down:#d03b3b;--wash:rgba(42,120,214,.10)}
+--axis:#c3c2b7;--ring:rgba(11,11,11,.10);--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--up:#006300;--down:#d03b3b;--wash:rgba(42,120,214,.10)}
 @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#fff;
---ink2:#c3c2b7;--grid:#2c2c2a;--axis:#383835;--ring:rgba(255,255,255,.10);--s1:#3987e5;--s2:#d95926;--s3:#199e70;--up:#0ca30c;--down:#e66767;--wash:rgba(57,135,229,.12)}}
+--ink2:#c3c2b7;--grid:#2c2c2a;--axis:#383835;--ring:rgba(255,255,255,.10);--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--up:#0ca30c;--down:#e66767;--wash:rgba(57,135,229,.12)}}
 :root[data-theme="dark"]{color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#fff;--ink2:#c3c2b7;--grid:#2c2c2a;--axis:#383835;
---ring:rgba(255,255,255,.10);--s1:#3987e5;--s2:#d95926;--s3:#199e70;--up:#0ca30c;--down:#e66767;--wash:rgba(57,135,229,.12)}
+--ring:rgba(255,255,255,.10);--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--up:#0ca30c;--down:#e66767;--wash:rgba(57,135,229,.12)}
 *{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
 main{max-width:1120px;margin:0 auto;padding:0 16px 48px}
 h1{font-size:20px;margin:0}h2{font-size:16px;margin:0 0 4px}.sub{color:var(--ink2);font-size:13px}.muted{color:var(--muted)}
@@ -549,7 +549,6 @@ __INTRO__
 <section class="card" id="attCard"><h2>Needs attention</h2><ul class="att" id="att"></ul></section>
 __DAILY__
 <section class="card"><h2>Return vs the S&amp;P 500</h2>
-<div class="tabs" role="tablist" aria-label="Portfolio line"><button type="button" role="tab" class="tab" data-tab="whole">Whole portfolio</button><button type="button" role="tab" class="tab" data-tab="invested">Invested money</button></div>
 <div class="ranges" role="group" aria-label="Chart period" id="ranges"></div>
 <div class="sub" id="lineSub"></div>
 <div class="legend" id="lineLegend"></div><div id="line"></div>
@@ -639,12 +638,10 @@ const tip=$('tip');function showTip(ev,nodes){tip.replaceChildren(...nodes);tip.
 tip.style.left=x+'px';tip.style.top=Math.max(8,ev.clientY-tip.offsetHeight-12)+'px';}function hideTip(){tip.style.display='none'}
 // ---- line chart
 const S=D.series.filter(p=>p.portfolio!=null).map(p=>({...p,...Object.fromEntries(['invested','portfolio','spy','world','invested_tw'].map(k=>[k,p[k]==null?null:p[k]-100]))}));  // % return since inception
-// one chart (owner 2026-11-18): the benchmarks are the same either way (the whole $100k in SPY or VT on day one, dividends
-// included); the toggle only swaps which portfolio line is drawn
-const BENCH=[['spy','S&P 500 from day one','--s2','S&P 500'],['world','Global shares (VT) from day one','--s3','Global']];
-const TABS={whole:{sub:'The whole portfolio (all $100k, cash and its interest included)',defs:[['portfolio','Whole portfolio (incl. cash)','--s1','Portfolio'],...BENCH]},
- invested:{sub:'The money put into stocks (cash excluded)',defs:[['invested','Invested money','--s1','Invested'],...BENCH]}};
-Object.values(TABS).forEach(t=>t.sub+=' vs the S&P 500 and global shares (VT) bought with all the money on day one, dividends included (%, US dollars).');
+// one chart, every line shown or hidden from the legend (owner 2026-11-18). Benchmarks: all $100k in SPY or VT on day one, dividends included
+const LINES=[['portfolio','Whole portfolio (incl. cash)','--s1','Portfolio'],['invested','Invested money (cash excluded)','--s4','Invested'],
+ ['world','Global shares (VT) from day one','--s3','Global'],['spy','S&P 500 from day one','--s2','S&P 500']];  // order: adjacent colours pass the palette check
+const LINE_SUB='The whole portfolio (all $100k, cash and its interest included) and the money put into stocks (cash excluded), vs the S&P 500 and global shares (VT) bought with all the money on day one, dividends included (%, US dollars). Click a line\'s name to show or hide it.';
 const HID=new Set();try{const h=localStorage.getItem('chartHidden2');if(h!=null){HID.clear();h.split(',').filter(Boolean).forEach(k=>HID.add(k));}}catch(e){}
 const TRD={};(D.trades||[]).forEach(t=>{(TRD[t.date]=TRD[t.date]||[]).push(t);});
 function nice(lo,hi){const raw=(hi-lo)/5||1,p=Math.pow(10,Math.floor(Math.log10(raw))),m=raw/p,st=(m<1.5?1:m<3?2:m<7?5:10)*p;return {lo:Math.floor(lo/st)*st,hi:Math.ceil(hi/st)*st,st};}
@@ -660,26 +657,25 @@ function rangeSeries(){if(!S.length)return {pts:[],base:null};const last=S[S.len
  else if(cut){const c=`${cut.getFullYear()}-${String(cut.getMonth()+1).padStart(2,'0')}-${String(cut.getDate()).padStart(2,'0')}`;S.forEach((p,i)=>{if(p.date<=c)i0=i;});}
  // a part of the history: the invested tab compares time-weighted returns (money in stocks vs SPY's price), since the
  // money-weighted lines only add up over the whole period (see invested_tw in dashboard.py)
- const win=S.slice(i0).concat(RANGE==='1D'&&LP?[LP]:[]).map(p=>CUR==='invested'?{...p,invested:p.invested_tw}:p);const keys=['invested','portfolio','spy','world'];
+ const win=S.slice(i0).concat(RANGE==='1D'&&LP?[LP]:[]).map(p=>RANGE==='All'?p:{...p,invested:p.invested_tw});const keys=['invested','portfolio','spy','world'];
  const base={};keys.forEach(k=>{const b=win.find(p=>p[k]!=null);base[k]=b?b[k]:null;});
  return {pts:win.map(p=>({...p,...Object.fromEntries(keys.map(k=>[k,p[k]==null||base[k]==null?null:((100+p[k])/(100+base[k])-1)*100]))})),base:win[0]};}
 function setRange(r){RANGE=r;document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===r)));
  try{localStorage.setItem('chartRange',r)}catch(e){}drawLine();}
 RANGES.forEach(([r,l])=>{const b=el('button',{type:'button',class:'rng','data-r':r,title:l,'aria-pressed':'false'},r);b.onclick=()=>setRange(r);$('ranges').append(b);});
-let CUR='whole';
-function setTab(name){const t=TABS[name]||TABS.whole;CUR=TABS[name]?name:'whole';defs=t.defs.filter(([k])=>S.some(p=>p[k]!=null));
- document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===name)));
- $('lineSub').textContent=t.sub;$('lineLegend').replaceChildren(...defs.map(([k,n,c])=>{const b=el('button',{type:'button',class:'lg','aria-pressed':String(!HID.has(k)),title:'Show or hide this line'},el('span',{class:'key',style:`background:var(${c})`}),n);
-  b.onclick=()=>{if(HID.has(k))HID.delete(k);else if(defs.filter(([x])=>!HID.has(x)).length>1)HID.add(k);try{localStorage.setItem('chartHidden2',[...HID].join(','))}catch(e){}setTab(CUR);};return b;}));
+function setTab(){defs=LINES.filter(([k])=>S.some(p=>p[k]!=null));
+ $('lineSub').textContent=LINE_SUB;$('lineLegend').replaceChildren(...defs.map(([k,n,c])=>{const b=el('button',{type:'button',class:'lg','aria-pressed':String(!HID.has(k)),title:'Show or hide this line'},el('span',{class:'key',style:`background:var(${c})`}),n);
+  b.onclick=()=>{if(HID.has(k))HID.delete(k);else if(defs.filter(([x])=>!HID.has(x)).length>1)HID.add(k);try{localStorage.setItem('chartHidden2',[...HID].join(','))}catch(e){}setTab();};return b;}));
  $('lineTable').replaceChildren(el('tr',{},el('th',{},'Date'),...defs.map(([,n])=>el('th',{class:'n'},n)),el('th',{class:'n'},'Value')),
   ...S.map(p=>el('tr',{},el('td',{},p.date),...defs.map(([k])=>el('td',{class:'n'},p[k]==null?'n/a':pct(p[k]))),el('td',{class:'n'},usd(p.value)))));
- try{localStorage.setItem('chartTab',name)}catch(e){}drawLine();}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+ drawLine();}
 function drawLine(){const box=$('line');box.replaceChildren();const RS=rangeSeries(),S=RS.pts,vis=defs.filter(([k])=>!HID.has(k));
- const rl=(RANGES.find(([r])=>r===RANGE)||[])[1]||RANGE,[A,B2]=defs,lastP=S[S.length-1];
+ const rl=(RANGES.find(([r])=>r===RANGE)||[])[1]||RANGE,lastP=S[S.length-1];
+ // the shaded gap and the sentence compare the first visible portfolio line with the S&P 500
+ const A=vis.find(([k])=>k==='portfolio'||k==='invested'),B2=vis.find(([k])=>k==='spy');
  const gapNow=A&&B2&&lastP&&lastP[A[0]]!=null&&lastP[B2[0]]!=null?lastP[A[0]]-lastP[B2[0]]:null;
- $('lineSub').textContent=(TABS[CUR]||TABS.invested).sub+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+(CUR==='invested'&&RANGE!=='All'?', as a daily-chained return of the money in stocks':'')+'.':'')
-  +(gapNow==null?'':` ${gapNow>=0?'Ahead of':'Behind'} the S&P 500 by ${Math.abs(gapNow).toFixed(1)} percentage points.`);
+ $('lineSub').textContent=LINE_SUB+(RS.base?` Showing ${rl.toLowerCase()}: change since the ${RS.base.date} close`+(RANGE==='1D'&&LP?', to live prices now':'')+(RANGE!=='All'&&vis.some(([k])=>k==='invested')?'; the invested line is a daily-chained return of the money in stocks':'')+'.':'')
+  +(gapNow==null?'':` ${A[3]} ${gapNow>=0?'ahead of':'behind'} the S&P 500 by ${Math.abs(gapNow).toFixed(1)} percentage points.`);
  if(S.length<2){box.append(el('div',{class:'empty'},'Not enough data for this period yet.'));return;}
  const W=Math.max(300,Math.round(box.getBoundingClientRect().width)),L=44,R=W<560?92:124,T=12,B=30,H=W<560?230:320;
  // equal spacing per trading day (weekends and holidays take no room)
@@ -693,7 +689,7 @@ function drawLine(){const box=$('line');box.replaceChildren();const RS=rangeSeri
  {let lastX=1e9;for(let i=S.length-1;i>=0;i--){const x=XD(S[i]);if(lastX-x>=64||i===S.length-1){svg.append(sv('line',{x1:x,x2:x,y1:H-B,y2:H-B+4,stroke:'var(--axis)','stroke-width':1}));
    const t=sv('text',{x,y:H-B+18,'text-anchor':i===S.length-1?'end':'middle'});t.textContent=dl(S[i]);svg.append(t);lastX=x;}}}
  // the gap to the S&P 500, shaded: this is the excess return
- if(A&&B2&&!HID.has(A[0])&&!HID.has(B2[0]))for(let i=0;i<S.length-1;i++){const p=S[i],q=S[i+1],a=A[0],b=B2[0];if([p[a],p[b],q[a],q[b]].some(v=>v==null))continue;
+ if(A&&B2)for(let i=0;i<S.length-1;i++){const p=S[i],q=S[i+1],a=A[0],b=B2[0];if([p[a],p[b],q[a],q[b]].some(v=>v==null))continue;
   svg.append(sv('path',{d:`M${XD(p)},${Y(p[a])}L${XD(q)},${Y(q[a])}L${XD(q)},${Y(q[b])}L${XD(p)},${Y(p[b])}Z`,fill:(p[a]-p[b]+q[a]-q[b])>=0?'var(--up)':'var(--down)','fill-opacity':.1}));}
  const ends=[];vis.forEach(([k,n,c,short])=>{const P=S.filter(p=>p[k]!=null);if(P.length<2)return;
   svg.append(sv('path',{d:P.map((p,i)=>(i?'L':'M')+XD(p).toFixed(1)+','+Y(p[k]).toFixed(1)).join(''),fill:'none',stroke:`var(${c})`,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
@@ -768,7 +764,7 @@ function riskBars(){const box=$('risk');box.replaceChildren();const R=D.risk;
    {h:'Interaction',n:1,f:r=>p2(r.interaction),c:r=>cls(r.interaction)},{h:'Total',n:1,f:r=>p2(r.t),c:r=>cls(r.t)}],rows,'');}}
 {let r0='All';try{r0=localStorage.getItem('chartRange')||r0}catch(e){}RANGE=RANGES.some(([r])=>r===r0)?r0:'All';
  document.querySelectorAll('.rng').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===RANGE)));}
-{let t0='whole';try{t0=localStorage.getItem('chartTab')||t0}catch(e){}setTab(TABS[t0]?t0:'whole');}
+setTab();
 setPage(location.hash.slice(1));drawn=true;drawAll();let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(drawAll,150);});
 // ---- tables
 function table(id,cols,rows,empty,opt={}){const t=$(id),lim=opt.limit??15;
