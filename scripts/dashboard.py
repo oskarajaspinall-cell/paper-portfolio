@@ -221,6 +221,11 @@ def review_items(decisions: list[dict], today: str) -> list[dict]:
          "question": "20+ closed across 5+ industries, stocks below their sector fund, puts profitable after spreads?",
          "decides": "Whether a real short side is ever designed; also whether the 5/7 bar lets enough through",
          "status": f"{sum(r['status'] == 'open' for r in book)} open, {sum(r['status'] == 'closed' for r in book)} closed; qualifying today: {', '.join(qual) or 'none'}"},
+        {"area": "Shorts (paper only)", "item": "Exit rule for shadow shorts",
+         "question": "Which of the 8 exit rules (trend, trailing stop, +15 / +25 profit-take, price-to-book back to its median, RSI 30, 25% below the 50-day, hold) did best, overall and by sector?",
+         "decides": "The exit the short side would use; a sector gets its own rule only with several positions behind it",
+         "status": (lambda x: f"{x['n']} position(s) compared" if x else "no positions yet")(
+             (shadow_shorts.alt_summary(book).get("All") or {}).get("hold"))},
         {"area": "Shorts (paper only)", "item": "US-listing map", "question": "Is the list of foreign stocks with US-listed options still current?",
          "decides": "Re-check against current listings (it missed SKHY)", "status": f"{len(adrs)} stocks mapped"},
     ]
