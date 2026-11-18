@@ -875,8 +875,9 @@ table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f
   tile('Stock vs its sector fund',vs.length?pct(med(vs),1):'–',vs.length?`median of ${vs.length}; below zero = the short call was right`:'none yet'),
   tile('Put profit or loss',B.some(r=>r.put_pnl_usd!=='')?(pp>=0?'+':'−')+usd(Math.abs(pp),0):'–','marked at mid prices; the bid/ask spread is not taken off'));
  table('shortBook',[{h:'Opened',f:r=>r.opened},{h:'Ticker',f:r=>r.ticker},{h:'Status',f:r=>r.status+(r.close_reason?` (${r.close_reason})`:'')},
-  {h:'Conf.',n:1,f:r=>r.confidence},{h:'Put',f:r=>r.put_contract?`${r.put_strike} ${r.put_expiry} x${r.contracts}`:'stock record only'},
+  {h:'Conf.',n:1,f:r=>r.confidence},{h:'Put',f:r=>r.put_contract?`${r.put_underlying&&r.put_underlying!==r.ticker?r.put_underlying+' ':''}${r.put_strike} ${r.put_expiry} x${r.contracts}`:'stock record only'},
   {h:'Stock vs sector',n:1,f:r=>r.stock_vs_etf_pct===''?'–':pct(+r.stock_vs_etf_pct,1),c:r=>r.stock_vs_etf_pct===''?'':cls(-r.stock_vs_etf_pct)},
+  {h:'Short after borrowing',n:1,f:r=>r.short_net_pct===''||r.short_net_pct==null?'–':pct(+r.short_net_pct,1),c:r=>r.short_net_pct===''||r.short_net_pct==null?'':cls(+r.short_net_pct)},
   {h:'Put P/L',n:1,f:r=>r.put_pnl_usd===''?'–':usd(+r.put_pnl_usd,0),c:r=>r.put_pnl_usd===''?'':cls(+r.put_pnl_usd)},
   {h:'Evaluation',f:r=>link(r.evaluation,'read')}],B,'No shadow shorts yet.');
  table('shortCands',[{h:'Ticker',f:r=>r.ticker},{h:'Researched',f:r=>r.decided},{h:'Conv.',n:1,f:r=>r.conviction},{h:'Confidence',n:1,f:r=>`${r.confidence}/7`},

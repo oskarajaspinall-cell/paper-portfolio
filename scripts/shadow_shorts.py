@@ -26,9 +26,9 @@ from common import ROOT, DataError, Ticker, load_config  # noqa: E402
 
 BOOK = ROOT / "portfolio" / "shadow_shorts.csv"
 COLS = ["id", "ticker", "status", "opened", "evaluation", "confidence", "short_conviction", "industry", "currency",
-        "entry_close", "sector_etf", "etf_entry", "put_contract", "put_expiry", "put_strike", "contracts", "put_entry_mid",
+        "entry_close", "sector_etf", "etf_entry", "borrow_fee_pct", "put_underlying", "put_contract", "put_expiry", "put_strike", "contracts", "put_entry_mid",
         "put_bid", "put_ask", "put_iv", "premium_usd", "notional_usd", "last_date", "last_close", "etf_last",
-        "put_last_mid", "stock_ret_pct", "etf_ret_pct", "stock_vs_etf_pct", "put_pnl_usd", "closed", "close_reason"]
+        "put_last_mid", "stock_ret_pct", "etf_ret_pct", "stock_vs_etf_pct", "borrow_cost_pct", "short_net_pct", "put_pnl_usd", "closed", "close_reason"]
 SECTOR_ETF = {"Technology": "XLK", "Financials": "XLF", "Healthcare": "XLV", "Energy": "XLE", "Industrials": "XLI",
               "Consumer Discretionary": "XLY", "Consumer Staples": "XLP", "Utilities": "XLU", "Real Estate": "XLRE",
               "Materials": "XLB", "Basic Materials": "XLB", "Communication Services": "XLC"}
@@ -69,11 +69,13 @@ def iv_rank(iv: float, closes: list[float]) -> float | None:
     return None if not vols else 100 * sum(v < iv for v in vols) / len(vols)
 
 
-def price_put(ticker: str, close: float, asof: str, closes: list[float], cfg: dict, loader=None) -> dict | None:
-    """The put to record, or None (no listed chain, too thin, or implied vol too high: the stock record stays)."""
+def price_put(ticker: str, close: float, asof: str, closes: list[float], cfg: dict, loader=None,
+              adr: str | None = None) -> dict | None:
+    """The put to record, or None (no listed chain, too thin, or implied vol too high: the stock record stays).
+    A foreign stock uses its US-listed share's chain (`adr`, with that share's own price and history)."""
     s = cfg["short"]
     from prices import yahoo_symbol
-    sym = yahoo_symbol(ticker) if not Ticker(ticker).exchange else None  # listed US chains only
+    sym = adr or (yahoo_symbol(ticker) if not Ticker(ticker).exchange else None)  # listed US chains only
     if not sym:
         return None
     try:
@@ -96,19 +98,18 @@ def price_put(ticker: str, close: float, asof: str, closes: list[float], cfg: di
     rank = iv_rank(iv, closes) if iv else None
     if rank is not None and rank > s["max_iv_pct_rank"]:
         return None
-    return {"contract": row.get("contractSymbol", ""), "expiry": exp, "strike": row["strike"], "bid": bid, "ask": ask,
+    return {"underlying": sym, "contract": row.get("contractSymbol", ""), "expiry": exp, "strike": row["strike"], "bid": bid, "ask": ask,
             "mid": (bid + ask) / 2, "iv": iv}
 
 
-def put_mark(ticker: str, contract: str, expiry: str, strike: float, close: float, asof: str, loader=None) -> float:
+def put_mark(underlying: str, contract: str, expiry: str, strike: float, close: float, asof: str, loader=None) -> float:
     """Today's mid for the recorded contract; its intrinsic value once expired or no longer quoted."""
     if asof < expiry:
         try:
             if loader:
                 return loader(contract)
             import yfinance as yf
-            from prices import yahoo_symbol
-            puts = yf.Ticker(yahoo_symbol(ticker)).option_chain(expiry).puts
+            puts = yf.Ticker(underlying).option_chain(expiry).puts
             r = puts[puts["contractSymbol"] == contract].iloc[0]
             if r["bid"] > 0 and r["ask"] > 0:
                 return float((r["bid"] + r["ask"]) / 2)
@@ -136,8 +137,12 @@ def exit_reason(row: dict, close: float, asof: str, base_fv: float | None, falsi
 def mark(row: dict, close: float, etf: float, asof: str, put_mid: float | None) -> None:
     sr = close / float(row["entry_close"]) - 1
     er = etf / float(row["etf_entry"]) - 1
+    days = (dt.date.fromisoformat(asof) - dt.date.fromisoformat(row["opened"])).days
+    borrow = float(row.get("borrow_fee_pct") or 0) * days / 365
+    # short_net_pct: what shorting the stock against its sector fund made, after the borrowing fee (+ = the short won)
     row.update(last_date=asof, last_close=round(close, 4), etf_last=round(etf, 4), stock_ret_pct=round(sr * 100, 2),
-               etf_ret_pct=round(er * 100, 2), stock_vs_etf_pct=round((sr - er) * 100, 2))
+               etf_ret_pct=round(er * 100, 2), stock_vs_etf_pct=round((sr - er) * 100, 2),
+               borrow_cost_pct=round(borrow, 2), short_net_pct=round(-(sr - er) * 100 - borrow, 2))
     if put_mid is not None and row.get("contracts"):
         row.update(put_last_mid=round(put_mid, 4),
                    put_pnl_usd=round((put_mid - float(row["put_entry_mid"])) * 100 * int(row["contracts"]), 2))
@@ -149,10 +154,12 @@ def new_position(cand: dict, decision: dict, eval_rel: str, close_q: dict, etf_s
     row = {"id": f"{asof}-{cand['ticker']}", "ticker": cand["ticker"], "status": "open", "opened": asof,
            "evaluation": eval_rel, "confidence": cand["confidence"], "short_conviction": decision["conviction"],
            "industry": cand.get("industry", ""), "currency": close_q["currency"], "entry_close": close_q["close"],
-           "sector_etf": etf_sym, "etf_entry": etf_close, "notional_usd": round(budget, 2)}
+           "sector_etf": etf_sym, "etf_entry": etf_close, "notional_usd": round(budget, 2),
+           "borrow_fee_pct": cfg["short"]["borrow_fee_hard_pct"] if (cand.get("short_interest") or 0) >= 10
+           else cfg["short"]["borrow_fee_pct"]}
     if put:
         n = max(1, int(budget // (put["mid"] * 100)))
-        row.update(put_contract=put["contract"], put_expiry=put["expiry"], put_strike=put["strike"], contracts=n,
+        row.update(put_underlying=put["underlying"], put_contract=put["contract"], put_expiry=put["expiry"], put_strike=put["strike"], contracts=n,
                    put_entry_mid=round(put["mid"], 4), put_bid=put["bid"], put_ask=put["ask"],
                    put_iv=round(put["iv"] or 0, 4), premium_usd=round(n * put["mid"] * 100, 2))
     return row
@@ -194,7 +201,7 @@ def run(asof: str, cfg: dict, mkt, agent: bool, log=print) -> dict:
             q, e = mkt.quote(r["ticker"], asof), mkt.quote(r["sector_etf"], asof)
         except DataError:
             continue
-        pm = put_mark(r["ticker"], r["put_contract"], r["put_expiry"], float(r["put_strike"]), q["close"], asof) if r.get("put_contract") else None
+        pm = put_mark(r.get("put_underlying") or r["ticker"], r["put_contract"], r["put_expiry"], float(r["put_strike"]), q["close"], asof) if r.get("put_contract") else None
         mark(r, q["close"], e["close"], asof, pm)
         hits = []
         ev = ROOT / r["evaluation"]
@@ -232,8 +239,10 @@ def run(asof: str, cfg: dict, mkt, agent: bool, log=print) -> dict:
         q = mkt.quote(c["ticker"], asof)
         from calibration import sector_of
         etf = SECTOR_ETF.get(sector_of(c["ticker"]) or "", "SPY")  # shortcut: a US sector ETF even for foreign stocks
-        closes = [x["close"] for x in mkt.history(c["ticker"])["rows"] if x.get("close")]
-        put = price_put(c["ticker"], q["close"], asof, closes, cfg)
+        und = c.get("adr")
+        hq = mkt.quote(und, asof) if und else q  # a foreign stock's put sits on its US share, at that share's price
+        closes = [x["close"] for x in mkt.history(und or c["ticker"])["rows"] if x.get("close")]
+        put = price_put(c["ticker"], hq["close"], asof, closes, cfg, adr=und)
         row = new_position(c, d, path, q, etf, mkt.quote(etf, asof)["close"], put, pv, asof, cfg)
         rows.append(row)
         open_rows.append(row)

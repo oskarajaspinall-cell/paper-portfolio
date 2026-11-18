@@ -95,9 +95,21 @@ def trend_turned(closes: list[float]) -> bool:
     return closes[-1] < sma < sum(closes[-55:-5]) / 50
 
 
+def adr_map() -> dict[str, str]:
+    """Foreign ticker -> its US-listed share with listed options (universe/adr_map.csv)."""
+    p = ROOT / "universe" / "adr_map.csv"
+    if not p.exists():
+        return {}
+    with p.open() as fh:
+        return {r["ticker"]: r["adr"] for r in csv.DictReader(fh)}
+
+
 def guards(sig: dict, eval_md: str, market_cap_usd_bn: float | None, asof: str, held: bool, watched: bool,
-           cfg: dict) -> list[str]:
+           cfg: dict, ticker: str = "", adr: str | None = None) -> list[str]:
     s, out = cfg["short"], []
+    ex = Ticker(ticker).exchange if ticker else None
+    if ex in s.get("restricted_markets", []) and not adr:
+        out.append(f"shorting restricted in {ex} and no US-listed share")
     if (sig.get("short_interest") or 0) > s["max_short_interest_pct"]:
         out.append(f"crowded: short interest {sig['short_interest']:g}%")
     if market_cap_usd_bn is not None and market_cap_usd_bn < s["min_market_cap_usd_bn"]:
@@ -131,6 +143,7 @@ def screen(asof: str, cfg: dict, mkt) -> list[dict]:
     state = json.loads((ROOT / "portfolio" / "state.json").read_text())
     import entry_watch
     watched = {r["ticker"] for r in entry_watch.read()}
+    adrs = adr_map()
     out = []
     for t, r in latest.items():
         if r["type"] != "CORE" or r["decision"] != "AVOID" or int(r["conviction"] or 9) > s["max_conviction"] or r["date"] < cut:
@@ -143,7 +156,7 @@ def screen(asof: str, cfg: dict, mkt) -> list[dict]:
         if not peak_cycle(sig, cfg):
             continue
         g = guards(sig, ev.read_text() if ev.exists() else "", caps.get(t), asof, t in state.get("holdings", {}),
-                   t in watched, cfg)
+                   t in watched, cfg, t, adrs.get(t))
         try:
             closes = [x["close"] for x in mkt.history(t)["rows"] if x.get("close") and x["date"] <= asof]
             q = mkt.quote(t, asof)
@@ -157,7 +170,7 @@ def screen(asof: str, cfg: dict, mkt) -> list[dict]:
                     "roic_peak_pp": (sig.get("ROIC") or {}).get("peak_pp"),
                     "margin_peak_pp": (sig.get("Operating margin") or {}).get("peak_pp"),
                     "vs_200d": sig.get("vs_200d"), "change_12m": sig.get("change_12m"),
-                    "short_interest": sig.get("short_interest"), "close": q and q["close"], "close_date": q and q["date"],
+                    "short_interest": sig.get("short_interest"), "adr": adrs.get(t), "close": q and q["close"], "close_date": q and q["date"],
                     "currency": q and q["currency"],
                     "qualifies": not g and turned and score >= s["min_confidence"]})
     out.sort(key=lambda c: (-c["qualifies"], -c["confidence"], c["ticker"]))

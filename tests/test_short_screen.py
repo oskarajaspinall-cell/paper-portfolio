@@ -94,3 +94,24 @@ def test_short_evaluation_check(scfg):
     assert any("gives 4" in e for e in check_docs.check_short(md.replace('"conviction": 4', '"conviction": 5'), scfg)[0])
     weak = md.replace('"catalyst": 2', '"catalyst": 0').replace('"conviction": 4', '"conviction": 3')
     assert any("needs conviction 4" in e for e in check_docs.check_short(weak, scfg)[0])
+
+
+def test_foreign_shorts_restricted_markets_adr_and_borrowing(scfg):
+    sig = SC.fact_sheet_signals(SHEET)
+    g = SC.guards(sig, "", 200.0, "2026-12-01", False, False, scfg, "KRX:000660", None)
+    assert g == ["shorting restricted in KRX and no US-listed share"]
+    assert SC.guards(sig, "", 200.0, "2026-12-01", False, False, scfg, "TPE:2330", "TSM") == []   # its US share is shortable
+    assert SC.guards(sig, "", 200.0, "2026-12-01", False, False, scfg, "TYO:6857", None) == []    # Japan is not restricted
+    assert SC.adr_map().get("TPE:2330") == "TSM"
+
+    chain = pd.DataFrame([{"contractSymbol": "TSM270319P00200000", "strike": 200.0, "bid": 9.0, "ask": 11.0,
+                           "openInterest": 900, "impliedVolatility": 0.2}])
+    closes = [100 * (1.02 if i % 2 else 0.98) for i in range(260)]
+    put = SS.price_put("TPE:2330", 201.0, "2026-11-18", closes, scfg, loader=lambda s: (["2027-03-19"], lambda e: chain),
+                       adr="TSM")
+    assert put["underlying"] == "TSM" and put["strike"] == 200.0          # foreign stock, put on its US share
+
+    row = {"entry_close": "100", "etf_entry": "50", "opened": "2026-11-18", "borrow_fee_pct": "6"}
+    SS.mark(row, 80, 51, "2027-05-18", None)                              # 181 days: 6% x 181/365 = 2.98%
+    assert row["borrow_cost_pct"] == pytest.approx(2.98, abs=0.01)
+    assert row["short_net_pct"] == pytest.approx(22.0 - 2.98, abs=0.01)  # stock -20% vs fund +2%, less the fee

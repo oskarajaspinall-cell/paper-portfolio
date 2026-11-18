@@ -461,6 +461,13 @@ stop_pct = 15                     # exits: close this far above entry, a falsifi
 min_days_to_expiry = 30           # ...or this close to expiry; puts 90-180 days out, strike nearest the money
 max_iv_pct_rank = 80              # skip the put (stock record only) when implied vol is in its top 20% of the year
 min_open_interest = 500           # ...or the contract's open interest is below this
+# Foreign stocks (owner 2026-11-18): a put is priced on the company's US-listed share (universe/adr_map.csv, ADRs with
+# listed options) when it has one. Markets where a foreign investor can't practically short (mainland China, Korea,
+# Taiwan, India, South-East Asia, the Gulf) are skipped unless such a US share exists. Every stock-vs-sector record pays
+# a borrowing fee: borrow_fee_pct a year, borrow_fee_hard_pct when short interest is 10%+ of float.
+restricted_markets = ["SHA", "SHE", "KRX", "TPE", "TPEX", "NSE", "BOM", "HOSE", "IDX", "BKK", "KLSE", "TADAWUL", "ADX", "DFM"]
+borrow_fee_pct = 1.5
+borrow_fee_hard_pct = 6
 ```
 <!-- CONFIG:END -->
 
