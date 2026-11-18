@@ -55,6 +55,7 @@ Token efficiency is a design requirement: Python scripts do all data work and ar
   - **Swap-reviewer guards** (weekly, intentionally low frequency): the holding sold must be held 30+ days, still at the buy bar (a broken thesis goes through the downgrade / smoke-alarm path, never an ad-hoc swap) and be beaten by the idea by `auto_swap_min_gap_pp` (15pp) on BOTH fair-value upside AND expected-12-month-value upside. The two share inputs, so this filters valuation-scaling noise; it does not validate two independent theses. The automatic swap for a below-bar (downgraded) holding is unchanged (blended upside).
 - **Funding queue** (design by Claude, owner-approved 2026-10-18; `[funding_queue]`): a conviction-4+ CORE BUY rejected only because it would take cash below the reserve (or the cash floor) is not lost. It waits in `state.json` `funding_queue`; weekdays it is resubmitted for the next open once there is room above the reserve (best upside first — to a 50/50 blend of the base fair value and the expected 12-month value (the latest evaluation's probability-weighted scenario targets), either alone when the other is missing (`fair_value_weight`, owner rule 2026-11-08), every rule re-checked); weekly the `swap-reviewer` weighs the best waiting idea against the weakest CORE holdings and may swap (a BUY with `replaces`, only when clearly better). It drops out after 30 days or once its close is 10% above the decision price. When the best idea doesn't fit at full size but the room above the reserve is at least half its target, it starts with a **starter position** using that room (one at a time, owner-approved 2026-10-19); the rest stays queued as a top-up (an ADD in steps of 1%+ as room appears, same 30-day / 10% limits; the holding's `target_pct` is the full size). The reserve itself is never relaxed.
 - **Dip radar** (design by Claude, owner request 2026-10-19; `[dip]`): every weekday night `scripts/dip_radar.py` checks holdings and recent conviction-3+ AVOIDs for an unusual stock-specific fall since our last research (beta-adjusted, in standard deviations of the stock's own moves) with the price at or below base fair value; the best few are re-researched the next day in the intraday window (holdings as re-initiations: ADD is the question). Complements the entry prices, which only cover names with a price-based obstacle. A dip is never a buy on its own.
+- **Shadow shorts** (owner 2026-11-18; `[short]`, `scripts/short_screen.py`, `scripts/shadow_shorts.py`, agent `short-evaluator`): SHADOW ONLY, never a trade, never in state.json/cash/ledger. Every night the screen lists conviction 1-2 CORE AVOIDs whose earnings sit far above their own 5-year history (a cyclical peak, with a positive margin), scores each 0-7 for confidence, and lets one qualify only at 5+ with the trend turned and no guard; a qualifier gets a fresh fact sheet and a short evaluation (Python sets its conviction from the parts) and, at 4+, a shadow position: a put 90-180 days out plus the stock against its US sector ETF, at most 3 open, one per industry. Recorded in `portfolio/shadow_shorts.csv`, shown on the dashboard's Activity tab. Go live only on the January bar (20+ closed, 5+ industries, stock below its sector, puts profitable after spreads).
 - **Dividends and splits** (owner request 2026-10-16): credited / applied mechanically by `scripts/corporate_actions.py` before every re-pricing (`[corporate_actions]`). A split never reads as a price move: shares, entry prices, tactical levels, watchlist entry prices and decision scoring are all adjusted.
 - **Country exposure** (owner-approved 2026-10-19; `[portfolio].country_group_caps`): China + Hong Kong combined (companies reporting in CNY or HKD) is capped at 25%, enforced by `portfolio.py` like the sector cap. Evaluators judge each stock on its merits and do NOT lower conviction for portfolio concentration: the caps handle it.
 - When the portfolio is at the max holdings, or a new buy would breach a cash, sleeve, sector, correlation-cluster or country limit, a BUY must name the holding it replaces and state why the new idea is better. The replacement is sold in the same order (both sides fill at the next open).
@@ -433,6 +434,33 @@ fetch_cap_tactical = 4
 max_new_initiations_per_week = 20  # full research (researcher + evaluator) per week
 parallel_research = 3              # researched at the same time; a failed NEW initiation just skips that stock
 weekly_flag_move_pct = 8
+
+[short]
+# SHADOW ONLY (owner 2026-11-18): short candidates are screened, evaluated and recorded as paper-on-paper positions in
+# portfolio/shadow_shorts.csv. Nothing here ever touches state.json, cash or the ledger; the mandate stays long-only.
+# Screen (scripts/short_screen.py): latest CORE AVOID at conviction <= max_conviction, at most max_age_days old, earnings
+# at a cyclical peak (ROIC or operating margin far above its own 5-year median, margin > 0), trend turned (close below a
+# falling 50-day), and no guard (crowded short, small, takeover, results due). Fair value is NOT used: a DCF on peak
+# earnings makes a peaking cyclical look fairly priced (replay 2026-11-18).
+max_conviction = 2
+max_age_days = 45
+roic_peak_pp = 20                 # confidence: +1 at this, +2 at roic_peak_pp_strong
+roic_peak_pp_strong = 40
+margin_peak_pp = 15               # confidence: +1 at this, +2 at margin_peak_pp_strong
+margin_peak_pp_strong = 30
+stretched_200d_pct = 20           # +1 when the research found the price this far above its 200-day
+parabolic_12m_pct = 100           # +1 when the 12-month change was at least this
+min_confidence = 5                # owner 2026-11-18: only the shorts we are most confident in (0-7)
+max_open = 3                      # shadow shorts open at once, one per industry
+max_short_interest_pct = 15       # guards: crowded (squeeze) ...
+min_market_cap_usd_bn = 2         # ... small ...
+results_blackout_days = 5         # ... results due within this many days
+min_short_conviction = 4          # the short evaluator's conviction needed to open
+premium_pct = 0.5                 # put premium per position, % of the portfolio (3% for the whole book)
+stop_pct = 15                     # exits: close this far above entry, a falsifier, base fair value reached,
+min_days_to_expiry = 30           # ...or this close to expiry; puts 90-180 days out, strike nearest the money
+max_iv_pct_rank = 80              # skip the put (stock record only) when implied vol is in its top 20% of the year
+min_open_interest = 500           # ...or the contract's open interest is below this
 ```
 <!-- CONFIG:END -->
 

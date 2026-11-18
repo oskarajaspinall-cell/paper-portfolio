@@ -265,3 +265,24 @@ def main(argv=None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# ---------------------------------------------------------------- short side (SHADOW ONLY, owner 2026-11-18)
+SHORT_PARTS = {"overvaluation": (0, 2), "peak_cycle": (0, 2), "deterioration": (0, 2), "capital_need": (0, 2),
+               "catalyst": (0, 2), "momentum": (-2, 0), "takeover_appeal": (-2, 0), "crowding": (-1, 0),
+               "insider_support": (-1, 0)}
+
+
+def short_score(parts: dict) -> tuple[dict | None, list[str]]:
+    """The short evaluator's parts -> total and conviction (Python sets it, as for longs): 9+ = 5, 7+ = 4, 5+ = 3,
+    3+ = 2, else 1. Returns (result, problems)."""
+    errs = []
+    for k, (lo, hi) in SHORT_PARTS.items():
+        v = parts.get(k)
+        if not isinstance(v, (int, float)) or not lo <= v <= hi:
+            errs.append(f"short parts.{k} must be a number from {lo} to {hi}")
+    if errs:
+        return None, errs
+    total = sum(parts[k] for k in SHORT_PARTS)
+    conv = 5 if total >= 9 else 4 if total >= 7 else 3 if total >= 5 else 2 if total >= 3 else 1
+    return {"total": total, "conviction": conv}, []

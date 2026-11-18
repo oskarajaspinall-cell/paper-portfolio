@@ -53,7 +53,8 @@ TOOLS = {"researcher": f"Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.
          "weekly-reviewer": f"Read,Glob,Grep,WebFetch,{_OUT}",
          "macro-overlay": f"Read,Glob,Grep,WebFetch,{_CHECK},{_OUT}",
          "macro-strategist": f"Read,Glob,Grep,WebFetch,{_CHECK},{_OUT}",
-         "swap-reviewer": f"Read,Glob,Grep,{_OUT}"}
+         "swap-reviewer": f"Read,Glob,Grep,{_OUT}",
+         "short-evaluator": f"Read,Glob,Grep,{_CHECK},{_OUT}"}  # SHADOW ONLY (2026-11-18)
 
 
 class StepFailed(Exception):

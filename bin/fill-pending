@@ -43,6 +43,8 @@ bin/with-timeout 300 bin/py scripts/risk.py report --asof "$ASOF" || echo "!! ri
 bin/with-timeout 1200 bin/py scripts/decision_log.py update --asof "$ASOF" || echo "!! decision scores not updated"
 # How stocks did after we trimmed or sold them (owner request 2026-11-18): portfolio/exits.csv
 bin/with-timeout 600 bin/py scripts/exit_log.py update --asof "$ASOF" || echo "!! exit outcomes not updated"
+# Shadow short book (owner 2026-11-18; SHADOW ONLY, never trades): screen, mark/close, evaluate one qualifier
+bin/with-timeout 1800 bin/py scripts/shadow_shorts.py run --asof "$ASOF" || echo "!! shadow shorts not updated"
 # The run's plain-English summary (owner request 2026-10-21): reports/daily/<date>.md + a Mac notification
 HEAD_LINE=$(bin/with-timeout 120 bin/py scripts/daily_summary.py --asof "$ASOF" --log "$LOG") || HEAD_LINE="summary not written"
 echo "summary: $HEAD_LINE"
@@ -57,7 +59,7 @@ start_queued() {
 }
 if git diff --quiet -- portfolio; then echo "nothing changed"; start_queued; exit 0; fi
 bin/with-timeout 600 bin/py scripts/dashboard.py >/dev/null || echo "!! dashboard not updated"
-git add -A -- portfolio docs reports/entry-watch reports/regime reports/dip-radar reports/attribution reports/risk reports/daily "$LOG"
+git add -A -- portfolio docs reports/entry-watch reports/regime reports/dip-radar reports/attribution reports/risk reports/daily reports/short-screen 'research/*/*short-evaluation.md' 'research/*/factsheet-*' "$LOG"
 git commit -q -m "Daily update $(date +%F)" && git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (committed locally)"
 start_queued
 echo "== end $(date)"

@@ -373,6 +373,39 @@ def already_true_triggers(triggers, stats: dict) -> list[str]:
             for h in trigger_hits(mech, stats)[0]]
 
 
+def check_short(md: str, cfg: dict) -> tuple[list[str], dict]:
+    """A short evaluation (SHADOW ONLY, owner 2026-11-18): sections, a complete block, conviction = Python's."""
+    import scorecard
+    errs = [f"missing section '{h}'" for h in ("## Bear thesis", "## Bull case against the short", "## Decision")
+            if h not in md]
+    d, err = decision_block(md)
+    if err or not d:
+        return errs + [err or "no Decision block"], {}
+    if d.get("decision") not in ("SHORT", "NO"):
+        errs.append("decision must be SHORT or NO")
+    res, perr = scorecard.short_score(d.get("parts") or {})
+    errs += perr
+    if res and d.get("conviction") != res["conviction"]:
+        errs.append(f"conviction {d.get('conviction')} but the parts total {res['total']:g} gives {res['conviction']}")
+    if d.get("decision") == "SHORT" and res and res["conviction"] < cfg["short"]["min_short_conviction"]:
+        errs.append(f"SHORT needs conviction {cfg['short']['min_short_conviction']}+ (got {res['conviction']})")
+    cat = d.get("catalyst") or {}
+    if not cat.get("text") or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(cat.get("date") or "")):
+        errs.append("catalyst needs text and a YYYY-MM-DD date")
+    fals = d.get("falsifiers") or []
+    if len(fals) < 3 or any(not f.get("text") for f in fals):
+        errs.append("at least 3 falsifiers, each with text")
+    for f in fals:
+        chk = f.get("check")
+        if chk and (chk.get("source") != "statistics" or chk.get("op") not in ("<", ">") or
+                    not isinstance(chk.get("value"), (int, float)) or not chk.get("field")):
+            errs.append(f"falsifier check must be {{source: statistics, field, op: < or >, value}}: {f.get('text', '')[:40]}")
+    for k in ("ticker", "thesis", "bull_case"):
+        if not d.get(k):
+            errs.append(f"missing {k}")
+    return errs, {"short": f"{res['total']:g}->{res['conviction']}" if res else "?"}
+
+
 def check_eval(md: str, state: dict, cfg: dict) -> tuple[list[str], dict]:
     errs, counts = [], {}
     heads = [h for h, _ in sections(md)]
@@ -593,7 +626,7 @@ def check_regime_view(md: str, score_doc: dict, cfg: dict) -> tuple[list[str], d
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("kind", choices=["note", "eval", "macro", "regime"])
+    ap.add_argument("kind", choices=["note", "eval", "macro", "regime", "short"])
     ap.add_argument("path")
     ap.add_argument("--state", default=str(ROOT / "portfolio" / "state.json"))
     a = ap.parse_args(argv)
@@ -607,6 +640,8 @@ def main(argv=None) -> int:
             errs += note_number_problems(md, _sources_for(path, False)[0])
     elif a.kind == "macro":
         errs, counts = check_macro(md, load_config())
+    elif a.kind == "short":
+        errs, counts = check_short(md, load_config())
     elif a.kind == "regime":  # reports/regime/<date>-view.md, checked against reports/regime/<date>.json
         p = Path(a.path)
         score = json.loads(p.with_name(p.name.replace("-view.md", ".json")).read_text())

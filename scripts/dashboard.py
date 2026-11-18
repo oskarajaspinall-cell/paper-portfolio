@@ -176,6 +176,17 @@ def add_world(ser: list[dict], closes: dict | None) -> None:
         p["world"] = c / base * 100 if c else None
 
 
+def shadow_shorts_data() -> dict:
+    """The shadow short book and the latest short screen (SHADOW ONLY: nothing trades)."""
+    import shadow_shorts
+    scr = sorted((ROOT / "reports" / "short-screen").glob("20??-??-??.json"))
+    s = json.loads(scr[-1].read_text()) if scr else {}
+    return {"asof": s.get("asof"), "candidates": [{k: c.get(k) for k in ("ticker", "decided", "conviction", "confidence",
+                                                                         "trend_turned", "guards", "qualifies")}
+                                                  for c in s.get("candidates", []) if c.get("confidence", 0) >= 3],
+            "book": shadow_shorts.read()}
+
+
 def funnel(decisions: list[dict], ledger: list[dict], today: str) -> dict:
     """Stocks researched -> rated conviction 4+ -> bought, over the last 7 and 30 days (new-name verdicts only)."""
     out = {}
@@ -431,6 +442,7 @@ def build_data(live: bool = True) -> dict:
                                                  "excess_1m", "excess_3m", "evaluation", "price_date", "since_excess", "since_date")}
                       | {"live": "price: live" in (d.get("note") or ""), "fate": fate(d)} for d in shown],
         "hits": hits, "n_decisions": len(decisions),
+        "shorts": shadow_shorts_data(),
         "exits": [{k: e.get(k, "") for k in ("date", "ticker", "decision", "shares", "kind", "replaced_by", "usd", "since_date",
                                              "since_ret", "since_excess", "kept_usd", "vs_replacement_since",
                                              "excess_1m", "hit_1m", "excess_3m")} for e in exits],
@@ -578,6 +590,9 @@ __DAILY__
 <div class="tiles" id="hits"></div><div class="tw" style="margin-top:12px"><table id="decisions"></table></div></section>
 <section class="card"><h2>After we sold</h2><div class="sub">Every trim and sale, followed from its fill price. A trim or sale was right when the stock then lagged the S&amp;P 500. "Selling saved" is what the sold shares have lost since (+) or gained (−); for a swap, the last column is the stock bought minus the one sold.</div>
 <div class="tiles" id="exitTiles"></div><div class="tw" style="margin-top:12px"><table id="exits"></table></div></section>
+<section class="card"><h2>Shadow shorts</h2><div class="sub" id="shortSub"></div>
+<div class="tiles" id="shortTiles"></div><div class="tw" style="margin-top:12px"><table id="shortBook"></table></div>
+<div class="sub" style="margin-top:12px">Candidates scoring 3 or more (out of 7)</div><div class="tw"><table id="shortCands"></table></div></section>
 <section class="card"><h2>Conviction scoreboard</h2><div class="sub" id="scoreSub"></div><div class="tw"><table id="score"></table></div>
 <div class="sub" style="margin-top:12px" id="pointsSub"></div><div class="tw"><table id="points"></table></div></section>
 </div>
@@ -842,6 +857,20 @@ table('decisions',[{h:'Date',f:r=>r.date},{h:'Ticker',f:r=>r.ticker},{h:'Type',f
  {h:'3m vs SPY',n:1,f:r=>r.excess_3m===''?'–':pct(+r.excess_3m,1),c:r=>r.excess_3m===''?'':cls(+r.excess_3m)},
  {h:'Since vs SPY',n:1,f:r=>!r.since_excess?'–':pct(+r.since_excess,1),c:r=>!r.since_excess?'':cls(+r.since_excess),t:r=>r.since_date?`to the ${r.since_date} close`:'buys, holds, trims and conviction-3 avoids only'},{h:'Evaluation',f:r=>link(r.evaluation,'read')}],D.decisions,'No decisions yet.',{filter:'Filter by ticker or decision',chips:[['With a result',r=>r.excess_1m!==''],['Buys',r=>r.decision==='BUY'||r.decision==='ADD'],
   ['Holds and trims',r=>!['BUY','ADD','AVOID'].includes(r.decision)],['Avoids',r=>r.decision==='AVOID'],['All',null]]});
+{const SH=D.shorts||{},B=SH.book||[],op=B.filter(r=>r.status==='open'),cl=B.filter(r=>r.status==='closed');
+ $('shortSub').textContent=`Tracking only: nothing is traded and no money is used. A stock is a candidate when the research rated it 1 or 2 and its earnings are far above its own 5-year history; it is shorted on paper (a put, plus the stock against its sector fund) only at a confidence of 5 of 7, after its trend has turned and a separate short analysis rates it 4+. At most 3 at a time. Screen ${SH.asof||'not run yet'}.`;
+ const med=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+ const vs=B.filter(r=>r.stock_vs_etf_pct!=='').map(r=>+r.stock_vs_etf_pct),pp=B.filter(r=>r.put_pnl_usd!=='').reduce((a,r)=>a+(+r.put_pnl_usd),0);
+ $('shortTiles').append(tile('Open / closed',`${op.length} / ${cl.length}`,'shadow positions'),
+  tile('Stock vs its sector fund',vs.length?pct(med(vs),1):'–',vs.length?`median of ${vs.length}; below zero = the short call was right`:'none yet'),
+  tile('Put profit or loss',B.some(r=>r.put_pnl_usd!=='')?(pp>=0?'+':'−')+usd(Math.abs(pp),0):'–','marked at mid prices; the bid/ask spread is not taken off'));
+ table('shortBook',[{h:'Opened',f:r=>r.opened},{h:'Ticker',f:r=>r.ticker},{h:'Status',f:r=>r.status+(r.close_reason?` (${r.close_reason})`:'')},
+  {h:'Conf.',n:1,f:r=>r.confidence},{h:'Put',f:r=>r.put_contract?`${r.put_strike} ${r.put_expiry} x${r.contracts}`:'stock record only'},
+  {h:'Stock vs sector',n:1,f:r=>r.stock_vs_etf_pct===''?'–':pct(+r.stock_vs_etf_pct,1),c:r=>r.stock_vs_etf_pct===''?'':cls(-r.stock_vs_etf_pct)},
+  {h:'Put P/L',n:1,f:r=>r.put_pnl_usd===''?'–':usd(+r.put_pnl_usd,0),c:r=>r.put_pnl_usd===''?'':cls(+r.put_pnl_usd)},
+  {h:'Evaluation',f:r=>link(r.evaluation,'read')}],B,'No shadow shorts yet.');
+ table('shortCands',[{h:'Ticker',f:r=>r.ticker},{h:'Researched',f:r=>r.decided},{h:'Conv.',n:1,f:r=>r.conviction},{h:'Confidence',n:1,f:r=>`${r.confidence}/7`},
+  {h:'Trend turned',f:r=>r.trend_turned?'yes':'no'},{h:'Blocked by',w:1,f:r=>(r.guards||[]).join('; ')||'–'},{h:'Qualifies',f:r=>r.qualifies?'yes':'no'}],SH.candidates||[],'No candidates.');}
 {const E=D.exits||[],sv=x=>x===''?'–':(+x>=0?'+':'−')+usd(Math.abs(+x),0),lag=E.filter(r=>r.since_excess!==''),m1=E.filter(r=>r.hit_1m!=='');
  $('exitTiles').append(tile('Since the exit: lagged the S&P 500',lag.length?`${lag.filter(r=>+r.since_excess<0).length} of ${lag.length}`:'–','sold or trimmed stocks that did worse than the index since'),
   tile('Selling saved so far',lag.length?sv(-lag.reduce((a,r)=>a+(+r.kept_usd||0),0)):'–','what the sold shares lost since (+) or gained (−)'),
