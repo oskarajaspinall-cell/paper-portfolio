@@ -1,0 +1,46 @@
+[
+ {
+  "ticker": "BUD:RICHTER",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "A net-cash pharma with rising returns and margins trades low in its own EV/EBITDA and P/FCF ranges while in a healthy uptrend.",
+  "reason": "Scorecard gives conviction 4: high, rising returns, net cash, and trend strength with a real FCF yield. Python sets the volatility-scaled size; cash after the pending order cannot fund it above the 1.5% floor, so the conviction-3 OTIS holding is sold to fund it. 2026-11-18 (owner): re-submitted after the PAYC order was cancelled; capped at 6.8% so cash stays above the 1.5% floor (the full target stays, the funding queue tops it up).",
+  "research_note": "research/BUD-RICHTER/2026-11-17.md",
+  "triggers": [
+   {
+    "text": "TTM operating margin falls below 28%, reversing most of the rise from 28.7% a year earlier to 34.5%.",
+    "check": {
+     "source": "statistics",
+     "field": "operatingMargin",
+     "op": "<",
+     "value": 28
+    }
+   },
+   {
+    "text": "TTM ROIC falls below 16%, back to the FY2021 level and erasing the returns improvement.",
+    "check": {
+     "source": "statistics",
+     "field": "roic",
+     "op": "<",
+     "value": 16
+    }
+   },
+   {
+    "text": "TTM FCF margin falls below 18%, showing the rolling slide from 29.3% is structural, not timing.",
+    "check": {
+     "source": "statistics",
+     "field": "fcfMargin",
+     "op": "<",
+     "value": 18
+    }
+   },
+   {
+    "text": "Net debt/EBITDA (ratios page) rises above 1.0x from -0.61x, signalling a debt-funded deal."
+   }
+  ],
+  "replaces": "OTIS",
+  "replacement_reason": "OTIS is held at conviction 3 with its price above the mechanical fair value and a balanced skew (its own thesis); Richter clears the buy bar with higher returns, net cash and a lower EV/EBITDA, and cash cannot fund a full position above the 1.5% floor.",
+  "cap_pct": 6.8
+ }
+]
