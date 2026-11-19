@@ -20,10 +20,13 @@ python_out=$(bin/with-timeout 900 bin/py scripts/portfolio.py fill-pending --aso
 echo "$python_out"
 # Dividends and splits (no AI, owner request 2026-10-16) BEFORE re-pricing: a split not applied would re-price
 # the old share count at the new price, so a failure here stops the run.
+echo "== $(date +%T) corporate_actions.py"  # step timing (2026-11-19: one run took 47 min, cause unknown)
 bin/with-timeout 1200 bin/py scripts/corporate_actions.py check --asof "$ASOF" || { echo "!! dividends/splits check failed: not re-pricing"; exit 1; }
 # Daily re-pricing (no AI): every holding at its latest close, a valuation point, a fresh dashboard.
+echo "== $(date +%T) portfolio.py"  # step timing (2026-11-19: one run took 47 min, cause unknown)
 bin/with-timeout 900 bin/py scripts/portfolio.py mark --phase daily --asof "$ASOF" || { echo "!! daily re-pricing failed"; exit 1; }
 # Entry prices (no AI): a conviction-3+ name closing at/below its entry price is re-researched first next run
+echo "== $(date +%T) entry_watch.py"  # step timing (2026-11-19: one run took 47 min, cause unknown)
 bin/with-timeout 900 bin/py scripts/entry_watch.py check --asof "$ASOF" || echo "!! entry watch not updated"
 # Daily dip check (no AI, 2026-10-19): the S&P 500's distance below its 52-week high resets the dip release on the
 # weekly regime's reserve, so a sell-off frees the reserve for tomorrow's open (the funding queue below can use it)
@@ -40,10 +43,12 @@ bin/with-timeout 600 bin/py scripts/funding_queue.py auto-swap --asof "$ASOF" ||
 bin/with-timeout 600 bin/py scripts/attribution.py report --asof "$ASOF" || echo "!! attribution not updated"
 bin/with-timeout 300 bin/py scripts/risk.py report --asof "$ASOF" || echo "!! risk report not updated"
 # since-decision returns re-price ~540 stocks (conviction-3 avoids included, 2026-11-18): about 6-7 minutes
+echo "== $(date +%T) decision_log.py"  # step timing (2026-11-19: one run took 47 min, cause unknown)
 bin/with-timeout 1200 bin/py scripts/decision_log.py update --asof "$ASOF" || echo "!! decision scores not updated"
 # How stocks did after we trimmed or sold them (owner request 2026-11-18): portfolio/exits.csv
 bin/with-timeout 600 bin/py scripts/exit_log.py update --asof "$ASOF" || echo "!! exit outcomes not updated"
 # Shadow short book (owner 2026-11-18; SHADOW ONLY, never trades): screen, mark/close, evaluate one qualifier
+echo "== $(date +%T) shadow_shorts.py"  # step timing (2026-11-19: one run took 47 min, cause unknown)
 bin/with-timeout 1800 bin/py scripts/shadow_shorts.py run --asof "$ASOF" || echo "!! shadow shorts not updated"
 # The run's plain-English summary (owner request 2026-10-21): reports/daily/<date>.md + a Mac notification
 HEAD_LINE=$(bin/with-timeout 120 bin/py scripts/daily_summary.py --asof "$ASOF" --log "$LOG") || HEAD_LINE="summary not written"
