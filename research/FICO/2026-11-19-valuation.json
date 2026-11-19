@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Software - Application",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/Revenue",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_revenue"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 312.63050118002803,
+    "base": 732.2825239889099,
+    "bull": 1125.5716746768228
+   },
+   "implied_growth": 0.08603180503137295,
+   "discount_rate": 0.09222430712843223,
+   "cost_of_equity": 0.112323,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.06487709238289614,
+     "base": 0.1005764364441452,
+     "bull": 0.18755156101078851
+    },
+    "cash_flow_margin": {
+     "bear": 0.2690531512060662,
+     "base": 0.4157880988199409,
+     "bull": 0.4157880988199409
+    },
+    "cagr_3y": 0.18755156101078851,
+    "cagr_5y": 0.1647541847657923,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_revenue",
+   "label": "EV/Revenue",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 568.6539035148774,
+    "base": 1484.0002047590046,
+    "bull": 1913.6097927179399
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 7.158,
+     "base": 15.459,
+     "bull": 19.355
+    },
+    "ttm_revenue": 2534873000
+   }
+  }
+ ],
+ "price": 677.75,
+ "risk_free": 0.051,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 397.97163529164453,
+  "base": 982.8550842456083,
+  "bull": 1388.2510473571954
+ },
+ "used": [
+  "dcf",
+  "ev_revenue"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.41280466943320615,
+  "base": 0.4501734920628673,
+  "bull": 1.0483231978711847
+ },
+ "implied_growth": 0.08603180503137295,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.0x (base 732.28-1484.00)"
+  ]
+ },
+ "ticker": "FICO",
+ "asof": "2026-11-19",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-18",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/fico/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/fico/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/fico/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/fico/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/fico/statistics/"
+ }
+}

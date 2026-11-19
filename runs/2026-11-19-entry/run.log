@@ -1,0 +1,94 @@
+[15:34:55] == re-research FICO (entry price hit)
+[15:34:55] == re-research PYPL (entry price hit)
+[15:34:55] == re-research UNH (dip radar)
+[15:34:55] $ bin/py scripts/sec_delta.py FICO --asof 2026-11-19
+[15:34:55] $ bin/py scripts/sec_delta.py PYPL --asof 2026-11-19
+[15:34:55] $ bin/py scripts/sec_delta.py UNH --asof 2026-11-19
+[15:35:11] OK research/PYPL/sec-delta-2026-11-19.md
+[15:35:11] $ claude -p Ticker PYPL, note type CORE, date 2026-11-19. Reason for review: entry_hit. Facts: entry price: 57.3768; price: traded at 56.835 at 10:34 ET. SEC filing delta: research/PYPL/sec-delta-2026-11-19.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:35:11] OK research/UNH/sec-delta-2026-11-19.md
+[15:35:11] $ claude -p Ticker UNH, note type CORE, date 2026-11-19. Reason for review: dip. Facts: detail: Dip radar: the close 349.91 (2026-11-18) is -16.1% over the 20 sessions since our last research (2026-10-12) vs the S&P 500 -5.5% (beta 0.03); the stock-specific part is -15.9% (-2.29 standard deviations); -7.8% since ou. SEC filing delta: research/UNH/sec-delta-2026-11-19.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:35:11] OK research/FICO/sec-delta-2026-11-19.md
+[15:35:11] $ claude -p Ticker FICO, note type CORE, date 2026-11-19. Reason for review: entry_hit. Facts: entry price: 668.251; price: traded at 657.98 at 10:34 ET. SEC filing delta: research/FICO/sec-delta-2026-11-19.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:39:22] Note: research/FICO/2026-11-19.md
+Fact sheet: research/FICO/factsheet-2026-11-19.md
+Check: OK research/FICO/2026-11-19.md type=CORE 1=71 2=131 3=118 4=46 5=53 6=74 total=493
+
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls. The note's other sources are the SEC delta file and headline URLs as listed in the fact sheet.
+[15:39:22] $ bin/py scripts/check_docs.py note research/FICO/2026-11-19.md
+[15:39:22] OK research/FICO/2026-11-19.md type=CORE 1=71 2=131 3=118 4=46 5=53 6=74 total=493
+[15:39:22] $ bin/py scripts/macro_data.py --asof 2026-11-19
+[15:39:38] - Note: `research/UNH/2026-11-19.md`
+- Fact sheet: `research/UNH/factsheet-2026-11-19.md`
+- Check: `OK research/UNH/2026-11-19.md type=CORE 1=53 2=121 3=125 4=58 5=63 6=82 total=502`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- The fact sheet's next earnings date (Oct 13, 2026) is already past. The note flags it as stale.
+- The first `check_docs.py` run failed on a word limit, a tag format and a source-line URL. I fixed all three.
+[15:39:38] $ bin/py scripts/check_docs.py note research/UNH/2026-11-19.md
+[15:39:38] OK research/UNH/2026-11-19.md type=CORE 1=53 2=121 3=125 4=58 5=63 6=82 total=502
+[15:39:38] $ bin/py scripts/macro_data.py --asof 2026-11-19
+[15:39:41] Note: research/PYPL/2026-11-19.md
+Fact sheet: research/PYPL/factsheet-2026-11-19.md
+Check: OK research/PYPL/2026-11-19.md type=CORE 1=76 2=139 3=131 4=34 5=59 6=95 total=534
+
+Data conflicts: none. Blocked URLs: none, and I made no WebFetch calls.
+
+The country revenue mix is marked [data unavailable] in the note, so the macro overlay should check it.
+[15:39:41] $ bin/py scripts/check_docs.py note research/PYPL/2026-11-19.md
+[15:39:41] OK research/PYPL/2026-11-19.md type=CORE 1=76 2=139 3=131 4=34 5=59 6=95 total=534
+[15:39:41] $ bin/py scripts/macro_data.py --asof 2026-11-19
+[15:41:47] {"out": "reports/macro/2026-11-19.md", "series": 20, "unavailable": []}
+[15:41:47] $ claude -p Ticker FICO, date 2026-11-19. Research: research/FICO/factsheet-2026-11-19.md, research/FICO/2026-11-19.md. Macro snapshot: reports/macro/2026-11-19.md. Write research/FICO/2026-11-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:41:51] {"out": "reports/macro/2026-11-19.md", "series": 20, "unavailable": []}
+[15:41:51] $ claude -p Ticker PYPL, date 2026-11-19. Research: research/PYPL/factsheet-2026-11-19.md, research/PYPL/2026-11-19.md. Macro snapshot: reports/macro/2026-11-19.md. Write research/PYPL/2026-11-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:41:55] {"out": "reports/macro/2026-11-19.md", "series": 20, "unavailable": []}
+[15:41:55] $ claude -p Ticker UNH, date 2026-11-19. Research: research/UNH/factsheet-2026-11-19.md, research/UNH/2026-11-19.md. Macro snapshot: reports/macro/2026-11-19.md. Write research/UNH/2026-11-19-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:42:07] research/FICO/2026-11-19-macro.md
+OK research/FICO/2026-11-19-macro.md macro_weight=context words=53
+[15:42:07] $ bin/py scripts/check_docs.py macro research/FICO/2026-11-19-macro.md
+[15:42:07] OK research/FICO/2026-11-19-macro.md macro_weight=context words=53
+[15:42:07] $ claude -p Evaluate FICO for 2026-11-19: fact sheet research/FICO/factsheet-2026-11-19.md, note research/FICO/2026-11-19.md, state portfolio/state.json, macro overlay research/FICO/2026-11-19-macro.md. Reason for review: entry_hit. Facts: entry price: 668.251; price: traded at 657.98 at 10:34 ET. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:42:09] research/UNH/2026-11-19-macro.md
+OK research/UNH/2026-11-19-macro.md macro_weight=context words=70
+[15:42:09] $ bin/py scripts/check_docs.py macro research/UNH/2026-11-19-macro.md
+[15:42:09] OK research/UNH/2026-11-19-macro.md macro_weight=context words=70
+[15:42:09] $ claude -p Evaluate UNH for 2026-11-19: fact sheet research/UNH/factsheet-2026-11-19.md, note research/UNH/2026-11-19.md, state portfolio/state.json, macro overlay research/UNH/2026-11-19-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 349.91 (2026-11-18) is -16.1% over the 20 sessions since our last research (2026-10-12) vs the S&P 500 -5.5% (beta 0.03); the stock-specific part is -15.9% (-2.29 standard deviations); -7.8% since ou. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:42:19] research/PYPL/2026-11-19-macro.md
+OK research/PYPL/2026-11-19-macro.md macro_weight=context words=92
+[15:42:19] $ bin/py scripts/check_docs.py macro research/PYPL/2026-11-19-macro.md
+[15:42:19] OK research/PYPL/2026-11-19-macro.md macro_weight=context words=92
+[15:42:19] $ claude -p Evaluate PYPL for 2026-11-19: fact sheet research/PYPL/factsheet-2026-11-19.md, note research/PYPL/2026-11-19.md, state portfolio/state.json, macro overlay research/PYPL/2026-11-19-macro.md. Reason for review: entry_hit. Facts: entry price: 57.3768; price: traded at 56.835 at 10:34 ET. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:43:03] research/UNH/2026-11-19-evaluation.md
+OK research/UNH/2026-11-19-evaluation.md Bear case=139 Bull case=119 decision=AVOID scorecard=6->3
+
+The decision is AVOID at conviction 3, which is the same verdict as 2026-10-12, so no new evidence was needed. The scorecard reached 3 on its own (6 points), so the binary_event veto I added for the pending CMS audit rule didn't change the number. The entry price is left empty because the regulatory event, not the price, is what stands in the way.
+[15:43:03] $ bin/py scripts/check_docs.py eval research/UNH/2026-11-19-evaluation.md
+[15:43:03] OK research/UNH/2026-11-19-evaluation.md Bear case=139 Bull case=119 decision=AVOID scorecard=6->3
+[15:43:03] $ bin/py scripts/valuation.py UNH --asof 2026-11-19 --eval research/UNH/2026-11-19-evaluation.md
+[15:43:03] {"out": "research/UNH/2026-11-19-valuation.md", "used": ["pe"], "fair_value": {"bear": 380.66, "base": 433.95, "bull": 478.7}, "price": 349.91}
+[15:43:04] == UNH: AVOID 3
+[15:43:19] I didn't check the portfolio's room for a buy, because the score fell below the buy bar before that mattered. The decision is AVOID: the scorecard gave conviction 2. The new 10-K risk factors say mortgage lenders may now pick VantageScore instead of FICO, and FY27 guidance was withheld. Since price isn't what blocks a buy, `entry_price` is left empty.
+
+research/FICO/2026-11-19-evaluation.md
+OK research/FICO/2026-11-19-evaluation.md Bear case=138 Bull case=126 decision=AVOID scorecard=4->2
+[15:43:19] $ bin/py scripts/check_docs.py eval research/FICO/2026-11-19-evaluation.md
+[15:43:19] OK research/FICO/2026-11-19-evaluation.md Bear case=138 Bull case=126 decision=AVOID scorecard=4->2
+[15:43:19] $ bin/py scripts/valuation.py FICO --asof 2026-11-19 --eval research/FICO/2026-11-19-evaluation.md
+[15:43:19] {"out": "research/FICO/2026-11-19-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 397.97, "base": 982.86, "bull": 1388.25}, "price": 677.75}
+[15:43:20] == FICO: AVOID 2
+[15:43:49] research/PYPL/2026-11-19-evaluation.md
+OK research/PYPL/2026-11-19-evaluation.md Bear case=142 Bull case=136 decision=AVOID scorecard=8->3
+
+Decision: **AVOID at conviction 3.** The scorecard totals 8 points, one short of the 9 needed for a buy. Quality, its direction and the balance sheet all get full marks, but the discount to the value blend is only about 14%, the moat is narrow and the branded-checkout risk is medium.
+
+Things you should know:
+- **Price basis:** the rules make me score on the last completed close (57.89 on 2026-11-18), not the 56.835 intraday price. At 56.835 the discount would likely reach the next band and give conviction 4. The new entry price is 57.42 (base fair value 67.56 × 0.85), so the stock sits just around it. The watch will probably fire again and trigger another full re-research rather than a buy.
+- **Debt trigger is text-only now:** the statistics page shows debt/EBITDA at 2.13x on its definition, so a 1.5x check would already be true. The trigger now tracks net debt/EBITDA (0.61x today) and the weekly reviewer has to test it by hand.
+
+I did not read the 2026-10-07 evaluation; it is more than 30 days old, so no new-evidence field is needed. Replacements were not considered because this is an AVOID.
+[15:43:49] $ bin/py scripts/check_docs.py eval research/PYPL/2026-11-19-evaluation.md
+[15:43:49] OK research/PYPL/2026-11-19-evaluation.md Bear case=142 Bull case=136 decision=AVOID scorecard=8->3
+[15:43:49] $ bin/py scripts/valuation.py PYPL --asof 2026-11-19 --eval research/PYPL/2026-11-19-evaluation.md
+[15:43:49] {"out": "research/PYPL/2026-11-19-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 38.04, "base": 67.56, "bull": 88.35}, "price": 57.89}
+[15:43:50] == PYPL: AVOID 3
