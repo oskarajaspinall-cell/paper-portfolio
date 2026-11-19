@@ -1,0 +1,132 @@
+== start Thu Nov 19 21:32:23 GMT 2026
+{
+ "applied": [
+  {
+   "side": "SELL",
+   "ticker": "OTIS",
+   "type": "CORE",
+   "shares": 70,
+   "fill_price": 76.08000183105469,
+   "currency": "USD",
+   "fill_close_date": "2026-11-18",
+   "gross_usd": 5325.6,
+   "costs_usd": 5.33,
+   "cash_change_usd": 5320.27,
+   "reason": "replaced by BUD:RICHTER: OTIS is held at conviction 3 with its price above the mechanical fair value and a balanced skew (its own thesis); Richter clears the buy bar with higher returns, net cash and a lower EV/EBITDA, and cash cannot fund a full position above the 1.5% floor. [order 2026-11-17-2 filled at the open of 2026-11-18; open 76.08 from yfinance, stockanalysis.com 76.08]"
+  },
+  {
+   "side": "BUY",
+   "ticker": "BUD:RICHTER",
+   "type": "CORE",
+   "shares": 173,
+   "fill_price": 13570,
+   "currency": "HUF",
+   "fill_close_date": "2026-11-18",
+   "gross_usd": 7091.95,
+   "costs_usd": 17.73,
+   "cash_change_usd": -7109.68,
+   "reason": "Scorecard gives conviction 4: high, rising returns, net cash, and trend strength with a real FCF yield. Python sets the volatility-scaled size; cash after the pending order cannot fund it above the 1.5% floor, so the conviction-3 OTIS holding is sold to fund it. 2026-11-18 (owner): re-submitted after the PAYC order was cancelled; capped at 6.8% so cash stays above the 1.5% floor (the full target stays, the funding queue tops it up). [order 2026-11-17-2 filled at the open of 2026-11-18; open from stockanalysis]"
+  }
+ ],
+ "rejected": [],
+ "still_pending": [],
+ "expired": []
+}
+Traceback (most recent call last):
+  File "/Users/oskaraspinall/paper-portfolio/scripts/corporate_actions.py", line 264, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/Users/oskaraspinall/paper-portfolio/scripts/corporate_actions.py", line 245, in main
+    out = check(state, ledger, read_csv(PORT / "corporate_actions.csv"), mkt, cfg, a.asof, dividend_fn,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/oskaraspinall/paper-portfolio/scripts/corporate_actions.py", line 221, in check
+    sp = splits(state, done, mkt, asof, stats_fn)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/oskaraspinall/paper-portfolio/scripts/corporate_actions.py", line 178, in splits
+    st = parse_split_stats(stats_fn(t))  # confirm Yahoo's split, or detect one when Yahoo wasn't the source
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/oskaraspinall/paper-portfolio/scripts/corporate_actions.py", line 69, in parse_split_stats
+    new, old = (float(x) for x in str(r).split(":"))
+    ^^^^^^^^
+ValueError: not enough values to unpack (expected 2, got 1)
+!! dividends/splits check failed: not re-pricing
+== start Thu Nov 19 21:45:39 GMT 2026
+{
+ "applied": [],
+ "rejected": [],
+ "still_pending": [],
+ "expired": []
+}
+{
+ "dry_run": false,
+ "applied": [],
+ "receivables": [
+  {
+   "ticker": "ZTS",
+   "ex_date": "2026-10-30",
+   "pay_date": "2026-12-01",
+   "net_usd": 44.15
+  },
+  {
+   "ticker": "OTIS",
+   "ex_date": "2026-11-13",
+   "pay_date": "2026-12-11",
+   "net_usd": 26.18
+  }
+ ],
+ "upcoming": [
+  {
+   "ticker": "CI",
+   "ex_date": "2026-12-03",
+   "pay_date": "2026-12-17",
+   "amount": 1.56,
+   "currency": "USD"
+  },
+  {
+   "ticker": "LDOS",
+   "ex_date": "2026-12-15",
+   "pay_date": "2026-12-31",
+   "amount": 0.45,
+   "currency": "USD"
+  },
+  {
+   "ticker": "TYO:2875",
+   "ex_date": "2027-03-30",
+   "pay_date": "2027-06-28",
+   "amount": 140.0,
+   "currency": "JPY"
+  }
+ ],
+ "notes": [
+  "RELY: dividend page not read, retried next run (https://stockanalysis.com/stocks/rely/dividend/ :: field 'http' :: status 404)"
+ ]
+}
+{"total": 104681.15, "cash": 1915.16, "core": 102695.66, "tactical": 0, "receivable": 70.33, "sectors": {"Financials": 10491.52, "Unknown": 7107.63, "Healthcare": 9923.7, "Consumer Discretionary": 15581.9, "Technology": 34228.68, "Consumer Staples": 18334.39, "Communication Services": 7027.84}, "n": 14}
+{"watching": 221, "hits": ["AMS:CVC", "COF", "DECK", "EPA:RMS", "HKG:0700", "HKG:9999", "LON:RMV", "PLD", "PYPL", "SHE:000807", "SSB"], "close_to_entry": ["HKG:0700", "DECK", "AMS:CVC", "SHE:000807", "EPA:RMS", "LON:RMV", "PYPL", "COF", "SSB", "HKG:9999", "PLD", "EPA:MC", "AMS:WKL", "UBER", "SHE:000792", "FSLR", "TKO", "INVH", "AMP", "SHA:601336", "BIT:MONC", "UMBF", "TROW", "BMV:OMA.B", "GD", "ATAT", "BVMF:ABEV3", "SHA:600030", "DOC", "HKG:0966", "JSE:SLM", "EPA:DSY", "CPT", "HAL", "DG", "HKG:0322", "TEL", "HRB", "HLNE", "R", "HSY", "TADAWUL:7203", "RJF", "ITW", "LMT", "EPA:GTT", "NSE:TCS"], "entered": ["HLNE", "HRB", "ITW", "JSE:SLM", "NSE:TCS", "RJF"]}
+{"asof": "2026-11-20", "spy_close": 715.87, "close_date": "2026-11-19", "high_52w": 779.09, "drawdown_pct": 8.11, "multiplier": 1.0, "weekly_regime": "risk_on", "reserve_pct": 13.0}
+{"asof": "2026-11-20", "watched": 486, "signals": 1, "queued": ["CFR"], "no_data": 0}
+{
+ "resubmitted": [],
+ "started": [],
+ "topped_up": [],
+ "dropped": [],
+ "waiting": [],
+ "added_topups": [],
+ "cash_telemetry": {
+  "date": "2026-11-19",
+  "cash_pct": 1.83,
+  "available_cash_pct": 0.33,
+  "open_core_topup_reserve_pct": 0,
+  "available_tactical_cap_pct": 0.33,
+  "starters_waiting": 0,
+  "starters_blocked_by_cap": 0,
+  "regime_stress": 26.4
+ }
+}
+{"auto_swaps": []}
+OK reports/attribution/2026-11-20.md excess=0.11382237071011558
+OK reports/risk/2026-11-20.md sigma_p=17.253734327676877
+{"rows": 839, "notes": []}
+{"rows": 8, "notes": []}
+{"candidates": 22, "qualify": [], "opened": [], "closed": [], "open": []}
+summary: $104,681 (-1.85%) · 0 trade(s) · cash 2% vs 1.5% reserve · entry hit AMS:CVC, AMS:WKL, COF, EPA:MC, EPA:RMS, HKG:0700, LON:RMV, PLD, PYPL, SHE:000807, SSB · dip CFR · 1 problem(s)
