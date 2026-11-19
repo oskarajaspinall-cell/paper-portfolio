@@ -242,3 +242,9 @@ def test_append_csv_migrates_a_file_to_new_columns(tmp_path):
         assert next(csv.reader(fh)) == VAL_COLS
     assert rows[0]["spy_div_cum"] == "" and rows[0]["total_usd"] == "1" and rows[1]["spy_div_cum"] == "2"
     assert math.isclose(float(rows[1]["core_income"]), 2)
+
+
+def test_split_ratio_written_as_a_bare_number():
+    from corporate_actions import parse_split_stats
+    assert parse_split_stats({"lastSplitDate": {"text": "Jul 11, 2013"}, "splitRatio": {"text": "10"}}) == ("2013-07-11", 10.0)
+    assert parse_split_stats({"lastSplitDate": {"text": "Sep 30, 2013"}, "splitRatio": {"text": "1:4"}}) == ("2013-09-30", 0.25)

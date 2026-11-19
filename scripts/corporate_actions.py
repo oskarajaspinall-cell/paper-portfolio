@@ -66,7 +66,8 @@ def parse_split_stats(stats: dict) -> tuple[str, float] | None:
     d, r = (stats.get("lastSplitDate") or {}).get("text"), (stats.get("splitRatio") or {}).get("text")
     if not d or not r or d == "n/a":
         return None
-    new, old = (float(x) for x in str(r).split(":"))
+    parts = str(r).split(":")  # "3:1"; BUD:RICHTER's page writes a bare "10" for 10-for-1 (2026-11-19)
+    new, old = (float(parts[0]), float(parts[1]) if len(parts) > 1 else 1.0)
     return dt.datetime.strptime(d, "%b %d, %Y").date().isoformat(), new / old
 
 
