@@ -1,0 +1,106 @@
+[15:30:36] == re-research COF (entry price hit)
+[15:30:36] == re-research PYPL (entry price hit)
+[15:30:36] == re-research FSLR (entry price hit)
+[15:30:36] $ bin/py scripts/sec_delta.py COF --asof 2026-11-20
+[15:30:36] $ bin/py scripts/sec_delta.py PYPL --asof 2026-11-20
+[15:30:36] $ bin/py scripts/sec_delta.py FSLR --asof 2026-11-20
+[15:30:51] OK research/PYPL/sec-delta-2026-11-20.md
+[15:30:51] $ claude -p Ticker PYPL, note type CORE, date 2026-11-20. Reason for review: entry_hit. Facts: entry price: 57.3111; price: traded at 55.06 at 10:30 ET. SEC filing delta: research/PYPL/sec-delta-2026-11-20.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:51] OK research/FSLR/sec-delta-2026-11-20.md
+[15:30:51] $ claude -p Ticker FSLR, note type CORE, date 2026-11-20. Reason for review: entry_hit. Facts: entry price: 149.308; price: traded at 148.37 at 10:30 ET. SEC filing delta: research/FSLR/sec-delta-2026-11-20.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:51] OK research/COF/sec-delta-2026-11-20.md
+[15:30:51] $ claude -p Ticker COF, note type CORE, date 2026-11-20. Reason for review: entry_hit. Facts: entry price: 184.1737; price: traded at 182.88 at 10:30 ET. SEC filing delta: research/COF/sec-delta-2026-11-20.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:34:40] - Note: `research/COF/2026-11-20.md`
+- Fact sheet: `research/COF/factsheet-2026-11-20.md`
+- check_docs: `OK research/COF/2026-11-20.md type=CORE 1=53 2=140 3=149 4=60 5=66 6=80 total=548`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- Peers: I swapped DFS for BAC, because stockanalysis.com returned a 404 for DFS. DFS is Discover, which COF acquired.
+- Missing data: the fact sheet has no ROIC, operating margin or EV/EBITDA for COF. The note marks them `[data unavailable]`.
+[15:34:40] $ bin/py scripts/check_docs.py note research/COF/2026-11-20.md
+[15:34:41] OK research/COF/2026-11-20.md type=CORE 1=53 2=140 3=149 4=60 5=66 6=80 total=548
+[15:34:41] $ bin/py scripts/macro_data.py --asof 2026-11-20
+[15:34:45] Note: research/PYPL/2026-11-20.md
+Fact sheet: research/PYPL/factsheet-2026-11-20.md
+Check: OK research/PYPL/2026-11-20.md type=CORE 1=49 2=118 3=106 4=35 5=57 6=120 total=485
+
+Data conflicts: none found. The fetch used 1 of 6; nothing was blocked.
+
+Not verified: the PR Newswire leadership release is cited from the fact sheet's headline list and was not fetched. The 10-Q fetch returned a truncated excerpt, so I took no guidance figure. The fact sheet's "next earnings date" still shows Oct 27, which has already passed.
+[15:34:45] $ bin/py scripts/check_docs.py note research/PYPL/2026-11-20.md
+[15:34:45] OK research/PYPL/2026-11-20.md type=CORE 1=49 2=118 3=106 4=35 5=57 6=120 total=485
+[15:34:45] $ bin/py scripts/macro_data.py --asof 2026-11-20
+[15:35:01] Note: research/FSLR/2026-11-20.md
+Fact sheet: research/FSLR/factsheet-2026-11-20.md
+check_docs: OK research/FSLR/2026-11-20.md type=CORE 1=62 2=131 3=142 4=56 5=51 6=85 total=527
+
+Data conflicts: none. Blocked URLs: none. I used one WebFetch, the 10-Q. It didn't return the backlog, bookings, guidance or revenue-by-geography figures, so the note omits them.
+
+Peers used were ENPH, NXT, CSIQ and JKS. The P/E and P/FCF peer medians cover only two peers (n=2).
+[15:35:01] $ bin/py scripts/check_docs.py note research/FSLR/2026-11-20.md
+[15:35:01] OK research/FSLR/2026-11-20.md type=CORE 1=62 2=131 3=142 4=56 5=51 6=85 total=527
+[15:35:01] $ bin/py scripts/macro_data.py --asof 2026-11-20
+[15:37:17] {"out": "reports/macro/2026-11-20.md", "series": 20, "unavailable": []}
+[15:37:17] $ claude -p Ticker COF, date 2026-11-20. Research: research/COF/factsheet-2026-11-20.md, research/COF/2026-11-20.md. Macro snapshot: reports/macro/2026-11-20.md. Write research/COF/2026-11-20-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:21] {"out": "reports/macro/2026-11-20.md", "series": 20, "unavailable": []}
+[15:37:21] $ claude -p Ticker FSLR, date 2026-11-20. Research: research/FSLR/factsheet-2026-11-20.md, research/FSLR/2026-11-20.md. Macro snapshot: reports/macro/2026-11-20.md. Write research/FSLR/2026-11-20-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:25] {"out": "reports/macro/2026-11-20.md", "series": 20, "unavailable": []}
+[15:37:25] $ claude -p Ticker PYPL, date 2026-11-20. Research: research/PYPL/factsheet-2026-11-20.md, research/PYPL/2026-11-20.md. Macro snapshot: reports/macro/2026-11-20.md. Write research/PYPL/2026-11-20-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:37] research/PYPL/2026-11-20-macro.md
+OK research/PYPL/2026-11-20-macro.md macro_weight=context words=75
+[15:37:37] $ bin/py scripts/check_docs.py macro research/PYPL/2026-11-20-macro.md
+[15:37:37] OK research/PYPL/2026-11-20-macro.md macro_weight=context words=75
+[15:37:37] $ claude -p Evaluate PYPL for 2026-11-20: fact sheet research/PYPL/factsheet-2026-11-20.md, note research/PYPL/2026-11-20.md, state portfolio/state.json, macro overlay research/PYPL/2026-11-20-macro.md. Reason for review: entry_hit. Facts: entry price: 57.3111; price: traded at 55.06 at 10:30 ET. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:51] research/COF/2026-11-20-macro.md
+OK research/COF/2026-11-20-macro.md macro_weight=secondary words=181
+[15:37:51] $ bin/py scripts/check_docs.py macro research/COF/2026-11-20-macro.md
+[15:37:51] OK research/COF/2026-11-20-macro.md macro_weight=secondary words=181
+[15:37:51] $ claude -p Evaluate COF for 2026-11-20: fact sheet research/COF/factsheet-2026-11-20.md, note research/COF/2026-11-20.md, state portfolio/state.json, macro overlay research/COF/2026-11-20-macro.md. Reason for review: entry_hit. Facts: entry price: 184.1737; price: traded at 182.88 at 10:30 ET. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:38:01] research/FSLR/2026-11-20-macro.md
+OK research/FSLR/2026-11-20-macro.md macro_weight=secondary words=246
+[15:38:01] $ bin/py scripts/check_docs.py macro research/FSLR/2026-11-20-macro.md
+[15:38:01] OK research/FSLR/2026-11-20-macro.md macro_weight=secondary words=246
+[15:38:01] $ claude -p Evaluate FSLR for 2026-11-20: fact sheet research/FSLR/factsheet-2026-11-20.md, note research/FSLR/2026-11-20.md, state portfolio/state.json, macro overlay research/FSLR/2026-11-20-macro.md. Reason for review: entry_hit. Facts: entry price: 149.308; price: traded at 148.37 at 10:30 ET. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:38:48] research/FSLR/2026-11-20-evaluation.md
+OK research/FSLR/2026-11-20-evaluation.md Bear case=130 Bull case=121 decision=AVOID scorecard=8->3
+
+The decision is AVOID at conviction 3. The scorecard scored 8, one point below the buy bar. The entry price is 147.42 (base fair value 173.44 x 0.85), which is below today's intraday 148.37, so the watch can fire again on another dip.
+
+I didn't look at the earlier 2026-10-07 evaluation beyond its date. It's more than 30 days old, so no `new_evidence` was needed.
+[15:38:48] $ bin/py scripts/check_docs.py eval research/FSLR/2026-11-20-evaluation.md
+[15:38:48] OK research/FSLR/2026-11-20-evaluation.md Bear case=130 Bull case=121 decision=AVOID scorecard=8->3
+[15:38:48] $ bin/py scripts/valuation.py FSLR --asof 2026-11-20 --eval research/FSLR/2026-11-20-evaluation.md
+[15:38:48] {"out": "research/FSLR/2026-11-20-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 148.49, "base": 173.44, "bull": 303.53}, "price": 151.95}
+[15:38:50] == FSLR: AVOID 3
+[15:38:50] research/COF/2026-11-20-evaluation.md
+OK research/COF/2026-11-20-evaluation.md Bear case=140 Bull case=119 decision=AVOID scorecard=5->3
+
+The decision is AVOID at conviction 3. Entry price is null: with ROE at 9.4%, quality scores zero, so no price gets this to conviction 4. I couldn't open the earlier COF evaluation that set the 184.17 entry price, because my instructions limit me to the four input files. So I set no `new_evidence`. The checker passed, but if that earlier verdict wasn't an AVOID at 3, this needs checking.
+[15:38:50] $ bin/py scripts/check_docs.py eval research/COF/2026-11-20-evaluation.md
+[15:38:50] OK research/COF/2026-11-20-evaluation.md Bear case=140 Bull case=119 decision=AVOID scorecard=5->3
+[15:38:50] $ bin/py scripts/valuation.py COF --asof 2026-11-20 --eval research/COF/2026-11-20-evaluation.md
+[15:38:50] {"out": "research/COF/2026-11-20-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 64.89, "base": 228.3, "bull": 432.06}, "price": 181.76}
+[15:38:52] == COF: AVOID 3
+[15:39:21] research/PYPL/2026-11-20-evaluation.md
+OK research/PYPL/2026-11-20-evaluation.md Bear case=147 Bull case=147 decision=BUY scorecard=9->4
+
+The decision is a **BUY at conviction 4**. That reverses yesterday's AVOID at 3, so I recorded the entry-price hit as the new evidence.
+
+- **Why it changed:** Python scored it 4 at the lower price. Yesterday's AVOID held back only because of price, and I left the judgement fields as they were.
+- **The fall:** it came with Friday's leadership reshuffle (a new CFO, and the Chief Risk Officer leaving with only an interim replacement). I treated that as added execution risk, not a governance veto, because no reported figure changed.
+- **Funding:** cash is at the 1.5% floor, so the BUY names JKHY as the holding it replaces. JKHY is held below the buy bar at conviction 3.
+
+I didn't read JKHY's or the other below-bar holdings' (CI, ZTS) research, so the replacement wasn't chosen by comparing upside; the swap logic may prefer a different one. The money from selling JKHY alone is below the 7% minimum core size, so the order may start as a smaller starter position or be rejected. The independent second evaluation still has to confirm the 4 before anything fills.
+[15:39:21] $ bin/py scripts/check_docs.py eval research/PYPL/2026-11-20-evaluation.md
+[15:39:21] OK research/PYPL/2026-11-20-evaluation.md Bear case=147 Bull case=147 decision=BUY scorecard=9->4
+[15:39:21] $ bin/py scripts/valuation.py PYPL --asof 2026-11-20 --eval research/PYPL/2026-11-20-evaluation.md
+[15:39:21] {"out": "research/PYPL/2026-11-20-valuation.md", "used": ["fcfe", "dcf"], "fair_value": {"bear": 38.17, "base": 67.8, "bull": 88.66}, "price": 56.37}
+[15:39:21] $ claude -p Independent second evaluation of PYPL for 2026-11-20: fact sheet research/PYPL/factsheet-2026-11-20.md, note research/PYPL/2026-11-20.md, state portfolio/state.json, macro overlay research/PYPL/2026-11-20-macro.md. Write it to research/PYPL/2026-11-20-evaluation-2.md (not the usual file). Do not read research/PYPL/2026-11-20-evaluation.md or any other evaluation of this stock dated 2026-11-20. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:41:04] research/PYPL/2026-11-20-evaluation-2.md
+OK research/PYPL/2026-11-20-evaluation-2.md Bear case=142 Bull case=129 decision=AVOID scorecard=9->3
+[15:41:04] $ bin/py scripts/check_docs.py eval research/PYPL/2026-11-20-evaluation-2.md
+[15:41:04] OK research/PYPL/2026-11-20-evaluation-2.md Bear case=142 Bull case=129 decision=AVOID scorecard=9->3
+[15:41:04] == PYPL: second opinion conviction 3 -> AVOID 3
+[15:41:04] $ bin/py scripts/check_docs.py eval research/PYPL/2026-11-20-evaluation.md
+[15:41:04] OK research/PYPL/2026-11-20-evaluation.md Bear case=147 Bull case=147 decision=AVOID scorecard=9->3
+[15:41:05] == PYPL: AVOID 3
