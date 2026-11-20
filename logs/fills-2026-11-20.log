@@ -1,0 +1,92 @@
+== start Fri Nov 20 21:30:05 GMT 2026
+{
+ "applied": [],
+ "rejected": [],
+ "still_pending": [],
+ "expired": []
+}
+== 21:30:05 corporate_actions.py
+{
+ "dry_run": false,
+ "applied": [],
+ "receivables": [
+  {
+   "ticker": "ZTS",
+   "ex_date": "2026-10-30",
+   "pay_date": "2026-12-01",
+   "net_usd": 44.15
+  },
+  {
+   "ticker": "OTIS",
+   "ex_date": "2026-11-13",
+   "pay_date": "2026-12-11",
+   "net_usd": 26.18
+  }
+ ],
+ "upcoming": [
+  {
+   "ticker": "CI",
+   "ex_date": "2026-12-03",
+   "pay_date": "2026-12-17",
+   "amount": 1.56,
+   "currency": "USD"
+  },
+  {
+   "ticker": "HKG:9999",
+   "ex_date": "2026-12-02",
+   "pay_date": "2026-12-14",
+   "amount": 0.91751,
+   "currency": "HKD"
+  },
+  {
+   "ticker": "LDOS",
+   "ex_date": "2026-12-15",
+   "pay_date": "2026-12-31",
+   "amount": 0.45,
+   "currency": "USD"
+  },
+  {
+   "ticker": "TYO:2875",
+   "ex_date": "2027-03-30",
+   "pay_date": "2027-06-28",
+   "amount": 140.0,
+   "currency": "JPY"
+  }
+ ],
+ "notes": [
+  "RELY: dividend page not read, retried next run (https://stockanalysis.com/stocks/rely/dividend/ :: field 'http' :: status 404)"
+ ]
+}
+== 21:31:46 portfolio.py
+{"total": 101503.07, "cash": 1915.35, "core": 99517.39, "tactical": 0, "receivable": 70.33, "sectors": {"Financials": 10555.54, "Healthcare": 16726.64, "Consumer Discretionary": 15387.77, "Technology": 32946.07, "Consumer Staples": 18110.64, "Communication Services": 5790.73}, "n": 14}
+== 21:32:30 entry_watch.py
+{"watching": 219, "hits": ["AMP", "AMS:CVC", "AMS:WKL", "BIT:MONC", "DECK", "EPA:MC", "EPA:RMS", "FSLR", "HKG:0700", "HKG:9999", "LON:RMV", "PLD", "SHE:000792", "SHE:000807", "SSB", "TKO", "TROW", "UBER"], "close_to_entry": ["HKG:9999", "HKG:0700", "DECK", "FSLR", "AMS:CVC", "EPA:RMS", "LON:RMV", "SHE:000807", "UBER", "EPA:MC", "SSB", "PLD", "BIT:MONC", "SHE:000792", "AMS:WKL", "TROW", "AMP", "TKO", "UMBF", "SHA:601336", "TEL", "EPA:DSY", "HAL", "GD", "BMV:OMA.B", "INVH", "JSE:SLM", "ATAT", "HLNE", "HKG:0966", "DG", "BVMF:ABEV3", "DOC", "CPT", "SHA:600030", "R", "HKG:0322", "HRB", "RJF", "EPA:GTT", "AMS:SBMO", "JSE:VAL", "ITW", "LMT", "LHX", "HKG:6862", "TADAWUL:7203", "SLB", "LON:AUTO", "HSY", "SWX:PGHN", "ICLR", "LON:ICG"], "entered": ["AMS:SBMO", "HKG:6862", "ICLR", "JSE:VAL", "LHX", "LON:AUTO", "LON:ICG", "SLB", "SWX:PGHN"]}
+{"asof": "2026-11-21", "spy_close": 689.81, "close_date": "2026-11-20", "high_52w": 779.09, "drawdown_pct": 11.46, "multiplier": 0.5, "weekly_regime": "risk_on", "reserve_pct": 6.5}
+{"asof": "2026-11-21", "watched": 486, "signals": 13, "queued": ["JSE:SOL", "MO", "EOG"], "no_data": 0}
+{
+ "resubmitted": [],
+ "started": [],
+ "topped_up": [],
+ "dropped": [],
+ "waiting": [],
+ "added_topups": [],
+ "cash_telemetry": {
+  "date": "2026-11-20",
+  "cash_pct": 1.89,
+  "available_cash_pct": 0.39,
+  "open_core_topup_reserve_pct": 0,
+  "available_tactical_cap_pct": 0.39,
+  "starters_waiting": 0,
+  "starters_blocked_by_cap": 0,
+  "regime_stress": 26.4
+ }
+}
+{"auto_swaps": []}
+OK reports/attribution/2026-11-21.md excess=0.1122787679120828
+OK reports/risk/2026-11-21.md sigma_p=18.764673321785732
+== 21:41:23 decision_log.py
+{"rows": 842, "notes": []}
+{"rows": 8, "notes": []}
+== 21:42:41 shadow_shorts.py
+{"candidates": 22, "qualify": ["SNDK"], "opened": [], "closed": [], "open": []}
+summary: $101,503 (-3.04%) · 0 trade(s) · cash 2% vs 1.5% reserve · entry hit AMP, AMS:CVC, AMS:WKL, BIT:MONC, EPA:MC, EPA:RMS, FSLR, HKG:0700, LON:RMV, PLD, SHE:000792, SHE:000807, SSB, TKO, TROW, UBER · dip JSE:SOL, MO, EOG
