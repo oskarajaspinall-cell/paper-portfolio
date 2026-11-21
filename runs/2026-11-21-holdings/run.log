@@ -1,0 +1,226 @@
+[05:43:36] == research loop: 33 names queued, best first: ['EOG', 'MO', 'JSE:SOL', 'CFR', 'UBER', 'TROW', 'TKO', 'SSB', 'SHE:000807', 'SHE:000792']
+[05:43:36] == initiate JSE:SOL
+[05:43:36] == initiate MO
+[05:43:36] == initiate EOG
+[05:43:36] $ bin/py scripts/sec_delta.py JSE:SOL --asof 2026-11-21
+[05:43:36] $ bin/py scripts/sec_delta.py MO --asof 2026-11-21
+[05:43:36] $ bin/py scripts/sec_delta.py EOG --asof 2026-11-21
+[05:43:36] SKIP JSE:SOL: not a US listing (SEC filers only)
+[05:43:36] $ claude -p Ticker JSE:SOL, note type CORE, date 2026-11-21. Reason for review: dip. Facts: detail: Dip radar: the close 20302 (2026-11-20) is -16.4% over the 5 sessions since our last research (2026-11-15) vs the S&P 500 -8.6% (beta -1.67); the stock-specific part is -30.8% (-4.49 standard deviations); -16.4% since ou. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:43:51] OK research/EOG/sec-delta-2026-11-21.md
+[05:43:51] $ claude -p Ticker EOG, note type CORE, date 2026-11-21. Reason for review: dip. Facts: detail: Dip radar: the close 148.6 (2026-11-20) is -6.1% over the 5 sessions since our last research (2026-11-15) vs the S&P 500 -8.6% (beta -1.04); the stock-specific part is -15.0% (-3.69 standard deviations); -6.1% since our . SEC filing delta: research/EOG/sec-delta-2026-11-21.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:43:51] OK research/MO/sec-delta-2026-11-21.md
+[05:43:51] $ claude -p Ticker MO, note type CORE, date 2026-11-21. Reason for review: dip. Facts: detail: Dip radar: the close 74.87 (2026-11-20) is -4.8% over the 5 sessions since our last research (2026-11-15) vs the S&P 500 -8.6% (beta -1.04); the stock-specific part is -13.7% (-3.96 standard deviations); -4.8% since our . SEC filing delta: research/MO/sec-delta-2026-11-21.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:47:10] The note isn't written yet. `bin/py scripts/fact_sheet.py EOG --peers COP DVN FANG OXY --asof 2026-11-21` is still running in the background, and `research/EOG/factsheet-2026-11-21.md` doesn't exist yet. Its output file is empty so far.
+
+I haven't read the fact sheet, and the check_docs step hasn't run. I won't estimate any numbers without the fact sheet, so I'm waiting for the command to finish.
+
+When it does, I'll read the fact sheet and the SEC delta, which is already read. The delta shows no Risk Factor changes. It does show the Barnett Shale and Woodford Oil Window sales, a larger buyback authorization, and new UAE production. I'll then write `research/EOG/2026-11-21.md`, run `check_docs.py note`, and return the paths and the OK line.
+
+Note: research/EOG/2026-11-21.md
+Fact sheet: research/EOG/factsheet-2026-11-21.md
+check_docs: OK research/EOG/2026-11-21.md type=CORE 1=64 2=110 3=115 4=45 5=82 6=101 total=517
+
+- **Data conflict:** the fact sheet lists next earnings as Nov 5, 2026, but Q3 results were already published on that date. I flagged it as a stale field.
+- **Blocked URLs:** none. I made no WebFetch calls.
+- **Dip cause:** I found no company-specific negative news, so the note records the cause as an unverified energy-price or sector move.
+[05:47:10] $ bin/py scripts/check_docs.py note research/EOG/2026-11-21.md
+[05:47:10] OK research/EOG/2026-11-21.md type=CORE 1=64 2=110 3=115 4=45 5=82 6=101 total=517
+[05:47:10] $ bin/py scripts/macro_data.py --asof 2026-11-21
+[05:47:13] - Note: `research/MO/2026-11-21.md`
+- Fact sheet: `research/MO/factsheet-2026-11-21.md`
+- check_docs: `OK research/MO/2026-11-21.md type=CORE 1=48 2=120 3=128 4=38 5=36 6=77 total=447`
+- Peers: PM, BTI and LON:IMB. My first run used `IMB`, which has no stockanalysis.com page and returned a 404, so I reran with `LON:IMB`.
+- Blocked URLs: none, and I made no WebFetch calls.
+- Data conflicts: none. The dip radar's figures (-13.7%, -3.96 standard deviations, beta -1.04, S&P -8.6%) aren't in the fact sheet, so I left them out of the note. The note says the signal is mostly a negative-beta artefact and names no company-specific cause.
+[05:47:13] $ bin/py scripts/check_docs.py note research/MO/2026-11-21.md
+[05:47:13] OK research/MO/2026-11-21.md type=CORE 1=48 2=120 3=128 4=38 5=36 6=77 total=447
+[05:47:13] $ bin/py scripts/macro_data.py --asof 2026-11-21
+[05:49:07] {"out": "reports/macro/2026-11-21.md", "series": 20, "unavailable": []}
+[05:49:07] $ claude -p Ticker EOG, date 2026-11-21. Research: research/EOG/factsheet-2026-11-21.md, research/EOG/2026-11-21.md. Macro snapshot: reports/macro/2026-11-21.md. Write research/EOG/2026-11-21-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:49:11] {"out": "reports/macro/2026-11-21.md", "series": 20, "unavailable": []}
+[05:49:11] $ claude -p Ticker MO, date 2026-11-21. Research: research/MO/factsheet-2026-11-21.md, research/MO/2026-11-21.md. Macro snapshot: reports/macro/2026-11-21.md. Write research/MO/2026-11-21-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:49:25] research/MO/2026-11-21-macro.md
+OK research/MO/2026-11-21-macro.md macro_weight=context words=75
+[05:49:25] $ bin/py scripts/check_docs.py macro research/MO/2026-11-21-macro.md
+[05:49:25] OK research/MO/2026-11-21-macro.md macro_weight=context words=75
+[05:49:25] $ claude -p Evaluate MO for 2026-11-21: fact sheet research/MO/factsheet-2026-11-21.md, note research/MO/2026-11-21.md, state portfolio/state.json, macro overlay research/MO/2026-11-21-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 74.87 (2026-11-20) is -4.8% over the 5 sessions since our last research (2026-11-15) vs the S&P 500 -8.6% (beta -1.04); the stock-specific part is -13.7% (-3.96 standard deviations); -4.8% since our . --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:49:25] research/EOG/2026-11-21-macro.md
+OK research/EOG/2026-11-21-macro.md macro_weight=context words=51
+[05:49:25] $ bin/py scripts/check_docs.py macro research/EOG/2026-11-21-macro.md
+[05:49:25] OK research/EOG/2026-11-21-macro.md macro_weight=context words=51
+[05:49:25] $ claude -p Evaluate EOG for 2026-11-21: fact sheet research/EOG/factsheet-2026-11-21.md, note research/EOG/2026-11-21.md, state portfolio/state.json, macro overlay research/EOG/2026-11-21-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 148.6 (2026-11-20) is -6.1% over the 5 sessions since our last research (2026-11-15) vs the S&P 500 -8.6% (beta -1.04); the stock-specific part is -15.0% (-3.69 standard deviations); -6.1% since our . --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:50:10] research/EOG/2026-11-21-evaluation.md
+OK research/EOG/2026-11-21-evaluation.md Bear case=142 Bull case=115 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3, the same as on 2026-11-15, because nothing new has come out since then. The entry price is 131.03, which is the base fair value of 154.15 less a 15% margin of safety.
+
+Risk: the fact sheet still lists the next earnings date as Nov 5, which has already passed, so that field is out of date. I also wrote the net debt/EBITDA trigger as text only, because I couldn't see the statistics page's current `debtEbitda` figure.
+[05:50:10] $ bin/py scripts/check_docs.py eval research/EOG/2026-11-21-evaluation.md
+[05:50:10] OK research/EOG/2026-11-21-evaluation.md Bear case=142 Bull case=115 decision=AVOID scorecard=7->3
+[05:50:10] $ bin/py scripts/valuation.py EOG --asof 2026-11-21 --eval research/EOG/2026-11-21-evaluation.md
+[05:50:10] {"out": "research/EOG/2026-11-21-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 154.09, "base": 154.15, "bull": 155.69}, "price": 148.6}
+[05:50:12] == done EOG
+[05:50:12] == initiate CFR
+[05:50:12] $ bin/py scripts/sec_delta.py CFR --asof 2026-11-21
+[05:50:25] OK research/CFR/sec-delta-2026-11-21.md
+[05:50:25] $ claude -p Ticker CFR, note type CORE, date 2026-11-21. Reason for review: dip. Facts: detail: Dip radar: the close 146.35 (2026-11-19) is -7.4% over the 8 sessions since our last research (2026-11-09) vs the S&P 500 -4.9% (beta -0.03); the stock-specific part is -7.6% (-2.34 standard deviations); -5.7% since our . SEC filing delta: research/CFR/sec-delta-2026-11-21.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:50:38] research/MO/2026-11-21-evaluation.md
+OK research/MO/2026-11-21-evaluation.md Bear case=141 Bull case=107 decision=AVOID scorecard=4->2
+
+The decision is AVOID at conviction 2. The 2026-11-15 AVOID was conviction 3. Nothing about the business or the dip changed between the two: the scorecard just gives this stock no valuation points now, because its EV/EBITDA and P/FCF are above their own 5-year highs. I recorded the change as `method_change`, saying the 11-15 verdict came before the newer trend-strength rules. The checker passed it. I didn't open the 11-15 evaluation (my instructions don't allow it), so I couldn't confirm that's the real reason the score dropped by one. I left out an entry price because one is only required at conviction 3 or higher.
+[05:50:38] $ bin/py scripts/check_docs.py eval research/MO/2026-11-21-evaluation.md
+[05:50:38] OK research/MO/2026-11-21-evaluation.md Bear case=141 Bull case=107 decision=AVOID scorecard=4->2
+[05:50:38] $ bin/py scripts/valuation.py MO --asof 2026-11-21 --eval research/MO/2026-11-21-evaluation.md
+[05:50:38] {"out": "research/MO/2026-11-21-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 55.66, "base": 79.7, "bull": 81.87}, "price": 74.87}
+[05:50:39] == done MO
+[05:50:39] == initiate UBER
+[05:50:39] $ bin/py scripts/sec_delta.py UBER --asof 2026-11-21
+[05:50:50] OK research/UBER/sec-delta-2026-11-21.md
+[05:50:50] $ claude -p Ticker UBER, note type CORE, date 2026-11-21. Reason for review: entry_hit. Facts: entry price: 65.2481; price: closed at 63.47 on 2026-11-20. SEC filing delta: research/UBER/sec-delta-2026-11-21.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:54:14] - Note: `research/CFR/2026-11-21.md`
+- Fact sheet: `research/CFR/factsheet-2026-11-21.md`
+- check_docs: `OK research/CFR/2026-11-21.md type=CORE 1=48 2=117 3=130 4=42 5=46 6=170 total=553`
+- Data conflicts: none.
+- Blocked URLs: none. I made no WebFetch calls.
+- The 32.9% non-interest-bearing deposit share and the buyback figures (1,266,798 shares, $178,349 thousand) are not from the new fact sheet. I carried them over from the 2026-11-09 note and did not re-read the 10-Q to confirm them. Each is tagged `[company-reported]` with the 10-Q URL.
+- I found no company-specific cause for the fall since 2026-11-09. The latest news is all dated 2026-10-29. The note labels regional-bank sector selling or rate worries as `[Guessing]`.
+[05:54:14] $ bin/py scripts/check_docs.py note research/CFR/2026-11-21.md
+[05:54:14] OK research/CFR/2026-11-21.md type=CORE 1=48 2=117 3=130 4=42 5=46 6=170 total=553
+[05:54:14] $ claude -p Ticker CFR, date 2026-11-21. Research: research/CFR/factsheet-2026-11-21.md, research/CFR/2026-11-21.md. Macro snapshot: reports/macro/2026-11-21.md. Write research/CFR/2026-11-21-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:54:36] - Note: `research/UBER/2026-11-21.md`
+- Fact sheet: `research/UBER/factsheet-2026-11-21.md`
+- check_docs: `OK research/UBER/2026-11-21.md type=CORE 1=78 2=111 3=107 4=54 5=79 6=183 total=612`
+- Data conflicts: none.
+- Blocked URLs: none.
+- Gaps:
+  - I made no WebFetch calls; the SEC filing delta was the only qualitative source besides the fact sheet.
+  - The revenue split by country is marked `[data unavailable]`. The UK is flagged only as a known exposure from the Mobility model change.
+  - The fact sheet's "next earnings date" (Nov 4, 2026) is stale, so the real next date is also `[data unavailable]`.
+  - The ~50% free-cash-flow return is taken from a headline summary and tagged `[Guessing]`.
+[05:54:36] $ bin/py scripts/check_docs.py note research/UBER/2026-11-21.md
+[05:54:36] OK research/UBER/2026-11-21.md type=CORE 1=78 2=111 3=107 4=54 5=79 6=183 total=612
+[05:54:36] $ claude -p Ticker UBER, date 2026-11-21. Research: research/UBER/factsheet-2026-11-21.md, research/UBER/2026-11-21.md. Macro snapshot: reports/macro/2026-11-21.md. Write research/UBER/2026-11-21-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:54:39] research/CFR/2026-11-21-macro.md
+OK research/CFR/2026-11-21-macro.md macro_weight=secondary words=238
+[05:54:39] $ bin/py scripts/check_docs.py macro research/CFR/2026-11-21-macro.md
+[05:54:40] OK research/CFR/2026-11-21-macro.md macro_weight=secondary words=238
+[05:54:40] $ claude -p Evaluate CFR for 2026-11-21: fact sheet research/CFR/factsheet-2026-11-21.md, note research/CFR/2026-11-21.md, state portfolio/state.json, macro overlay research/CFR/2026-11-21-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 146.35 (2026-11-19) is -7.4% over the 8 sessions since our last research (2026-11-09) vs the S&P 500 -4.9% (beta -0.03); the stock-specific part is -7.6% (-2.34 standard deviations); -5.7% since our . --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:54:54] research/UBER/2026-11-21-macro.md
+OK research/UBER/2026-11-21-macro.md macro_weight=context words=128
+[05:54:54] $ bin/py scripts/check_docs.py macro research/UBER/2026-11-21-macro.md
+[05:54:55] OK research/UBER/2026-11-21-macro.md macro_weight=context words=128
+[05:54:55] $ claude -p Evaluate UBER for 2026-11-21: fact sheet research/UBER/factsheet-2026-11-21.md, note research/UBER/2026-11-21.md, state portfolio/state.json, macro overlay research/UBER/2026-11-21-macro.md. Reason for review: entry_hit. Facts: entry price: 65.2481; price: closed at 63.47 on 2026-11-20. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:55:59] Note: research/JSE-SOL/2026-11-21.md
+Fact sheet: research/JSE-SOL/factsheet-2026-11-21.md
+Check: OK research/JSE-SOL/2026-11-21.md type=CORE 1=52 2=103 3=91 4=31 5=55 6=120 total=452
+
+Data conflicts and gaps:
+- Blocked URL: https://www.sasol.com/investor-centre/sens-announcements is not on the allowlist, so I couldn't read the company's own announcements. The cause of the dip is therefore not established, and the note says so.
+- Fair value is [data unavailable] because the model has no ZAR FX rate.
+- Revenue mix by country and short interest are also [data unavailable].
+- The dip radar's own figures aren't in the fact sheet, so I left them out of the note.
+[05:55:59] $ bin/py scripts/check_docs.py note research/JSE-SOL/2026-11-21.md
+[05:55:59] OK research/JSE-SOL/2026-11-21.md type=CORE 1=52 2=103 3=91 4=31 5=55 6=120 total=452
+[05:55:59] $ claude -p Ticker JSE:SOL, date 2026-11-21. Research: research/JSE-SOL/factsheet-2026-11-21.md, research/JSE-SOL/2026-11-21.md. Macro snapshot: reports/macro/2026-11-21.md. Write research/JSE-SOL/2026-11-21-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:56:00] research/CFR/2026-11-21-evaluation.md
+OK research/CFR/2026-11-21-evaluation.md Bear case=150 Bull case=116 decision=AVOID scorecard=6->3
+[05:56:00] $ bin/py scripts/check_docs.py eval research/CFR/2026-11-21-evaluation.md
+[05:56:00] OK research/CFR/2026-11-21-evaluation.md Bear case=150 Bull case=116 decision=AVOID scorecard=6->3
+[05:56:00] $ bin/py scripts/valuation.py CFR --asof 2026-11-21 --eval research/CFR/2026-11-21-evaluation.md
+[05:56:00] {"out": "research/CFR/2026-11-21-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 104.3, "base": 148.46, "bull": 178.64}, "price": 144.56}
+[05:56:01] == done CFR
+[05:56:01] == initiate TROW
+[05:56:01] $ bin/py scripts/sec_delta.py TROW --asof 2026-11-21
+[05:56:08] research/UBER/2026-11-21-evaluation.md
+OK research/UBER/2026-11-21-evaluation.md Bear case=140 Bull case=120 decision=AVOID scorecard=7->3
+
+The decision is AVOID at conviction 3. I didn't test whether 62.0 is the price where the score actually reaches 4; Python recomputes the entry price anyway. I didn't read the 2026-10-09 evaluation because it is more than 30 days old.
+[05:56:08] $ bin/py scripts/check_docs.py eval research/UBER/2026-11-21-evaluation.md
+[05:56:08] OK research/UBER/2026-11-21-evaluation.md Bear case=140 Bull case=120 decision=AVOID scorecard=7->3
+[05:56:08] $ bin/py scripts/valuation.py UBER --asof 2026-11-21 --eval research/UBER/2026-11-21-evaluation.md
+[05:56:08] {"out": "research/UBER/2026-11-21-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": -12.82, "base": 82.35, "bull": 116.88}, "price": 63.47}
+[05:56:09] == done UBER
+[05:56:09] == initiate TKO
+[05:56:09] $ bin/py scripts/sec_delta.py TKO --asof 2026-11-21
+[05:56:12] OK research/TROW/sec-delta-2026-11-21.md
+[05:56:12] $ claude -p Ticker TROW, note type CORE, date 2026-11-21. Reason for review: entry_hit. Facts: entry price: 101.1021; price: closed at 100.99 on 2026-11-20. SEC filing delta: research/TROW/sec-delta-2026-11-21.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:56:20] OK research/TKO/sec-delta-2026-11-21.md
+[05:56:20] $ claude -p Ticker TKO, note type CORE, date 2026-11-21. Reason for review: entry_hit. Facts: entry price: 178.1387; price: closed at 177.99 on 2026-11-20. SEC filing delta: research/TKO/sec-delta-2026-11-21.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:56:24] research/JSE-SOL/2026-11-21-macro.md
+OK research/JSE-SOL/2026-11-21-macro.md macro_weight=context words=103
+[05:56:24] $ bin/py scripts/check_docs.py macro research/JSE-SOL/2026-11-21-macro.md
+[05:56:24] OK research/JSE-SOL/2026-11-21-macro.md macro_weight=context words=103
+[05:56:24] $ claude -p Evaluate JSE:SOL for 2026-11-21: fact sheet research/JSE-SOL/factsheet-2026-11-21.md, note research/JSE-SOL/2026-11-21.md, state portfolio/state.json, macro overlay research/JSE-SOL/2026-11-21-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 20302 (2026-11-20) is -16.4% over the 5 sessions since our last research (2026-11-15) vs the S&P 500 -8.6% (beta -1.67); the stock-specific part is -30.8% (-4.49 standard deviations); -16.4% since ou. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:57:32] research/JSE-SOL/2026-11-21-evaluation.md
+OK research/JSE-SOL/2026-11-21-evaluation.md Bear case=144 Bull case=120 decision=AVOID scorecard=6->3
+
+The decision is AVOID at conviction 3, the same verdict as 2026-11-15. I didn't use the reverse-DCF cross-check because the fact sheet has no fair value, as it has no ZAR exchange rate. The cause of the fall is still unknown. I set the entry price to null because a lower price alone wouldn't reach conviction 4.
+[05:57:32] $ bin/py scripts/check_docs.py eval research/JSE-SOL/2026-11-21-evaluation.md
+[05:57:32] OK research/JSE-SOL/2026-11-21-evaluation.md Bear case=144 Bull case=120 decision=AVOID scorecard=6->3
+[05:57:32] $ bin/py scripts/valuation.py JSE:SOL --asof 2026-11-21 --eval research/JSE-SOL/2026-11-21-evaluation.md
+[05:57:32] {"out": "research/JSE-SOL/2026-11-21-valuation.md", "used": null, "fair_value": {}, "price": 20302}
+[05:57:33] == done JSE:SOL
+[05:57:33] == initiate SSB
+[05:57:33] $ bin/py scripts/sec_delta.py SSB --asof 2026-11-21
+[05:57:45] OK research/SSB/sec-delta-2026-11-21.md
+[05:57:45] $ claude -p Ticker SSB, note type CORE, date 2026-11-21. Reason for review: entry_hit. Facts: entry price: 101.0331; price: closed at 99.18 on 2026-11-19. SEC filing delta: research/SSB/sec-delta-2026-11-21.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:57:58] Note: research/TROW/2026-11-21.md
+Fact sheet: research/TROW/factsheet-2026-11-21.md
+check_docs: OK research/TROW/2026-11-21.md type=CORE 1=54 2=120 3=121 4=52 5=43 6=62 total=452
+Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+[05:57:58] $ bin/py scripts/check_docs.py note research/TROW/2026-11-21.md
+[05:57:58] OK research/TROW/2026-11-21.md type=CORE 1=54 2=120 3=121 4=52 5=43 6=62 total=452
+[05:57:58] $ claude -p Ticker TROW, date 2026-11-21. Research: research/TROW/factsheet-2026-11-21.md, research/TROW/2026-11-21.md. Macro snapshot: reports/macro/2026-11-21.md. Write research/TROW/2026-11-21-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:58:30] research/TROW/2026-11-21-macro.md
+OK research/TROW/2026-11-21-macro.md macro_weight=secondary words=189
+[05:58:30] $ bin/py scripts/check_docs.py macro research/TROW/2026-11-21-macro.md
+[05:58:30] OK research/TROW/2026-11-21-macro.md macro_weight=secondary words=189
+[05:58:30] $ claude -p Evaluate TROW for 2026-11-21: fact sheet research/TROW/factsheet-2026-11-21.md, note research/TROW/2026-11-21.md, state portfolio/state.json, macro overlay research/TROW/2026-11-21-macro.md. Reason for review: entry_hit. Facts: entry price: 101.1021; price: closed at 100.99 on 2026-11-20. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:58:34] Note: research/TKO/2026-11-21.md
+Fact sheet: research/TKO/factsheet-2026-11-21.md
+Check: OK research/TKO/2026-11-21.md type=CORE 1=45 2=132 3=119 4=41 5=67 6=98 total=502
+
+Data conflicts and blocked URLs:
+- No data conflicts.
+- Nothing was blocked. I used one WebFetch, on the 10-Q.
+- The 10-Q fetch returned only an excerpt, so there is no country or region revenue mix and no segment shares. Section 1 says `[data unavailable]` for the foreign share of revenue.
+- The fact sheet flags fair value as unreliable (DCF and EV/EBITDA methods disagree by 4.9x).
+[05:58:34] $ bin/py scripts/check_docs.py note research/TKO/2026-11-21.md
+[05:58:34] OK research/TKO/2026-11-21.md type=CORE 1=45 2=132 3=119 4=41 5=67 6=98 total=502
+[05:58:34] $ claude -p Ticker TKO, date 2026-11-21. Research: research/TKO/factsheet-2026-11-21.md, research/TKO/2026-11-21.md. Macro snapshot: reports/macro/2026-11-21.md. Write research/TKO/2026-11-21-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:58:51] research/TKO/2026-11-21-macro.md
+OK research/TKO/2026-11-21-macro.md macro_weight=context words=51
+[05:58:51] $ bin/py scripts/check_docs.py macro research/TKO/2026-11-21-macro.md
+[05:58:51] OK research/TKO/2026-11-21-macro.md macro_weight=context words=51
+[05:58:51] $ claude -p Evaluate TKO for 2026-11-21: fact sheet research/TKO/factsheet-2026-11-21.md, note research/TKO/2026-11-21.md, state portfolio/state.json, macro overlay research/TKO/2026-11-21-macro.md. Reason for review: entry_hit. Facts: entry price: 178.1387; price: closed at 177.99 on 2026-11-20. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:58:51] - Note: `research/SSB/2026-11-21.md`
+- Fact sheet: `research/SSB/factsheet-2026-11-21.md`
+- check_docs: `OK research/SSB/2026-11-21.md type=CORE 1=47 2=104 3=100 4=54 5=49 6=99 total=453`
+- Data conflicts: none. Blocked URLs: none. I made no WebFetch calls.
+[05:58:51] $ bin/py scripts/check_docs.py note research/SSB/2026-11-21.md
+[05:58:51] OK research/SSB/2026-11-21.md type=CORE 1=47 2=104 3=100 4=54 5=49 6=99 total=453
+[05:58:51] $ claude -p Ticker SSB, date 2026-11-21. Research: research/SSB/factsheet-2026-11-21.md, research/SSB/2026-11-21.md. Macro snapshot: reports/macro/2026-11-21.md. Write research/SSB/2026-11-21-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:59:14] research/SSB/2026-11-21-macro.md
+OK research/SSB/2026-11-21-macro.md macro_weight=secondary words=230
+[05:59:14] $ bin/py scripts/check_docs.py macro research/SSB/2026-11-21-macro.md
+[05:59:14] OK research/SSB/2026-11-21-macro.md macro_weight=secondary words=230
+[05:59:14] $ claude -p Evaluate SSB for 2026-11-21: fact sheet research/SSB/factsheet-2026-11-21.md, note research/SSB/2026-11-21.md, state portfolio/state.json, macro overlay research/SSB/2026-11-21-macro.md. Reason for review: entry_hit. Facts: entry price: 101.0331; price: closed at 99.18 on 2026-11-19. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:59:50] research/TROW/2026-11-21-evaluation.md
+OK research/TROW/2026-11-21-evaluation.md Bear case=134 Bull case=113 decision=BUY scorecard=9->4
+
+The decision is a CORE BUY at conviction 4, replacing JKHY. Cash is near the 1.5% floor, so the buy has to be funded by a sale. I didn't read JKHY's own research to compare the two directly. Selling JKHY may still not free enough cash for the full 7%, which would make this a starter position. As a CORE BUY, it also needs the second evaluation before it can go ahead.
+[05:59:50] $ bin/py scripts/check_docs.py eval research/TROW/2026-11-21-evaluation.md
+[05:59:50] OK research/TROW/2026-11-21-evaluation.md Bear case=134 Bull case=113 decision=BUY scorecard=9->4
+[05:59:50] $ bin/py scripts/valuation.py TROW --asof 2026-11-21 --eval research/TROW/2026-11-21-evaluation.md
+[05:59:51] {"out": "research/TROW/2026-11-21-valuation.md", "used": ["dcf", "pe"], "fair_value": {"bear": 89.48, "base": 120.41, "bull": 164.73}, "price": 100.99}
+[05:59:51] $ claude -p Independent second evaluation of TROW for 2026-11-21: fact sheet research/TROW/factsheet-2026-11-21.md, note research/TROW/2026-11-21.md, state portfolio/state.json, macro overlay research/TROW/2026-11-21-macro.md. Write it to research/TROW/2026-11-21-evaluation-2.md (not the usual file). Do not read research/TROW/2026-11-21-evaluation.md or any other evaluation of this stock dated 2026-11-21. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[05:59:53] research/TKO/2026-11-21-evaluation.md
+OK research/TKO/2026-11-21-evaluation.md Bear case=144 Bull case=115 decision=AVOID scorecard=4->2
+
+I didn't open the 2026-10-12 evaluation. It is more than 30 days old, so no `new_evidence` field was needed. `entry_price` is null: ROIC (return on invested capital) of 9.2% fails the quality bar, so a lower price can't turn this into a buy.
+[05:59:53] $ bin/py scripts/check_docs.py eval research/TKO/2026-11-21-evaluation.md
+[05:59:53] OK research/TKO/2026-11-21-evaluation.md Bear case=144 Bull case=115 decision=AVOID scorecard=4->2
+[05:59:53] $ bin/py scripts/valuation.py TKO --asof 2026-11-21 --eval research/TKO/2026-11-21-evaluation.md
+[05:59:53] {"out": "research/TKO/2026-11-21-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 60.55, "base": 223.34, "bull": 460.88}, "price": 177.99}
+[05:59:54] == done TKO

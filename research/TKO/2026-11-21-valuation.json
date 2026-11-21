@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Entertainment",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 63.269081743533704,
+    "base": 303.7969451144467,
+    "bull": 607.6580988632361
+   },
+   "implied_growth": 0.0792098262537749,
+   "discount_rate": 0.084706166916496,
+   "cost_of_equity": 0.09040000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.17,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.09586998709375724,
+     "base": 0.3243214105365038,
+     "bull": 0.5156498599391132
+    },
+    "cagr_3y": 0.6074013472470561,
+    "cagr_5y": 0.4635899735094502,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 55.12464176783082,
+    "base": 62.432259520981646,
+    "bull": 167.31323520318026
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 18.392,
+     "base": 20.127,
+     "bull": 20.329
+    },
+    "ttm_ebitda": 1802556000,
+    "peak_earnings": "TTM EBITDA is 2.6x its 5y median: bear/base use the 5y average (8.138e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 177.99,
+ "risk_free": 0.0504,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 60.55426841829941,
+  "base": 223.34204991662503,
+  "bull": 460.87647764321747
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.6597883677830249,
+  "base": 0.2548011119536211,
+  "bull": 1.5893391631171272
+ },
+ "implied_growth": 0.0792098262537749,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 4.9x (base 62.43-303.80)"
+  ]
+ },
+ "ticker": "TKO",
+ "asof": "2026-11-21",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-20",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/tko/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/tko/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/tko/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/tko/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/tko/statistics/"
+ }
+}
