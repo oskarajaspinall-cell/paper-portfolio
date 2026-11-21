@@ -175,7 +175,7 @@ def batch_add(t: str | None, flush: bool = False) -> None:
 
 
 cfg = load_config()
-OPTS = {"no_prescreen": False, "reason": "screen", "redo": False, "holdings": False}
+OPTS = {"no_prescreen": False, "reason": "screen", "redo": False, "holdings": False, "no_hits": False}
 hits: list[str] = []
 hit_rows: dict[str, dict] = {}
 
@@ -214,7 +214,7 @@ def build_queue() -> list[str]:
     from entry_watch import researched_since  # a hit the weekly run already re-researched is not repeated
     hit_rows = {h["ticker"]: h for h in reversed((st.get("entry_hits") or []) + (st.get("dip_hits") or []))
                 if h["ticker"] not in st.get("holdings", {}) and not researched_since(h)}  # entry-price / dip hits
-    hits = list(hit_rows)
+    hits = [] if OPTS["no_hits"] else list(hit_rows)  # --no-hits: only this queue (hits wait for their usual runs)
     queue = hits + [t for t in queue if t not in hits]
     (run / "loop-queue.json").write_text(json.dumps([t for t in queue if t not in hits]))
     return queue
@@ -336,13 +336,15 @@ def main(argv=None) -> int:
     ap.add_argument("--cache-date", default=dt.date.today().isoformat(), help="rank: the page-cache day to screen")
     ap.add_argument("--no-prescreen", action="store_true", help="run: research every name (owner requests)")
     ap.add_argument("--redo", action="store_true", help="run: also re-research names that already have an evaluation")
+    ap.add_argument("--no-hits", action="store_true", help="run: research only the queue, not the waiting entry/dip hits "
+                    "(owner 2026-11-21: re-research the holdings now)")
     ap.add_argument("--holdings", action="store_true", help="run with --redo: include current holdings (their HOLD/ADD/TRIM/SELL "
                     "goes to the portfolio manager, like a BUY)")
     ap.add_argument("--reason", choices=["screen", "owner_request"], default="screen",
                     help="run: the neutral reason code given to the researcher (no free text, 2026-11-09)")
     a = ap.parse_args(argv)
     run = (ROOT / a.run_dir).resolve()
-    OPTS["no_prescreen"], OPTS["redo"], OPTS["holdings"] = a.no_prescreen, a.redo, a.holdings
+    OPTS["no_prescreen"], OPTS["redo"], OPTS["holdings"], OPTS["no_hits"] = a.no_prescreen, a.redo, a.holdings, a.no_hits
     if a.reason:
         OPTS["reason"] = a.reason
     if a.cmd == "rank":
