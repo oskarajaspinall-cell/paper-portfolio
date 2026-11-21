@@ -1,0 +1,108 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 80.08191591394754,
+    "base": 112.52892555910135,
+    "bull": 173.02965160299692
+   },
+   "implied_growth": -0.007436963942259267,
+   "discount_rate": 0.1153745,
+   "cost_of_equity": 0.1153745,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": -0.023422718169154626,
+     "base": 0.019731249707737004,
+     "bull": 0.04077043516925727
+    },
+    "cash_flow_margin": {
+     "bear": 0.2401054189014241,
+     "base": 0.2840044655606615,
+     "bull": 0.40184308971701926
+    },
+    "cagr_3y": 0.04077043516925727,
+    "cagr_5y": -0.011845436338309256,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 108.271548306,
+    "base": 136.161020142,
+    "bull": 148.141847746
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.971,
+     "base": 13.797,
+     "bull": 15.011
+    },
+    "ttm_eps": 9.868886
+   }
+  }
+ ],
+ "price": 100.99,
+ "risk_free": 0.0504,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 89.47846004463169,
+  "base": 120.40629042006758,
+  "bull": 164.73371698399794
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.11398692895700868,
+  "base": 0.1922595348060956,
+  "bull": 0.6311884046341019
+ },
+ "implied_growth": -0.007436963942259267,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "TROW",
+ "asof": "2026-11-21",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-20",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/trow/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/trow/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/trow/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/trow/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/trow/statistics/"
+ }
+}
