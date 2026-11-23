@@ -1,0 +1,18 @@
+[15:30:40] == re-research FSLR (entry price hit)
+[15:30:40] == re-research CFR (dip radar)
+[15:30:40] == re-research JSE:SOL (dip radar)
+[15:30:40] $ bin/py scripts/sec_delta.py FSLR --asof 2026-11-23
+[15:30:40] $ bin/py scripts/sec_delta.py CFR --asof 2026-11-23
+[15:30:40] $ bin/py scripts/sec_delta.py JSE:SOL --asof 2026-11-23
+[15:30:40] SKIP JSE:SOL: not a US listing (SEC filers only)
+[15:30:40] $ claude -p Ticker JSE:SOL, note type CORE, date 2026-11-23. Reason for review: dip. Facts: detail: Dip radar: the close 20302 (2026-11-20) is -16.4% over the 5 sessions since our last research (2026-11-15) vs the S&P 500 -8.6% (beta -1.67); the stock-specific part is -30.8% (-4.49 standard deviations); -16.4% since ou. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:42] Failed to authenticate: OAuth session expired and could not be refreshed
+[15:30:42] !! FAILED JSE:SOL: claude -p Ticker JSE:SOL, note type CORE, date 2026-11-23. Reason for review: dip. Facts: detail: Dip radar: the close 20302 (2026-11-20) is -16.4% over the 5 sessions since our last research (2026-11-15) vs the S&P 500 -8.6% (beta -1.67); the stock-specific part is -30.8% (-4.49 standard deviations
+[15:30:51] OK research/FSLR/sec-delta-2026-11-23.md
+[15:30:51] $ claude -p Ticker FSLR, note type CORE, date 2026-11-23. Reason for review: entry_hit. Facts: entry price: 148.911; price: traded at 147.33 at 10:30 ET. SEC filing delta: research/FSLR/sec-delta-2026-11-23.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:52] Failed to authenticate: OAuth session expired and could not be refreshed
+[15:30:52] !! FAILED FSLR: claude -p Ticker FSLR, note type CORE, date 2026-11-23. Reason for review: entry_hit. Facts: entry price: 148.911; price: traded at 147.33 at 10:30 ET. SEC filing delta: research/FSLR/sec-delta-2026-11-23.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher -
+[15:30:53] OK research/CFR/sec-delta-2026-11-23.md
+[15:30:53] $ claude -p Ticker CFR, note type CORE, date 2026-11-23. Reason for review: dip. Facts: detail: Dip radar: the close 146.35 (2026-11-19) is -7.4% over the 8 sessions since our last research (2026-11-09) vs the S&P 500 -4.9% (beta -0.03); the stock-specific part is -7.6% (-2.34 standard deviations); -5.7% since our . SEC filing delta: research/CFR/sec-delta-2026-11-23.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:54] Failed to authenticate: OAuth session expired and could not be refreshed
+[15:30:54] !! FAILED CFR: claude -p Ticker CFR, note type CORE, date 2026-11-23. Reason for review: dip. Facts: detail: Dip radar: the close 146.35 (2026-11-19) is -7.4% over the 8 sessions since our last research (2026-11-09) vs the S&P 500 -4.9% (beta -0.03); the stock-specific part is -7.6% (-2.34 standard deviations); -5
