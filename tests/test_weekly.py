@@ -787,3 +787,29 @@ def test_fair_value_reliability_flag():
     assert not V.reliability(dict(ok, fair_value={"base": 211}))["reliable"]   # > +100%
     assert not V.reliability(dict(ok, fair_value={"base": 1}))["reliable"]     # Mizrahi-style -99%
     assert not V.is_reliable(None)
+
+
+def test_failed_run_keeps_finished_research_and_logs_its_decisions(fake_repo, monkeypatch):
+    """2026-11-23 (owner): a failure at the portfolio-manager step undoes the trades but keeps the evaluations."""
+    scan_ = dict(SCAN_QUIET, reinitiate=["TRIG"], exits=[], mechanical_requests=[])
+    (fake_repo / "portfolio" / "state.json").write_text(json.dumps({"holdings": {"TRIG": {"type": "CORE"}}}))
+    before = (fake_repo / "portfolio" / "state.json").read_bytes()
+    calls = []
+    monkeypatch.setattr(wr, "sh", make_sh(fake_repo, scan_, calls))
+
+    def agent(name, prompt, log):
+        d = fake_repo / "research" / "TRIG"
+        d.mkdir(exist_ok=True)
+        if name == "researcher":
+            (d / "2026-10-10.md").write_text("note")
+        if name == "evaluator":
+            (d / "2026-10-10-evaluation.md").write_text(EVAL.replace("AAA", "TRIG") % ("HOLD", 3))
+        if name == "portfolio-manager":
+            raise wr.StepFailed("You've hit your session limit")
+    assert wr.run("2026-10-10", False, 0, agent=agent) == 1
+    assert (fake_repo / "portfolio" / "state.json").read_bytes() == before            # no trades
+    assert (fake_repo / "research" / "TRIG" / "2026-10-10-evaluation.md").exists()    # research kept
+    rec = [c for c in calls if "decision_log.py record" in c]
+    assert rec and "research/TRIG/2026-10-10-evaluation.md" in rec[-1]               # logged after the restore
+    err = (fake_repo / "runs" / "2026-10-10" / "error.log").read_text()
+    assert "NOT acted on" in err and "research/TRIG/2026-10-10-evaluation.md" in err

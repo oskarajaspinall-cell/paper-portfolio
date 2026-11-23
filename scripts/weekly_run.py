@@ -492,9 +492,21 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
     except Exception as e:  # noqa: BLE001 - any failure aborts the whole run
         shutil.rmtree(port)
         shutil.copytree(backup, port)
+        # 2026-11-23 (owner): the finished research is kept and logged as decisions; only the trades are undone
+        # (21 Nov: the usage limit hit at the last step and six holdings' fresh evaluations were thrown away)
+        done = [ev for _, ev in (locals().get("evals") or []) if ev and Path(ev).exists()] if not dry_run else []
+        kept = ""
+        if done:
+            try:
+                sh(PY + ["scripts/decision_log.py", "record", *[str(Path(ev).relative_to(ROOT)) for ev in done],
+                         "--asof", asof], log)
+                kept = ("\nKept and logged as decisions, but NOT acted on (run the portfolio manager on them):\n"
+                        + "\n".join(f"  {Path(ev).relative_to(ROOT)}" for ev in done) + "\n")
+            except StepFailed as e2:
+                kept = f"\nResearch kept, but the decision log failed: {e2}\n"
         (rundir / "error.log").write_text(
             f"Weekly run {asof} FAILED at step: {manifest['steps'][-1] if manifest['steps'] else 'start'}\n"
-            f"{e}\n\n{traceback.format_exc()}\nNo trades from this run were applied; portfolio/ restored.\n")
+            f"{e}\n\n{traceback.format_exc()}\nNo trades from this run were applied; portfolio/ restored.\n{kept}")
         log(f"FAILED: {e}")
         print(f"FAILED: {e} (see runs/{asof}/error.log)", file=sys.stderr)
         return 1

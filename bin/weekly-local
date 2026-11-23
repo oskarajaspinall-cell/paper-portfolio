@@ -24,9 +24,6 @@ LOCK=/tmp/paper-portfolio-weekly.lock
 if ! mkdir "$LOCK" 2>/dev/null; then echo "another run is in progress; exiting"; exit 0; fi
 trap 'rmdir "$LOCK"' EXIT
 caffeinate -i -w $$ &             # keep the Mac awake until this script ends
-# Uncommitted research/report files that exist BEFORE the run: a failed run's clean-up leaves them alone.
-PRE=$(mktemp)
-{ git ls-files --others --exclude-standard -- research reports; git diff --name-only -- research reports; } > "$PRE"
 
 if [ $TEST = 1 ]; then SCREEN_ARGS="--limit 20"; REVIEW_ARGS="--dry-run --max-new 0"; else SCREEN_ARGS=""; REVIEW_ARGS=""; fi
 
@@ -49,17 +46,14 @@ if [ $review = 0 ]; then
 else
   err="runs/$ASOF/error.log"; tmp=$(mktemp); [ -f "$err" ] && cp "$err" "$tmp"
   runlog="runs/$ASOF/run.log"; tmplog=$(mktemp); [ -f "$runlog" ] && cp "$runlog" "$tmplog"   # keep the cause
-  git checkout -q -- portfolio 2>/dev/null
-  # undo only what this run changed in research/ and reports/ (the screen is kept and logged below)
-  git diff --name-only -- research reports | grep -vxFf "$PRE" | grep -v '^reports/screen/' \
-    | while IFS= read -r f; do git checkout -q -- "$f"; done
-  git ls-files --others --exclude-standard -- research reports | grep -vxFf "$PRE" | grep -v '^reports/screen/' \
-    | while IFS= read -r f; do rm -f -- "$f"; done
-  find research -type d -empty -delete 2>/dev/null
+  # weekly_run.py already restored portfolio/ (no trades) and logged the finished evaluations as decisions.
+  # 2026-11-23 (owner): research and reports are KEPT (a usage limit at the last step used to throw away the week's
+  # research); only the run folder's working files go.
   git clean -q -fd -- "runs/$ASOF"
   mkdir -p "runs/$ASOF"; [ -s "$tmp" ] && mv "$tmp" "$err"; [ -s "$tmplog" ] && mv "$tmplog" "$runlog"
-  git add -- "$err" "$runlog" "$LOG" reports/screen 2>/dev/null
-  git commit -q -m "Weekly run $ASOF FAILED (error log only)" || true
+  git add -A -- research reports portfolio/decisions.csv portfolio/entry_watch.csv portfolio/entry_conversions.csv \
+    "$err" "$runlog" "$LOG" 2>/dev/null
+  git commit -q -m "Weekly run $ASOF FAILED (research kept, no trades)" || true
 fi
 git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (results are committed locally; next run retries)"
 echo "== end $(date) review_exit=$review"
