@@ -1,0 +1,31 @@
+[
+ {
+  "ticker": "SHA:603939",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "A net-cash Chinese pharmacy chain with rising ROIC trades low in its own P/E range and below its 5-year minimum EV/EBITDA while in a healthy uptrend, though peers are cheaper on cash multiples and regulation caps margins.",
+  "reason": "Scorecard gives 4: high and rising ROIC, net cash, a deep own-history discount with a healthy uptrend; regulation and cheaper peers keep it at the standard size, which Python sets. Cash is at the floor and China/HK is near its cap, so it replaces a China holding.",
+  "research_note": "research/SHA-603939/2026-11-23.md",
+  "triggers": [
+   {
+    "text": "TTM ROIC falls below 15%, giving up most of the rise from 14.0% in FY2021 to 24.9%.",
+    "check": {"source": "statistics", "field": "roic", "op": "<", "value": 15}
+   },
+   {
+    "text": "TTM operating margin falls below 8.5%, under the five-year low of 8.9%.",
+    "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 8.5}
+   },
+   {
+    "text": "TTM gross margin falls below 36%, showing drug-pricing or reimbursement pressure.",
+    "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 36}
+   },
+   {
+    "text": "TTM FCF margin falls below 8%, under the FY2021 level of 8.6%.",
+    "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 8}
+   }
+  ],
+  "replaces": "HKG:0291",
+  "replacement_reason": "Same CNY consumer exposure and net cash, but Yifeng earns roughly double the ROIC with rising returns and a similar own-history discount; selling the brewer frees the China/HK room and cash this buy needs."
+ }
+]

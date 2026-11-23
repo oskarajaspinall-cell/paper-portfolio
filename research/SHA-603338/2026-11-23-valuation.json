@@ -1,0 +1,110 @@
+{
+ "industry": {
+  "industry": "Farm & Heavy Construction Machinery",
+  "known": true,
+  "best": "Through-cycle DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 8.998789642852458,
+    "base": 31.227913268964556,
+    "bull": 108.41470034455453
+   },
+   "implied_growth": 0.30579250275503234,
+   "discount_rate": 0.12184813253854601,
+   "cost_of_equity": 0.1254,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.056441883044482014,
+     "base": 0.09033461049922535,
+     "bull": 0.16345467590793739
+    },
+    "cash_flow_margin": {
+     "bear": 0.0019691095293327566,
+     "base": 0.07883083733380881,
+     "bull": 0.26266231636716714
+    },
+    "cagr_3y": 0.16345467590793739,
+    "cagr_5y": 0.14788376608896403,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 66.7698510420619,
+    "base": 75.39378328054492,
+    "bull": 97.98222685344244
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 11.358,
+     "base": 13.039,
+     "bull": 17.442
+    },
+    "ttm_ebitda": 2596302222
+   }
+  }
+ ],
+ "price": 58.99,
+ "risk_free": 0.0504,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 28.255810109255606,
+  "base": 45.94986993949135,
+  "bull": 104.9372091808505
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.521006778958203,
+  "base": -0.2210566207918062,
+  "bull": 0.7788982739591541
+ },
+ "implied_growth": 0.30579250275503234,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.4x (base 31.23-75.39)"
+  ]
+ },
+ "ticker": "SHA:603338",
+ "asof": "2026-11-23",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-20",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/603338/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/603338/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/603338/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/603338/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/603338/statistics/"
+ }
+}

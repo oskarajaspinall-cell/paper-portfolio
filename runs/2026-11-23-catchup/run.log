@@ -551,3 +551,82 @@ The decision is AVOID at conviction 3. I didn't read `portfolio/state.json` beca
 [17:13:38] $ bin/py scripts/valuation.py SHA:601156 --asof 2026-11-23 --eval research/SHA-601156/2026-11-23-evaluation.md
 [17:13:38] {"out": "research/SHA-601156/2026-11-23-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 11.44, "base": 41.66, "bull": 43.34}, "price": 19.71}
 [17:13:40] == done SHA:601156
+[17:13:45] == Research batch 05: 6 researched, 0 BUY, 6 AVOID -> reports/research/2026-11-23-batch-05.md; uploaded to GitHub
+[17:14:12] Note: research/SHA-603939/2026-11-23.md
+Fact sheet: research/SHA-603939/factsheet-2026-11-23.md
+check_docs: OK research/SHA-603939/2026-11-23.md type=CORE 1=54 2=127 3=146 4=39 5=34 6=36 total=436
+
+Data conflicts: none.
+Blocked URLs: none. I made no WebFetch calls, so the note rests on the fact sheet alone. It marks the revenue mix by region and the Q3 2026 results as [data unavailable].
+Peers: P/E peer median uses n=2 (one peer has no P/E).
+[17:14:12] $ bin/py scripts/check_docs.py note research/SHA-603939/2026-11-23.md
+[17:14:12] OK research/SHA-603939/2026-11-23.md type=CORE 1=54 2=127 3=146 4=39 5=34 6=36 total=436
+[17:14:12] $ claude -p Ticker SHA:603939, date 2026-11-23. Research: research/SHA-603939/factsheet-2026-11-23.md, research/SHA-603939/2026-11-23.md. Macro snapshot: reports/macro/2026-11-23.md. Write research/SHA-603939/2026-11-23-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:14:15] - Note: `research/SHA-603338/2026-11-23.md`
+- Fact sheet: `research/SHA-603338/factsheet-2026-11-23.md`
+- check_docs: `OK research/SHA-603338/2026-11-23.md type=CORE 1=64 2=129 3=150 4=41 5=47 6=67 total=498`
+- Blocked URL: https://www.cndingli.com was not on the allowlist. The revenue split by country is therefore `[data unavailable]`, and the macro overlay can't check overseas exposure.
+- Fair value: the fact sheet marks it unreliable because the two methods disagree 2.4x.
+- Short interest: `[data unavailable]`.
+- Data conflicts: none.
+- Not read: the Q3 2026 filing.
+[17:14:15] $ bin/py scripts/check_docs.py note research/SHA-603338/2026-11-23.md
+[17:14:15] OK research/SHA-603338/2026-11-23.md type=CORE 1=64 2=129 3=150 4=41 5=47 6=67 total=498
+[17:14:15] $ claude -p Ticker SHA:603338, date 2026-11-23. Research: research/SHA-603338/factsheet-2026-11-23.md, research/SHA-603338/2026-11-23.md. Macro snapshot: reports/macro/2026-11-23.md. Write research/SHA-603338/2026-11-23-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:14:27] research/SHA-603939/2026-11-23-macro.md
+OK research/SHA-603939/2026-11-23-macro.md macro_weight=context words=73
+
+Skipped: no WebFetch calls. The revenue mix comes from the note, which says segment and country mix weren't checked against filings.
+[17:14:27] $ bin/py scripts/check_docs.py macro research/SHA-603939/2026-11-23-macro.md
+[17:14:27] OK research/SHA-603939/2026-11-23-macro.md macro_weight=context words=73
+[17:14:27] $ claude -p Evaluate SHA:603939 for 2026-11-23: fact sheet research/SHA-603939/factsheet-2026-11-23.md, note research/SHA-603939/2026-11-23.md, state portfolio/state.json, macro overlay research/SHA-603939/2026-11-23-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:14:35] research/SHA-603338/2026-11-23-macro.md
+OK research/SHA-603338/2026-11-23-macro.md macro_weight=context words=120
+[17:14:35] $ bin/py scripts/check_docs.py macro research/SHA-603338/2026-11-23-macro.md
+[17:14:35] OK research/SHA-603338/2026-11-23-macro.md macro_weight=context words=120
+[17:14:35] $ claude -p Evaluate SHA:603338 for 2026-11-23: fact sheet research/SHA-603338/factsheet-2026-11-23.md, note research/SHA-603338/2026-11-23.md, state portfolio/state.json, macro overlay research/SHA-603338/2026-11-23-macro.md. Reason for review: screen. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:15:44] research/SHA-603338/2026-11-23-evaluation.md
+OK research/SHA-603338/2026-11-23-evaluation.md Bear case=139 Bull case=127 decision=AVOID scorecard=6->3
+
+The decision is AVOID at conviction 3, which is what the scorecard gave. I didn't read portfolio/state.json because the decision isn't a BUY. The entry price is 39.06 CNY (base fair value × 0.85), but the system may reset it using the scorecard method that took over on 2026-11-18. The net-cash trigger is text-only because the statistics page's debtEbitda field may not measure net debt the same way.
+[17:15:44] $ bin/py scripts/check_docs.py eval research/SHA-603338/2026-11-23-evaluation.md
+[17:15:44] OK research/SHA-603338/2026-11-23-evaluation.md Bear case=139 Bull case=127 decision=AVOID scorecard=6->3
+[17:15:44] $ bin/py scripts/valuation.py SHA:603338 --asof 2026-11-23 --eval research/SHA-603338/2026-11-23-evaluation.md
+[17:15:44] {"out": "research/SHA-603338/2026-11-23-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": 28.26, "base": 45.95, "bull": 104.94}, "price": 58.99}
+[17:15:46] == done SHA:603338
+[17:15:54] research/SHA-603939/2026-11-23-evaluation.md
+OK research/SHA-603939/2026-11-23-evaluation.md Bear case=140 Bull case=139 decision=BUY scorecard=10->4
+
+The decision is a CORE BUY at conviction 4, which is what the scorecard gave. Two things to know about it:
+- **The sale it relies on:** the buy names HKG:0291 to be sold. Cash is about 1.9%, and China/HK holdings are about 24% against the 25% cap, so the buy can't fit without selling a China name. I picked 0291 myself (lower ROIC); I didn't check how it compares with the other China holdings.
+- **What wasn't checked:** the Q3 2026 filing was never read, so a guidance cut could be missing. Also, the room this sale frees under the China/HK cap is my rough estimate from the state file. `portfolio.py` hasn't checked it.
+[17:15:54] $ bin/py scripts/check_docs.py eval research/SHA-603939/2026-11-23-evaluation.md
+[17:15:54] OK research/SHA-603939/2026-11-23-evaluation.md Bear case=140 Bull case=139 decision=BUY scorecard=10->4
+[17:15:54] $ bin/py scripts/valuation.py SHA:603939 --asof 2026-11-23 --eval research/SHA-603939/2026-11-23-evaluation.md
+[17:15:54] {"out": "research/SHA-603939/2026-11-23-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 24.92, "base": 43.46, "bull": 61.16}, "price": 26.26}
+[17:15:54] $ claude -p Independent second evaluation of SHA:603939 for 2026-11-23: fact sheet research/SHA-603939/factsheet-2026-11-23.md, note research/SHA-603939/2026-11-23.md, state portfolio/state.json, macro overlay research/SHA-603939/2026-11-23-macro.md. Write it to research/SHA-603939/2026-11-23-evaluation-2.md (not the usual file). Do not read research/SHA-603939/2026-11-23-evaluation.md or any other evaluation of this stock dated 2026-11-23. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:17:39] research/SHA-603939/2026-11-23-evaluation-2.md
+OK research/SHA-603939/2026-11-23-evaluation-2.md Bear case=142 Bull case=136 decision=BUY scorecard=10->4
+
+Not checked: the Q3 2026 report wasn't reviewed, and that weakens the evidence. Because of the cash floor and the China/HK cap, the BUY replaces HKG:3998. That choice is my own judgement and the portfolio rules still have to accept it.
+[17:17:39] $ bin/py scripts/check_docs.py eval research/SHA-603939/2026-11-23-evaluation-2.md
+[17:17:39] OK research/SHA-603939/2026-11-23-evaluation-2.md Bear case=142 Bull case=136 decision=BUY scorecard=10->4
+[17:17:39] == SHA:603939: second opinion conviction 4 -> BUY 4
+[17:17:39] $ bin/py scripts/check_docs.py eval research/SHA-603939/2026-11-23-evaluation.md
+[17:17:40] OK research/SHA-603939/2026-11-23-evaluation.md Bear case=140 Bull case=139 decision=BUY scorecard=10->4
+[17:17:41] == portfolio-manager SHA:603939 (BUY 4)
+[17:17:41] $ claude -p Evaluation files: research/SHA-603939/2026-11-23-evaluation.md. Date 2026-11-23. Write the requests to runs/2026-11-23-catchup/requests-SHA-603939.json and submit with --at-market --save runs/2026-11-23-catchup/submit-SHA-603939.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[17:17:59] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| SHA:603939 | BUY (replaces HKG:0291) | CORE | 4 |
+
+Script output:
+- **Filled now:** none.
+- **Queued for next open:** order `2026-11-23-1`, BUY 2,227 shares of SHA:603939 at an estimated CNY 26.26 (close of 2026-11-20), about $8,754.91. The order names HKG:0291 as the holding it replaces.
+- **Rejected:** none.
+- **Warnings:** cash is 1.9% against the 1.5% reserve (residual regime).
+
+This is a real submission, not a dry run, and the portfolio was written. The requests file is `runs/2026-11-23-catchup/requests-SHA-603939.json`.
+
+I did not review the saved submit file.
+[17:17:59] == done SHA:603939
