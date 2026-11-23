@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Leisure",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 4283.58271949584,
+    "base": 8657.753318182558,
+    "bull": 14311.224486943693
+   },
+   "implied_growth": 0.12568136298413435,
+   "discount_rate": 0.09794658403851207,
+   "cost_of_equity": 0.10540000000000001,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": 0.14903707516466966,
+     "base": 0.2,
+     "bull": 0.25
+    },
+    "cash_flow_margin": {
+     "bear": 0.13162867139704465,
+     "base": 0.19904427050136111,
+     "bull": 0.261773313204609
+    },
+    "cagr_3y": 0.3330741503293393,
+    "cagr_5y": 0.4752147404961611,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 713.0287587012915,
+    "base": 1153.6044880394045,
+    "bull": 5055.267342334861
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 10.088,
+     "base": 12.839,
+     "bull": 14.662
+    },
+    "ttm_ebitda": 1345529000,
+    "peak_earnings": "TTM EBITDA is 2.1x its 5y median: bear/base use the 5y average (5.303e+08), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 6250,
+ "risk_free": 0.0504,
+ "country_risk_premium": 0.015,
+ "reporting_currency": "PLN",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 3093.3980658976575,
+  "base": 6156.370374801507,
+  "bull": 11225.905438740747
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.5050563094563748,
+  "base": -0.014980740031758866,
+  "bull": 0.7961448701985194
+ },
+ "implied_growth": 0.12568136298413435,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 7.5x (base 1153.60-8657.75)"
+  ]
+ },
+ "ticker": "WSE:BFT",
+ "asof": "2026-11-23",
+ "quote_currency": "PLN",
+ "financials_currency": "PLN",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-20",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/wse/BFT/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/wse/BFT/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/wse/BFT/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/wse/BFT/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/wse/BFT/statistics/"
+ }
+}

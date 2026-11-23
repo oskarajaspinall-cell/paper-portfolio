@@ -1,0 +1,111 @@
+{
+ "industry": {
+  "industry": "Integrated Freight & Logistics",
+  "known": true,
+  "best": "DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 10.258702312780317,
+    "base": 51.074836451352226,
+    "bull": 53.32420388276241
+   },
+   "implied_growth": -0.22947094196912315,
+   "discount_rate": 0.11236773535990374,
+   "cost_of_equity": 0.1254,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.011923328275257144,
+     "base": 0.02083073810161039,
+     "bull": 0.022169608956955855
+    },
+    "cash_flow_margin": {
+     "bear": 0.04383008768944305,
+     "base": 0.23812197852573677,
+     "bull": 0.24779975039863553
+    },
+    "cagr_3y": 0.011153343449485709,
+    "cagr_5y": 0.022169608956955855,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 13.811988634677773,
+    "base": 22.827550232123812,
+    "bull": 23.37086751346291
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.255,
+     "base": 5.827,
+     "bull": 5.982
+    },
+    "ttm_ebitda": 5587537550
+   }
+  }
+ ],
+ "price": 19.71,
+ "risk_free": 0.0504,
+ "country_risk_premium": 0.035,
+ "reporting_currency": "CNY",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 11.443131086746135,
+  "base": 41.65907437827609,
+  "bull": 43.33975842632924
+ },
+ "used": [
+  "dcf",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.41942510975412817,
+  "base": 1.1136009324340987,
+  "bull": 1.1988715589208137
+ },
+ "implied_growth": -0.22947094196912315,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "methods disagree 2.2x (base 22.83-51.07)",
+   "base +111% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "SHA:601156",
+ "asof": "2026-11-23",
+ "quote_currency": "CNY",
+ "financials_currency": "CNY",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-20",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/sha/601156/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/sha/601156/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/sha/601156/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/sha/601156/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/sha/601156/statistics/"
+ }
+}
