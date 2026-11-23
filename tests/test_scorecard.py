@@ -177,3 +177,12 @@ def test_method_change_after_a_scorecard_rule_change(tmp_path, monkeypatch):
     assert check_docs.consistency_problems(tmp_path / "2026-11-17-evaluation.md", new) == []
     monkeypatch.setattr(S, "evaluate_file", lambda p, cfg=None: ({"conviction": 3}, []))   # still a 3: no method change happened
     assert check_docs.consistency_problems(tmp_path / "2026-11-17-evaluation.md", new)
+
+
+def test_buy_then_hold_on_a_new_holding_is_not_a_flip(tmp_path):
+    import json
+    import check_docs
+    (tmp_path / "2026-11-16-evaluation.md").write_text("x\n```json\n" + json.dumps({"decision": "BUY", "conviction": 4}) + "\n```\n")
+    assert check_docs.consistency_problems(tmp_path / "2026-11-23-evaluation.md", {"decision": "HOLD", "conviction": 4}) == []
+    assert check_docs.consistency_problems(tmp_path / "2026-11-23-evaluation.md", {"decision": "HOLD", "conviction": 3})  # crosses the line
+    assert check_docs.consistency_problems(tmp_path / "2026-11-23-evaluation.md", {"decision": "TRIM", "conviction": 4})

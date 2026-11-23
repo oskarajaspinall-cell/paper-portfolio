@@ -325,7 +325,8 @@ def consistency_problems(path: Path, d: dict) -> list[str]:
     # what must not flip on the same evidence: the decision, or conviction across the buy line (4). A conviction
     # move on the same side (e.g. 3 -> 2 because the Python scorecard now sets it) is a method change, not a flip.
     c0, c1 = int(pd_.get("conviction") or 0), int(d.get("conviction") or 0)
-    if pd_.get("decision") == d.get("decision") and (c0 >= 4) == (c1 >= 4):
+    same = {"BUY": "HOLD"}.get(pd_.get("decision"), pd_.get("decision"))  # a BUY that is now held is re-rated as HOLD
+    if d.get("decision") in (pd_.get("decision"), same) and (c0 >= 4) == (c1 >= 4):  # (ACGL, RICHTER 2026-11-23)
         return []
     so = d.get("second_opinion")
     if isinstance(so, dict) and isinstance(so.get("conviction"), int) and so["conviction"] < 4 and c1 < 4:
