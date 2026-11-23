@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "ACGL",
+    "action": "HOLD",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A disciplined, lowly levered specialty insurer earning high-teens ROE trades below peers and low in its own EV/EBITDA range while in a healthy uptrend, with buybacks compounding per-share value through a softening cycle.",
+    "reason": "Conviction 4 is unchanged a week after entry: returns normalised but flat over the last year, leverage is low, buybacks continue and the stock is cheap versus peers and its own EV/EBITDA history. The position sits near its target size, so HOLD; no new evidence justifies adding.",
+    "research_note": "research/ACGL/2026-11-23.md",
+    "triggers": [
+      {"text": "TTM ROIC falls below 12%, showing the soft cycle is eroding returns beyond a normal cyclical dip.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 12}},
+      {"text": "TTM ROE falls below 14%, well under the 18.7% now, signalling underwriting returns have broken down.", "check": {"source": "statistics", "field": "roe", "op": "<", "value": 14}},
+      {"text": "Net debt/EBITDA rises above 1.5x, reversing the deleveraging.", "check": {"source": "statistics", "field": "debtEbitda", "op": ">", "value": 1.5}},
+      {"text": "Insurance or reinsurance underwriting income turns negative in two consecutive 10-Qs (sec.gov)."}
+    ]
+  }
+]

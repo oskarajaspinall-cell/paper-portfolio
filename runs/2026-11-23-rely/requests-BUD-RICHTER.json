@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "BUD:RICHTER",
+    "action": "HOLD",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A net-cash pharma with rising returns and margins trades low in its own EV/EBITDA and P/FCF ranges while in a healthy uptrend.",
+    "reason": "Thesis intact: ROIC and operating margin at 2-year highs, net cash, FCF yield 10.43%; the rolling FCF dip is timing, not profitability. No new evidence since the 2026-11-18 entry and the position sits close to its target size, so hold rather than add.",
+    "research_note": "research/BUD-RICHTER/2026-11-23.md",
+    "triggers": [
+      {"text": "TTM operating margin falls below 28%, reversing most of the rise from 28.7% a year earlier to 34.5%.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 28}},
+      {"text": "TTM ROIC falls below 16%, back to the FY2021 level and erasing the returns improvement.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 16}},
+      {"text": "TTM FCF margin falls below 18%, showing the rolling slide from 29.3% is structural, not timing.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 18}},
+      {"text": "Net debt/EBITDA (ratios page) rises above 1.0x from -0.61x, signalling a debt-funded deal."}
+    ]
+  }
+]

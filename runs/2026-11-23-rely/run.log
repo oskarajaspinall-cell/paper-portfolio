@@ -1,0 +1,170 @@
+[00:51:05] == research loop: 3 names queued, best first: ['RELY', 'ACGL', 'BUD:RICHTER']
+[00:51:05] == initiate RELY
+[00:51:05] == initiate ACGL
+[00:51:05] == initiate BUD:RICHTER
+[00:51:05] $ bin/py scripts/sec_delta.py RELY --asof 2026-11-23
+[00:51:05] $ bin/py scripts/sec_delta.py ACGL --asof 2026-11-23
+[00:51:05] $ bin/py scripts/sec_delta.py BUD:RICHTER --asof 2026-11-23
+[00:51:05] SKIP BUD:RICHTER: not a US listing (SEC filers only)
+[00:51:05] $ claude -p Ticker BUD:RICHTER, note type CORE, date 2026-11-23. Reason for review: owner_request. Facts: source: global core ranking. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[00:51:06] OK research/ACGL/sec-delta-2026-11-23.md
+[00:51:06] $ claude -p Ticker ACGL, note type CORE, date 2026-11-23. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/ACGL/sec-delta-2026-11-23.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[00:51:16] OK research/RELY/sec-delta-2026-11-23.md
+[00:51:16] $ claude -p Ticker RELY, note type CORE, date 2026-11-23. Reason for review: owner_request. Facts: source: global core ranking. SEC filing delta: research/RELY/sec-delta-2026-11-23.md (read it before any web fetch; it does not count toward the fetch cap). --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[00:51:48] Note: research/BUD-RICHTER/2026-11-23.md
+Fact sheet: research/BUD-RICHTER/factsheet-2026-11-23.md
+Check: OK research/BUD-RICHTER/2026-11-23.md type=CORE 1=59 2=123 3=127 4=34 5=65 6=32 total=440
+
+Data gaps and blocked URLs:
+- **Blocked URL:** https://www.richter.hu/en-US/Investors/Pages/default.aspx was not on the allowlist. I did not retry it.
+- **Revenue by country/region:** [data unavailable]. The note flags this, so the macro overlay can't size any Russia/CIS or other foreign exposure from it.
+- **Q3 2026 results:** published 2026-11-10 but not read. The note says so.
+- **Next earnings date:** the fact sheet still lists Nov 10, 2026, which is already past.
+- **Conflicts:** none.
+[00:51:48] $ bin/py scripts/check_docs.py note research/BUD-RICHTER/2026-11-23.md
+[00:51:49] OK research/BUD-RICHTER/2026-11-23.md type=CORE 1=59 2=123 3=127 4=34 5=65 6=32 total=440
+[00:51:49] $ claude -p Ticker BUD:RICHTER, date 2026-11-23. Research: research/BUD-RICHTER/factsheet-2026-11-23.md, research/BUD-RICHTER/2026-11-23.md. Macro snapshot: reports/macro/2026-11-23.md. Write research/BUD-RICHTER/2026-11-23-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[00:51:56] Note: research/ACGL/2026-11-23.md
+Fact sheet: research/ACGL/factsheet-2026-11-23.md
+Check: OK research/ACGL/2026-11-23.md type=CORE 1=61 2=127 3=127 4=36 5=46 6=63 total=460
+
+- **Fetches:** I made no WebFetch calls. The SEC delta file was my only qualitative source.
+- **Country split:** The revenue split by country is [data unavailable] in the note.
+- **Stale date:** The fact sheet's "Next earnings date" (Oct 27, 2026) is already past, and I didn't use it.
+- **Headlines:** I cited the news headlines only as qualitative items. I took no numbers from them.
+[00:51:56] $ bin/py scripts/check_docs.py note research/ACGL/2026-11-23.md
+[00:51:56] OK research/ACGL/2026-11-23.md type=CORE 1=61 2=127 3=127 4=36 5=46 6=63 total=460
+[00:51:56] $ claude -p Ticker ACGL, date 2026-11-23. Research: research/ACGL/factsheet-2026-11-23.md, research/ACGL/2026-11-23.md. Macro snapshot: reports/macro/2026-11-23.md. Write research/ACGL/2026-11-23-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[00:52:06] research/BUD-RICHTER/2026-11-23-macro.md
+OK research/BUD-RICHTER/2026-11-23-macro.md macro_weight=context words=115
+[00:52:06] $ bin/py scripts/check_docs.py macro research/BUD-RICHTER/2026-11-23-macro.md
+[00:52:06] OK research/BUD-RICHTER/2026-11-23-macro.md macro_weight=context words=115
+[00:52:06] $ claude -p Evaluate BUD:RICHTER for 2026-11-23: fact sheet research/BUD-RICHTER/factsheet-2026-11-23.md, note research/BUD-RICHTER/2026-11-23.md, state portfolio/state.json, macro overlay research/BUD-RICHTER/2026-11-23-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[00:52:15] research/ACGL/2026-11-23-macro.md
+OK research/ACGL/2026-11-23-macro.md macro_weight=context words=55
+[00:52:15] $ bin/py scripts/check_docs.py macro research/ACGL/2026-11-23-macro.md
+[00:52:15] OK research/ACGL/2026-11-23-macro.md macro_weight=context words=55
+[00:52:15] $ claude -p Evaluate ACGL for 2026-11-23: fact sheet research/ACGL/factsheet-2026-11-23.md, note research/ACGL/2026-11-23.md, state portfolio/state.json, macro overlay research/ACGL/2026-11-23-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[00:53:06] Note: research/RELY/2026-11-23.md
+Fact sheet: research/RELY/factsheet-2026-11-23.md
+check_docs: OK research/RELY/2026-11-23.md type=CORE 1=75 2=103 3=115 4=57 5=54 6=105 total=509
+
+Blocked URLs and data issues:
+- Blocked: the globenewswire.com Q3 press release (not on the allowlist, logged). I cited it only as a headline listing from the fact sheet.
+- Blocked: https://ir.remitly.com/ returned HTTP 403.
+- No data conflicts. The fact sheet's "Next earnings date" still shows Nov 4, 2026, which is already past.
+- The 28.00 high on 2026-11-04 to 19.83 now is a large fall. I found no sourced cause and the note marks it unexplained.
+- The fetch of the 10-Q read only the first 100,000 of about 122,000 characters, so the Risk Factors section was not visible.
+[00:53:06] $ bin/py scripts/check_docs.py note research/RELY/2026-11-23.md
+[00:53:07] OK research/RELY/2026-11-23.md type=CORE 1=75 2=103 3=115 4=57 5=54 6=105 total=509
+[00:53:07] $ claude -p Ticker RELY, date 2026-11-23. Research: research/RELY/factsheet-2026-11-23.md, research/RELY/2026-11-23.md. Macro snapshot: reports/macro/2026-11-23.md. Write research/RELY/2026-11-23-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[00:53:21] I wrote `research/ACGL/2026-11-23-evaluation.md`. The decision is HOLD at conviction 4, and the checker printed:
+
+OK research/ACGL/2026-11-23-evaluation.md Bear case=130 Bull case=136 decision=HOLD scorecard=9->4
+
+Two things to know:
+- **HOLD, not ADD:** the scorecard would have allowed an ADD, but I chose HOLD. The position is close to its target size, and there's no new evidence since the 2026-11-16 BUY at the same conviction.
+- **Not read:** the 2026-11-16 evaluation, because my inputs don't include it. The decision and conviction are unchanged from that BUY, so no new-evidence field was needed.
+[00:53:21] $ bin/py scripts/check_docs.py eval research/ACGL/2026-11-23-evaluation.md
+[00:53:22] OK research/ACGL/2026-11-23-evaluation.md Bear case=130 Bull case=136 decision=HOLD scorecard=9->4
+[00:53:22] $ bin/py scripts/valuation.py ACGL --asof 2026-11-23 --eval research/ACGL/2026-11-23-evaluation.md
+[00:53:22] {"out": "research/ACGL/2026-11-23-valuation.md", "used": ["pb_roe", "pe"], "fair_value": {"bear": 86.01, "base": 151.55, "bull": 169.0}, "price": 108.82}
+[00:53:23] == portfolio-manager ACGL (HOLD 4)
+[00:53:23] $ claude -p Evaluation files: research/ACGL/2026-11-23-evaluation.md. Date 2026-11-23. Write the requests to runs/2026-11-23-rely/requests-ACGL.json and submit with --at-market --save runs/2026-11-23-rely/submit-ACGL.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[00:53:24] research/BUD-RICHTER/2026-11-23-evaluation.md
+OK research/BUD-RICHTER/2026-11-23-evaluation.md Bear case=146 Bull case=125 decision=HOLD scorecard=9->4
+
+I didn't check: what the Q3 2026 release (2026-11-10) says, because the note never read it, and the size of any CIS/HUF exposure, because revenue by country isn't available. I set `entry_price` to null since the stock already scores 4 at today's price.
+[00:53:24] $ bin/py scripts/check_docs.py eval research/BUD-RICHTER/2026-11-23-evaluation.md
+[00:53:24] OK research/BUD-RICHTER/2026-11-23-evaluation.md Bear case=146 Bull case=125 decision=HOLD scorecard=9->4
+[00:53:24] $ bin/py scripts/valuation.py BUD:RICHTER --asof 2026-11-23 --eval research/BUD-RICHTER/2026-11-23-evaluation.md
+[00:53:24] {"out": "research/BUD-RICHTER/2026-11-23-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 7317.69, "base": 18416.37, "bull": 21506.87}, "price": 13290}
+[00:53:26] research/RELY/2026-11-23-macro.md
+OK research/RELY/2026-11-23-macro.md macro_weight=context words=65
+[00:53:26] $ bin/py scripts/check_docs.py macro research/RELY/2026-11-23-macro.md
+[00:53:26] OK research/RELY/2026-11-23-macro.md macro_weight=context words=65
+[00:53:26] $ claude -p Evaluate RELY for 2026-11-23: fact sheet research/RELY/factsheet-2026-11-23.md, note research/RELY/2026-11-23.md, state portfolio/state.json, macro overlay research/RELY/2026-11-23-macro.md. Reason for review: owner_request. Facts: source: global core ranking. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[00:53:41] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| ACGL | HOLD | CORE | 4 |
+
+Script output:
+```json
+{
+ "mode": "at_market",
+ "placed": [],
+ "applied": [
+  {"side": "HOLD", "ticker": "ACGL", "type": "CORE", "shares": 0, "reason": "Conviction 4 is unchanged a week after entry: returns normalised but flat over the last year, leverage is low, buybacks continue and the stock is cheap versus peers and its own EV/EBITDA history. The position sits near its target size, so HOLD; no new evidence justifies adding."}
+ ],
+ "rejected": [],
+ "warnings": ["cash 1.9% vs a 1.5% reserve (residual (bottom-up) regime)"],
+ "filled_now": [],
+ "queued_for_next_open": [],
+ "dry_run": false
+}
+```
+
+- No trade was made. The HOLD recorded the refreshed thesis, triggers and conviction.
+- Nothing was rejected, and nothing was queued for the next open.
+- This was a live run, not a dry run, so the portfolio was written.
+
+I skipped `check_docs.py`, because the caller had already checked the evaluation file. The one warning is that cash is 1.9% against the 1.5% floor, which leaves little room for further buys.
+[00:53:41] == done ACGL
+[00:53:41] == portfolio-manager BUD:RICHTER (HOLD 4)
+[00:53:41] $ claude -p Evaluation files: research/BUD-RICHTER/2026-11-23-evaluation.md. Date 2026-11-23. Write the requests to runs/2026-11-23-rely/requests-BUD-RICHTER.json and submit with --at-market --save runs/2026-11-23-rely/submit-BUD-RICHTER.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[00:53:58] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| BUD:RICHTER | HOLD | CORE | 4 |
+
+```json
+{
+ "mode": "at_market",
+ "placed": [],
+ "applied": [
+  {
+   "side": "HOLD",
+   "ticker": "BUD:RICHTER",
+   "type": "CORE",
+   "shares": 0,
+   "reason": "Thesis intact: ROIC and operating margin at 2-year highs, net cash, FCF yield 10.43%; the rolling FCF dip is timing, not profitability. No new evidence since the 2026-11-18 entry and the position sits close to its target size, so hold rather than add."
+  }
+ ],
+ "rejected": [],
+ "warnings": [
+  "cash 1.9% vs a 1.5% reserve (residual (bottom-up) regime)"
+ ],
+ "filled_now": [],
+ "queued_for_next_open": [],
+ "dry_run": false
+}
+```
+
+The hold was written to the portfolio as the new decision, with its refreshed thesis and triggers. No trade was made.
+
+I didn't re-run `check_docs.py` on the evaluation, because the caller had already checked it.
+[00:53:58] == done BUD:RICHTER
+[00:54:19] research/RELY/2026-11-23-evaluation.md
+OK research/RELY/2026-11-23-evaluation.md Bear case=140 Bull case=132 decision=HOLD scorecard=9->4
+
+I didn't read the earlier RELY evaluations. The checker didn't ask for `new_evidence` because the conviction stays at 4, the same as the 2026-11-17 BUY. `entry_price` is null, since at conviction 4 price isn't what stands in the way.
+[00:54:19] $ bin/py scripts/check_docs.py eval research/RELY/2026-11-23-evaluation.md
+[00:54:19] OK research/RELY/2026-11-23-evaluation.md Bear case=140 Bull case=132 decision=HOLD scorecard=9->4
+[00:54:19] $ bin/py scripts/valuation.py RELY --asof 2026-11-23 --eval research/RELY/2026-11-23-evaluation.md
+[00:54:19] {"out": "research/RELY/2026-11-23-valuation.md", "used": ["ev_revenue"], "fair_value": {"bear": 15.83, "base": 31.39, "bull": 33.95}, "price": 19.83}
+[00:54:21] == portfolio-manager RELY (HOLD 4)
+[00:54:21] $ claude -p Evaluation files: research/RELY/2026-11-23-evaluation.md. Date 2026-11-23. Write the requests to runs/2026-11-23-rely/requests-RELY.json and submit with --at-market --save runs/2026-11-23-rely/submit-RELY.json (decided trades fill now at the live price where the market is open, else at the next open). --agent portfolio-manager --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/portfolio.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(runs/**),Edit(portfolio/requests-*.json),Edit(logs/dry-run-requests-*.json) --output-format text
+[00:54:38] | Ticker | Decision | Type | Conviction |
+|---|---|---|---|
+| RELY | HOLD | CORE | 4 |
+
+Script output:
+- **Filled now:** none.
+- **Queued for next open:** none.
+- **Rejected:** none.
+- **Applied:** a HOLD on RELY. No shares traded. It records the refreshed thesis, triggers and conviction.
+- **Warning:** cash is 1.9% against a 1.5% reserve (residual regime).
+
+This was not a dry run, so the HOLD decision was written to the portfolio. The requests are in `runs/2026-11-23-rely/requests-RELY.json` and the script output is saved to `runs/2026-11-23-rely/submit-RELY.json`.
+
+I did not run `check_docs.py` on the evaluation file, since the caller had already checked it.
+[00:54:38] == done RELY
