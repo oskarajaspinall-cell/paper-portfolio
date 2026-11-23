@@ -204,7 +204,7 @@ def build_queue() -> list[str]:
     import csv
     with (ROOT / "universe" / "universe.csv").open() as fh:
         current = {r["ticker"] for r in csv.DictReader(fh)}
-    ranked = [t for t in ranked if t in current]
+    ranked = [t for t in ranked if t in current or t in st.get("holdings", {})]  # a holding is never dropped (RELY, 2026-11-23)
     today = f"{dt.date.today()}"
     queue = [t for t in ranked if not (ROOT / "research" / Ticker(t).slug / f"{today}.md").exists()
              and not list((ROOT / "research" / Ticker(t).slug).glob("*-evaluation.md"))]
