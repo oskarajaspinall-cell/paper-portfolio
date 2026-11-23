@@ -813,3 +813,32 @@ def test_failed_run_keeps_finished_research_and_logs_its_decisions(fake_repo, mo
     assert rec and "research/TRIG/2026-10-10-evaluation.md" in rec[-1]               # logged after the restore
     err = (fake_repo / "runs" / "2026-10-10" / "error.log").read_text()
     assert "NOT acted on" in err and "research/TRIG/2026-10-10-evaluation.md" in err
+
+
+def test_research_phase_then_trade_phase(fake_repo, monkeypatch):
+    """2026-11-23 (owner): Saturday researches with no trades; Sunday's trades step runs the portfolio manager on it."""
+    scan_ = dict(SCAN_QUIET, reinitiate=["TRIG"], exits=[], mechanical_requests=[])
+    (fake_repo / "portfolio" / "state.json").write_text(json.dumps({"holdings": {"TRIG": {"type": "CORE"}}}))
+    calls, seen = [], []
+    monkeypatch.setattr(wr, "sh", make_sh(fake_repo, scan_, calls))
+
+    def agent(name, prompt, log):
+        seen.append(name)
+        d = fake_repo / "research" / "TRIG"
+        d.mkdir(exist_ok=True)
+        if name == "researcher":
+            (d / "2026-10-10.md").write_text("note")
+        if name == "evaluator":
+            (d / "2026-10-10-evaluation.md").write_text(EVAL.replace("AAA", "TRIG") % ("HOLD", 3))
+        if name == "portfolio-manager":
+            (fake_repo / "runs" / "2026-10-10" / "submit.json").write_text("{}")
+
+    run = fake_repo / "runs" / "2026-10-10"
+    assert wr.run("2026-10-10", False, 0, agent=agent, phase="research") == 0
+    assert "portfolio-manager" not in seen and not any("portfolio.py submit" in c for c in calls)
+    assert json.loads((run / "evals.json").read_text())["evals"] == [["reinitiation", "research/TRIG/2026-10-10-evaluation.md"]]
+    seen.clear(); calls.clear()
+    assert wr.run("2026-10-10", False, 0, agent=agent, phase="trade") == 0
+    assert seen == ["portfolio-manager"] and not any("weekly_scan.py" in c for c in calls)
+    assert any("decision_log.py record" in c and "TRIG" in c for c in calls)
+    assert not (run / "evals.json").exists() and (run / "evals-traded.json").exists()   # never trades twice

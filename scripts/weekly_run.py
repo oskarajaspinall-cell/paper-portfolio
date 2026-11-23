@@ -306,7 +306,7 @@ def screen_picks(asof: str, max_age_days: int = 7) -> list[dict]:
     return json.loads(files[-1].read_text())["picks"] if files else []
 
 
-def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local: bool = False) -> int:
+def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local: bool = False, phase: str = "all") -> int:
     cfg = load_config()
     rundir = ROOT / "runs" / asof
     rundir.mkdir(parents=True, exist_ok=True)
@@ -332,101 +332,112 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
     try:
         if (ROOT / "PAUSED").exists() and not local:
             raise StepFailed("PAUSED file present (the workflow should have exited before this)")
-        step("fill pending")  # orders from earlier runs fill at their next open (owner rule)
-        sh(PY + ["scripts/portfolio.py", "fill-pending", "--asof", asof, "--save", str(rundir / "fills.json")]
-           + (["--dry-run"] if dry_run else []), log)
-        step("mark")
-        sh(PY + ["scripts/corporate_actions.py", "check", "--asof", asof], log)  # dividends/splits first (2026-10-16)
-        sh(PY + ["scripts/portfolio.py", "mark", "--asof", asof], log)
+        if phase == "trade":  # 2026-11-23 (owner): Sunday's trades step uses Saturday's saved research
+            saved = json.loads((rundir / "evals.json").read_text())
+            evals = [(k, ROOT / e) for k, e in saved["evals"]]
+            manifest.update(steps=saved.get("steps", []), skipped=saved.get("skipped", []))
+        else:
+            step("fill pending")  # orders from earlier runs fill at their next open (owner rule)
+            sh(PY + ["scripts/portfolio.py", "fill-pending", "--asof", asof, "--save", str(rundir / "fills.json")]
+               + (["--dry-run"] if dry_run else []), log)
+            step("mark")
+            sh(PY + ["scripts/corporate_actions.py", "check", "--asof", asof], log)  # dividends/splits first (2026-10-16)
+            sh(PY + ["scripts/portfolio.py", "mark", "--asof", asof], log)
 
-        step("cash strategy")  # cash is a holding (owner rule 2026-10-09): macro regime -> cash reserve
-        run_cash_strategy(asof, agent, log)
+            step("cash strategy")  # cash is a holding (owner rule 2026-10-09): macro regime -> cash reserve
+            run_cash_strategy(asof, agent, log)
 
-        step("scan")
-        sh(PY + ["scripts/weekly_scan.py", "--asof", asof, "--out", str(rundir)], log)
-        scan = json.loads((rundir / "scan.json").read_text())
-        state = json.loads((port / "state.json").read_text())
+            step("scan")
+            sh(PY + ["scripts/weekly_scan.py", "--asof", asof, "--out", str(rundir)], log)
+            scan = json.loads((rundir / "scan.json").read_text())
+            state = json.loads((port / "state.json").read_text())
 
-        reinit = list(scan["reinitiate"])
-        dip_holdings = {h["ticker"]: h for h in state.get("dip_hits") or [] if h["ticker"] in state["holdings"]}
-        if scan["review"]:
-            step("review")
-            agent("weekly-reviewer", f"Scan file runs/{asof}/scan.json, date {asof}. "
-                                     f"Write runs/{asof}/reviews.md.", log)
-            rv = rundir / "reviews.md"
-            if not rv.exists():
-                raise StepFailed("weekly-reviewer wrote no reviews.md")
-            text = rv.read_text()
-            for t in scan["review"]:
-                sec = text.split(f"### {t}", 1)[1].split("\n### ", 1)[0] if f"### {t}" in text else ""
-                if "Action:" not in sec:
-                    raise StepFailed(f"reviews.md has no Action line for {t}")
-                if "ESCALATE" in sec.split("Action:", 1)[1]:
-                    reinit.append(t)
+            reinit = list(scan["reinitiate"])
+            dip_holdings = {h["ticker"]: h for h in state.get("dip_hits") or [] if h["ticker"] in state["holdings"]}
+            if scan["review"]:
+                step("review")
+                agent("weekly-reviewer", f"Scan file runs/{asof}/scan.json, date {asof}. "
+                                         f"Write runs/{asof}/reviews.md.", log)
+                rv = rundir / "reviews.md"
+                if not rv.exists():
+                    raise StepFailed("weekly-reviewer wrote no reviews.md")
+                text = rv.read_text()
+                for t in scan["review"]:
+                    sec = text.split(f"### {t}", 1)[1].split("\n### ", 1)[0] if f"### {t}" in text else ""
+                    if "Action:" not in sec:
+                        raise StepFailed(f"reviews.md has no Action line for {t}")
+                    if "ESCALATE" in sec.split("Action:", 1)[1]:
+                        reinit.append(t)
 
-        evals = []
-        fvr = {f["ticker"]: f for f in scan.get("fair_value_reached", [])}
-        rolling = rolling_reviews(state, set(reinit) | set(dip_holdings), asof,
-                                  int(cfg["core"].get("rolling_reviews_per_week", 0)))
-        if rolling:
-            log(f"== rolling full re-check (oldest research first): {', '.join(rolling)}")
-        for t in dict.fromkeys(reinit + list(dip_holdings) + rolling):
-            step(f"reinitiate {t}")
-            h = state["holdings"][t]
-            src = ("the price reached its base fair value" if t in fvr and t in scan["reinitiate"] else
-                   "core or macro trigger fired" if t in scan["reinitiate"] else
-                   "escalated by weekly review" if t in reinit else
-                   "dip radar" if t in dip_holdings else
-                   "rolling full re-check: the holding with the oldest full research, re-examined whether or not "
-                   "anything was flagged (owner request 2026-11-02)")
-            fv = fvr.get(t)
-            if t in dip_holdings and t not in reinit:
-                why = entry_hit_reason({**dip_holdings[t], "kind": "dip"})
-            else:
-                why = reason_text("tripwire" if t in scan["reinitiate"] and t not in fvr else "recheck",
-                                  holding=f"{h['type']} holding", flagged_by=src,
-                                  fair_value=(f"close {fv['close']} reached the base fair value {fv['base']:.2f} "
-                                              f"({fv['file']})") if fv else None)
-            evals.append(("reinitiation", research_and_evaluate(t, h["type"], asof, why, agent, log, rundir)))
-        if fvr and not dry_run:
-            from weekly_scan import record_fv_reviews
-            record_fv_reviews([f for t, f in fvr.items() if t in reinit], asof, port / "fv_reviews.json")
+            evals = []
+            fvr = {f["ticker"]: f for f in scan.get("fair_value_reached", [])}
+            rolling = rolling_reviews(state, set(reinit) | set(dip_holdings), asof,
+                                      int(cfg["core"].get("rolling_reviews_per_week", 0)))
+            if rolling:
+                log(f"== rolling full re-check (oldest research first): {', '.join(rolling)}")
+            for t in dict.fromkeys(reinit + list(dip_holdings) + rolling):
+                step(f"reinitiate {t}")
+                h = state["holdings"][t]
+                src = ("the price reached its base fair value" if t in fvr and t in scan["reinitiate"] else
+                       "core or macro trigger fired" if t in scan["reinitiate"] else
+                       "escalated by weekly review" if t in reinit else
+                       "dip radar" if t in dip_holdings else
+                       "rolling full re-check: the holding with the oldest full research, re-examined whether or not "
+                       "anything was flagged (owner request 2026-11-02)")
+                fv = fvr.get(t)
+                if t in dip_holdings and t not in reinit:
+                    why = entry_hit_reason({**dip_holdings[t], "kind": "dip"})
+                else:
+                    why = reason_text("tripwire" if t in scan["reinitiate"] and t not in fvr else "recheck",
+                                      holding=f"{h['type']} holding", flagged_by=src,
+                                      fair_value=(f"close {fv['close']} reached the base fair value {fv['base']:.2f} "
+                                                  f"({fv['file']})") if fv else None)
+                evals.append(("reinitiation", research_and_evaluate(t, h["type"], asof, why, agent, log, rundir)))
+            if fvr and not dry_run:
+                from weekly_scan import record_fv_reviews
+                record_fv_reviews([f for t, f in fvr.items() if t in reinit], asof, port / "fv_reviews.json")
 
-        cap = cfg["agents"]["max_new_initiations_per_week"] if max_new is None else max_new
-        from screen import recently_researched
-        days = cfg["screen"]["exclude_researched_days"]
-        recent = {k: recently_researched(days, asof, k) for k in ("CORE", "TACTICAL")}  # same kind only
-        picks = [p for p in screen_picks(asof) if p["ticker"] not in state["holdings"]
-                 and Ticker(p["ticker"]).slug not in recent.get(p["type"], set())]
-        # entry-price hits (owner rule 2026-10-09) go first and bypass the 90-day rule: the price reached the
-        # level we set, so re-research whether it's now a BUY (it fell for a reason; nothing is bought blindly)
-        from entry_watch import researched_since
-        hits = [{"ticker": h["ticker"], "type": "CORE", "entry_hit": h}
-                for h in (state.get("entry_hits") or []) + (state.get("dip_hits") or [])
-                if h["ticker"] not in state["holdings"] and not researched_since(h)]  # the loop may have done it (2026-11-18)
-        hits = list({h["ticker"]: h for h in reversed(hits)}.values())[::-1]  # one per stock, first kept
-        picks = hits + [p for p in picks if p["ticker"] not in {h["ticker"] for h in hits}]
-        manifest["skipped"] = []
+            cap = cfg["agents"]["max_new_initiations_per_week"] if max_new is None else max_new
+            from screen import recently_researched
+            days = cfg["screen"]["exclude_researched_days"]
+            recent = {k: recently_researched(days, asof, k) for k in ("CORE", "TACTICAL")}  # same kind only
+            picks = [p for p in screen_picks(asof) if p["ticker"] not in state["holdings"]
+                     and Ticker(p["ticker"]).slug not in recent.get(p["type"], set())]
+            # entry-price hits (owner rule 2026-10-09) go first and bypass the 90-day rule: the price reached the
+            # level we set, so re-research whether it's now a BUY (it fell for a reason; nothing is bought blindly)
+            from entry_watch import researched_since
+            hits = [{"ticker": h["ticker"], "type": "CORE", "entry_hit": h}
+                    for h in (state.get("entry_hits") or []) + (state.get("dip_hits") or [])
+                    if h["ticker"] not in state["holdings"] and not researched_since(h)]  # the loop may have done it (2026-11-18)
+            hits = list({h["ticker"]: h for h in reversed(hits)}.values())[::-1]  # one per stock, first kept
+            picks = hits + [p for p in picks if p["ticker"] not in {h["ticker"] for h in hits}]
+            manifest["skipped"] = []
 
-        def initiate(p):
-            """A failed NEW initiation skips that stock only (owner rule); it never cancels the week."""
-            try:
-                step(f"initiate {p['ticker']}")
-                return research_and_evaluate(p["ticker"], p["type"], asof,
-                                             entry_hit_reason(p["entry_hit"]) if p.get("entry_hit")
-                                             else reason_text("screen", source="weekly screen", setup=p.get("setup_detail")),
-                                             agent, log, rundir)
-            except Exception as e:  # noqa: BLE001
-                log(f"SKIPPED initiation {p['ticker']}: {e}")
-                manifest["skipped"].append({"ticker": p["ticker"], "type": p["type"], "reason": str(e)[:300]})
-                discard_partial(p["ticker"], asof)  # no half-finished docs left behind
-                return None
+            def initiate(p):
+                """A failed NEW initiation skips that stock only (owner rule); it never cancels the week."""
+                try:
+                    step(f"initiate {p['ticker']}")
+                    return research_and_evaluate(p["ticker"], p["type"], asof,
+                                                 entry_hit_reason(p["entry_hit"]) if p.get("entry_hit")
+                                                 else reason_text("screen", source="weekly screen", setup=p.get("setup_detail")),
+                                                 agent, log, rundir)
+                except Exception as e:  # noqa: BLE001
+                    log(f"SKIPPED initiation {p['ticker']}: {e}")
+                    manifest["skipped"].append({"ticker": p["ticker"], "type": p["type"], "reason": str(e)[:300]})
+                    discard_partial(p["ticker"], asof)  # no half-finished docs left behind
+                    return None
 
-        workers = max(1, int(cfg["agents"].get("parallel_research", 1)))
-        with ThreadPoolExecutor(max_workers=workers) as pool:
-            for p, ev in zip(picks[:cap], pool.map(initiate, picks[:cap])):
-                if ev is not None:
-                    evals.append(("new", ev))
+            workers = max(1, int(cfg["agents"].get("parallel_research", 1)))
+            with ThreadPoolExecutor(max_workers=workers) as pool:
+                for p, ev in zip(picks[:cap], pool.map(initiate, picks[:cap])):
+                    if ev is not None:
+                        evals.append(("new", ev))
+            if phase == "research":  # stop before any trade; `--phase trade` picks it up in a fresh usage window
+                (rundir / "evals.json").write_text(json.dumps({"evals": [[k, str(e.relative_to(ROOT))] for k, e in evals],
+                                                               "steps": manifest["steps"], "skipped": manifest["skipped"]}, indent=1))
+                log(f"== research phase done ({len(evals)} evaluations); trades: weekly_run.py --phase trade --asof {asof}")
+                print(f"OK research phase runs/{asof}/evals.json")
+                return 0
 
         mech = rundir / "requests-mechanical.json"
         step("mechanical submit")
@@ -513,6 +524,8 @@ def run(asof: str, dry_run: bool, max_new: int | None, agent=claude_agent, local
     finally:
         shutil.rmtree(backup, ignore_errors=True)
         logf.close()
+    if phase == "trade":  # done: a rerun of the trades step would trade twice
+        (rundir / "evals.json").rename(rundir / "evals-traded.json")
     print(f"OK reports/weekly/{asof}.md")
     return 0
 
@@ -527,6 +540,9 @@ def main(argv=None) -> int:
     ap.add_argument("--max-new", type=int)
     ap.add_argument("--local", action="store_true",
                     help="run on this computer even if PAUSED exists (PAUSED then only pauses GitHub)")
+    ap.add_argument("--phase", choices=["all", "research", "trade"], default="all",
+                    help="research: everything up to the evaluations (Saturday); trade: the portfolio manager onwards "
+                         "from runs/<asof>/evals.json (Sunday, a fresh usage window; 7 of 7 one-piece runs hit a limit)")
     a = ap.parse_args(argv)
     if (ROOT / "PAUSED").exists() and not a.local:
         print("PAUSED: exiting without changes (on your own computer, add --local to run anyway)")
@@ -537,7 +553,7 @@ def main(argv=None) -> int:
         print(f"Another weekly review is already running (lock {LOCK}). Exiting without changes.")
         return 1
     try:
-        return run(a.asof, a.dry_run, a.max_new, local=a.local)
+        return run(a.asof, a.dry_run, a.max_new, local=a.local, phase=a.phase)
     finally:
         LOCK.rmdir()
 

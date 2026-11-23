@@ -3,18 +3,27 @@
 # Started by macOS launchd every Saturday 15:00 (owner request 2026-11-06; was Friday 22:00, when the Mac kept sleeping) (~/Library/LaunchAgents/com.paperportfolio.weekly.plist).
 #   bin/weekly-local          real run
 #   bin/weekly-local --test   quick check: 20-stock screen, dry-run review, no commit/upload
+#   bin/weekly-local --research   Saturday 15:00: universe, screen, research and evaluations, NO trades (owner 2026-11-23)
+#   bin/weekly-local --trade      Sunday 10:00: the portfolio manager onwards on Saturday's saved evaluations, in a fresh
+#                                 usage window (all 7 one-piece weekly runs, 10 Oct to 21 Nov, hit a limit or failed late)
 set -u
 # Keep the Mac awake for the whole job (2026-10-19: the 21:30 run paused for 30 minutes when the Mac slept). -i stops
 # idle sleep, -s system sleep while on mains power; closing the lid on battery still forces sleep.
 [ -z "${PP_CAFFEINATED:-}" ] && exec env PP_CAFFEINATED=1 /usr/bin/caffeinate -i -s "$0" "$@"
 cd "$(dirname "$0")/.." || exit 1
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-TEST=0; [ "${1:-}" = "--test" ] && TEST=1
+TEST=0; PHASE=all
+case "${1:-}" in --test) TEST=1 ;; --research) PHASE=research ;; --trade) PHASE=trade ;; esac
 
 RUNDAY=$(date +%F)
 # review date: on a weekend run it is the run day (Friday's closes are complete); on a weekday run (a manual
 # Friday-night run) the next day, so that day's closes count as completed
 case "$(date +%u)" in 6|7) ASOF=$RUNDAY ;; *) ASOF=$(date -v+1d +%F) ;; esac
+# the trades step continues the newest research phase still waiting for its trades (normally yesterday's)
+if [ $PHASE = trade ]; then
+  ASOF=$(ls runs/20??-??-??/evals.json 2>/dev/null | tail -1 | cut -d/ -f2)
+  [ -z "$ASOF" ] && { echo "== $(date) trades step: no research phase waiting (runs/*/evals.json); nothing to do"; exit 0; }
+fi
 mkdir -p logs
 LOG="logs/weekly-local-$RUNDAY.log"
 exec >>"$LOG" 2>&1
@@ -28,13 +37,15 @@ caffeinate -i -w $$ &             # keep the Mac awake until this script ends
 if [ $TEST = 1 ]; then SCREEN_ARGS="--limit 20"; REVIEW_ARGS="--dry-run --max-new 0"; else SCREEN_ARGS=""; REVIEW_ARGS=""; fi
 
 # 1-2. Universe + screen. A failure here is logged but never blocks the review (exits must still run).
+if [ $PHASE != trade ]; then
 bin/with-timeout 3600 bin/py scripts/universe.py build || echo "!! universe build failed (previous list kept)"
 # shellcheck disable=SC2086
 bin/with-timeout 25200 bin/py scripts/screen.py --asof "$RUNDAY" $SCREEN_ARGS || echo "!! screen failed (no new initiations this week)"
+fi
 
 # 3. Weekly review (restores portfolio/ itself and writes runs/$ASOF/error.log on failure).
 # shellcheck disable=SC2086
-bin/with-timeout 43200 bin/py scripts/weekly_run.py --local --asof "$ASOF" $REVIEW_ARGS
+bin/with-timeout 43200 bin/py scripts/weekly_run.py --local --asof "$ASOF" --phase $PHASE $REVIEW_ARGS
 review=$?
 
 if [ $TEST = 1 ]; then echo "== test finished $(date) review_exit=$review (no commit/upload in test mode)"; exit $review; fi
@@ -42,7 +53,8 @@ if [ $TEST = 1 ]; then echo "== test finished $(date) review_exit=$review (no co
 # 4. Commit + upload. On failure keep ONLY the error log, the run log and this log (no trades from the run).
 if [ $review = 0 ]; then
   git add -A -- portfolio research reports runs logs docs universe/ir_domains.txt
-  git commit -q -m "Weekly run $ASOF" || echo "nothing to commit"
+  case $PHASE in research) MSG="Weekly run $ASOF: research (trades step Sunday)" ;; trade) MSG="Weekly run $ASOF: trades" ;; *) MSG="Weekly run $ASOF" ;; esac
+  git commit -q -m "$MSG" || echo "nothing to commit"
 else
   err="runs/$ASOF/error.log"; tmp=$(mktemp); [ -f "$err" ] && cp "$err" "$tmp"
   runlog="runs/$ASOF/run.log"; tmplog=$(mktemp); [ -f "$runlog" ] && cp "$runlog" "$tmplog"   # keep the cause
@@ -53,7 +65,7 @@ else
   mkdir -p "runs/$ASOF"; [ -s "$tmp" ] && mv "$tmp" "$err"; [ -s "$tmplog" ] && mv "$tmplog" "$runlog"
   git add -A -- research reports portfolio/decisions.csv portfolio/entry_watch.csv portfolio/entry_conversions.csv \
     "$err" "$runlog" "$LOG" 2>/dev/null
-  git commit -q -m "Weekly run $ASOF FAILED (research kept, no trades)" || true
+  git commit -q -m "Weekly run $ASOF FAILED at the $PHASE step (research kept, no trades)" || true
 fi
 git pull -q --rebase --autostash && git push -q && echo "uploaded to GitHub" || echo "!! upload failed (results are committed locally; next run retries)"
 echo "== end $(date) review_exit=$review"
