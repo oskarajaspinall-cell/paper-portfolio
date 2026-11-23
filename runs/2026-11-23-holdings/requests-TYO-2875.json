@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "TYO:2875",
+    "action": "HOLD",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A net-cash, high-ROIC Japanese noodle and food maker with rising rolling margins trades below its own 5-year minimum P/E and P/FCF and well below peers, pricing no growth.",
+    "reason": "Fundamentals have improved since purchase: rolling operating and FCF margins rose and multiples sit at or below their own 5-year lows. The margin-reversion risk is real but the net-cash balance sheet cushions it. Held at its current size; cash above the floor is too small for a meaningful ADD.",
+    "research_note": "research/TYO-2875/2026-11-23.md",
+    "triggers": [
+      {"text": "TTM ROIC falls below 18%, giving up most of the rise from 11.4% in FY2022 to 24.4%.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 18}},
+      {"text": "TTM operating margin falls below 13%, back under the FY2024 level of 13.6%, showing the margin gains were input-cost relief.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 13}},
+      {"text": "TTM gross margin falls below 28%, under the FY2024 level of 28.7%, signalling lost pricing power.", "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 28}},
+      {"text": "TTM FCF margin falls below 6%, back to the level of a year earlier, showing the cash recovery was transitory.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 6}}
+    ]
+  }
+]
