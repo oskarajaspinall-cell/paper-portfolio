@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "HKG:0291",
+    "action": "HOLD",
+    "position_type": "CORE",
+    "conviction": 4,
+    "thesis": "A net-cash Chinese brewer with rising operating and FCF margins trades below its own 5-year minimum cash multiples, pricing shrinkage that its improving operations do not show.",
+    "reason": "Same evidence as the 2026-11-16 HOLD 4: cash multiples below their 5-year minimums, net cash and improving operating and FCF margins, against slipping ROIC, an unexplained net-income fall and a weak trend. The position is near its target size and cash is near the floor, so no ADD.",
+    "research_note": "research/HKG-0291/2026-11-23.md",
+    "triggers": [
+      {"text": "TTM operating margin falls below 12.0% (14.9% now), reversing the mix and pricing gains.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 12.0}},
+      {"text": "TTM FCF margin falls below 10.0% (15.3% now), showing the cash step-up was transitory.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 10.0}},
+      {"text": "TTM ROIC falls below 9.0% (10.8% now), below the FY2024 low of 10.3%.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 9.0}},
+      {"text": "Net debt/EBITDA (debt minus cash and short-term investments) turns positive from -1.55x TTM, i.e. net cash is gone."}
+    ]
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "ticker": "CI",
+    "action": "HOLD",
+    "position_type": "CORE",
+    "conviction": 3,
+    "thesis": "A deleveraging PBM and employer-health franchise with ROIC of 12.6% and an 11.58% FCF yield trades below its own 5-year minimum P/E and EV/EBITDA, where the price implies a revenue decline that raised 2026 guidance does not show.",
+    "reason": "Same evidence as the last review plus fresh sector policy risk: cheap on every own-history multiple with strong cash conversion, but thin margins, 2027 rebate and GLP-1 headwinds and the CMS audit proposal keep it below the buy bar. Held at the conviction-3 size it was already trimmed to.",
+    "research_note": "research/CI/2026-11-23.md",
+    "triggers": [
+      {"text": "TTM ROIC falls below 10%, giving up most of the five-year improvement from 8.8% to 12.6%.", "check": {"source": "statistics", "field": "roic", "op": "<", "value": 10}},
+      {"text": "TTM operating margin falls below 3.5%, under the FY2025 five-year low of 3.7%, showing rebate reform or medical cost pressure is compressing profitability structurally.", "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 3.5}},
+      {"text": "TTM FCF margin falls below 2.0%, well under the current 2.9%, signalling cash generation and buyback capacity are deteriorating.", "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 2.0}},
+      {"text": "Net debt/EBITDA rises above 2.5x (1.87x TTM now), reversing the deleveraging.", "check": {"source": "statistics", "field": "debtEbitda", "op": ">", "value": 2.5}}
+    ]
+  }
+]
