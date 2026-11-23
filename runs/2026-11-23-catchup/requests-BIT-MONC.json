@@ -1,0 +1,31 @@
+[
+ {
+  "ticker": "BIT:MONC",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "A 78%-gross-margin, near net-cash outerwear brand with flat margins and rising FCF trades below its own 5-year minimum on every multiple, pricing only 3.1% growth after a tourism-driven flat quarter.",
+  "reason": "Scorecard conviction 4: top-tier margins, near net-cash balance sheet and every multiple below its 5-year minimum, with the fall explained by a tourism and weather soft patch rather than margin damage. Python sizes it; cash is at the floor, so it replaces JKHY, a conviction-3 holding.",
+  "research_note": "research/BIT-MONC/2026-11-23.md",
+  "triggers": [
+   {
+    "text": "TTM gross margin falls below 75%, under the FY2021-25 range, signalling loss of brand pricing power.",
+    "check": {"source": "statistics", "field": "grossMargin", "op": "<", "value": 75}
+   },
+   {
+    "text": "TTM operating margin falls below 26%, under every year since FY2021, showing flat sales are deleveraging the cost base structurally.",
+    "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 26}
+   },
+   {
+    "text": "TTM ROIC falls below 14%, extending the slide from 21.0% to 18.4% into clear moat erosion.",
+    "check": {"source": "statistics", "field": "roic", "op": "<", "value": 14}
+   },
+   {
+    "text": "TTM FCF margin falls below 18%, under the FY2022 five-year low of 18.9%, showing inventory or working-capital stress from a weak season.",
+    "check": {"source": "statistics", "field": "fcfMargin", "op": "<", "value": 18}
+   }
+  ],
+  "replaces": "JKHY",
+  "replacement_reason": "Cash is at the 1.5% floor, so the buy needs funding; JKHY is held at conviction 3 and its price already implies growth above the company's framework, while Moncler scores conviction 4 at multiples below its own 5-year minimum."
+ }
+]

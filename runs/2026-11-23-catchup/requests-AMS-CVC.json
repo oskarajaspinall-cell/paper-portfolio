@@ -1,0 +1,31 @@
+[
+ {
+  "ticker": "AMS:CVC",
+  "action": "BUY",
+  "position_type": "CORE",
+  "conviction": 4,
+  "thesis": "A high-return, deleveraging private-markets manager with recurring fees trades below its own 5-year minimum EV/EBITDA and P/FCF and well below peers on P/E, where the price implies modest growth.",
+  "reason": "The fall is market and credit driven, not a broken business: last-12-month margins rose, leverage fell and multiples sit below their own 5-year lows. Scorecard conviction 4, standard core size set by Python; cash is at the floor, so it replaces CI, a below-bar conviction-3 holding.",
+  "research_note": "research/AMS-CVC/2026-11-23.md",
+  "triggers": [
+   {
+    "text": "TTM ROIC falls below 20%, well under the 30.4% now, showing fee and carry economics have weakened structurally.",
+    "check": {"source": "statistics", "field": "roic", "op": "<", "value": 20}
+   },
+   {
+    "text": "TTM operating margin falls below 42%, under the FY2023 level of 47.7%, showing fee-related earnings compression rather than carry timing.",
+    "check": {"source": "statistics", "field": "operatingMargin", "op": "<", "value": 42}
+   },
+   {
+    "text": "Net debt/EBITDA rises above 2.0x from 1.15x, reversing the deleveraging.",
+    "check": {"source": "statistics", "field": "debtEbitda", "op": ">", "value": 2.0}
+   },
+   {
+    "text": "Shares change YoY exceeds 5%, showing dilution.",
+    "check": {"source": "statistics", "field": "sharesgrowthyoy", "op": ">", "value": 5}
+   }
+  ],
+  "replaces": "CI",
+  "replacement_reason": "Cash is at the 1.5% floor, so the buy needs funding; CI is held at conviction 3, below the buy bar, while CVC scores 4 with higher returns, lower leverage and multiples below their own 5-year minimums."
+ }
+]

@@ -1,0 +1,109 @@
+{
+ "industry": {
+  "industry": "Asset Management",
+  "known": true,
+  "best": "DCF based on AUM/fees",
+  "second": "P/E",
+  "best_models": [
+   "dcf"
+  ],
+  "second_models": [
+   "pe"
+  ],
+  "stockanalysis": "Both"
+ },
+ "methods": [
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": 445.261778415036,
+    "base": 658.2997283604383,
+    "bull": 943.7906062905827
+   },
+   "implied_growth": -0.0184753574436734,
+   "discount_rate": 0.1043865,
+   "cost_of_equity": 0.1043865,
+   "assumptions": {
+    "cash_flow": "net income (cash flow distorted by float / balance-sheet flows)",
+    "growth": {
+     "bear": 0.027581688550373754,
+     "base": 0.05923342982239442,
+     "bull": 0.09677034218883018
+    },
+    "cash_flow_margin": {
+     "bear": 0.15879721669980118,
+     "base": 0.20668421313999105,
+     "bull": 0.2552095003360968
+    },
+    "cagr_3y": 0.09677034218883018,
+    "cagr_5y": 0.09016337710074751,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "pe",
+   "label": "P/E",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 294.799032,
+    "base": 381.585384,
+    "bull": 667.9735084819999
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 9.878,
+     "base": 12.786,
+     "bull": 15.038
+    },
+    "ttm_eps": 44.419039,
+    "peak_earnings": "TTM EPS is 1.6x its 5y median: bear/base use the 5y average (29.84), bull the TTM figure"
+   }
+  }
+ ],
+ "price": 480.29,
+ "risk_free": 0.0504,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 395.1075296100241,
+  "base": 566.0616135736256,
+  "bull": 851.8515736877217
+ },
+ "used": [
+  "dcf",
+  "pe"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -0.17735632719810102,
+  "base": 0.17858296773537963,
+  "bull": 0.7736192169058729
+ },
+ "implied_growth": -0.0184753574436734,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "AMP",
+ "asof": "2026-11-23",
+ "quote_currency": "USD",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-20",
+ "sources": {
+  "income": "https://stockanalysis.com/stocks/amp/financials/income-statement/",
+  "balance": "https://stockanalysis.com/stocks/amp/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/stocks/amp/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/stocks/amp/financials/ratios/",
+  "statistics": "https://stockanalysis.com/stocks/amp/statistics/"
+ }
+}
