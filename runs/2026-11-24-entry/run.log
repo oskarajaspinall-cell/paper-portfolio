@@ -1,0 +1,98 @@
+[15:30:29] == re-research EPA:VK (dip radar)
+[15:30:29] == re-research EPA:DSY (dip radar)
+[15:30:29] == re-research OSL:EQNR (dip radar)
+[15:30:29] $ bin/py scripts/sec_delta.py EPA:VK --asof 2026-11-24
+[15:30:29] $ bin/py scripts/sec_delta.py EPA:DSY --asof 2026-11-24
+[15:30:29] $ bin/py scripts/sec_delta.py OSL:EQNR --asof 2026-11-24
+[15:30:29] SKIP EPA:VK: not a US listing (SEC filers only)
+[15:30:29] SKIP EPA:DSY: not a US listing (SEC filers only)
+[15:30:29] SKIP OSL:EQNR: not a US listing (SEC filers only)
+[15:30:29] $ claude -p Ticker EPA:VK, note type CORE, date 2026-11-24. Reason for review: dip. Facts: detail: Dip radar: the close 14.81 (2026-11-23) is -21.7% over the 11 sessions since our last research (2026-11-08) vs the S&P 500 -1.8% (beta -0.47); the stock-specific part is -22.5% (-2.95 standard deviations); -21.7% since o. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:29] $ claude -p Ticker EPA:DSY, note type CORE, date 2026-11-24. Reason for review: dip. Facts: detail: Dip radar: the close 22.14 (2026-11-23) is -13.7% over the 5 sessions since our last research (2026-11-16) vs the S&P 500 -2.4% (beta 0.0); the stock-specific part is -13.7% (-2.55 standard deviations); -14.8% since our . --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:30:29] $ claude -p Ticker OSL:EQNR, note type CORE, date 2026-11-24. Reason for review: dip. Facts: detail: Dip radar: the close 380.5 (2026-11-23) is -6.7% over the 6 sessions since our last research (2026-11-15) vs the S&P 500 -4.2% (beta -1.1); the stock-specific part is -11.3% (-2.36 standard deviations); -6.7% since our A. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:34:38] Note: research/EPA-DSY/2026-11-24.md
+Fact sheet: research/EPA-DSY/factsheet-2026-11-24.md
+check_docs: OK research/EPA-DSY/2026-11-24.md type=CORE 1=62 2=88 3=145 4=43 5=49 6=47 total=434
+
+Blocked URL: https://www.3ds.com/newsroom/press-releases was not on the allowlist. The note therefore marks the regional revenue mix [data unavailable].
+
+Data conflicts: none.
+[15:34:38] $ bin/py scripts/check_docs.py note research/EPA-DSY/2026-11-24.md
+[15:34:38] OK research/EPA-DSY/2026-11-24.md type=CORE 1=62 2=88 3=145 4=43 5=49 6=47 total=434
+[15:34:38] $ bin/py scripts/macro_data.py --asof 2026-11-24
+[15:34:41] The fact sheet script for OSL:EQNR is still running in the background. It fetches one page every 3 seconds, and peer pages add to that. It has produced no output and no `factsheet-2026-11-24` file yet.
+
+Nothing is written so far. I'm waiting for the script to finish, since the fact sheet is the only source of numbers for the note. Once it does, I'll read it and the headlines. I'll then write `research/OSL-EQNR/2026-11-24.md` and run `check_docs.py note` on it.
+
+The peers are LON:SHEL, LON:BP, EPA:TTE and XOM. If the script exits non-zero, I'll return its error verbatim.
+
+Note: research/OSL-EQNR/2026-11-24.md
+Fact sheet: research/OSL-EQNR/factsheet-2026-11-24.md
+Check: OK research/OSL-EQNR/2026-11-24.md type=CORE 1=63 2=88 3=115 4=43 5=53 6=63 total=425
+
+Data conflicts and blocked URLs:
+- No data conflicts and no blocked URLs. I made no WebFetch calls and used only headline URLs listed in the fact sheet.
+- Section 1 has no country revenue split, because I didn't fetch a company source. It is marked [data unavailable].
+- The fact sheet's "next earnings date" (Oct 28, 2026) is already past, so the site data is stale. The note flags this.
+- The fact sheet marks the DCF fair value as unreliable (base +102.9%), and the note says so.
+[15:34:41] $ bin/py scripts/check_docs.py note research/OSL-EQNR/2026-11-24.md
+[15:34:41] OK research/OSL-EQNR/2026-11-24.md type=CORE 1=63 2=88 3=115 4=43 5=53 6=63 total=425
+[15:34:41] $ bin/py scripts/macro_data.py --asof 2026-11-24
+[15:34:51] - Note: `research/EPA-VK/2026-11-24.md`
+- Fact sheet: `research/EPA-VK/factsheet-2026-11-24.md`
+- Check: `OK research/EPA-VK/2026-11-24.md type=CORE 1=75 2=135 3=128 4=33 5=75 6=112 total=558`
+- Blocked URL: `https://www.vallourec.com/en/investors` is not on the allowlist, so I read no primary source for the revenue split by region. Section 1 says `[data unavailable]` for it.
+- Data gap: I used no figures from the Q3 call transcript, because stockanalysis.com transcripts aren't a primary source. Section 6 flags the dividend ex-date as `[Guessing]` and not verified.
+- Peers: I chose TS, NOV and OII.
+[15:34:51] $ bin/py scripts/check_docs.py note research/EPA-VK/2026-11-24.md
+[15:34:51] OK research/EPA-VK/2026-11-24.md type=CORE 1=75 2=135 3=128 4=33 5=75 6=112 total=558
+[15:34:51] $ bin/py scripts/macro_data.py --asof 2026-11-24
+[15:37:32] {"out": "reports/macro/2026-11-24.md", "series": 20, "unavailable": []}
+[15:37:32] $ claude -p Ticker EPA:DSY, date 2026-11-24. Research: research/EPA-DSY/factsheet-2026-11-24.md, research/EPA-DSY/2026-11-24.md. Macro snapshot: reports/macro/2026-11-24.md. Write research/EPA-DSY/2026-11-24-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:36] {"out": "reports/macro/2026-11-24.md", "series": 20, "unavailable": []}
+[15:37:36] $ claude -p Ticker EPA:VK, date 2026-11-24. Research: research/EPA-VK/factsheet-2026-11-24.md, research/EPA-VK/2026-11-24.md. Macro snapshot: reports/macro/2026-11-24.md. Write research/EPA-VK/2026-11-24-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:40] {"out": "reports/macro/2026-11-24.md", "series": 20, "unavailable": []}
+[15:37:40] $ claude -p Ticker OSL:EQNR, date 2026-11-24. Research: research/OSL-EQNR/factsheet-2026-11-24.md, research/OSL-EQNR/2026-11-24.md. Macro snapshot: reports/macro/2026-11-24.md. Write research/OSL-EQNR/2026-11-24-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:52] research/EPA-DSY/2026-11-24-macro.md
+OK research/EPA-DSY/2026-11-24-macro.md macro_weight=context words=111
+[15:37:52] $ bin/py scripts/check_docs.py macro research/EPA-DSY/2026-11-24-macro.md
+[15:37:52] OK research/EPA-DSY/2026-11-24-macro.md macro_weight=context words=111
+[15:37:52] $ claude -p Evaluate EPA:DSY for 2026-11-24: fact sheet research/EPA-DSY/factsheet-2026-11-24.md, note research/EPA-DSY/2026-11-24.md, state portfolio/state.json, macro overlay research/EPA-DSY/2026-11-24-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 22.14 (2026-11-23) is -13.7% over the 5 sessions since our last research (2026-11-16) vs the S&P 500 -2.4% (beta 0.0); the stock-specific part is -13.7% (-2.55 standard deviations); -14.8% since our . --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:59] research/EPA-VK/2026-11-24-macro.md
+OK research/EPA-VK/2026-11-24-macro.md macro_weight=context words=86
+[15:37:59] $ bin/py scripts/check_docs.py macro research/EPA-VK/2026-11-24-macro.md
+[15:37:59] OK research/EPA-VK/2026-11-24-macro.md macro_weight=context words=86
+[15:37:59] $ claude -p Evaluate EPA:VK for 2026-11-24: fact sheet research/EPA-VK/factsheet-2026-11-24.md, note research/EPA-VK/2026-11-24.md, state portfolio/state.json, macro overlay research/EPA-VK/2026-11-24-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 14.81 (2026-11-23) is -21.7% over the 11 sessions since our last research (2026-11-08) vs the S&P 500 -1.8% (beta -0.47); the stock-specific part is -22.5% (-2.95 standard deviations); -21.7% since o. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:37:59] research/OSL-EQNR/2026-11-24-macro.md
+OK research/OSL-EQNR/2026-11-24-macro.md macro_weight=context words=53
+[15:37:59] $ bin/py scripts/check_docs.py macro research/OSL-EQNR/2026-11-24-macro.md
+[15:37:59] OK research/OSL-EQNR/2026-11-24-macro.md macro_weight=context words=53
+[15:37:59] $ claude -p Evaluate OSL:EQNR for 2026-11-24: fact sheet research/OSL-EQNR/factsheet-2026-11-24.md, note research/OSL-EQNR/2026-11-24.md, state portfolio/state.json, macro overlay research/OSL-EQNR/2026-11-24-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 380.5 (2026-11-23) is -6.7% over the 6 sessions since our last research (2026-11-15) vs the S&P 500 -4.2% (beta -1.1); the stock-specific part is -11.3% (-2.36 standard deviations); -6.7% since our A. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[15:38:47] research/EPA-DSY/2026-11-24-evaluation.md
+OK research/EPA-DSY/2026-11-24-evaluation.md Bear case=149 Bull case=114 decision=AVOID scorecard=8->3
+[15:38:47] $ bin/py scripts/check_docs.py eval research/EPA-DSY/2026-11-24-evaluation.md
+[15:38:47] OK research/EPA-DSY/2026-11-24-evaluation.md Bear case=149 Bull case=114 decision=AVOID scorecard=8->3
+[15:38:47] $ bin/py scripts/valuation.py EPA:DSY --asof 2026-11-24 --eval research/EPA-DSY/2026-11-24-evaluation.md
+[15:38:47] {"out": "research/EPA-DSY/2026-11-24-valuation.md", "used": ["dcf", "ev_revenue"], "fair_value": {"bear": 16.83, "base": 25.41, "bull": 32.54}, "price": 22.14}
+[15:38:48] == EPA:DSY: AVOID 3
+[15:39:02] research/OSL-EQNR/2026-11-24-evaluation.md
+OK research/OSL-EQNR/2026-11-24-evaluation.md Bear case=146 Bull case=122 decision=AVOID scorecard=6->3
+
+The verdict is AVOID at conviction 3, the same as on 2026-11-15, so no new-evidence field was needed. I didn't open the 11-15 evaluation; I took that verdict from the dip-hit entry in `portfolio/state.json`. The fact sheet's next earnings date (Oct 28) is out of date.
+[15:39:02] $ bin/py scripts/check_docs.py eval research/OSL-EQNR/2026-11-24-evaluation.md
+[15:39:02] OK research/OSL-EQNR/2026-11-24-evaluation.md Bear case=146 Bull case=122 decision=AVOID scorecard=6->3
+[15:39:02] $ bin/py scripts/valuation.py OSL:EQNR --asof 2026-11-24 --eval research/OSL-EQNR/2026-11-24-evaluation.md
+[15:39:02] {"out": "research/OSL-EQNR/2026-11-24-valuation.md", "used": ["dcf"], "fair_value": {"bear": 320.92, "base": 771.87, "bull": 2400.83}, "price": 380.5}
+[15:39:02] == OSL:EQNR: AVOID 3
+[15:39:05] research/EPA-VK/2026-11-24-evaluation.md
+OK research/EPA-VK/2026-11-24-evaluation.md Bear case=147 Bull case=107 decision=AVOID scorecard=6->3
+
+The decision is AVOID at conviction 3, the same verdict as on 2026-11-08. Three things to know:
+- **No entry price.** The entry price is null because a lower price can't reach conviction 4: full valuation points still leave the score short of the buy line.
+- **Debt trigger is text-only.** The site's debt/EBITDA figure is already 1.29, so the net-debt trigger can't use an automatic check; the weekly reviewer has to test it by hand.
+- **Ex-dividend date not checked.** The note says part of the fall may come from a dividend going ex, but it did not confirm the ex-date.
+[15:39:05] $ bin/py scripts/check_docs.py eval research/EPA-VK/2026-11-24-evaluation.md
+[15:39:05] OK research/EPA-VK/2026-11-24-evaluation.md Bear case=147 Bull case=107 decision=AVOID scorecard=6->3
+[15:39:05] $ bin/py scripts/valuation.py EPA:VK --asof 2026-11-24 --eval research/EPA-VK/2026-11-24-evaluation.md
+[15:39:05] {"out": "research/EPA-VK/2026-11-24-valuation.md", "used": ["dcf_norm", "ev_ebitda"], "fair_value": {"bear": -3.82, "base": 18.91, "bull": 31.1}, "price": 14.81}
+[15:39:06] == EPA:VK: AVOID 3

@@ -1,0 +1,108 @@
+{
+ "industry": {
+  "industry": "Steel",
+  "known": true,
+  "best": "Normalized DCF",
+  "second": "EV/EBITDA",
+  "best_models": [
+   "dcf_norm"
+  ],
+  "second_models": [
+   "ev_ebitda"
+  ],
+  "stockanalysis": "DCF"
+ },
+ "methods": [
+  {
+   "model": "dcf_norm",
+   "label": "through-cycle DCF",
+   "slot": "best",
+   "status": "ok",
+   "values": {
+    "bear": -10.83782891255272,
+    "base": 20.695158812931965,
+    "bull": 37.21500936452562
+   },
+   "implied_growth": -0.06683509259615278,
+   "discount_rate": 0.08364988259740831,
+   "cost_of_equity": 0.0892,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.04257158095499784,
+     "base": 0.008430634363529522,
+     "bull": 0.033865699364113766
+    },
+    "cash_flow_margin": {
+     "bear": -0.05225256124464438,
+     "base": 0.08565803073983762,
+     "bull": 0.13690635723139613
+    },
+    "cagr_3y": -0.05014316190999568,
+    "cagr_5y": 0.033865699364113766,
+    "terminal_growth": 0.025
+   }
+  },
+  {
+   "model": "ev_ebitda",
+   "label": "EV/EBITDA",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 10.201944228867841,
+    "base": 15.327802075242646,
+    "bull": 18.879770475359
+   },
+   "assumptions": {
+    "multiple": {
+     "bear": 3.486,
+     "base": 5.16,
+     "bull": 6.32
+    },
+    "ttm_ebitda": 816832777
+   }
+  }
+ ],
+ "price": 14.81,
+ "risk_free": 0.0492,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": -3.824571198745866,
+  "base": 18.906039900368857,
+  "bull": 31.103263068136744
+ },
+ "used": [
+  "dcf_norm",
+  "ev_ebitda"
+ ],
+ "weights": [
+  2,
+  1
+ ],
+ "upside": {
+  "bear": -1.258242484722881,
+  "base": 0.2765725793631908,
+  "bull": 1.1001528067614275
+ },
+ "implied_growth": -0.06683509259615278,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "EPA:VK",
+ "asof": "2026-11-24",
+ "quote_currency": "EUR",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 0.91135,
+ "price_date": "2026-11-23",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/epa/VK/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/epa/VK/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/epa/VK/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/epa/VK/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/epa/VK/statistics/"
+ }
+}

@@ -1,0 +1,104 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Integrated",
+  "known": true,
+  "best": "SOTP / NAV",
+  "second": "DCF",
+  "best_models": [
+   "sotp",
+   "nav"
+  ],
+  "second_models": [
+   "dcf"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "sotp",
+   "label": "sum of the parts",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs segment-level profits, not on stockanalysis.com]"
+  },
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 320.9234895555221,
+    "base": 771.8650978265534,
+    "bull": 2400.8281931859674
+   },
+   "implied_growth": -0.15498044453966348,
+   "discount_rate": 0.0752937265452603,
+   "cost_of_equity": 0.0892,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.07139452002408907,
+     "base": -0.004592761630553482,
+     "bull": 0.0394179935259642
+    },
+    "cash_flow_margin": {
+     "bear": 0.053861926900253244,
+     "base": 0.09264505855422486,
+     "bull": 0.2335818673137374
+    },
+    "cagr_3y": -0.10778904004817813,
+    "cagr_5y": 0.0394179935259642,
+    "terminal_growth": 0.025
+   }
+  }
+ ],
+ "price": 380.5,
+ "risk_free": 0.0492,
+ "country_risk_premium": 0.0,
+ "reporting_currency": "USD",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 320.9234895555221,
+  "base": 771.8650978265534,
+  "bull": 2400.8281931859674
+ },
+ "used": [
+  "dcf"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.15657427186459372,
+  "base": 1.0285547906085504,
+  "bull": 5.309666736362595
+ },
+ "implied_growth": -0.15498044453966348,
+ "reliability": {
+  "reliable": false,
+  "reasons": [
+   "base +103% from the price (outside -80% to +100%)"
+  ]
+ },
+ "ticker": "OSL:EQNR",
+ "asof": "2026-11-24",
+ "quote_currency": "NOK",
+ "financials_currency": "USD",
+ "fx_fin_to_quote": 9.76121,
+ "price_date": "2026-11-23",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/osl/EQNR/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/osl/EQNR/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/osl/EQNR/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/osl/EQNR/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/osl/EQNR/statistics/"
+ }
+}
