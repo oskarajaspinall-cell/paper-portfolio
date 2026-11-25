@@ -1,0 +1,99 @@
+== start Wed Nov 25 21:30:01 GMT 2026
+{
+ "applied": [],
+ "rejected": [],
+ "still_pending": [],
+ "expired": []
+}
+== 21:30:01 corporate_actions.py
+{
+ "dry_run": false,
+ "applied": [],
+ "receivables": [
+  {
+   "ticker": "ZTS",
+   "ex_date": "2026-10-30",
+   "pay_date": "2026-12-01",
+   "net_usd": 44.15
+  },
+  {
+   "ticker": "OTIS",
+   "ex_date": "2026-11-13",
+   "pay_date": "2026-12-11",
+   "net_usd": 26.18
+  }
+ ],
+ "upcoming": [
+  {
+   "ticker": "CI",
+   "ex_date": "2026-12-03",
+   "pay_date": "2026-12-17",
+   "amount": 1.56,
+   "currency": "USD"
+  },
+  {
+   "ticker": "HKG:9999",
+   "ex_date": "2026-12-02",
+   "pay_date": "2026-12-14",
+   "amount": 0.91704,
+   "currency": "HKD"
+  },
+  {
+   "ticker": "INTU",
+   "ex_date": "2027-01-08",
+   "pay_date": "2027-01-15",
+   "amount": 1.38,
+   "currency": "USD"
+  },
+  {
+   "ticker": "LDOS",
+   "ex_date": "2026-12-15",
+   "pay_date": "2026-12-31",
+   "amount": 0.45,
+   "currency": "USD"
+  },
+  {
+   "ticker": "TYO:2875",
+   "ex_date": "2027-03-30",
+   "pay_date": "2027-06-28",
+   "amount": 140.0,
+   "currency": "JPY"
+  }
+ ],
+ "notes": [
+  "RELY: dividend page not read, retried next run (https://stockanalysis.com/stocks/rely/dividend/ :: field 'http' :: status 404)"
+ ]
+}
+== 21:31:43 portfolio.py
+{"total": 105178.16, "cash": 2582.35, "core": 102525.48, "tactical": 0, "receivable": 70.33, "sectors": {"Financials": 10698.13, "Healthcare": 26257.84, "Consumer Discretionary": 16058.990000000002, "Technology": 34868.1, "Communication Services": 5943.09, "Consumer Staples": 8699.33}, "n": 14}
+== 21:32:44 entry_watch.py
+{"watching": 214, "hits": ["EPA:MC", "TADAWUL:4190"], "close_to_entry": ["TADAWUL:4190", "EPA:MC", "EPA:DSY", "INTU", "SHA:601336", "HKG:0966", "AMS:WKL", "SHA:600030", "UMBF", "BVMF:ABEV3", "TADAWUL:7203", "EPA:RMS", "JSE:VAL", "JSE:SLM", "HAL", "EPA:GTT", "HKG:0322", "LON:RMV", "TEL", "LDOS", "LON:AUTO", "GD", "ATAT", "HKG:6862", "BMV:OMA.B", "R", "INVH", "HLNE", "CPT", "LON:ICG", "HRB", "SHA:600233", "SHE:002001", "AMS:SBMO"], "entered": ["LON:AUTO", "LON:ICG"]}
+{"asof": "2026-11-26", "spy_close": 716.7, "close_date": "2026-11-25", "high_52w": 779.09, "drawdown_pct": 8.01, "multiplier": 1.0, "weekly_regime": "risk_on", "reserve_pct": 13.0}
+{"asof": "2026-11-26", "watched": 487, "signals": 3, "queued": ["VIE:OMV", "HKG:2883", "BIT:UCG"], "no_data": 0}
+{
+ "resubmitted": [],
+ "started": [],
+ "topped_up": [],
+ "dropped": [],
+ "waiting": [],
+ "added_topups": [],
+ "cash_telemetry": {
+  "date": "2026-11-25",
+  "cash_pct": 2.46,
+  "available_cash_pct": 0.96,
+  "open_core_topup_reserve_pct": 0,
+  "available_tactical_cap_pct": 0.96,
+  "starters_waiting": 0,
+  "starters_blocked_by_cap": 0,
+  "regime_stress": 26.4
+ }
+}
+{"auto_swaps": []}
+OK reports/attribution/2026-11-26.md excess=0.11447717124458756
+OK reports/risk/2026-11-26.md sigma_p=19.689577749904643
+== 21:45:34 decision_log.py
+{"rows": 889, "notes": []}
+{"rows": 9, "notes": []}
+== 21:46:51 shadow_shorts.py
+{"candidates": 16, "qualify": [], "opened": [], "closed": [], "open": []}
+summary: $105,178 (+1.07%) · 0 trade(s) · cash 2% vs 1.5% reserve · entry hit AMS:WKL, EPA:MC, TADAWUL:4190 · dip VIE:OMV, HKG:2883, BIT:UCG
