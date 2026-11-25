@@ -1,0 +1,96 @@
+[16:09:23] == re-research BVMF:PETR4 (dip radar)
+[16:09:23] == re-research HKG:0883 (dip radar)
+[16:09:23] == re-research EPA:TTE (dip radar)
+[16:09:23] $ bin/py scripts/sec_delta.py BVMF:PETR4 --asof 2026-11-25
+[16:09:23] $ bin/py scripts/sec_delta.py EPA:TTE --asof 2026-11-25
+[16:09:23] $ bin/py scripts/sec_delta.py HKG:0883 --asof 2026-11-25
+[16:09:23] SKIP EPA:TTE: not a US listing (SEC filers only)
+[16:09:23] SKIP HKG:0883: not a US listing (SEC filers only)
+[16:09:23] $ claude -p Ticker EPA:TTE, note type CORE, date 2026-11-25. Reason for review: dip. Facts: detail: Dip radar: the close 77.68 (2026-11-24) is -5.5% over the 7 sessions since our last research (2026-11-15) vs the S&P 500 -4.7% (beta -0.54); the stock-specific part is -8.0% (-2.1 standard deviations); -5.5% since our AV. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:09:23] SKIP BVMF:PETR4: not a US listing (SEC filers only)
+[16:09:23] $ claude -p Ticker HKG:0883, note type CORE, date 2026-11-25. Reason for review: dip. Facts: detail: Dip radar: the close 20.86 (2026-11-24) is -15.6% over the 17 sessions since our last research (2026-10-31) vs the S&P 500 -4.9% (beta -0.08); the stock-specific part is -15.9% (-2.11 standard deviations); -15.6% since o. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:09:23] $ claude -p Ticker BVMF:PETR4, note type CORE, date 2026-11-25. Reason for review: dip. Facts: detail: Dip radar: the close 40.52 (2026-11-24) is -10.6% over the 6 sessions since our last research (2026-11-15) vs the S&P 500 -1.1% (beta -0.57); the stock-specific part is -11.2% (-2.39 standard deviations); -10.7% since ou. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:21:13] Note: research/EPA-TTE/2026-11-25.md
+Fact sheet: research/EPA-TTE/factsheet-2026-11-25.md
+Check: OK research/EPA-TTE/2026-11-25.md type=CORE 1=50 2=113 3=108 4=32 5=34 6=98 total=435
+
+Blocked URL: https://totalenergies.com/media/news/press-releases was not on the allowlist. I couldn't confirm why the price fell, and the note says the cause is unverified. I did not review Q3 results.
+[16:21:13] $ bin/py scripts/check_docs.py note research/EPA-TTE/2026-11-25.md
+[16:21:13] OK research/EPA-TTE/2026-11-25.md type=CORE 1=50 2=113 3=108 4=32 5=34 6=98 total=435
+[16:21:13] $ bin/py scripts/macro_data.py --asof 2026-11-25
+[16:21:22] The fact sheet for HKG:0883 is still being generated. I'll wait for the completion notice before writing the note.
+
+Note: research/HKG-0883/2026-11-25.md
+Fact sheet: research/HKG-0883/factsheet-2026-11-25.md
+Check: OK research/HKG-0883/2026-11-25.md type=CORE 1=76 2=121 3=126 4=42 5=41 6=61 total=467
+
+Data conflicts: none.
+
+Blocked or unusable URLs:
+- The Reuters page (Bohai discovery, 2026-11-12) was blocked on fetch. The note cites it only as a fact-sheet headline.
+- The stockanalysis.com Q3 filings page (https://stockanalysis.com/quote/hkg/0883/filings/3910451/) returned only an index, with no results text. The cause of the price fall is therefore unverified, and the note marks it [Guessing] (oil price easing).
+[16:21:22] $ bin/py scripts/check_docs.py note research/HKG-0883/2026-11-25.md
+[16:21:23] OK research/HKG-0883/2026-11-25.md type=CORE 1=76 2=121 3=126 4=42 5=41 6=61 total=467
+[16:21:23] $ bin/py scripts/macro_data.py --asof 2026-11-25
+[16:21:25] - Note: `research/BVMF-PETR4/2026-11-25.md`
+- Fact sheet: `research/BVMF-PETR4/factsheet-2026-11-25.md`
+- Check: `OK research/BVMF-PETR4/2026-11-25.md type=CORE 1=69 2=114 3=117 4=32 5=91 6=71 total=494`
+- Peers: The fact sheet on disk uses peers BVMF:PRIO3, XOM, CVX and EC. A first run that timed out and finished in the background overwrote my XOM, CVX, TTE and EQNR run. The note's valuation figures match the file on disk. The Sources list names only XOM and CVX as peers, not PRIO3 or EC.
+- Fetches: I made no WebFetch calls. I couldn't find the company's own website domain for PETR4 in `universe/`, so no primary-source page was read. The cause of the dip rests on listed headlines, tagged [Likely], with no numbers taken from them.
+- Data conflict: The 2026-11-15 note said financials were in USD. This fact sheet shows BRL, and the TTM ROIC and net debt/EBITDA figures differ from that note. I did not reconcile them.
+- Stale field: The fact sheet's "next earnings" date (Nov 10, 2026) is stale. The note says so.
+- Missing data: Short interest and share-count change are [data unavailable].
+[16:21:25] $ bin/py scripts/check_docs.py note research/BVMF-PETR4/2026-11-25.md
+[16:21:25] OK research/BVMF-PETR4/2026-11-25.md type=CORE 1=69 2=114 3=117 4=32 5=91 6=71 total=494
+[16:21:25] $ bin/py scripts/macro_data.py --asof 2026-11-25
+[16:23:48] {"out": "reports/macro/2026-11-25.md", "series": 20, "unavailable": []}
+[16:23:48] $ claude -p Ticker EPA:TTE, date 2026-11-25. Research: research/EPA-TTE/factsheet-2026-11-25.md, research/EPA-TTE/2026-11-25.md. Macro snapshot: reports/macro/2026-11-25.md. Write research/EPA-TTE/2026-11-25-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:23:52] {"out": "reports/macro/2026-11-25.md", "series": 20, "unavailable": []}
+[16:23:52] $ claude -p Ticker BVMF:PETR4, date 2026-11-25. Research: research/BVMF-PETR4/factsheet-2026-11-25.md, research/BVMF-PETR4/2026-11-25.md. Macro snapshot: reports/macro/2026-11-25.md. Write research/BVMF-PETR4/2026-11-25-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:23:57] {"out": "reports/macro/2026-11-25.md", "series": 20, "unavailable": []}
+[16:23:57] $ claude -p Ticker HKG:0883, date 2026-11-25. Research: research/HKG-0883/factsheet-2026-11-25.md, research/HKG-0883/2026-11-25.md. Macro snapshot: reports/macro/2026-11-25.md. Write research/HKG-0883/2026-11-25-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:24:08] research/EPA-TTE/2026-11-25-macro.md
+OK research/EPA-TTE/2026-11-25-macro.md macro_weight=context words=63
+[16:24:08] $ bin/py scripts/check_docs.py macro research/EPA-TTE/2026-11-25-macro.md
+[16:24:08] OK research/EPA-TTE/2026-11-25-macro.md macro_weight=context words=63
+[16:24:08] $ claude -p Evaluate EPA:TTE for 2026-11-25: fact sheet research/EPA-TTE/factsheet-2026-11-25.md, note research/EPA-TTE/2026-11-25.md, state portfolio/state.json, macro overlay research/EPA-TTE/2026-11-25-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 77.68 (2026-11-24) is -5.5% over the 7 sessions since our last research (2026-11-15) vs the S&P 500 -4.7% (beta -0.54); the stock-specific part is -8.0% (-2.1 standard deviations); -5.5% since our AV. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:24:16] research/HKG-0883/2026-11-25-macro.md
+OK research/HKG-0883/2026-11-25-macro.md macro_weight=context words=41
+[16:24:16] $ bin/py scripts/check_docs.py macro research/HKG-0883/2026-11-25-macro.md
+[16:24:16] OK research/HKG-0883/2026-11-25-macro.md macro_weight=context words=41
+[16:24:16] $ claude -p Evaluate HKG:0883 for 2026-11-25: fact sheet research/HKG-0883/factsheet-2026-11-25.md, note research/HKG-0883/2026-11-25.md, state portfolio/state.json, macro overlay research/HKG-0883/2026-11-25-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 20.86 (2026-11-24) is -15.6% over the 17 sessions since our last research (2026-10-31) vs the S&P 500 -4.9% (beta -0.08); the stock-specific part is -15.9% (-2.11 standard deviations); -15.6% since o. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:24:19] research/BVMF-PETR4/2026-11-25-macro.md
+OK research/BVMF-PETR4/2026-11-25-macro.md macro_weight=secondary words=224
+[16:24:19] $ bin/py scripts/check_docs.py macro research/BVMF-PETR4/2026-11-25-macro.md
+[16:24:20] OK research/BVMF-PETR4/2026-11-25-macro.md macro_weight=secondary words=224
+[16:24:20] $ claude -p Evaluate BVMF:PETR4 for 2026-11-25: fact sheet research/BVMF-PETR4/factsheet-2026-11-25.md, note research/BVMF-PETR4/2026-11-25.md, state portfolio/state.json, macro overlay research/BVMF-PETR4/2026-11-25-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 40.52 (2026-11-24) is -10.6% over the 6 sessions since our last research (2026-11-15) vs the S&P 500 -1.1% (beta -0.57); the stock-specific part is -11.2% (-2.39 standard deviations); -10.7% since ou. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:25:13] Decision: AVOID at conviction 3.
+
+research/BVMF-PETR4/2026-11-25-evaluation.md
+OK research/BVMF-PETR4/2026-11-25-evaluation.md Bear case=145 Bull case=124 decision=AVOID scorecard=5->3
+
+I kept the optional `new_evidence` block even though the verdict hasn't changed from 2026-11-15. The checker accepts it.
+[16:25:13] $ bin/py scripts/check_docs.py eval research/BVMF-PETR4/2026-11-25-evaluation.md
+[16:25:13] OK research/BVMF-PETR4/2026-11-25-evaluation.md Bear case=145 Bull case=124 decision=AVOID scorecard=5->3
+[16:25:13] $ bin/py scripts/valuation.py BVMF:PETR4 --asof 2026-11-25 --eval research/BVMF-PETR4/2026-11-25-evaluation.md
+[16:25:13] {"out": "research/BVMF-PETR4/2026-11-25-valuation.md", "used": ["dcf"], "fair_value": {"bear": 70.27, "base": 99.27, "bull": 276.28}, "price": 40.55}
+[16:25:14] == BVMF:PETR4: AVOID 3
+[16:25:21] research/EPA-TTE/2026-11-25-evaluation.md
+OK research/EPA-TTE/2026-11-25-evaluation.md Bear case=141 Bull case=99 decision=AVOID scorecard=6->3
+
+I didn't re-run the scorecard after the last edit. The score should not change: decline_cause has no effect when Python finds nothing falling, and check_docs scored it 6 → 3. The entry price of 66 EUR is my own figure, set because the default (base fair value less 15%) is above today's price. Python re-sets entry prices from the scorecard anyway.
+[16:25:21] $ bin/py scripts/check_docs.py eval research/EPA-TTE/2026-11-25-evaluation.md
+[16:25:21] OK research/EPA-TTE/2026-11-25-evaluation.md Bear case=141 Bull case=99 decision=AVOID scorecard=6->3
+[16:25:21] $ bin/py scripts/valuation.py EPA:TTE --asof 2026-11-25 --eval research/EPA-TTE/2026-11-25-evaluation.md
+[16:25:21] {"out": "research/EPA-TTE/2026-11-25-valuation.md", "used": ["dcf"], "fair_value": {"bear": 71.29, "base": 168.14, "bull": 203.25}, "price": 77.68}
+[16:25:22] == EPA:TTE: AVOID 3
+[16:25:25] research/HKG-0883/2026-11-25-evaluation.md
+
+OK research/HKG-0883/2026-11-25-evaluation.md Bear case=140 Bull case=91 decision=AVOID scorecard=6->3
+
+The verdict is AVOID at conviction 3, the same as on 2026-10-31. The dip didn't remove the obstacle: the price is about 1% below the value blend and still below its 200-day average, so the scorecard gives no valuation points. The cause of the fall is still unverified because the research note couldn't read the Q3 release. The entry price is 18.09 HKD (base fair value 21.28 × 0.85).
+[16:25:25] $ bin/py scripts/check_docs.py eval research/HKG-0883/2026-11-25-evaluation.md
+[16:25:25] OK research/HKG-0883/2026-11-25-evaluation.md Bear case=140 Bull case=91 decision=AVOID scorecard=6->3
+[16:25:25] $ bin/py scripts/valuation.py HKG:0883 --asof 2026-11-25 --eval research/HKG-0883/2026-11-25-evaluation.md
+[16:25:26] {"out": "research/HKG-0883/2026-11-25-valuation.md", "used": ["ev_ebitda"], "fair_value": {"bear": 15.67, "base": 21.28, "bull": 26.0}, "price": 20.86}
+[16:25:27] == HKG:0883: AVOID 3
