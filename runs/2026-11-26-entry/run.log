@@ -1,0 +1,34 @@
+[16:26:05] == re-research VIE:OMV (dip radar)
+[16:26:05] == re-research HKG:2883 (dip radar)
+[16:26:05] == re-research BIT:UCG (dip radar)
+[16:26:05] $ bin/py scripts/sec_delta.py VIE:OMV --asof 2026-11-26
+[16:26:05] $ bin/py scripts/sec_delta.py HKG:2883 --asof 2026-11-26
+[16:26:05] $ bin/py scripts/sec_delta.py BIT:UCG --asof 2026-11-26
+[16:26:05] SKIP HKG:2883: not a US listing (SEC filers only)
+[16:26:05] SKIP BIT:UCG: not a US listing (SEC filers only)
+[16:26:05] SKIP VIE:OMV: not a US listing (SEC filers only)
+[16:26:05] $ claude -p Ticker HKG:2883, note type CORE, date 2026-11-26. Reason for review: dip. Facts: detail: Dip radar: the close 6.29 (2026-11-25) is -18.6% over the 20 sessions since our last research (2026-10-25) vs the S&P 500 -7.2% (beta -0.54); the stock-specific part is -22.5% (-2.28 standard deviations); -15.1% since ou. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:26:05] $ claude -p Ticker BIT:UCG, note type CORE, date 2026-11-26. Reason for review: dip. Facts: detail: Dip radar: the close 73.21 (2026-11-25) is -12.1% over the 7 sessions since our last research (2026-11-16) vs the S&P 500 -3.1% (beta 0.89); the stock-specific part is -9.3% (-2.19 standard deviations); -12.5% since our . --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:26:05] $ claude -p Ticker VIE:OMV, note type CORE, date 2026-11-26. Reason for review: dip. Facts: detail: Dip radar: the close 66.65 (2026-11-25) is -8.5% over the 7 sessions since our last research (2026-11-16) vs the S&P 500 -3.1% (beta -0.52); the stock-specific part is -10.1% (-2.34 standard deviations); -9.1% since our . --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[17:43:43] The fact sheet run for BIT:UCG is going in the background with a 30-minute limit. I'll continue once it finishes.
+[17:43:43] !! FAILED BIT:UCG: researcher wrote no note at /Users/oskaraspinall/paper-portfolio/research/BIT-UCG/2026-11-26.md
+[18:11:43] I couldn't write the note, because the fact sheet for VIE:OMV on 2026-11-26 was never produced.
+
+`bin/py scripts/fact_sheet.py VIE:OMV --peers EPA:TTE BIT:ENI BME:REP LON:SHEL --asof 2026-11-26` was killed both times I ran it. The first run hit the 120-second foreground limit. The second was a background run and was killed at its time limit. Neither run printed anything or exited with an error message, so the only output is `[killed]`.
+
+`research/VIE-OMV/` has no `factsheet-2026-11-26.md`, so there is no note or check_docs result. I did not fall back to the 2026-11-16 fact sheet. It predates the 7-session, roughly -8.5% fall that triggered this dip review, and I can't estimate figures the fact sheet doesn't give me.
+
+No URLs were blocked and no data conflicts came up.
+
+I didn't run it a third time, since the same background time limit would probably stop it again. The likely cause is slow or stalled page loads at the 3-second request limit. The peer list may be adding to that, since not all four peers may have stockanalysis.com pages. Please check the site's responsiveness and `data/cache/` before retrying.
+[18:11:43] !! FAILED VIE:OMV: researcher wrote no note at /Users/oskaraspinall/paper-portfolio/research/VIE-OMV/2026-11-26.md
+[18:44:39] The fact sheet for HKG:2883 isn't written yet. The first run was killed at its time limit, and I've restarted it in the background with a one-hour limit. No note exists yet. I'll write it once the fact sheet lands, and I'll report the exact error if the run exits non-zero.
+
+I couldn't write the note: the fact sheet for HKG:2883 was never produced.
+
+`bin/py scripts/fact_sheet.py HKG:2883 --peers SLB HAL HKG:1033 SHE:002353 --asof 2026-11-26` was stopped twice. The first run was killed after it moved to the background. I reran it with a one-hour limit and it was killed again. Neither run printed anything or wrote `research/HKG-2883/factsheet-2026-11-26.md`. The only error is the `[killed]` marker in the output file, so I don't know the cause. One possibility is a hang while fetching a peer page, but I haven't confirmed that.
+
+I didn't estimate any numbers and I haven't run `check_docs.py`. The only fact sheet and note for this ticker are from 2026-10-25, and I did not reuse them for today's dip review. No URLs were blocked.
+
+To retry, rerun the same command. Swapping one of the peers (for example `SHE:002353` or `HKG:1033`) is the first thing to try if it hangs again.
+[18:44:39] !! FAILED HKG:2883: researcher wrote no note at /Users/oskaraspinall/paper-portfolio/research/HKG-2883/2026-11-26.md
