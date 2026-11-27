@@ -1,0 +1,86 @@
+[16:24:39] == re-research VIE:OMV (dip radar)
+[16:24:39] == re-research HKG:2883 (dip radar)
+[16:24:39] == re-research BIT:UCG (dip radar)
+[16:24:39] $ bin/py scripts/sec_delta.py VIE:OMV --asof 2026-11-27
+[16:24:39] $ bin/py scripts/sec_delta.py HKG:2883 --asof 2026-11-27
+[16:24:39] $ bin/py scripts/sec_delta.py BIT:UCG --asof 2026-11-27
+[16:24:39] SKIP HKG:2883: not a US listing (SEC filers only)
+[16:24:39] SKIP VIE:OMV: not a US listing (SEC filers only)
+[16:24:39] SKIP BIT:UCG: not a US listing (SEC filers only)
+[16:24:39] $ claude -p Ticker BIT:UCG, note type CORE, date 2026-11-27. Reason for review: dip. Facts: detail: Dip radar: the close 73.21 (2026-11-25) is -12.1% over the 7 sessions since our last research (2026-11-16) vs the S&P 500 -3.1% (beta 0.89); the stock-specific part is -9.3% (-2.19 standard deviations); -12.5% since our . --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:24:39] $ claude -p Ticker VIE:OMV, note type CORE, date 2026-11-27. Reason for review: dip. Facts: detail: Dip radar: the close 66.65 (2026-11-25) is -8.5% over the 7 sessions since our last research (2026-11-16) vs the S&P 500 -3.1% (beta -0.52); the stock-specific part is -10.1% (-2.34 standard deviations); -9.1% since our . --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:24:39] $ claude -p Ticker HKG:2883, note type CORE, date 2026-11-27. Reason for review: dip. Facts: detail: Dip radar: the close 6.29 (2026-11-25) is -18.6% over the 20 sessions since our last research (2026-10-25) vs the S&P 500 -7.2% (beta -0.54); the stock-specific part is -22.5% (-2.28 standard deviations); -15.1% since ou. --agent researcher --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/fact_sheet.py:*),Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:28:49] - Note: `research/VIE-OMV/2026-11-27.md`
+- Fact sheet: `research/VIE-OMV/factsheet-2026-11-27.md`
+- check_docs: `OK research/VIE-OMV/2026-11-27.md type=CORE 1=59 2=96 3=128 4=39 5=53 6=101 total=476`
+- Blocked URL: `https://www.omv.com/en/media/press-releases` is not on the allowlist, so the cause of the dip is unverified. The headlines list nothing company-specific after 2026-11-05. The note says this.
+- Data conflict: none. I left the caller's dip-radar figures out of the note, because they aren't in the fact sheet.
+- The first fact-sheet run hit the foreground timeout and I started a second run, so two runs wrote the same file. The final fact sheet came from a completed run.
+[16:28:49] $ bin/py scripts/check_docs.py note research/VIE-OMV/2026-11-27.md
+[16:28:50] OK research/VIE-OMV/2026-11-27.md type=CORE 1=59 2=96 3=128 4=39 5=53 6=101 total=476
+[16:28:50] $ bin/py scripts/macro_data.py --asof 2026-11-27
+[16:28:57] - Note: `research/BIT-UCG/2026-11-27.md`
+- Fact sheet: `research/BIT-UCG/factsheet-2026-11-27.md`
+- check_docs: `OK research/BIT-UCG/2026-11-27.md type=CORE 1=52 2=98 3=118 4=53 5=71 6=102 total=494`
+- Data conflicts: none. The fair value is flagged unreliable on the fact sheet because the methods disagree 3.0x.
+- Blocked URLs: none. I made no WebFetch calls, so there is no primary-source check on why the stock fell. The note says no headline gives a clear cause for the fall, and the candidate causes it lists are marked [Guessing].
+[16:28:57] $ bin/py scripts/check_docs.py note research/BIT-UCG/2026-11-27.md
+[16:28:57] OK research/BIT-UCG/2026-11-27.md type=CORE 1=52 2=98 3=118 4=53 5=71 6=102 total=494
+[16:28:57] $ bin/py scripts/macro_data.py --asof 2026-11-27
+[16:29:15] Note: research/HKG-2883/2026-11-27.md
+Fact sheet: research/HKG-2883/factsheet-2026-11-27.md
+Check: OK research/HKG-2883/2026-11-27.md type=CORE 1=57 2=126 3=123 4=33 5=50 6=165 total=554
+Data conflict: the dip radar gave a 2026-11-25 close of 6.29. The fact sheet's last completed close is 6.47 HKD on 2026-11-26. I flagged this in the note and did not reconcile it. The note leaves out the 6.29 figure because check_docs rejects numbers that aren't in the fact sheet.
+Blocked URLs: none. I used 1 WebFetch (the Q3 2026 transcript).
+[16:29:15] $ bin/py scripts/check_docs.py note research/HKG-2883/2026-11-27.md
+[16:29:15] OK research/HKG-2883/2026-11-27.md type=CORE 1=57 2=126 3=123 4=33 5=50 6=165 total=554
+[16:29:15] $ bin/py scripts/macro_data.py --asof 2026-11-27
+[16:31:21] {"out": "reports/macro/2026-11-27.md", "series": 20, "unavailable": []}
+[16:31:21] $ claude -p Ticker VIE:OMV, date 2026-11-27. Research: research/VIE-OMV/factsheet-2026-11-27.md, research/VIE-OMV/2026-11-27.md. Macro snapshot: reports/macro/2026-11-27.md. Write research/VIE-OMV/2026-11-27-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:31:25] {"out": "reports/macro/2026-11-27.md", "series": 20, "unavailable": []}
+[16:31:25] $ claude -p Ticker HKG:2883, date 2026-11-27. Research: research/HKG-2883/factsheet-2026-11-27.md, research/HKG-2883/2026-11-27.md. Macro snapshot: reports/macro/2026-11-27.md. Write research/HKG-2883/2026-11-27-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:31:28] {"out": "reports/macro/2026-11-27.md", "series": 20, "unavailable": []}
+[16:31:28] $ claude -p Ticker BIT:UCG, date 2026-11-27. Research: research/BIT-UCG/factsheet-2026-11-27.md, research/BIT-UCG/2026-11-27.md. Macro snapshot: reports/macro/2026-11-27.md. Write research/BIT-UCG/2026-11-27-macro.md. --agent macro-overlay --permission-mode dontAsk --allowedTools Read,Glob,Grep,WebFetch,Bash(bin/py scripts/check_docs.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:31:44] research/VIE-OMV/2026-11-27-macro.md
+OK research/VIE-OMV/2026-11-27-macro.md macro_weight=context words=65
+[16:31:44] $ bin/py scripts/check_docs.py macro research/VIE-OMV/2026-11-27-macro.md
+[16:31:44] OK research/VIE-OMV/2026-11-27-macro.md macro_weight=context words=65
+[16:31:44] $ claude -p Evaluate VIE:OMV for 2026-11-27: fact sheet research/VIE-OMV/factsheet-2026-11-27.md, note research/VIE-OMV/2026-11-27.md, state portfolio/state.json, macro overlay research/VIE-OMV/2026-11-27-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 66.65 (2026-11-25) is -8.5% over the 7 sessions since our last research (2026-11-16) vs the S&P 500 -3.1% (beta -0.52); the stock-specific part is -10.1% (-2.34 standard deviations); -9.1% since our . --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:31:45] research/HKG-2883/2026-11-27-macro.md
+OK research/HKG-2883/2026-11-27-macro.md macro_weight=context words=62
+[16:31:45] $ bin/py scripts/check_docs.py macro research/HKG-2883/2026-11-27-macro.md
+[16:31:45] OK research/HKG-2883/2026-11-27-macro.md macro_weight=context words=62
+[16:31:45] $ claude -p Evaluate HKG:2883 for 2026-11-27: fact sheet research/HKG-2883/factsheet-2026-11-27.md, note research/HKG-2883/2026-11-27.md, state portfolio/state.json, macro overlay research/HKG-2883/2026-11-27-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 6.29 (2026-11-25) is -18.6% over the 20 sessions since our last research (2026-10-25) vs the S&P 500 -7.2% (beta -0.54); the stock-specific part is -22.5% (-2.28 standard deviations); -15.1% since ou. --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:31:56] research/BIT-UCG/2026-11-27-macro.md
+OK research/BIT-UCG/2026-11-27-macro.md macro_weight=context words=87
+[16:31:56] $ bin/py scripts/check_docs.py macro research/BIT-UCG/2026-11-27-macro.md
+[16:31:56] OK research/BIT-UCG/2026-11-27-macro.md macro_weight=context words=87
+[16:31:56] $ claude -p Evaluate BIT:UCG for 2026-11-27: fact sheet research/BIT-UCG/factsheet-2026-11-27.md, note research/BIT-UCG/2026-11-27.md, state portfolio/state.json, macro overlay research/BIT-UCG/2026-11-27-macro.md. Reason for review: dip. Facts: detail: Dip radar: the close 73.21 (2026-11-25) is -12.1% over the 7 sessions since our last research (2026-11-16) vs the S&P 500 -3.1% (beta 0.89); the stock-specific part is -9.3% (-2.19 standard deviations); -12.5% since our . --agent evaluator --permission-mode dontAsk --allowedTools Read,Glob,Grep,Bash(bin/py scripts/check_docs.py:*),Bash(bin/py scripts/scorecard.py:*),Edit(research/**),Edit(reports/**),Edit(runs/**) --output-format text
+[16:32:40] research/HKG-2883/2026-11-27-evaluation.md
+OK research/HKG-2883/2026-11-27-evaluation.md Bear case=150 Bull case=137 decision=AVOID scorecard=7->3
+[16:32:40] $ bin/py scripts/check_docs.py eval research/HKG-2883/2026-11-27-evaluation.md
+[16:32:40] OK research/HKG-2883/2026-11-27-evaluation.md Bear case=150 Bull case=137 decision=AVOID scorecard=7->3
+[16:32:40] $ bin/py scripts/valuation.py HKG:2883 --asof 2026-11-27 --eval research/HKG-2883/2026-11-27-evaluation.md
+[16:32:40] {"out": "research/HKG-2883/2026-11-27-valuation.md", "used": ["dcf", "ev_ebitda"], "fair_value": {"bear": 13.7, "base": 21.69, "bull": 31.9}, "price": 6.47}
+[16:32:41] == HKG:2883: AVOID 3
+[16:32:47] I wrote `research/BIT-UCG/2026-11-27-evaluation.md`. The checker printed:
+
+`OK research/BIT-UCG/2026-11-27-evaluation.md Bear case=130 Bull case=106 decision=AVOID scorecard=5->3`
+
+The decision is AVOID at conviction 3, the same verdict as on 2026-11-16, so no new-evidence field was needed.
+
+I didn't use the default entry price, which is base fair value less 15%. That would have put it above the current price, and the fair value is flagged unreliable. I set 66.0 instead, a level just under the six-month low. The system now re-scores entry prices on its own, so it may replace that figure.
+[16:32:47] $ bin/py scripts/check_docs.py eval research/BIT-UCG/2026-11-27-evaluation.md
+[16:32:47] OK research/BIT-UCG/2026-11-27-evaluation.md Bear case=130 Bull case=106 decision=AVOID scorecard=5->3
+[16:32:47] $ bin/py scripts/valuation.py BIT:UCG --asof 2026-11-27 --eval research/BIT-UCG/2026-11-27-evaluation.md
+[16:32:47] {"out": "research/BIT-UCG/2026-11-27-valuation.md", "used": ["pb_roe", "fcfe"], "fair_value": {"bear": 14.79, "base": 89.1, "bull": 103.61}, "price": 73.85}
+[16:32:49] == BIT:UCG: AVOID 3
+[16:33:03] research/VIE-OMV/2026-11-27-evaluation.md
+OK research/VIE-OMV/2026-11-27-evaluation.md Bear case=144 Bull case=120 decision=AVOID scorecard=6->3
+
+I didn't re-read the 16 November evaluation (it's outside the allowed inputs). This review gives the same AVOID at conviction 3 as that one, so no `new_evidence` was needed. Nothing explains the dip, so its cause is unverified.
+[16:33:03] $ bin/py scripts/check_docs.py eval research/VIE-OMV/2026-11-27-evaluation.md
+[16:33:03] OK research/VIE-OMV/2026-11-27-evaluation.md Bear case=144 Bull case=120 decision=AVOID scorecard=6->3
+[16:33:03] $ bin/py scripts/valuation.py VIE:OMV --asof 2026-11-27 --eval research/VIE-OMV/2026-11-27-evaluation.md
+[16:33:03] {"out": "research/VIE-OMV/2026-11-27-valuation.md", "used": ["dcf"], "fair_value": {"bear": 27.77, "base": 97.5, "bull": 141.08}, "price": 68}
+[16:33:04] == VIE:OMV: AVOID 3

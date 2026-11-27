@@ -1,0 +1,102 @@
+{
+ "industry": {
+  "industry": "Oil & Gas Integrated",
+  "known": true,
+  "best": "SOTP / NAV",
+  "second": "DCF",
+  "best_models": [
+   "sotp",
+   "nav"
+  ],
+  "second_models": [
+   "dcf"
+  ],
+  "stockanalysis": "DCF*"
+ },
+ "methods": [
+  {
+   "model": "sotp",
+   "label": "sum of the parts",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs segment-level profits, not on stockanalysis.com]"
+  },
+  {
+   "model": "nav",
+   "label": "NAV",
+   "slot": "best",
+   "status": "unavailable",
+   "why": "[data unavailable \u2014 needs reserve, mine or asset-level values, not on stockanalysis.com]"
+  },
+  {
+   "model": "dcf",
+   "label": "DCF",
+   "slot": "second",
+   "status": "ok",
+   "values": {
+    "bear": 27.76969234362612,
+    "base": 97.49675313652962,
+    "bull": 141.0809356408683
+   },
+   "implied_growth": -0.11915064765864747,
+   "discount_rate": 0.07969723911681945,
+   "cost_of_equity": 0.09410000000000002,
+   "assumptions": {
+    "cash_flow": "FCFF - stock-based pay",
+    "growth": {
+     "bear": -0.1523197958955238,
+     "base": -0.05,
+     "bull": -0.05
+    },
+    "cash_flow_margin": {
+     "bear": 0.055869531371633196,
+     "base": 0.09487365772406706,
+     "bull": 0.13213170186548986
+    },
+    "cagr_3y": -0.2696395917910476,
+    "cagr_5y": -0.09293848890403078,
+    "terminal_growth": 0.025
+   }
+  }
+ ],
+ "price": 68,
+ "risk_free": 0.049100000000000005,
+ "country_risk_premium": 0.005,
+ "reporting_currency": "EUR",
+ "terminal_growth": 0.025,
+ "overrides": [],
+ "fair_value": {
+  "bear": 27.76969234362612,
+  "base": 97.49675313652962,
+  "bull": 141.0809356408683
+ },
+ "used": [
+  "dcf"
+ ],
+ "weights": [
+  1.0
+ ],
+ "upside": {
+  "bear": -0.5916221714172629,
+  "base": 0.4337757814195533,
+  "bull": 1.0747196417774747
+ },
+ "implied_growth": -0.11915064765864747,
+ "reliability": {
+  "reliable": true,
+  "reasons": []
+ },
+ "ticker": "VIE:OMV",
+ "asof": "2026-11-27",
+ "quote_currency": "EUR",
+ "financials_currency": "EUR",
+ "fx_fin_to_quote": 1.0,
+ "price_date": "2026-11-26",
+ "sources": {
+  "income": "https://stockanalysis.com/quote/vie/OMV/financials/income-statement/",
+  "balance": "https://stockanalysis.com/quote/vie/OMV/financials/balance-sheet/",
+  "cashflow": "https://stockanalysis.com/quote/vie/OMV/financials/cash-flow-statement/",
+  "ratios": "https://stockanalysis.com/quote/vie/OMV/financials/ratios/",
+  "statistics": "https://stockanalysis.com/quote/vie/OMV/statistics/"
+ }
+}
